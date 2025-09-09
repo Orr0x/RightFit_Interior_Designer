@@ -1,0 +1,325 @@
+// Multi-Room Project Architecture - TypeScript Interfaces
+// Phase 1: Core Data Models
+
+export type RoomType = 
+  | 'kitchen' 
+  | 'bedroom' 
+  | 'bathroom' 
+  | 'living-room' 
+  | 'dining-room' 
+  | 'utility' 
+  | 'under-stairs';
+
+export interface Project {
+  id: string;
+  user_id: string;
+  name: string;
+  description?: string;
+  thumbnail_url?: string;
+  is_public: boolean;
+  created_at: string;
+  updated_at: string;
+  // Populated when needed (not always loaded)
+  room_designs?: RoomDesign[];
+}
+
+export interface RoomDesign {
+  id: string;
+  project_id: string;
+  room_type: RoomType;
+  name?: string; // Custom room name (optional)
+  room_dimensions: RoomDimensions;
+  design_elements: DesignElement[];
+  design_settings: RoomDesignSettings;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface RoomDimensions {
+  width: number;  // in cm
+  height: number; // in cm (depth in 2D view)
+}
+
+export interface RoomDesignSettings {
+  // Room-specific settings
+  default_wall_height?: number;
+  floor_material?: string;
+  wall_color?: string;
+  lighting_settings?: LightingSettings;
+  view_preferences?: ViewPreferences;
+  // Migration tracking
+  migrated?: boolean;
+  original_design_id?: string;
+  migration_date?: string;
+  fallback_migration?: boolean;
+}
+
+export interface LightingSettings {
+  ambient_intensity?: number;
+  directional_intensity?: number;
+  point_light_intensity?: number;
+  shadows_enabled?: boolean;
+}
+
+export interface ViewPreferences {
+  default_2d_view?: '2d' | '3d';
+  default_2d_mode?: 'plan' | 'front' | 'back' | 'left' | 'right';
+  grid_enabled?: boolean;
+  ruler_enabled?: boolean;
+  snap_to_grid?: boolean;
+}
+
+// Re-export existing DesignElement interface (from Designer.tsx)
+// This maintains backward compatibility
+export interface DesignElement {
+  id: string;
+  type: 'wall' | 'cabinet' | 'appliance';
+  x: number;
+  y: number;
+  width: number;
+  height: number; // DEPRECATED: Use depth instead, kept for backward compatibility
+  depth?: number; // Front-to-back dimension (replaces height)
+  verticalHeight?: number; // Bottom-to-top dimension (new)
+  rotation: number;
+  style?: string;
+  color?: string;
+  material?: string;
+}
+
+// Database response types (what we get from Supabase)
+export interface ProjectRow {
+  id: string;
+  user_id: string;
+  name: string;
+  description: string | null;
+  thumbnail_url: string | null;
+  is_public: boolean;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface RoomDesignRow {
+  id: string;
+  project_id: string;
+  room_type: string;
+  name: string | null;
+  room_dimensions: Record<string, number>; // JSONB - room dimensions
+  design_elements: Record<string, unknown>[]; // JSONB - design elements array
+  design_settings: Record<string, unknown>; // JSONB - settings object
+  created_at: string;
+  updated_at: string;
+}
+
+// API request/response types
+export interface CreateProjectRequest {
+  name: string;
+  description?: string;
+  is_public?: boolean;
+}
+
+export interface UpdateProjectRequest {
+  name?: string;
+  description?: string;
+  thumbnail_url?: string;
+  is_public?: boolean;
+}
+
+export interface CreateRoomDesignRequest {
+  project_id: string;
+  room_type: RoomType;
+  name?: string;
+  room_dimensions?: RoomDimensions;
+  design_elements?: DesignElement[];
+  design_settings?: RoomDesignSettings;
+}
+
+export interface UpdateRoomDesignRequest {
+  name?: string;
+  room_dimensions?: RoomDimensions;
+  design_elements?: DesignElement[];
+  design_settings?: RoomDesignSettings;
+}
+
+// Utility types
+export interface ProjectWithRooms extends Project {
+  room_designs: RoomDesign[];
+}
+
+export interface RoomDesignSummary {
+  room_type: RoomType;
+  name?: string;
+  element_count: number;
+  last_updated: string;
+  has_design: boolean;
+}
+
+export interface ProjectSummary extends Project {
+  room_count: number;
+  total_elements: number;
+  room_summaries: RoomDesignSummary[];
+}
+
+// Room type configuration
+export interface RoomTypeConfig {
+  name: string;
+  defaultDimensions: RoomDimensions;
+  icon: string;
+  description: string;
+  defaultSettings: RoomDesignSettings;
+}
+
+export const ROOM_TYPE_CONFIGS: Record<RoomType, RoomTypeConfig> = {
+  kitchen: {
+    name: 'Kitchen',
+    defaultDimensions: { width: 600, height: 400 },
+    icon: 'ChefHat',
+    description: 'Kitchen design with cabinets and appliances',
+    defaultSettings: {
+      default_wall_height: 250,
+      view_preferences: {
+        default_2d_view: '2d',
+        default_2d_mode: 'plan',
+        grid_enabled: true,
+        snap_to_grid: true
+      }
+    }
+  },
+  bedroom: {
+    name: 'Bedroom',
+    defaultDimensions: { width: 500, height: 400 },
+    icon: 'Bed',
+    description: 'Bedroom design with furniture and storage',
+    defaultSettings: {
+      default_wall_height: 250,
+      view_preferences: {
+        default_2d_view: '2d',
+        default_2d_mode: 'plan',
+        grid_enabled: true,
+        snap_to_grid: true
+      }
+    }
+  },
+  bathroom: {
+    name: 'Bathroom',
+    defaultDimensions: { width: 300, height: 300 },
+    icon: 'Bath',
+    description: 'Bathroom design with fixtures and vanities',
+    defaultSettings: {
+      default_wall_height: 250,
+      view_preferences: {
+        default_2d_view: '2d',
+        default_2d_mode: 'plan',
+        grid_enabled: true,
+        snap_to_grid: true
+      }
+    }
+  },
+  'living-room': {
+    name: 'Living Room',
+    defaultDimensions: { width: 600, height: 500 },
+    icon: 'Sofa',
+    description: 'Living room design with seating and entertainment',
+    defaultSettings: {
+      default_wall_height: 250,
+      view_preferences: {
+        default_2d_view: '3d',
+        default_2d_mode: 'plan',
+        grid_enabled: true,
+        snap_to_grid: true
+      }
+    }
+  },
+  'dining-room': {
+    name: 'Dining Room',
+    defaultDimensions: { width: 500, height: 400 },
+    icon: 'UtensilsCrossed',
+    description: 'Dining room design with table and storage',
+    defaultSettings: {
+      default_wall_height: 250,
+      view_preferences: {
+        default_2d_view: '2d',
+        default_2d_mode: 'plan',
+        grid_enabled: true,
+        snap_to_grid: true
+      }
+    }
+  },
+  utility: {
+    name: 'Utility Room',
+    defaultDimensions: { width: 300, height: 250 },
+    icon: 'Wrench',
+    description: 'Utility room design with appliances and storage',
+    defaultSettings: {
+      default_wall_height: 250,
+      view_preferences: {
+        default_2d_view: '2d',
+        default_2d_mode: 'plan',
+        grid_enabled: true,
+        snap_to_grid: true
+      }
+    }
+  },
+  'under-stairs': {
+    name: 'Under Stairs',
+    defaultDimensions: { width: 200, height: 250 },
+    icon: 'Home',
+    description: 'Under stairs storage design',
+    defaultSettings: {
+      default_wall_height: 200, // Lower ceiling
+      view_preferences: {
+        default_2d_view: '2d',
+        default_2d_mode: 'front', // Side view more useful for under stairs
+        grid_enabled: true,
+        snap_to_grid: true
+      }
+    }
+  }
+};
+
+// Helper functions
+export const getRoomTypeConfig = (roomType: RoomType): RoomTypeConfig => {
+  return ROOM_TYPE_CONFIGS[roomType];
+};
+
+export const getAllRoomTypes = (): RoomType[] => {
+  return Object.keys(ROOM_TYPE_CONFIGS) as RoomType[];
+};
+
+export const isValidRoomType = (roomType: string): roomType is RoomType => {
+  return roomType in ROOM_TYPE_CONFIGS;
+};
+
+// Migration helpers
+export const migrateDesignElement = (element: Record<string, string | number | boolean | undefined>): DesignElement => {
+  return {
+    id: element.id as string,
+    type: element.type as 'wall' | 'cabinet' | 'appliance',
+    x: element.x as number,
+    y: element.y as number,
+    width: element.width as number,
+    height: element.height as number, // Keep for backward compatibility
+    depth: (element.depth ?? element.height) as number, // Use depth if available, otherwise use height
+    verticalHeight: (element.verticalHeight ?? 90) as number, // Default vertical height for cabinets
+    rotation: (element.rotation ?? 0) as number,
+    style: element.style as string | undefined,
+    color: element.color as string | undefined,
+    material: element.material as string | undefined
+  };
+};
+
+export const createDefaultRoomDesign = (
+  projectId: string,
+  roomType: RoomType,
+  customName?: string
+): Omit<RoomDesign, 'id' | 'created_at' | 'updated_at'> => {
+  const config = getRoomTypeConfig(roomType);
+  
+  return {
+    project_id: projectId,
+    room_type: roomType,
+    name: customName,
+    room_dimensions: config.defaultDimensions,
+    design_elements: [],
+    design_settings: config.defaultSettings
+  };
+};
