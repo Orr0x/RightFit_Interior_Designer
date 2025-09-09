@@ -272,7 +272,7 @@ const components: ComponentDefinition[] = [
     height: 200,
     color: '#8B4513',
     category: 'bedroom-furniture',
-    roomTypes: ['bedroom'],
+    roomTypes: ['bedroom', 'master-bedroom', 'guest-bedroom'],
     icon: <Bed className="h-4 w-4" />,
     description: 'Standard double bed frame'
   },
@@ -284,7 +284,7 @@ const components: ComponentDefinition[] = [
     height: 200,
     color: '#8B4513',
     category: 'bedroom-furniture',
-    roomTypes: ['bedroom'],
+    roomTypes: ['bedroom', 'master-bedroom', 'guest-bedroom'],
     icon: <Bed className="h-4 w-4" />,
     description: 'King size bed frame'
   },
@@ -296,7 +296,7 @@ const components: ComponentDefinition[] = [
     height: 60,
     color: '#654321',
     category: 'bedroom-storage',
-    roomTypes: ['bedroom'],
+    roomTypes: ['bedroom', 'master-bedroom', 'guest-bedroom'],
     icon: <Shirt className="h-4 w-4" />,
     description: 'Two door wardrobe'
   },
@@ -308,7 +308,7 @@ const components: ComponentDefinition[] = [
     height: 60,
     color: '#654321',
     category: 'bedroom-storage',
-    roomTypes: ['bedroom'],
+    roomTypes: ['bedroom', 'master-bedroom', 'guest-bedroom'],
     icon: <Shirt className="h-4 w-4" />,
     description: 'Three door wardrobe'
   },
@@ -320,7 +320,7 @@ const components: ComponentDefinition[] = [
     height: 40,
     color: '#654321',
     category: 'bedroom-storage',
-    roomTypes: ['bedroom'],
+    roomTypes: ['bedroom', 'master-bedroom', 'guest-bedroom'],
     icon: <Archive className="h-4 w-4" />,
     description: 'Four drawer chest'
   },
@@ -332,7 +332,7 @@ const components: ComponentDefinition[] = [
     height: 40,
     color: '#654321',
     category: 'bedroom-storage',
-    roomTypes: ['bedroom'],
+    roomTypes: ['bedroom', 'master-bedroom', 'guest-bedroom'],
     icon: <Box className="h-4 w-4" />,
     description: 'Bedside table with drawer'
   },
@@ -346,7 +346,7 @@ const components: ComponentDefinition[] = [
     height: 60,
     color: '#F5F5DC',
     category: 'bathroom-vanities',
-    roomTypes: ['bathroom'],
+    roomTypes: ['bathroom', 'ensuite'],
     icon: <Bath className="h-4 w-4" />,
     description: 'Wall-hung vanity unit with basin'
   },
@@ -358,7 +358,7 @@ const components: ComponentDefinition[] = [
     height: 60,
     color: '#F5F5DC',
     category: 'bathroom-vanities',
-    roomTypes: ['bathroom'],
+    roomTypes: ['bathroom', 'ensuite'],
     icon: <Bath className="h-4 w-4" />,
     description: 'Wall-hung vanity unit with basin'
   },
@@ -370,7 +370,7 @@ const components: ComponentDefinition[] = [
     height: 60,
     color: '#FFFFFF',
     category: 'bathroom-fixtures',
-    roomTypes: ['bathroom'],
+    roomTypes: ['bathroom', 'ensuite'],
     icon: <Home className="h-4 w-4" />,
     description: 'Wall-hung toilet'
   },
@@ -382,7 +382,7 @@ const components: ComponentDefinition[] = [
     height: 90,
     color: '#E6E6FA',
     category: 'bathroom-fixtures',
-    roomTypes: ['bathroom'],
+    roomTypes: ['bathroom', 'ensuite'],
     icon: <Waves className="h-4 w-4" />,
     description: 'Square shower tray'
   },
@@ -394,7 +394,7 @@ const components: ComponentDefinition[] = [
     height: 70,
     color: '#FFFFFF',
     category: 'bathroom-fixtures',
-    roomTypes: ['bathroom'],
+    roomTypes: ['bathroom', 'ensuite'],
     icon: <Bath className="h-4 w-4" />,
     description: 'Standard bathtub'
   },
@@ -534,7 +534,7 @@ const components: ComponentDefinition[] = [
     height: 75,
     color: '#2F4F4F',
     category: 'office-furniture',
-    roomTypes: ['bedroom', 'living-room'],
+    roomTypes: ['office', 'bedroom', 'living-room'],
     icon: <RectangleHorizontal className="h-4 w-4" />,
     description: 'Standard office desk'
   },
@@ -546,7 +546,7 @@ const components: ComponentDefinition[] = [
     height: 60,
     color: '#2F4F4F',
     category: 'office-furniture',
-    roomTypes: ['bedroom', 'living-room'],
+    roomTypes: ['office', 'bedroom', 'living-room'],
     icon: <Sofa className="h-4 w-4" />,
     description: 'Ergonomic office chair'
   },
@@ -558,7 +558,7 @@ const components: ComponentDefinition[] = [
     height: 200,
     color: '#8B4513',
     category: 'office-furniture',
-    roomTypes: ['bedroom', 'living-room'],
+    roomTypes: ['office', 'bedroom', 'living-room'],
     icon: <Archive className="h-4 w-4" />,
     description: 'Tall bookshelf'
   },
@@ -572,7 +572,7 @@ const components: ComponentDefinition[] = [
     height: 50,
     color: '#8B4513',
     category: 'bedroom-furniture',
-    roomTypes: ['bedroom'],
+    roomTypes: ['bedroom', 'master-bedroom', 'guest-bedroom'],
     icon: <RectangleHorizontal className="h-4 w-4" />,
     description: 'Bedroom dressing table with mirror'
   },
@@ -584,7 +584,7 @@ const components: ComponentDefinition[] = [
     height: 60,
     color: '#6B8E23',
     category: 'bedroom-furniture',
-    roomTypes: ['bedroom'],
+    roomTypes: ['bedroom', 'master-bedroom', 'guest-bedroom'],
     icon: <Sofa className="h-4 w-4" />,
     description: 'Bedroom ottoman/seat'
   },

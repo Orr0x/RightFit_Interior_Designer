@@ -5,19 +5,19 @@ import { useToast } from '../hooks/use-toast';
 import { Json } from '../integrations/supabase/types';
 
 // Helper function to transform database room design to TypeScript interface
-function transformRoomDesign(dbRoomDesign: any): RoomDesign {
+function transformRoomDesign(dbRoomDesign: Record<string, unknown>): RoomDesign {
   return {
-    id: dbRoomDesign.id,
-    project_id: dbRoomDesign.project_id,
+    id: dbRoomDesign.id as string,
+    project_id: dbRoomDesign.project_id as string,
     room_type: dbRoomDesign.room_type as RoomType,
-    name: dbRoomDesign.name || '',
+    name: (dbRoomDesign.name as string) || '',
     design_elements: Array.isArray(dbRoomDesign.design_elements)
       ? dbRoomDesign.design_elements as DesignElement[]
       : [],
-    design_settings: dbRoomDesign.design_settings || {},
-    room_dimensions: dbRoomDesign.room_dimensions || { width: 800, height: 600 },
-    created_at: dbRoomDesign.created_at,
-    updated_at: dbRoomDesign.updated_at,
+    design_settings: (dbRoomDesign.design_settings as Record<string, unknown>) || {},
+    room_dimensions: (dbRoomDesign.room_dimensions as { width: number; height: number }) || { width: 800, height: 600 },
+    created_at: dbRoomDesign.created_at as string,
+    updated_at: dbRoomDesign.updated_at as string,
   };
 }
 
@@ -140,7 +140,7 @@ function projectReducer(state: ProjectState, action: ProjectAction): ProjectStat
         loading: false
       };
     
-    case 'ADD_ROOM_DESIGN':
+    case 'ADD_ROOM_DESIGN': {
       if (!state.currentProject) return state;
       
       const updatedProject = {
@@ -156,8 +156,9 @@ function projectReducer(state: ProjectState, action: ProjectAction): ProjectStat
         ),
         loading: false
       };
+    }
     
-    case 'UPDATE_ROOM_DESIGN':
+    case 'UPDATE_ROOM_DESIGN': {
       if (!state.currentProject) return state;
       
       const projectWithUpdatedRoom = {
@@ -178,8 +179,9 @@ function projectReducer(state: ProjectState, action: ProjectAction): ProjectStat
           : state.currentRoomDesign,
         loading: false
       };
+    }
     
-    case 'DELETE_ROOM_DESIGN':
+    case 'DELETE_ROOM_DESIGN': {
       if (!state.currentProject) return state;
       
       const projectWithRemovedRoom = {
@@ -197,6 +199,7 @@ function projectReducer(state: ProjectState, action: ProjectAction): ProjectStat
         currentRoomDesign: state.currentRoomDesign?.id === action.payload ? null : state.currentRoomDesign,
         loading: false
       };
+    }
     
     case 'SET_UNSAVED_CHANGES':
       return {
@@ -308,7 +311,7 @@ export function ProjectProvider({ children }: { children: React.ReactNode }) {
           room_designs (*)
         `)
         .eq('id', projectId)
-        .single();
+        .single() as { data: Record<string, unknown> | null; error: unknown };
 
       if (error) {
         // Check if error is due to missing table
@@ -682,7 +685,7 @@ export function ProjectProvider({ children }: { children: React.ReactNode }) {
             error.message.includes('table "projects" does not exist') ||
             error.code === 'PGRST116' || error.code === '42P01') {
           
-          console.warn('Projects table does not exist - Phase 1 migrations need to be deployed');
+          // Projects table does not exist - migrations need to be deployed
           dispatch({ type: 'SET_PROJECTS', payload: [] });
           dispatch({ type: 'SET_ERROR', payload: 'Database migrations pending. Please deploy Phase 1 migrations to use multi-room projects.' });
           

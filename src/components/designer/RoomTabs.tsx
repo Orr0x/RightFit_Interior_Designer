@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Plus, X, Home, ChefHat, Bed, Bath, Sofa, UtensilsCrossed, Wrench, Edit2, Palette, Check } from 'lucide-react';
+import React, { useState, useRef, useEffect } from 'react';
+import { Plus, X, Home, ChefHat, Bed, Bath, Sofa, UtensilsCrossed, Wrench, Edit2, Palette, Check, Monitor, Shirt, ChevronLeft, ChevronRight } from 'lucide-react';
 import { Button } from '../ui/button';
 import { Tabs, TabsList, TabsTrigger } from '../ui/tabs';
 import { Badge } from '../ui/badge';
@@ -43,9 +43,14 @@ import {
 const roomIcons: Record<RoomType, React.ComponentType<{ className?: string }>> = {
   kitchen: ChefHat,
   bedroom: Bed,
+  'master-bedroom': Bed,
+  'guest-bedroom': Bed,
   bathroom: Bath,
+  ensuite: Bath,
   'living-room': Sofa,
   'dining-room': UtensilsCrossed,
+  office: Monitor,
+  'dressing-room': Shirt,
   utility: Wrench,
   'under-stairs': Home,
 };
@@ -54,9 +59,14 @@ const roomIcons: Record<RoomType, React.ComponentType<{ className?: string }>> =
 const roomDisplayNames: Record<RoomType, string> = {
   kitchen: 'Kitchen',
   bedroom: 'Bedroom',
+  'master-bedroom': 'Master Bedroom',
+  'guest-bedroom': 'Guest Bedroom',
   bathroom: 'Bathroom',
+  ensuite: 'Ensuite',
   'living-room': 'Living Room',
   'dining-room': 'Dining Room',
+  office: 'Office',
+  'dressing-room': 'Dressing Room',
   utility: 'Utility Room',
   'under-stairs': 'Under Stairs',
 };
@@ -81,6 +91,11 @@ export function RoomTabs({ className }: RoomTabsProps) {
   const [roomName, setRoomName] = useState('');
   const [colorPickerOpen, setColorPickerOpen] = useState(false);
   const [selectedRoomId, setSelectedRoomId] = useState<string | null>(null);
+  
+  // Scroll state
+  const [canScrollLeft, setCanScrollLeft] = useState(false);
+  const [canScrollRight, setCanScrollRight] = useState(false);
+  const tabsContainerRef = useRef<HTMLDivElement>(null);
 
   // Predefined color palette
   const colorPalette = [
@@ -171,7 +186,7 @@ export function RoomTabs({ className }: RoomTabsProps) {
       setColorPickerOpen(false);
       setSelectedRoomId(null);
     } catch (error) {
-      console.error('Failed to update room color:', error);
+      // Error updating room color - handled by toast
     }
   };
 
@@ -188,8 +203,39 @@ export function RoomTabs({ className }: RoomTabsProps) {
   const availableRoomTypes = Object.keys(roomDisplayNames) as RoomType[];
   const usedRoomTypes = currentProject.room_designs.map(rd => rd.room_type);
 
+  // Scroll functions
+  const checkScrollButtons = () => {
+    if (tabsContainerRef.current) {
+      const { scrollLeft, scrollWidth, clientWidth } = tabsContainerRef.current;
+      setCanScrollLeft(scrollLeft > 0);
+      setCanScrollRight(scrollLeft < scrollWidth - clientWidth - 1);
+    }
+  };
+
+  const scrollLeft = () => {
+    if (tabsContainerRef.current) {
+      tabsContainerRef.current.scrollBy({ left: -200, behavior: 'smooth' });
+    }
+  };
+
+  const scrollRight = () => {
+    if (tabsContainerRef.current) {
+      tabsContainerRef.current.scrollBy({ left: 200, behavior: 'smooth' });
+    }
+  };
+
+  // Update scroll buttons when rooms change or component mounts
+  useEffect(() => {
+    checkScrollButtons();
+    const container = tabsContainerRef.current;
+    if (container) {
+      container.addEventListener('scroll', checkScrollButtons);
+      return () => container.removeEventListener('scroll', checkScrollButtons);
+    }
+  }, [currentProject.room_designs.length]);
+
   // Helper function to clean room names
-  const getCleanRoomName = (room: any) => {
+  const getCleanRoomName = (room: { name?: string; room_type: string }) => {
     const baseName = room.name || roomDisplayNames[room.room_type];
     // Remove "Design" suffix if it exists
     return baseName.replace(/\s*Design\s*$/i, '');
@@ -197,10 +243,27 @@ export function RoomTabs({ className }: RoomTabsProps) {
 
   return (
     <>
-      <div className={`flex items-center gap-2 p-2 border-b bg-background ${className}`}>
-        {currentProject.room_designs.length > 0 ? (
-          <Tabs value={currentRoomId || ''} onValueChange={handleRoomSwitch} className="flex-1 min-w-0">
-            <TabsList className="h-auto p-1 bg-muted/50 overflow-x-auto scrollbar-thin scrollbar-track-transparent scrollbar-thumb-muted-foreground/30">
+      <div className={`flex items-center gap-1 p-2 border-b bg-background ${className}`}>
+        {/* Left Scroll Arrow */}
+        {currentProject.room_designs.length > 0 && canScrollLeft && (
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={scrollLeft}
+            className="h-8 w-8 p-0 flex-shrink-0 hover:bg-muted/50"
+          >
+            <ChevronLeft className="h-4 w-4" />
+          </Button>
+        )}
+
+        {/* Scrollable Room Tabs Section */}
+        <div className="flex-1 min-w-0 relative">
+          {currentProject.room_designs.length > 0 ? (
+            <Tabs value={currentRoomId || ''} onValueChange={handleRoomSwitch} className="w-full">
+            <TabsList 
+              ref={tabsContainerRef}
+              className="h-auto p-1 bg-muted/50 w-full overflow-x-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
+            >
               <div className="flex gap-1 min-w-max">
                 {currentProject.room_designs.map((room) => {
                   const IconComponent = roomIcons[room.room_type];
@@ -314,61 +377,77 @@ export function RoomTabs({ className }: RoomTabsProps) {
                 })}
               </div>
             </TabsList>
-          </Tabs>
-        ) : (
-          <div className="flex-1 flex items-center justify-center text-muted-foreground">
-            <span className="text-sm">No rooms in this project</span>
-          </div>
+            </Tabs>
+          ) : (
+            <div className="flex items-center justify-center text-muted-foreground py-2">
+              <span className="text-sm">No rooms in this project</span>
+            </div>
+          )}
+        </div>
+
+        {/* Right Scroll Arrow */}
+        {currentProject.room_designs.length > 0 && canScrollRight && (
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={scrollRight}
+            className="h-8 w-8 p-0 flex-shrink-0 hover:bg-muted/50"
+          >
+            <ChevronRight className="h-4 w-4" />
+          </Button>
         )}
 
-        {/* Add Room Button */}
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button
-              variant="outline"
-              size="sm"
-              disabled={loading}
-              className="flex items-center gap-2"
-            >
-              <Plus className="h-4 w-4" />
-              Add Room
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end" className="w-48">
-            {availableRoomTypes.map((roomType) => {
-              const IconComponent = roomIcons[roomType];
-              const isUsed = usedRoomTypes.includes(roomType);
-              
-              return (
-                <DropdownMenuItem
-                  key={roomType}
-                  onClick={() => !isUsed && handleCreateRoom(roomType)}
-                  className={`flex items-center gap-2 ${isUsed ? 'opacity-50 cursor-not-allowed' : ''}`}
-                  disabled={loading || isUsed}
-                >
-                  <IconComponent className="h-4 w-4" />
-                  <span>{roomDisplayNames[roomType]}</span>
-                  {isUsed ? (
-                    <Badge variant="secondary" className="ml-auto text-xs">
-                      Exists
-                    </Badge>
-                  ) : (
-                    <Badge variant="outline" className="ml-auto text-xs">
-                      Add
-                    </Badge>
-                  )}
-                </DropdownMenuItem>
-              );
-            })}
-          </DropdownMenuContent>
-        </DropdownMenu>
+        {/* Fixed Right Section - Add Room Button and Project Info */}
+        <div className="flex items-center gap-2 flex-shrink-0">
+          {/* Add Room Button */}
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button
+                variant="outline"
+                size="sm"
+                disabled={loading}
+                className="flex items-center gap-2"
+              >
+                <Plus className="h-4 w-4" />
+                Add Room
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="w-48">
+              {availableRoomTypes.map((roomType) => {
+                const IconComponent = roomIcons[roomType];
+                const isUsed = usedRoomTypes.includes(roomType);
+                
+                return (
+                  <DropdownMenuItem
+                    key={roomType}
+                    onClick={() => !isUsed && handleCreateRoom(roomType)}
+                    className={`flex items-center gap-2 ${isUsed ? 'opacity-50 cursor-not-allowed' : ''}`}
+                    disabled={loading || isUsed}
+                  >
+                    <IconComponent className="h-4 w-4" />
+                    <span>{roomDisplayNames[roomType]}</span>
+                    {isUsed ? (
+                      <Badge variant="secondary" className="ml-auto text-xs">
+                        Exists
+                      </Badge>
+                    ) : (
+                      <Badge variant="outline" className="ml-auto text-xs">
+                        Add
+                      </Badge>
+                    )}
+                  </DropdownMenuItem>
+                );
+              })}
+            </DropdownMenuContent>
+          </DropdownMenu>
 
-        {/* Project Info */}
-        <div className="flex items-center gap-2 text-sm text-muted-foreground border-l pl-2">
-          <Home className="h-4 w-4" />
-          <Badge variant="outline" className="text-xs">
-            {currentProject.room_designs.length} room{currentProject.room_designs.length !== 1 ? 's' : ''}
-          </Badge>
+          {/* Project Info */}
+          <div className="flex items-center gap-2 text-sm text-muted-foreground border-l pl-2">
+            <Home className="h-4 w-4" />
+            <Badge variant="outline" className="text-xs">
+              {currentProject.room_designs.length} room{currentProject.room_designs.length !== 1 ? 's' : ''}
+            </Badge>
+          </div>
         </div>
       </div>
 

@@ -4,9 +4,14 @@
 export type RoomType = 
   | 'kitchen' 
   | 'bedroom' 
+  | 'master-bedroom'
+  | 'guest-bedroom'
   | 'bathroom' 
+  | 'ensuite'
   | 'living-room' 
   | 'dining-room' 
+  | 'office'
+  | 'dressing-room'
   | 'utility' 
   | 'under-stairs';
 
@@ -67,6 +72,15 @@ export interface ViewPreferences {
   grid_enabled?: boolean;
   ruler_enabled?: boolean;
   snap_to_grid?: boolean;
+}
+
+// Design interface for component compatibility
+export interface Design {
+  id: string;
+  name: string;
+  elements: DesignElement[];
+  roomDimensions: RoomDimensions;
+  roomType: RoomType;
 }
 
 // Re-export existing DesignElement interface (from Designer.tsx)
@@ -199,11 +213,56 @@ export const ROOM_TYPE_CONFIGS: Record<RoomType, RoomTypeConfig> = {
       }
     }
   },
+  'master-bedroom': {
+    name: 'Master Bedroom',
+    defaultDimensions: { width: 600, height: 500 },
+    icon: 'Bed',
+    description: 'Master bedroom with en-suite and walk-in closet space',
+    defaultSettings: {
+      default_wall_height: 250,
+      view_preferences: {
+        default_2d_view: '2d',
+        default_2d_mode: 'plan',
+        grid_enabled: true,
+        snap_to_grid: true
+      }
+    }
+  },
+  'guest-bedroom': {
+    name: 'Guest Bedroom',
+    defaultDimensions: { width: 450, height: 400 },
+    icon: 'Bed',
+    description: 'Guest bedroom design with essential furniture',
+    defaultSettings: {
+      default_wall_height: 250,
+      view_preferences: {
+        default_2d_view: '2d',
+        default_2d_mode: 'plan',
+        grid_enabled: true,
+        snap_to_grid: true
+      }
+    }
+  },
   bathroom: {
     name: 'Bathroom',
     defaultDimensions: { width: 300, height: 300 },
     icon: 'Bath',
     description: 'Bathroom design with fixtures and vanities',
+    defaultSettings: {
+      default_wall_height: 250,
+      view_preferences: {
+        default_2d_view: '2d',
+        default_2d_mode: 'plan',
+        grid_enabled: true,
+        snap_to_grid: true
+      }
+    }
+  },
+  ensuite: {
+    name: 'Ensuite',
+    defaultDimensions: { width: 250, height: 200 },
+    icon: 'Bath',
+    description: 'Ensuite bathroom connected to master bedroom',
     defaultSettings: {
       default_wall_height: 250,
       view_preferences: {
@@ -234,6 +293,36 @@ export const ROOM_TYPE_CONFIGS: Record<RoomType, RoomTypeConfig> = {
     defaultDimensions: { width: 500, height: 400 },
     icon: 'UtensilsCrossed',
     description: 'Dining room design with table and storage',
+    defaultSettings: {
+      default_wall_height: 250,
+      view_preferences: {
+        default_2d_view: '2d',
+        default_2d_mode: 'plan',
+        grid_enabled: true,
+        snap_to_grid: true
+      }
+    }
+  },
+  office: {
+    name: 'Office',
+    defaultDimensions: { width: 400, height: 350 },
+    icon: 'Monitor',
+    description: 'Home office design with desk and storage',
+    defaultSettings: {
+      default_wall_height: 250,
+      view_preferences: {
+        default_2d_view: '2d',
+        default_2d_mode: 'plan',
+        grid_enabled: true,
+        snap_to_grid: true
+      }
+    }
+  },
+  'dressing-room': {
+    name: 'Dressing Room',
+    defaultDimensions: { width: 300, height: 400 },
+    icon: 'Shirt',
+    description: 'Dressing room with wardrobe and storage solutions',
     defaultSettings: {
       default_wall_height: 250,
       view_preferences: {

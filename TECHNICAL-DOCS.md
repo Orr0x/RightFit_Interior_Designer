@@ -42,6 +42,29 @@ RightFit Interior Designer is a React-based web application that provides profes
 - Project → Room Designs (1:many)
 - Room Design → Design Elements (1:many)
 
+### Room Types
+The application supports 12 different room types:
+
+**Living Spaces:**
+- **Kitchen**: Cabinets, appliances, work surfaces
+- **Living Room**: Seating, entertainment, storage
+- **Dining Room**: Tables, chairs, storage
+
+**Bedrooms:**
+- **Bedroom**: Standard bedroom with furniture and storage
+- **Master Bedroom**: Larger bedroom with en-suite space (600x500cm)
+- **Guest Bedroom**: Essential furniture for guests (450x400cm)
+
+**Bathrooms:**
+- **Bathroom**: Main bathroom with fixtures and vanities (300x300cm)
+- **Ensuite**: Private bathroom connected to master bedroom (250x200cm)
+
+**Specialized Rooms:**
+- **Office**: Home office with desk and storage (400x350cm)
+- **Dressing Room**: Wardrobe and storage solutions (300x400cm)
+- **Utility Room**: Appliances and storage (300x250cm)
+- **Under Stairs**: Storage solutions (200x250cm)
+
 ## API Integration
 
 ### Supabase Client
@@ -110,6 +133,7 @@ npm run build
 Deploy migrations in order:
 1. `20250908160000_create_multi_room_schema.sql`
 2. `20250908160001_migrate_existing_designs.sql`
+3. `20250109000000_add_new_room_types.sql` (adds 5 new room types)
 
 ### Production Considerations
 - Enable HTTPS

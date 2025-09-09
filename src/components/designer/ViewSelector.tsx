@@ -30,31 +30,26 @@ export const ViewSelector: React.FC<ViewSelectorProps> = ({
 
   return (
     <TooltipProvider>
-      <div className="flex items-center gap-1 p-1 bg-gradient-to-r from-gray-50 to-gray-100 rounded-lg shadow-sm border border-gray-200 animate-fade-in">
+      <div className="flex flex-col items-center gap-1 p-2 bg-white/95 backdrop-blur-sm rounded-lg shadow-lg border border-gray-200 animate-fade-in">
         {views.map(({ id, name, icon: Icon, description }) => (
           <Tooltip key={id} delayDuration={300}>
             <TooltipTrigger asChild>
               <Button
                 size="sm"
-                variant={activeView === id ? "default" : "ghost"}
+                variant="ghost"
                 onClick={() => onViewChange(id as View2DMode)}
-                className={`flex items-center gap-1 text-xs px-3 py-2 transition-all duration-300 hover-scale ${
+                className={`w-10 h-10 p-0 transition-all duration-200 hover-scale ${
                   activeView === id 
-                    ? 'bg-primary text-primary-foreground shadow-md scale-105' 
-                    : 'hover:bg-gray-200/70 hover:shadow-sm'
+                    ? 'bg-blue-600 text-white hover:bg-blue-700 shadow-lg scale-105' 
+                    : 'hover:bg-gray-100 text-gray-600 hover:text-gray-900'
                 }`}
               >
-                <Icon className={`h-3 w-3 transition-transform duration-200 ${
-                  activeView === id ? 'scale-110' : ''
-                }`} />
-                <span className="hidden sm:inline font-medium">{name}</span>
-                {activeView === id && (
-                  <div className="absolute -bottom-1 left-1/2 transform -translate-x-1/2 w-1 h-1 bg-primary rounded-full animate-pulse"></div>
-                )}
+                <Icon className="h-4 w-4" />
               </Button>
             </TooltipTrigger>
-            <TooltipContent side="bottom" className="bg-gray-900 text-white text-xs max-w-xs">
-              <p>{description}</p>
+            <TooltipContent side="right" className="bg-gray-900 text-white text-xs max-w-xs">
+              <p className="font-medium">{name}</p>
+              <p className="text-gray-300">{description}</p>
             </TooltipContent>
           </Tooltip>
         ))}

@@ -1,43 +1,36 @@
-
+import React from 'react';
 import { Button } from '@/components/ui/button';
-import { Separator } from '@/components/ui/separator';
 import { Badge } from '@/components/ui/badge';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
-import { KeyboardShortcutsHelp } from '@/components/designer/KeyboardShortcutsHelp';
-import { RoomType } from '@/pages/Designer';
 import { 
   MousePointer2, 
-  Square, 
   Move, 
-  RotateCw, 
+  Maximize2, 
+  Undo2, 
+  Redo2, 
   Copy, 
-  Trash2,
-  Grid3X3,
-  Ruler,
+  Trash2, 
+  Grid3X3, 
+  Ruler, 
   Eye,
-  Undo2,
-  Redo2,
   PanelLeft,
   PanelRight,
-  Save,
-  Plus,
+  RotateCw,
+  Layers,
   Home,
   Bed,
   Bath,
   Tv,
   Grid2X2,
-  Layers,
-  Target,
-  Maximize2,
-  Settings,
-  Sparkles
+  RulerIcon
 } from 'lucide-react';
+import { RoomType } from '@/types/project';
 
 interface DesignToolbarProps {
   activeView: '2d' | '3d';
   onViewChange: (view: '2d' | '3d') => void;
-  activeTool: 'select' | 'fit-screen' | 'pan' | 'none';
-  onToolChange: (tool: 'select' | 'fit-screen' | 'pan' | 'none') => void;
+  activeTool: 'select' | 'fit-screen' | 'pan' | 'tape-measure' | 'none';
+  onToolChange: (tool: 'select' | 'fit-screen' | 'pan' | 'tape-measure' | 'none') => void;
   showGrid: boolean;
   onToggleGrid: () => void;
   showRuler: boolean;
@@ -92,8 +85,6 @@ export const DesignToolbar: React.FC<DesignToolbarProps> = ({
   elementCount,
   onValidateDesign
 }) => {
-  
-  // Get room-specific icon and color
   const getRoomIcon = (roomType: RoomType) => {
     const iconMap = {
       kitchen: Home,
@@ -121,9 +112,9 @@ export const DesignToolbar: React.FC<DesignToolbarProps> = ({
   return (
     <TooltipProvider>
       <div className="bg-white/95 backdrop-blur-sm border-b shadow-sm animate-fade-in">
-        {/* First Row - Panel Toggles and Room Info */}
-        <div className="flex items-center justify-between w-full p-2 border-b border-gray-100">
-          {/* Left Section - Panel Toggle & Room Info */}
+        {/* Single Row - All Tools */}
+        <div className="flex items-center justify-between w-full p-3">
+          {/* Left Section - Left Panel Toggle */}
           <div className="flex items-center gap-3">
             <Tooltip>
               <TooltipTrigger asChild>
@@ -140,59 +131,9 @@ export const DesignToolbar: React.FC<DesignToolbarProps> = ({
                 <p>Toggle component library</p>
               </TooltipContent>
             </Tooltip>
-
-            {/* Room Type Indicator */}
-            <div className={getRoomIndicatorClass(roomType)}>
-              <RoomIcon className="h-3 w-3 mr-1" />
-              <span className="capitalize">{roomType.replace('-', ' ')}</span>
-            </div>
-
-            {/* Element Counter */}
-            <Badge variant="secondary" className="text-xs">
-              <Layers className="h-3 w-3 mr-1" />
-              {elementCount} elements
-            </Badge>
           </div>
 
-          {/* Right Section - Panel Toggle & Quick Actions */}
-          <div className="flex items-center gap-2">
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Button 
-                  variant="outline" 
-                  size="sm"
-                  onClick={onReset}
-                  className="hover-scale fast-transition hover:bg-destructive/10 text-xs"
-                >
-                  <RotateCw className="h-4 w-4 mr-1" />
-                  Reset
-                </Button>
-              </TooltipTrigger>
-              <TooltipContent>
-                <p>Reset entire design</p>
-              </TooltipContent>
-            </Tooltip>
-
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Button 
-                  variant={showRightPanel ? 'default' : 'outline'} 
-                  size="sm"
-                  onClick={onToggleRightPanel}
-                  className="hover-scale fast-transition"
-                >
-                  <PanelRight className="h-4 w-4" />
-                </Button>
-              </TooltipTrigger>
-              <TooltipContent>
-                <p>Toggle properties panel</p>
-              </TooltipContent>
-            </Tooltip>
-          </div>
-        </div>
-
-        {/* Second Row - Tool Groups */}
-        <div className="flex items-center justify-center w-full p-2">
+          {/* Center Section - Main Tools */}
           <div className="flex items-center space-x-4">
             {/* Selection Tools */}
             <div className="flex items-center space-x-1 bg-muted/50 rounded-lg p-1">
@@ -352,6 +293,30 @@ export const DesignToolbar: React.FC<DesignToolbarProps> = ({
                   <p>Measurement tool - click two points to measure</p>
                 </TooltipContent>
               </Tooltip>
+
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button 
+                    variant={activeTool === 'tape-measure' ? 'default' : 'ghost'} 
+                    size="sm"
+                    onClick={() => onToolChange('tape-measure')}
+                    className="hover-scale fast-transition"
+                  >
+                    <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M2 12h20"/>
+                      <path d="M6 12l-4 8"/>
+                      <path d="M10 12H4"/>
+                      <path d="M14 12h-4"/>
+                      <path d="M18 12h-4"/>
+                      <path d="M22 12h-4"/>
+                      <path d="M6 4l4 8"/>
+                    </svg>
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>Tape measure - click two points or drag to measure</p>
+                </TooltipContent>
+              </Tooltip>
               
               <Tooltip>
                 <TooltipTrigger asChild>
@@ -370,26 +335,44 @@ export const DesignToolbar: React.FC<DesignToolbarProps> = ({
               </Tooltip>
             </div>
 
-            <div className="flex items-center gap-1">
+            {/* Reset Tool */}
+            <div className="flex items-center space-x-1 bg-muted/50 rounded-lg p-1">
               <Tooltip>
                 <TooltipTrigger asChild>
                   <Button 
-                    variant="ghost" 
-                    size="sm" 
-                    onClick={onValidateDesign}
-                    className="hover-scale fast-transition text-xs hover:bg-primary/10 hover:text-primary"
+                    variant="outline" 
+                    size="sm"
+                    onClick={onReset}
+                    className="hover-scale fast-transition hover:bg-destructive/10 text-xs"
                   >
-                    <Target className="h-4 w-4 mr-1" />
-                    Validate
+                    <RotateCw className="h-4 w-4 mr-1" />
+                    Reset
                   </Button>
                 </TooltipTrigger>
                 <TooltipContent>
-                  <p>Validate design for completeness (V)</p>
+                  <p>Reset entire design</p>
                 </TooltipContent>
               </Tooltip>
-
-              <KeyboardShortcutsHelp />
             </div>
+          </div>
+
+          {/* Right Section - Right Panel Toggle */}
+          <div className="flex items-center gap-2">
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button 
+                  variant={showRightPanel ? 'default' : 'outline'} 
+                  size="sm"
+                  onClick={onToggleRightPanel}
+                  className="hover-scale fast-transition"
+                >
+                  <PanelRight className="h-4 w-4" />
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>Toggle properties panel</p>
+              </TooltipContent>
+            </Tooltip>
           </div>
         </div>
       </div>

@@ -2,7 +2,7 @@ import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { Clock, Save, Users, Layers, Grid3X3, Ruler, MousePointer2 } from 'lucide-react';
-import { RoomType } from '@/pages/Designer';
+import { RoomType } from '@/types/project';
 
 interface StatusBarProps {
   elementCount: number;

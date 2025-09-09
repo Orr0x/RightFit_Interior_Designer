@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Save, ArrowLeft, Layout, Box, Edit3, Shield, CheckCircle, Home } from 'lucide-react';
+import { Save, ArrowLeft, Layout, Box, Edit3, Shield, CheckCircle, Home, Layers } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import { useProject } from '@/contexts/ProjectContext';
 import { useKeyboardShortcuts } from '@/hooks/useKeyboardShortcuts';
@@ -17,19 +17,12 @@ import { PropertiesPanel } from '@/components/designer/PropertiesPanel';
 import { ErrorBoundary } from '@/components/designer/ErrorBoundary';
 import { PerformanceMonitor } from '@/components/designer/PerformanceMonitor';
 import { RoomTabs } from '@/components/designer/RoomTabs';
+import { KeyboardShortcutsHelp } from '@/components/designer/KeyboardShortcutsHelp';
 import { toast } from 'sonner';
 import { useDesignValidation } from '@/hooks/useDesignValidation';
 import { Project, RoomDesign, DesignElement, RoomType } from '@/types/project';
 import rightfitLogo from '@/assets/logo.png';
 
-// Legacy Design interface for backward compatibility
-interface LegacyDesign {
-  id: string;
-  name: string;
-  elements: DesignElement[];
-  roomDimensions: { width: number; height: number };
-  roomType: RoomType;
-}
 
 const Designer = () => {
   const navigate = useNavigate();
@@ -55,7 +48,7 @@ const Designer = () => {
   const [selectedElement, setSelectedElement] = useState<DesignElement | null>(null);
   const [isEditingProjectName, setIsEditingProjectName] = useState(false);
   const [editingProjectName, setEditingProjectName] = useState('');
-  const [activeTool, setActiveTool] = useState<'select' | 'fit-screen' | 'pan' | 'none'>('select');
+  const [activeTool, setActiveTool] = useState<'select' | 'fit-screen' | 'pan' | 'tape-measure' | 'none'>('select');
   const [showGrid, setShowGrid] = useState(true);
   const [showRuler, setShowRuler] = useState(false);
   const [fitToScreenSignal, setFitToScreenSignal] = useState(0);
@@ -63,6 +56,11 @@ const Designer = () => {
   const [showRightPanel, setShowRightPanel] = useState(true);
   const [lastValidatedDesign, setLastValidatedDesign] = useState<string | null>(null);
   const [lastSaved, setLastSaved] = useState<Date | undefined>(undefined);
+
+  // Tape measure state - multi-measurement support
+  const [completedMeasurements, setCompletedMeasurements] = useState<{ start: { x: number; y: number }, end: { x: number; y: number } }[]>([]);
+  const [currentMeasureStart, setCurrentMeasureStart] = useState<{ x: number; y: number } | null>(null);
+  const [tapeMeasurePreview, setTapeMeasurePreview] = useState<{ x: number; y: number } | null>(null);
 
   // History for undo/redo
   const [history, setHistory] = useState<RoomDesign[]>([]);
@@ -101,20 +99,14 @@ const Designer = () => {
     }
   }, [roomId, currentProject, currentRoomId]);
 
-  // Convert RoomDesign to legacy Design format for compatibility
-  const getLegacyDesign = (): LegacyDesign | null => {
-    if (!currentRoomDesign) return null;
-    
-    return {
-      id: currentRoomDesign.id,
-      name: currentRoomDesign.name || 'Untitled Room',
-      elements: currentRoomDesign.design_elements || [],
-      roomDimensions: currentRoomDesign.room_dimensions || { width: 800, height: 600 },
-      roomType: currentRoomDesign.room_type,
-    };
-  };
-
-  const design = getLegacyDesign();
+  // Convert RoomDesign to Design format for component compatibility
+  const design = currentRoomDesign ? {
+    id: currentRoomDesign.id,
+    name: currentRoomDesign.name || 'Untitled Room',
+    elements: currentRoomDesign.design_elements || [],
+    roomDimensions: currentRoomDesign.room_dimensions || { width: 800, height: 600 },
+    roomType: currentRoomDesign.room_type,
+  } : null;
 
   // Auto-fit when switching 2D views
   useEffect(() => {
@@ -123,6 +115,8 @@ const Designer = () => {
       setFitToScreenSignal(s => s + 1);
     }
   }, [active2DView, activeView]);
+
+  // Don't auto-reset tape measure when tool changes - let user manually clear
 
   const handleSaveDesign = async () => {
     if (!currentRoomDesign) return;
@@ -144,7 +138,7 @@ const Designer = () => {
         setLastValidatedDesign(JSON.stringify(design));
       }
     } catch (error) {
-      console.error('Error saving design:', error);
+      toast.error('Failed to save design');
     }
   };
 
@@ -237,7 +231,7 @@ const Designer = () => {
   };
 
   // Toolbar functions
-  const handleToolChange = (tool: 'select' | 'fit-screen' | 'pan' | 'none') => {
+  const handleToolChange = (tool: 'select' | 'fit-screen' | 'pan' | 'tape-measure' | 'none') => {
     setActiveTool(tool);
     if (tool !== 'select') {
       setSelectedElement(null);
@@ -336,6 +330,40 @@ const Designer = () => {
     }
   };
 
+  // Tape measure functions - multi-measurement support
+  const handleTapeMeasureClick = (x: number, y: number) => {
+    if (activeTool !== 'tape-measure') return;
+
+    if (!currentMeasureStart) {
+      // First click - set start point for new measurement
+      setCurrentMeasureStart({ x, y });
+      setTapeMeasurePreview(null);
+    } else {
+      // Second click - complete measurement and add to completed list
+      const newMeasurement = {
+        start: currentMeasureStart,
+        end: { x, y }
+      };
+      setCompletedMeasurements(prev => [...prev, newMeasurement]);
+      setCurrentMeasureStart(null);
+      setTapeMeasurePreview(null);
+    }
+  };
+
+  const handleTapeMeasureMouseMove = (x: number, y: number) => {
+    if (activeTool !== 'tape-measure' || !currentMeasureStart) return;
+    
+    // Show preview line while moving to second point
+    setTapeMeasurePreview({ x, y });
+  };
+
+  const handleClearTapeMeasure = () => {
+    // Clear all measurements
+    setCompletedMeasurements([]);
+    setCurrentMeasureStart(null);
+    setTapeMeasurePreview(null);
+  };
+
   // Check if design has changed since last validation
   const isDesignValidated = design ? lastValidatedDesign === JSON.stringify(design) : false;
 
@@ -386,7 +414,13 @@ const Designer = () => {
     onToggleRuler: handleToggleRuler,
     onSelectTool: () => setActiveTool('select'),
     onPanTool: () => setActiveTool('pan'),
-    onEscape: () => setSelectedElement(null),
+    onEscape: () => {
+      if (activeTool === 'tape-measure') {
+        handleClearTapeMeasure();
+      } else {
+        setSelectedElement(null);
+      }
+    },
     onArrowLeft: selectedElement ? handleNudgeLeft : undefined,
     onArrowRight: selectedElement ? handleNudgeRight : undefined,
     onArrowUp: selectedElement ? handleNudgeUp : undefined,
@@ -474,18 +508,27 @@ const Designer = () => {
         />
         
         <header className="bg-white shadow-sm border-b px-4 py-3">
-          <div className="flex items-center justify-between w-full relative">
-            {/* Left Navigation */}
+          <div className="flex items-center justify-between w-full">
+            {/* Left Section - Dashboard Button & Current Room */}
             <div className="flex items-center gap-3">
               <Button variant="outline" size="sm" onClick={handleBackToDashboard}>
                 <ArrowLeft className="h-4 w-4 mr-2" />
                 Dashboard
               </Button>
+              
+              {/* Current Room Info */}
+              <div className="flex items-center gap-2">
+                <div className="flex items-center gap-1 text-sm font-medium text-gray-700">
+                  <Home className="h-4 w-4" />
+                  <span className="capitalize">{currentRoomDesign.room_type.replace('-', ' ')}</span>
+                </div>
+              </div>
             </div>
 
-            {/* Center Logo, Room Name, and Validation */}
-            <div className="flex items-center gap-4 absolute left-1/2 transform -translate-x-1/2">
+            {/* Center Section - Logo, Project Name, and Tools */}
+            <div className="flex items-center gap-4">
               <img src={rightfitLogo} alt="RightFit Interiors logo" className="h-12 w-auto" />
+              
               <div className="flex items-center gap-3">
                 <div className="flex items-center gap-2">
                   {isEditingProjectName ? (
@@ -539,7 +582,7 @@ const Designer = () => {
                   )}
                 </div>
                 
-                {/* Design Validation Status */}
+                {/* Design Validation Status & Shortcuts */}
                 <div className="flex items-center gap-2">
                   {isDesignValidated ? (
                     <div className="flex items-center gap-1 text-green-600">
@@ -557,12 +600,21 @@ const Designer = () => {
                       Validate
                     </Button>
                   )}
+                  
+                  <KeyboardShortcutsHelp />
                 </div>
               </div>
             </div>
             
-            {/* Right 3D/2D Tabs */}
-            <div className="flex items-center gap-3 pr-20">
+            {/* Right Section - Element Counter and View Tabs */}
+            <div className="flex items-center gap-3">
+              {/* Element Counter */}
+              <div className="flex items-center gap-1 text-sm text-gray-600">
+                <Layers className="h-4 w-4" />
+                <span>{currentRoomDesign.design_elements?.length || 0} elements</span>
+              </div>
+              
+              {/* 3D/2D Tabs */}
               <Tabs className="shrink-0" value={activeView} onValueChange={(value) => setActiveView(value as '2d' | '3d')}>
                 <TabsList className="grid grid-cols-2">
                   <TabsTrigger value="2d" className="flex items-center space-x-2">
@@ -637,23 +689,13 @@ const Designer = () => {
                 />
               </div>
               
-              {/* View Selector - Only show in 2D mode */}
-              {activeView === '2d' && (
-                <div className="flex items-center gap-2">
-                  <span className="text-sm text-gray-600 font-medium">View:</span>
-                  <ViewSelector
-                    activeView={active2DView}
-                    onViewChange={setActive2DView}
-                  />
-                </div>
-              )}
             </div>
 
             {/* Canvas Area */}
             <div className="flex-1 p-4">
               <Card className="h-full design-canvas-card transition-all duration-300 ease-in-out shadow-lg hover:shadow-xl">
                 {activeView === '2d' && design ? (
-                  <div className="h-full">
+                  <div className="h-full relative">
                     <DesignCanvas2D
                       key={`canvas-2d-${active2DView}-${currentRoomId}`}
                       design={design}
@@ -668,7 +710,21 @@ const Designer = () => {
                       activeTool={activeTool}
                       fitToScreenSignal={fitToScreenSignal}
                       active2DView={active2DView}
+                      completedMeasurements={completedMeasurements}
+                      currentMeasureStart={currentMeasureStart}
+                      tapeMeasurePreview={tapeMeasurePreview}
+                      onTapeMeasureClick={handleTapeMeasureClick}
+                      onTapeMeasureMouseMove={handleTapeMeasureMouseMove}
+                      onClearTapeMeasure={handleClearTapeMeasure}
                     />
+                    
+                    {/* View Selector Overlay - Top Left */}
+                    <div className="absolute top-4 left-4 z-10">
+                      <ViewSelector
+                        activeView={active2DView}
+                        onViewChange={setActive2DView}
+                      />
+                    </div>
                   </div>
                 ) : design ? (
                   <View3D

@@ -1,5 +1,5 @@
 import { useCallback } from 'react';
-import { Design, DesignElement, RoomType } from '@/pages/Designer';
+import { DesignElement, RoomType } from '@/types/project';
 import { toast } from 'sonner';
 
 interface ValidationResult {

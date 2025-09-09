@@ -1,11 +1,11 @@
 import React, { useRef, useEffect, useState, useCallback } from 'react';
-import { DesignElement } from '../../types/project';
+import { DesignElement, Design } from '../../types/project';
 
 // Throttle function for performance optimization
-const throttle = (func: Function, delay: number) => {
+const throttle = (func: (...args: unknown[]) => void, delay: number) => {
   let timeoutId: NodeJS.Timeout | null = null;
   let lastExecTime = 0;
-  return (...args: any[]) => {
+  return (...args: unknown[]) => {
     const currentTime = Date.now();
     
     if (currentTime - lastExecTime > delay) {
@@ -21,14 +21,6 @@ const throttle = (func: Function, delay: number) => {
   };
 };
 
-// Legacy Design interface for backward compatibility
-interface Design {
-  id: string;
-  name: string;
-  elements: DesignElement[];
-  roomDimensions: { width: number; height: number };
-  roomType: string;
-}
 
 interface DesignCanvas2DProps {
   design: Design;
@@ -40,9 +32,16 @@ interface DesignCanvas2DProps {
   onAddElement: (element: DesignElement) => void;
   showGrid?: boolean;
   showRuler?: boolean;
-  activeTool?: 'select' | 'fit-screen' | 'pan' | 'none';
+  activeTool?: 'select' | 'fit-screen' | 'pan' | 'tape-measure' | 'none';
   fitToScreenSignal?: number;
   active2DView: 'plan' | 'front' | 'back' | 'left' | 'right';
+  // Tape measure props - multi-measurement support
+  completedMeasurements?: { start: { x: number; y: number }, end: { x: number; y: number } }[];
+  currentMeasureStart?: { x: number; y: number } | null;
+  tapeMeasurePreview?: { x: number; y: number } | null;
+  onTapeMeasureClick?: (x: number, y: number) => void;
+  onTapeMeasureMouseMove?: (x: number, y: number) => void;
+  onClearTapeMeasure?: () => void;
 }
 
 // Default room dimensions for kitchen (matching reference images)
@@ -84,7 +83,14 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
   showRuler = false,
   activeTool = 'select',
   fitToScreenSignal = 0,
-  active2DView = 'plan'
+  active2DView = 'plan',
+  // Tape measure props - multi-measurement support
+  completedMeasurements = [],
+  currentMeasureStart = null,
+  tapeMeasurePreview = null,
+  onTapeMeasureClick,
+  onTapeMeasureMouseMove,
+  onClearTapeMeasure
 }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -1124,6 +1130,110 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
     ctx.restore();
   }, [isDragging, draggedElement, currentMousePos, canvasToRoom, roomToCanvas, zoom, getSnapPosition]);
 
+  // Draw tape measure - multi-measurement support
+  const drawTapeMeasure = useCallback((ctx: CanvasRenderingContext2D) => {
+    ctx.save();
+
+    // Helper function to draw a single measurement
+    const drawSingleMeasurement = (start: { x: number; y: number }, end: { x: number; y: number }, isCompleted: boolean, measurementIndex?: number) => {
+      // Calculate distance in cm
+      const pixelDistance = Math.sqrt(
+        Math.pow(end.x - start.x, 2) + 
+        Math.pow(end.y - start.y, 2)
+      );
+      const distanceInCm = Math.round(pixelDistance / zoom);
+
+      // Draw measurement line
+      ctx.strokeStyle = isCompleted ? '#3b82f6' : '#94a3b8'; // Blue if completed, gray if preview
+      ctx.lineWidth = 2;
+      ctx.setLineDash(isCompleted ? [] : [8, 4]); // Solid if completed, dashed if preview
+      
+      ctx.beginPath();
+      ctx.moveTo(start.x, start.y);
+      ctx.lineTo(end.x, end.y);
+      ctx.stroke();
+
+      // Draw start point
+      ctx.fillStyle = '#3b82f6';
+      ctx.beginPath();
+      ctx.arc(start.x, start.y, 5, 0, 2 * Math.PI);
+      ctx.fill();
+
+      // Draw end point
+      ctx.fillStyle = isCompleted ? '#3b82f6' : '#94a3b8';
+      ctx.beginPath();
+      ctx.arc(end.x, end.y, 5, 0, 2 * Math.PI);
+      ctx.fill();
+
+      // Draw distance label
+      const midX = (start.x + end.x) / 2;
+      const midY = (start.y + end.y) / 2;
+      
+      // Background for text
+      ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
+      ctx.strokeStyle = isCompleted ? '#3b82f6' : '#94a3b8';
+      ctx.lineWidth = 1;
+      
+      const text = `${distanceInCm}cm`;
+      const textWidth = ctx.measureText(text).width;
+      const padding = 6;
+      const bgWidth = textWidth + padding * 2;
+      const bgHeight = 20;
+      
+      ctx.fillRect(midX - bgWidth/2, midY - bgHeight/2, bgWidth, bgHeight);
+      ctx.strokeRect(midX - bgWidth/2, midY - bgHeight/2, bgWidth, bgHeight);
+      
+      // Distance text
+      ctx.fillStyle = isCompleted ? '#1e40af' : '#64748b';
+      ctx.font = 'bold 12px Arial';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText(text, midX, midY);
+
+      // Add measurement number for completed measurements
+      if (isCompleted && measurementIndex !== undefined) {
+        ctx.fillStyle = '#ffffff';
+        ctx.beginPath();
+        ctx.arc(start.x - 8, start.y - 8, 8, 0, 2 * Math.PI);
+        ctx.fill();
+        
+        ctx.fillStyle = '#3b82f6';
+        ctx.font = 'bold 10px Arial';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText((measurementIndex + 1).toString(), start.x - 8, start.y - 8);
+      }
+    };
+
+    // Draw all completed measurements
+    completedMeasurements.forEach((measurement, index) => {
+      drawSingleMeasurement(measurement.start, measurement.end, true, index);
+    });
+
+    // Draw current measurement in progress
+    if (currentMeasureStart) {
+      if (tapeMeasurePreview) {
+        // Show preview line
+        drawSingleMeasurement(currentMeasureStart, tapeMeasurePreview, false);
+      } else {
+        // Just show start point
+        ctx.fillStyle = '#3b82f6';
+        ctx.beginPath();
+        ctx.arc(currentMeasureStart.x, currentMeasureStart.y, 5, 0, 2 * Math.PI);
+        ctx.fill();
+        
+        // Draw start point label
+        ctx.fillStyle = '#1e40af';
+        ctx.font = 'bold 12px Arial';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText('START', currentMeasureStart.x, currentMeasureStart.y - 15);
+      }
+    }
+
+    ctx.restore();
+  }, [completedMeasurements, currentMeasureStart, tapeMeasurePreview, zoom]);
+
   // Main render function
   const render = useCallback(() => {
     const canvas = canvasRef.current;
@@ -1168,13 +1278,16 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
       drawDragPreview(ctx);
     }
 
+    // Draw tape measure
+    drawTapeMeasure(ctx);
+
     // Draw zoom controls
     drawZoomControls(ctx);
 
     // Draw ruler
     drawRuler(ctx);
 
-  }, [drawGrid, drawRoom, drawElement, drawSnapGuides, drawDragPreview, drawZoomControls, drawRuler, design.elements, active2DView, draggedElement, isDragging]);
+  }, [drawGrid, drawRoom, drawElement, drawSnapGuides, drawDragPreview, drawTapeMeasure, drawZoomControls, drawRuler, design.elements, active2DView, draggedElement, isDragging]);
 
   // Mouse event handlers
   const handleMouseDown = useCallback((e: React.MouseEvent<HTMLCanvasElement>) => {
@@ -1202,6 +1315,13 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
 
     if (activeTool === 'pan') {
       setIsDragging(true);
+      setDragStart({ x, y });
+      return;
+    }
+
+    // Handle tape measure tool
+    if (activeTool === 'tape-measure') {
+      // Just set up for click handling in mouse up
       setDragStart({ x, y });
       return;
     }
@@ -1264,6 +1384,11 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
       }
     }
 
+    // Handle tape measure preview
+    if (activeTool === 'tape-measure' && onTapeMeasureMouseMove) {
+      onTapeMeasureMouseMove(x, y);
+    }
+
     if (!isDragging) return;
 
     if (activeTool === 'pan') {
@@ -1282,7 +1407,7 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
       // Trigger re-render to show drag preview (also throttled by requestAnimationFrame)
       requestAnimationFrame(() => render());
     }
-  }, [isDragging, activeTool, dragStart, draggedElement, canvasToRoom, design.elements, active2DView, render, throttledSnapUpdate, snapGuides]);
+  }, [isDragging, activeTool, dragStart, draggedElement, canvasToRoom, design.elements, active2DView, render, throttledSnapUpdate, snapGuides, onTapeMeasureMouseMove]);
 
   const handleMouseUp = useCallback(() => {
     if (isDragging && draggedElement) {
@@ -1310,11 +1435,17 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
       });
     }
 
+    // Handle tape measure clicks
+    if (activeTool === 'tape-measure' && onTapeMeasureClick && !isDragging) {
+      // Only handle clicks, not drags
+      onTapeMeasureClick(currentMousePos.x, currentMousePos.y);
+    }
+
     // Clear drag state
     setIsDragging(false);
     setDraggedElement(null);
     setSnapGuides({ vertical: [], horizontal: [], snapPoint: null });
-  }, [isDragging, draggedElement, canvasToRoom, currentMousePos, getSnapPosition, snapToGrid, onUpdateElement, roomDimensions]);
+  }, [isDragging, draggedElement, canvasToRoom, currentMousePos, getSnapPosition, snapToGrid, onUpdateElement, roomDimensions, activeTool, onTapeMeasureClick]);
 
   const handleWheel = useCallback((e: React.WheelEvent<HTMLCanvasElement>) => {
     e.preventDefault();
@@ -1355,7 +1486,7 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
 
       onAddElement(newElement);
     } catch (error) {
-      console.error('Error parsing dropped component:', error);
+      // Error parsing dropped component - handled by toast
     }
   }, [canvasToRoom, snapToGrid, roomDimensions, getSnapPosition, onAddElement]);
 
@@ -1430,6 +1561,13 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
         onMouseDown={handleMouseDown}
         onMouseMove={handleMouseMove}
         onMouseUp={handleMouseUp}
+        onContextMenu={(e) => {
+          e.preventDefault();
+          if (activeTool === 'tape-measure' && onClearTapeMeasure) {
+            // Right-click clears tape measure
+            onClearTapeMeasure();
+          }
+        }}
         onDrop={handleDrop}
         onDragOver={handleDragOver}
         style={{

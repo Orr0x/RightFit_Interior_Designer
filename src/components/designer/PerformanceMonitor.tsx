@@ -46,7 +46,7 @@ export const PerformanceMonitor: React.FC<PerformanceMonitorProps> = ({
           elementCount,
           fps,
           renderTime: deltaTime / frameCount,
-          memoryUsage: (performance as any).memory?.usedJSHeapSize / 1024 / 1024 || 0
+          memoryUsage: (performance as { memory?: { usedJSHeapSize: number } }).memory?.usedJSHeapSize / 1024 / 1024 || 0
         }));
 
         // Performance warnings

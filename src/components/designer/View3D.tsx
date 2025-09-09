@@ -1,16 +1,8 @@
 import React, { Suspense, useEffect, useRef } from 'react';
 import { Canvas, useThree } from '@react-three/fiber';
 import { OrbitControls, Environment, Grid, Text } from '@react-three/drei';
-import { DesignElement } from '@/types/project';
+import { DesignElement, Design } from '@/types/project';
 
-// Legacy Design interface for backward compatibility
-interface Design {
-  id: string;
-  name: string;
-  elements: DesignElement[];
-  roomDimensions: { width: number; height: number };
-  roomType: string;
-}
 import * as THREE from 'three';
 import { EnhancedCabinet3D, EnhancedAppliance3D } from './EnhancedModels3D';
 
@@ -108,7 +100,7 @@ export const View3D: React.FC<View3DProps> = ({
   };
 
   // Controller inside Canvas to handle fit-to-screen and controls target updates
-  const FitToScreenController: React.FC<{ roomDimensions: { width: number; height: number }; signal: number; controlsRef: React.RefObject<any>; }> = ({ roomDimensions, signal, controlsRef }) => {
+  const FitToScreenController: React.FC<{ roomDimensions: { width: number; height: number }; signal: number; controlsRef: React.RefObject<OrbitControls | null>; }> = ({ roomDimensions, signal, controlsRef }) => {
     const { camera } = useThree();
     useEffect(() => {
       if (!signal) return;
@@ -127,7 +119,7 @@ export const View3D: React.FC<View3DProps> = ({
     onSelectElement(selectedElement?.id === element.id ? null : element);
   };
 
-  const controlsRef = useRef<any>(null);
+  const controlsRef = useRef<OrbitControls | null>(null);
   return (
     <div className="w-full h-full relative z-0 bg-gray-50 rounded-lg overflow-hidden">
       <Canvas
