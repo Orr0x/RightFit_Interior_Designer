@@ -68,7 +68,9 @@ const COMPONENT_DATA: Record<string, {
   'cabinet': { hasDirection: true, doorSide: 'front', mountType: 'floor', defaultDepth: 60 },
   'base-cabinet': { hasDirection: true, doorSide: 'front', mountType: 'floor', defaultDepth: 60 },
   'wall-cabinet': { hasDirection: true, doorSide: 'front', mountType: 'wall', defaultDepth: 35 },
-  'appliance': { hasDirection: true, doorSide: 'front', mountType: 'floor', defaultDepth: 60 }
+  'appliance': { hasDirection: true, doorSide: 'front', mountType: 'floor', defaultDepth: 60 },
+  'counter-top': { hasDirection: false, doorSide: 'front', mountType: 'floor', defaultDepth: 60 },
+  'end-panel': { hasDirection: false, doorSide: 'front', mountType: 'floor', defaultDepth: 60 }
 };
 
 export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
@@ -160,7 +162,9 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
 
   // Smart snap detection for walls and components
   const getSnapPosition = useCallback((element: DesignElement, x: number, y: number) => {
-    const snapTolerance = 15; // cm
+    // Use more generous snap tolerance for counter tops
+    const isCounterTop = element.type === 'counter-top';
+    const snapTolerance = isCounterTop ? 25 : 15; // cm - more generous for counter tops
     let snappedX = x;
     let snappedY = y;
     let rotation = element.rotation || 0;
@@ -285,7 +289,8 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
     // Enhanced smart wall orientation - doors always face away from walls into the room
     const componentData = COMPONENT_DATA[element.type];
     if (componentData?.hasDirection) {
-      const wallSnapDistance = 35; // cm - increased for better detection
+      // Use more generous wall snap distance for counter tops
+      const wallSnapDistance = isCounterTop ? 50 : 35; // cm - more generous for counter tops
       const cornerTolerance = 30; // cm tolerance for corner detection
       
       // Check if this is a corner unit placement
@@ -1712,9 +1717,36 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
         clampDepth = 90;
       }
 
+      // Enhanced boundary checking for rotated elements
+      // Ensure the element stays within room boundaries using effective dimensions
+      const clampedX = Math.max(0, Math.min(finalX, roomDimensions.width - clampWidth));
+      const clampedY = Math.max(0, Math.min(finalY, roomDimensions.height - clampDepth));
+      
+      // Additional check: if element was snapped to a wall, ensure it stays snapped
+      let finalClampedX = clampedX;
+      let finalClampedY = clampedY;
+      
+      if (snapped.guides.vertical.length > 0) {
+        // Element was snapped to a vertical wall, maintain that snap
+        if (snapped.guides.vertical.includes(0)) {
+          finalClampedX = 0; // Left wall
+        } else if (snapped.guides.vertical.includes(roomDimensions.width)) {
+          finalClampedX = roomDimensions.width - clampWidth; // Right wall
+        }
+      }
+      
+      if (snapped.guides.horizontal.length > 0) {
+        // Element was snapped to a horizontal wall, maintain that snap
+        if (snapped.guides.horizontal.includes(0)) {
+          finalClampedY = 0; // Top wall
+        } else if (snapped.guides.horizontal.includes(roomDimensions.height)) {
+          finalClampedY = roomDimensions.height - clampDepth; // Bottom wall
+        }
+      }
+
       onUpdateElement(draggedElement.id, {
-        x: Math.max(0, Math.min(finalX, roomDimensions.width - clampWidth)),
-        y: Math.max(0, Math.min(finalY, roomDimensions.height - clampDepth)),
+        x: finalClampedX,
+        y: finalClampedY,
         rotation: snapped.rotation
       });
     }

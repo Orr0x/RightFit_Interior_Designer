@@ -48,8 +48,8 @@ interface ComponentDefinition {
 const components: ComponentDefinition[] = [
   // COUNTER TOPS - Available in all rooms
   {
-    id: 'counter-top-straight',
-    name: 'Counter Top Straight',
+    id: 'counter-top-horizontal',
+    name: 'Counter Top Horizontal',
     type: 'counter-top',
     width: 300,
     depth: 60,
@@ -58,33 +58,46 @@ const components: ComponentDefinition[] = [
     category: 'counter-tops',
     roomTypes: ['kitchen', 'bedroom', 'bathroom', 'living-room', 'office', 'dining-room', 'dressing-room', 'utility', 'under-stairs', 'media-wall', 'internal-doors', 'flooring'],
     icon: <Square className="h-4 w-4" />,
-    description: 'Straight counter top section - 300cm x 60cm x 4cm'
+    description: 'Horizontal counter top - 300cm x 60cm x 4cm (left-to-right)'
+  },
+  {
+    id: 'counter-top-vertical',
+    name: 'Counter Top Vertical',
+    type: 'counter-top',
+    width: 60,
+    depth: 300,
+    height: 4,
+    color: '#D2B48C',
+    category: 'counter-tops',
+    roomTypes: ['kitchen', 'bedroom', 'bathroom', 'living-room', 'office', 'dining-room', 'dressing-room', 'utility', 'under-stairs', 'media-wall', 'internal-doors', 'flooring'],
+    icon: <Square className="h-4 w-4" />,
+    description: 'Vertical counter top - 60cm x 300cm x 4cm (front-to-back)'
+  },
+  {
+    id: 'counter-top-square',
+    name: 'Counter Top Square',
+    type: 'counter-top',
+    width: 60,
+    depth: 60,
+    height: 4,
+    color: '#D2B48C',
+    category: 'counter-tops',
+    roomTypes: ['kitchen', 'bedroom', 'bathroom', 'living-room', 'office', 'dining-room', 'dressing-room', 'utility', 'under-stairs', 'media-wall', 'internal-doors', 'flooring'],
+    icon: <Square className="h-4 w-4" />,
+    description: 'Square counter top - 60cm x 60cm x 4cm'
   },
   {
     id: 'counter-top-corner',
     name: 'Counter Top Corner',
     type: 'counter-top',
-    width: 150,
-    depth: 60,
+    width: 90,
+    depth: 90,
     height: 4,
     color: '#D2B48C',
     category: 'counter-tops',
     roomTypes: ['kitchen', 'bedroom', 'bathroom', 'living-room', 'office', 'dining-room', 'dressing-room', 'utility', 'under-stairs', 'media-wall', 'internal-doors', 'flooring'],
     icon: <Square className="h-4 w-4" />,
-    description: 'Corner counter top section - 150cm x 60cm x 4cm'
-  },
-  {
-    id: 'counter-top-short',
-    name: 'Counter Top Short',
-    type: 'counter-top',
-    width: 150,
-    depth: 60,
-    height: 4,
-    color: '#D2B48C',
-    category: 'counter-tops',
-    roomTypes: ['kitchen', 'bedroom', 'bathroom', 'living-room', 'office', 'dining-room', 'dressing-room', 'utility', 'under-stairs', 'media-wall', 'internal-doors', 'flooring'],
-    icon: <Square className="h-4 w-4" />,
-    description: 'Short counter top section - 150cm x 60cm x 4cm'
+    description: 'L-shaped corner counter top - 90cm x 90cm x 4cm'
   },
 
   // END PANELS - Available in all rooms
