@@ -190,31 +190,31 @@ export const View3D: React.FC<View3DProps> = ({
               );
             }
             
-            if (element.type === 'counter-top') {
-              return (
-                <EnhancedCounterTop3D
-                  key={element.id}
-                  element={element}
-                  roomDimensions={roomDimensions}
-                  isSelected={isSelected}
-                  onClick={() => handleElementClick(element)}
-                />
-              );
-            }
-            
-            if (element.type === 'end-panel') {
-              return (
-                <EnhancedEndPanel3D
-                  key={element.id}
-                  element={element}
-                  roomDimensions={roomDimensions}
-                  isSelected={isSelected}
-                  onClick={() => handleElementClick(element)}
-                />
-              );
-            }
-            
-            return null;
+              if (element.type === 'counter-top') {
+                return (
+                  <EnhancedCounterTop3D
+                    key={element.id}
+                    element={element}
+                    roomDimensions={roomDimensions}
+                    isSelected={isSelected}
+                    onClick={() => handleElementClick(element)}
+                  />
+                );
+              }
+             
+              if (element.type === 'end-panel') {
+                return (
+                  <EnhancedEndPanel3D
+                    key={element.id}
+                    element={element}
+                    roomDimensions={roomDimensions}
+                    isSelected={isSelected}
+                    onClick={() => handleElementClick(element)}
+                  />
+                );
+              }
+              
+              return null;
           })}
           
           {/* Camera Controls */}
