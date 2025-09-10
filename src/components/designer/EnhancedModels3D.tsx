@@ -9,8 +9,9 @@ interface ComponentDefinition {
   id: string;
   name: string;
   type: 'cabinet' | 'appliance';
-  width: number;
-  height: number;
+  width: number; // X-axis dimension (left-to-right)
+  depth: number; // Y-axis dimension (front-to-back)
+  height: number; // Z-axis dimension (bottom-to-top)
   color: string;
   category: string;
   roomTypes: string[];
@@ -53,7 +54,9 @@ export const EnhancedCabinet3D: React.FC<Enhanced3DModelProps> = ({
   onClick 
 }) => {
   const { x, z } = convertTo3D(element.x, element.y, roomDimensions.width, roomDimensions.height);
-  const width = element.width / 100;  // Convert cm to meters
+  const width = element.width / 100;  // Convert cm to meters (X-axis)
+  const depth = element.depth / 100;  // Convert cm to meters (Y-axis)
+  const height = element.height / 100; // Convert cm to meters (Z-axis)
   
   // Determine cabinet type
   const isWallCabinet = element.style?.toLowerCase().includes('wall') || 
@@ -75,11 +78,7 @@ export const EnhancedCabinet3D: React.FC<Enhanced3DModelProps> = ({
   const isMediaUnit = element.id.includes('tv-unit') || 
                      element.id.includes('media');
   
-  // Set depth based on cabinet type
-  const depth = isWallCabinet ? 0.4 : 0.6;
-  
-  // Set height based on cabinet type and position
-  const height = isWallCabinet ? element.height / 100 : 0.9; // Default 90cm for base cabinets
+  // Set position based on cabinet type
   const yPosition = isWallCabinet ? 2.0 - height / 2 : height / 2;
   
   // Material colors - more refined than basic colors
@@ -105,15 +104,15 @@ export const EnhancedCabinet3D: React.FC<Enhanced3DModelProps> = ({
   const cabinetHeight = isWallCabinet ? height : height - plinthHeight;
   const doorHeight = cabinetHeight - 0.05; // Door height with slight gap
   
-  // Corner cabinet specific dimensions
-  const legLength = 0.9; // 90cm leg length for corner cabinets
+  // Corner cabinet specific dimensions - use actual element dimensions
+  const legLength = Math.min(width, depth); // Use the smaller dimension for corner cabinets
   
   // Specialized rendering for different cabinet types
   if (isCornerCabinet) {
     // L-shaped corner cabinet with detailed features
-    const cornerDepth = isWallCabinet ? 0.4 : 0.6;
-    const centerX = legLength / 2;
-    const centerZ = legLength / 2;
+    const cornerDepth = depth; // Use actual depth dimension
+    const centerX = width / 2;
+    const centerZ = depth / 2;
     
     return (
       <group 
@@ -433,8 +432,9 @@ export const EnhancedAppliance3D: React.FC<Enhanced3DModelProps> = ({
   onClick 
 }) => {
   const { x, z } = convertTo3D(element.x, element.y, roomDimensions.width, roomDimensions.height);
-  const width = element.width / 100;
-  const depth = 0.6;
+  const width = element.width / 100;  // Convert cm to meters (X-axis)
+  const depth = element.depth / 100;  // Convert cm to meters (Y-axis)
+  const height = element.height / 100; // Convert cm to meters (Z-axis)
   
   const selectedColor = '#ff6b6b';
   
@@ -453,9 +453,9 @@ export const EnhancedAppliance3D: React.FC<Enhanced3DModelProps> = ({
                       element.id.includes('table') ? 'table' :
                       element.id.includes('tv') ? 'tv' : 'generic';
   
-  // Set height based on appliance type
-  const height = getApplianceHeight(applianceType, element);
-  const yPosition = height / 2;
+  // Use actual element height, with fallback for legacy elements
+  const actualHeight = height || getApplianceHeight(applianceType, element);
+  const yPosition = actualHeight / 2;
   
   // Base color based on appliance type
   const applianceColor = getApplianceColor(applianceType, element);
@@ -509,7 +509,7 @@ export const EnhancedAppliance3D: React.FC<Enhanced3DModelProps> = ({
         rotation={[0, element.rotation * Math.PI / 180, 0]}
       >
         {/* Bed frame */}
-        <mesh position={[0, -height/2 + frameHeight/2, 0]}>
+        <mesh position={[0, -actualHeight/2 + frameHeight/2, 0]}>
           <boxGeometry args={[width, frameHeight, bedDepth]} />
           <meshStandardMaterial 
             color={isSelected ? selectedColor : applianceColor} 
@@ -519,14 +519,14 @@ export const EnhancedAppliance3D: React.FC<Enhanced3DModelProps> = ({
         </mesh>
         
         {/* Mattress */}
-        <mesh position={[0, -height/2 + frameHeight + mattressHeight/2, 0]}>
+        <mesh position={[0, -actualHeight/2 + frameHeight + mattressHeight/2, 0]}>
           <boxGeometry args={[width - 0.1, mattressHeight, bedDepth - 0.1]} />
           <meshStandardMaterial color="#FFFFFF" roughness={0.9} metalness={0} />
         </mesh>
         
         {/* Headboard */}
         <mesh position={[0, 0, -bedDepth/2 + 0.05]}>
-          <boxGeometry args={[width, height, 0.1]} />
+          <boxGeometry args={[width, actualHeight, 0.1]} />
           <meshStandardMaterial 
             color={isSelected ? selectedColor : applianceColor} 
             roughness={0.7} 
@@ -535,18 +535,18 @@ export const EnhancedAppliance3D: React.FC<Enhanced3DModelProps> = ({
         </mesh>
         
         {/* Pillows */}
-        <mesh position={[-width/4, -height/2 + frameHeight + mattressHeight + 0.05, -bedDepth/3]}>
+        <mesh position={[-width/4, -actualHeight/2 + frameHeight + mattressHeight + 0.05, -bedDepth/3]}>
           <boxGeometry args={[width/3, 0.1, bedDepth/4]} />
           <meshStandardMaterial color="#F5F5F5" roughness={0.9} metalness={0} />
         </mesh>
-        <mesh position={[width/4, -height/2 + frameHeight + mattressHeight + 0.05, -bedDepth/3]}>
+        <mesh position={[width/4, -actualHeight/2 + frameHeight + mattressHeight + 0.05, -bedDepth/3]}>
           <boxGeometry args={[width/3, 0.1, bedDepth/4]} />
           <meshStandardMaterial color="#F5F5F5" roughness={0.9} metalness={0} />
         </mesh>
         
         {/* Frame outline */}
         <lineSegments>
-          <edgesGeometry args={[new THREE.BoxGeometry(width, height, bedDepth)]} />
+          <edgesGeometry args={[new THREE.BoxGeometry(width, actualHeight, bedDepth)]} />
           <lineBasicMaterial color="#333" />
         </lineSegments>
       </group>
@@ -563,7 +563,7 @@ export const EnhancedAppliance3D: React.FC<Enhanced3DModelProps> = ({
         rotation={[0, element.rotation * Math.PI / 180, 0]}
       >
         {/* Sofa base */}
-        <mesh position={[0, -height/2 + baseHeight/2, 0]}>
+        <mesh position={[0, -actualHeight/2 + baseHeight/2, 0]}>
           <boxGeometry args={[width, baseHeight, sofaDepth]} />
           <meshStandardMaterial 
             color={isSelected ? selectedColor : applianceColor} 
@@ -574,7 +574,7 @@ export const EnhancedAppliance3D: React.FC<Enhanced3DModelProps> = ({
         
         {/* Sofa back */}
         <mesh position={[0, 0, -sofaDepth/2 + 0.2]}>
-          <boxGeometry args={[width, height, 0.4]} />
+          <boxGeometry args={[width, actualHeight, 0.4]} />
           <meshStandardMaterial 
             color={isSelected ? selectedColor : applianceColor} 
             roughness={0.8} 
@@ -584,7 +584,7 @@ export const EnhancedAppliance3D: React.FC<Enhanced3DModelProps> = ({
         
         {/* Sofa arms */}
         <mesh position={[-width/2 + 0.2, 0, 0]}>
-          <boxGeometry args={[0.4, height, sofaDepth - 0.2]} />
+          <boxGeometry args={[0.4, actualHeight, sofaDepth - 0.2]} />
           <meshStandardMaterial 
             color={isSelected ? selectedColor : applianceColor} 
             roughness={0.8} 
@@ -592,7 +592,7 @@ export const EnhancedAppliance3D: React.FC<Enhanced3DModelProps> = ({
           />
         </mesh>
         <mesh position={[width/2 - 0.2, 0, 0]}>
-          <boxGeometry args={[0.4, height, sofaDepth - 0.2]} />
+          <boxGeometry args={[0.4, actualHeight, sofaDepth - 0.2]} />
           <meshStandardMaterial 
             color={isSelected ? selectedColor : applianceColor} 
             roughness={0.8} 
@@ -601,7 +601,7 @@ export const EnhancedAppliance3D: React.FC<Enhanced3DModelProps> = ({
         </mesh>
         
         {/* Seat cushions */}
-        <mesh position={[0, -height/4, sofaDepth/6]}>
+        <mesh position={[0, -actualHeight/4, sofaDepth/6]}>
           <boxGeometry args={[width - 1, 0.15, sofaDepth - 0.6]} />
           <meshStandardMaterial 
             color={isSelected ? selectedColor : (element.color ? element.color : "#4A6F8C")} 
@@ -622,7 +622,7 @@ export const EnhancedAppliance3D: React.FC<Enhanced3DModelProps> = ({
         
         {/* Frame outline */}
         <lineSegments>
-          <edgesGeometry args={[new THREE.BoxGeometry(width, height, sofaDepth)]} />
+          <edgesGeometry args={[new THREE.BoxGeometry(width, actualHeight, sofaDepth)]} />
           <lineBasicMaterial color="#333" />
         </lineSegments>
       </group>
@@ -648,8 +648,8 @@ export const EnhancedAppliance3D: React.FC<Enhanced3DModelProps> = ({
         </mesh>
         
         {/* Chair back */}
-        <mesh position={[0, height/3, -chairDepth/2 + 0.05]}>
-          <boxGeometry args={[width, height * 0.8, 0.1]} />
+        <mesh position={[0, actualHeight/3, -chairDepth/2 + 0.05]}>
+          <boxGeometry args={[width, actualHeight * 0.8, 0.1]} />
           <meshStandardMaterial 
             color={isSelected ? selectedColor : applianceColor} 
             roughness={0.7} 
@@ -658,26 +658,26 @@ export const EnhancedAppliance3D: React.FC<Enhanced3DModelProps> = ({
         </mesh>
         
         {/* Chair legs */}
-        <mesh position={[-width/2 + 0.05, -height/2 + 0.4, -chairDepth/2 + 0.05]}>
+        <mesh position={[-width/2 + 0.05, -actualHeight/2 + 0.4, -chairDepth/2 + 0.05]}>
           <boxGeometry args={[0.05, 0.8, 0.05]} />
           <meshStandardMaterial color="#2F4F4F" roughness={0.4} metalness={0.6} />
         </mesh>
-        <mesh position={[width/2 - 0.05, -height/2 + 0.4, -chairDepth/2 + 0.05]}>
+        <mesh position={[width/2 - 0.05, -actualHeight/2 + 0.4, -chairDepth/2 + 0.05]}>
           <boxGeometry args={[0.05, 0.8, 0.05]} />
           <meshStandardMaterial color="#2F4F4F" roughness={0.4} metalness={0.6} />
         </mesh>
-        <mesh position={[-width/2 + 0.05, -height/2 + 0.4, chairDepth/2 - 0.05]}>
+        <mesh position={[-width/2 + 0.05, -actualHeight/2 + 0.4, chairDepth/2 - 0.05]}>
           <boxGeometry args={[0.05, 0.8, 0.05]} />
           <meshStandardMaterial color="#2F4F4F" roughness={0.4} metalness={0.6} />
         </mesh>
-        <mesh position={[width/2 - 0.05, -height/2 + 0.4, chairDepth/2 - 0.05]}>
+        <mesh position={[width/2 - 0.05, -actualHeight/2 + 0.4, chairDepth/2 - 0.05]}>
           <boxGeometry args={[0.05, 0.8, 0.05]} />
           <meshStandardMaterial color="#2F4F4F" roughness={0.4} metalness={0.6} />
         </mesh>
         
         {/* Frame outline */}
         <lineSegments>
-          <edgesGeometry args={[new THREE.BoxGeometry(width, height, chairDepth)]} />
+          <edgesGeometry args={[new THREE.BoxGeometry(width, actualHeight, chairDepth)]} />
           <lineBasicMaterial color="#333" />
         </lineSegments>
       </group>
@@ -703,7 +703,7 @@ export const EnhancedAppliance3D: React.FC<Enhanced3DModelProps> = ({
         </mesh>
         
         {/* Table legs */}
-        <mesh position={[-width/2 + 0.05, -height/2 + 0.35, -tableDepth/2 + 0.05]}>
+        <mesh position={[-width/2 + 0.05, -actualHeight/2 + 0.35, -tableDepth/2 + 0.05]}>
           <boxGeometry args={[0.08, 0.7, 0.08]} />
           <meshStandardMaterial 
             color={isSelected ? selectedColor : applianceColor} 
@@ -711,7 +711,7 @@ export const EnhancedAppliance3D: React.FC<Enhanced3DModelProps> = ({
             metalness={0.2}
           />
         </mesh>
-        <mesh position={[width/2 - 0.05, -height/2 + 0.35, -tableDepth/2 + 0.05]}>
+        <mesh position={[width/2 - 0.05, -actualHeight/2 + 0.35, -tableDepth/2 + 0.05]}>
           <boxGeometry args={[0.08, 0.7, 0.08]} />
           <meshStandardMaterial 
             color={isSelected ? selectedColor : applianceColor} 
@@ -719,7 +719,7 @@ export const EnhancedAppliance3D: React.FC<Enhanced3DModelProps> = ({
             metalness={0.2}
           />
         </mesh>
-        <mesh position={[-width/2 + 0.05, -height/2 + 0.35, tableDepth/2 - 0.05]}>
+        <mesh position={[-width/2 + 0.05, -actualHeight/2 + 0.35, tableDepth/2 - 0.05]}>
           <boxGeometry args={[0.08, 0.7, 0.08]} />
           <meshStandardMaterial 
             color={isSelected ? selectedColor : applianceColor} 
@@ -727,7 +727,7 @@ export const EnhancedAppliance3D: React.FC<Enhanced3DModelProps> = ({
             metalness={0.2}
           />
         </mesh>
-        <mesh position={[width/2 - 0.05, -height/2 + 0.35, tableDepth/2 - 0.05]}>
+        <mesh position={[width/2 - 0.05, -actualHeight/2 + 0.35, tableDepth/2 - 0.05]}>
           <boxGeometry args={[0.08, 0.7, 0.08]} />
           <meshStandardMaterial 
             color={isSelected ? selectedColor : applianceColor} 
@@ -738,7 +738,7 @@ export const EnhancedAppliance3D: React.FC<Enhanced3DModelProps> = ({
         
         {/* Frame outline */}
         <lineSegments>
-          <edgesGeometry args={[new THREE.BoxGeometry(width, height, tableDepth)]} />
+          <edgesGeometry args={[new THREE.BoxGeometry(width, actualHeight, tableDepth)]} />
           <lineBasicMaterial color="#333" />
         </lineSegments>
       </group>
@@ -750,13 +750,13 @@ export const EnhancedAppliance3D: React.FC<Enhanced3DModelProps> = ({
     
     return (
       <group 
-        position={[x + width / 2, yPosition + height/2, z + depth / 2]} 
+        position={[x + width / 2, yPosition + actualHeight/2, z + depth / 2]} 
         onClick={onClick} 
         rotation={[0, element.rotation * Math.PI / 180, 0]}
       >
         {/* TV screen */}
         <mesh position={[0, 0, 0]}>
-          <boxGeometry args={[width, height, tvThickness]} />
+          <boxGeometry args={[width, actualHeight, tvThickness]} />
           <meshStandardMaterial 
             color="#000000" 
             roughness={0.2} 
@@ -766,7 +766,7 @@ export const EnhancedAppliance3D: React.FC<Enhanced3DModelProps> = ({
         
         {/* TV frame */}
         <mesh position={[0, 0, 0]} scale={[1.05, 1.05, 1]}>
-          <boxGeometry args={[width, height, tvThickness]} />
+          <boxGeometry args={[width, actualHeight, tvThickness]} />
           <meshStandardMaterial 
             color={isSelected ? selectedColor : "#333333"} 
             roughness={0.4} 
@@ -775,7 +775,7 @@ export const EnhancedAppliance3D: React.FC<Enhanced3DModelProps> = ({
         </mesh>
         
         {/* TV stand */}
-        <mesh position={[0, -height/2 - standHeight/2, depth/3]}>
+        <mesh position={[0, -actualHeight/2 - standHeight/2, depth/3]}>
           <boxGeometry args={[width/3, standHeight, depth/2]} />
           <meshStandardMaterial 
             color={isSelected ? selectedColor : "#2F4F4F"} 
@@ -785,7 +785,7 @@ export const EnhancedAppliance3D: React.FC<Enhanced3DModelProps> = ({
         </mesh>
         
         {/* TV stand neck */}
-        <mesh position={[0, -height/2, depth/4]}>
+        <mesh position={[0, -actualHeight/2, depth/4]}>
           <boxGeometry args={[0.05, 0.1, depth/3]} />
           <meshStandardMaterial 
             color="#333333" 
@@ -796,7 +796,7 @@ export const EnhancedAppliance3D: React.FC<Enhanced3DModelProps> = ({
         
         {/* Frame outline */}
         <lineSegments>
-          <edgesGeometry args={[new THREE.BoxGeometry(width, height, tvThickness)]} />
+          <edgesGeometry args={[new THREE.BoxGeometry(width, actualHeight, tvThickness)]} />
           <lineBasicMaterial color="#666" />
         </lineSegments>
       </group>
@@ -811,7 +811,7 @@ export const EnhancedAppliance3D: React.FC<Enhanced3DModelProps> = ({
       >
         {/* Main body */}
         <mesh>
-          <boxGeometry args={[width, height, depth]} />
+          <boxGeometry args={[width, actualHeight, depth]} />
           <meshStandardMaterial 
             color={isSelected ? selectedColor : applianceColor} 
             roughness={0.4} 
@@ -820,16 +820,16 @@ export const EnhancedAppliance3D: React.FC<Enhanced3DModelProps> = ({
         </mesh>
         
         {/* Fridge door with improved detail */}
-        <mesh position={[0, height * 0.25, depth / 2 + 0.005]}>
-          <boxGeometry args={[width - 0.02, height * 0.4, 0.015]} />
+        <mesh position={[0, actualHeight * 0.25, depth / 2 + 0.005]}>
+          <boxGeometry args={[width - 0.02, actualHeight * 0.4, 0.015]} />
           <meshStandardMaterial 
             color="#f0f0f0" 
             roughness={0.4} 
             metalness={0.6}
           />
         </mesh>
-        <mesh position={[0, -height * 0.25, depth / 2 + 0.005]}>
-          <boxGeometry args={[width - 0.02, height * 0.4, 0.015]} />
+        <mesh position={[0, -actualHeight * 0.25, depth / 2 + 0.005]}>
+          <boxGeometry args={[width - 0.02, actualHeight * 0.4, 0.015]} />
           <meshStandardMaterial 
             color="#f0f0f0" 
             roughness={0.4} 

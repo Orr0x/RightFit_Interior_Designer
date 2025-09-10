@@ -34,8 +34,9 @@ interface ComponentDefinition {
   id: string;
   name: string;
   type: 'cabinet' | 'appliance';
-  width: number;
-  height: number;
+  width: number; // X-axis dimension (left-to-right)
+  depth: number; // Y-axis dimension (front-to-back)
+  height: number; // Z-axis dimension (bottom-to-top)
   color: string;
   category: string;
   roomTypes: RoomType[];
@@ -50,8 +51,9 @@ const components: ComponentDefinition[] = [
     id: 'base-cabinet-30',
     name: 'Base Cabinet 30cm',
     type: 'cabinet',
-    width: 30,
-    height: 60,
+    width: 30, // X-axis dimension (left-to-right)
+    depth: 60, // Y-axis dimension (front-to-back)
+    height: 90, // Z-axis dimension (bottom-to-top)
     color: '#8b4513',
     category: 'base-cabinets',
     roomTypes: ['kitchen'],
@@ -62,8 +64,9 @@ const components: ComponentDefinition[] = [
     id: 'base-cabinet-40',
     name: 'Base Cabinet 40cm',
     type: 'cabinet',
-    width: 40,
-    height: 60,
+    width: 40, // X-axis dimension (left-to-right)
+    depth: 60, // Y-axis dimension (front-to-back)
+    height: 90, // Z-axis dimension (bottom-to-top)
     color: '#8b4513',
     category: 'base-cabinets',
     roomTypes: ['kitchen'],
@@ -74,8 +77,9 @@ const components: ComponentDefinition[] = [
     id: 'base-cabinet-50',
     name: 'Base Cabinet 50cm',
     type: 'cabinet',
-    width: 50,
-    height: 60,
+    width: 50, // X-axis dimension (left-to-right)
+    depth: 60, // Y-axis dimension (front-to-back)
+    height: 90, // Z-axis dimension (bottom-to-top)
     color: '#8b4513',
     category: 'base-cabinets',
     roomTypes: ['kitchen'],
@@ -86,8 +90,9 @@ const components: ComponentDefinition[] = [
     id: 'base-cabinet-60',
     name: 'Base Cabinet 60cm',
     type: 'cabinet',
-    width: 60,
-    height: 60,
+    width: 60, // X-axis dimension (left-to-right)
+    depth: 60, // Y-axis dimension (front-to-back)
+    height: 90, // Z-axis dimension (bottom-to-top)
     color: '#8b4513',
     category: 'base-cabinets',
     roomTypes: ['kitchen'],
@@ -98,8 +103,9 @@ const components: ComponentDefinition[] = [
     id: 'corner-cabinet',
     name: 'Corner Base Cabinet',
     type: 'cabinet',
-    width: 90,
-    height: 90,
+    width: 90, // X-axis dimension (left-to-right)
+    depth: 90, // Y-axis dimension (front-to-back)
+    height: 90, // Z-axis dimension (bottom-to-top)
     color: '#8b4513',
     category: 'base-cabinets',
     roomTypes: ['kitchen'],
@@ -268,8 +274,9 @@ const components: ComponentDefinition[] = [
     id: 'larder-full-height',
     name: 'Full Height Larder Unit',
     type: 'cabinet',
-    width: 60,
-    height: 200,
+    width: 60, // X-axis dimension (left-to-right)
+    depth: 60, // Y-axis dimension (front-to-back)
+    height: 200, // Z-axis dimension (bottom-to-top)
     color: '#F5F5F5',
     category: 'kitchen-larder',
     roomTypes: ['kitchen'],
@@ -280,8 +287,9 @@ const components: ComponentDefinition[] = [
     id: 'larder-built-in-fridge',
     name: 'Built-in Fridge Larder',
     type: 'cabinet',
-    width: 60,
-    height: 200,
+    width: 60, // X-axis dimension (left-to-right)
+    depth: 60, // Y-axis dimension (front-to-back)
+    height: 200, // Z-axis dimension (bottom-to-top)
     color: '#F5F5F5',
     category: 'kitchen-larder',
     roomTypes: ['kitchen'],
@@ -292,8 +300,9 @@ const components: ComponentDefinition[] = [
     id: 'larder-single-oven',
     name: 'Single Built-in Oven Larder',
     type: 'cabinet',
-    width: 60,
-    height: 200,
+    width: 60, // X-axis dimension (left-to-right)
+    depth: 60, // Y-axis dimension (front-to-back)
+    height: 200, // Z-axis dimension (bottom-to-top)
     color: '#F5F5F5',
     category: 'kitchen-larder',
     roomTypes: ['kitchen'],
@@ -304,8 +313,9 @@ const components: ComponentDefinition[] = [
     id: 'larder-double-oven',
     name: 'Double Built-in Oven Larder',
     type: 'cabinet',
-    width: 60,
-    height: 200,
+    width: 60, // X-axis dimension (left-to-right)
+    depth: 60, // Y-axis dimension (front-to-back)
+    height: 200, // Z-axis dimension (bottom-to-top)
     color: '#F5F5F5',
     category: 'kitchen-larder',
     roomTypes: ['kitchen'],
@@ -316,8 +326,9 @@ const components: ComponentDefinition[] = [
     id: 'larder-oven-microwave',
     name: 'Oven + Microwave Larder',
     type: 'cabinet',
-    width: 60,
-    height: 200,
+    width: 60, // X-axis dimension (left-to-right)
+    depth: 60, // Y-axis dimension (front-to-back)
+    height: 200, // Z-axis dimension (bottom-to-top)
     color: '#F5F5F5',
     category: 'kitchen-larder',
     roomTypes: ['kitchen'],
@@ -328,8 +339,9 @@ const components: ComponentDefinition[] = [
     id: 'larder-coffee-machine',
     name: 'Coffee Machine Larder',
     type: 'cabinet',
-    width: 60,
-    height: 200,
+    width: 60, // X-axis dimension (left-to-right)
+    depth: 60, // Y-axis dimension (front-to-back)
+    height: 200, // Z-axis dimension (bottom-to-top)
     color: '#F5F5F5',
     category: 'kitchen-larder',
     roomTypes: ['kitchen'],
@@ -340,8 +352,9 @@ const components: ComponentDefinition[] = [
     id: 'larder-corner-unit',
     name: 'Corner Larder Unit',
     type: 'cabinet',
-    width: 60,
-    height: 200,
+    width: 60, // X-axis dimension (left-to-right)
+    depth: 60, // Y-axis dimension (front-to-back)
+    height: 200, // Z-axis dimension (bottom-to-top)
     color: '#F5F5F5',
     category: 'kitchen-larder',
     roomTypes: ['kitchen'],
@@ -1916,8 +1929,9 @@ export const EnhancedSidebar: React.FC<EnhancedSidebarProps> = ({
       type: component.type,
       x: 100,
       y: 100,
-      width: component.width,
-      height: component.height,
+      width: component.width, // X-axis dimension
+      depth: component.depth, // Y-axis dimension (front-to-back)
+      height: component.height, // Z-axis dimension (bottom-to-top)
       rotation: 0,
       color: component.color,
       style: component.name
@@ -2090,9 +2104,9 @@ export const EnhancedSidebar: React.FC<EnhancedSidebarProps> = ({
                           {component.icon}
                           <CardTitle className="text-sm">{component.name}</CardTitle>
                         </div>
-                        <Badge variant="secondary" className="text-xs">
-                          {component.width}×{component.height}
-                        </Badge>
+                      <Badge variant="secondary" className="text-xs">
+                        {component.width}×{component.depth}×{component.height}
+                      </Badge>
                       </div>
                     </CardHeader>
                     <CardContent className="pt-0">

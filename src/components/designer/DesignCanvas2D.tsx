@@ -1470,9 +1470,10 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
         id: `${componentData.id}-${Date.now()}`,
         type: componentData.type,
         x: snapToGrid(Math.max(0, Math.min(roomPos.x, roomDimensions.width - componentData.width))),
-        y: snapToGrid(Math.max(0, Math.min(roomPos.y, roomDimensions.height - componentData.height))),
-        width: componentData.width,
-        height: componentData.height,
+        y: snapToGrid(Math.max(0, Math.min(roomPos.y, roomDimensions.height - componentData.depth))),
+        width: componentData.width, // X-axis dimension
+        depth: componentData.depth, // Y-axis dimension (front-to-back)
+        height: componentData.height, // Z-axis dimension (bottom-to-top)
         rotation: 0,
         color: componentData.color,
         style: componentData.name

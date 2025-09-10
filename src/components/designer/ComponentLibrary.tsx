@@ -33,8 +33,9 @@ interface ComponentDefinition {
   id: string;
   name: string;
   type: 'cabinet' | 'appliance';
-  width: number;
-  height: number;
+  width: number; // X-axis dimension (left-to-right)
+  depth: number; // Y-axis dimension (front-to-back)
+  height: number; // Z-axis dimension (bottom-to-top)
   color: string;
   category: string;
   roomTypes: RoomType[];
@@ -2602,8 +2603,9 @@ export const ComponentLibrary: React.FC<ComponentLibraryProps> = ({ onAddElement
       type: component.type,
       x: 100,
       y: 100,
-      width: component.width,
-      height: component.height,
+      width: component.width, // X-axis dimension
+      depth: component.depth, // Y-axis dimension (front-to-back)
+      height: component.height, // Z-axis dimension (bottom-to-top)
       rotation: 0,
       color: component.color,
       style: component.name
@@ -2779,7 +2781,7 @@ export const ComponentLibrary: React.FC<ComponentLibraryProps> = ({ onAddElement
                         <CardTitle className="text-sm">{component.name}</CardTitle>
                       </div>
                       <Badge variant="secondary" className="text-xs">
-                        {component.width}×{component.height}
+                        {component.width}×{component.depth}×{component.height}
                       </Badge>
                     </div>
                   </CardHeader>

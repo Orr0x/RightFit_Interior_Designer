@@ -83,17 +83,17 @@ export interface Design {
   roomType: RoomType;
 }
 
-// Re-export existing DesignElement interface (from Designer.tsx)
-// This maintains backward compatibility
+// DesignElement interface with proper 3D dimension mapping
 export interface DesignElement {
   id: string;
   type: 'wall' | 'cabinet' | 'appliance';
-  x: number;
-  y: number;
-  width: number;
-  height: number; // DEPRECATED: Use depth instead, kept for backward compatibility
-  depth?: number; // Front-to-back dimension (replaces height)
-  verticalHeight?: number; // Bottom-to-top dimension (new)
+  x: number; // X position in room
+  y: number; // Y position in room
+  width: number; // X-axis dimension (left-to-right)
+  depth: number; // Y-axis dimension (front-to-back)
+  height: number; // Z-axis dimension (bottom-to-top)
+  // Legacy properties for backward compatibility
+  verticalHeight?: number; // DEPRECATED: Use height instead
   rotation: number;
   style?: string;
   color?: string;
@@ -378,17 +378,34 @@ export const isValidRoomType = (roomType: string): roomType is RoomType => {
   return roomType in ROOM_TYPE_CONFIGS;
 };
 
-// Migration helpers
+// Migration helpers - Updated for proper 3D dimension mapping
 export const migrateDesignElement = (element: Record<string, string | number | boolean | undefined>): DesignElement => {
+  // Handle legacy elements that might have old dimension structure
+  const legacyHeight = element.height as number;
+  const legacyDepth = element.depth as number;
+  const legacyVerticalHeight = element.verticalHeight as number;
+  
+  // Determine proper dimensions based on what's available
+  let width = element.width as number;
+  let depth = legacyDepth ?? legacyHeight ?? 60; // Use depth if available, otherwise height, default 60cm
+  let height = legacyVerticalHeight ?? 90; // Use verticalHeight if available, default 90cm
+  
+  // If we have legacy height but no depth, assume height was actually depth
+  if (legacyHeight && !legacyDepth && !legacyVerticalHeight) {
+    depth = legacyHeight;
+    height = 90; // Default cabinet height
+  }
+  
   return {
     id: element.id as string,
     type: element.type as 'wall' | 'cabinet' | 'appliance',
     x: element.x as number,
     y: element.y as number,
-    width: element.width as number,
-    height: element.height as number, // Keep for backward compatibility
-    depth: (element.depth ?? element.height) as number, // Use depth if available, otherwise use height
-    verticalHeight: (element.verticalHeight ?? 90) as number, // Default vertical height for cabinets
+    width: width,
+    depth: depth, // Y-axis dimension (front-to-back)
+    height: height, // Z-axis dimension (bottom-to-top)
+    // Legacy properties for backward compatibility
+    verticalHeight: legacyVerticalHeight, // Keep for backward compatibility
     rotation: (element.rotation ?? 0) as number,
     style: element.style as string | undefined,
     color: element.color as string | undefined,

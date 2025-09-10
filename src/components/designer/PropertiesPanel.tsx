@@ -29,34 +29,26 @@ export const PropertiesPanel: React.FC<PropertiesPanelProps> = ({
   roomType,
   active2DView
 }) => {
-  // Helper functions for backward compatibility
+  // Helper functions for proper 3D dimension mapping
   const getElementDepth = (element: DesignElement): number => {
-    return element.depth ?? element.height;
+    return element.depth ?? 60; // Default depth for cabinets
   };
 
-  const getElementVerticalHeight = (element: DesignElement): number => {
-    return element.verticalHeight ?? 90; // Default cabinet height
+  const getElementHeight = (element: DesignElement): number => {
+    return element.height ?? 90; // Default height for cabinets
   };
 
-  const updateElementDimension = (dimension: 'width' | 'depth' | 'verticalHeight', value: number) => {
+  const updateElementDimension = (dimension: 'width' | 'depth' | 'height', value: number) => {
     if (!selectedElement) return;
     
     const updates: Partial<DesignElement> = {};
-    
-    if (dimension === 'depth') {
-      updates.depth = value;
-      updates.height = value; // Keep backward compatibility
-    } else if (dimension === 'verticalHeight') {
-      updates.verticalHeight = value;
-    } else {
-      updates[dimension] = value;
-    }
+    updates[dimension] = value;
     
     onUpdateElement(selectedElement.id, updates);
   };
 
-  // Determine if height control should be shown (only in elevation views)
-  const showHeightControl = active2DView !== 'plan';
+  // Always show height control - it's a fundamental 3D property
+  const showHeightControl = true;
 
   const [roomWidth, setRoomWidth] = useState(roomDimensions.width);
   const [roomHeight, setRoomHeight] = useState(roomDimensions.height);
@@ -357,8 +349,8 @@ export const PropertiesPanel: React.FC<PropertiesPanelProps> = ({
                       <Label className="text-xs">Height (cm)</Label>
                       <Input
                         type="number"
-                        value={getElementVerticalHeight(selectedElement)}
-                        onChange={(e) => updateElementDimension('verticalHeight', Number(e.target.value))}
+                        value={getElementHeight(selectedElement)}
+                        onChange={(e) => updateElementDimension('height', Number(e.target.value))}
                         className="h-8 text-xs"
                       />
                     </div>
