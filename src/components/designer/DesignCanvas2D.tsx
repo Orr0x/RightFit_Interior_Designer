@@ -583,6 +583,11 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
       elementHeight = 70 * zoom; // Wall cabinet height (70cm)
       const wallCabinetBottomHeight = 135 * zoom; // 135cm from floor (base cabinet + counter + gap)
       yPos = floorY - wallCabinetBottomHeight - elementHeight; // Position from floor level
+    } else if (element.type === 'counter-top') {
+      // Counter top dimensions and positioning
+      elementHeight = 4 * zoom; // Counter top thickness (4cm)
+      const counterTopHeight = 90 * zoom; // 90cm from floor
+      yPos = floorY - counterTopHeight - elementHeight; // Position from floor level
     } else if (element.type.includes('appliance')) {
       if (element.style?.toLowerCase().includes('refrigerator')) {
         elementHeight = 180 * zoom; // Tall refrigerator
@@ -621,6 +626,8 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
       drawCabinetElevationDetails(ctx, xPos, yPos, elementWidth, elementHeight, element);
     } else if (element.type.includes('appliance')) {
       drawApplianceElevationDetails(ctx, xPos, yPos, elementWidth, elementHeight, element);
+    } else if (element.type === 'counter-top') {
+      drawCounterTopElevationDetails(ctx, xPos, yPos, elementWidth, elementHeight, element);
     }
 
     ctx.restore();
@@ -846,6 +853,39 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
       const handleHeight = Math.min(height * 0.4, 30);
       ctx.fillRect(x + width - 8, y + (height - handleHeight) / 2, 3, handleHeight);
     }
+  };
+
+  // Draw detailed counter top elevation
+  const drawCounterTopElevationDetails = (ctx: CanvasRenderingContext2D, x: number, y: number, width: number, height: number, element: DesignElement) => {
+    ctx.strokeStyle = '#8B7355'; // Darker brown for counter top edge
+    ctx.lineWidth = 1;
+
+    // Draw counter top surface with subtle texture lines
+    ctx.strokeStyle = '#A0522D'; // Saddle brown for surface lines
+    ctx.lineWidth = 0.5;
+    
+    // Horizontal surface lines to simulate wood grain or stone texture
+    const lineSpacing = Math.max(2, height * 0.5);
+    for (let i = 0; i < Math.floor(height / lineSpacing); i++) {
+      const lineY = y + i * lineSpacing;
+      ctx.beginPath();
+      ctx.moveTo(x + 2, lineY);
+      ctx.lineTo(x + width - 2, lineY);
+      ctx.stroke();
+    }
+    
+    // Draw edge detail (slightly darker)
+    ctx.strokeStyle = '#8B7355';
+    ctx.lineWidth = 1;
+    ctx.strokeRect(x, y, width, height);
+    
+    // Draw subtle highlight on top edge
+    ctx.strokeStyle = '#D2B48C';
+    ctx.lineWidth = 0.5;
+    ctx.beginPath();
+    ctx.moveTo(x, y);
+    ctx.lineTo(x + width, y);
+    ctx.stroke();
   };
 
   // Check if element is a corner unit

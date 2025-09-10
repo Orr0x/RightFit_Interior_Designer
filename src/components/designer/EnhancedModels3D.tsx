@@ -7,7 +7,7 @@ import { Sofa, RectangleHorizontal } from 'lucide-react';
 interface ComponentDefinition {
   id: string;
   name: string;
-  type: 'cabinet' | 'appliance';
+  type: 'cabinet' | 'appliance' | 'counter-top';
   width: number; // X-axis dimension (left-to-right)
   depth: number; // Y-axis dimension (front-to-back)
   height: number; // Z-axis dimension (bottom-to-top)
@@ -1609,6 +1609,76 @@ export const createFurnitureModels = (): Record<string, ComponentDefinition> => 
       description: 'Tall bookshelf'
     }
   };
+};
+
+/**
+ * EnhancedCounterTop3D - Detailed 3D counter top model
+ * 
+ * Features:
+ * - Realistic counter top with proper thickness
+ * - Material textures for stone/wood surfaces
+ * - Proper scale and proportions
+ * - Positioned at 90cm height (0.9m) off ground
+ */
+export const EnhancedCounterTop3D: React.FC<Enhanced3DModelProps> = ({ 
+  element, 
+  roomDimensions, 
+  isSelected, 
+  onClick 
+}) => {
+  const { x, z } = convertTo3D(element.x, element.y, roomDimensions.width, roomDimensions.height);
+  
+  // Convert dimensions from cm to meters
+  const width = element.width / 100;
+  const depth = element.depth / 100;
+  const height = element.height / 100;
+  
+  // Counter tops are positioned at 90cm (0.9m) off the ground, or use element.z if set
+  const baseHeight = element.z ? element.z / 100 : 0.9; // Convert cm to meters
+  const y = baseHeight + (height / 2);
+  
+  // Create materials
+  const counterTopMaterial = new THREE.MeshLambertMaterial({ 
+    color: element.color || '#D2B48C' 
+  });
+  
+  const edgeMaterial = new THREE.MeshLambertMaterial({ 
+    color: '#B8860B' // Darker edge color
+  });
+  
+  return (
+    <group 
+      position={[x, y, z]} 
+      onClick={onClick}
+      onPointerOver={(e) => {
+        e.stopPropagation();
+        document.body.style.cursor = 'pointer';
+      }}
+      onPointerOut={() => {
+        document.body.style.cursor = 'auto';
+      }}
+    >
+      {/* Main counter top surface */}
+      <mesh position={[0, 0, 0]} castShadow receiveShadow>
+        <boxGeometry args={[width, height, depth]} />
+        <primitive object={counterTopMaterial} />
+      </mesh>
+      
+      {/* Counter top edge - slightly darker for depth */}
+      <mesh position={[0, 0, 0]} castShadow>
+        <boxGeometry args={[width, height * 0.1, depth]} />
+        <primitive object={edgeMaterial} />
+      </mesh>
+      
+      {/* Selection highlight */}
+      {isSelected && (
+        <mesh position={[0, height / 2 + 0.01, 0]}>
+          <boxGeometry args={[width + 0.02, 0.02, depth + 0.02]} />
+          <meshLambertMaterial color="#00ff00" transparent opacity={0.5} />
+        </mesh>
+      )}
+    </group>
+  );
 };
 
 /**

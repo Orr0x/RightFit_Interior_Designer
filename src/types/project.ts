@@ -86,9 +86,10 @@ export interface Design {
 // DesignElement interface with proper 3D dimension mapping
 export interface DesignElement {
   id: string;
-  type: 'wall' | 'cabinet' | 'appliance';
+  type: 'wall' | 'cabinet' | 'appliance' | 'counter-top';
   x: number; // X position in room
   y: number; // Y position in room
+  z?: number; // Z position in room (height off ground)
   width: number; // X-axis dimension (left-to-right)
   depth: number; // Y-axis dimension (front-to-back)
   height: number; // Z-axis dimension (bottom-to-top)

@@ -33,7 +33,7 @@ interface EnhancedSidebarProps {
 interface ComponentDefinition {
   id: string;
   name: string;
-  type: 'cabinet' | 'appliance';
+  type: 'cabinet' | 'appliance' | 'counter-top';
   width: number; // X-axis dimension (left-to-right)
   depth: number; // Y-axis dimension (front-to-back)
   height: number; // Z-axis dimension (bottom-to-top)
@@ -46,6 +46,47 @@ interface ComponentDefinition {
 
 
 const components: ComponentDefinition[] = [
+  // COUNTER TOPS - Available in all rooms
+  {
+    id: 'counter-top-straight',
+    name: 'Counter Top Straight',
+    type: 'counter-top',
+    width: 300,
+    depth: 60,
+    height: 4,
+    color: '#D2B48C',
+    category: 'counter-tops',
+    roomTypes: ['kitchen', 'bedroom', 'bathroom', 'living-room', 'office', 'dining-room', 'dressing-room', 'utility', 'under-stairs', 'media-wall', 'internal-doors', 'flooring'],
+    icon: <Square className="h-4 w-4" />,
+    description: 'Straight counter top section - 300cm x 60cm x 4cm'
+  },
+  {
+    id: 'counter-top-corner',
+    name: 'Counter Top Corner',
+    type: 'counter-top',
+    width: 150,
+    depth: 60,
+    height: 4,
+    color: '#D2B48C',
+    category: 'counter-tops',
+    roomTypes: ['kitchen', 'bedroom', 'bathroom', 'living-room', 'office', 'dining-room', 'dressing-room', 'utility', 'under-stairs', 'media-wall', 'internal-doors', 'flooring'],
+    icon: <Square className="h-4 w-4" />,
+    description: 'Corner counter top section - 150cm x 60cm x 4cm'
+  },
+  {
+    id: 'counter-top-short',
+    name: 'Counter Top Short',
+    type: 'counter-top',
+    width: 150,
+    depth: 60,
+    height: 4,
+    color: '#D2B48C',
+    category: 'counter-tops',
+    roomTypes: ['kitchen', 'bedroom', 'bathroom', 'living-room', 'office', 'dining-room', 'dressing-room', 'utility', 'under-stairs', 'media-wall', 'internal-doors', 'flooring'],
+    icon: <Square className="h-4 w-4" />,
+    description: 'Short counter top section - 150cm x 60cm x 4cm'
+  },
+
   // KITCHEN COMPONENTS
   {
     id: 'base-cabinet-30',
@@ -1957,6 +1998,11 @@ export const EnhancedSidebar: React.FC<EnhancedSidebarProps> = ({
       style: component.name
     };
 
+    // Set default Z position for counter tops (90cm off ground)
+    if (component.type === 'counter-top') {
+      newElement.z = 90; // 90cm off ground
+    }
+
     onAddElement(newElement);
   };
 
@@ -2034,6 +2080,7 @@ export const EnhancedSidebar: React.FC<EnhancedSidebarProps> = ({
 
   const getCategoryLabel = (category: string): string => {
     const labels: { [key: string]: string } = {
+      'counter-tops': 'Counter Tops',
       'base-cabinets': 'Base Cabinets',
       'base-drawers': 'Base Drawers', 
       'wall-units': 'Wall Units',

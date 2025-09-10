@@ -4,7 +4,7 @@ import { OrbitControls, Environment, Grid, Text } from '@react-three/drei';
 import { DesignElement, Design } from '@/types/project';
 
 import * as THREE from 'three';
-import { EnhancedCabinet3D, EnhancedAppliance3D } from './EnhancedModels3D';
+import { EnhancedCabinet3D, EnhancedAppliance3D, EnhancedCounterTop3D } from './EnhancedModels3D';
 
 interface View3DProps {
   design: Design;
@@ -181,6 +181,18 @@ export const View3D: React.FC<View3DProps> = ({
             if (element.type === 'appliance') {
               return (
                 <EnhancedAppliance3D
+                  key={element.id}
+                  element={element}
+                  roomDimensions={roomDimensions}
+                  isSelected={isSelected}
+                  onClick={() => handleElementClick(element)}
+                />
+              );
+            }
+            
+            if (element.type === 'counter-top') {
+              return (
+                <EnhancedCounterTop3D
                   key={element.id}
                   element={element}
                   roomDimensions={roomDimensions}
