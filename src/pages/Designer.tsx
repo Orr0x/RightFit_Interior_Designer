@@ -11,6 +11,7 @@ import { useKeyboardShortcuts } from '@/hooks/useKeyboardShortcuts';
 import { DesignCanvas2D } from '@/components/designer/DesignCanvas2D';
 import { View3D } from '@/components/designer/View3D';
 import { EnhancedSidebar } from '@/components/designer/EnhancedSidebar';
+import { ComponentSelector } from '@/components/designer/ComponentSelector';
 import { ViewSelector } from '@/components/designer/ViewSelector';
 import { DesignToolbar } from '@/components/designer/DesignToolbar';
 import { PropertiesPanel } from '@/components/designer/PropertiesPanel';
@@ -741,14 +742,24 @@ const Designer = () => {
             </div>
           </div>
 
-          {/* Right Sidebar - Properties Panel */}
+          {/* Right Sidebar - Component Selector & Properties Panel */}
           <div className={`${showRightPanel ? 'w-80' : 'w-0'} bg-white border-l flex flex-col smooth-transition overflow-hidden relative z-10`}>
             {showRightPanel && design && (
               <>
                 <div className="p-4 border-b">
-                  <h2 className="font-semibold text-gray-900">Properties</h2>
+                  <h2 className="font-semibold text-gray-900">Inspector</h2>
                 </div>
-                <div className="flex-1 overflow-y-auto">
+                <div className="flex-1 overflow-y-auto p-4 space-y-4">
+                  {/* Component Selector */}
+                  <ComponentSelector
+                    elements={design.elements}
+                    selectedElement={selectedElement}
+                    onSelectElement={setSelectedElement}
+                    onUpdateElement={handleUpdateElement}
+                    onDeleteElement={handleDeleteElement}
+                  />
+                  
+                  {/* Properties Panel */}
                   <PropertiesPanel
                     selectedElement={selectedElement}
                     onUpdateElement={handleUpdateElement}

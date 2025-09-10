@@ -1637,6 +1637,9 @@ export const EnhancedCounterTop3D: React.FC<Enhanced3DModelProps> = ({
   const baseHeight = element.z ? element.z / 100 : 0.9; // Convert cm to meters
   const y = baseHeight + (height / 2);
   
+  // Check if this is a corner counter top
+  const isCornerCounterTop = element.id.includes('counter-top-corner');
+  
   // Create materials
   const counterTopMaterial = new THREE.MeshLambertMaterial({ 
     color: element.color || '#D2B48C' 
@@ -1648,8 +1651,9 @@ export const EnhancedCounterTop3D: React.FC<Enhanced3DModelProps> = ({
   
   return (
     <group 
-      position={[x, y, z]} 
+      position={[x + width / 2, y, z + depth / 2]} 
       onClick={onClick}
+      rotation={[0, element.rotation * Math.PI / 180, 0]}
       onPointerOver={(e) => {
         e.stopPropagation();
         document.body.style.cursor = 'pointer';
@@ -1658,24 +1662,67 @@ export const EnhancedCounterTop3D: React.FC<Enhanced3DModelProps> = ({
         document.body.style.cursor = 'auto';
       }}
     >
-      {/* Main counter top surface */}
-      <mesh position={[0, 0, 0]} castShadow receiveShadow>
-        <boxGeometry args={[width, height, depth]} />
-        <primitive object={counterTopMaterial} />
-      </mesh>
-      
-      {/* Counter top edge - slightly darker for depth */}
-      <mesh position={[0, 0, 0]} castShadow>
-        <boxGeometry args={[width, height * 0.1, depth]} />
-        <primitive object={edgeMaterial} />
-      </mesh>
-      
-      {/* Selection highlight */}
-      {isSelected && (
-        <mesh position={[0, height / 2 + 0.01, 0]}>
-          <boxGeometry args={[width + 0.02, 0.02, depth + 0.02]} />
-          <meshLambertMaterial color="#00ff00" transparent opacity={0.5} />
-        </mesh>
+      {isCornerCounterTop ? (
+        <>
+          {/* L-shaped corner counter top - Two rectangular sections */}
+          {/* Horizontal section (left-to-right) */}
+          <mesh position={[0, 0, -depth/4]} castShadow receiveShadow>
+            <boxGeometry args={[width, height, depth/2]} />
+            <primitive object={counterTopMaterial} />
+          </mesh>
+          
+          {/* Vertical section (front-to-back) */}
+          <mesh position={[width/4, 0, 0]} castShadow receiveShadow>
+            <boxGeometry args={[width/2, height, depth]} />
+            <primitive object={counterTopMaterial} />
+          </mesh>
+          
+          {/* Edge details for L-shape */}
+          <mesh position={[0, 0, -depth/4]} castShadow>
+            <boxGeometry args={[width, height * 0.1, depth/2]} />
+            <primitive object={edgeMaterial} />
+          </mesh>
+          <mesh position={[width/4, 0, 0]} castShadow>
+            <boxGeometry args={[width/2, height * 0.1, depth]} />
+            <primitive object={edgeMaterial} />
+          </mesh>
+          
+          {/* Selection highlight for L-shape */}
+          {isSelected && (
+            <>
+              <mesh position={[0, height / 2 + 0.01, -depth/4]}>
+                <boxGeometry args={[width + 0.02, 0.02, depth/2 + 0.02]} />
+                <meshLambertMaterial color="#00ff00" transparent opacity={0.5} />
+              </mesh>
+              <mesh position={[width/4, height / 2 + 0.01, 0]}>
+                <boxGeometry args={[width/2 + 0.02, 0.02, depth + 0.02]} />
+                <meshLambertMaterial color="#00ff00" transparent opacity={0.5} />
+              </mesh>
+            </>
+          )}
+        </>
+      ) : (
+        <>
+          {/* Standard rectangular counter top */}
+          <mesh position={[0, 0, 0]} castShadow receiveShadow>
+            <boxGeometry args={[width, height, depth]} />
+            <primitive object={counterTopMaterial} />
+          </mesh>
+          
+          {/* Counter top edge - slightly darker for depth */}
+          <mesh position={[0, 0, 0]} castShadow>
+            <boxGeometry args={[width, height * 0.1, depth]} />
+            <primitive object={edgeMaterial} />
+          </mesh>
+          
+          {/* Selection highlight */}
+          {isSelected && (
+            <mesh position={[0, height / 2 + 0.01, 0]}>
+              <boxGeometry args={[width + 0.02, 0.02, depth + 0.02]} />
+              <meshLambertMaterial color="#00ff00" transparent opacity={0.5} />
+            </mesh>
+          )}
+        </>
       )}
     </group>
   );

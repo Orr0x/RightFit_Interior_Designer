@@ -140,6 +140,24 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
     return Math.round(value / gridSizeInRoom) * gridSizeInRoom;
   }, [zoom]);
 
+  // Helper function to get effective dimensions based on rotation
+  const getEffectiveDimensions = useCallback((element: { width: number; depth: number; rotation?: number }) => {
+    const rotation = element.rotation || 0;
+    const normalizedRotation = ((rotation % 360) + 360) % 360;
+    
+    // For 90° and 270° rotations, swap width and depth
+    if (normalizedRotation >= 45 && normalizedRotation < 135) {
+      // 90° rotation
+      return { width: element.depth, depth: element.width };
+    } else if (normalizedRotation >= 225 && normalizedRotation < 315) {
+      // 270° rotation  
+      return { width: element.depth, depth: element.width };
+    } else {
+      // 0° and 180° rotations (and close to them)
+      return { width: element.width, depth: element.depth };
+    }
+  }, []);
+
   // Smart snap detection for walls and components
   const getSnapPosition = useCallback((element: DesignElement, x: number, y: number) => {
     const snapTolerance = 15; // cm
@@ -148,10 +166,14 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
     let rotation = element.rotation || 0;
     const guides = { vertical: [] as number[], horizontal: [] as number[] };
 
-    // Wall snapping - use proper dimensions for plan view
-    const elementDepth = element.depth || element.height; // Use depth for Y-axis in plan view
+    // Get effective dimensions based on current rotation
+    const effectiveDims = getEffectiveDimensions(element);
+    const elementWidth = effectiveDims.width;
+    const elementDepth = effectiveDims.depth;
+    
+    // Wall snapping with rotation-aware dimensions
     const distToLeft = x;
-    const distToRight = roomDimensions.width - (x + element.width);
+    const distToRight = roomDimensions.width - (x + elementWidth);
     const distToTop = y;
     const distToBottom = roomDimensions.height - (y + elementDepth);
 
@@ -172,12 +194,29 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
       guides.horizontal.push(roomDimensions.height);
     }
 
-    // Component-to-component snapping
+    // Component-to-component snapping - only for nearby elements
+    const proximityThreshold = 100; // Only snap to elements within 100cm
     const otherElements = design.elements.filter(el => el.id !== element.id);
     
     for (const otherEl of otherElements) {
-      // Use proper dimensions for plan view
-      const otherElDepth = otherEl.depth || otherEl.height;
+      // Check proximity first - calculate distance between element centers
+      const elementCenterX = x + elementWidth / 2;
+      const elementCenterY = y + elementDepth / 2;
+      const otherCenterX = otherEl.x + otherEl.width / 2;
+      const otherCenterY = otherEl.y + (otherEl.depth || otherEl.height) / 2;
+      
+      const distance = Math.sqrt(
+        Math.pow(elementCenterX - otherCenterX, 2) + 
+        Math.pow(elementCenterY - otherCenterY, 2)
+      );
+      
+      // Skip snapping if elements are too far apart
+      if (distance > proximityThreshold) continue;
+      
+      // Get effective dimensions for other element
+      const otherEffectiveDims = getEffectiveDimensions(otherEl);
+      const otherElWidth = otherEffectiveDims.width;
+      const otherElDepth = otherEffectiveDims.depth;
       
       // Horizontal alignment (same Y or adjacent Y)
       const topAlign = Math.abs(y - otherEl.y);
@@ -260,12 +299,12 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
           rotation = 270;
           guides.vertical.push(roomDimensions.width);
         } else if (minDist === distToTop) {
-          // Against top wall - face down (into room)
-          rotation = 180;
+          // Against top wall (front) - face up (into room)
+          rotation = 0;
           guides.horizontal.push(0);
         } else if (minDist === distToBottom) {
-          // Against bottom wall - face up (into room)
-          rotation = 0;
+          // Against bottom wall (back) - face down (into room)
+          rotation = 180;
           guides.horizontal.push(roomDimensions.height);
         }
       } else {
@@ -279,12 +318,12 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
           snappedX = roomDimensions.width - element.width; // Snap to wall
           guides.vertical.push(roomDimensions.width);
         } else if (distToTop <= 10) {
-          rotation = 180; // Face down
+          rotation = 0; // Face up (into room)
           snappedY = 0; // Snap to wall
           guides.horizontal.push(0);
         } else if (distToBottom <= 10) {
-          rotation = 0; // Face up
-          snappedY = roomDimensions.height - element.height; // Snap to wall
+          rotation = 180; // Face down (into room)
+          snappedY = roomDimensions.height - elementDepth; // Snap to wall using effective depth
           guides.horizontal.push(roomDimensions.height);
         }
       }
@@ -1550,11 +1589,26 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
       const y = e.clientY - rect.top;
       const roomPos = canvasToRoom(x, y);
 
+      // Calculate drop position accounting for component center vs corner positioning
+      // In 2D canvas, we position by corner (top-left), but drop position should be centered
+      const dropX = roomPos.x - (componentData.width / 2);
+      const dropY = roomPos.y - (componentData.depth / 2);
+
+      // Create initial element with rotation 0 for boundary checks
+      const tempElement = {
+        width: componentData.width,
+        depth: componentData.depth,
+        rotation: 0
+      };
+      
+      // Use effective dimensions for boundary checks (initially no rotation)
+      const effectiveDims = getEffectiveDimensions(tempElement);
+
       const newElement: DesignElement = {
         id: `${componentData.id}-${Date.now()}`,
         type: componentData.type,
-        x: snapToGrid(Math.max(0, Math.min(roomPos.x, roomDimensions.width - componentData.width))),
-        y: snapToGrid(Math.max(0, Math.min(roomPos.y, roomDimensions.height - componentData.depth))),
+        x: snapToGrid(Math.max(0, Math.min(dropX, roomDimensions.width - effectiveDims.width))),
+        y: snapToGrid(Math.max(0, Math.min(dropY, roomDimensions.height - effectiveDims.depth))),
         width: componentData.width, // X-axis dimension
         depth: componentData.depth, // Y-axis dimension (front-to-back)
         height: componentData.height, // Z-axis dimension (bottom-to-top)
