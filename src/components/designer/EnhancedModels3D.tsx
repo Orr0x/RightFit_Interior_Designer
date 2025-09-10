@@ -1,7 +1,6 @@
 import React from 'react';
 import { DesignElement } from '@/types/project';
 import * as THREE from 'three';
-import { useTexture } from '@react-three/drei';
 import { Sofa, RectangleHorizontal } from 'lucide-react';
 
 // Import ComponentDefinition type
@@ -206,7 +205,6 @@ export const EnhancedCabinet3D: React.FC<Enhanced3DModelProps> = ({
     );
   } else if (isLarderCornerUnit) {
     // Larder corner unit - separate from regular corner cabinet
-    const larderCornerDepth = depth;
     const centerX = width / 2;
     const centerZ = depth / 2;
     
@@ -670,18 +668,6 @@ export const EnhancedAppliance3D: React.FC<Enhanced3DModelProps> = ({
   // Base color based on appliance type
   const applianceColor = getApplianceColor(applianceType, element);
   
-  // Helper function to get appliance-specific height
-  function getApplianceHeight(type: string, element: DesignElement): number {
-    switch(type) {
-      case 'refrigerator': return 2.0;
-      case 'bed': return 0.5; // Lower height for beds
-      case 'sofa': return 0.8;
-      case 'chair': return 0.9;
-      case 'table': return 0.75;
-      case 'tv': return 0.1; // Thin for TV
-      default: return 0.9; // Standard height for other appliances
-    }
-  }
   
   // Helper function to get appliance-specific color
   function getApplianceColor(type: string, element: DesignElement): string {
@@ -1492,6 +1478,7 @@ export const createFurnitureModels = (): Record<string, ComponentDefinition> => 
       name: 'Modern Sofa',
       type: 'appliance',
       width: 200,
+      depth: 80,
       height: 80,
       color: '#3A6EA5',
       category: 'living-room',
@@ -1504,6 +1491,7 @@ export const createFurnitureModels = (): Record<string, ComponentDefinition> => 
       name: 'Armchair',
       type: 'appliance',
       width: 80,
+      depth: 80,
       height: 80,
       color: '#3A6EA5',
       category: 'living-room',
@@ -1516,7 +1504,8 @@ export const createFurnitureModels = (): Record<string, ComponentDefinition> => 
       name: 'Coffee Table',
       type: 'appliance',
       width: 120,
-      height: 60,
+      depth: 60,
+      height: 45,
       color: '#8B4513',
       category: 'living-room',
       roomTypes: ['media-wall'],
@@ -1530,7 +1519,8 @@ export const createFurnitureModels = (): Record<string, ComponentDefinition> => 
       name: 'Dining Table',
       type: 'appliance',
       width: 180,
-      height: 90,
+      depth: 90,
+      height: 75,
       color: '#8B4513',
       category: 'dining-room',
       roomTypes: ['kitchen'],
@@ -1542,7 +1532,8 @@ export const createFurnitureModels = (): Record<string, ComponentDefinition> => 
       name: 'Dining Chair',
       type: 'appliance',
       width: 45,
-      height: 45,
+      depth: 45,
+      height: 90,
       color: '#8B4513',
       category: 'dining-room',
       roomTypes: ['kitchen'],
@@ -1556,7 +1547,8 @@ export const createFurnitureModels = (): Record<string, ComponentDefinition> => 
       name: 'Dressing Table',
       type: 'appliance',
       width: 120,
-      height: 50,
+      depth: 50,
+      height: 75,
       color: '#8B4513',
       category: 'bedroom-furniture',
       roomTypes: ['bedroom'],
@@ -1568,7 +1560,8 @@ export const createFurnitureModels = (): Record<string, ComponentDefinition> => 
       name: 'Ottoman',
       type: 'appliance',
       width: 60,
-      height: 60,
+      depth: 60,
+      height: 45,
       color: '#6B8E23',
       category: 'bedroom-furniture',
       roomTypes: ['bedroom'],
@@ -1582,6 +1575,7 @@ export const createFurnitureModels = (): Record<string, ComponentDefinition> => 
       name: 'Office Desk',
       type: 'appliance',
       width: 150,
+      depth: 75,
       height: 75,
       color: '#2F4F4F',
       category: 'office',
@@ -1594,7 +1588,8 @@ export const createFurnitureModels = (): Record<string, ComponentDefinition> => 
       name: 'Office Chair',
       type: 'appliance',
       width: 60,
-      height: 60,
+      depth: 60,
+      height: 110,
       color: '#2F4F4F',
       category: 'office',
       roomTypes: ['bedroom', 'media-wall'],
@@ -1606,6 +1601,7 @@ export const createFurnitureModels = (): Record<string, ComponentDefinition> => 
       name: 'Bookshelf',
       type: 'cabinet',
       width: 100,
+      depth: 30,
       height: 200,
       color: '#8B4513',
       category: 'office',
