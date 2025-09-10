@@ -59,7 +59,6 @@ export const EnhancedCabinet3D: React.FC<Enhanced3DModelProps> = ({
   
   // Determine cabinet type
   const isWallCabinet = element.style?.toLowerCase().includes('wall') || 
-                        element.height <= 50 || 
                         element.id.includes('wall-cabinet');
   
   const isCornerCabinet = element.id.includes('corner-cabinet') || 
