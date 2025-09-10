@@ -22,7 +22,12 @@ import {
   Sofa,
   Grid3X3,
   Home,
-  DoorOpen
+  DoorOpen,
+  DoorClosed,
+  Layers,
+  Crown,
+  PanelLeft,
+  PanelRight
 } from 'lucide-react';
 
 interface EnhancedSidebarProps {
@@ -33,7 +38,7 @@ interface EnhancedSidebarProps {
 interface ComponentDefinition {
   id: string;
   name: string;
-  type: 'cabinet' | 'appliance' | 'counter-top' | 'end-panel';
+  type: 'cabinet' | 'appliance' | 'counter-top' | 'end-panel' | 'window' | 'door' | 'flooring' | 'toe-kick' | 'cornice' | 'pelmet' | 'wall-unit-end-panel';
   width: number; // X-axis dimension (left-to-right)
   depth: number; // Y-axis dimension (front-to-back)
   height: number; // Z-axis dimension (bottom-to-top)
@@ -1621,6 +1626,309 @@ const components: ComponentDefinition[] = [
     description: 'Electric heated towel rail'
   },
 
+  // ROOM COMPONENTS - Windows, Doors, Flooring
+  {
+    id: 'window-standard',
+    name: 'Standard Window',
+    type: 'window',
+    width: 120,
+    depth: 15,
+    height: 120,
+    color: '#E6F3FF',
+    category: 'windows',
+    roomTypes: ['kitchen', 'bedroom', 'bathroom', 'living-room', 'office', 'dining-room', 'dressing-room', 'utility', 'under-stairs', 'media-wall', 'internal-doors', 'flooring'],
+    icon: <Square className="h-4 w-4" />,
+    description: 'Standard window - 120cm x 120cm x 15cm'
+  },
+  {
+    id: 'window-large',
+    name: 'Large Window',
+    type: 'window',
+    width: 180,
+    depth: 15,
+    height: 120,
+    color: '#E6F3FF',
+    category: 'windows',
+    roomTypes: ['kitchen', 'bedroom', 'bathroom', 'living-room', 'office', 'dining-room', 'dressing-room', 'utility', 'under-stairs', 'media-wall', 'internal-doors', 'flooring'],
+    icon: <Square className="h-4 w-4" />,
+    description: 'Large window - 180cm x 120cm x 15cm'
+  },
+  {
+    id: 'window-bay',
+    name: 'Bay Window',
+    type: 'window',
+    width: 240,
+    depth: 15,
+    height: 120,
+    color: '#E6F3FF',
+    category: 'windows',
+    roomTypes: ['kitchen', 'bedroom', 'bathroom', 'living-room', 'office', 'dining-room', 'dressing-room', 'utility', 'under-stairs', 'media-wall', 'internal-doors', 'flooring'],
+    icon: <Square className="h-4 w-4" />,
+    description: 'Bay window - 240cm x 120cm x 15cm'
+  },
+  {
+    id: 'window-small',
+    name: 'Small Window',
+    type: 'window',
+    width: 80,
+    depth: 15,
+    height: 80,
+    color: '#E6F3FF',
+    category: 'windows',
+    roomTypes: ['kitchen', 'bedroom', 'bathroom', 'living-room', 'office', 'dining-room', 'dressing-room', 'utility', 'under-stairs', 'media-wall', 'internal-doors', 'flooring'],
+    icon: <Square className="h-4 w-4" />,
+    description: 'Small window - 80cm x 80cm x 15cm'
+  },
+  {
+    id: 'door-standard',
+    name: 'Standard Door',
+    type: 'door',
+    width: 80,
+    depth: 4,
+    height: 200,
+    color: '#8B4513',
+    category: 'doors',
+    roomTypes: ['kitchen', 'bedroom', 'bathroom', 'living-room', 'office', 'dining-room', 'dressing-room', 'utility', 'under-stairs', 'media-wall', 'internal-doors', 'flooring'],
+    icon: <DoorClosed className="h-4 w-4" />,
+    description: 'Standard door - 80cm x 200cm x 4cm'
+  },
+  {
+    id: 'door-double',
+    name: 'Double Door',
+    type: 'door',
+    width: 160,
+    depth: 4,
+    height: 200,
+    color: '#8B4513',
+    category: 'doors',
+    roomTypes: ['kitchen', 'bedroom', 'bathroom', 'living-room', 'office', 'dining-room', 'dressing-room', 'utility', 'under-stairs', 'media-wall', 'internal-doors', 'flooring'],
+    icon: <DoorClosed className="h-4 w-4" />,
+    description: 'Double door - 160cm x 200cm x 4cm'
+  },
+  {
+    id: 'door-sliding',
+    name: 'Sliding Door',
+    type: 'door',
+    width: 120,
+    depth: 4,
+    height: 200,
+    color: '#8B4513',
+    category: 'doors',
+    roomTypes: ['kitchen', 'bedroom', 'bathroom', 'living-room', 'office', 'dining-room', 'dressing-room', 'utility', 'under-stairs', 'media-wall', 'internal-doors', 'flooring'],
+    icon: <DoorClosed className="h-4 w-4" />,
+    description: 'Sliding door - 120cm x 200cm x 4cm'
+  },
+  {
+    id: 'door-french',
+    name: 'French Door',
+    type: 'door',
+    width: 140,
+    depth: 4,
+    height: 200,
+    color: '#8B4513',
+    category: 'doors',
+    roomTypes: ['kitchen', 'bedroom', 'bathroom', 'living-room', 'office', 'dining-room', 'dressing-room', 'utility', 'under-stairs', 'media-wall', 'internal-doors', 'flooring'],
+    icon: <DoorClosed className="h-4 w-4" />,
+    description: 'French door - 140cm x 200cm x 4cm'
+  },
+  {
+    id: 'flooring-hardwood',
+    name: 'Hardwood Floor',
+    type: 'flooring',
+    width: 300,
+    depth: 300,
+    height: 2,
+    color: '#DEB887',
+    category: 'flooring',
+    roomTypes: ['kitchen', 'bedroom', 'bathroom', 'living-room', 'office', 'dining-room', 'dressing-room', 'utility', 'under-stairs', 'media-wall', 'internal-doors', 'flooring'],
+    icon: <Layers className="h-4 w-4" />,
+    description: 'Oak hardwood flooring - 300cm x 300cm x 2cm'
+  },
+  {
+    id: 'flooring-tile',
+    name: 'Tile Floor',
+    type: 'flooring',
+    width: 300,
+    depth: 300,
+    height: 2,
+    color: '#D3D3D3',
+    category: 'flooring',
+    roomTypes: ['kitchen', 'bedroom', 'bathroom', 'living-room', 'office', 'dining-room', 'dressing-room', 'utility', 'under-stairs', 'media-wall', 'internal-doors', 'flooring'],
+    icon: <Layers className="h-4 w-4" />,
+    description: 'Ceramic tile flooring - 300cm x 300cm x 2cm'
+  },
+  {
+    id: 'flooring-carpet',
+    name: 'Carpet Floor',
+    type: 'flooring',
+    width: 300,
+    depth: 300,
+    height: 2,
+    color: '#8FBC8F',
+    category: 'flooring',
+    roomTypes: ['kitchen', 'bedroom', 'bathroom', 'living-room', 'office', 'dining-room', 'dressing-room', 'utility', 'under-stairs', 'media-wall', 'internal-doors', 'flooring'],
+    icon: <Layers className="h-4 w-4" />,
+    description: 'Carpet flooring - 300cm x 300cm x 2cm'
+  },
+  {
+    id: 'flooring-vinyl',
+    name: 'Vinyl Floor',
+    type: 'flooring',
+    width: 300,
+    depth: 300,
+    height: 2,
+    color: '#F0E68C',
+    category: 'flooring',
+    roomTypes: ['kitchen', 'bedroom', 'bathroom', 'living-room', 'office', 'dining-room', 'dressing-room', 'utility', 'under-stairs', 'media-wall', 'internal-doors', 'flooring'],
+    icon: <Layers className="h-4 w-4" />,
+    description: 'Vinyl plank flooring - 300cm x 300cm x 2cm'
+  },
+
+  // KITCHEN COMPONENTS - Toe Kick, Cornice, Pelmets, Wall Unit End Panels
+  {
+    id: 'toe-kick-standard',
+    name: 'Standard Toe Kick',
+    type: 'toe-kick',
+    width: 60,
+    depth: 10,
+    height: 15,
+    color: '#FFFFFF',
+    category: 'kitchen-toe-kick',
+    roomTypes: ['kitchen'],
+    icon: <PanelLeft className="h-4 w-4" />,
+    description: 'Standard toe kick for base units - 60cm x 10cm x 15cm'
+  },
+  {
+    id: 'toe-kick-corner',
+    name: 'Corner Toe Kick',
+    type: 'toe-kick',
+    width: 90,
+    depth: 10,
+    height: 15,
+    color: '#FFFFFF',
+    category: 'kitchen-toe-kick',
+    roomTypes: ['kitchen'],
+    icon: <PanelLeft className="h-4 w-4" />,
+    description: 'L-shaped toe kick for corner units - 90cm x 10cm x 15cm'
+  },
+  {
+    id: 'toe-kick-long',
+    name: 'Long Toe Kick',
+    type: 'toe-kick',
+    width: 120,
+    depth: 10,
+    height: 15,
+    color: '#FFFFFF',
+    category: 'kitchen-toe-kick',
+    roomTypes: ['kitchen'],
+    icon: <PanelLeft className="h-4 w-4" />,
+    description: 'Long toe kick for multiple base units - 120cm x 10cm x 15cm'
+  },
+  {
+    id: 'cornice-standard',
+    name: 'Standard Cornice',
+    type: 'cornice',
+    width: 60,
+    depth: 5,
+    height: 15,
+    color: '#FFFFFF',
+    category: 'kitchen-cornice',
+    roomTypes: ['kitchen'],
+    icon: <Crown className="h-4 w-4" />,
+    description: 'Standard cornice for wall units - 60cm x 5cm x 15cm'
+  },
+  {
+    id: 'cornice-corner',
+    name: 'Corner Cornice',
+    type: 'cornice',
+    width: 90,
+    depth: 5,
+    height: 15,
+    color: '#FFFFFF',
+    category: 'kitchen-cornice',
+    roomTypes: ['kitchen'],
+    icon: <Crown className="h-4 w-4" />,
+    description: 'L-shaped cornice for corner wall units - 90cm x 5cm x 15cm'
+  },
+  {
+    id: 'cornice-long',
+    name: 'Long Cornice',
+    type: 'cornice',
+    width: 120,
+    depth: 5,
+    height: 15,
+    color: '#FFFFFF',
+    category: 'kitchen-cornice',
+    roomTypes: ['kitchen'],
+    icon: <Crown className="h-4 w-4" />,
+    description: 'Long cornice for multiple wall units - 120cm x 5cm x 15cm'
+  },
+  {
+    id: 'pelmet-standard',
+    name: 'Standard Pelmet',
+    type: 'pelmet',
+    width: 60,
+    depth: 8,
+    height: 15,
+    color: '#FFFFFF',
+    category: 'kitchen-pelmet',
+    roomTypes: ['kitchen'],
+    icon: <PanelRight className="h-4 w-4" />,
+    description: 'Standard pelmet for wall units - 60cm x 8cm x 15cm'
+  },
+  {
+    id: 'pelmet-corner',
+    name: 'Corner Pelmet',
+    type: 'pelmet',
+    width: 90,
+    depth: 8,
+    height: 15,
+    color: '#FFFFFF',
+    category: 'kitchen-pelmet',
+    roomTypes: ['kitchen'],
+    icon: <PanelRight className="h-4 w-4" />,
+    description: 'L-shaped pelmet for corner wall units - 90cm x 8cm x 15cm'
+  },
+  {
+    id: 'pelmet-long',
+    name: 'Long Pelmet',
+    type: 'pelmet',
+    width: 120,
+    depth: 8,
+    height: 15,
+    color: '#FFFFFF',
+    category: 'kitchen-pelmet',
+    roomTypes: ['kitchen'],
+    icon: <PanelRight className="h-4 w-4" />,
+    description: 'Long pelmet for multiple wall units - 120cm x 8cm x 15cm'
+  },
+  {
+    id: 'wall-unit-end-panel',
+    name: 'Wall Unit End Panel',
+    type: 'wall-unit-end-panel',
+    width: 1.8,
+    depth: 60,
+    height: 200,
+    color: '#8B4513',
+    category: 'kitchen-wall-unit-end-panels',
+    roomTypes: ['kitchen'],
+    icon: <PanelLeft className="h-4 w-4" />,
+    description: 'Wall unit end panel - 1.8cm x 60cm x 200cm'
+  },
+  {
+    id: 'wall-unit-end-panel-corner',
+    name: 'Corner Wall Unit End Panel',
+    type: 'wall-unit-end-panel',
+    width: 1.8,
+    depth: 90,
+    height: 200,
+    color: '#8B4513',
+    category: 'kitchen-wall-unit-end-panels',
+    roomTypes: ['kitchen'],
+    icon: <PanelLeft className="h-4 w-4" />,
+    description: 'L-shaped wall unit end panel - 1.8cm x 90cm x 200cm'
+  },
+
   // UTILITY ROOM COMPONENTS - Make available in kitchen as utility area
   {
     id: 'utility-washing-machine',
@@ -2157,7 +2465,14 @@ export const EnhancedSidebar: React.FC<EnhancedSidebarProps> = ({
       'dressing-furniture': 'Furniture',
       'dressing-storage': 'Storage',
       'dressing-props': 'Accessories',
-      'utility-props': 'Accessories'
+      'utility-props': 'Accessories',
+      'windows': 'Windows',
+      'doors': 'Doors',
+      'flooring': 'Flooring',
+      'kitchen-toe-kick': 'Toe Kick',
+      'kitchen-cornice': 'Cornice',
+      'kitchen-pelmet': 'Pelmets',
+      'kitchen-wall-unit-end-panels': 'Wall Unit End Panels'
     };
     return labels[category] || category;
   };

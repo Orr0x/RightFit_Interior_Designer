@@ -70,7 +70,14 @@ const COMPONENT_DATA: Record<string, {
   'wall-cabinet': { hasDirection: true, doorSide: 'front', mountType: 'wall', defaultDepth: 35 },
   'appliance': { hasDirection: true, doorSide: 'front', mountType: 'floor', defaultDepth: 60 },
   'counter-top': { hasDirection: false, doorSide: 'front', mountType: 'floor', defaultDepth: 60 },
-  'end-panel': { hasDirection: false, doorSide: 'front', mountType: 'floor', defaultDepth: 60 }
+  'end-panel': { hasDirection: false, doorSide: 'front', mountType: 'floor', defaultDepth: 60 },
+  'window': { hasDirection: false, doorSide: 'front', mountType: 'wall', defaultDepth: 15 },
+  'door': { hasDirection: true, doorSide: 'front', mountType: 'floor', defaultDepth: 4 },
+  'flooring': { hasDirection: false, doorSide: 'front', mountType: 'floor', defaultDepth: 2 },
+  'toe-kick': { hasDirection: false, doorSide: 'front', mountType: 'floor', defaultDepth: 10 },
+  'cornice': { hasDirection: false, doorSide: 'front', mountType: 'wall', defaultDepth: 5 },
+  'pelmet': { hasDirection: false, doorSide: 'front', mountType: 'wall', defaultDepth: 8 },
+  'wall-unit-end-panel': { hasDirection: false, doorSide: 'front', mountType: 'wall', defaultDepth: 60 }
 };
 
 export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
@@ -756,6 +763,38 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
       // End panel dimensions and positioning
       elementHeight = element.height * zoom; // Use actual height from element
       yPos = floorY - elementHeight; // Position from floor level
+    } else if (element.type === 'window') {
+      // Window dimensions and positioning
+      elementHeight = element.height * zoom; // Use actual height from element
+      const windowHeight = 90 * zoom; // 90cm from floor
+      yPos = floorY - windowHeight - elementHeight; // Position from floor level
+    } else if (element.type === 'door') {
+      // Door dimensions and positioning
+      elementHeight = element.height * zoom; // Use actual height from element
+      yPos = floorY - elementHeight; // Position from floor level
+    } else if (element.type === 'flooring') {
+      // Flooring dimensions and positioning
+      elementHeight = element.height * zoom; // Use actual height from element
+      yPos = floorY - elementHeight; // Position from floor level
+    } else if (element.type === 'toe-kick') {
+      // Toe kick dimensions and positioning
+      elementHeight = element.height * zoom; // Use actual height from element
+      yPos = floorY - elementHeight; // Position from floor level
+    } else if (element.type === 'cornice') {
+      // Cornice dimensions and positioning
+      elementHeight = element.height * zoom; // Use actual height from element
+      const corniceHeight = 200 * zoom; // 200cm from floor (top of wall units)
+      yPos = floorY - corniceHeight - elementHeight; // Position from floor level
+    } else if (element.type === 'pelmet') {
+      // Pelmet dimensions and positioning
+      elementHeight = element.height * zoom; // Use actual height from element
+      const pelmetHeight = 140 * zoom; // 140cm from floor (bottom of wall units)
+      yPos = floorY - pelmetHeight - elementHeight; // Position from floor level
+    } else if (element.type === 'wall-unit-end-panel') {
+      // Wall unit end panel dimensions and positioning
+      elementHeight = element.height * zoom; // Use actual height from element
+      const wallUnitHeight = 200 * zoom; // 200cm from floor
+      yPos = floorY - wallUnitHeight - elementHeight; // Position from floor level
     } else if (element.type.includes('appliance')) {
       if (element.style?.toLowerCase().includes('refrigerator')) {
         elementHeight = 180 * zoom; // Tall refrigerator
@@ -798,6 +837,20 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
       drawCounterTopElevationDetails(ctx, xPos, yPos, elementWidth, elementHeight, element);
     } else if (element.type === 'end-panel') {
       drawEndPanelElevationDetails(ctx, xPos, yPos, elementWidth, elementHeight, element);
+    } else if (element.type === 'window') {
+      drawWindowElevationDetails(ctx, xPos, yPos, elementWidth, elementHeight, element);
+    } else if (element.type === 'door') {
+      drawDoorElevationDetails(ctx, xPos, yPos, elementWidth, elementHeight, element);
+    } else if (element.type === 'flooring') {
+      drawFlooringElevationDetails(ctx, xPos, yPos, elementWidth, elementHeight, element);
+    } else if (element.type === 'toe-kick') {
+      drawToeKickElevationDetails(ctx, xPos, yPos, elementWidth, elementHeight, element);
+    } else if (element.type === 'cornice') {
+      drawCorniceElevationDetails(ctx, xPos, yPos, elementWidth, elementHeight, element);
+    } else if (element.type === 'pelmet') {
+      drawPelmetElevationDetails(ctx, xPos, yPos, elementWidth, elementHeight, element);
+    } else if (element.type === 'wall-unit-end-panel') {
+      drawWallUnitEndPanelElevationDetails(ctx, xPos, yPos, elementWidth, elementHeight, element);
     }
 
     ctx.restore();
@@ -1089,6 +1142,278 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
     ctx.moveTo(x, y);
     ctx.lineTo(x, y + height);
     ctx.stroke();
+  };
+
+  // Draw detailed window elevation
+  const drawWindowElevationDetails = (ctx: CanvasRenderingContext2D, x: number, y: number, width: number, height: number, element: DesignElement) => {
+    ctx.strokeStyle = '#2F4F4F'; // Dark slate gray for window frame
+    ctx.lineWidth = 2;
+
+    // Draw window frame
+    ctx.strokeRect(x, y, width, height);
+    
+    // Draw window panes (2x2 grid)
+    const paneWidth = width / 2;
+    const paneHeight = height / 2;
+    
+    // Vertical divider
+    ctx.beginPath();
+    ctx.moveTo(x + paneWidth, y);
+    ctx.lineTo(x + paneWidth, y + height);
+    ctx.stroke();
+    
+    // Horizontal divider
+    ctx.beginPath();
+    ctx.moveTo(x, y + paneHeight);
+    ctx.lineTo(x + width, y + paneHeight);
+    ctx.stroke();
+    
+    // Draw glass effect (slight transparency)
+    ctx.fillStyle = 'rgba(173, 216, 230, 0.3)'; // Light blue with transparency
+    ctx.fillRect(x + 2, y + 2, width - 4, height - 4);
+    
+    // Draw window sill
+    ctx.fillStyle = '#8B4513';
+    ctx.fillRect(x - 5, y + height, width + 10, 3);
+  };
+
+  // Draw detailed door elevation
+  const drawDoorElevationDetails = (ctx: CanvasRenderingContext2D, x: number, y: number, width: number, height: number, element: DesignElement) => {
+    ctx.strokeStyle = '#8B4513'; // Brown for door frame
+    ctx.lineWidth = 2;
+
+    // Draw door frame
+    ctx.strokeRect(x, y, width, height);
+    
+    // Draw door panel
+    ctx.fillStyle = '#D2691E'; // Slightly lighter brown for door
+    ctx.fillRect(x + 2, y + 2, width - 4, height - 4);
+    
+    // Draw door panel details
+    ctx.strokeStyle = '#A0522D';
+    ctx.lineWidth = 1;
+    
+    // Vertical panel lines
+    for (let i = 1; i < 3; i++) {
+      const lineX = x + (width / 3) * i;
+      ctx.beginPath();
+      ctx.moveTo(lineX, y + 2);
+      ctx.lineTo(lineX, y + height - 2);
+      ctx.stroke();
+    }
+    
+    // Horizontal panel lines
+    for (let i = 1; i < 3; i++) {
+      const lineY = y + (height / 3) * i;
+      ctx.beginPath();
+      ctx.moveTo(x + 2, lineY);
+      ctx.lineTo(x + width - 2, lineY);
+      ctx.stroke();
+    }
+    
+    // Draw door handle
+    ctx.fillStyle = '#FFD700'; // Gold handle
+    ctx.beginPath();
+    ctx.arc(x + width - 15, y + height / 2, 4, 0, 2 * Math.PI);
+    ctx.fill();
+    
+    // Draw door handle backplate
+    ctx.strokeStyle = '#B8860B';
+    ctx.lineWidth = 1;
+    ctx.stroke();
+  };
+
+  // Draw detailed flooring elevation
+  const drawFlooringElevationDetails = (ctx: CanvasRenderingContext2D, x: number, y: number, width: number, height: number, element: DesignElement) => {
+    ctx.strokeStyle = '#8B4513'; // Brown for flooring edge
+    ctx.lineWidth = 1;
+
+    // Draw flooring surface with texture based on type
+    if (element.id.includes('hardwood')) {
+      // Hardwood planks
+      ctx.strokeStyle = '#D2691E';
+      ctx.lineWidth = 0.5;
+      
+      const plankHeight = Math.max(2, height / 8);
+      for (let i = 0; i < 8; i++) {
+        const plankY = y + i * plankHeight;
+        ctx.beginPath();
+        ctx.moveTo(x, plankY);
+        ctx.lineTo(x + width, plankY);
+        ctx.stroke();
+      }
+    } else if (element.id.includes('tile')) {
+      // Tile pattern
+      ctx.strokeStyle = '#CD853F';
+      ctx.lineWidth = 0.5;
+      
+      const tileSize = Math.max(4, width / 6);
+      for (let i = 0; i < Math.floor(width / tileSize); i++) {
+        for (let j = 0; j < Math.floor(height / tileSize); j++) {
+          const tileX = x + i * tileSize;
+          const tileY = y + j * tileSize;
+          ctx.strokeRect(tileX, tileY, tileSize, tileSize);
+        }
+      }
+    } else if (element.id.includes('carpet')) {
+      // Carpet texture
+      ctx.strokeStyle = '#8B4513';
+      ctx.lineWidth = 0.3;
+      
+      // Random texture lines
+      for (let i = 0; i < 20; i++) {
+        const startX = x + Math.random() * width;
+        const startY = y + Math.random() * height;
+        const endX = startX + (Math.random() - 0.5) * 20;
+        const endY = startY + (Math.random() - 0.5) * 20;
+        
+        ctx.beginPath();
+        ctx.moveTo(startX, startY);
+        ctx.lineTo(endX, endY);
+        ctx.stroke();
+      }
+    } else {
+      // Vinyl - smooth surface
+      ctx.strokeStyle = '#D2691E';
+      ctx.lineWidth = 0.5;
+      
+      // Subtle horizontal lines
+      for (let i = 0; i < 3; i++) {
+        const lineY = y + (height / 4) * (i + 1);
+        ctx.beginPath();
+        ctx.moveTo(x, lineY);
+        ctx.lineTo(x + width, lineY);
+        ctx.stroke();
+      }
+    }
+    
+    // Draw edge detail
+    ctx.strokeStyle = '#8B4513';
+    ctx.lineWidth = 1;
+    ctx.strokeRect(x, y, width, height);
+  };
+
+  // Draw detailed toe kick elevation
+  const drawToeKickElevationDetails = (ctx: CanvasRenderingContext2D, x: number, y: number, width: number, height: number, element: DesignElement) => {
+    ctx.strokeStyle = '#654321'; // Dark brown for toe kick
+    ctx.lineWidth = 1;
+
+    // Draw toe kick surface
+    ctx.fillStyle = '#8B4513';
+    ctx.fillRect(x, y, width, height);
+    
+    // Draw recessed effect
+    ctx.strokeStyle = '#5D4037';
+    ctx.lineWidth = 1;
+    ctx.strokeRect(x + 1, y + 1, width - 2, height - 2);
+    
+    // Draw subtle texture lines
+    ctx.strokeStyle = '#A0522D';
+    ctx.lineWidth = 0.5;
+    
+    // Horizontal lines for wood grain
+    for (let i = 0; i < 3; i++) {
+      const lineY = y + (height / 4) * (i + 1);
+      ctx.beginPath();
+      ctx.moveTo(x + 2, lineY);
+      ctx.lineTo(x + width - 2, lineY);
+      ctx.stroke();
+    }
+  };
+
+  // Draw detailed cornice elevation
+  const drawCorniceElevationDetails = (ctx: CanvasRenderingContext2D, x: number, y: number, width: number, height: number, element: DesignElement) => {
+    ctx.strokeStyle = '#8B4513'; // Brown for cornice
+    ctx.lineWidth = 1;
+
+    // Draw cornice surface
+    ctx.fillStyle = '#D2691E';
+    ctx.fillRect(x, y, width, height);
+    
+    // Draw decorative profile
+    ctx.strokeStyle = '#A0522D';
+    ctx.lineWidth = 1;
+    
+    // Top edge detail
+    ctx.beginPath();
+    ctx.moveTo(x, y);
+    ctx.lineTo(x + width, y);
+    ctx.stroke();
+    
+    // Bottom edge detail
+    ctx.beginPath();
+    ctx.moveTo(x, y + height);
+    ctx.lineTo(x + width, y + height);
+    ctx.stroke();
+    
+    // Decorative line in middle
+    ctx.beginPath();
+    ctx.moveTo(x, y + height / 2);
+    ctx.lineTo(x + width, y + height / 2);
+    ctx.stroke();
+  };
+
+  // Draw detailed pelmet elevation
+  const drawPelmetElevationDetails = (ctx: CanvasRenderingContext2D, x: number, y: number, width: number, height: number, element: DesignElement) => {
+    ctx.strokeStyle = '#8B4513'; // Brown for pelmet
+    ctx.lineWidth = 1;
+
+    // Draw pelmet surface
+    ctx.fillStyle = '#D2691E';
+    ctx.fillRect(x, y, width, height);
+    
+    // Draw pelmet profile
+    ctx.strokeStyle = '#A0522D';
+    ctx.lineWidth = 1;
+    
+    // Top edge detail
+    ctx.beginPath();
+    ctx.moveTo(x, y);
+    ctx.lineTo(x + width, y);
+    ctx.stroke();
+    
+    // Bottom edge detail
+    ctx.beginPath();
+    ctx.moveTo(x, y + height);
+    ctx.lineTo(x + width, y + height);
+    ctx.stroke();
+    
+    // Decorative lines
+    for (let i = 1; i < 3; i++) {
+      const lineY = y + (height / 4) * i;
+      ctx.beginPath();
+      ctx.moveTo(x, lineY);
+      ctx.lineTo(x + width, lineY);
+      ctx.stroke();
+    }
+  };
+
+  // Draw detailed wall unit end panel elevation
+  const drawWallUnitEndPanelElevationDetails = (ctx: CanvasRenderingContext2D, x: number, y: number, width: number, height: number, element: DesignElement) => {
+    ctx.strokeStyle = '#654321'; // Dark brown for wall unit end panel
+    ctx.lineWidth = 1;
+
+    // Draw end panel surface
+    ctx.fillStyle = '#8B4513';
+    ctx.fillRect(x, y, width, height);
+    
+    // Draw vertical grain lines
+    ctx.strokeStyle = '#A0522D';
+    ctx.lineWidth = 0.5;
+    
+    const lineSpacing = Math.max(2, width * 0.3);
+    for (let i = 0; i < Math.floor(width / lineSpacing); i++) {
+      const lineX = x + i * lineSpacing;
+      ctx.beginPath();
+      ctx.moveTo(lineX, y + 2);
+      ctx.lineTo(lineX, y + height - 2);
+      ctx.stroke();
+    }
+    
+    // Draw edge detail
+    ctx.strokeStyle = '#654321';
+    ctx.lineWidth = 1;
+    ctx.strokeRect(x, y, width, height);
   };
 
   // Check if element is a corner unit

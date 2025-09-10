@@ -86,7 +86,7 @@ export interface Design {
 // DesignElement interface with proper 3D dimension mapping
 export interface DesignElement {
   id: string;
-  type: 'wall' | 'cabinet' | 'appliance' | 'counter-top' | 'end-panel';
+  type: 'wall' | 'cabinet' | 'appliance' | 'counter-top' | 'end-panel' | 'window' | 'door' | 'flooring' | 'toe-kick' | 'cornice' | 'pelmet' | 'wall-unit-end-panel';
   x: number; // X position in room
   y: number; // Y position in room
   z?: number; // Z position in room (height off ground)
@@ -399,7 +399,7 @@ export const migrateDesignElement = (element: Record<string, string | number | b
   
   return {
     id: element.id as string,
-    type: element.type as 'wall' | 'cabinet' | 'appliance',
+    type: element.type as 'wall' | 'cabinet' | 'appliance' | 'counter-top' | 'end-panel' | 'window' | 'door' | 'flooring' | 'toe-kick' | 'cornice' | 'pelmet' | 'wall-unit-end-panel',
     x: element.x as number,
     y: element.y as number,
     width: width,
