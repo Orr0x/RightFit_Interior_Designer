@@ -263,6 +263,92 @@ const components: ComponentDefinition[] = [
     description: 'Tumble dryer with round door'
   },
 
+  // KITCHEN LARDER UNITS - Custom Built-in Solutions
+  {
+    id: 'larder-full-height',
+    name: 'Full Height Larder Unit',
+    type: 'cabinet',
+    width: 60,
+    height: 200,
+    color: '#F5F5F5',
+    category: 'kitchen-larder',
+    roomTypes: ['kitchen'],
+    icon: <Archive className="h-4 w-4" />,
+    description: 'Full-height pantry larder with adjustable shelving'
+  },
+  {
+    id: 'larder-built-in-fridge',
+    name: 'Built-in Fridge Larder',
+    type: 'cabinet',
+    width: 60,
+    height: 200,
+    color: '#F5F5F5',
+    category: 'kitchen-larder',
+    roomTypes: ['kitchen'],
+    icon: <Refrigerator className="h-4 w-4" />,
+    description: 'Integrated refrigerator disguised as larder unit'
+  },
+  {
+    id: 'larder-single-oven',
+    name: 'Single Built-in Oven Larder',
+    type: 'cabinet',
+    width: 60,
+    height: 200,
+    color: '#F5F5F5',
+    category: 'kitchen-larder',
+    roomTypes: ['kitchen'],
+    icon: <Microwave className="h-4 w-4" />,
+    description: 'Single built-in oven with storage above and below'
+  },
+  {
+    id: 'larder-double-oven',
+    name: 'Double Built-in Oven Larder',
+    type: 'cabinet',
+    width: 60,
+    height: 200,
+    color: '#F5F5F5',
+    category: 'kitchen-larder',
+    roomTypes: ['kitchen'],
+    icon: <Microwave className="h-4 w-4" />,
+    description: 'Double built-in oven stack with storage compartments'
+  },
+  {
+    id: 'larder-oven-microwave',
+    name: 'Oven + Microwave Larder',
+    type: 'cabinet',
+    width: 60,
+    height: 200,
+    color: '#F5F5F5',
+    category: 'kitchen-larder',
+    roomTypes: ['kitchen'],
+    icon: <Microwave className="h-4 w-4" />,
+    description: 'Combined oven and microwave in single larder unit'
+  },
+  {
+    id: 'larder-coffee-machine',
+    name: 'Coffee Machine Larder',
+    type: 'cabinet',
+    width: 60,
+    height: 200,
+    color: '#F5F5F5',
+    category: 'kitchen-larder',
+    roomTypes: ['kitchen'],
+    icon: <Zap className="h-4 w-4" />,
+    description: 'Integrated coffee machine with storage above and below'
+  },
+  {
+    id: 'larder-corner-unit',
+    name: 'Corner Larder Unit',
+    type: 'cabinet',
+    width: 60,
+    height: 200,
+    color: '#F5F5F5',
+    category: 'kitchen-larder',
+    roomTypes: ['kitchen'],
+    icon: <Square className="h-4 w-4" />,
+    description: 'L-shaped corner larder unit maximizing space efficiency'
+  },
+
   // BEDROOM COMPONENTS
   {
     id: 'double-bed',
@@ -1918,6 +2004,7 @@ export const EnhancedSidebar: React.FC<EnhancedSidebarProps> = ({
       'base-drawers': 'Base Drawers', 
       'wall-units': 'Wall Units',
       'appliances': 'Appliances',
+      'kitchen-larder': 'Larder Units',
       'bedroom-furniture': 'Furniture',
       'bedroom-storage': 'Storage',
       'bedroom-props': 'Decor Props',
