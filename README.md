@@ -18,7 +18,9 @@ A professional-grade interior design application built with React, TypeScript, a
 - **Grid System**: Snap-to-grid functionality for accurate alignment
 
 ### 🎛️ Professional Interface
-- **Component Library**: 100+ components across 7 room types
+- **Comprehensive Component Library**: 200+ components across 8 room types
+- **Custom Carpentry Solutions**: Specialized storage and cabinetry components
+- **Organized Categories**: Multiple tabs per room type (Furniture, Storage, Props, etc.)
 - **Keyboard Shortcuts**: Professional hotkeys (Ctrl+Z, Ctrl+Y, Ctrl+S, etc.)
 - **Performance Monitoring**: Real-time FPS and memory usage tracking
 - **Error Handling**: Graceful error recovery with user feedback
@@ -91,6 +93,62 @@ const SUPABASE_PUBLISHABLE_KEY = "your-anon-key-here";
 3. **Design in 2D**: Use plan view for layout, elevation views for heights
 4. **Preview in 3D**: Switch to 3D view for immersive visualization
 5. **Save & Share**: Auto-save ensures your work is never lost
+
+## 🏠 Component Library
+
+### Room Types & Components
+
+#### 🛏️ **Bedroom** (26 components)
+- **Furniture Tab**: 10 bed types, seating, reading chairs
+- **Storage Tab**: 12 custom storage solutions (wardrobes, drawers, floating units)
+- **Decor Props Tab**: 4 accessories (lamps, mirrors, rugs, curtains)
+
+#### 🛁 **Bathroom** (16 components)
+- **Vanities Tab**: 4 custom vanity units (double, floating, corner, compact)
+- **Storage Tab**: 4 storage solutions (linen cupboard, mirror cabinet, towel rack)
+- **Fixtures Tab**: 5 bathroom fixtures (toilets, showers, bathtubs)
+- **Accessories Tab**: 3 props (mirrors, extractor fan, heated towel rail)
+
+#### 🏠 **Living Room** (13 components)
+- **Built-in Units Tab**: 3 entertainment systems (wall unit, floating console, corner unit)
+- **Shelving Tab**: 3 custom bookcases (floor-to-ceiling, wall-mounted, recessed)
+- **Storage Tab**: 2 storage solutions (ottoman, console table)
+- **Furniture Tab**: 3 seating options (sectional, loveseat, chaise)
+- **Decor Props Tab**: 2 accessories (floor lamp, area rug)
+
+#### 💼 **Office** (12 components)
+- **Office Furniture Tab**: 6 desk types (executive, L-shaped, standing, etc.)
+- **Storage Tab**: 2 filing solutions (4-drawer cabinet, credenza)
+- **Shelving Tab**: 2 bookcase types (barrister, wall-mounted)
+- **Accessories Tab**: 2 props (LED desk lamp, whiteboard)
+
+#### 🍽️ **Dining Room** (14 components)
+- **Furniture Tab**: 7 dining sets (4 table sizes, 3 chair types, bench)
+- **Display Cabinets Tab**: 2 display units (tall china cabinet, dining hutch)
+- **Storage Tab**: 3 storage solutions (sideboards, wine rack)
+- **Decor Props Tab**: 2 accessories (chandelier, bar cart)
+
+#### 👗 **Dressing Room** (8 components)
+- **Storage Tab**: 4 custom storage systems (walk-in wardrobe, island unit, shoe tower, jewelry armoire)
+- **Furniture Tab**: 2 dressing furniture (large vanity, storage bench)
+- **Accessories Tab**: 2 mirrors (full-length, lighted vanity)
+
+#### 🧺 **Utility Room** (8 components)
+- **Appliances Tab**: 4 utility appliances (washer, dryer, stacked pair, sink)
+- **Storage Tab**: 3 storage solutions (tall cabinet, folding station, pantry)
+- **Accessories Tab**: 1 prop (ironing board cabinet)
+
+#### 🍳 **Kitchen** (Existing)
+- **Base Cabinets Tab**: Corner units, base units, drawers
+- **Wall Units Tab**: Wall cabinets, extractor hoods
+- **Appliances Tab**: Ovens, hobs, fridges, dishwashers
+
+### Custom Carpentry Solutions
+The component library showcases **Right Fit Interiors'** carpentry expertise with:
+- **Custom Storage Solutions**: Built-in wardrobes, entertainment units, storage systems
+- **Specialized Cabinetry**: Corner units, floating units, modular systems
+- **Professional Finishes**: Multiple wood tones and finishes
+- **Space Optimization**: L-shaped units, corner solutions, multi-functional designs
 
 ## 🏗️ Project Structure
 

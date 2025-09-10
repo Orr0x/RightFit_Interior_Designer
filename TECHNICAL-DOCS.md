@@ -21,7 +21,7 @@ RightFit Interior Designer is a React-based web application that provides profes
 ### Design Tools
 - **DesignCanvas2D**: Multi-view 2D canvas with drag-and-drop
 - **View3D**: Three.js-based 3D visualization
-- **ComponentLibrary**: Room-specific component catalog
+- **EnhancedSidebar**: Comprehensive component library with 200+ components
 - **PropertiesPanel**: Element property editing
 
 ### Professional Features
@@ -42,27 +42,56 @@ RightFit Interior Designer is a React-based web application that provides profes
 - Project → Room Designs (1:many)
 - Room Design → Design Elements (1:many)
 
+## Component Library Architecture
+
+### EnhancedSidebar Component
+The main component library is implemented in `src/components/designer/EnhancedSidebar.tsx` and provides:
+
+#### Component Definition Interface
+```typescript
+interface ComponentDefinition {
+  id: string;
+  name: string;
+  type: 'appliance' | 'cabinet';
+  width: number;
+  height: number;
+  color: string;
+  category: string;
+  roomTypes: RoomType[];
+  icon: ReactElement;
+  description: string;
+}
+```
+
+#### Component Categories
+Each room type has multiple organized categories:
+- **Furniture**: Beds, chairs, tables, seating
+- **Storage**: Wardrobes, cabinets, drawers, shelving
+- **Props**: Lighting, mirrors, accessories, decor
+- **Built-ins**: Custom entertainment units, storage systems
+- **Appliances**: Non-carpentry items (fixtures, electronics)
+
+#### Room Type Filtering
+Components are filtered by `roomTypes` array to show only relevant items for each room type.
+
 ### Room Types
-The application supports 12 different room types:
+The application supports 8 major room types with comprehensive component libraries:
 
 **Living Spaces:**
-- **Kitchen**: Cabinets, appliances, work surfaces
-- **Living Room**: Seating, entertainment, storage
-- **Dining Room**: Tables, chairs, storage
+- **Kitchen**: Cabinets, appliances, work surfaces (existing)
+- **Living Room**: 13 components across 5 categories
+- **Dining Room**: 14 components across 4 categories
 
 **Bedrooms:**
-- **Bedroom**: Standard bedroom with furniture and storage
-- **Master Bedroom**: Larger bedroom with en-suite space (600x500cm)
-- **Guest Bedroom**: Essential furniture for guests (450x400cm)
-
-**Bathrooms:**
-- **Bathroom**: Main bathroom with fixtures and vanities (300x300cm)
-- **Ensuite**: Private bathroom connected to master bedroom (250x200cm)
+- **Bedroom**: 26 components across 3 categories (Furniture, Storage, Decor Props)
+- **Master Bedroom**: Same as bedroom with larger dimensions
+- **Guest Bedroom**: Same as bedroom with guest-specific components
 
 **Specialized Rooms:**
-- **Office**: Home office with desk and storage (400x350cm)
-- **Dressing Room**: Wardrobe and storage solutions (300x400cm)
-- **Utility Room**: Appliances and storage (300x250cm)
+- **Bathroom**: 16 components across 4 categories (Vanities, Storage, Fixtures, Accessories)
+- **Office**: 12 components across 4 categories (Office Furniture, Storage, Shelving, Accessories)
+- **Dressing Room**: 8 components across 3 categories (Storage, Furniture, Accessories)
+- **Utility Room**: 8 components across 3 categories (Appliances, Storage, Accessories)
 - **Under Stairs**: Storage solutions (200x250cm)
 
 ## API Integration

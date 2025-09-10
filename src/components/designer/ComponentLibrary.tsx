@@ -343,96 +343,414 @@ const components: ComponentDefinition[] = [
     description: 'Bedside table with drawer'
   },
 
-  // DRESSING ROOM COMPONENTS (new additions)
+  // ENHANCED DRESSING ROOM COMPONENTS - Phase 6 Implementation
+
+  // CUSTOM WARDROBE SYSTEMS (Your Carpentry Expertise)
   {
-    id: 'wardrobe-4door',
-    name: '4-Door Wardrobe',
+    id: 'walk-in-wardrobe-system',
+    name: 'Walk-in Wardrobe System',
     type: 'cabinet',
-    width: 200,
+    width: 250,
     height: 220,
     color: '#654321',
     category: 'dressing-storage',
     roomTypes: ['dressing-room'],
     icon: <Shirt className="h-4 w-4" />,
-    description: 'Large 4-door wardrobe'
+    description: 'Complete walk-in wardrobe with custom shelving and rails'
   },
   {
-    id: 'wardrobe-6door',
-    name: '6-Door Wardrobe',
+    id: 'wardrobe-modular-system',
+    name: 'Modular Wardrobe System',
+    type: 'cabinet',
+    width: 280,
+    height: 220,
+    color: '#654321',
+    category: 'dressing-storage',
+    roomTypes: ['dressing-room'],
+    icon: <Shirt className="h-4 w-4" />,
+    description: 'Modular wardrobe system with customizable compartments'
+  },
+  {
+    id: 'wardrobe-u-shaped',
+    name: 'U-Shaped Wardrobe',
     type: 'cabinet',
     width: 300,
     height: 220,
     color: '#654321',
     category: 'dressing-storage',
     roomTypes: ['dressing-room'],
-    icon: <Shirt className="h-4 w-4" />,
-    description: 'Extra large 6-door wardrobe'
+    icon: <Square className="h-4 w-4" />,
+    description: 'U-shaped wardrobe system for three walls'
   },
   {
-    id: 'dressing-table',
-    name: 'Dressing Table',
+    id: 'wardrobe-island-unit',
+    name: 'Wardrobe Island Unit',
     type: 'cabinet',
-    width: 120,
-    height: 45,
-    color: '#8B4513',
-    category: 'dressing-furniture',
+    width: 180,
+    height: 90,
+    color: '#654321',
+    category: 'dressing-storage',
     roomTypes: ['dressing-room'],
-    icon: <RectangleHorizontal className="h-4 w-4" />,
-    description: 'Dressing table with mirror'
+    icon: <Shirt className="h-4 w-4" />,
+    description: 'Central island unit with drawers and shelves'
   },
+
+  // ADVANCED STORAGE SOLUTIONS
   {
-    id: 'shoe-rack',
-    name: 'Shoe Rack',
+    id: 'shoe-storage-tower-dressing',
+    name: 'Premium Shoe Tower',
     type: 'cabinet',
     width: 80,
-    height: 100,
+    height: 200,
     color: '#654321',
     category: 'dressing-storage',
     roomTypes: ['dressing-room'],
     icon: <Box className="h-4 w-4" />,
-    description: 'Multi-tier shoe storage'
+    description: 'Tall shoe storage with automatic shutters'
   },
   {
-    id: 'jewelry-cabinet',
-    name: 'Jewelry Cabinet',
+    id: 'belt-rack-organizer',
+    name: 'Belt & Tie Organizer',
     type: 'cabinet',
-    width: 40,
+    width: 60,
+    height: 30,
+    color: '#654321',
+    category: 'dressing-storage',
+    roomTypes: ['dressing-room'],
+    icon: <Archive className="h-4 w-4" />,
+    description: 'Specialized organizer for belts and ties'
+  },
+  {
+    id: 'accessory-drawer-unit',
+    name: 'Accessory Drawer Unit',
+    type: 'cabinet',
+    width: 100,
     height: 60,
+    color: '#654321',
+    category: 'dressing-storage',
+    roomTypes: ['dressing-room'],
+    icon: <Archive className="h-4 w-4" />,
+    description: 'Shallow drawers for accessories and small items'
+  },
+  {
+    id: 'hat-box-storage',
+    name: 'Hat Box Storage',
+    type: 'cabinet',
+    width: 80,
+    height: 180,
+    color: '#654321',
+    category: 'dressing-storage',
+    roomTypes: ['dressing-room'],
+    icon: <Box className="h-4 w-4" />,
+    description: 'Vertical storage for hat boxes and bags'
+  },
+
+  // CUSTOM DRESSING FURNITURE
+  {
+    id: 'dressing-table-vanity',
+    name: 'Vanity Dressing Table',
+    type: 'cabinet',
+    width: 140,
+    height: 50,
+    color: '#8B4513',
+    category: 'dressing-furniture',
+    roomTypes: ['dressing-room'],
+    icon: <RectangleHorizontal className="h-4 w-4" />,
+    description: 'Large vanity table with integrated lighting'
+  },
+  {
+    id: 'dressing-stool-upholstered',
+    name: 'Upholstered Dressing Stool',
+    type: 'appliance',
+    width: 45,
+    height: 45,
+    color: '#8B4513',
+    category: 'dressing-furniture',
+    roomTypes: ['dressing-room'],
+    icon: <Sofa className="h-4 w-4" />,
+    description: 'Comfortable stool for dressing table'
+  },
+  {
+    id: 'full-length-mirror-stand',
+    name: 'Full-Length Mirror',
+    type: 'appliance',
+    width: 50,
+    height: 180,
+    color: '#C0C0C0',
+    category: 'dressing-furniture',
+    roomTypes: ['dressing-room'],
+    icon: <RectangleHorizontal className="h-4 w-4" />,
+    description: 'Floor-standing full-length mirror'
+  },
+  {
+    id: 'dressing-bench-storage',
+    name: 'Storage Dressing Bench',
+    type: 'cabinet',
+    width: 120,
+    height: 50,
+    color: '#8B4513',
+    category: 'dressing-furniture',
+    roomTypes: ['dressing-room'],
+    icon: <RectangleHorizontal className="h-4 w-4" />,
+    description: 'Bench with lift-up seat for storage'
+  },
+
+  // JEWELRY & ACCESSORY STORAGE
+  {
+    id: 'jewelry-armoire-large',
+    name: 'Large Jewelry Armoire',
+    type: 'cabinet',
+    width: 50,
+    height: 120,
     color: '#8B4513',
     category: 'dressing-storage',
     roomTypes: ['dressing-room'],
     icon: <Archive className="h-4 w-4" />,
-    description: 'Wall-mounted jewelry cabinet'
+    description: 'Tall jewelry cabinet with multiple drawers and hooks'
   },
-
-  // BATHROOM COMPONENTS (new additions)
   {
-    id: 'vanity-unit-60',
-    name: 'Vanity Unit 60cm',
+    id: 'watch-case-display',
+    name: 'Watch Display Case',
     type: 'cabinet',
-    width: 60,
-    height: 60,
-    color: '#F5F5DC',
-    category: 'bathroom-vanities',
-    roomTypes: ['bathroom', 'ensuite'],
-    icon: <Bath className="h-4 w-4" />,
-    description: 'Wall-hung vanity unit with basin'
+    width: 40,
+    height: 30,
+    color: '#8B4513',
+    category: 'dressing-storage',
+    roomTypes: ['dressing-room'],
+    icon: <Archive className="h-4 w-4" />,
+    description: 'Specialized display case for watches'
   },
   {
-    id: 'vanity-unit-80',
-    name: 'Vanity Unit 80cm',
+    id: 'perfume-organizer',
+    name: 'Perfume Organizer',
+    type: 'cabinet',
+    width: 30,
+    height: 40,
+    color: '#F5DEB3',
+    category: 'dressing-storage',
+    roomTypes: ['dressing-room'],
+    icon: <Archive className="h-4 w-4" />,
+    description: 'Tiered organizer for perfume bottles'
+  },
+  {
+    id: 'scarf-hanging-rack',
+    name: 'Scarf Hanging Rack',
     type: 'cabinet',
     width: 80,
+    height: 20,
+    color: '#8B4513',
+    category: 'dressing-storage',
+    roomTypes: ['dressing-room'],
+    icon: <Archive className="h-4 w-4" />,
+    description: 'Wall-mounted rack for scarves and belts'
+  },
+
+  // DRESSING ROOM ACCESSORIES & PROPS
+  {
+    id: 'dressing-room-mirror-lighted',
+    name: 'Lighted Makeup Mirror',
+    type: 'appliance',
+    width: 60,
+    height: 80,
+    color: '#C0C0C0',
+    category: 'dressing-props',
+    roomTypes: ['dressing-room'],
+    icon: <RectangleHorizontal className="h-4 w-4" />,
+    description: 'Wall-mounted mirror with integrated lighting'
+  },
+  {
+    id: 'laundry-hamper-dressing',
+    name: 'Decorative Laundry Hamper',
+    type: 'appliance',
+    width: 50,
+    height: 60,
+    color: '#8B4513',
+    category: 'dressing-props',
+    roomTypes: ['dressing-room'],
+    icon: <Archive className="h-4 w-4" />,
+    description: 'Woven hamper for dirty clothes'
+  },
+  {
+    id: 'dressing-room-ottoman',
+    name: 'Dressing Room Ottoman',
+    type: 'appliance',
+    width: 60,
+    height: 40,
+    color: '#8B4513',
+    category: 'dressing-props',
+    roomTypes: ['dressing-room'],
+    icon: <Sofa className="h-4 w-4" />,
+    description: 'Small ottoman for sitting while dressing'
+  },
+  {
+    id: 'clothes-valet-stand',
+    name: 'Clothes Valet Stand',
+    type: 'appliance',
+    width: 50,
+    height: 170,
+    color: '#8B4513',
+    category: 'dressing-props',
+    roomTypes: ['dressing-room'],
+    icon: <Shirt className="h-4 w-4" />,
+    description: 'Valet stand for hanging clothes and accessories'
+  },
+
+  // ENHANCED BATHROOM COMPONENTS - Phase 2 Implementation
+
+  // CUSTOM VANITY UNITS (Your Carpentry Expertise)
+  {
+    id: 'vanity-double-120',
+    name: 'Double Vanity 120cm',
+    type: 'cabinet',
+    width: 120,
     height: 60,
     color: '#F5F5DC',
     category: 'bathroom-vanities',
     roomTypes: ['bathroom', 'ensuite'],
     icon: <Bath className="h-4 w-4" />,
-    description: 'Wall-hung vanity unit with basin'
+    description: 'His & hers double vanity unit with integrated storage'
   },
   {
-    id: 'toilet',
-    name: 'Toilet',
+    id: 'vanity-floating-100',
+    name: 'Floating Vanity 100cm',
+    type: 'cabinet',
+    width: 100,
+    height: 50,
+    color: '#F5F5DC',
+    category: 'bathroom-vanities',
+    roomTypes: ['bathroom', 'ensuite'],
+    icon: <Bath className="h-4 w-4" />,
+    description: 'Wall-mounted floating vanity with open shelving'
+  },
+  {
+    id: 'vanity-corner-unit',
+    name: 'Corner Vanity Unit',
+    type: 'cabinet',
+    width: 80,
+    height: 80,
+    color: '#F5F5DC',
+    category: 'bathroom-vanities',
+    roomTypes: ['bathroom', 'ensuite'],
+    icon: <Square className="h-4 w-4" />,
+    description: 'L-shaped corner vanity maximizing bathroom space'
+  },
+  {
+    id: 'vanity-compact-45',
+    name: 'Compact Vanity 45cm',
+    type: 'cabinet',
+    width: 45,
+    height: 60,
+    color: '#F5F5DC',
+    category: 'bathroom-vanities',
+    roomTypes: ['bathroom', 'ensuite'],
+    icon: <Bath className="h-4 w-4" />,
+    description: 'Narrow vanity for powder rooms or small bathrooms'
+  },
+
+  // BATHROOM STORAGE SOLUTIONS
+  {
+    id: 'bathroom-linen-cupboard',
+    name: 'Linen Cupboard',
+    type: 'cabinet',
+    width: 60,
+    height: 180,
+    color: '#F5F5DC',
+    category: 'bathroom-storage',
+    roomTypes: ['bathroom', 'ensuite'],
+    icon: <Archive className="h-4 w-4" />,
+    description: 'Tall linen storage cupboard with adjustable shelves'
+  },
+  {
+    id: 'bathroom-mirror-cabinet',
+    name: 'Illuminated Mirror Cabinet',
+    type: 'cabinet',
+    width: 70,
+    height: 80,
+    color: '#C0C0C0',
+    category: 'bathroom-storage',
+    roomTypes: ['bathroom', 'ensuite'],
+    icon: <RectangleHorizontal className="h-4 w-4" />,
+    description: 'Mirror-fronted cabinet with integrated lighting'
+  },
+  {
+    id: 'bathroom-towel-rack',
+    name: 'Towel Storage Rack',
+    type: 'cabinet',
+    width: 80,
+    height: 40,
+    color: '#F5F5DC',
+    category: 'bathroom-storage',
+    roomTypes: ['bathroom', 'ensuite'],
+    icon: <Archive className="h-4 w-4" />,
+    description: 'Wall-mounted towel storage with baskets'
+  },
+  {
+    id: 'bathroom-under-sink-storage',
+    name: 'Under-Sink Pull-Out Storage',
+    type: 'cabinet',
+    width: 60,
+    height: 80,
+    color: '#F5F5DC',
+    category: 'bathroom-storage',
+    roomTypes: ['bathroom', 'ensuite'],
+    icon: <Archive className="h-4 w-4" />,
+    description: 'Custom under-sink storage with pull-out drawers'
+  },
+
+  // BATHROOM CABINETS & SHELVING
+  {
+    id: 'bathroom-wall-shelves',
+    name: 'Wall-Mounted Shelves',
+    type: 'cabinet',
+    width: 100,
+    height: 30,
+    color: '#F5F5DC',
+    category: 'bathroom-storage',
+    roomTypes: ['bathroom', 'ensuite'],
+    icon: <RectangleHorizontal className="h-4 w-4" />,
+    description: 'Wall-mounted storage shelves above vanity'
+  },
+  {
+    id: 'bathroom-recessed-cabinet',
+    name: 'Recessed Cabinet',
+    type: 'cabinet',
+    width: 40,
+    height: 60,
+    color: '#F5F5DC',
+    category: 'bathroom-storage',
+    roomTypes: ['bathroom', 'ensuite'],
+    icon: <Box className="h-4 w-4" />,
+    description: 'Shallow recessed cabinet for bathroom essentials'
+  },
+  {
+    id: 'bathroom-niche-storage',
+    name: 'Shower Niche Storage',
+    type: 'cabinet',
+    width: 30,
+    height: 60,
+    color: '#F5F5DC',
+    category: 'bathroom-storage',
+    roomTypes: ['bathroom', 'ensuite'],
+    icon: <Box className="h-4 w-4" />,
+    description: 'Built-in shower niche with storage compartments'
+  },
+
+  // BATHROOM FIXTURES (Props - Non-Carpentry)
+  {
+    id: 'toilet-compact',
+    name: 'Compact Toilet',
+    type: 'appliance',
+    width: 35,
+    height: 60,
+    color: '#FFFFFF',
+    category: 'bathroom-fixtures',
+    roomTypes: ['bathroom', 'ensuite'],
+    icon: <Home className="h-4 w-4" />,
+    description: 'Space-saving compact toilet design'
+  },
+  {
+    id: 'bidet-toilet',
+    name: 'Toilet with Bidet',
     type: 'appliance',
     width: 40,
     height: 60,
@@ -440,81 +758,417 @@ const components: ComponentDefinition[] = [
     category: 'bathroom-fixtures',
     roomTypes: ['bathroom', 'ensuite'],
     icon: <Home className="h-4 w-4" />,
-    description: 'Wall-hung toilet'
+    description: 'Wall-hung toilet with integrated bidet function'
   },
   {
-    id: 'shower-tray',
-    name: 'Shower Tray',
+    id: 'shower-enclosure-rectangular',
+    name: 'Rectangular Shower Enclosure',
+    type: 'appliance',
+    width: 80,
+    height: 200,
+    color: '#E6E6FA',
+    category: 'bathroom-fixtures',
+    roomTypes: ['bathroom', 'ensuite'],
+    icon: <Waves className="h-4 w-4" />,
+    description: 'Walk-in shower enclosure with frameless glass'
+  },
+  {
+    id: 'shower-enclosure-corner',
+    name: 'Corner Shower Enclosure',
     type: 'appliance',
     width: 90,
     height: 90,
     color: '#E6E6FA',
     category: 'bathroom-fixtures',
     roomTypes: ['bathroom', 'ensuite'],
-    icon: <Waves className="h-4 w-4" />,
-    description: 'Square shower tray'
+    icon: <Square className="h-4 w-4" />,
+    description: 'Corner shower enclosure with sliding doors'
   },
   {
-    id: 'bathtub',
-    name: 'Bathtub',
+    id: 'freestanding-bathtub',
+    name: 'Freestanding Bathtub',
     type: 'appliance',
     width: 170,
-    height: 70,
+    height: 75,
     color: '#FFFFFF',
     category: 'bathroom-fixtures',
     roomTypes: ['bathroom', 'ensuite'],
     icon: <Bath className="h-4 w-4" />,
-    description: 'Standard bathtub'
+    description: 'Classic freestanding roll-top bathtub'
+  },
+  {
+    id: 'walk-in-bathtub',
+    name: 'Walk-in Bathtub',
+    type: 'appliance',
+    width: 150,
+    height: 90,
+    color: '#FFFFFF',
+    category: 'bathroom-fixtures',
+    roomTypes: ['bathroom', 'ensuite'],
+    icon: <Bath className="h-4 w-4" />,
+    description: 'Accessible walk-in bathtub with low step entry'
   },
 
-  // MEDIA WALL COMPONENTS (new additions)
+  // BATHROOM ACCESSORIES & PROPS
   {
-    id: 'tv-unit-120',
-    name: 'TV Unit 120cm',
-    type: 'cabinet',
-    width: 120,
-    height: 40,
-    color: '#2F4F4F',
-    category: 'media-furniture',
-    roomTypes: ['living-room'],
-    icon: <Tv className="h-4 w-4" />,
-    description: 'Low TV cabinet unit'
+    id: 'bathroom-mirror-large',
+    name: 'Large Bathroom Mirror',
+    type: 'appliance',
+    width: 80,
+    height: 100,
+    color: '#C0C0C0',
+    category: 'bathroom-props',
+    roomTypes: ['bathroom', 'ensuite'],
+    icon: <RectangleHorizontal className="h-4 w-4" />,
+    description: 'Large frameless bathroom mirror'
   },
   {
-    id: 'tv-unit-160',
-    name: 'TV Unit 160cm',
-    type: 'cabinet',
-    width: 160,
-    height: 40,
-    color: '#2F4F4F',
-    category: 'media-furniture',
-    roomTypes: ['living-room'],
-    icon: <Tv className="h-4 w-4" />,
-    description: 'Wide TV cabinet unit'
+    id: 'bathroom-extractor-fan',
+    name: 'Extractor Fan',
+    type: 'appliance',
+    width: 30,
+    height: 30,
+    color: '#FFFFFF',
+    category: 'bathroom-props',
+    roomTypes: ['bathroom', 'ensuite'],
+    icon: <Wind className="h-4 w-4" />,
+    description: 'Wall-mounted bathroom extractor fan'
   },
   {
-    id: 'media-shelving',
-    name: 'Media Shelving',
-    type: 'cabinet',
+    id: 'bathroom-heated-towel-rail',
+    name: 'Heated Towel Rail',
+    type: 'appliance',
     width: 60,
     height: 120,
-    color: '#2F4F4F',
-    category: 'media-storage',
-    roomTypes: ['living-room'],
-    icon: <Box className="h-4 w-4" />,
-    description: 'Tall media shelving unit'
+    color: '#C0C0C0',
+    category: 'bathroom-props',
+    roomTypes: ['bathroom', 'ensuite'],
+    icon: <Zap className="h-4 w-4" />,
+    description: 'Electric heated towel rail'
   },
   {
-    id: 'media-cabinet',
-    name: 'Media Cabinet',
+    id: 'bathroom-scale-digital',
+    name: 'Digital Bathroom Scale',
+    type: 'appliance',
+    width: 30,
+    height: 30,
+    color: '#FFFFFF',
+    category: 'bathroom-props',
+    roomTypes: ['bathroom', 'ensuite'],
+    icon: <Square className="h-4 w-4" />,
+    description: 'Digital bathroom scale with LCD display'
+  },
+
+  // ENHANCED LIVING ROOM COMPONENTS - Phase 3 Implementation
+
+  // CUSTOM ENTERTAINMENT UNITS (Your Carpentry Expertise)
+  {
+    id: 'entertainment-wall-unit',
+    name: 'Entertainment Wall Unit',
+    type: 'cabinet',
+    width: 300,
+    height: 220,
+    color: '#2F4F4F',
+    category: 'living-room-built-ins',
+    roomTypes: ['living-room'],
+    icon: <Tv className="h-4 w-4" />,
+    description: 'Custom floor-to-ceiling entertainment wall system'
+  },
+  {
+    id: 'media-console-floating',
+    name: 'Floating Media Console',
+    type: 'cabinet',
+    width: 180,
+    height: 40,
+    color: '#2F4F4F',
+    category: 'living-room-built-ins',
+    roomTypes: ['living-room'],
+    icon: <Tv className="h-4 w-4" />,
+    description: 'Wall-mounted floating entertainment unit'
+  },
+  {
+    id: 'corner-entertainment-unit',
+    name: 'Corner Entertainment Unit',
+    type: 'cabinet',
+    width: 120,
+    height: 180,
+    color: '#2F4F4F',
+    category: 'living-room-built-ins',
+    roomTypes: ['living-room'],
+    icon: <Square className="h-4 w-4" />,
+    description: 'L-shaped corner entertainment unit maximizing space'
+  },
+  {
+    id: 'modular-media-system',
+    name: 'Modular Media System',
+    type: 'cabinet',
+    width: 200,
+    height: 60,
+    color: '#2F4F4F',
+    category: 'living-room-built-ins',
+    roomTypes: ['living-room'],
+    icon: <Grid3X3 className="h-4 w-4" />,
+    description: 'Modular entertainment system with customizable components'
+  },
+
+  // CUSTOM BOOKCASES & SHELVING
+  {
+    id: 'floor-to-ceiling-bookshelf',
+    name: 'Floor-to-Ceiling Bookshelf',
     type: 'cabinet',
     width: 80,
-    height: 80,
-    color: '#2F4F4F',
-    category: 'media-storage',
+    height: 240,
+    color: '#8B4513',
+    category: 'living-room-shelving',
     roomTypes: ['living-room'],
     icon: <Archive className="h-4 w-4" />,
-    description: 'Square media storage cabinet'
+    description: 'Tall custom bookshelf with adjustable shelving'
+  },
+  {
+    id: 'wall-mounted-shelves-wide',
+    name: 'Wide Wall Shelves',
+    type: 'cabinet',
+    width: 200,
+    height: 30,
+    color: '#F5DEB3',
+    category: 'living-room-shelving',
+    roomTypes: ['living-room'],
+    icon: <RectangleHorizontal className="h-4 w-4" />,
+    description: 'Wide wall-mounted display shelves'
+  },
+  {
+    id: 'recessed-bookshelves',
+    name: 'Recessed Bookshelves',
+    type: 'cabinet',
+    width: 100,
+    height: 180,
+    color: '#8B4513',
+    category: 'living-room-shelving',
+    roomTypes: ['living-room'],
+    icon: <Archive className="h-4 w-4" />,
+    description: 'Built-in recessed bookshelf alcove'
+  },
+  {
+    id: 'ladder-bookshelf',
+    name: 'Ladder Bookshelf',
+    type: 'cabinet',
+    width: 60,
+    height: 200,
+    color: '#8B4513',
+    category: 'living-room-shelving',
+    roomTypes: ['living-room'],
+    icon: <Archive className="h-4 w-4" />,
+    description: 'Leaning ladder-style bookshelf'
+  },
+
+  // CUSTOM STORAGE SOLUTIONS
+  {
+    id: 'ottoman-storage-large',
+    name: 'Large Storage Ottoman',
+    type: 'cabinet',
+    width: 100,
+    height: 50,
+    color: '#6B8E23',
+    category: 'living-room-storage',
+    roomTypes: ['living-room'],
+    icon: <Archive className="h-4 w-4" />,
+    description: 'Large upholstered ottoman with internal storage'
+  },
+  {
+    id: 'console-table-storage',
+    name: 'Console Table with Storage',
+    type: 'cabinet',
+    width: 120,
+    height: 80,
+    color: '#8B4513',
+    category: 'living-room-storage',
+    roomTypes: ['living-room'],
+    icon: <Archive className="h-4 w-4" />,
+    description: 'Console table with drawers and cabinets'
+  },
+  {
+    id: 'magazine-rack-storage',
+    name: 'Magazine Rack Storage',
+    type: 'cabinet',
+    width: 40,
+    height: 60,
+    color: '#8B4513',
+    category: 'living-room-storage',
+    roomTypes: ['living-room'],
+    icon: <Archive className="h-4 w-4" />,
+    description: 'Magazine and newspaper storage rack'
+  },
+  {
+    id: 'cable-management-cabinet',
+    name: 'Cable Management Cabinet',
+    type: 'cabinet',
+    width: 60,
+    height: 40,
+    color: '#2F4F4F',
+    category: 'living-room-storage',
+    roomTypes: ['living-room'],
+    icon: <Archive className="h-4 w-4" />,
+    description: 'Entertainment center cable management unit'
+  },
+
+  // LIVING ROOM SEATING & TABLES
+  {
+    id: 'sectional-sofa-left-arm',
+    name: 'Sectional Sofa (Left Arm)',
+    type: 'appliance',
+    width: 280,
+    height: 90,
+    color: '#3A6EA5',
+    category: 'living-room-furniture',
+    roomTypes: ['living-room'],
+    icon: <Sofa className="h-4 w-4" />,
+    description: 'Large left-arm sectional sofa'
+  },
+  {
+    id: 'sectional-sofa-right-arm',
+    name: 'Sectional Sofa (Right Arm)',
+    type: 'appliance',
+    width: 280,
+    height: 90,
+    color: '#3A6EA5',
+    category: 'living-room-furniture',
+    roomTypes: ['living-room'],
+    icon: <Sofa className="h-4 w-4" />,
+    description: 'Large right-arm sectional sofa'
+  },
+  {
+    id: 'loveseat-sofa',
+    name: 'Loveseat Sofa',
+    type: 'appliance',
+    width: 140,
+    height: 80,
+    color: '#3A6EA5',
+    category: 'living-room-furniture',
+    roomTypes: ['living-room'],
+    icon: <Sofa className="h-4 w-4" />,
+    description: 'Compact 2-seater loveseat'
+  },
+  {
+    id: 'chaise-lounge',
+    name: 'Chaise Lounge',
+    type: 'appliance',
+    width: 160,
+    height: 70,
+    color: '#3A6EA5',
+    category: 'living-room-furniture',
+    roomTypes: ['living-room'],
+    icon: <Sofa className="h-4 w-4" />,
+    description: 'Comfortable chaise lounge chair'
+  },
+  {
+    id: 'coffee-table-oval',
+    name: 'Oval Coffee Table',
+    type: 'appliance',
+    width: 120,
+    height: 50,
+    color: '#8B4513',
+    category: 'living-room-furniture',
+    roomTypes: ['living-room'],
+    icon: <RectangleHorizontal className="h-4 w-4" />,
+    description: 'Oval glass-top coffee table'
+  },
+  {
+    id: 'side-table-nested',
+    name: 'Nested Side Tables',
+    type: 'appliance',
+    width: 60,
+    height: 50,
+    color: '#8B4513',
+    category: 'living-room-furniture',
+    roomTypes: ['living-room'],
+    icon: <RectangleHorizontal className="h-4 w-4" />,
+    description: 'Set of 3 nested side tables'
+  },
+  {
+    id: 'console-table-hallway',
+    name: 'Hallway Console Table',
+    type: 'appliance',
+    width: 100,
+    height: 80,
+    color: '#8B4513',
+    category: 'living-room-furniture',
+    roomTypes: ['living-room'],
+    icon: <RectangleHorizontal className="h-4 w-4" />,
+    description: 'Narrow console table for hallways or behind sofa'
+  },
+
+  // LIVING ROOM PROPS & ACCESSORIES
+  {
+    id: 'floor-lamp-modern',
+    name: 'Modern Floor Lamp',
+    type: 'appliance',
+    width: 40,
+    height: 160,
+    color: '#C0C0C0',
+    category: 'living-room-props',
+    roomTypes: ['living-room'],
+    icon: <Zap className="h-4 w-4" />,
+    description: 'Contemporary floor lamp with adjustable height'
+  },
+  {
+    id: 'table-lamp-decorative',
+    name: 'Decorative Table Lamp',
+    type: 'appliance',
+    width: 30,
+    height: 60,
+    color: '#F5DEB3',
+    category: 'living-room-props',
+    roomTypes: ['living-room'],
+    icon: <Zap className="h-4 w-4" />,
+    description: 'Ornate table lamp for side tables'
+  },
+  {
+    id: 'area-rug-large',
+    name: 'Large Area Rug',
+    type: 'appliance',
+    width: 300,
+    height: 200,
+    color: '#8B4513',
+    category: 'living-room-props',
+    roomTypes: ['living-room'],
+    icon: <Sofa className="h-4 w-4" />,
+    description: 'Large patterned area rug for living room'
+  },
+  {
+    id: 'wall-art-large',
+    name: 'Large Wall Art',
+    type: 'appliance',
+    width: 120,
+    height: 80,
+    color: '#FFFFFF',
+    category: 'living-room-props',
+    roomTypes: ['living-room'],
+    icon: <RectangleHorizontal className="h-4 w-4" />,
+    description: 'Large framed wall artwork or mirror'
+  },
+  {
+    id: 'plant-stand-tall',
+    name: 'Tall Plant Stand',
+    type: 'appliance',
+    width: 40,
+    height: 120,
+    color: '#8B4513',
+    category: 'living-room-props',
+    roomTypes: ['living-room'],
+    icon: <Box className="h-4 w-4" />,
+    description: 'Tiered plant stand for indoor plants'
+  },
+  {
+    id: 'fireplace-surround-electric',
+    name: 'Electric Fireplace Surround',
+    type: 'appliance',
+    width: 120,
+    height: 100,
+    color: '#FFFFFF',
+    category: 'living-room-props',
+    roomTypes: ['living-room'],
+    icon: <Zap className="h-4 w-4" />,
+    description: 'Electric fireplace with decorative surround'
   },
 
   // FLOORING COMPONENTS (new additions)
@@ -592,68 +1246,546 @@ const components: ComponentDefinition[] = [
     description: 'Rectangular coffee table'
   },
 
-  // OFFICE FURNITURE - New additions
+  // ENHANCED OFFICE COMPONENTS - Phase 5 Implementation
+
+  // CUSTOM OFFICE DESKS (Your Carpentry Expertise)
   {
-    id: 'office-desk',
-    name: 'Office Desk',
+    id: 'executive-desk',
+    name: 'Executive Desk',
     type: 'appliance',
-    width: 150,
-    height: 75,
-    color: '#2F4F4F',
+    width: 180,
+    height: 80,
+    color: '#8B4513',
     category: 'office-furniture',
-    roomTypes: ['office', 'bedroom', 'living-room'],
+    roomTypes: ['office'],
     icon: <RectangleHorizontal className="h-4 w-4" />,
-    description: 'Standard office desk'
+    description: 'Large executive desk with multiple drawers'
   },
   {
-    id: 'office-chair',
-    name: 'Office Chair',
+    id: 'l-shaped-desk',
+    name: 'L-Shaped Desk',
+    type: 'appliance',
+    width: 160,
+    height: 140,
+    color: '#8B4513',
+    category: 'office-furniture',
+    roomTypes: ['office'],
+    icon: <RectangleHorizontal className="h-4 w-4" />,
+    description: 'Corner L-shaped desk maximizing workspace'
+  },
+  {
+    id: 'standing-desk',
+    name: 'Height Adjustable Desk',
+    type: 'appliance',
+    width: 160,
+    height: 80,
+    color: '#2F4F4F',
+    category: 'office-furniture',
+    roomTypes: ['office'],
+    icon: <RectangleHorizontal className="h-4 w-4" />,
+    description: 'Electric height-adjustable standing desk'
+  },
+  {
+    id: 'compact-desk',
+    name: 'Compact Writing Desk',
+    type: 'appliance',
+    width: 120,
+    height: 60,
+    color: '#8B4513',
+    category: 'office-furniture',
+    roomTypes: ['office'],
+    icon: <RectangleHorizontal className="h-4 w-4" />,
+    description: 'Small writing desk for home office'
+  },
+
+  // OFFICE STORAGE SOLUTIONS
+  {
+    id: 'filing-cabinet-2drawer',
+    name: '2-Drawer Filing Cabinet',
+    type: 'cabinet',
+    width: 45,
+    height: 70,
+    color: '#2F4F4F',
+    category: 'office-storage',
+    roomTypes: ['office'],
+    icon: <Archive className="h-4 w-4" />,
+    description: 'Metal filing cabinet for documents'
+  },
+  {
+    id: 'filing-cabinet-4drawer',
+    name: '4-Drawer Filing Cabinet',
+    type: 'cabinet',
+    width: 45,
+    height: 130,
+    color: '#2F4F4F',
+    category: 'office-storage',
+    roomTypes: ['office'],
+    icon: <Archive className="h-4 w-4" />,
+    description: 'Tall metal filing cabinet with lock'
+  },
+  {
+    id: 'lateral-file-cabinet',
+    name: 'Lateral File Cabinet',
+    type: 'cabinet',
+    width: 90,
+    height: 70,
+    color: '#2F4F4F',
+    category: 'office-storage',
+    roomTypes: ['office'],
+    icon: <Archive className="h-4 w-4" />,
+    description: 'Wide lateral filing system'
+  },
+  {
+    id: 'storage-credenza',
+    name: 'Storage Credenza',
+    type: 'cabinet',
+    width: 180,
+    height: 60,
+    color: '#8B4513',
+    category: 'office-storage',
+    roomTypes: ['office'],
+    icon: <Archive className="h-4 w-4" />,
+    description: 'Low credenza with multiple storage compartments'
+  },
+
+  // CUSTOM BOOKCASES & SHELVING
+  {
+    id: 'bookshelf-barrister',
+    name: 'Barrister Bookshelf',
+    type: 'cabinet',
+    width: 80,
+    height: 180,
+    color: '#8B4513',
+    category: 'office-shelving',
+    roomTypes: ['office'],
+    icon: <Archive className="h-4 w-4" />,
+    description: 'Traditional barrister bookcase with glass doors'
+  },
+  {
+    id: 'bookshelf-modular',
+    name: 'Modular Bookshelf System',
+    type: 'cabinet',
+    width: 120,
+    height: 200,
+    color: '#8B4513',
+    category: 'office-shelving',
+    roomTypes: ['office'],
+    icon: <Archive className="h-4 w-4" />,
+    description: 'Modular bookshelf system with adjustable shelves'
+  },
+  {
+    id: 'corner-bookshelf-office',
+    name: 'Corner Bookshelf',
+    type: 'cabinet',
+    width: 80,
+    height: 200,
+    color: '#8B4513',
+    category: 'office-shelving',
+    roomTypes: ['office'],
+    icon: <Square className="h-4 w-4" />,
+    description: 'Corner bookshelf maximizing office space'
+  },
+  {
+    id: 'wall-mounted-shelves-office',
+    name: 'Wall-Mounted Office Shelves',
+    type: 'cabinet',
+    width: 150,
+    height: 30,
+    color: '#F5DEB3',
+    category: 'office-shelving',
+    roomTypes: ['office'],
+    icon: <RectangleHorizontal className="h-4 w-4" />,
+    description: 'Wall-mounted shelves above desk'
+  },
+
+  // OFFICE SEATING
+  {
+    id: 'executive-office-chair',
+    name: 'Executive Office Chair',
+    type: 'appliance',
+    width: 65,
+    height: 65,
+    color: '#2F4F4F',
+    category: 'office-furniture',
+    roomTypes: ['office'],
+    icon: <Sofa className="h-4 w-4" />,
+    description: 'High-back executive office chair with lumbar support'
+  },
+  {
+    id: 'task-office-chair',
+    name: 'Task Office Chair',
     type: 'appliance',
     width: 60,
     height: 60,
     color: '#2F4F4F',
     category: 'office-furniture',
-    roomTypes: ['office', 'bedroom', 'living-room'],
+    roomTypes: ['office'],
     icon: <Sofa className="h-4 w-4" />,
-    description: 'Ergonomic office chair'
+    description: 'Adjustable task chair for computer work'
   },
   {
-    id: 'bookshelf',
-    name: 'Bookshelf',
+    id: 'guest-chair-office',
+    name: 'Office Guest Chair',
+    type: 'appliance',
+    width: 55,
+    height: 55,
+    color: '#2F4F4F',
+    category: 'office-furniture',
+    roomTypes: ['office'],
+    icon: <Sofa className="h-4 w-4" />,
+    description: 'Comfortable guest chair for meetings'
+  },
+  {
+    id: 'drafting-stool',
+    name: 'Drafting Stool',
+    type: 'appliance',
+    width: 50,
+    height: 50,
+    color: '#2F4F4F',
+    category: 'office-furniture',
+    roomTypes: ['office'],
+    icon: <Sofa className="h-4 w-4" />,
+    description: 'Adjustable stool for drafting table'
+  },
+
+  // OFFICE ACCESSORIES & PROPS
+  {
+    id: 'desk-lamp-led',
+    name: 'LED Desk Lamp',
+    type: 'appliance',
+    width: 25,
+    height: 40,
+    color: '#C0C0C0',
+    category: 'office-props',
+    roomTypes: ['office'],
+    icon: <Zap className="h-4 w-4" />,
+    description: 'Modern LED desk lamp with adjustable arm'
+  },
+  {
+    id: 'monitor-stand',
+    name: 'Monitor Stand',
+    type: 'appliance',
+    width: 50,
+    height: 15,
+    color: '#2F4F4F',
+    category: 'office-props',
+    roomTypes: ['office'],
+    icon: <RectangleHorizontal className="h-4 w-4" />,
+    description: 'Ergonomic monitor stand with storage'
+  },
+  {
+    id: 'cable-management-tray',
+    name: 'Cable Management Tray',
+    type: 'appliance',
+    width: 100,
+    height: 10,
+    color: '#2F4F4F',
+    category: 'office-props',
+    roomTypes: ['office'],
+    icon: <RectangleHorizontal className="h-4 w-4" />,
+    description: 'Under-desk cable management tray'
+  },
+  {
+    id: 'office-plant',
+    name: 'Office Plant',
+    type: 'appliance',
+    width: 30,
+    height: 50,
+    color: '#228B22',
+    category: 'office-props',
+    roomTypes: ['office'],
+    icon: <Box className="h-4 w-4" />,
+    description: 'Decorative office plant for workspace'
+  },
+  {
+    id: 'whiteboard-wall',
+    name: 'Wall-Mounted Whiteboard',
+    type: 'appliance',
+    width: 120,
+    height: 90,
+    color: '#FFFFFF',
+    category: 'office-props',
+    roomTypes: ['office'],
+    icon: <RectangleHorizontal className="h-4 w-4" />,
+    description: 'Magnetic whiteboard for brainstorming'
+  },
+  {
+    id: 'coat-rack-office',
+    name: 'Office Coat Rack',
+    type: 'appliance',
+    width: 40,
+    height: 180,
+    color: '#8B4513',
+    category: 'office-props',
+    roomTypes: ['office'],
+    icon: <Archive className="h-4 w-4" />,
+    description: 'Tall coat rack with hooks and storage'
+  },
+
+  // ENHANCED BEDROOM COMPONENTS - Phase 1 Implementation
+
+  // CUSTOM WARDROBE SOLUTIONS (Your Carpentry Expertise)
+  {
+    id: 'wardrobe-walk-in',
+    name: 'Walk-in Wardrobe Unit',
     type: 'cabinet',
+    width: 200,
+    height: 60,
+    color: '#654321',
+    category: 'bedroom-storage',
+    roomTypes: ['bedroom', 'master-bedroom'],
+    icon: <Shirt className="h-4 w-4" />,
+    description: 'Custom walk-in wardrobe with hanging rails and shelves'
+  },
+  {
+    id: 'wardrobe-built-in',
+    name: 'Built-in Wardrobe',
+    type: 'cabinet',
+    width: 240,
+    height: 60,
+    color: '#654321',
+    category: 'bedroom-storage',
+    roomTypes: ['bedroom', 'master-bedroom', 'guest-bedroom'],
+    icon: <Shirt className="h-4 w-4" />,
+    description: 'Floor-to-ceiling built-in wardrobe system'
+  },
+  {
+    id: 'wardrobe-corner',
+    name: 'Corner Wardrobe',
+    type: 'cabinet',
+    width: 120,
+    height: 120,
+    color: '#654321',
+    category: 'bedroom-storage',
+    roomTypes: ['bedroom', 'master-bedroom'],
+    icon: <Square className="h-4 w-4" />,
+    description: 'L-shaped corner wardrobe maximizing space'
+  },
+  {
+    id: 'wardrobe-sliding-door',
+    name: 'Sliding Door Wardrobe',
+    type: 'cabinet',
+    width: 180,
+    height: 60,
+    color: '#654321',
+    category: 'bedroom-storage',
+    roomTypes: ['bedroom', 'master-bedroom', 'guest-bedroom'],
+    icon: <Shirt className="h-4 w-4" />,
+    description: 'Space-saving sliding door wardrobe system'
+  },
+
+  // ADVANCED STORAGE SOLUTIONS
+  {
+    id: 'bed-storage-drawers',
+    name: 'Bed Storage Drawers',
+    type: 'cabinet',
+    width: 160,
+    height: 40,
+    color: '#8B4513',
+    category: 'bedroom-storage',
+    roomTypes: ['bedroom', 'master-bedroom', 'guest-bedroom'],
+    icon: <Archive className="h-4 w-4" />,
+    description: 'Under-bed storage drawers for seasonal items'
+  },
+  {
+    id: 'tallboy-6-drawer',
+    name: 'Tallboy Chest',
+    type: 'cabinet',
+    width: 50,
+    height: 120,
+    color: '#654321',
+    category: 'bedroom-storage',
+    roomTypes: ['bedroom', 'master-bedroom', 'guest-bedroom'],
+    icon: <Archive className="h-4 w-4" />,
+    description: 'Narrow 6-drawer tallboy for tight spaces'
+  },
+  {
+    id: 'dressing-unit',
+    name: 'Dressing Storage Unit',
+    type: 'cabinet',
+    width: 100,
+    height: 180,
+    color: '#654321',
+    category: 'bedroom-storage',
+    roomTypes: ['bedroom', 'master-bedroom'],
+    icon: <Archive className="h-4 w-4" />,
+    description: 'Tall dressing unit with shelves and hanging space'
+  },
+  {
+    id: 'shoe-storage-tower',
+    name: 'Shoe Storage Tower',
+    type: 'cabinet',
+    width: 60,
+    height: 120,
+    color: '#654321',
+    category: 'bedroom-storage',
+    roomTypes: ['bedroom', 'master-bedroom', 'guest-bedroom'],
+    icon: <Box className="h-4 w-4" />,
+    description: 'Vertical shoe storage with adjustable shelves'
+  },
+
+  // CUSTOM BEDROOM CABINETS
+  {
+    id: 'bed-head-unit',
+    name: 'Bed Head Storage Unit',
+    type: 'cabinet',
+    width: 160,
+    height: 30,
+    color: '#8B4513',
+    category: 'bedroom-storage',
+    roomTypes: ['bedroom', 'master-bedroom', 'guest-bedroom'],
+    icon: <Archive className="h-4 w-4" />,
+    description: 'Custom bed head unit with integrated storage'
+  },
+  {
+    id: 'floating-bedside',
+    name: 'Floating Bedside Cabinet',
+    type: 'cabinet',
+    width: 50,
+    height: 40,
+    color: '#8B4513',
+    category: 'bedroom-storage',
+    roomTypes: ['bedroom', 'master-bedroom', 'guest-bedroom'],
+    icon: <Box className="h-4 w-4" />,
+    description: 'Wall-mounted floating bedside cabinet'
+  },
+  {
+    id: 'corner-shelving',
+    name: 'Corner Display Shelving',
+    type: 'cabinet',
+    width: 60,
+    height: 180,
+    color: '#F5DEB3',
+    category: 'bedroom-storage',
+    roomTypes: ['bedroom', 'master-bedroom'],
+    icon: <Square className="h-4 w-4" />,
+    description: 'Corner shelving unit for books and decor'
+  },
+
+  // BEDROOM FURNITURE & SEATING
+  {
+    id: 'king-bed-storage',
+    name: 'King Bed with Storage',
+    type: 'appliance',
+    width: 180,
+    height: 200,
+    color: '#8B4513',
+    category: 'bedroom-furniture',
+    roomTypes: ['bedroom', 'master-bedroom'],
+    icon: <Bed className="h-4 w-4" />,
+    description: 'King size bed with under-bed storage drawers'
+  },
+  {
+    id: 'super-king-bed',
+    name: 'Super King Bed',
+    type: 'appliance',
+    width: 200,
+    height: 200,
+    color: '#8B4513',
+    category: 'bedroom-furniture',
+    roomTypes: ['bedroom', 'master-bedroom'],
+    icon: <Bed className="h-4 w-4" />,
+    description: 'Super king size bed frame'
+  },
+  {
+    id: 'single-bed',
+    name: 'Single Bed',
+    type: 'appliance',
     width: 100,
     height: 200,
     color: '#8B4513',
-    category: 'office-furniture',
-    roomTypes: ['office', 'bedroom', 'living-room'],
-    icon: <Archive className="h-4 w-4" />,
-    description: 'Tall bookshelf'
+    category: 'bedroom-furniture',
+    roomTypes: ['bedroom', 'guest-bedroom'],
+    icon: <Bed className="h-4 w-4" />,
+    description: 'Single bed for guest rooms or children'
+  },
+  {
+    id: 'bunk-bed-system',
+    name: 'Bunk Bed System',
+    type: 'appliance',
+    width: 100,
+    height: 180,
+    color: '#8B4513',
+    category: 'bedroom-furniture',
+    roomTypes: ['bedroom', 'guest-bedroom'],
+    icon: <Bed className="h-4 w-4" />,
+    description: 'Two-tier bunk bed with storage underneath'
   },
 
-  // ADDITIONAL BEDROOM FURNITURE
+  // BEDROOM SEATING & ACCENTS
   {
-    id: 'dressing-table',
-    name: 'Dressing Table',
+    id: 'upholstered-bench',
+    name: 'Upholstered Storage Bench',
     type: 'appliance',
     width: 120,
     height: 50,
-    color: '#8B4513',
-    category: 'bedroom-furniture',
-    roomTypes: ['bedroom', 'master-bedroom', 'guest-bedroom'],
-    icon: <RectangleHorizontal className="h-4 w-4" />,
-    description: 'Bedroom dressing table with mirror'
-  },
-  {
-    id: 'bedroom-ottoman',
-    name: 'Ottoman',
-    type: 'appliance',
-    width: 60,
-    height: 60,
     color: '#6B8E23',
     category: 'bedroom-furniture',
-    roomTypes: ['bedroom', 'master-bedroom', 'guest-bedroom'],
+    roomTypes: ['bedroom', 'master-bedroom'],
     icon: <Sofa className="h-4 w-4" />,
-    description: 'Bedroom ottoman/seat'
+    description: 'End-of-bed bench with internal storage'
+  },
+  {
+    id: 'reading-chair',
+    name: 'Reading Chair',
+    type: 'appliance',
+    width: 70,
+    height: 80,
+    color: '#8B4513',
+    category: 'bedroom-furniture',
+    roomTypes: ['bedroom', 'master-bedroom'],
+    icon: <Sofa className="h-4 w-4" />,
+    description: 'Comfortable armchair for bedroom reading nook'
+  },
+
+  // BEDROOM PROPS (Non-Carpentry Items)
+  {
+    id: 'bedside-lamp',
+    name: 'Bedside Lamp',
+    type: 'appliance',
+    width: 25,
+    height: 50,
+    color: '#F5F5DC',
+    category: 'bedroom-props',
+    roomTypes: ['bedroom', 'master-bedroom', 'guest-bedroom'],
+    icon: <Zap className="h-4 w-4" />,
+    description: 'Table lamp for bedside lighting'
+  },
+  {
+    id: 'wall-mirror-oval',
+    name: 'Oval Wall Mirror',
+    type: 'appliance',
+    width: 60,
+    height: 80,
+    color: '#C0C0C0',
+    category: 'bedroom-props',
+    roomTypes: ['bedroom', 'master-bedroom', 'guest-bedroom'],
+    icon: <RectangleHorizontal className="h-4 w-4" />,
+    description: 'Oval framed wall mirror'
+  },
+  {
+    id: 'bedroom-rug-large',
+    name: 'Large Bedroom Rug',
+    type: 'appliance',
+    width: 250,
+    height: 180,
+    color: '#8B4513',
+    category: 'bedroom-props',
+    roomTypes: ['bedroom', 'master-bedroom'],
+    icon: <Sofa className="h-4 w-4" />,
+    description: 'Large area rug for bedroom floor'
+  },
+  {
+    id: 'curtains-floor-length',
+    name: 'Floor Length Curtains',
+    type: 'appliance',
+    width: 100,
+    height: 250,
+    color: '#F5F5DC',
+    category: 'bedroom-props',
+    roomTypes: ['bedroom', 'master-bedroom', 'guest-bedroom'],
+    icon: <RectangleHorizontal className="h-4 w-4" />,
+    description: 'Floor-to-ceiling window curtains'
   },
 
   // UTILITY ROOM COMPONENTS - Make available in kitchen as utility area
@@ -707,135 +1839,742 @@ const components: ComponentDefinition[] = [
   }
 ];
 
+// ENHANCED UTILITY ROOM COMPONENTS - Phase 7 Implementation
+
 // Add utility room components
 const utilityComponents: ComponentDefinition[] = [
+  // LAUNDRY APPLIANCES & FIXTURES
   {
-    id: 'washing-machine-utility',
-    name: 'Washing Machine',
+    id: 'front-load-washer',
+    name: 'Front Load Washer',
     type: 'appliance',
     width: 60,
-    height: 60,
+    height: 85,
     color: '#f0f0f0',
     category: 'utility-appliances',
     roomTypes: ['utility'],
     icon: <Zap className="h-4 w-4" />,
-    description: 'Front-loading washing machine'
+    description: 'Energy-efficient front-loading washing machine'
   },
   {
-    id: 'tumble-dryer-utility',
-    name: 'Tumble Dryer',
+    id: 'stacked-laundry-pair',
+    name: 'Stacked Laundry Pair',
     type: 'appliance',
     width: 60,
-    height: 60,
+    height: 170,
+    color: '#f0f0f0',
+    category: 'utility-appliances',
+    roomTypes: ['utility'],
+    icon: <Zap className="h-4 w-4" />,
+    description: 'Washer and dryer stacked vertically'
+  },
+  {
+    id: 'compact-dryer',
+    name: 'Compact Tumble Dryer',
+    type: 'appliance',
+    width: 55,
+    height: 75,
     color: '#e8e8e8',
     category: 'utility-appliances',
     roomTypes: ['utility'],
     icon: <Wind className="h-4 w-4" />,
-    description: 'Tumble dryer with round door'
+    description: 'Space-saving compact tumble dryer'
   },
   {
-    id: 'utility-sink-utility',
-    name: 'Utility Sink',
+    id: 'utility-sink-stainless',
+    name: 'Stainless Utility Sink',
     type: 'appliance',
     width: 60,
-    height: 60,
-    color: '#FFFFFF',
+    height: 90,
+    color: '#C0C0C0',
     category: 'utility-appliances',
     roomTypes: ['utility'],
     icon: <Waves className="h-4 w-4" />,
-    description: 'Deep utility sink'
+    description: 'Deep stainless steel utility sink with drainboard'
   },
+
+  // CUSTOM LAUNDRY STORAGE SOLUTIONS
   {
-    id: 'utility-storage-utility',
-    name: 'Utility Storage',
+    id: 'laundry-folding-station',
+    name: 'Folding Station',
     type: 'cabinet',
-    width: 80,
-    height: 200,
-    color: '#8b4513',
+    width: 120,
+    height: 90,
+    color: '#8B4513',
     category: 'utility-storage',
     roomTypes: ['utility'],
     icon: <Archive className="h-4 w-4" />,
-    description: 'Tall utility storage cabinet'
+    description: 'Custom laundry folding counter with storage drawers'
+  },
+  {
+    id: 'laundry-hamper-cabinet',
+    name: 'Hamper Storage Cabinet',
+    type: 'cabinet',
+    width: 80,
+    height: 60,
+    color: '#8B4513',
+    category: 'utility-storage',
+    roomTypes: ['utility'],
+    icon: <Archive className="h-4 w-4" />,
+    description: 'Cabinet with built-in laundry hamper compartments'
+  },
+  {
+    id: 'laundry-sorting-station',
+    name: 'Laundry Sorting Center',
+    type: 'cabinet',
+    width: 100,
+    height: 40,
+    color: '#8B4513',
+    category: 'utility-storage',
+    roomTypes: ['utility'],
+    icon: <Archive className="h-4 w-4" />,
+    description: 'Multi-compartment sorting station for laundry'
+  },
+  {
+    id: 'detergent-storage-unit',
+    name: 'Detergent Storage Unit',
+    type: 'cabinet',
+    width: 40,
+    height: 120,
+    color: '#8B4513',
+    category: 'utility-storage',
+    roomTypes: ['utility'],
+    icon: <Archive className="h-4 w-4" />,
+    description: 'Narrow cabinet for laundry supplies and detergents'
+  },
+
+  // UTILITY ROOM CABINETS & SHELVING
+  {
+    id: 'floor-to-ceiling-pantry',
+    name: 'Utility Pantry Cabinet',
+    type: 'cabinet',
+    width: 60,
+    height: 240,
+    color: '#8B4513',
+    category: 'utility-storage',
+    roomTypes: ['utility'],
+    icon: <Archive className="h-4 w-4" />,
+    description: 'Tall pantry-style cabinet with adjustable shelving'
+  },
+  {
+    id: 'utility-workbench',
+    name: 'Utility Workbench',
+    type: 'cabinet',
+    width: 150,
+    height: 90,
+    color: '#8B4513',
+    category: 'utility-storage',
+    roomTypes: ['utility'],
+    icon: <Archive className="h-4 w-4" />,
+    description: 'Work surface with storage cabinets underneath'
+  },
+  {
+    id: 'mop-bucket-storage',
+    name: 'Cleaning Supply Storage',
+    type: 'cabinet',
+    width: 80,
+    height: 60,
+    color: '#8B4513',
+    category: 'utility-storage',
+    roomTypes: ['utility'],
+    icon: <Archive className="h-4 w-4" />,
+    description: 'Storage for mops, buckets, and cleaning supplies'
+  },
+  {
+    id: 'tool-storage-cabinet',
+    name: 'Tool Storage Cabinet',
+    type: 'cabinet',
+    width: 100,
+    height: 120,
+    color: '#8B4513',
+    category: 'utility-storage',
+    roomTypes: ['utility'],
+    icon: <Archive className="h-4 w-4" />,
+    description: 'Lockable cabinet for tools and maintenance supplies'
+  },
+
+  // SPECIALIZED UTILITY STORAGE
+  {
+    id: 'recycling-center',
+    name: 'Recycling Center',
+    type: 'cabinet',
+    width: 80,
+    height: 100,
+    color: '#228B22',
+    category: 'utility-storage',
+    roomTypes: ['utility'],
+    icon: <Archive className="h-4 w-4" />,
+    description: 'Multi-bin recycling and waste sorting station'
+  },
+  {
+    id: 'seasonal-storage-unit',
+    name: 'Seasonal Storage Unit',
+    type: 'cabinet',
+    width: 120,
+    height: 80,
+    color: '#8B4513',
+    category: 'utility-storage',
+    roomTypes: ['utility'],
+    icon: <Archive className="h-4 w-4" />,
+    description: 'Large storage unit for seasonal items and decorations'
+  },
+  {
+    id: 'pet-supply-station',
+    name: 'Pet Supply Station',
+    type: 'cabinet',
+    width: 60,
+    height: 60,
+    color: '#8B4513',
+    category: 'utility-storage',
+    roomTypes: ['utility'],
+    icon: <Archive className="h-4 w-4" />,
+    description: 'Storage for pet food, toys, and grooming supplies'
+  },
+  {
+    id: 'sports-equipment-rack',
+    name: 'Sports Equipment Rack',
+    type: 'cabinet',
+    width: 40,
+    height: 180,
+    color: '#8B4513',
+    category: 'utility-storage',
+    roomTypes: ['utility'],
+    icon: <Archive className="h-4 w-4" />,
+    description: 'Vertical rack for sports equipment and bicycles'
+  },
+
+  // UTILITY ROOM ACCESSORIES & PROPS
+  {
+    id: 'iron-board-cabinet',
+    name: 'Ironing Board Cabinet',
+    type: 'cabinet',
+    width: 50,
+    height: 40,
+    color: '#8B4513',
+    category: 'utility-props',
+    roomTypes: ['utility'],
+    icon: <Archive className="h-4 w-4" />,
+    description: 'Wall-mounted cabinet for fold-away ironing board'
+  },
+  {
+    id: 'vacuum-cleaner-storage',
+    name: 'Vacuum Storage Unit',
+    type: 'cabinet',
+    width: 30,
+    height: 150,
+    color: '#8B4513',
+    category: 'utility-props',
+    roomTypes: ['utility'],
+    icon: <Archive className="h-4 w-4" />,
+    description: 'Tall narrow cabinet for vacuum cleaner storage'
+  },
+  {
+    id: 'utility-room-bench',
+    name: 'Utility Room Bench',
+    type: 'appliance',
+    width: 100,
+    height: 45,
+    color: '#8B4513',
+    category: 'utility-props',
+    roomTypes: ['utility'],
+    icon: <Sofa className="h-4 w-4" />,
+    description: 'Storage bench for sitting while putting on shoes'
+  },
+  {
+    id: 'coat-hooks-utility',
+    name: 'Utility Coat Hooks',
+    type: 'appliance',
+    width: 60,
+    height: 20,
+    color: '#8B4513',
+    category: 'utility-props',
+    roomTypes: ['utility'],
+    icon: <Archive className="h-4 w-4" />,
+    description: 'Wall-mounted hooks for coats and bags'
   }
 ];
 
+// ENHANCED DINING ROOM COMPONENTS - Phase 4 Implementation
+
 // Add dining room specific components
 const diningRoomComponents: ComponentDefinition[] = [
+  // CUSTOM DINING TABLES (Your Carpentry Expertise)
   {
-    id: 'dining-table-6',
-    name: 'Dining Table (6)',
+    id: 'dining-table-4',
+    name: 'Dining Table (4)',
     type: 'appliance',
-    width: 180,
+    width: 120,
+    height: 80,
+    color: '#8B4513',
+    category: 'dining-furniture',
+    roomTypes: ['dining-room'],
+    icon: <RectangleHorizontal className="h-4 w-4" />,
+    description: 'Compact dining table for 4 people'
+  },
+  {
+    id: 'dining-table-8',
+    name: 'Dining Table (8)',
+    type: 'appliance',
+    width: 220,
     height: 90,
     color: '#8B4513',
     category: 'dining-furniture',
     roomTypes: ['dining-room'],
     icon: <RectangleHorizontal className="h-4 w-4" />,
-    description: 'Dining table for 6 people'
+    description: 'Large dining table for 8 people'
   },
   {
-    id: 'dining-chair-set',
-    name: 'Dining Chair',
+    id: 'dining-table-extendable',
+    name: 'Extendable Dining Table',
     type: 'appliance',
-    width: 45,
+    width: 160,
+    height: 90,
+    color: '#8B4513',
+    category: 'dining-furniture',
+    roomTypes: ['dining-room'],
+    icon: <RectangleHorizontal className="h-4 w-4" />,
+    description: 'Extendable dining table (6-10 seats)'
+  },
+  {
+    id: 'dining-table-round',
+    name: 'Round Dining Table',
+    type: 'appliance',
+    width: 150,
+    height: 150,
+    color: '#8B4513',
+    category: 'dining-furniture',
+    roomTypes: ['dining-room'],
+    icon: <Square className="h-4 w-4" />,
+    description: 'Round dining table for 6 people'
+  },
+
+  // DINING CHAIRS & SEATING
+  {
+    id: 'dining-chair-upholstered',
+    name: 'Upholstered Dining Chair',
+    type: 'appliance',
+    width: 50,
     height: 45,
     color: '#8B4513',
     category: 'dining-furniture',
     roomTypes: ['dining-room'],
     icon: <Sofa className="h-4 w-4" />,
-    description: 'Dining chair'
+    description: 'Comfortable upholstered dining chair'
   },
   {
-    id: 'sideboard',
-    name: 'Sideboard',
+    id: 'dining-chair-parsons',
+    name: 'Parsons Dining Chair',
+    type: 'appliance',
+    width: 45,
+    height: 45,
+    color: '#FFFFFF',
+    category: 'dining-furniture',
+    roomTypes: ['dining-room'],
+    icon: <Sofa className="h-4 w-4" />,
+    description: 'Modern Parsons style dining chair'
+  },
+  {
+    id: 'dining-chair-carver',
+    name: 'Carver Dining Chair',
+    type: 'appliance',
+    width: 55,
+    height: 50,
+    color: '#8B4513',
+    category: 'dining-furniture',
+    roomTypes: ['dining-room'],
+    icon: <Sofa className="h-4 w-4" />,
+    description: 'Traditional carver dining chair with arms'
+  },
+  {
+    id: 'bench-dining',
+    name: 'Dining Bench',
+    type: 'appliance',
+    width: 150,
+    height: 45,
+    color: '#8B4513',
+    category: 'dining-furniture',
+    roomTypes: ['dining-room'],
+    icon: <RectangleHorizontal className="h-4 w-4" />,
+    description: 'Long dining bench for casual seating'
+  },
+
+  // CUSTOM CHINA CABINETS & DISPLAY
+  {
+    id: 'china-cabinet-tall',
+    name: 'Tall China Cabinet',
     type: 'cabinet',
-    width: 160,
+    width: 60,
+    height: 200,
+    color: '#F5DEB3',
+    category: 'dining-display',
+    roomTypes: ['dining-room'],
+    icon: <Archive className="h-4 w-4" />,
+    description: 'Tall china cabinet with glass doors and shelving'
+  },
+  {
+    id: 'china-cabinet-wide',
+    name: 'Wide China Cabinet',
+    type: 'cabinet',
+    width: 150,
+    height: 90,
+    color: '#F5DEB3',
+    category: 'dining-display',
+    roomTypes: ['dining-room'],
+    icon: <Archive className="h-4 w-4" />,
+    description: 'Wide china cabinet with display lighting'
+  },
+  {
+    id: 'hutch-dining',
+    name: 'Dining Hutch',
+    type: 'cabinet',
+    width: 120,
+    height: 180,
+    color: '#8B4513',
+    category: 'dining-display',
+    roomTypes: ['dining-room'],
+    icon: <Archive className="h-4 w-4" />,
+    description: 'Traditional dining hutch with plate rack'
+  },
+  {
+    id: 'corner-cabinet-dining',
+    name: 'Corner Display Cabinet',
+    type: 'cabinet',
+    width: 80,
+    height: 180,
+    color: '#F5DEB3',
+    category: 'dining-display',
+    roomTypes: ['dining-room'],
+    icon: <Square className="h-4 w-4" />,
+    description: 'Corner china cabinet maximizing space'
+  },
+
+  // DINING ROOM STORAGE SOLUTIONS
+  {
+    id: 'sideboard-large',
+    name: 'Large Sideboard',
+    type: 'cabinet',
+    width: 180,
     height: 45,
     color: '#8B4513',
     category: 'dining-storage',
     roomTypes: ['dining-room'],
     icon: <Archive className="h-4 w-4" />,
-    description: 'Dining room sideboard'
+    description: 'Large sideboard with multiple drawers and cabinets'
+  },
+  {
+    id: 'sideboard-narrow',
+    name: 'Narrow Sideboard',
+    type: 'cabinet',
+    width: 100,
+    height: 45,
+    color: '#8B4513',
+    category: 'dining-storage',
+    roomTypes: ['dining-room'],
+    icon: <Archive className="h-4 w-4" />,
+    description: 'Narrow sideboard for smaller dining rooms'
+  },
+  {
+    id: 'buffet-server',
+    name: 'Buffet Server',
+    type: 'cabinet',
+    width: 140,
+    height: 50,
+    color: '#8B4513',
+    category: 'dining-storage',
+    roomTypes: ['dining-room'],
+    icon: <Archive className="h-4 w-4" />,
+    description: 'Buffet server with warming drawers'
+  },
+  {
+    id: 'wine-rack-storage',
+    name: 'Wine Rack Storage',
+    type: 'cabinet',
+    width: 60,
+    height: 120,
+    color: '#8B4513',
+    category: 'dining-storage',
+    roomTypes: ['dining-room'],
+    icon: <Archive className="h-4 w-4" />,
+    description: 'Wine rack with bottle storage and stemware holders'
+  },
+
+  // DINING ROOM PROPS & ACCESSORIES
+  {
+    id: 'dining-pendant-lighting',
+    name: 'Pendant Lighting Set',
+    type: 'appliance',
+    width: 100,
+    height: 80,
+    color: '#C0C0C0',
+    category: 'dining-props',
+    roomTypes: ['dining-room'],
+    icon: <Zap className="h-4 w-4" />,
+    description: 'Set of 3 pendant lights above dining table'
+  },
+  {
+    id: 'dining-chandelier',
+    name: 'Crystal Chandelier',
+    type: 'appliance',
+    width: 60,
+    height: 60,
+    color: '#E6E6FA',
+    category: 'dining-props',
+    roomTypes: ['dining-room'],
+    icon: <Zap className="h-4 w-4" />,
+    description: 'Elegant crystal chandelier for dining room'
+  },
+  {
+    id: 'dining-mirror-large',
+    name: 'Large Dining Mirror',
+    type: 'appliance',
+    width: 100,
+    height: 150,
+    color: '#C0C0C0',
+    category: 'dining-props',
+    roomTypes: ['dining-room'],
+    icon: <RectangleHorizontal className="h-4 w-4" />,
+    description: 'Large decorative mirror for dining room wall'
+  },
+  {
+    id: 'dining-rug-patterned',
+    name: 'Patterned Dining Rug',
+    type: 'appliance',
+    width: 250,
+    height: 180,
+    color: '#8B4513',
+    category: 'dining-props',
+    roomTypes: ['dining-room'],
+    icon: <Sofa className="h-4 w-4" />,
+    description: 'Patterned area rug under dining table'
+  },
+  {
+    id: 'bar-cart-mobile',
+    name: 'Mobile Bar Cart',
+    type: 'appliance',
+    width: 60,
+    height: 80,
+    color: '#8B4513',
+    category: 'dining-props',
+    roomTypes: ['dining-room'],
+    icon: <Archive className="h-4 w-4" />,
+    description: 'Mobile bar cart for entertaining'
+  },
+  {
+    id: 'serving-trolley',
+    name: 'Serving Trolley',
+    type: 'appliance',
+    width: 50,
+    height: 70,
+    color: '#8B4513',
+    category: 'dining-props',
+    roomTypes: ['dining-room'],
+    icon: <Archive className="h-4 w-4" />,
+    description: 'Wooden serving trolley with glass top'
   }
 ];
 
+// ENHANCED UNDER STAIRS COMPONENTS - Phase 8 Implementation
+
 // Add under stairs storage components
 const underStairsComponents: ComponentDefinition[] = [
+  // CUSTOM UNDER STAIRS STORAGE SYSTEMS (Your Carpentry Expertise)
   {
-    id: 'under-stairs-cabinet',
-    name: 'Under Stairs Cabinet',
+    id: 'wedge-shaped-cabinet',
+    name: 'Wedge-Shaped Cabinet',
+    type: 'cabinet',
+    width: 150,
+    height: 120,
+    color: '#8B4513',
+    category: 'under-stairs-storage',
+    roomTypes: ['under-stairs'],
+    icon: <Archive className="h-4 w-4" />,
+    description: 'Custom wedge-shaped cabinet following stair angle'
+  },
+  {
+    id: 'multi-level-shelving',
+    name: 'Multi-Level Shelving',
     type: 'cabinet',
     width: 120,
-    height: 90,
-    color: '#8b4513',
+    height: 180,
+    color: '#8B4513',
     category: 'under-stairs-storage',
     roomTypes: ['under-stairs'],
     icon: <Archive className="h-4 w-4" />,
-    description: 'Under stairs storage cabinet'
+    description: 'Tiered shelving system maximizing vertical space'
   },
   {
-    id: 'under-stairs-drawers',
-    name: 'Under Stairs Drawers',
+    id: 'pull-out-storage-unit',
+    name: 'Pull-Out Storage Unit',
     type: 'cabinet',
-    width: 60,
-    height: 60,
-    color: '#8b4513',
+    width: 80,
+    height: 40,
+    color: '#8B4513',
     category: 'under-stairs-storage',
     roomTypes: ['under-stairs'],
     icon: <Archive className="h-4 w-4" />,
-    description: 'Under stairs drawer unit'
+    description: 'Sliding storage unit that pulls out from under stairs'
   },
   {
-    id: 'under-stairs-shelf',
-    name: 'Under Stairs Shelf',
+    id: 'angled-door-cabinet',
+    name: 'Angled Door Cabinet',
     type: 'cabinet',
     width: 100,
-    height: 30,
-    color: '#a0522d',
+    height: 100,
+    color: '#8B4513',
     category: 'under-stairs-storage',
     roomTypes: ['under-stairs'],
-    icon: <RectangleHorizontal className="h-4 w-4" />,
-    description: 'Under stairs shelf'
+    icon: <Archive className="h-4 w-4" />,
+    description: 'Cabinet with angled doors to fit stair pitch'
+  },
+
+  // SPECIALIZED UNDER STAIRS ORGANIZERS
+  {
+    id: 'shoe-storage-wedge',
+    name: 'Shoe Storage Wedge',
+    type: 'cabinet',
+    width: 90,
+    height: 80,
+    color: '#8B4513',
+    category: 'under-stairs-storage',
+    roomTypes: ['under-stairs'],
+    icon: <Archive className="h-4 w-4" />,
+    description: 'Wedge-shaped shoe storage with adjustable shelves'
+  },
+  {
+    id: 'coat-boot-organizer',
+    name: 'Coat & Boot Organizer',
+    type: 'cabinet',
+    width: 60,
+    height: 150,
+    color: '#8B4513',
+    category: 'under-stairs-storage',
+    roomTypes: ['under-stairs'],
+    icon: <Archive className="h-4 w-4" />,
+    description: 'Organized storage for coats, boots, and umbrellas'
+  },
+  {
+    id: 'seasonal-decoration-storage',
+    name: 'Holiday Storage Unit',
+    type: 'cabinet',
+    width: 70,
+    height: 60,
+    color: '#8B4513',
+    category: 'under-stairs-storage',
+    roomTypes: ['under-stairs'],
+    icon: <Archive className="h-4 w-4" />,
+    description: 'Storage for seasonal decorations and holiday items'
+  },
+  {
+    id: 'bicycle-storage-rack',
+    name: 'Bicycle Storage Rack',
+    type: 'cabinet',
+    width: 120,
+    height: 50,
+    color: '#8B4513',
+    category: 'under-stairs-storage',
+    roomTypes: ['under-stairs'],
+    icon: <Archive className="h-4 w-4" />,
+    description: 'Vertical bicycle storage rack for under stairs'
+  },
+
+  // UTILITY STORAGE FOR UNDER STAIRS
+  {
+    id: 'cleaning-supply-cabinet',
+    name: 'Cleaning Supply Cabinet',
+    type: 'cabinet',
+    width: 50,
+    height: 120,
+    color: '#8B4513',
+    category: 'under-stairs-storage',
+    roomTypes: ['under-stairs'],
+    icon: <Archive className="h-4 w-4" />,
+    description: 'Secure storage for cleaning supplies and chemicals'
+  },
+  {
+    id: 'recycling-bin-storage',
+    name: 'Recycling Bin Storage',
+    type: 'cabinet',
+    width: 80,
+    height: 40,
+    color: '#228B22',
+    category: 'under-stairs-storage',
+    roomTypes: ['under-stairs'],
+    icon: <Archive className="h-4 w-4" />,
+    description: 'Concealed recycling and waste bin storage'
+  },
+  {
+    id: 'tool-box-storage',
+    name: 'Tool Box Storage',
+    type: 'cabinet',
+    width: 60,
+    height: 50,
+    color: '#2F4F4F',
+    category: 'under-stairs-storage',
+    roomTypes: ['under-stairs'],
+    icon: <Archive className="h-4 w-4" />,
+    description: 'Lockable storage for household tool boxes'
+  },
+  {
+    id: 'emergency-kit-station',
+    name: 'Emergency Kit Station',
+    type: 'cabinet',
+    width: 40,
+    height: 60,
+    color: '#8B0000',
+    category: 'under-stairs-storage',
+    roomTypes: ['under-stairs'],
+    icon: <Archive className="h-4 w-4" />,
+    description: 'Organized storage for emergency supplies and first aid'
+  },
+
+  // FLEXIBLE STORAGE SOLUTIONS
+  {
+    id: 'adjustable-shelf-unit',
+    name: 'Adjustable Shelf Unit',
+    type: 'cabinet',
+    width: 90,
+    height: 160,
+    color: '#8B4513',
+    category: 'under-stairs-storage',
+    roomTypes: ['under-stairs'],
+    icon: <Archive className="h-4 w-4" />,
+    description: 'Modular shelf unit with adjustable height shelves'
+  },
+  {
+    id: 'bin-storage-system',
+    name: 'Bin Storage System',
+    type: 'cabinet',
+    width: 100,
+    height: 80,
+    color: '#F5DEB3',
+    category: 'under-stairs-storage',
+    roomTypes: ['under-stairs'],
+    icon: <Archive className="h-4 w-4" />,
+    description: 'Stackable bin system for small parts and accessories'
+  },
+  {
+    id: 'folding-step-ladder-storage',
+    name: 'Step Ladder Storage',
+    type: 'cabinet',
+    width: 30,
+    height: 180,
+    color: '#8B4513',
+    category: 'under-stairs-storage',
+    roomTypes: ['under-stairs'],
+    icon: <Archive className="h-4 w-4" />,
+    description: 'Narrow vertical storage for folding step ladder'
+  },
+  {
+    id: 'vacuum-bag-storage',
+    name: 'Vacuum Bag Storage',
+    type: 'cabinet',
+    width: 40,
+    height: 40,
+    color: '#8B4513',
+    category: 'under-stairs-storage',
+    roomTypes: ['under-stairs'],
+    icon: <Archive className="h-4 w-4" />,
+    description: 'Compact storage for vacuum cleaner bags and accessories'
   }
 ];
 
@@ -965,18 +2704,36 @@ export const ComponentLibrary: React.FC<ComponentLibraryProps> = ({ onAddElement
       'appliances': 'Appliances',
       'bedroom-furniture': 'Furniture',
       'bedroom-storage': 'Storage',
+      'bedroom-props': 'Decor Props',
       'bathroom-vanities': 'Vanities',
       'bathroom-fixtures': 'Fixtures',
+      'bathroom-storage': 'Storage',
+      'bathroom-props': 'Accessories',
       'media-furniture': 'TV Units',
       'media-storage': 'Storage',
       'flooring-materials': 'Materials',
       'utility-appliances': 'Appliances',
       'utility-storage': 'Storage',
       'dining-furniture': 'Furniture',
+      'dining-display': 'Display Cabinets',
       'dining-storage': 'Storage',
+      'dining-props': 'Decor Props',
       'under-stairs-storage': 'Storage',
+      'living-room-built-ins': 'Built-in Units',
+      'living-room-shelving': 'Shelving',
+      'living-room-storage': 'Storage',
       'living-room-furniture': 'Furniture',
-      'office-furniture': 'Office Furniture'
+      'living-room-props': 'Decor Props',
+      'office-furniture': 'Office Furniture',
+      'office-storage': 'Storage',
+      'office-shelving': 'Shelving',
+      'office-props': 'Accessories',
+      'dressing-furniture': 'Furniture',
+      'dressing-storage': 'Storage',
+      'dressing-props': 'Accessories',
+      'utility-appliances': 'Appliances',
+      'utility-storage': 'Storage',
+      'utility-props': 'Accessories'
     };
     return labels[category] || category;
   };
