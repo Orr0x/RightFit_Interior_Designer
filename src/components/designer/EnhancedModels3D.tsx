@@ -64,8 +64,9 @@ export const EnhancedCabinet3D: React.FC<Enhanced3DModelProps> = ({
                         element.id.includes('wall-cabinet');
   
   const isCornerCabinet = element.id.includes('corner-cabinet') || 
-                        element.id.includes('larder-corner-unit') ||
                         element.style?.toLowerCase().includes('corner');
+                        
+  const isLarderCornerUnit = element.id.includes('larder-corner-unit');
                         
   const isPanDrawer = element.id.includes('pan-drawers') || 
                      element.style?.toLowerCase().includes('pan drawer');
@@ -112,15 +113,15 @@ export const EnhancedCabinet3D: React.FC<Enhanced3DModelProps> = ({
   const cabinetHeight = isWallCabinet ? height : height - plinthHeight;
   const doorHeight = cabinetHeight - 0.05; // Door height with slight gap
   
-  // Corner cabinet specific dimensions - use actual element dimensions
-  const legLength = Math.min(width, depth); // Use the smaller dimension for corner cabinets
+  // Corner cabinet specific dimensions - restore original geometry
+  const legLength = 0.9; // 90cm leg length for corner cabinets (ORIGINAL - DO NOT CHANGE)
   
   // Specialized rendering for different cabinet types
   if (isCornerCabinet) {
-    // L-shaped corner cabinet with detailed features
-    const cornerDepth = depth; // Use actual depth dimension
-    const centerX = width / 2;
-    const centerZ = depth / 2;
+    // L-shaped corner cabinet with detailed features (ORIGINAL GEOMETRY - DO NOT CHANGE)
+    const cornerDepth = isWallCabinet ? 0.4 : 0.6;
+    const centerX = legLength / 2;
+    const centerZ = legLength / 2;
     
     return (
       <group 
@@ -199,6 +200,79 @@ export const EnhancedCabinet3D: React.FC<Enhanced3DModelProps> = ({
         </lineSegments>
         <lineSegments position={[cornerDepth / 2 - legLength / 2, 0, 0]}>
           <edgesGeometry args={[new THREE.BoxGeometry(cornerDepth, height, legLength)]} />
+          <lineBasicMaterial color="#333" />
+        </lineSegments>
+      </group>
+    );
+  } else if (isLarderCornerUnit) {
+    // Larder corner unit - separate from regular corner cabinet
+    const larderCornerDepth = depth;
+    const centerX = width / 2;
+    const centerZ = depth / 2;
+    
+    return (
+      <group 
+        position={[x + centerX, yPosition, z + centerZ]} 
+        onClick={onClick} 
+        rotation={[0, element.rotation * Math.PI / 180, 0]}
+      >
+        {/* Plinth for larder corner unit */}
+        {!isWallCabinet && (
+          <mesh position={[0, -height/2 + plinthHeight/2, 0]}>
+            <boxGeometry args={[width, plinthHeight, depth]} />
+            <meshLambertMaterial color={plinthColor} />
+          </mesh>
+        )}
+
+        {/* Main larder body - L-shaped for corner */}
+        <mesh position={[-width/4, plinthHeight/2, -depth/4]}>
+          <boxGeometry args={[width/2, cabinetHeight, depth/2]} />
+          <meshStandardMaterial 
+            color={isSelected ? selectedColor : cabinetMaterial} 
+            roughness={0.7} 
+            metalness={0.1}
+          />
+        </mesh>
+        <mesh position={[width/4, plinthHeight/2, depth/4]}>
+          <boxGeometry args={[width/2, cabinetHeight, depth/2]} />
+          <meshStandardMaterial 
+            color={isSelected ? selectedColor : cabinetMaterial} 
+            roughness={0.7} 
+            metalness={0.1}
+          />
+        </mesh>
+
+        {/* Larder doors */}
+        <mesh position={[-width/4, plinthHeight/2, -depth/2 + 0.01]}>
+          <boxGeometry args={[width/2 - 0.05, doorHeight, 0.02]} />
+          <meshStandardMaterial 
+            color={doorColor} 
+            roughness={0.6} 
+            metalness={0.1}
+          />
+        </mesh>
+        <mesh position={[width/2 - 0.01, plinthHeight/2, depth/4]}>
+          <boxGeometry args={[0.02, doorHeight, depth/2 - 0.05]} />
+          <meshStandardMaterial 
+            color={doorColor} 
+            roughness={0.6} 
+            metalness={0.1}
+          />
+        </mesh>
+
+        {/* Door handles */}
+        <mesh position={[-width/8, plinthHeight/2, -depth/2 + 0.03]}>
+          <boxGeometry args={[0.02, 0.15, 0.02]} />
+          <meshStandardMaterial color={handleColor} metalness={0.8} roughness={0.2} />
+        </mesh>
+        <mesh position={[width/2 - 0.03, plinthHeight/2, depth/8]}>
+          <boxGeometry args={[0.02, 0.15, 0.02]} />
+          <meshStandardMaterial color={handleColor} metalness={0.8} roughness={0.2} />
+        </mesh>
+
+        {/* Frame outline */}
+        <lineSegments>
+          <edgesGeometry args={[new THREE.BoxGeometry(width, height, depth)]} />
           <lineBasicMaterial color="#333" />
         </lineSegments>
       </group>
