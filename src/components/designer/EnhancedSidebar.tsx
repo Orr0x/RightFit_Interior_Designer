@@ -352,8 +352,8 @@ const components: ComponentDefinition[] = [
     id: 'larder-corner-unit',
     name: 'Corner Larder Unit',
     type: 'cabinet',
-    width: 60, // X-axis dimension (left-to-right)
-    depth: 60, // Y-axis dimension (front-to-back)
+    width: 90, // X-axis dimension (left-to-right) - matches original corner cabinet
+    depth: 90, // Y-axis dimension (front-to-back) - matches original corner cabinet
     height: 200, // Z-axis dimension (bottom-to-top)
     color: '#F5F5F5',
     category: 'kitchen-larder',

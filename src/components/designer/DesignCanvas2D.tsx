@@ -148,11 +148,12 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
     let rotation = element.rotation || 0;
     const guides = { vertical: [] as number[], horizontal: [] as number[] };
 
-    // Wall snapping
+    // Wall snapping - use proper dimensions for plan view
+    const elementDepth = element.depth || element.height; // Use depth for Y-axis in plan view
     const distToLeft = x;
     const distToRight = roomDimensions.width - (x + element.width);
     const distToTop = y;
-    const distToBottom = roomDimensions.height - (y + element.height);
+    const distToBottom = roomDimensions.height - (y + elementDepth);
 
     // Snap to walls
     if (distToLeft <= snapTolerance) {
@@ -167,7 +168,7 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
       snappedY = 0;
       guides.horizontal.push(0);
     } else if (distToBottom <= snapTolerance) {
-      snappedY = roomDimensions.height - element.height;
+      snappedY = roomDimensions.height - elementDepth;
       guides.horizontal.push(roomDimensions.height);
     }
 
@@ -175,20 +176,23 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
     const otherElements = design.elements.filter(el => el.id !== element.id);
     
     for (const otherEl of otherElements) {
+      // Use proper dimensions for plan view
+      const otherElDepth = otherEl.depth || otherEl.height;
+      
       // Horizontal alignment (same Y or adjacent Y)
       const topAlign = Math.abs(y - otherEl.y);
-      const bottomAlign = Math.abs((y + element.height) - (otherEl.y + otherEl.height));
-      const centerAlignY = Math.abs((y + element.height/2) - (otherEl.y + otherEl.height/2));
+      const bottomAlign = Math.abs((y + elementDepth) - (otherEl.y + otherElDepth));
+      const centerAlignY = Math.abs((y + elementDepth/2) - (otherEl.y + otherElDepth/2));
       
       if (topAlign <= snapTolerance) {
         snappedY = otherEl.y;
         guides.horizontal.push(otherEl.y);
       } else if (bottomAlign <= snapTolerance) {
-        snappedY = otherEl.y + otherEl.height - element.height;
-        guides.horizontal.push(otherEl.y + otherEl.height);
+        snappedY = otherEl.y + otherElDepth - elementDepth;
+        guides.horizontal.push(otherEl.y + otherElDepth);
       } else if (centerAlignY <= snapTolerance) {
-        snappedY = otherEl.y + otherEl.height/2 - element.height/2;
-        guides.horizontal.push(otherEl.y + otherEl.height/2);
+        snappedY = otherEl.y + otherElDepth/2 - elementDepth/2;
+        guides.horizontal.push(otherEl.y + otherElDepth/2);
       }
 
       // Vertical alignment (same X or adjacent X)
@@ -210,8 +214,8 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
       // Adjacent snapping (edge-to-edge)
       const adjacentRight = Math.abs(x - (otherEl.x + otherEl.width));
       const adjacentLeft = Math.abs((x + element.width) - otherEl.x);
-      const adjacentBottom = Math.abs(y - (otherEl.y + otherEl.height));
-      const adjacentTop = Math.abs((y + element.height) - otherEl.y);
+      const adjacentBottom = Math.abs(y - (otherEl.y + otherElDepth));
+      const adjacentTop = Math.abs((y + elementDepth) - otherEl.y);
 
       if (adjacentRight <= snapTolerance && Math.abs(y - otherEl.y) <= snapTolerance * 2) {
         snappedX = otherEl.x + otherEl.width;
@@ -222,11 +226,11 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
         guides.vertical.push(otherEl.x);
       }
       if (adjacentBottom <= snapTolerance && Math.abs(x - otherEl.x) <= snapTolerance * 2) {
-        snappedY = otherEl.y + otherEl.height;
-        guides.horizontal.push(otherEl.y + otherEl.height);
+        snappedY = otherEl.y + otherElDepth;
+        guides.horizontal.push(otherEl.y + otherElDepth);
       }
       if (adjacentTop <= snapTolerance && Math.abs(x - otherEl.x) <= snapTolerance * 2) {
-        snappedY = otherEl.y - element.height;
+        snappedY = otherEl.y - elementDepth;
         guides.horizontal.push(otherEl.y);
       }
     }
@@ -1110,7 +1114,7 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
     const snapResult = getSnapPosition(draggedElement, roomPos.x, roomPos.y);
     const pos = roomToCanvas(snapResult.x, snapResult.y);
     const width = draggedElement.width * zoom;
-    const height = draggedElement.height * zoom;
+    const height = (draggedElement.depth || draggedElement.height) * zoom; // Use depth for Y-axis in plan view
     
     // Draw semi-transparent preview at snap position
     ctx.save();
@@ -1427,10 +1431,11 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
         finalY = snapToGrid(snapped.y);
       }
       
-      // Update element with final position
+      // Update element with final position - use proper dimensions for plan view
+      const draggedElementDepth = draggedElement.depth || draggedElement.height;
       onUpdateElement(draggedElement.id, {
         x: Math.max(0, Math.min(finalX, roomDimensions.width - draggedElement.width)),
-        y: Math.max(0, Math.min(finalY, roomDimensions.height - draggedElement.height)),
+        y: Math.max(0, Math.min(finalY, roomDimensions.height - draggedElementDepth)),
         rotation: snapped.rotation
       });
     }
