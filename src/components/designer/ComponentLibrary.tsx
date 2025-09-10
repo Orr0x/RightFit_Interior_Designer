@@ -21,8 +21,7 @@ import {
   Tv,
   Sofa,
   Grid3X3,
-  Home,
-  DoorOpen
+  Home
 } from 'lucide-react';
 
 interface ComponentLibraryProps {
@@ -2730,10 +2729,7 @@ export const ComponentLibrary: React.FC<ComponentLibraryProps> = ({ onAddElement
       'office-props': 'Accessories',
       'dressing-furniture': 'Furniture',
       'dressing-storage': 'Storage',
-      'dressing-props': 'Accessories',
-      'utility-appliances': 'Appliances',
-      'utility-storage': 'Storage',
-      'utility-props': 'Accessories'
+      'dressing-props': 'Accessories'
     };
     return labels[category] || category;
   };
