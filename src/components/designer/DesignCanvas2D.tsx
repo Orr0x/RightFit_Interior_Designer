@@ -588,6 +588,10 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
       elementHeight = 4 * zoom; // Counter top thickness (4cm)
       const counterTopHeight = 90 * zoom; // 90cm from floor
       yPos = floorY - counterTopHeight - elementHeight; // Position from floor level
+    } else if (element.type === 'end-panel') {
+      // End panel dimensions and positioning
+      elementHeight = element.height * zoom; // Use actual height from element
+      yPos = floorY - elementHeight; // Position from floor level
     } else if (element.type.includes('appliance')) {
       if (element.style?.toLowerCase().includes('refrigerator')) {
         elementHeight = 180 * zoom; // Tall refrigerator
@@ -628,6 +632,8 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
       drawApplianceElevationDetails(ctx, xPos, yPos, elementWidth, elementHeight, element);
     } else if (element.type === 'counter-top') {
       drawCounterTopElevationDetails(ctx, xPos, yPos, elementWidth, elementHeight, element);
+    } else if (element.type === 'end-panel') {
+      drawEndPanelElevationDetails(ctx, xPos, yPos, elementWidth, elementHeight, element);
     }
 
     ctx.restore();
@@ -885,6 +891,39 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
     ctx.beginPath();
     ctx.moveTo(x, y);
     ctx.lineTo(x + width, y);
+    ctx.stroke();
+  };
+
+  // Draw detailed end panel elevation
+  const drawEndPanelElevationDetails = (ctx: CanvasRenderingContext2D, x: number, y: number, width: number, height: number, element: DesignElement) => {
+    ctx.strokeStyle = '#654321'; // Darker brown for end panel edge
+    ctx.lineWidth = 1;
+
+    // Draw end panel surface with subtle texture lines
+    ctx.strokeStyle = '#8B4513'; // Saddle brown for surface lines
+    ctx.lineWidth = 0.5;
+    
+    // Vertical surface lines to simulate wood grain
+    const lineSpacing = Math.max(2, width * 0.5);
+    for (let i = 0; i < Math.floor(width / lineSpacing); i++) {
+      const lineX = x + i * lineSpacing;
+      ctx.beginPath();
+      ctx.moveTo(lineX, y + 2);
+      ctx.lineTo(lineX, y + height - 2);
+      ctx.stroke();
+    }
+    
+    // Draw edge detail (slightly darker)
+    ctx.strokeStyle = '#654321';
+    ctx.lineWidth = 1;
+    ctx.strokeRect(x, y, width, height);
+    
+    // Draw subtle highlight on left edge
+    ctx.strokeStyle = '#A0522D';
+    ctx.lineWidth = 0.5;
+    ctx.beginPath();
+    ctx.moveTo(x, y);
+    ctx.lineTo(x, y + height);
     ctx.stroke();
   };
 

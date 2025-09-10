@@ -7,7 +7,7 @@ import { Sofa, RectangleHorizontal } from 'lucide-react';
 interface ComponentDefinition {
   id: string;
   name: string;
-  type: 'cabinet' | 'appliance' | 'counter-top';
+  type: 'cabinet' | 'appliance' | 'counter-top' | 'end-panel';
   width: number; // X-axis dimension (left-to-right)
   depth: number; // Y-axis dimension (front-to-back)
   height: number; // Z-axis dimension (bottom-to-top)
@@ -1665,6 +1665,75 @@ export const EnhancedCounterTop3D: React.FC<Enhanced3DModelProps> = ({
       </mesh>
       
       {/* Counter top edge - slightly darker for depth */}
+      <mesh position={[0, 0, 0]} castShadow>
+        <boxGeometry args={[width, height * 0.1, depth]} />
+        <primitive object={edgeMaterial} />
+      </mesh>
+      
+      {/* Selection highlight */}
+      {isSelected && (
+        <mesh position={[0, height / 2 + 0.01, 0]}>
+          <boxGeometry args={[width + 0.02, 0.02, depth + 0.02]} />
+          <meshLambertMaterial color="#00ff00" transparent opacity={0.5} />
+        </mesh>
+      )}
+    </group>
+  );
+};
+
+/**
+ * EnhancedEndPanel3D - Detailed 3D end panel model
+ * 
+ * Features:
+ * - Realistic end panel with proper thickness
+ * - Material textures for wood finish
+ * - Proper scale and proportions
+ * - Positioned at floor level (Z=0)
+ */
+export const EnhancedEndPanel3D: React.FC<Enhanced3DModelProps> = ({ 
+  element, 
+  roomDimensions, 
+  isSelected, 
+  onClick 
+}) => {
+  const { x, z } = convertTo3D(element.x, element.y, roomDimensions.width, roomDimensions.height);
+  
+  // Convert dimensions from cm to meters
+  const width = element.width / 100;
+  const depth = element.depth / 100;
+  const height = element.height / 100;
+  
+  // End panels are positioned at floor level
+  const y = height / 2;
+  
+  // Create materials
+  const endPanelMaterial = new THREE.MeshLambertMaterial({ 
+    color: element.color || '#8B4513' 
+  });
+  
+  const edgeMaterial = new THREE.MeshLambertMaterial({ 
+    color: '#654321' // Darker edge color
+  });
+  
+  return (
+    <group 
+      position={[x, y, z]} 
+      onClick={onClick}
+      onPointerOver={(e) => {
+        e.stopPropagation();
+        document.body.style.cursor = 'pointer';
+      }}
+      onPointerOut={() => {
+        document.body.style.cursor = 'auto';
+      }}
+    >
+      {/* Main end panel surface */}
+      <mesh position={[0, 0, 0]} castShadow receiveShadow>
+        <boxGeometry args={[width, height, depth]} />
+        <primitive object={endPanelMaterial} />
+      </mesh>
+      
+      {/* End panel edge - slightly darker for depth */}
       <mesh position={[0, 0, 0]} castShadow>
         <boxGeometry args={[width, height * 0.1, depth]} />
         <primitive object={edgeMaterial} />

@@ -33,7 +33,7 @@ interface EnhancedSidebarProps {
 interface ComponentDefinition {
   id: string;
   name: string;
-  type: 'cabinet' | 'appliance' | 'counter-top';
+  type: 'cabinet' | 'appliance' | 'counter-top' | 'end-panel';
   width: number; // X-axis dimension (left-to-right)
   depth: number; // Y-axis dimension (front-to-back)
   height: number; // Z-axis dimension (bottom-to-top)
@@ -85,6 +85,34 @@ const components: ComponentDefinition[] = [
     roomTypes: ['kitchen', 'bedroom', 'bathroom', 'living-room', 'office', 'dining-room', 'dressing-room', 'utility', 'under-stairs', 'media-wall', 'internal-doors', 'flooring'],
     icon: <Square className="h-4 w-4" />,
     description: 'Short counter top section - 150cm x 60cm x 4cm'
+  },
+
+  // END PANELS - Available in all rooms
+  {
+    id: 'end-panel-base',
+    name: 'End Panel Base Unit',
+    type: 'end-panel',
+    width: 1.8,
+    depth: 60,
+    height: 90,
+    color: '#8B4513',
+    category: 'end-panels',
+    roomTypes: ['kitchen', 'bedroom', 'bathroom', 'living-room', 'office', 'dining-room', 'dressing-room', 'utility', 'under-stairs', 'media-wall', 'internal-doors', 'flooring'],
+    icon: <Square className="h-4 w-4" />,
+    description: 'Base unit end panel - 1.8cm x 60cm x 90cm'
+  },
+  {
+    id: 'end-panel-full-height',
+    name: 'End Panel Full Height',
+    type: 'end-panel',
+    width: 1.8,
+    depth: 60,
+    height: 200,
+    color: '#8B4513',
+    category: 'end-panels',
+    roomTypes: ['kitchen', 'bedroom', 'bathroom', 'living-room', 'office', 'dining-room', 'dressing-room', 'utility', 'under-stairs', 'media-wall', 'internal-doors', 'flooring'],
+    icon: <Square className="h-4 w-4" />,
+    description: 'Full height end panel - 1.8cm x 60cm x 200cm'
   },
 
   // KITCHEN COMPONENTS
@@ -2081,6 +2109,7 @@ export const EnhancedSidebar: React.FC<EnhancedSidebarProps> = ({
   const getCategoryLabel = (category: string): string => {
     const labels: { [key: string]: string } = {
       'counter-tops': 'Counter Tops',
+      'end-panels': 'End Panels',
       'base-cabinets': 'Base Cabinets',
       'base-drawers': 'Base Drawers', 
       'wall-units': 'Wall Units',
