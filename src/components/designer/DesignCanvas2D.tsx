@@ -446,18 +446,18 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
     const isHovered = hoveredElement?.id === element.id;
     
     if (active2DView === 'plan') {
-      // Plan view rendering
+      // Plan view rendering - use width × depth for top-down view
       const pos = roomToCanvas(element.x, element.y);
       const width = element.width * zoom;
-      const height = element.height * zoom;
+      const depth = (element.depth || element.height) * zoom; // Use depth for Y-axis in plan view
       const rotation = element.rotation || 0;
 
       ctx.save();
       
       // Apply rotation - convert degrees to radians if needed
-      ctx.translate(pos.x + width / 2, pos.y + height / 2);
+      ctx.translate(pos.x + width / 2, pos.y + depth / 2);
       ctx.rotate(rotation * Math.PI / 180);
-      ctx.translate(-width / 2, -height / 2);
+      ctx.translate(-width / 2, -depth / 2);
 
       // Element fill
       if (isSelected) {
@@ -468,13 +468,13 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
         ctx.fillStyle = element.color || '#8b4513';
       }
       
-      ctx.fillRect(0, 0, width, height);
+      ctx.fillRect(0, 0, width, depth);
 
       // Element border
       ctx.strokeStyle = isSelected ? '#ff0000' : '#333';
       ctx.lineWidth = isSelected ? 2 : 1;
       ctx.setLineDash([]);
-      ctx.strokeRect(0, 0, width, height);
+      ctx.strokeRect(0, 0, width, depth);
 
       // In plan view, show solid blocks without cabinet details or text labels
       // Cabinet details and text are not appropriate for top-down view
@@ -483,7 +483,7 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
 
       // Selection handles (drawn after restore)
       if (isSelected) {
-        drawSelectionHandles(ctx, pos.x, pos.y, width, height);
+        drawSelectionHandles(ctx, pos.x, pos.y, width, depth);
       }
 
     } else {
