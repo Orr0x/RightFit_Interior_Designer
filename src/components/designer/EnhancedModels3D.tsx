@@ -1651,7 +1651,12 @@ export const EnhancedCounterTop3D: React.FC<Enhanced3DModelProps> = ({
   
   return (
     <group 
-      position={[x + width / 2, y, z + depth / 2]} 
+      position={[
+        // For corner counter tops, align to a 90cm x 90cm footprint center (0.45m, 0.45m)
+        isCornerCounterTop ? x + 0.45 : x + width / 2,
+        y,
+        isCornerCounterTop ? z + 0.45 : z + depth / 2
+      ]} 
       onClick={onClick}
       rotation={[0, element.rotation * Math.PI / 180, 0]}
       onPointerOver={(e) => {
@@ -1664,38 +1669,43 @@ export const EnhancedCounterTop3D: React.FC<Enhanced3DModelProps> = ({
     >
       {isCornerCounterTop ? (
         <>
-          {/* L-shaped corner counter top - Two rectangular sections */}
-          {/* Horizontal section (left-to-right) */}
-          <mesh position={[0, 0, -depth/4]} castShadow receiveShadow>
-            <boxGeometry args={[width, height, depth/2]} />
+          {/* L-shaped corner counter top - Match corner cabinet geometry */}
+          {/* Use same dimensions as corner cabinets: 90cm leg length */}
+          {/* X leg (horizontal section) */}
+          <mesh position={[0, 0, 0.3 - 0.9/2]} castShadow receiveShadow>
+            <boxGeometry args={[0.9, height, 0.6]} />
             <primitive object={counterTopMaterial} />
           </mesh>
           
-          {/* Vertical section (front-to-back) */}
-          <mesh position={[width/4, 0, 0]} castShadow receiveShadow>
-            <boxGeometry args={[width/2, height, depth]} />
+          {/* Z leg (vertical section) */}
+          <mesh position={[0.3 - 0.9/2, 0, 0]} castShadow receiveShadow>
+            <boxGeometry args={[0.6, height, 0.9]} />
             <primitive object={counterTopMaterial} />
           </mesh>
           
-          {/* Edge details for L-shape */}
-          <mesh position={[0, 0, -depth/4]} castShadow>
-            <boxGeometry args={[width, height * 0.1, depth/2]} />
+          {/* Edge details for L-shape - X leg */}
+          <mesh position={[0, 0, 0.3 - 0.9/2]} castShadow>
+            <boxGeometry args={[0.9, height * 0.1, 0.6]} />
             <primitive object={edgeMaterial} />
           </mesh>
-          <mesh position={[width/4, 0, 0]} castShadow>
-            <boxGeometry args={[width/2, height * 0.1, depth]} />
+          
+          {/* Edge details for L-shape - Z leg */}
+          <mesh position={[0.3 - 0.9/2, 0, 0]} castShadow>
+            <boxGeometry args={[0.6, height * 0.1, 0.9]} />
             <primitive object={edgeMaterial} />
           </mesh>
           
           {/* Selection highlight for L-shape */}
           {isSelected && (
             <>
-              <mesh position={[0, height / 2 + 0.01, -depth/4]}>
-                <boxGeometry args={[width + 0.02, 0.02, depth/2 + 0.02]} />
+              {/* X leg highlight */}
+              <mesh position={[0, height / 2 + 0.01, 0.3 - 0.9/2]}>
+                <boxGeometry args={[0.9 + 0.02, 0.02, 0.6 + 0.02]} />
                 <meshLambertMaterial color="#00ff00" transparent opacity={0.5} />
               </mesh>
-              <mesh position={[width/4, height / 2 + 0.01, 0]}>
-                <boxGeometry args={[width/2 + 0.02, 0.02, depth + 0.02]} />
+              {/* Z leg highlight */}
+              <mesh position={[0.3 - 0.9/2, height / 2 + 0.01, 0]}>
+                <boxGeometry args={[0.6 + 0.02, 0.02, 0.9 + 0.02]} />
                 <meshLambertMaterial color="#00ff00" transparent opacity={0.5} />
               </mesh>
             </>

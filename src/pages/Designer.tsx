@@ -1,17 +1,17 @@
-import React, { useState, useEffect } from 'react';
-import { useNavigate, useParams, Link } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Save, ArrowLeft, Layout, Box, Edit3, Shield, CheckCircle, Home, Layers } from 'lucide-react';
+import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Save, ArrowLeft, Layout, Box, Edit3, Shield, CheckCircle, Home } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import { useProject } from '@/contexts/ProjectContext';
 import { useKeyboardShortcuts } from '@/hooks/useKeyboardShortcuts';
 import { DesignCanvas2D } from '@/components/designer/DesignCanvas2D';
 import { View3D } from '@/components/designer/View3D';
 import { EnhancedSidebar } from '@/components/designer/EnhancedSidebar';
-import { ComponentSelector } from '@/components/designer/ComponentSelector';
+import { CanvasElementCounter } from '@/components/designer/CanvasElementCounter';
 import { ViewSelector } from '@/components/designer/ViewSelector';
 import { DesignToolbar } from '@/components/designer/DesignToolbar';
 import { PropertiesPanel } from '@/components/designer/PropertiesPanel';
@@ -21,7 +21,7 @@ import { RoomTabs } from '@/components/designer/RoomTabs';
 import { KeyboardShortcutsHelp } from '@/components/designer/KeyboardShortcutsHelp';
 import { toast } from 'sonner';
 import { useDesignValidation } from '@/hooks/useDesignValidation';
-import { Project, RoomDesign, DesignElement, RoomType } from '@/types/project';
+import { RoomDesign, DesignElement } from '@/types/project';
 import rightfitLogo from '@/assets/logo.png';
 
 
@@ -56,7 +56,6 @@ const Designer = () => {
   const [showLeftPanel, setShowLeftPanel] = useState(true);
   const [showRightPanel, setShowRightPanel] = useState(true);
   const [lastValidatedDesign, setLastValidatedDesign] = useState<string | null>(null);
-  const [lastSaved, setLastSaved] = useState<Date | undefined>(undefined);
 
   // Tape measure state - multi-measurement support
   const [completedMeasurements, setCompletedMeasurements] = useState<{ start: { x: number; y: number }, end: { x: number; y: number } }[]>([]);
@@ -92,7 +91,7 @@ const Designer = () => {
   // Handle room switching from URL
   useEffect(() => {
     if (roomId && currentProject && roomId !== currentRoomId) {
-      const room = currentProject.room_designs.find(r => r.id === roomId);
+      const room = currentProject.room_designs?.find(r => r.id === roomId);
       if (room) {
         // Switch to the specified room
         // This will be handled by the ProjectContext
@@ -133,7 +132,6 @@ const Designer = () => {
 
     try {
       await saveCurrentDesign(true); // Manual save with notification
-      setLastSaved(new Date());
       
       if (design) {
         setLastValidatedDesign(JSON.stringify(design));
@@ -478,7 +476,7 @@ const Designer = () => {
               
               <div className="flex items-center gap-4">
                 <img src={rightfitLogo} alt="RightFit Interiors logo" className="h-12 w-auto" />
-                <h1 className="text-xl font-semibold">{currentProject.name}</h1>
+                <h1 className="text-xl font-semibold">{currentProject?.name || 'Untitled Project'}</h1>
               </div>
               
               <div className="w-20"></div>
@@ -554,7 +552,7 @@ const Designer = () => {
                   ) : (
                     <div className="flex items-center gap-2">
                       <h1 className="text-xl font-semibold">
-                        {currentProject.name}
+                        {currentProject?.name || 'Untitled Project'}
                         {hasUnsavedChanges && <span className="text-orange-500 ml-1">•</span>}
                       </h1>
                       <Button size="sm" variant="ghost" onClick={handleEditProjectName}>
@@ -607,14 +605,8 @@ const Designer = () => {
               </div>
             </div>
             
-            {/* Right Section - Element Counter and View Tabs */}
+            {/* Right Section - View Tabs */}
             <div className="flex items-center gap-3">
-              {/* Element Counter */}
-              <div className="flex items-center gap-1 text-sm text-gray-600">
-                <Layers className="h-4 w-4" />
-                <span>{currentRoomDesign.design_elements?.length || 0} elements</span>
-              </div>
-              
               {/* 3D/2D Tabs */}
               <Tabs className="shrink-0" value={activeView} onValueChange={(value) => setActiveView(value as '2d' | '3d')}>
                 <TabsList className="grid grid-cols-2">
@@ -726,40 +718,50 @@ const Designer = () => {
                         onViewChange={setActive2DView}
                       />
                     </div>
+                    
+                    {/* Canvas Element Counter - Bottom Left */}
+                    <CanvasElementCounter
+                      elements={design.elements}
+                      selectedElement={selectedElement}
+                      onSelectElement={setSelectedElement}
+                      onUpdateElement={handleUpdateElement}
+                      onDeleteElement={handleDeleteElement}
+                    />
                   </div>
                 ) : design ? (
-                  <View3D
-                    key={`view3d-${currentRoomId}-${showLeftPanel}-${showRightPanel}`}
-                    design={design}
-                    selectedElement={selectedElement}
-                    onSelectElement={setSelectedElement}
-                    activeTool={activeTool}
-                    showGrid={showGrid}
-                    fitToScreenSignal={fitToScreenSignal}
-                  />
+                  <div className="h-full relative">
+                    <View3D
+                      key={`view3d-${currentRoomId}-${showLeftPanel}-${showRightPanel}`}
+                      design={design}
+                      selectedElement={selectedElement}
+                      onSelectElement={setSelectedElement}
+                      activeTool={activeTool === 'tape-measure' ? 'select' : activeTool}
+                      showGrid={showGrid}
+                      fitToScreenSignal={fitToScreenSignal}
+                    />
+                    
+                    {/* Canvas Element Counter - Bottom Left */}
+                    <CanvasElementCounter
+                      elements={design.elements}
+                      selectedElement={selectedElement}
+                      onSelectElement={setSelectedElement}
+                      onUpdateElement={handleUpdateElement}
+                      onDeleteElement={handleDeleteElement}
+                    />
+                  </div>
                 ) : null}
               </Card>
             </div>
           </div>
 
-          {/* Right Sidebar - Component Selector & Properties Panel */}
+          {/* Right Sidebar - Properties Panel */}
           <div className={`${showRightPanel ? 'w-80' : 'w-0'} bg-white border-l flex flex-col smooth-transition overflow-hidden relative z-10`}>
             {showRightPanel && design && (
               <>
                 <div className="p-4 border-b">
-                  <h2 className="font-semibold text-gray-900">Inspector</h2>
+                  <h2 className="font-semibold text-gray-900">Properties</h2>
                 </div>
-                <div className="flex-1 overflow-y-auto p-4 space-y-4">
-                  {/* Component Selector */}
-                  <ComponentSelector
-                    elements={design.elements}
-                    selectedElement={selectedElement}
-                    onSelectElement={setSelectedElement}
-                    onUpdateElement={handleUpdateElement}
-                    onDeleteElement={handleDeleteElement}
-                  />
-                  
-                  {/* Properties Panel */}
+                <div className="flex-1 overflow-y-auto">
                   <PropertiesPanel
                     selectedElement={selectedElement}
                     onUpdateElement={handleUpdateElement}

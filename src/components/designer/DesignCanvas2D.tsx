@@ -168,8 +168,15 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
 
     // Get effective dimensions based on current rotation
     const effectiveDims = getEffectiveDimensions(element);
-    const elementWidth = effectiveDims.width;
-    const elementDepth = effectiveDims.depth;
+    let elementWidth = effectiveDims.width;
+    let elementDepth = effectiveDims.depth;
+    
+    // Corner counter top behaves as a 90x90 square footprint in plan view
+    const isCornerCounterTop = element.type === 'counter-top' && element.id.includes('counter-top-corner');
+    if (isCornerCounterTop) {
+      elementWidth = 90;
+      elementDepth = 90;
+    }
     
     // Wall snapping with rotation-aware dimensions
     const distToLeft = x;
@@ -182,7 +189,8 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
       snappedX = 0;
       guides.vertical.push(0);
     } else if (distToRight <= snapTolerance) {
-      snappedX = roomDimensions.width - element.width;
+      // Use effective width (or 90cm for corner counter top)
+      snappedX = roomDimensions.width - elementWidth;
       guides.vertical.push(roomDimensions.width);
     }
 
@@ -236,23 +244,23 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
 
       // Vertical alignment (same X or adjacent X)
       const leftAlign = Math.abs(x - otherEl.x);
-      const rightAlign = Math.abs((x + element.width) - (otherEl.x + otherEl.width));
-      const centerAlignX = Math.abs((x + element.width/2) - (otherEl.x + otherEl.width/2));
+      const rightAlign = Math.abs((x + elementWidth) - (otherEl.x + otherEl.width));
+      const centerAlignX = Math.abs((x + elementWidth/2) - (otherEl.x + otherEl.width/2));
       
       if (leftAlign <= snapTolerance) {
         snappedX = otherEl.x;
         guides.vertical.push(otherEl.x);
       } else if (rightAlign <= snapTolerance) {
-        snappedX = otherEl.x + otherEl.width - element.width;
+        snappedX = otherEl.x + otherEl.width - elementWidth;
         guides.vertical.push(otherEl.x + otherEl.width);
       } else if (centerAlignX <= snapTolerance) {
-        snappedX = otherEl.x + otherEl.width/2 - element.width/2;
+        snappedX = otherEl.x + otherEl.width/2 - elementWidth/2;
         guides.vertical.push(otherEl.x + otherEl.width/2);
       }
 
       // Adjacent snapping (edge-to-edge)
       const adjacentRight = Math.abs(x - (otherEl.x + otherEl.width));
-      const adjacentLeft = Math.abs((x + element.width) - otherEl.x);
+      const adjacentLeft = Math.abs((x + elementWidth) - otherEl.x);
       const adjacentBottom = Math.abs(y - (otherEl.y + otherElDepth));
       const adjacentTop = Math.abs((y + elementDepth) - otherEl.y);
 
@@ -261,7 +269,7 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
         guides.vertical.push(otherEl.x + otherEl.width);
       }
       if (adjacentLeft <= snapTolerance && Math.abs(y - otherEl.y) <= snapTolerance * 2) {
-        snappedX = otherEl.x - element.width;
+        snappedX = otherEl.x - elementWidth;
         guides.vertical.push(otherEl.x);
       }
       if (adjacentBottom <= snapTolerance && Math.abs(x - otherEl.x) <= snapTolerance * 2) {
@@ -278,15 +286,81 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
     const componentData = COMPONENT_DATA[element.type];
     if (componentData?.hasDirection) {
       const wallSnapDistance = 35; // cm - increased for better detection
+      const cornerTolerance = 30; // cm tolerance for corner detection
       
-      // Calculate distances to each wall
-      const distToLeft = snappedX;
-      const distToRight = roomDimensions.width - (snappedX + element.width);
-      const distToTop = snappedY;
-      const distToBottom = roomDimensions.height - (snappedY + element.height);
+      // Check if this is a corner unit placement
+      // For corner counter tops, use 90cm square dimensions for detection
+      const isCornerCounterTop = element.type === 'counter-top' && element.id.includes('counter-top-corner');
+      const detectionWidth = isCornerCounterTop ? 90 : elementWidth;
+      const detectionDepth = isCornerCounterTop ? 90 : elementDepth;
       
-      // Find the closest wall and orient accordingly
-      const minDist = Math.min(distToLeft, distToRight, distToTop, distToBottom);
+      const isCornerPosition = 
+        (x <= cornerTolerance && y <= cornerTolerance) || // front-left corner
+        (x >= roomDimensions.width - detectionWidth - cornerTolerance && y <= cornerTolerance) || // front-right corner
+        (x <= cornerTolerance && y >= roomDimensions.height - detectionDepth - cornerTolerance) || // back-left corner
+        (x >= roomDimensions.width - detectionWidth - cornerTolerance && y >= roomDimensions.height - detectionDepth - cornerTolerance); // back-right corner
+      
+      if (isCornerPosition) {
+        // Special handling for corner units - they have specific orientations
+        // For corner counter tops, use 90cm square dimensions (isCornerCounterTop already defined above)
+        const cornerWidth = isCornerCounterTop ? 90 : elementWidth;
+        const cornerDepth = isCornerCounterTop ? 90 : elementDepth;
+        
+        if (x <= cornerTolerance && y <= cornerTolerance) {
+          // Front-left corner
+          if (isCornerCounterTop) {
+            rotation = 0; // L-shape faces down-right
+          } else {
+            rotation = 90; // door faces right (into room)
+          }
+          snappedX = 0;
+          snappedY = 0;
+          guides.vertical.push(0);
+          guides.horizontal.push(0);
+        } else if (x >= roomDimensions.width - cornerWidth - cornerTolerance && y <= cornerTolerance) {
+          // Front-right corner
+          if (isCornerCounterTop) {
+            rotation = 270; // L-shape faces down-left
+          } else {
+            rotation = 270; // door faces left (into room)
+          }
+          snappedX = roomDimensions.width - cornerWidth;
+          snappedY = 0;
+          guides.vertical.push(roomDimensions.width);
+          guides.horizontal.push(0);
+        } else if (x <= cornerTolerance && y >= roomDimensions.height - cornerDepth - cornerTolerance) {
+          // Back-left corner
+          if (isCornerCounterTop) {
+            rotation = 90; // L-shape faces up-right
+          } else {
+            rotation = 90; // door faces right (into room)
+          }
+          snappedX = 0;
+          snappedY = roomDimensions.height - cornerDepth;
+          guides.vertical.push(0);
+          guides.horizontal.push(roomDimensions.height);
+        } else if (x >= roomDimensions.width - cornerWidth - cornerTolerance && y >= roomDimensions.height - cornerDepth - cornerTolerance) {
+          // Back-right corner
+          if (isCornerCounterTop) {
+            rotation = 180; // L-shape faces up-left
+          } else {
+            rotation = 270; // door faces left (into room)
+          }
+          snappedX = roomDimensions.width - cornerWidth;
+          snappedY = roomDimensions.height - cornerDepth;
+          guides.vertical.push(roomDimensions.width);
+          guides.horizontal.push(roomDimensions.height);
+        }
+      } else {
+        // Non-corner placement - use normal wall orientation logic
+        // Calculate distances to each wall
+        const distToLeft = snappedX;
+        const distToRight = roomDimensions.width - (snappedX + elementWidth);
+        const distToTop = snappedY;
+        const distToBottom = roomDimensions.height - (snappedY + elementDepth);
+        
+        // Find the closest wall and orient accordingly
+        const minDist = Math.min(distToLeft, distToRight, distToTop, distToBottom);
       
       if (minDist <= wallSnapDistance) {
         // Orient based on closest wall - doors always face into the room
@@ -307,27 +381,28 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
           rotation = 180;
           guides.horizontal.push(roomDimensions.height);
         }
-      } else {
-        // If not against a wall, check if very close and auto-orient
-        if (distToLeft <= 10) {
-          rotation = 90; // Face right
-          snappedX = 0; // Snap to wall
-          guides.vertical.push(0);
-        } else if (distToRight <= 10) {
-          rotation = 270; // Face left
-          snappedX = roomDimensions.width - element.width; // Snap to wall
-          guides.vertical.push(roomDimensions.width);
-        } else if (distToTop <= 10) {
-          rotation = 0; // Face up (into room)
-          snappedY = 0; // Snap to wall
-          guides.horizontal.push(0);
-        } else if (distToBottom <= 10) {
-          rotation = 180; // Face down (into room)
-          snappedY = roomDimensions.height - elementDepth; // Snap to wall using effective depth
-          guides.horizontal.push(roomDimensions.height);
+        } else {
+          // If not against a wall, check if very close and auto-orient
+          if (distToLeft <= 10) {
+            rotation = 90; // Face right
+            snappedX = 0; // Snap to wall
+            guides.vertical.push(0);
+          } else if (distToRight <= 10) {
+            rotation = 270; // Face left
+            snappedX = roomDimensions.width - elementWidth; // Snap to wall using effective width
+            guides.vertical.push(roomDimensions.width);
+          } else if (distToTop <= 10) {
+            rotation = 0; // Face up (into room)
+            snappedY = 0; // Snap to wall
+            guides.horizontal.push(0);
+          } else if (distToBottom <= 10) {
+            rotation = 180; // Face down (into room)
+            snappedY = roomDimensions.height - elementDepth; // Snap to wall using effective depth
+            guides.horizontal.push(roomDimensions.height);
+          }
         }
-      }
-    }
+      } // End of corner position check
+    } // End of hasDirection check
 
     return { x: snappedX, y: snappedY, rotation, guides };
   }, [roomDimensions, design.elements]);
@@ -497,10 +572,23 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
 
       ctx.save();
       
+      // Check if this is a corner counter top for proper rotation center
+      const isCornerCounterTop = element.type === 'counter-top' && element.id.includes('counter-top-corner');
+      
       // Apply rotation - convert degrees to radians if needed
-      ctx.translate(pos.x + width / 2, pos.y + depth / 2);
-      ctx.rotate(rotation * Math.PI / 180);
-      ctx.translate(-width / 2, -depth / 2);
+      if (isCornerCounterTop) {
+        // For L-shaped counter tops, rotate around the L-shape center (45cm, 45cm)
+        const lShapeCenterX = 45 * zoom; // Center of 90cm leg
+        const lShapeCenterY = 45 * zoom; // Center of 90cm leg
+        ctx.translate(pos.x + lShapeCenterX, pos.y + lShapeCenterY);
+        ctx.rotate(rotation * Math.PI / 180);
+        ctx.translate(-lShapeCenterX, -lShapeCenterY);
+      } else {
+        // Standard rectangular rotation from center
+        ctx.translate(pos.x + width / 2, pos.y + depth / 2);
+        ctx.rotate(rotation * Math.PI / 180);
+        ctx.translate(-width / 2, -depth / 2);
+      }
 
       // Element fill
       if (isSelected) {
@@ -511,13 +599,39 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
         ctx.fillStyle = element.color || '#8b4513';
       }
       
-      ctx.fillRect(0, 0, width, depth);
-
-      // Element border
-      ctx.strokeStyle = isSelected ? '#ff0000' : '#333';
-      ctx.lineWidth = isSelected ? 2 : 1;
-      ctx.setLineDash([]);
-      ctx.strokeRect(0, 0, width, depth);
+      // L-shape rendering (isCornerCounterTop already defined above)
+      
+      if (isCornerCounterTop) {
+        // Draw L-shaped corner counter top in plan view
+        // Match the 3D geometry: 90cm legs with 60cm depth
+        const legLength = 90 * zoom; // 90cm legs
+        const legDepth = 60 * zoom;  // 60cm depth
+        
+        // X leg (horizontal section)
+        ctx.fillRect(0, 0, legLength, legDepth);
+        
+        // Z leg (vertical section) - positioned to form L-shape
+        ctx.fillRect(0, 0, legDepth, legLength);
+        
+        // Element border for L-shape
+        ctx.strokeStyle = isSelected ? '#ff0000' : '#333';
+        ctx.lineWidth = isSelected ? 2 : 1;
+        ctx.setLineDash([]);
+        
+        // Border for X leg
+        ctx.strokeRect(0, 0, legLength, legDepth);
+        // Border for Z leg  
+        ctx.strokeRect(0, 0, legDepth, legLength);
+      } else {
+        // Standard rectangular rendering
+        ctx.fillRect(0, 0, width, depth);
+        
+        // Element border
+        ctx.strokeStyle = isSelected ? '#ff0000' : '#333';
+        ctx.lineWidth = isSelected ? 2 : 1;
+        ctx.setLineDash([]);
+        ctx.strokeRect(0, 0, width, depth);
+      }
 
       // In plan view, show solid blocks without cabinet details or text labels
       // Cabinet details and text are not appropriate for top-down view
@@ -526,7 +640,13 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
 
       // Selection handles (drawn after restore)
       if (isSelected) {
-        drawSelectionHandles(ctx, pos.x, pos.y, width, depth);
+        if (isCornerCounterTop) {
+          // For L-shaped counter tops, draw square selection handles (90cm x 90cm)
+          const squareSize = 90 * zoom;
+          drawSelectionHandles(ctx, pos.x, pos.y, squareSize, squareSize);
+        } else {
+          drawSelectionHandles(ctx, pos.x, pos.y, width, depth);
+        }
       }
 
     } else {
@@ -1231,23 +1351,45 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
     // Calculate snap position (but don't update guides in real-time to avoid performance issues)
     const snapResult = getSnapPosition(draggedElement, roomPos.x, roomPos.y);
     const pos = roomToCanvas(snapResult.x, snapResult.y);
-    const width = draggedElement.width * zoom;
-    const height = (draggedElement.depth || draggedElement.height) * zoom; // Use depth for Y-axis in plan view
+    
+    // Check if this is a corner counter top for L-shape preview
+    const isCornerCounterTop = draggedElement.type === 'counter-top' && draggedElement.id.includes('counter-top-corner');
     
     // Draw semi-transparent preview at snap position
     ctx.save();
     ctx.globalAlpha = 0.7;
-    
-    // Preview fill
-    ctx.fillStyle = draggedElement.color || '#8b4513';
-    ctx.fillRect(pos.x, pos.y, width, height);
     
     // Preview border - green if snapping, red if not
     const isSnapped = Math.abs(snapResult.x - roomPos.x) > 0.1 || Math.abs(snapResult.y - roomPos.y) > 0.1;
     ctx.strokeStyle = isSnapped ? '#00ff00' : '#ff6b6b';
     ctx.lineWidth = 2;
     ctx.setLineDash([5, 5]);
-    ctx.strokeRect(pos.x, pos.y, width, height);
+    
+    if (isCornerCounterTop) {
+      // Draw L-shaped drag preview
+      const legLength = 90 * zoom; // 90cm legs
+      const legDepth = 60 * zoom;  // 60cm depth
+      
+      // Preview fill
+      ctx.fillStyle = draggedElement.color || '#8b4513';
+      
+      // X leg (horizontal section)
+      ctx.fillRect(pos.x, pos.y, legLength, legDepth);
+      ctx.strokeRect(pos.x, pos.y, legLength, legDepth);
+      
+      // Z leg (vertical section)
+      ctx.fillRect(pos.x, pos.y, legDepth, legLength);
+      ctx.strokeRect(pos.x, pos.y, legDepth, legLength);
+    } else {
+      // Standard rectangular drag preview
+      const width = draggedElement.width * zoom;
+      const height = (draggedElement.depth || draggedElement.height) * zoom; // Use depth for Y-axis in plan view
+      
+      // Preview fill
+      ctx.fillStyle = draggedElement.color || '#8b4513';
+      ctx.fillRect(pos.x, pos.y, width, height);
+      ctx.strokeRect(pos.x, pos.y, width, height);
+    }
     
     ctx.restore();
   }, [isDragging, draggedElement, currentMousePos, canvasToRoom, roomToCanvas, zoom, getSnapPosition]);
@@ -1451,8 +1593,18 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
     // Check for element clicks
     const roomPos = canvasToRoom(x, y);
     const clickedElement = design.elements.find(element => {
-      return roomPos.x >= element.x && roomPos.x <= element.x + element.width &&
-             roomPos.y >= element.y && roomPos.y <= element.y + element.height;
+      // Special handling for corner counter tops - use square bounding box
+      const isCornerCounterTop = element.type === 'counter-top' && element.id.includes('counter-top-corner');
+      
+      if (isCornerCounterTop) {
+        // Use 90cm x 90cm square for corner counter tops
+        return roomPos.x >= element.x && roomPos.x <= element.x + 90 &&
+               roomPos.y >= element.y && roomPos.y <= element.y + 90;
+      } else {
+        // Standard rectangular hit detection
+        return roomPos.x >= element.x && roomPos.x <= element.x + element.width &&
+               roomPos.y >= element.y && roomPos.y <= element.y + (element.depth || element.height);
+      }
     });
 
     if (clickedElement) {
@@ -1549,11 +1701,20 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
         finalY = snapToGrid(snapped.y);
       }
       
-      // Update element with final position - use proper dimensions for plan view
-      const draggedElementDepth = draggedElement.depth || draggedElement.height;
+      // Update element with final position - use effective footprint for plan view
+      const effectiveDims = getEffectiveDimensions(draggedElement);
+      let clampWidth = effectiveDims.width;
+      let clampDepth = effectiveDims.depth;
+      // Corner counter tops occupy a 90x90 footprint in plan view
+      const isCornerCounterTop = draggedElement.type === 'counter-top' && draggedElement.id.includes('counter-top-corner');
+      if (isCornerCounterTop) {
+        clampWidth = 90;
+        clampDepth = 90;
+      }
+
       onUpdateElement(draggedElement.id, {
-        x: Math.max(0, Math.min(finalX, roomDimensions.width - draggedElement.width)),
-        y: Math.max(0, Math.min(finalY, roomDimensions.height - draggedElementDepth)),
+        x: Math.max(0, Math.min(finalX, roomDimensions.width - clampWidth)),
+        y: Math.max(0, Math.min(finalY, roomDimensions.height - clampDepth)),
         rotation: snapped.rotation
       });
     }

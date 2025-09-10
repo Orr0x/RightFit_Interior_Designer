@@ -10,7 +10,7 @@ interface View3DProps {
   design: Design;
   selectedElement: DesignElement | null;
   onSelectElement: (element: DesignElement | null) => void;
-  activeTool?: 'select' | 'fit-screen' | 'pan' | 'none';
+  activeTool?: 'select' | 'fit-screen' | 'pan' | 'tape-measure' | 'none';
   showGrid?: boolean;
   fitToScreenSignal?: number;
 }
