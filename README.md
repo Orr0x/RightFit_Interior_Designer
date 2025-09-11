@@ -66,9 +66,19 @@ const SUPABASE_URL = "your-project-url-here";
 const SUPABASE_PUBLISHABLE_KEY = "your-anon-key-here";
 ```
 
-4. Run the database migrations in Supabase SQL Editor:
-   - `supabase/migrations/20250908160000_create_multi_room_schema.sql`
-   - `supabase/migrations/20250908160001_migrate_existing_designs.sql`
+4. Run the database migrations using Supabase CLI:
+   ```bash
+   # Link to your Supabase project
+   npx supabase link --project-ref YOUR_PROJECT_REF
+   
+   # Push all migrations to production
+   npx supabase db push
+   ```
+   
+   **Migration Files Applied:**
+   - `20250908160000_create_multi_room_schema.sql` - Phase 1: Multi-room schema
+   - `20250908160001_migrate_existing_designs.sql` - Data migration
+   - `20250908160002_add_new_room_types.sql` - Additional room types
 
 ## 🎮 Using the Designer
 
@@ -209,6 +219,15 @@ npm run build
 npm run preview
 ```
 
+## ⚠️ Known Issues
+
+### User Account Activation
+- **Issue**: New user accounts may experience slow activation (2-3 minutes)
+- **Symptoms**: Login errors, "user not found" messages, RLS policy violations
+- **Resolution**: Wait 2-3 minutes after account creation before attempting to log in
+- **Root Cause**: Supabase user creation and RLS policy propagation takes time
+- **Workaround**: Show loading state or retry mechanism for new users
+
 ## 🐛 Troubleshooting
 
 ### Common Issues
@@ -217,6 +236,11 @@ npm run preview
 - Check Supabase credentials in `client.ts`
 - Verify database migrations are deployed
 - Clear browser cache and refresh
+
+**New user login issues:**
+- Wait 2-3 minutes after account creation
+- Check browser console for RLS policy errors
+- Verify user exists in Supabase Auth dashboard
 
 **Performance issues:**
 - Enable hardware acceleration in browser
