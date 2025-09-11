@@ -1,0 +1,122 @@
+name: Deploy to Production
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch: # Allows manual trigger from GitHub UI
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Build project
+        run: npm run build:prod
+      
+      - name: Create deployment package
+        run: |
+          mkdir -p deployment
+          cp -r dist/* deployment/
+          echo "Deployment package created"
+          ls -la deployment/
+      
+      - name: Deploy to VPS - Clean and Backup
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          key: ${{ secrets.VPS_SSH_KEY }}
+          passphrase: ${{ secrets.VPS_SSH_PASSPHRASE }}
+          port: ${{ secrets.VPS_PORT || 22 }}
+          script: |
+            cd /var/www/rightfit-kitchens.co.uk
+            
+            # Create backup
+            echo "Creating backup..."
+            mkdir -p backups
+            if [ -d "assets" ]; then
+              cp -r assets backups/backup-$(date +%Y%m%d_%H%M%S) 2>/dev/null || true
+            fi
+            if [ -f "index.html" ]; then
+              mkdir -p backups/backup-$(date +%Y%m%d_%H%M%S)
+              cp index.html backups/backup-$(date +%Y%m%d_%H%M%S)/ 2>/dev/null || true
+            fi
+            
+            # Clean current deployment
+            echo "Cleaning current deployment..."
+            rm -rf assets/
+            rm -f index.html favicon.ico robots.txt placeholder.svg
+            
+            echo "VPS cleaned successfully"
+      
+      - name: Upload files to VPS
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          key: ${{ secrets.VPS_SSH_KEY }}
+          passphrase: ${{ secrets.VPS_SSH_PASSPHRASE }}
+          port: ${{ secrets.VPS_PORT || 22 }}
+          source: "deployment/*"
+          target: "/var/www/rightfit-kitchens.co.uk/"
+          strip_components: 1
+      
+      - name: Set permissions and finalize
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          key: ${{ secrets.VPS_SSH_KEY }}
+          passphrase: ${{ secrets.VPS_SSH_PASSPHRASE }}
+          port: ${{ secrets.VPS_PORT || 22 }}
+          script: |
+            cd /var/www/rightfit-kitchens.co.uk
+            
+            # Set proper permissions
+            chown -R www-data:www-data .
+            chmod -R 755 .
+            
+            # Verify deployment
+            echo "Verifying deployment..."
+            ls -la
+            
+            echo "Permissions set successfully"
+      
+      - name: Test deployment
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          key: ${{ secrets.VPS_SSH_KEY }}
+          passphrase: ${{ secrets.VPS_SSH_PASSPHRASE }}
+          port: ${{ secrets.VPS_PORT || 22 }}
+          script: |
+            echo "Testing deployment..."
+            HTTP_CODE=$(curl -s -o /dev/null -w '%{http_code}' http://localhost/ || echo "000")
+            if [ "$HTTP_CODE" = "200" ]; then
+              echo "✅ Deployment test passed! HTTP 200 OK"
+            else
+              echo "⚠️ Deployment test returned HTTP $HTTP_CODE"
+              echo "Checking if files exist..."
+              ls -la /var/www/rightfit-kitchens.co.uk/
+            fi
+      
+      - name: Deployment Summary
+        run: |
+          echo "🎉 Deployment completed successfully!"
+          echo "🌐 Production URL: http://${{ secrets.VPS_HOST }}/"
+          echo "📅 Deployed at: $(date)"
+          echo "📝 Commit: ${{ github.sha }}"
+          echo "📝 Branch: ${{ github.ref_name }}"

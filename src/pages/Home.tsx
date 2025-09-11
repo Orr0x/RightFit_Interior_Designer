@@ -356,6 +356,7 @@ const Home = () => {
           
           <div className="border-t border-white border-opacity-20 mt-12 pt-8 text-center">
             <p className="text-gray-200">© {currentYear}. All rights reserved.</p>
+            <p className="text-gray-300 text-sm mt-2">🚀 CICD Baby</p>
           </div>
         </div>
       </footer>
