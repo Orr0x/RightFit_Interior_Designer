@@ -92,7 +92,7 @@ const DevTools: React.FC = () => {
               <Button 
                 className="w-full" 
                 disabled={!permissions.canAccessGitUI}
-                onClick={() => window.location.href = '/dev/git'}
+                onClick={() => permissions.canAccessGitUI && (window.location.href = '/dev/git')}
               >
                 {permissions.canAccessGitUI ? 'Open Git Manager' : 'Access Denied'}
               </Button>

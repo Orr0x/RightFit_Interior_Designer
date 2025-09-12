@@ -15,6 +15,9 @@ import UnderStairStorage from "./pages/UnderStairStorage";
 import UnifiedDashboard from "./pages/UnifiedDashboard";
 import Designer from "./pages/Designer";
 import NotFound from "./pages/NotFound";
+import DevTools from "./pages/DevTools";
+import GitManager from "./pages/GitManager";
+import DevToolsButton from "./components/DevToolsButton";
 import { AuthProvider } from "./contexts/AuthContext";
 import { ProjectProvider } from "./contexts/ProjectContext";
 
@@ -43,8 +46,11 @@ const App = () => (
               <Route path="/projects" element={<Designer />} />
               <Route path="/projects/:projectId" element={<Designer />} />
               <Route path="/projects/:projectId/rooms/:roomId" element={<Designer />} />
+              <Route path="/dev" element={<DevTools />} />
+              <Route path="/dev/git" element={<GitManager />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
+            <DevToolsButton />
           </BrowserRouter>
         </TooltipProvider>
       </ProjectProvider>
