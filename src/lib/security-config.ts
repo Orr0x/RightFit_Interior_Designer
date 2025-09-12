@@ -144,3 +144,4 @@ export function validateSupabaseAnonKey(key: string): boolean {
   }
 }
 
+

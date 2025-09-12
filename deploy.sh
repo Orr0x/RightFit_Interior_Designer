@@ -75,3 +75,4 @@ echo "1. Open http://$VPS_IP in your browser"
 echo "2. Check browser console for any errors"
 echo "3. Test the app functionality"
 
+

@@ -96,3 +96,4 @@ Write-Host "1. Open http://$VpsIp in your browser" -ForegroundColor White
 Write-Host "2. Check browser console for any errors" -ForegroundColor White
 Write-Host "3. Test the app functionality" -ForegroundColor White
 
+

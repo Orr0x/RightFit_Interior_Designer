@@ -166,3 +166,4 @@ Set performance budgets to maintain good performance:
 - **Web Vitals**: Google PageSpeed Insights
 - **Bundle Size**: `npm run size-check`
 
+
