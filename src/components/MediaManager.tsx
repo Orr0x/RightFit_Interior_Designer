@@ -59,7 +59,7 @@ const MediaManager: React.FC = () => {
     formatFileSize
   } = useMediaFiles();
 
-  const [selectedCategory, setSelectedCategory] = useState('all');
+  const [selectedCategory, setSelectedCategory] = useState<'all' | 'general' | 'gallery' | 'assets' | 'blog'>('all');
   const [searchTerm, setSearchTerm] = useState('');
   const [storageStats, setStorageStats] = useState<any>(null);
   const [moveDialogOpen, setMoveDialogOpen] = useState(false);
@@ -74,7 +74,8 @@ const MediaManager: React.FC = () => {
     try {
       // Determine category based on current filter
       let category: 'general' | 'gallery' | 'blog' | 'assets' = 'general';
-      if (selectedCategory === 'gallery') category = 'gallery';
+      if (selectedCategory === 'general') category = 'general';
+      else if (selectedCategory === 'gallery') category = 'gallery';
       else if (selectedCategory === 'blog') category = 'blog';
       else if (selectedCategory === 'assets') category = 'assets';
 
@@ -166,21 +167,13 @@ const MediaManager: React.FC = () => {
   };
 
   const filteredFiles = mediaFiles.filter(file => {
-    // Debug logging - remove this after fixing
-    if (selectedCategory !== 'all') {
-      console.log('Filtering file:', {
-        fileName: file.file_name,
-        category: file.category,
-        bucket_id: file.bucket_id,
-        selectedCategory,
-        file
-      });
-    }
-    
     let matchesCategory = false;
     
     if (selectedCategory === 'all') {
       matchesCategory = true;
+    } else if (selectedCategory === 'general') {
+      // Show files with general category in media bucket
+      matchesCategory = file.category === 'general' && file.bucket_id === 'media';
     } else if (selectedCategory === 'gallery') {
       // Show files in gallery bucket OR with gallery category
       matchesCategory = file.bucket_id === 'gallery' || 
@@ -193,17 +186,13 @@ const MediaManager: React.FC = () => {
                        file.category === 'blog-media' ||
                        (file.category && file.category.toLowerCase() === 'blog');
     } else if (selectedCategory === 'assets') {
-      // Show files in media bucket with assets/general category OR assets bucket
-      matchesCategory = (file.bucket_id === 'media' && (file.category === 'assets' || file.category === 'general')) ||
+      // Show files in media bucket with assets category only (exclude general)
+      matchesCategory = (file.bucket_id === 'media' && file.category === 'assets') ||
                        file.category === 'assets' ||
                        (file.category && file.category.toLowerCase() === 'assets');
     } else {
       // Fallback for other categories
       matchesCategory = file.category && file.category.toLowerCase() === selectedCategory.toLowerCase();
-    }
-    
-    if (selectedCategory !== 'all') {
-      console.log('Match result:', matchesCategory);
     }
     
     const matchesSearch = file.file_name.toLowerCase().includes(searchTerm.toLowerCase());
@@ -332,13 +321,14 @@ const MediaManager: React.FC = () => {
           </CardContent>
         </Card>
 
-        <Tabs defaultValue="all" className="space-y-6">
+        <Tabs value={selectedCategory} onValueChange={setSelectedCategory} className="space-y-6">
           <div className="flex items-center justify-between">
             <TabsList>
-              <TabsTrigger value="all" onClick={() => setSelectedCategory('all')}>All Files</TabsTrigger>
-              <TabsTrigger value="gallery" onClick={() => setSelectedCategory('gallery')}>Gallery</TabsTrigger>
-              <TabsTrigger value="assets" onClick={() => setSelectedCategory('assets')}>App Assets</TabsTrigger>
-              <TabsTrigger value="blog" onClick={() => setSelectedCategory('blog')}>Blog Media</TabsTrigger>
+              <TabsTrigger value="all">All Files</TabsTrigger>
+              <TabsTrigger value="general">General</TabsTrigger>
+              <TabsTrigger value="gallery">Gallery</TabsTrigger>
+              <TabsTrigger value="assets">App Assets</TabsTrigger>
+              <TabsTrigger value="blog">Blog Media</TabsTrigger>
             </TabsList>
             
             <div className="flex items-center space-x-2">
@@ -352,7 +342,7 @@ const MediaManager: React.FC = () => {
             </div>
           </div>
 
-          <TabsContent value="all" className="space-y-6">
+          <TabsContent value={selectedCategory} className="space-y-6">
             <Card>
               <CardHeader>
                 <CardTitle>Media Library</CardTitle>
