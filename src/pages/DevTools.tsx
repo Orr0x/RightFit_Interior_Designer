@@ -4,7 +4,21 @@ import { UserTier, TIER_NAMES, getUserTierPermissions } from '@/types/user-tiers
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Crown, Database, GitBranch, Settings, Users } from 'lucide-react';
+import { 
+  Crown, 
+  Database, 
+  GitBranch, 
+  Settings, 
+  Users,
+  Upload,
+  Image,
+  Video,
+  FileText,
+  Images,
+  Camera,
+  Edit3,
+  Globe
+} from 'lucide-react';
 
 const DevTools: React.FC = () => {
   const { user } = useAuth();
@@ -46,7 +60,7 @@ const DevTools: React.FC = () => {
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
               <div className="flex items-center space-x-2">
                 <GitBranch className={`h-5 w-5 ${permissions.canAccessGitUI ? 'text-green-500' : 'text-gray-400'}`} />
                 <span className={permissions.canAccessGitUI ? 'text-green-700' : 'text-gray-500'}>
@@ -69,6 +83,30 @@ const DevTools: React.FC = () => {
                 <Settings className={`h-5 w-5 ${permissions.canAccessSystemSettings ? 'text-green-500' : 'text-gray-400'}`} />
                 <span className={permissions.canAccessSystemSettings ? 'text-green-700' : 'text-gray-500'}>
                   System Settings
+                </span>
+              </div>
+              <div className="flex items-center space-x-2">
+                <Upload className={`h-5 w-5 ${permissions.canAccessGitUI ? 'text-green-500' : 'text-gray-400'}`} />
+                <span className={permissions.canAccessGitUI ? 'text-green-700' : 'text-gray-500'}>
+                  Media Manager
+                </span>
+              </div>
+              <div className="flex items-center space-x-2">
+                <FileText className={`h-5 w-5 ${permissions.canAccessGitUI ? 'text-green-500' : 'text-gray-400'}`} />
+                <span className={permissions.canAccessGitUI ? 'text-green-700' : 'text-gray-500'}>
+                  Blog Manager
+                </span>
+              </div>
+              <div className="flex items-center space-x-2">
+                <Images className={`h-5 w-5 ${permissions.canAccessGitUI ? 'text-green-500' : 'text-gray-400'}`} />
+                <span className={permissions.canAccessGitUI ? 'text-green-700' : 'text-gray-500'}>
+                  Gallery Manager
+                </span>
+              </div>
+              <div className="flex items-center space-x-2">
+                <Globe className={`h-5 w-5 ${permissions.canAccessGitUI ? 'text-green-500' : 'text-gray-400'}`} />
+                <span className={permissions.canAccessGitUI ? 'text-green-700' : 'text-gray-500'}>
+                  Website CMS
                 </span>
               </div>
             </div>
@@ -161,6 +199,150 @@ const DevTools: React.FC = () => {
                 onClick={() => window.location.href = '/dev/system'}
               >
                 {permissions.canAccessSystemSettings ? 'System Settings' : 'God Mode Only'}
+              </Button>
+            </CardContent>
+          </Card>
+
+          {/* Media Manager */}
+          <Card className={!permissions.canAccessGitUI ? 'opacity-50' : ''}>
+            <CardHeader>
+              <CardTitle className="flex items-center space-x-2">
+                <Upload className="h-5 w-5 text-blue-500" />
+                <span>Media Manager</span>
+              </CardTitle>
+              <CardDescription>
+                Upload and manage images, videos, and media assets for your app
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-2">
+                <div className="flex items-center space-x-2 text-sm text-gray-600">
+                  <Image className="h-4 w-4" />
+                  <span>Gallery Images</span>
+                </div>
+                <div className="flex items-center space-x-2 text-sm text-gray-600">
+                  <Video className="h-4 w-4" />
+                  <span>App Resources</span>
+                </div>
+                <div className="flex items-center space-x-2 text-sm text-gray-600">
+                  <Camera className="h-4 w-4" />
+                  <span>Project Assets</span>
+                </div>
+              </div>
+              <Button 
+                className="w-full mt-4" 
+                disabled={!permissions.canAccessGitUI}
+                onClick={() => window.location.href = '/dev/media'}
+              >
+                {permissions.canAccessGitUI ? 'Open Media Manager' : 'Dev Access Required'}
+              </Button>
+            </CardContent>
+          </Card>
+
+          {/* Blog Manager */}
+          <Card className={!permissions.canAccessGitUI ? 'opacity-50' : ''}>
+            <CardHeader>
+              <CardTitle className="flex items-center space-x-2">
+                <FileText className="h-5 w-5 text-green-500" />
+                <span>Blog Manager</span>
+              </CardTitle>
+              <CardDescription>
+                Create, edit, and publish blog posts for your website
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-2">
+                <div className="flex items-center space-x-2 text-sm text-gray-600">
+                  <Edit3 className="h-4 w-4" />
+                  <span>Rich Text Editor</span>
+                </div>
+                <div className="flex items-center space-x-2 text-sm text-gray-600">
+                  <Image className="h-4 w-4" />
+                  <span>Media Integration</span>
+                </div>
+                <div className="flex items-center space-x-2 text-sm text-gray-600">
+                  <Globe className="h-4 w-4" />
+                  <span>SEO Optimization</span>
+                </div>
+              </div>
+              <Button 
+                className="w-full mt-4" 
+                disabled={!permissions.canAccessGitUI}
+                onClick={() => window.location.href = '/dev/blog'}
+              >
+                {permissions.canAccessGitUI ? 'Open Blog Manager' : 'Dev Access Required'}
+              </Button>
+            </CardContent>
+          </Card>
+
+          {/* Gallery Manager */}
+          <Card className={!permissions.canAccessGitUI ? 'opacity-50' : ''}>
+            <CardHeader>
+              <CardTitle className="flex items-center space-x-2">
+                <Images className="h-5 w-5 text-purple-500" />
+                <span>Gallery Manager</span>
+              </CardTitle>
+              <CardDescription>
+                Organize project galleries and showcase portfolios
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-2">
+                <div className="flex items-center space-x-2 text-sm text-gray-600">
+                  <Image className="h-4 w-4" />
+                  <span>Before/After Photos</span>
+                </div>
+                <div className="flex items-center space-x-2 text-sm text-gray-600">
+                  <Camera className="h-4 w-4" />
+                  <span>Project Showcases</span>
+                </div>
+                <div className="flex items-center space-x-2 text-sm text-gray-600">
+                  <Settings className="h-4 w-4" />
+                  <span>Album Management</span>
+                </div>
+              </div>
+              <Button 
+                className="w-full mt-4" 
+                disabled={!permissions.canAccessGitUI}
+                onClick={() => permissions.canAccessGitUI && (window.location.href = '/dev/gallery')}
+              >
+                {permissions.canAccessGitUI ? 'Open Gallery Manager' : 'Dev Access Required'}
+              </Button>
+            </CardContent>
+          </Card>
+
+          {/* Website CMS */}
+          <Card className={!permissions.canAccessGitUI ? 'opacity-50' : ''}>
+            <CardHeader>
+              <CardTitle className="flex items-center space-x-2">
+                <Globe className="h-5 w-5 text-orange-500" />
+                <span>Website CMS</span>
+              </CardTitle>
+              <CardDescription>
+                Manage website content, pages, and marketing materials
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-2">
+                <div className="flex items-center space-x-2 text-sm text-gray-600">
+                  <FileText className="h-4 w-4" />
+                  <span>Page Content</span>
+                </div>
+                <div className="flex items-center space-x-2 text-sm text-gray-600">
+                  <Settings className="h-4 w-4" />
+                  <span>Site Configuration</span>
+                </div>
+                <div className="flex items-center space-x-2 text-sm text-gray-600">
+                  <Users className="h-4 w-4" />
+                  <span>Contact Forms</span>
+                </div>
+              </div>
+              <Button 
+                className="w-full mt-4" 
+                disabled={!permissions.canAccessGitUI}
+                onClick={() => window.location.href = '/dev/cms'}
+              >
+                {permissions.canAccessGitUI ? 'Open Website CMS' : 'Dev Access Required'}
               </Button>
             </CardContent>
           </Card>
