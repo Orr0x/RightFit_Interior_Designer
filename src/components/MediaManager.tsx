@@ -3,6 +3,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { UserTier, getUserTierPermissions } from '@/types/user-tiers';
 import { useMediaFiles, MediaFile } from '@/hooks/useMediaFiles';
 import { useToast } from '@/hooks/use-toast';
+import DevToolsHeader from '@/components/DevToolsHeader';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -237,21 +238,13 @@ const MediaManager: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 p-6">
-      <div className="max-w-7xl mx-auto space-y-6">
-        {/* Header */}
-        <div className="flex items-center justify-between">
-          <div className="flex items-center space-x-3">
-            <Upload className="h-8 w-8 text-blue-500" />
-            <div>
-              <h1 className="text-3xl font-bold text-gray-900">Media Manager</h1>
-              <p className="text-gray-600">Upload and manage your app's media assets</p>
-            </div>
-          </div>
-          <Badge className="bg-blue-100 text-blue-800">
-            {loading ? 'Loading...' : `${filteredFiles.length} files`}
-          </Badge>
-        </div>
+    <div className="min-h-screen bg-gray-50">
+      <DevToolsHeader 
+        title="Media Manager"
+        description="Upload and manage your app's media assets"
+        icon={<Upload className="h-5 w-5 text-blue-600" />}
+      />
+      <div className="max-w-7xl mx-auto p-6 space-y-6">
 
         {/* Upload Section */}
         <Card>
