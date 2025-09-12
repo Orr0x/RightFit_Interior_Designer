@@ -22,7 +22,6 @@ import {
   Crown,
   Calendar,
   Tag,
-  Globe,
   Image,
   Settings,
   Loader2
@@ -46,7 +45,6 @@ const BlogManager: React.FC = () => {
   } = useBlogPosts();
 
   const [selectedPost, setSelectedPost] = useState<BlogPost | null>(null);
-  const [isEditing, setIsEditing] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [filterStatus, setFilterStatus] = useState('all');
   const [saving, setSaving] = useState(false);
@@ -121,7 +119,6 @@ const BlogManager: React.FC = () => {
         tags: []
       });
       setSelectedPost(null);
-      setIsEditing(false);
     } catch (error) {
       toast({
         title: "Error",

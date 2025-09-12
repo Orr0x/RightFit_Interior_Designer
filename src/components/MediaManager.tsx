@@ -18,7 +18,6 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from '@/components/ui/dialog';
 import { 
   Upload, 
@@ -54,7 +53,6 @@ const MediaManager: React.FC = () => {
     uploadFiles, 
     deleteFile,
     moveFile,
-    updateFile,
     getStorageStats,
     formatFileSize
   } = useMediaFiles();
@@ -183,16 +181,12 @@ const MediaManager: React.FC = () => {
       // Show files in blog-media bucket OR with blog category
       matchesCategory = file.bucket_id === 'blog-media' || 
                        file.category === 'blog' ||
-                       file.category === 'blog-media' ||
                        (file.category && file.category.toLowerCase() === 'blog');
     } else if (selectedCategory === 'assets') {
       // Show files in media bucket with assets category only (exclude general)
       matchesCategory = (file.bucket_id === 'media' && file.category === 'assets') ||
                        file.category === 'assets' ||
                        (file.category && file.category.toLowerCase() === 'assets');
-    } else {
-      // Fallback for other categories
-      matchesCategory = file.category && file.category.toLowerCase() === selectedCategory.toLowerCase();
     }
     
     const matchesSearch = file.file_name.toLowerCase().includes(searchTerm.toLowerCase());
@@ -321,7 +315,7 @@ const MediaManager: React.FC = () => {
           </CardContent>
         </Card>
 
-        <Tabs value={selectedCategory} onValueChange={setSelectedCategory} className="space-y-6">
+        <Tabs value={selectedCategory} onValueChange={(value) => setSelectedCategory(value as 'all' | 'general' | 'gallery' | 'assets' | 'blog')} className="space-y-6">
           <div className="flex items-center justify-between">
             <TabsList>
               <TabsTrigger value="all">All Files</TabsTrigger>
