@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { UserTier, getUserTierPermissions } from '@/types/user-tiers';
+import { useMediaFiles, MediaFile } from '@/hooks/useMediaFiles';
+import { useToast } from '@/hooks/use-toast';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -21,89 +23,110 @@ import {
   Crown,
   FolderOpen,
   Plus,
-  Search
+  Search,
+  Loader2
 } from 'lucide-react';
-
-interface MediaFile {
-  id: string;
-  name: string;
-  type: 'image' | 'video' | 'document';
-  size: string;
-  url: string;
-  uploadDate: string;
-  category: string;
-}
 
 const MediaManager: React.FC = () => {
   const { user } = useAuth();
   const userTier = (user?.profile?.user_tier as UserTier) || UserTier.FREE;
   const permissions = getUserTierPermissions(userTier);
+  const { toast } = useToast();
 
-  // Mock data - in real implementation, this would come from your storage API
-  const [mediaFiles] = useState<MediaFile[]>([
-    {
-      id: '1',
-      name: 'kitchen-renovation-before.jpg',
-      type: 'image',
-      size: '2.4 MB',
-      url: '/api/media/kitchen-renovation-before.jpg',
-      uploadDate: '2024-01-15',
-      category: 'Gallery'
-    },
-    {
-      id: '2',
-      name: 'rightfit-logo.png',
-      type: 'image',
-      size: '128 KB',
-      url: '/api/media/rightfit-logo.png',
-      uploadDate: '2024-01-10',
-      category: 'Assets'
-    },
-    {
-      id: '3',
-      name: 'installation-process.mp4',
-      type: 'video',
-      size: '15.2 MB',
-      url: '/api/media/installation-process.mp4',
-      uploadDate: '2024-01-20',
-      category: 'Gallery'
-    }
-  ]);
+  // Real API integration
+  const { 
+    files: mediaFiles, 
+    loading, 
+    error, 
+    uploadProgress,
+    uploadFiles, 
+    deleteFile,
+    updateFile,
+    getStorageStats 
+  } = useMediaFiles();
 
-  const [uploadProgress, setUploadProgress] = useState(0);
-  const [isUploading, setIsUploading] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [searchTerm, setSearchTerm] = useState('');
+  const [storageStats, setStorageStats] = useState<any>(null);
 
   const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files;
-    if (!files) return;
+    if (!files || files.length === 0) return;
 
-    setIsUploading(true);
-    
-    // Simulate upload progress
-    for (let i = 0; i <= 100; i += 10) {
-      setUploadProgress(i);
-      await new Promise(resolve => setTimeout(resolve, 100));
+    try {
+      // Determine category based on current filter
+      let category: 'general' | 'gallery' | 'blog' | 'assets' = 'general';
+      if (selectedCategory === 'gallery') category = 'gallery';
+      else if (selectedCategory === 'blog') category = 'blog';
+      else if (selectedCategory === 'assets') category = 'assets';
+
+      await uploadFiles(files, category);
+      
+      toast({
+        title: "Success",
+        description: `${files.length} file(s) uploaded successfully`
+      });
+
+      // Refresh storage stats
+      const stats = await getStorageStats();
+      setStorageStats(stats);
+
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: error instanceof Error ? error.message : "Failed to upload files",
+        variant: "destructive"
+      });
     }
-    
-    setIsUploading(false);
-    setUploadProgress(0);
+
+    // Reset file input
+    event.target.value = '';
   };
 
-  const getFileIcon = (type: string) => {
-    switch (type) {
-      case 'image': return <Image className="h-5 w-5 text-blue-500" />;
-      case 'video': return <Video className="h-5 w-5 text-purple-500" />;
-      default: return <File className="h-5 w-5 text-gray-500" />;
+  const handleDeleteFile = async (fileId: string) => {
+    if (!confirm('Are you sure you want to delete this file?')) {
+      return;
     }
+
+    try {
+      await deleteFile(fileId);
+      toast({
+        title: "Success",
+        description: "File deleted successfully"
+      });
+
+      // Refresh storage stats
+      const stats = await getStorageStats();
+      setStorageStats(stats);
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: error instanceof Error ? error.message : "Failed to delete file",
+        variant: "destructive"
+      });
+    }
+  };
+
+  const getFileIcon = (mimeType: string) => {
+    if (mimeType.startsWith('image/')) return <Image className="h-5 w-5 text-blue-500" />;
+    if (mimeType.startsWith('video/')) return <Video className="h-5 w-5 text-purple-500" />;
+    return <File className="h-5 w-5 text-gray-500" />;
   };
 
   const filteredFiles = mediaFiles.filter(file => {
     const matchesCategory = selectedCategory === 'all' || file.category.toLowerCase() === selectedCategory;
-    const matchesSearch = file.name.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesSearch = file.file_name.toLowerCase().includes(searchTerm.toLowerCase());
     return matchesCategory && matchesSearch;
   });
+
+  // Load storage stats on component mount
+  React.useEffect(() => {
+    const loadStats = async () => {
+      const stats = await getStorageStats();
+      setStorageStats(stats);
+    };
+    loadStats();
+  }, [mediaFiles]);
 
   if (!permissions.canAccessGitUI) {
     return (
@@ -140,7 +163,7 @@ const MediaManager: React.FC = () => {
             </div>
           </div>
           <Badge className="bg-blue-100 text-blue-800">
-            {filteredFiles.length} files
+            {loading ? 'Loading...' : `${filteredFiles.length} files`}
           </Badge>
         </div>
 
@@ -156,19 +179,22 @@ const MediaManager: React.FC = () => {
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
-            {!isUploading ? (
+            {Object.keys(uploadProgress).length === 0 ? (
               <div className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center">
                 <Upload className="h-12 w-12 mx-auto text-gray-400 mb-4" />
                 <div className="space-y-2">
                   <p className="text-lg font-medium">Drop files here or click to upload</p>
                   <p className="text-sm text-gray-500">
-                    Supports: JPG, PNG, GIF, MP4, MOV, PDF, DOC
+                    Supports: JPG, PNG, GIF, WebP, MP4, MOV, PDF, DOC (50MB max)
+                  </p>
+                  <p className="text-xs text-gray-400">
+                    Files will be uploaded to: {selectedCategory === 'all' ? 'General' : selectedCategory}
                   </p>
                 </div>
                 <Input
                   type="file"
                   multiple
-                  accept="image/*,video/*,.pdf,.doc,.docx"
+                  accept="image/*,video/*,.pdf,.doc,.docx,.txt"
                   onChange={handleFileUpload}
                   className="mt-4 cursor-pointer"
                 />
@@ -179,8 +205,25 @@ const MediaManager: React.FC = () => {
                   <Upload className="h-5 w-5 text-blue-500" />
                   <span>Uploading files...</span>
                 </div>
-                <Progress value={uploadProgress} className="w-full" />
-                <p className="text-sm text-gray-600">{uploadProgress}% complete</p>
+                {Object.entries(uploadProgress).map(([fileId, progress]) => (
+                  <div key={fileId} className="space-y-2">
+                    <div className="flex items-center justify-between text-sm">
+                      <span className="truncate">{progress.file.name}</span>
+                      <div className="flex items-center space-x-2">
+                        {progress.status === 'uploading' && (
+                          <Loader2 className="h-4 w-4 animate-spin text-blue-500" />
+                        )}
+                        {progress.status === 'completed' && (
+                          <CheckCircle className="h-4 w-4 text-green-500" />
+                        )}
+                        {progress.status === 'error' && (
+                          <div className="text-red-500 text-xs">{progress.error}</div>
+                        )}
+                      </div>
+                    </div>
+                    <Progress value={progress.progress} className="w-full" />
+                  </div>
+                ))}
               </div>
             )}
           </CardContent>
@@ -215,48 +258,121 @@ const MediaManager: React.FC = () => {
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-                  {filteredFiles.map(file => (
-                    <div key={file.id} className="border rounded-lg p-4 hover:shadow-md transition-shadow">
-                      <div className="flex items-center space-x-3 mb-3">
-                        {getFileIcon(file.type)}
-                        <div className="flex-1 min-w-0">
-                          <p className="font-medium text-sm truncate">{file.name}</p>
-                          <p className="text-xs text-gray-500">{file.size}</p>
-                        </div>
-                      </div>
-                      
-                      <div className="flex items-center justify-between mb-3">
-                        <Badge variant="outline" className="text-xs">
-                          {file.category}
-                        </Badge>
-                        <span className="text-xs text-gray-500">{file.uploadDate}</span>
-                      </div>
-
-                      <div className="flex space-x-1">
-                        <Button size="sm" variant="outline" className="flex-1">
-                          <Eye className="h-3 w-3 mr-1" />
-                          View
-                        </Button>
-                        <Button size="sm" variant="outline">
-                          <Copy className="h-3 w-3" />
-                        </Button>
-                        <Button size="sm" variant="outline">
-                          <Download className="h-3 w-3" />
-                        </Button>
-                        <Button size="sm" variant="outline" className="text-red-500 hover:text-red-700">
-                          <Trash2 className="h-3 w-3" />
-                        </Button>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-
-                {filteredFiles.length === 0 && (
-                  <div className="text-center py-8">
-                    <FolderOpen className="h-12 w-12 mx-auto text-gray-400 mb-4" />
-                    <p className="text-gray-500">No files found</p>
+                {/* Loading State */}
+                {loading && (
+                  <div className="flex items-center justify-center py-8">
+                    <Loader2 className="h-8 w-8 animate-spin text-gray-500" />
+                    <span className="ml-2 text-gray-500">Loading media files...</span>
                   </div>
+                )}
+
+                {/* Error State */}
+                {error && (
+                  <div className="text-center py-8">
+                    <p className="text-red-600">Error loading files: {error}</p>
+                  </div>
+                )}
+
+                {/* Files Grid */}
+                {!loading && !error && (
+                  <>
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+                      {filteredFiles.map(file => (
+                        <div key={file.id} className="border rounded-lg p-4 hover:shadow-md transition-shadow">
+                          {/* File Preview */}
+                          <div className="mb-3">
+                            {file.mime_type.startsWith('image/') ? (
+                              <div className="aspect-square bg-gray-100 rounded-lg overflow-hidden">
+                                <img 
+                                  src={file.url} 
+                                  alt={file.alt_text || file.file_name}
+                                  className="w-full h-full object-cover"
+                                  loading="lazy"
+                                />
+                              </div>
+                            ) : (
+                              <div className="aspect-square bg-gray-100 rounded-lg flex items-center justify-center">
+                                {getFileIcon(file.mime_type)}
+                              </div>
+                            )}
+                          </div>
+
+                          <div className="flex items-center space-x-3 mb-3">
+                            {getFileIcon(file.mime_type)}
+                            <div className="flex-1 min-w-0">
+                              <p className="font-medium text-sm truncate" title={file.file_name}>
+                                {file.file_name}
+                              </p>
+                              <p className="text-xs text-gray-500">{file.size_formatted}</p>
+                            </div>
+                          </div>
+                          
+                          <div className="flex items-center justify-between mb-3">
+                            <Badge variant="outline" className="text-xs">
+                              {file.category}
+                            </Badge>
+                            <span className="text-xs text-gray-500">
+                              {new Date(file.created_at).toLocaleDateString()}
+                            </span>
+                          </div>
+
+                          <div className="flex space-x-1">
+                            <Button 
+                              size="sm" 
+                              variant="outline" 
+                              className="flex-1"
+                              onClick={() => window.open(file.url, '_blank')}
+                            >
+                              <Eye className="h-3 w-3 mr-1" />
+                              View
+                            </Button>
+                            <Button 
+                              size="sm" 
+                              variant="outline"
+                              onClick={() => {
+                                navigator.clipboard.writeText(file.url || '');
+                                toast({ title: "Copied!", description: "File URL copied to clipboard" });
+                              }}
+                            >
+                              <Copy className="h-3 w-3" />
+                            </Button>
+                            <Button 
+                              size="sm" 
+                              variant="outline"
+                              onClick={() => {
+                                const a = document.createElement('a');
+                                a.href = file.url || '';
+                                a.download = file.file_name;
+                                a.click();
+                              }}
+                            >
+                              <Download className="h-3 w-3" />
+                            </Button>
+                            <Button 
+                              size="sm" 
+                              variant="outline" 
+                              className="text-red-500 hover:text-red-700"
+                              onClick={() => handleDeleteFile(file.id)}
+                            >
+                              <Trash2 className="h-3 w-3" />
+                            </Button>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+
+                    {filteredFiles.length === 0 && !loading && (
+                      <div className="text-center py-8">
+                        <FolderOpen className="h-12 w-12 mx-auto text-gray-400 mb-4" />
+                        <p className="text-gray-500">
+                          {searchTerm ? 'No files match your search' : 'No files found'}
+                        </p>
+                        <p className="text-sm text-gray-400 mt-2">
+                          Upload some files to get started!
+                        </p>
+                      </div>
+                    )}
+                  </>
                 )}
               </CardContent>
             </Card>
@@ -272,16 +388,38 @@ const MediaManager: React.FC = () => {
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <div className="space-y-4">
-              <div className="flex justify-between text-sm">
-                <span>Used: 125.8 MB</span>
-                <span>Available: 4.87 GB</span>
+            {storageStats ? (
+              <div className="space-y-4">
+                <div className="flex justify-between text-sm">
+                  <span>Used: {storageStats.totalSizeFormatted}</span>
+                  <span>Files: {storageStats.fileCount}</span>
+                </div>
+                
+                {/* Storage by bucket */}
+                <div className="space-y-2">
+                  <p className="text-sm font-medium">By Category:</p>
+                  {Object.entries(storageStats.byCategory).map(([category, size]) => (
+                    <div key={category} className="flex justify-between text-xs">
+                      <span className="capitalize">{category}:</span>
+                      <span>{formatFileSize(size as number)}</span>
+                    </div>
+                  ))}
+                </div>
+
+                {/* Simple progress bar - you can enhance this with actual limits */}
+                <div className="space-y-1">
+                  <Progress value={Math.min((storageStats.totalSize / (1024 * 1024 * 1024)) * 20, 100)} className="w-full" />
+                  <p className="text-xs text-gray-500">
+                    Storage usage (no limits set)
+                  </p>
+                </div>
               </div>
-              <Progress value={2.5} className="w-full" />
-              <p className="text-xs text-gray-500">
-                2.5% of 5 GB storage used
-              </p>
-            </div>
+            ) : (
+              <div className="flex items-center justify-center py-4">
+                <Loader2 className="h-4 w-4 animate-spin text-gray-500" />
+                <span className="ml-2 text-sm text-gray-500">Loading storage stats...</span>
+              </div>
+            )}
           </CardContent>
         </Card>
       </div>

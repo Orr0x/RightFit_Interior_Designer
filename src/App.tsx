@@ -20,6 +20,8 @@ import GitManager from "./pages/GitManager";
 import MediaManager from "./pages/MediaManager";
 import BlogManager from "./pages/BlogManager";
 import GalleryManager from "./pages/GalleryManager";
+import Blog from "./pages/Blog";
+import BlogPost from "./pages/BlogPost";
 import DevToolsButton from "./components/DevToolsButton";
 import { AuthProvider } from "./contexts/AuthContext";
 import { ProjectProvider } from "./contexts/ProjectContext";
@@ -54,6 +56,8 @@ const App = () => (
               <Route path="/dev/media" element={<MediaManager />} />
               <Route path="/dev/blog" element={<BlogManager />} />
               <Route path="/dev/gallery" element={<GalleryManager />} />
+              <Route path="/blog" element={<Blog />} />
+              <Route path="/blog/:slug" element={<BlogPost />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
             <DevToolsButton />

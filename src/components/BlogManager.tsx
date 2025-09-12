@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { UserTier, getUserTierPermissions } from '@/types/user-tiers';
+import { useBlogPosts, BlogPost, CreateBlogPostData } from '@/hooks/useBlogPosts';
+import { useToast } from '@/hooks/use-toast';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -22,59 +24,35 @@ import {
   Tag,
   Globe,
   Image,
-  Settings
+  Settings,
+  Loader2
 } from 'lucide-react';
-
-interface BlogPost {
-  id: string;
-  title: string;
-  slug: string;
-  excerpt: string;
-  content: string;
-  status: 'draft' | 'published' | 'scheduled';
-  publishDate: string;
-  author: string;
-  tags: string[];
-  featuredImage?: string;
-}
 
 const BlogManager: React.FC = () => {
   const { user } = useAuth();
   const userTier = (user?.profile?.user_tier as UserTier) || UserTier.FREE;
   const permissions = getUserTierPermissions(userTier);
+  const { toast } = useToast();
 
-  // Mock data - in real implementation, this would come from your CMS API
-  const [blogPosts] = useState<BlogPost[]>([
-    {
-      id: '1',
-      title: 'Transform Your Kitchen: 2024 Design Trends',
-      slug: 'transform-kitchen-2024-trends',
-      excerpt: 'Discover the latest kitchen design trends that will make your space both beautiful and functional.',
-      content: '# Transform Your Kitchen: 2024 Design Trends\n\nKitchen design is evolving rapidly...',
-      status: 'published',
-      publishDate: '2024-01-15',
-      author: 'RightFit Team',
-      tags: ['Kitchen', 'Design', 'Trends', '2024']
-    },
-    {
-      id: '2',
-      title: 'The Ultimate Guide to Bathroom Renovations',
-      slug: 'ultimate-bathroom-renovation-guide',
-      excerpt: 'Everything you need to know about planning and executing a successful bathroom renovation.',
-      content: '# The Ultimate Guide to Bathroom Renovations\n\nPlanning a bathroom renovation...',
-      status: 'draft',
-      publishDate: '2024-02-01',
-      author: 'RightFit Team',
-      tags: ['Bathroom', 'Renovation', 'Guide']
-    }
-  ]);
+  // Real API integration
+  const { 
+    posts: blogPosts, 
+    loading, 
+    error, 
+    createPost, 
+    updatePost, 
+    deletePost,
+    generateSlug 
+  } = useBlogPosts();
 
   const [selectedPost, setSelectedPost] = useState<BlogPost | null>(null);
   const [isEditing, setIsEditing] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [filterStatus, setFilterStatus] = useState('all');
+  const [saving, setSaving] = useState(false);
+  const [activeTab, setActiveTab] = useState('posts');
 
-  const [newPost, setNewPost] = useState<Partial<BlogPost>>({
+  const [newPost, setNewPost] = useState<CreateBlogPostData>({
     title: '',
     excerpt: '',
     content: '',
@@ -97,6 +75,102 @@ const BlogManager: React.FC = () => {
     const matchesStatus = filterStatus === 'all' || post.status === filterStatus;
     return matchesSearch && matchesStatus;
   });
+
+  // Handle save post (create or update)
+  const handleSavePost = async () => {
+    if (!newPost.title.trim()) {
+      toast({
+        title: "Error",
+        description: "Post title is required",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    setSaving(true);
+    try {
+      if (selectedPost) {
+        // Update existing post
+        await updatePost({
+          id: selectedPost.id,
+          ...newPost,
+          slug: newPost.slug || generateSlug(newPost.title)
+        });
+        toast({
+          title: "Success",
+          description: "Blog post updated successfully"
+        });
+      } else {
+        // Create new post
+        await createPost({
+          ...newPost,
+          slug: newPost.slug || generateSlug(newPost.title)
+        });
+        toast({
+          title: "Success", 
+          description: "Blog post created successfully"
+        });
+      }
+      
+      // Reset form
+      setNewPost({
+        title: '',
+        excerpt: '',
+        content: '',
+        status: 'draft',
+        tags: []
+      });
+      setSelectedPost(null);
+      setIsEditing(false);
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: error instanceof Error ? error.message : "Failed to save post",
+        variant: "destructive"
+      });
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  // Handle delete post
+  const handleDeletePost = async (postId: string) => {
+    if (!confirm('Are you sure you want to delete this post?')) {
+      return;
+    }
+
+    try {
+      await deletePost(postId);
+      toast({
+        title: "Success",
+        description: "Blog post deleted successfully"
+      });
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: error instanceof Error ? error.message : "Failed to delete post",
+        variant: "destructive"
+      });
+    }
+  };
+
+  // Handle edit post
+  const handleEditPost = (post: BlogPost) => {
+    setSelectedPost(post);
+    setNewPost({
+      title: post.title,
+      slug: post.slug,
+      excerpt: post.excerpt || '',
+      content: post.content,
+      status: post.status,
+      publish_date: post.publish_date,
+      featured_image_url: post.featured_image_url,
+      tags: post.tags,
+      meta_title: post.meta_title,
+      meta_description: post.meta_description
+    });
+    setActiveTab('editor');
+  };
 
   if (!permissions.canAccessGitUI) {
     return (
@@ -133,11 +207,11 @@ const BlogManager: React.FC = () => {
             </div>
           </div>
           <Badge className="bg-green-100 text-green-800">
-            {filteredPosts.length} posts
+            {loading ? 'Loading...' : `${filteredPosts.length} posts`}
           </Badge>
         </div>
 
-        <Tabs defaultValue="posts" className="space-y-6">
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
           <TabsList>
             <TabsTrigger value="posts">All Posts</TabsTrigger>
             <TabsTrigger value="editor">Editor</TabsTrigger>
@@ -155,7 +229,17 @@ const BlogManager: React.FC = () => {
                       Manage your blog content and publications
                     </CardDescription>
                   </div>
-                  <Button onClick={() => setIsEditing(true)}>
+                  <Button onClick={() => {
+                    setSelectedPost(null);
+                    setNewPost({
+                      title: '',
+                      excerpt: '',
+                      content: '',
+                      status: 'draft',
+                      tags: []
+                    });
+                    setActiveTab('editor');
+                  }}>
                     <Plus className="h-4 w-4 mr-2" />
                     New Post
                   </Button>
@@ -186,47 +270,93 @@ const BlogManager: React.FC = () => {
                   </Select>
                 </div>
 
+                {/* Loading State */}
+                {loading && (
+                  <div className="flex items-center justify-center py-8">
+                    <Loader2 className="h-8 w-8 animate-spin text-gray-500" />
+                    <span className="ml-2 text-gray-500">Loading blog posts...</span>
+                  </div>
+                )}
+
+                {/* Error State */}
+                {error && (
+                  <div className="text-center py-8">
+                    <p className="text-red-600">Error loading posts: {error}</p>
+                  </div>
+                )}
+
                 {/* Posts List */}
-                <div className="space-y-4">
-                  {filteredPosts.map(post => (
-                    <div key={post.id} className="border rounded-lg p-4 hover:shadow-md transition-shadow">
-                      <div className="flex items-start justify-between">
-                        <div className="flex-1">
-                          <div className="flex items-center space-x-3 mb-2">
-                            <h3 className="font-semibold text-lg">{post.title}</h3>
-                            <Badge className={getStatusColor(post.status)}>
-                              {post.status}
-                            </Badge>
-                          </div>
-                          <p className="text-gray-600 text-sm mb-3">{post.excerpt}</p>
-                          <div className="flex items-center space-x-4 text-xs text-gray-500">
-                            <div className="flex items-center space-x-1">
-                              <Calendar className="h-3 w-3" />
-                              <span>{post.publishDate}</span>
-                            </div>
-                            <div className="flex items-center space-x-1">
-                              <Tag className="h-3 w-3" />
-                              <span>{post.tags.join(', ')}</span>
-                            </div>
-                          </div>
-                        </div>
-                        <div className="flex space-x-2">
-                          <Button size="sm" variant="outline">
-                            <Eye className="h-3 w-3 mr-1" />
-                            Preview
-                          </Button>
-                          <Button size="sm" variant="outline" onClick={() => setSelectedPost(post)}>
-                            <Edit3 className="h-3 w-3 mr-1" />
-                            Edit
-                          </Button>
-                          <Button size="sm" variant="outline" className="text-red-500 hover:text-red-700">
-                            <Trash2 className="h-3 w-3" />
-                          </Button>
-                        </div>
+                {!loading && !error && (
+                  <div className="space-y-4">
+                    {filteredPosts.length === 0 ? (
+                      <div className="text-center py-8">
+                        <FileText className="h-12 w-12 mx-auto text-gray-400 mb-4" />
+                        <p className="text-gray-500">No blog posts found</p>
+                        <Button className="mt-4" onClick={() => {
+                          setSelectedPost(null);
+                          setNewPost({
+                            title: '',
+                            excerpt: '',
+                            content: '',
+                            status: 'draft',
+                            tags: []
+                          });
+                          setActiveTab('editor');
+                        }}>
+                          <Plus className="h-4 w-4 mr-2" />
+                          Create Your First Post
+                        </Button>
                       </div>
-                    </div>
-                  ))}
-                </div>
+                    ) : (
+                      filteredPosts.map(post => (
+                        <div key={post.id} className="border rounded-lg p-4 hover:shadow-md transition-shadow">
+                          <div className="flex items-start justify-between">
+                            <div className="flex-1">
+                              <div className="flex items-center space-x-3 mb-2">
+                                <h3 className="font-semibold text-lg">{post.title}</h3>
+                                <Badge className={getStatusColor(post.status)}>
+                                  {post.status}
+                                </Badge>
+                              </div>
+                              <p className="text-gray-600 text-sm mb-3">{post.excerpt || 'No excerpt available'}</p>
+                              <div className="flex items-center space-x-4 text-xs text-gray-500">
+                                <div className="flex items-center space-x-1">
+                                  <Calendar className="h-3 w-3" />
+                                  <span>{new Date(post.created_at).toLocaleDateString()}</span>
+                                </div>
+                                <div className="flex items-center space-x-1">
+                                  <Tag className="h-3 w-3" />
+                                  <span>{post.tags.length > 0 ? post.tags.join(', ') : 'No tags'}</span>
+                                </div>
+                                <div className="flex items-center space-x-1">
+                                  <span>By {post.author_email || 'Unknown'}</span>
+                                </div>
+                              </div>
+                            </div>
+                            <div className="flex space-x-2">
+                              <Button size="sm" variant="outline">
+                                <Eye className="h-3 w-3 mr-1" />
+                                Preview
+                              </Button>
+                              <Button size="sm" variant="outline" onClick={() => handleEditPost(post)}>
+                                <Edit3 className="h-3 w-3 mr-1" />
+                                Edit
+                              </Button>
+                              <Button 
+                                size="sm" 
+                                variant="outline" 
+                                className="text-red-500 hover:text-red-700"
+                                onClick={() => handleDeletePost(post.id)}
+                              >
+                                <Trash2 className="h-3 w-3" />
+                              </Button>
+                            </div>
+                          </div>
+                        </div>
+                      ))
+                    )}
+                  </div>
+                )}
               </CardContent>
             </Card>
           </TabsContent>
@@ -249,11 +379,9 @@ const BlogManager: React.FC = () => {
                       <Input
                         id="title"
                         placeholder="Enter post title..."
-                        value={selectedPost?.title || newPost.title || ''}
-                        onChange={(e) => selectedPost ? 
-                          setSelectedPost({...selectedPost, title: e.target.value}) :
-                          setNewPost({...newPost, title: e.target.value})
-                        }
+                        value={newPost.title}
+                        onChange={(e) => setNewPost({...newPost, title: e.target.value})}
+                        disabled={saving}
                       />
                     </div>
 
@@ -263,11 +391,9 @@ const BlogManager: React.FC = () => {
                         id="excerpt"
                         placeholder="Brief description of the post..."
                         rows={3}
-                        value={selectedPost?.excerpt || newPost.excerpt || ''}
-                        onChange={(e) => selectedPost ? 
-                          setSelectedPost({...selectedPost, excerpt: e.target.value}) :
-                          setNewPost({...newPost, excerpt: e.target.value})
-                        }
+                        value={newPost.excerpt || ''}
+                        onChange={(e) => setNewPost({...newPost, excerpt: e.target.value})}
+                        disabled={saving}
                       />
                     </div>
 
@@ -278,11 +404,9 @@ const BlogManager: React.FC = () => {
                         placeholder="Write your blog post content in Markdown..."
                         rows={15}
                         className="font-mono"
-                        value={selectedPost?.content || newPost.content || ''}
-                        onChange={(e) => selectedPost ? 
-                          setSelectedPost({...selectedPost, content: e.target.value}) :
-                          setNewPost({...newPost, content: e.target.value})
-                        }
+                        value={newPost.content}
+                        onChange={(e) => setNewPost({...newPost, content: e.target.value})}
+                        disabled={saving}
                       />
                     </div>
                   </div>
@@ -297,11 +421,9 @@ const BlogManager: React.FC = () => {
                         <div className="space-y-2">
                           <Label>Status</Label>
                           <Select 
-                            value={selectedPost?.status || newPost.status || 'draft'}
-                            onValueChange={(value) => selectedPost ? 
-                              setSelectedPost({...selectedPost, status: value as any}) :
-                              setNewPost({...newPost, status: value as any})
-                            }
+                            value={newPost.status || 'draft'}
+                            onValueChange={(value) => setNewPost({...newPost, status: value as any})}
+                            disabled={saving}
                           >
                             <SelectTrigger>
                               <SelectValue />
@@ -319,7 +441,9 @@ const BlogManager: React.FC = () => {
                           <Input
                             id="publishDate"
                             type="date"
-                            value={selectedPost?.publishDate || newPost.publishDate || ''}
+                            value={newPost.publish_date ? new Date(newPost.publish_date).toISOString().split('T')[0] : ''}
+                            onChange={(e) => setNewPost({...newPost, publish_date: e.target.value ? new Date(e.target.value).toISOString() : undefined})}
+                            disabled={saving}
                           />
                         </div>
 
@@ -328,7 +452,9 @@ const BlogManager: React.FC = () => {
                           <Input
                             id="tags"
                             placeholder="kitchen, design, trends"
-                            value={selectedPost?.tags?.join(', ') || ''}
+                            value={newPost.tags?.join(', ') || ''}
+                            onChange={(e) => setNewPost({...newPost, tags: e.target.value.split(',').map(tag => tag.trim()).filter(Boolean)})}
+                            disabled={saving}
                           />
                         </div>
                       </CardContent>
@@ -350,11 +476,24 @@ const BlogManager: React.FC = () => {
                     </Card>
 
                     <div className="flex space-x-2">
-                      <Button className="flex-1">
-                        <Save className="h-4 w-4 mr-2" />
-                        Save
+                      <Button 
+                        className="flex-1" 
+                        onClick={handleSavePost}
+                        disabled={saving || !newPost.title.trim()}
+                      >
+                        {saving ? (
+                          <>
+                            <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                            Saving...
+                          </>
+                        ) : (
+                          <>
+                            <Save className="h-4 w-4 mr-2" />
+                            {selectedPost ? 'Update' : 'Save'}
+                          </>
+                        )}
                       </Button>
-                      <Button variant="outline">
+                      <Button variant="outline" disabled={saving}>
                         <Eye className="h-4 w-4 mr-2" />
                         Preview
                       </Button>
