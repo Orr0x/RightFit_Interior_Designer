@@ -8,10 +8,12 @@ interface Profile {
   user_id: string;
   display_name: string | null;
   avatar_url: string | null;
+  user_tier: 'guest' | 'free' | 'basic' | 'standard' | 'pro' | 'dev' | 'admin' | 'god';
 }
 
 interface AuthUser extends User {
   profile?: Profile;
+  user_tier?: 'guest' | 'free' | 'basic' | 'standard' | 'pro' | 'dev' | 'admin' | 'god';
 }
 
 interface AuthContextType {
@@ -55,7 +57,15 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
                 .eq('user_id', session.user.id)
                 .maybeSingle();
               setUser((prev) =>
-                prev ? ({ ...prev, profile: profile || null } as AuthUser) : ({ ...session.user, profile: profile || null } as AuthUser)
+                prev ? ({ 
+                  ...prev, 
+                  profile: profile || null,
+                  user_tier: profile?.user_tier || 'free'
+                } as AuthUser) : ({ 
+                  ...session.user, 
+                  profile: profile || null,
+                  user_tier: profile?.user_tier || 'free'
+                } as AuthUser)
               );
             } finally {
               setIsLoading(false);
@@ -81,7 +91,15 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
               .eq('user_id', session.user.id)
               .maybeSingle();
             setUser((prev) =>
-              prev ? ({ ...prev, profile: profile || null } as AuthUser) : ({ ...session.user, profile: profile || null } as AuthUser)
+              prev ? ({ 
+                ...prev, 
+                profile: profile || null,
+                user_tier: profile?.user_tier || 'free'
+              } as AuthUser) : ({ 
+                ...session.user, 
+                profile: profile || null,
+                user_tier: profile?.user_tier || 'free'
+              } as AuthUser)
             );
           } finally {
             setIsLoading(false);

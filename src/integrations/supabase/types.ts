@@ -65,6 +65,7 @@ export type Database = {
           public_profile: boolean | null
           updated_at: string
           user_id: string
+          user_tier: 'guest' | 'free' | 'basic' | 'standard' | 'pro' | 'dev' | 'admin' | 'god'
         }
         Insert: {
           avatar_url?: string | null
@@ -74,6 +75,7 @@ export type Database = {
           public_profile?: boolean | null
           updated_at?: string
           user_id: string
+          user_tier?: 'guest' | 'free' | 'basic' | 'standard' | 'pro' | 'dev' | 'admin' | 'god'
         }
         Update: {
           avatar_url?: string | null
@@ -83,6 +85,7 @@ export type Database = {
           public_profile?: boolean | null
           updated_at?: string
           user_id?: string
+          user_tier?: 'guest' | 'free' | 'basic' | 'standard' | 'pro' | 'dev' | 'admin' | 'god'
         }
         Relationships: [
           {
