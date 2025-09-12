@@ -6,8 +6,8 @@ import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 import { DesignElement, RoomType } from '@/types/project';
-// Import the complete components array directly from EnhancedSidebar
-// This ensures we have ALL components without missing any
+import { useComponents } from '@/hooks/useComponents';
+import { LoadingSpinner } from '@/components/designer/LoadingSpinner';
 import { ComponentDefinition } from '@/data/components';
 import { 
   Search, 
@@ -16,7 +16,12 @@ import {
   Grid3X3, 
   List, 
   Filter,
-  Clock
+  Clock,
+  Square,
+  Archive,
+  Refrigerator,
+  Waves,
+  Package
 } from 'lucide-react';
 
 interface CompactComponentSidebarProps {
@@ -28,6 +33,19 @@ interface CompactComponentSidebarProps {
 type ViewMode = 'grid' | 'list';
 type SizeFilter = 'all' | 'small' | 'medium' | 'large';
 
+// Simple icon mapping function
+const getIconComponent = (iconName: string): React.ReactNode => {
+  const iconMap: Record<string, React.ReactNode> = {
+    'Square': <Square className="h-4 w-4" />,
+    'Archive': <Archive className="h-4 w-4" />,
+    'Refrigerator': <Refrigerator className="h-4 w-4" />,
+    'Waves': <Waves className="h-4 w-4" />,
+    'Package': <Package className="h-4 w-4" />
+  };
+  
+  return iconMap[iconName] || <Square className="h-4 w-4" />;
+};
+
 const CompactComponentSidebar: React.FC<CompactComponentSidebarProps> = ({ 
   onAddElement, 
   roomType 
@@ -38,17 +56,27 @@ const CompactComponentSidebar: React.FC<CompactComponentSidebarProps> = ({
   const [expandedCategories, setExpandedCategories] = useState<Set<string>>(new Set(['base-cabinets']));
   const [recentlyUsed, setRecentlyUsed] = useState<string[]>([]);
 
-  // Import components directly from EnhancedSidebar for now
-  // TODO: Move to shared data file later
-  const allComponents = React.useMemo(() => {
-    // This is a temporary solution - we'll import the actual components array
-    // For now, let's use a minimal set to get the UI working
-    const tempComponents: ComponentDefinition[] = [];
+  // 🚀 DATABASE-DRIVEN COMPONENTS! Load all 154 components from Supabase
+  const { components, loading, error, refetch } = useComponents();
+  
+  // Convert database components to ComponentDefinition format
+  const allComponents = useMemo(() => {
+    if (!components) return [];
     
-    // We need to dynamically import the components from EnhancedSidebar
-    // For now, return empty array until we fix the import
-    return tempComponents;
-  }, []);
+    return components.map(comp => ({
+      id: comp.component_id,
+      name: comp.name,
+      type: comp.type,
+      width: Number(comp.width),
+      depth: Number(comp.depth), 
+      height: Number(comp.height),
+      color: comp.color,
+      category: comp.category,
+      roomTypes: comp.room_types as RoomType[],
+      icon: getIconComponent(comp.icon_name),
+      description: comp.description
+    }));
+  }, [components]);
 
   // Filter components for current room type
   const availableComponents = useMemo(() => {
@@ -123,36 +151,69 @@ const CompactComponentSidebar: React.FC<CompactComponentSidebarProps> = ({
     return labels[category] || category.replace('-', ' ').replace(/\b\w/g, l => l.toUpperCase());
   };
 
-  // Handle drag start
+  // Handle drag start - only serialize essential data (no React components)
   const handleDragStart = (e: React.DragEvent, component: ComponentDefinition) => {
-    e.dataTransfer.setData('component', JSON.stringify(component));
+    // Create clean data object without React components for serialization
+    const dragData = {
+      id: component.id,
+      name: component.name,
+      type: component.type,
+      width: component.width,
+      depth: component.depth,
+      height: component.height,
+      color: component.color,
+      category: component.category,
+      roomTypes: component.roomTypes,
+      description: component.description
+    };
+    
+    e.dataTransfer.setData('component', JSON.stringify(dragData));
     e.dataTransfer.effectAllowed = 'copy';
     
-    // Create realistic drag image
-    const dragImage = document.createElement('div');
-    const scaleFactor = Math.min(80 / Math.max(component.width, component.height), 2);
-    const displayWidth = component.width * scaleFactor;
-    const displayHeight = component.height * scaleFactor;
-    
-    dragImage.style.width = `${displayWidth}px`;
-    dragImage.style.height = `${displayHeight}px`;
-    dragImage.style.backgroundColor = component.color;
-    dragImage.style.border = '2px solid #333';
-    dragImage.style.borderRadius = '4px';
-    dragImage.style.opacity = '0.8';
-    dragImage.style.position = 'absolute';
-    dragImage.style.top = '-1000px';
-    dragImage.style.left = '-1000px';
-    dragImage.style.pointerEvents = 'none';
-    dragImage.style.zIndex = '1000';
-    
-    document.body.appendChild(dragImage);
-    e.dataTransfer.setDragImage(dragImage, displayWidth / 2, displayHeight / 2);
-    
-    // Clean up drag image after drag
+    // 🎯 CREATE A COMPONENT-SHAPED DRAG PREVIEW (WORKING VERSION)
+    // Show the actual footprint/shape of the component with size adjustment
+    const dragPreview = document.createElement('div');
+
+    // Calculate scale to make drag preview match canvas size better
+    const scaleFactor = 1.15; // Increase by 15% to better match canvas components
+    const previewWidth = component.width * scaleFactor;
+    const previewDepth = component.depth * scaleFactor;
+
+    // Style to look like the actual component footprint
+    dragPreview.style.width = `${previewWidth}px`;
+    dragPreview.style.height = `${previewDepth}px`; // depth becomes height in 2D
+    dragPreview.style.backgroundColor = component.color;
+    dragPreview.style.border = '2px solid #333';
+    dragPreview.style.borderRadius = '3px';
+    dragPreview.style.opacity = '0.8';
+    dragPreview.style.position = 'absolute';
+    dragPreview.style.top = '-1000px';
+    dragPreview.style.left = '-1000px';
+    dragPreview.style.pointerEvents = 'none';
+    dragPreview.style.boxShadow = '0 4px 12px rgba(0,0,0,0.3)';
+    dragPreview.style.display = 'flex';
+    dragPreview.style.alignItems = 'center';
+    dragPreview.style.justifyContent = 'center';
+
+    // Add dimensions label
+    const label = document.createElement('div');
+    label.textContent = `${component.width}×${component.depth}`;
+    label.style.fontSize = '10px';
+    label.style.fontWeight = 'bold';
+    label.style.color = '#fff';
+    label.style.textShadow = '1px 1px 2px rgba(0,0,0,0.8)';
+    label.style.whiteSpace = 'nowrap';
+
+    dragPreview.appendChild(label);
+    document.body.appendChild(dragPreview);
+
+    // Set the component-shaped preview as drag image
+    e.dataTransfer.setDragImage(dragPreview, previewWidth / 2, previewDepth / 2);
+
+    // Clean up after drag
     setTimeout(() => {
-      if (document.body.contains(dragImage)) {
-        document.body.removeChild(dragImage);
+      if (document.body.contains(dragPreview)) {
+        document.body.removeChild(dragPreview);
       }
     }, 0);
   };
@@ -196,8 +257,38 @@ const CompactComponentSidebar: React.FC<CompactComponentSidebarProps> = ({
     });
   };
 
+  // 🚀 Loading and error states for database components
+  if (loading) {
+    return (
+      <div className="p-3 h-full flex flex-col items-center justify-center">
+        <LoadingSpinner />
+        <p className="text-sm text-gray-600 mt-2">Loading 154 components from database...</p>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="p-3 h-full flex flex-col items-center justify-center">
+        <div className="text-red-500 text-center">
+          <p className="font-medium">Failed to load components</p>
+          <p className="text-sm text-gray-600 mt-1">{error}</p>
+          <Button 
+            variant="outline" 
+            size="sm" 
+            className="mt-3"
+            onClick={() => refetch()}
+          >
+            Try Again
+          </Button>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="p-3 space-y-4 h-full flex flex-col">
+      {/* 🎉 DATABASE-DRIVEN COMPONENT LIBRARY - {allComponents.length} components loaded! */}
       {/* Header Controls */}
       <div className="space-y-3">
         {/* Search Bar */}

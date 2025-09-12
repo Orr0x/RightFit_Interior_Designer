@@ -19,16 +19,23 @@ RightFit Interior Designer is a React-based web application that provides profes
 - **ProjectDashboard**: Project creation and management interface
 
 ### Design Tools
-- **DesignCanvas2D**: Multi-view 2D canvas with drag-and-drop
+- **DesignCanvas2D**: Multi-view 2D canvas with enhanced drag-and-drop
+- **CompactComponentSidebar**: Database-driven component library with 154+ components
 - **View3D**: Three.js-based 3D visualization
-- **EnhancedSidebar**: Comprehensive component library with 200+ components
-- **PropertiesPanel**: Element property editing
+- **PropertiesPanel**: Element property editing with smart controls
 
 ### Professional Features
 - **Keyboard Shortcuts**: Full keyboard navigation support
 - **Performance Monitor**: Real-time FPS and memory tracking
 - **Error Boundaries**: Graceful error handling
 - **Validation System**: Design validation and feedback
+
+### Enhanced User Interface (v2.1)
+- **Smart Click Selection**: 5-pixel drag threshold prevents accidental movement
+- **Precision Drag Previews**: 1.15× scaled drag images match final component size
+- **CSS Scaling Fix**: Coordinate conversion accounts for browser window scaling
+- **Improved Hover Detection**: Accurate mouse hit testing for component selection
+- **Visual Feedback**: Enhanced drag states with proper opacity and visual cues
 
 ## Database Schema
 

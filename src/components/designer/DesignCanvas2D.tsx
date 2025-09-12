@@ -112,6 +112,7 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
   const [currentMousePos, setCurrentMousePos] = useState({ x: 0, y: 0 });
   const [draggedElement, setDraggedElement] = useState<DesignElement | null>(null);
   const [hoveredElement, setHoveredElement] = useState<DesignElement | null>(null);
+  const [dragThreshold, setDragThreshold] = useState<{ exceeded: boolean; startElement: DesignElement | null }>({ exceeded: false, startElement: null });
   const [snapGuides, setSnapGuides] = useState<{
     vertical: number[];
     horizontal: number[];
@@ -1883,14 +1884,19 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
 
   }, [drawGrid, drawRoom, drawElement, drawSnapGuides, drawDragPreview, drawTapeMeasure, drawZoomControls, drawRuler, design.elements, active2DView, draggedElement, isDragging]);
 
+
   // Mouse event handlers
   const handleMouseDown = useCallback((e: React.MouseEvent<HTMLCanvasElement>) => {
     const canvas = canvasRef.current;
     if (!canvas) return;
 
     const rect = canvas.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
+    // 🎯 FIX: Account for CSS scaling of canvas element
+    const scaleX = CANVAS_WIDTH / rect.width;
+    const scaleY = CANVAS_HEIGHT / rect.height;
+    
+    const x = (e.clientX - rect.left) * scaleX;
+    const y = (e.clientY - rect.top) * scaleY;
 
     // Check for zoom control clicks
     const controlsX = CANVAS_WIDTH - 100;
@@ -1940,9 +1946,9 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
     if (clickedElement) {
       onSelectElement(clickedElement);
       if (activeTool === 'select') {
-        setIsDragging(true);
+        // 🎯 FIX: Don't start dragging immediately - just prepare for potential drag
         setDragStart({ x, y });
-        setDraggedElement(clickedElement);
+        setDragThreshold({ exceeded: false, startElement: clickedElement });
       }
     } else {
       onSelectElement(null);
@@ -1967,8 +1973,13 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
     if (!canvas) return;
 
     const rect = canvas.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
+    // 🎯 FIX: Account for CSS scaling of canvas element
+    // The canvas internal size is CANVAS_WIDTH × CANVAS_HEIGHT but CSS may scale it
+    const scaleX = CANVAS_WIDTH / rect.width;
+    const scaleY = CANVAS_HEIGHT / rect.height;
+    
+    const x = (e.clientX - rect.left) * scaleX;
+    const y = (e.clientY - rect.top) * scaleY;
     
     // Always track current mouse position for drag operations
     setCurrentMousePos({ x, y });
@@ -1991,6 +2002,21 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
     // Handle tape measure preview
     if (activeTool === 'tape-measure' && onTapeMeasureMouseMove) {
       onTapeMeasureMouseMove(x, y);
+    }
+
+    // 🎯 FIX: Check drag threshold before starting drag
+    if (!isDragging && dragThreshold.startElement && activeTool === 'select') {
+      const deltaX = x - dragStart.x;
+      const deltaY = y - dragStart.y;
+      const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+      const DRAG_THRESHOLD = 5; // pixels - must move at least 5px to start dragging
+      
+      if (distance >= DRAG_THRESHOLD && !dragThreshold.exceeded) {
+        // Start dragging now that threshold is exceeded
+        setIsDragging(true);
+        setDraggedElement(dragThreshold.startElement);
+        setDragThreshold({ exceeded: true, startElement: dragThreshold.startElement });
+      }
     }
 
     if (!isDragging) return;
@@ -2086,12 +2112,19 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
     setIsDragging(false);
     setDraggedElement(null);
     setSnapGuides({ vertical: [], horizontal: [], snapPoint: null });
+    setDragThreshold({ exceeded: false, startElement: null }); // 🎯 Clear drag threshold
   }, [isDragging, draggedElement, canvasToRoom, currentMousePos, getSnapPosition, snapToGrid, onUpdateElement, roomDimensions, activeTool, onTapeMeasureClick]);
 
   const handleWheel = useCallback((e: React.WheelEvent<HTMLCanvasElement>) => {
     e.preventDefault();
     const delta = e.deltaY > 0 ? 0.9 : 1.1;
     setZoom(prev => Math.max(MIN_ZOOM, Math.min(MAX_ZOOM, prev * delta)));
+  }, []);
+
+  // Handle drag over for drag and drop
+  const handleDragOver = useCallback((e: React.DragEvent<HTMLCanvasElement>) => {
+    e.preventDefault();
+    e.dataTransfer.dropEffect = 'copy';
   }, []);
 
   // Handle drop
@@ -2103,14 +2136,29 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
     try {
       const componentData = JSON.parse(e.dataTransfer.getData('component'));
       const rect = canvas.getBoundingClientRect();
-      const x = e.clientX - rect.left;
-      const y = e.clientY - rect.top;
+      // 🎯 FIX: Account for CSS scaling of canvas element
+      const scaleX = CANVAS_WIDTH / rect.width;
+      const scaleY = CANVAS_HEIGHT / rect.height;
+      
+      const x = (e.clientX - rect.left) * scaleX;
+      const y = (e.clientY - rect.top) * scaleY;
       const roomPos = canvasToRoom(x, y);
 
-      // Calculate drop position accounting for component center vs corner positioning
-      // In 2D canvas, we position by corner (top-left), but drop position should be centered
+      // 🎯 DEBUG: Log coordinate conversion
+      console.log('Drop Debug:', {
+        mouse: { clientX: e.clientX, clientY: e.clientY },
+        canvasRect: rect,
+        canvasPos: { x, y },
+        roomPos,
+        component: { name: componentData.name, w: componentData.width, d: componentData.depth }
+      });
+
+      // 🎯 FIX: Drop position should place component center at mouse position
+      // The drag image center represents where the component center should be placed
       const dropX = roomPos.x - (componentData.width / 2);
       const dropY = roomPos.y - (componentData.depth / 2);
+
+      console.log('Drop Position:', { dropX, dropY, finalX: dropX, finalY: dropY });
 
       // Create initial element with rotation 0 for boundary checks
       const tempElement = {
@@ -2146,10 +2194,6 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
       // Error parsing dropped component - handled by toast
     }
   }, [canvasToRoom, snapToGrid, roomDimensions, getSnapPosition, onAddElement]);
-
-  const handleDragOver = useCallback((e: React.DragEvent<HTMLCanvasElement>) => {
-    e.preventDefault();
-  }, []);
 
   // Initialize canvas and set up event listeners
   useEffect(() => {

@@ -10,7 +10,7 @@ import { useProject } from '@/contexts/ProjectContext';
 import { useKeyboardShortcuts } from '@/hooks/useKeyboardShortcuts';
 import { DesignCanvas2D } from '@/components/designer/DesignCanvas2D';
 import { View3D } from '@/components/designer/View3D';
-import { EnhancedSidebar } from '@/components/designer/EnhancedSidebar';
+import CompactComponentSidebar from '@/components/designer/CompactComponentSidebar';
 import { CanvasElementCounter } from '@/components/designer/CanvasElementCounter';
 import { ViewSelector } from '@/components/designer/ViewSelector';
 import { DesignToolbar } from '@/components/designer/DesignToolbar';
@@ -189,10 +189,17 @@ const Designer = () => {
     setHistory(prev => [...prev, { ...currentRoomDesign }]);
     setFuture([]);
 
-    const newElements = [...(currentRoomDesign.design_elements || []), element];
+    // Add the new element to the design
+    const updatedElements = [...(currentRoomDesign.design_elements || []), element];
     await updateCurrentRoomDesign({
-      design_elements: newElements,
+      design_elements: updatedElements,
     });
+
+    // Select the newly added element
+    setSelectedElement(element);
+    
+    // Show success message
+    toast.success(`Added ${element.name} to design`);
   };
 
   const handleUpdateElement = async (elementId: string, updates: Partial<DesignElement>) => {
@@ -228,6 +235,7 @@ const Designer = () => {
 
     setSelectedElement(null);
   };
+
 
   // Toolbar functions
   const handleToolChange = (tool: 'select' | 'fit-screen' | 'pan' | 'tape-measure' | 'none') => {
@@ -637,7 +645,7 @@ const Designer = () => {
                   <h2 className="font-semibold text-gray-900">Designer</h2>
                 </div>
                 <div className="flex-1 overflow-y-auto">
-                  <EnhancedSidebar
+                  <CompactComponentSidebar
                     onAddElement={handleAddElement}
                     roomType={currentRoomDesign.room_type}
                   />

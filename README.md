@@ -21,6 +21,9 @@ A professional-grade interior design application built with React, TypeScript, a
 - **Comprehensive Component Library**: 154+ components across 8 room types
 - **Database-Driven Components**: Scalable component system with versioning
 - **Component Manager**: Professional UI for managing component library (DevTools)
+- **Enhanced Drag & Drop**: Precision component placement with visual feedback
+- **Smart Selection**: Click-to-select without accidental movement
+- **Accurate Drag Previews**: Drag previews match final component size exactly
 - **Custom Carpentry Solutions**: Specialized storage and cabinetry components
 - **Organized Categories**: Multiple tabs per room type (Furniture, Storage, Props, etc.)
 - **Keyboard Shortcuts**: Professional hotkeys (Ctrl+Z, Ctrl+Y, Ctrl+S, etc.)
