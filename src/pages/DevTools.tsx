@@ -17,7 +17,8 @@ import {
   Images,
   Camera,
   Edit3,
-  Globe
+  Globe,
+  Package
 } from 'lucide-react';
 
 const DevTools: React.FC = () => {
@@ -107,6 +108,12 @@ const DevTools: React.FC = () => {
                 <Globe className={`h-5 w-5 ${permissions.canAccessGitUI ? 'text-green-500' : 'text-gray-400'}`} />
                 <span className={permissions.canAccessGitUI ? 'text-green-700' : 'text-gray-500'}>
                   Website CMS
+                </span>
+              </div>
+              <div className="flex items-center space-x-2">
+                <Package className={`h-5 w-5 ${permissions.canAccessGitUI ? 'text-green-500' : 'text-gray-400'}`} />
+                <span className={permissions.canAccessGitUI ? 'text-green-700' : 'text-gray-500'}>
+                  Component Manager
                 </span>
               </div>
             </div>
@@ -343,6 +350,42 @@ const DevTools: React.FC = () => {
                 onClick={() => window.location.href = '/dev/cms'}
               >
                 {permissions.canAccessGitUI ? 'Open Website CMS' : 'Dev Access Required'}
+              </Button>
+            </CardContent>
+          </Card>
+
+          {/* Component Manager */}
+          <Card className={!permissions.canAccessGitUI ? 'opacity-50' : ''}>
+            <CardHeader>
+              <CardTitle className="flex items-center space-x-2">
+                <Package className="h-5 w-5 text-indigo-500" />
+                <span>Component Manager</span>
+              </CardTitle>
+              <CardDescription>
+                Manage design component library with versioning and metadata
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-2">
+                <div className="flex items-center space-x-2 text-sm text-gray-600">
+                  <Database className="h-4 w-4" />
+                  <span>2000+ Components</span>
+                </div>
+                <div className="flex items-center space-x-2 text-sm text-gray-600">
+                  <Settings className="h-4 w-4" />
+                  <span>Version Control</span>
+                </div>
+                <div className="flex items-center space-x-2 text-sm text-gray-600">
+                  <Edit3 className="h-4 w-4" />
+                  <span>Metadata & Tags</span>
+                </div>
+              </div>
+              <Button 
+                className="w-full mt-4" 
+                disabled={!permissions.canAccessGitUI}
+                onClick={() => window.location.href = '/dev/components'}
+              >
+                {permissions.canAccessGitUI ? 'Open Component Manager' : 'Dev Access Required'}
               </Button>
             </CardContent>
           </Card>

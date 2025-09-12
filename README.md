@@ -18,7 +18,9 @@ A professional-grade interior design application built with React, TypeScript, a
 - **Grid System**: Snap-to-grid functionality for accurate alignment
 
 ### 🎛️ Professional Interface
-- **Comprehensive Component Library**: 200+ components across 8 room types
+- **Comprehensive Component Library**: 154+ components across 8 room types
+- **Database-Driven Components**: Scalable component system with versioning
+- **Component Manager**: Professional UI for managing component library (DevTools)
 - **Custom Carpentry Solutions**: Specialized storage and cabinetry components
 - **Organized Categories**: Multiple tabs per room type (Furniture, Storage, Props, etc.)
 - **Keyboard Shortcuts**: Professional hotkeys (Ctrl+Z, Ctrl+Y, Ctrl+S, etc.)
@@ -106,52 +108,72 @@ const SUPABASE_PUBLISHABLE_KEY = "your-anon-key-here";
 
 ## 🏠 Component Library
 
+### 🎯 Database-Driven Component Library
+- **154+ Professional Components** across 8 room types
+- **Scalable Architecture** supporting thousands of components
+- **Version Control** with deprecation management
+- **Metadata Support** for future extensibility (materials, pricing, etc.)
+
+### 🛠️ Component Manager (DevTools)
+Access the Component Manager at `/dev/components` with DEV+ tier access:
+- **Browse & Search**: Filter components by category, room type, or search terms
+- **Create & Edit**: Add new components or modify existing ones
+- **Version Management**: Handle component updates and deprecation
+- **Professional UI**: Responsive design with comprehensive CRUD operations
+
 ### Room Types & Components
 
-#### 🛏️ **Bedroom** (26 components)
-- **Furniture Tab**: 10 bed types, seating, reading chairs
-- **Storage Tab**: 12 custom storage solutions (wardrobes, drawers, floating units)
-- **Decor Props Tab**: 4 accessories (lamps, mirrors, rugs, curtains)
+#### 🍳 **Kitchen** (47 components) - ✅ Complete
+- **Base Cabinets**: 5 sizes (30cm-80cm) + corner solutions  
+- **Base Drawers**: 3 pan drawer units (50cm, 60cm, 80cm)
+- **Wall Units**: 5 sizes (30cm-80cm) + corner wall cabinets
+- **Appliances**: 6 built-in and freestanding appliances
+- **Kitchen Larder**: 7 tall storage solutions (200cm-244cm height)
+- **Finishing**: 21 professional pieces (cornice, pelmet, toe-kick, end panels)
 
-#### 🛁 **Bathroom** (16 components)
-- **Vanities Tab**: 4 custom vanity units (double, floating, corner, compact)
-- **Storage Tab**: 4 storage solutions (linen cupboard, mirror cabinet, towel rack)
-- **Fixtures Tab**: 5 bathroom fixtures (toilets, showers, bathtubs)
-- **Accessories Tab**: 3 props (mirrors, extractor fan, heated towel rail)
+#### 🛏️ **Bedroom** (46 components) - ✅ Complete
+- **Bedroom Storage**: 14 custom storage solutions (wardrobes, drawers, floating units)
+- **Bedroom Furniture**: 10 bed types, seating, reading chairs  
+- **Bedroom Props**: 4 accessories (lamps, mirrors, rugs, curtains)
+- **Universal Items**: 18 (counter tops, end panels, doors, windows, flooring)
 
-#### 🏠 **Living Room** (13 components)
-- **Built-in Units Tab**: 3 entertainment systems (wall unit, floating console, corner unit)
-- **Shelving Tab**: 3 custom bookcases (floor-to-ceiling, wall-mounted, recessed)
-- **Storage Tab**: 2 storage solutions (ottoman, console table)
-- **Furniture Tab**: 3 seating options (sectional, loveseat, chaise)
-- **Decor Props Tab**: 2 accessories (floor lamp, area rug)
+#### 🛁 **Bathroom** (21 components) - ✅ Complete
+- **Bathroom Fixtures**: 8 sanitaryware (toilets, bidets, baths, showers)
+- **Bathroom Vanities**: 6 vanity units (40cm-120cm) + basin options
+- **Bathroom Storage**: 4 bathroom storage solutions
+- **Bathroom Props**: 3 accessories (mirrors, towel rails, etc.)
 
-#### 💼 **Office** (12 components)
-- **Office Furniture Tab**: 6 desk types (executive, L-shaped, standing, etc.)
-- **Storage Tab**: 2 filing solutions (4-drawer cabinet, credenza)
-- **Shelving Tab**: 2 bookcase types (barrister, wall-mounted)
-- **Accessories Tab**: 2 props (LED desk lamp, whiteboard)
+#### 🛋️ **Living Room** (20 components) - ✅ Complete
+- **Living Room Furniture**: 6 seating options (sofas, chairs, ottomans)
+- **Media Furniture**: 2 entertainment units and TV stands
+- **Built-ins & Shelving**: 6 living room storage solutions  
+- **Living Room Props**: 2 decorative elements
+- **Universal Items**: 4 (counter tops, flooring, etc.)
 
-#### 🍽️ **Dining Room** (14 components)
-- **Furniture Tab**: 7 dining sets (4 table sizes, 3 chair types, bench)
-- **Display Cabinets Tab**: 2 display units (tall china cabinet, dining hutch)
-- **Storage Tab**: 3 storage solutions (sideboards, wine rack)
-- **Decor Props Tab**: 2 accessories (chandelier, bar cart)
+#### 💼 **Office** (12 components) - ✅ Complete
+- **Office Furniture**: 6 desks, chairs, and office furniture
+- **Office Storage**: 2 filing and organization solutions
+- **Office Shelving**: 2 display and book storage
+- **Office Props**: 2 office accessories
 
-#### 👗 **Dressing Room** (8 components)
-- **Storage Tab**: 4 custom storage systems (walk-in wardrobe, island unit, shoe tower, jewelry armoire)
-- **Furniture Tab**: 2 dressing furniture (large vanity, storage bench)
-- **Accessories Tab**: 2 mirrors (full-length, lighted vanity)
+#### 👗 **Dressing Room** (8 components) - ✅ Complete
+- **Dressing Storage**: 4 walk-in wardrobe systems and islands
+- **Dressing Furniture**: 2 specialized furniture pieces
+- **Dressing Props**: 2 accessories
 
-#### 🧺 **Utility Room** (8 components)
-- **Appliances Tab**: 4 utility appliances (washer, dryer, stacked pair, sink)
-- **Storage Tab**: 3 storage solutions (tall cabinet, folding station, pantry)
-- **Accessories Tab**: 1 prop (ironing board cabinet)
+#### 🍽️ **Dining Room** (3 components) - ✅ Complete
+- **Dining Furniture**: Tables, chairs, and seating options
 
-#### 🍳 **Kitchen** (Existing)
-- **Base Cabinets Tab**: Corner units, base units, drawers
-- **Wall Units Tab**: Wall cabinets, extractor hoods
-- **Appliances Tab**: Ovens, hobs, fridges, dishwashers
+#### 🧺 **Utility Room** (3 components) - ✅ Complete  
+- **Utility Appliances**: 3 laundry and utility appliances
+
+#### 🏠 **Universal Components** (Available in all rooms)
+- **Counter Tops**: 4 (horizontal, vertical, square, corner)
+- **End Panels**: 2 (base and full height)
+- **Doors & Windows**: 4 architectural elements
+- **Flooring**: 7 materials and finishes
+
+### 📊 **Total: 154 Professional Components**
 
 ### Custom Carpentry Solutions
 The component library showcases **Right Fit Interiors'** carpentry expertise with:

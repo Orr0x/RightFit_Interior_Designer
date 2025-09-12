@@ -20,6 +20,7 @@ import GitManager from "./pages/GitManager";
 import MediaManager from "./pages/MediaManager";
 import BlogManager from "./pages/BlogManager";
 import GalleryManager from "./pages/GalleryManager";
+import ComponentManagerPage from "./pages/ComponentManagerPage";
 import Blog from "./pages/Blog";
 import BlogPost from "./pages/BlogPost";
 import DevToolsButton from "./components/DevToolsButton";
@@ -56,6 +57,7 @@ const App = () => (
               <Route path="/dev/media" element={<MediaManager />} />
               <Route path="/dev/blog" element={<BlogManager />} />
               <Route path="/dev/gallery" element={<GalleryManager />} />
+              <Route path="/dev/components" element={<ComponentManagerPage />} />
               <Route path="/blog" element={<Blog />} />
               <Route path="/blog/:slug" element={<BlogPost />} />
               <Route path="*" element={<NotFound />} />
