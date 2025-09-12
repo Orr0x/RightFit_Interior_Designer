@@ -166,6 +166,17 @@ const MediaManager: React.FC = () => {
   };
 
   const filteredFiles = mediaFiles.filter(file => {
+    // Debug logging - remove this after fixing
+    if (selectedCategory !== 'all') {
+      console.log('Filtering file:', {
+        fileName: file.file_name,
+        category: file.category,
+        bucket_id: file.bucket_id,
+        selectedCategory,
+        file
+      });
+    }
+    
     let matchesCategory = false;
     
     if (selectedCategory === 'all') {
@@ -189,6 +200,10 @@ const MediaManager: React.FC = () => {
     } else {
       // Fallback for other categories
       matchesCategory = file.category && file.category.toLowerCase() === selectedCategory.toLowerCase();
+    }
+    
+    if (selectedCategory !== 'all') {
+      console.log('Match result:', matchesCategory);
     }
     
     const matchesSearch = file.file_name.toLowerCase().includes(searchTerm.toLowerCase());
