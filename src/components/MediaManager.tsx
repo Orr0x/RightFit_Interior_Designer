@@ -171,13 +171,24 @@ const MediaManager: React.FC = () => {
     if (selectedCategory === 'all') {
       matchesCategory = true;
     } else if (selectedCategory === 'gallery') {
-      matchesCategory = file.category === 'gallery' || file.bucket_id === 'gallery';
+      // Show files in gallery bucket OR with gallery category
+      matchesCategory = file.bucket_id === 'gallery' || 
+                       file.category === 'gallery' ||
+                       (file.category && file.category.toLowerCase() === 'gallery');
     } else if (selectedCategory === 'blog') {
-      matchesCategory = file.category === 'blog' || file.bucket_id === 'blog-media' || file.category === 'blog-media';
+      // Show files in blog-media bucket OR with blog category
+      matchesCategory = file.bucket_id === 'blog-media' || 
+                       file.category === 'blog' ||
+                       file.category === 'blog-media' ||
+                       (file.category && file.category.toLowerCase() === 'blog');
     } else if (selectedCategory === 'assets') {
-      matchesCategory = file.category === 'assets' || file.category === 'general';
+      // Show files in media bucket with assets/general category OR assets bucket
+      matchesCategory = (file.bucket_id === 'media' && (file.category === 'assets' || file.category === 'general')) ||
+                       file.category === 'assets' ||
+                       (file.category && file.category.toLowerCase() === 'assets');
     } else {
-      matchesCategory = file.category.toLowerCase() === selectedCategory;
+      // Fallback for other categories
+      matchesCategory = file.category && file.category.toLowerCase() === selectedCategory.toLowerCase();
     }
     
     const matchesSearch = file.file_name.toLowerCase().includes(searchTerm.toLowerCase());
