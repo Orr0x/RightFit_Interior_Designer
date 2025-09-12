@@ -166,7 +166,20 @@ const MediaManager: React.FC = () => {
   };
 
   const filteredFiles = mediaFiles.filter(file => {
-    const matchesCategory = selectedCategory === 'all' || file.category.toLowerCase() === selectedCategory;
+    let matchesCategory = false;
+    
+    if (selectedCategory === 'all') {
+      matchesCategory = true;
+    } else if (selectedCategory === 'gallery') {
+      matchesCategory = file.category === 'gallery' || file.bucket_id === 'gallery';
+    } else if (selectedCategory === 'blog') {
+      matchesCategory = file.category === 'blog' || file.bucket_id === 'blog-media' || file.category === 'blog-media';
+    } else if (selectedCategory === 'assets') {
+      matchesCategory = file.category === 'assets' || file.category === 'general';
+    } else {
+      matchesCategory = file.category.toLowerCase() === selectedCategory;
+    }
+    
     const matchesSearch = file.file_name.toLowerCase().includes(searchTerm.toLowerCase());
     return matchesCategory && matchesSearch;
   });
