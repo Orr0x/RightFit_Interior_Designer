@@ -255,6 +255,121 @@ export const useMediaFiles = () => {
     }
   };
 
+  // Move/copy file to different category
+  const moveFile = async (
+    fileId: string, 
+    newCategory: 'general' | 'gallery' | 'blog' | 'assets',
+    copy: boolean = false
+  ): Promise<MediaFile> => {
+    if (!user?.id || !permissions.canAccessGitUI) {
+      throw new Error('Insufficient permissions to move files');
+    }
+
+    const file = files.find(f => f.id === fileId);
+    if (!file) {
+      throw new Error('File not found');
+    }
+
+    try {
+      // Determine new bucket based on category
+      let newBucket = 'media';
+      if (newCategory === 'gallery') newBucket = 'gallery';
+      if (newCategory === 'blog') newBucket = 'blog-media';
+
+      const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
+      const fileName = file.file_name.replace(/[^a-zA-Z0-9.-]/g, '_');
+      const newPath = `${user.id}/${newCategory}/${timestamp}-${fileName}`;
+
+      if (copy) {
+        // Copy file to new location
+        const { data: copyData, error: copyError } = await supabase.storage
+          .from(file.bucket_id)
+          .copy(file.file_path, `${newBucket}/${newPath}`);
+
+        if (copyError) {
+          throw copyError;
+        }
+
+        // Create new database record
+        const { data: newDbData, error: newDbError } = await supabase
+          .from('media_files')
+          .insert([{
+            file_name: file.file_name,
+            file_path: newPath,
+            file_size: file.file_size,
+            mime_type: file.mime_type,
+            bucket_id: newBucket,
+            category: newCategory,
+            alt_text: file.alt_text,
+            caption: file.caption,
+            uploaded_by: user.id
+          }])
+          .select()
+          .single();
+
+        if (newDbError) {
+          // Clean up copied file if database insert fails
+          await supabase.storage.from(newBucket).remove([newPath]);
+          throw newDbError;
+        }
+
+        const copiedFile = {
+          ...newDbData,
+          url: getPublicUrl(newBucket, newPath),
+          size_formatted: formatFileSize(newDbData.file_size)
+        };
+
+        // Add to files list
+        setFiles(prev => [copiedFile, ...prev]);
+        return copiedFile;
+
+      } else {
+        // Move file to new location
+        const { data: moveData, error: moveError } = await supabase.storage
+          .from(file.bucket_id)
+          .move(file.file_path, `${newBucket}/${newPath}`);
+
+        if (moveError) {
+          throw moveError;
+        }
+
+        // Update database record
+        const { data: updatedDbData, error: updateDbError } = await supabase
+          .from('media_files')
+          .update({
+            file_path: newPath,
+            bucket_id: newBucket,
+            category: newCategory
+          })
+          .eq('id', fileId)
+          .select()
+          .single();
+
+        if (updateDbError) {
+          // Try to move file back if database update fails
+          await supabase.storage.from(newBucket).move(newPath, `${file.bucket_id}/${file.file_path}`);
+          throw updateDbError;
+        }
+
+        const movedFile = {
+          ...updatedDbData,
+          url: getPublicUrl(newBucket, newPath),
+          size_formatted: formatFileSize(updatedDbData.file_size)
+        };
+
+        // Update files list
+        setFiles(prev => 
+          prev.map(f => f.id === fileId ? movedFile : f)
+        );
+
+        return movedFile;
+      }
+    } catch (err) {
+      console.error('Error moving/copying file:', err);
+      throw err;
+    }
+  };
+
   // Update file metadata
   const updateFile = async (
     fileId: string, 
@@ -349,6 +464,7 @@ export const useMediaFiles = () => {
     uploadProgress,
     uploadFiles,
     deleteFile,
+    moveFile,
     updateFile,
     getStorageStats,
     refetch: fetchFiles,

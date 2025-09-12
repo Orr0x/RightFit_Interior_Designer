@@ -10,6 +10,16 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Progress } from '@/components/ui/progress';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { 
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog';
 import { 
   Upload, 
   Image, 
@@ -24,7 +34,9 @@ import {
   FolderOpen,
   Plus,
   Search,
-  Loader2
+  Loader2,
+  Move,
+  FolderTree
 } from 'lucide-react';
 
 const MediaManager: React.FC = () => {
@@ -41,13 +53,19 @@ const MediaManager: React.FC = () => {
     uploadProgress,
     uploadFiles, 
     deleteFile,
+    moveFile,
     updateFile,
-    getStorageStats 
+    getStorageStats,
+    formatFileSize
   } = useMediaFiles();
 
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [searchTerm, setSearchTerm] = useState('');
   const [storageStats, setStorageStats] = useState<any>(null);
+  const [moveDialogOpen, setMoveDialogOpen] = useState(false);
+  const [selectedFileForMove, setSelectedFileForMove] = useState<MediaFile | null>(null);
+  const [targetCategory, setTargetCategory] = useState<'general' | 'gallery' | 'blog' | 'assets'>('general');
+  const [moveOperation, setMoveOperation] = useState<'move' | 'copy'>('move');
 
   const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files;
@@ -107,6 +125,40 @@ const MediaManager: React.FC = () => {
     }
   };
 
+  const handleMoveFile = (file: MediaFile, operation: 'move' | 'copy') => {
+    setSelectedFileForMove(file);
+    setMoveOperation(operation);
+    setTargetCategory(file.category === 'general' ? 'gallery' : 'general'); // Default to different category
+    setMoveDialogOpen(true);
+  };
+
+  const executeMoveFile = async () => {
+    if (!selectedFileForMove) return;
+
+    try {
+      await moveFile(selectedFileForMove.id, targetCategory, moveOperation === 'copy');
+      
+      toast({
+        title: "Success",
+        description: `File ${moveOperation === 'copy' ? 'copied' : 'moved'} to ${targetCategory} successfully`
+      });
+
+      // Refresh storage stats
+      const stats = await getStorageStats();
+      setStorageStats(stats);
+
+      // Close dialog
+      setMoveDialogOpen(false);
+      setSelectedFileForMove(null);
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: error instanceof Error ? error.message : `Failed to ${moveOperation} file`,
+        variant: "destructive"
+      });
+    }
+  };
+
   const getFileIcon = (mimeType: string) => {
     if (mimeType.startsWith('image/')) return <Image className="h-5 w-5 text-blue-500" />;
     if (mimeType.startsWith('video/')) return <Video className="h-5 w-5 text-purple-500" />;
@@ -122,8 +174,20 @@ const MediaManager: React.FC = () => {
   // Load storage stats on component mount
   React.useEffect(() => {
     const loadStats = async () => {
-      const stats = await getStorageStats();
-      setStorageStats(stats);
+      try {
+        const stats = await getStorageStats();
+        setStorageStats(stats);
+      } catch (error) {
+        console.error('Error loading storage stats:', error);
+        // Set default stats to prevent crashes
+        setStorageStats({
+          totalSize: 0,
+          totalSizeFormatted: '0 Bytes',
+          byBucket: {},
+          byCategory: {},
+          fileCount: 0
+        });
+      }
     };
     loadStats();
   }, [mediaFiles]);
@@ -316,11 +380,11 @@ const MediaManager: React.FC = () => {
                             </span>
                           </div>
 
-                          <div className="flex space-x-1">
+                          <div className="flex flex-wrap gap-1">
                             <Button 
                               size="sm" 
                               variant="outline" 
-                              className="flex-1"
+                              className="flex-1 min-w-0"
                               onClick={() => window.open(file.url, '_blank')}
                             >
                               <Eye className="h-3 w-3 mr-1" />
@@ -347,6 +411,27 @@ const MediaManager: React.FC = () => {
                               }}
                             >
                               <Download className="h-3 w-3" />
+                            </Button>
+                          </div>
+                          
+                          <div className="flex space-x-1 mt-2">
+                            <Button 
+                              size="sm" 
+                              variant="outline" 
+                              className="flex-1"
+                              onClick={() => handleMoveFile(file, 'move')}
+                            >
+                              <Move className="h-3 w-3 mr-1" />
+                              Move
+                            </Button>
+                            <Button 
+                              size="sm" 
+                              variant="outline" 
+                              className="flex-1"
+                              onClick={() => handleMoveFile(file, 'copy')}
+                            >
+                              <FolderTree className="h-3 w-3 mr-1" />
+                              Copy
                             </Button>
                             <Button 
                               size="sm" 
@@ -396,15 +481,17 @@ const MediaManager: React.FC = () => {
                 </div>
                 
                 {/* Storage by bucket */}
-                <div className="space-y-2">
-                  <p className="text-sm font-medium">By Category:</p>
-                  {Object.entries(storageStats.byCategory).map(([category, size]) => (
-                    <div key={category} className="flex justify-between text-xs">
-                      <span className="capitalize">{category}:</span>
-                      <span>{formatFileSize(size as number)}</span>
-                    </div>
-                  ))}
-                </div>
+                {storageStats.byCategory && Object.keys(storageStats.byCategory).length > 0 && (
+                  <div className="space-y-2">
+                    <p className="text-sm font-medium">By Category:</p>
+                    {Object.entries(storageStats.byCategory).map(([category, size]) => (
+                      <div key={category} className="flex justify-between text-xs">
+                        <span className="capitalize">{category}:</span>
+                        <span>{formatFileSize(size as number)}</span>
+                      </div>
+                    ))}
+                  </div>
+                )}
 
                 {/* Simple progress bar - you can enhance this with actual limits */}
                 <div className="space-y-1">
@@ -422,6 +509,91 @@ const MediaManager: React.FC = () => {
             )}
           </CardContent>
         </Card>
+
+        {/* Move/Copy Dialog */}
+        <Dialog open={moveDialogOpen} onOpenChange={setMoveDialogOpen}>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>
+                {moveOperation === 'move' ? 'Move' : 'Copy'} File
+              </DialogTitle>
+              <DialogDescription>
+                {moveOperation === 'move' 
+                  ? 'Move this file to a different category. This will change its storage location.' 
+                  : 'Copy this file to a different category. The original file will remain in its current location.'
+                }
+              </DialogDescription>
+            </DialogHeader>
+            
+            {selectedFileForMove && (
+              <div className="space-y-4">
+                {/* File Preview */}
+                <div className="flex items-center space-x-3 p-3 bg-gray-50 rounded-lg">
+                  {selectedFileForMove.mime_type.startsWith('image/') ? (
+                    <img 
+                      src={selectedFileForMove.url} 
+                      alt={selectedFileForMove.file_name}
+                      className="w-12 h-12 object-cover rounded"
+                    />
+                  ) : (
+                    <div className="w-12 h-12 bg-gray-200 rounded flex items-center justify-center">
+                      {getFileIcon(selectedFileForMove.mime_type)}
+                    </div>
+                  )}
+                  <div className="flex-1 min-w-0">
+                    <p className="font-medium text-sm truncate">{selectedFileForMove.file_name}</p>
+                    <p className="text-xs text-gray-500">
+                      Current: {selectedFileForMove.category} • {selectedFileForMove.size_formatted}
+                    </p>
+                  </div>
+                </div>
+
+                {/* Category Selection */}
+                <div className="space-y-2">
+                  <Label htmlFor="target-category">
+                    {moveOperation === 'move' ? 'Move to' : 'Copy to'} Category:
+                  </Label>
+                  <Select value={targetCategory} onValueChange={(value: any) => setTargetCategory(value)}>
+                    <SelectTrigger>
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="general">General</SelectItem>
+                      <SelectItem value="gallery">Gallery</SelectItem>
+                      <SelectItem value="blog">Blog Media</SelectItem>
+                      <SelectItem value="assets">App Assets</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  <p className="text-xs text-gray-500">
+                    {targetCategory === 'gallery' && 'Files will be stored in the gallery bucket for project showcases'}
+                    {targetCategory === 'blog' && 'Files will be stored in the blog-media bucket for blog posts'}
+                    {targetCategory === 'assets' && 'Files will be stored in the media bucket as app assets'}
+                    {targetCategory === 'general' && 'Files will be stored in the general media bucket'}
+                  </p>
+                </div>
+              </div>
+            )}
+
+            <DialogFooter>
+              <Button variant="outline" onClick={() => setMoveDialogOpen(false)}>
+                Cancel
+              </Button>
+              <Button onClick={executeMoveFile}>
+                {moveOperation === 'move' ? (
+                  <>
+                    <Move className="h-4 w-4 mr-2" />
+                    Move File
+                  </>
+                ) : (
+                  <>
+                    <FolderTree className="h-4 w-4 mr-2" />
+                    Copy File
+                  </>
+                )}
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
       </div>
     </div>
   );
