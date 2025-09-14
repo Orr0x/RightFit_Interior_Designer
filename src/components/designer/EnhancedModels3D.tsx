@@ -37,6 +37,29 @@ const convertTo3D = (x: number, y: number, roomWidth: number, roomHeight: number
   };
 };
 
+// Utility function to safely convert dimensions and prevent NaN errors
+const safeConvertDimensions = (element: any) => {
+  const width = (element.width && !isNaN(element.width)) ? element.width / 100 : 0.6;  // Default 60cm
+  const depth = (element.depth && !isNaN(element.depth)) ? element.depth / 100 : 0.6;  // Default 60cm  
+  const height = (element.height && !isNaN(element.height)) ? element.height / 100 : 0.9; // Default 90cm
+  
+  // Validate final dimensions
+  if (isNaN(width) || isNaN(depth) || isNaN(height) || width <= 0 || depth <= 0 || height <= 0) {
+    console.warn('3D Model has invalid dimensions:', { 
+      elementId: element.id, 
+      elementWidth: element.width, 
+      elementDepth: element.depth, 
+      elementHeight: element.height,
+      calculatedWidth: width,
+      calculatedDepth: depth,
+      calculatedHeight: height
+    });
+    return null; // Return null to indicate invalid dimensions
+  }
+  
+  return { width, depth, height };
+};
+
 /**
  * EnhancedCabinet3D - Detailed 3D cabinet model
  * 
@@ -53,9 +76,12 @@ export const EnhancedCabinet3D: React.FC<Enhanced3DModelProps> = ({
   onClick 
 }) => {
   const { x, z } = convertTo3D(element.x, element.y, roomDimensions.width, roomDimensions.height);
-  const width = element.width / 100;  // Convert cm to meters (X-axis)
-  const depth = element.depth / 100;  // Convert cm to meters (Y-axis)
-  const height = element.height / 100; // Convert cm to meters (Z-axis)
+  
+  // Safely convert dimensions - prevent NaN errors
+  const dimensions = safeConvertDimensions(element);
+  if (!dimensions) return null; // Don't render if dimensions are invalid
+  
+  const { width, depth, height } = dimensions;
   
   // Determine cabinet type
   const isWallCabinet = element.style?.toLowerCase().includes('wall') || 
