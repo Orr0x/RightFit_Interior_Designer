@@ -263,7 +263,7 @@ export const EnhancedCabinet3D: React.FC<Enhanced3DModelProps> = ({
       </group>
     );
   } else if (isPanDrawer) {
-    // Pan drawer unit with multiple drawers
+    // Pan drawer unit with multiple drawers - FIXED HEIGHT AND TOE KICK
     const cabinetYPosition = plinthHeight / 2; // Define cabinetYPosition for pan drawers
     
     return (
@@ -272,13 +272,13 @@ export const EnhancedCabinet3D: React.FC<Enhanced3DModelProps> = ({
         onClick={onClick}
         rotation={[0, element.rotation * Math.PI / 180, 0]}
       >
-        {/* Plinth */}
-        <mesh position={[0, -height/2 + plinthHeight/2, -0.1]}>
-          <boxGeometry args={[width, plinthHeight, depth - 0.2]} />
+        {/* Recessed plinth - same as base units */}
+        <mesh position={[0, -height/2 + plinthHeight/2, 0]}>
+          <boxGeometry args={[width, plinthHeight, depth]} />
           <meshLambertMaterial color={plinthColor} />
         </mesh>
 
-        {/* Cabinet body */}
+        {/* Cabinet body - same height as base units */}
         <mesh position={[0, plinthHeight/2, 0]}>
           <boxGeometry args={[width, cabinetHeight, depth]} />
           <meshStandardMaterial
@@ -294,6 +294,7 @@ export const EnhancedCabinet3D: React.FC<Enhanced3DModelProps> = ({
           <boxGeometry args={[width - 0.05, doorHeight/3 - 0.02, 0.02]} />
           <meshStandardMaterial color={doorColor} roughness={0.6} metalness={0.1} />
         </mesh>
+        {/* Centered handle for top drawer */}
         <mesh position={[0, cabinetYPosition + doorHeight/3, depth / 2 + 0.03]}>
           <boxGeometry args={[0.15, 0.02, 0.02]} />
           <meshStandardMaterial color={handleColor} metalness={0.8} roughness={0.2} />
@@ -304,6 +305,7 @@ export const EnhancedCabinet3D: React.FC<Enhanced3DModelProps> = ({
           <boxGeometry args={[width - 0.05, doorHeight/3 - 0.02, 0.02]} />
           <meshStandardMaterial color={doorColor} roughness={0.6} metalness={0.1} />
         </mesh>
+        {/* Centered handle for middle drawer */}
         <mesh position={[0, cabinetYPosition, depth / 2 + 0.03]}>
           <boxGeometry args={[0.15, 0.02, 0.02]} />
           <meshStandardMaterial color={handleColor} metalness={0.8} roughness={0.2} />
@@ -314,6 +316,7 @@ export const EnhancedCabinet3D: React.FC<Enhanced3DModelProps> = ({
           <boxGeometry args={[width - 0.05, doorHeight/3 - 0.02, 0.02]} />
           <meshStandardMaterial color={doorColor} roughness={0.6} metalness={0.1} />
         </mesh>
+        {/* Centered handle for bottom drawer */}
         <mesh position={[0, cabinetYPosition - doorHeight/3, depth / 2 + 0.03]}>
           <boxGeometry args={[0.15, 0.02, 0.02]} />
           <meshStandardMaterial color={handleColor} metalness={0.8} roughness={0.2} />
