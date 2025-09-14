@@ -21,6 +21,12 @@ A professional-grade interior design application built with React, TypeScript, a
 ### 🎛️ Professional Interface
 - **Comprehensive Component Library**: 164 database-driven components across 8 room types
 - **100% Database-Driven System**: All components stored in Supabase with versioning and metadata
+- **Manufacturing Integration**: Real-time cost calculation, cutting lists, and supplier data
+- **Global Pricing System**: Multi-currency support across 5 regions (UK, EU, US, CA, AU)
+- **Tiered Business Model**: 4 user tiers from FREE to ENTERPRISE (£0-£199/month)
+- **Multi-Language Support**: 4 languages (EN-GB, EN-US, FR-FR, DE-DE)
+- **White-Label Ready**: Complete customization for enterprise clients
+- **Smart Validation**: Automated design rules and tier-based feature access
 - **Component Manager**: Professional UI for managing component library (DevTools)
 - **Enhanced Drag & Drop**: Precision component placement with visual feedback
 - **Smart Selection**: Click-to-select without accidental movement
@@ -31,6 +37,16 @@ A professional-grade interior design application built with React, TypeScript, a
 - **Performance Monitoring**: Real-time FPS and memory usage tracking
 - **Error Handling**: Graceful error recovery with user feedback
 - **Responsive Design**: Collapsible panels and mobile-friendly interface
+
+### 💰 Business & Manufacturing Features
+- **Real-Time Costing**: Instant material cost calculation with supplier pricing
+- **Cutting Lists**: Automated material requirements with waste factors
+- **Supplier Integration**: Real supplier data, part numbers, and lead times
+- **Volume Discounts**: Tier-based pricing with automatic discount application
+- **Regional Pricing**: Local currency support with market-specific adjustments
+- **Manufacturing Export**: BOM and cutting list export for production
+- **Inventory Tracking**: Component availability and stock management
+- **White-Label Customization**: Complete branding control for enterprise clients
 
 ### 🔐 Security & Performance
 - **Secure Authentication**: Supabase-powered user management
@@ -85,6 +101,12 @@ const SUPABASE_PUBLISHABLE_KEY = "your-anon-key-here";
    - `20250908160000_create_multi_room_schema.sql` - Phase 1: Multi-room schema
    - `20250908160001_migrate_existing_designs.sql` - Data migration
    - `20250908160002_add_new_room_types.sql` - Additional room types
+   - `20250912300000_complete_component_system.sql` - Complete component system
+   - `20250913000000_create_3d_models_system.sql` - 3D models and configuration
+   - `20250913100000_create_3d_config_system.sql` - 3D model configuration
+   - `20250914000000_create_materials_system.sql` - Materials & manufacturing
+   - `20250914010000_create_pricing_tiers_system.sql` - Pricing & user tiers
+   - `20250914020000_create_room_ui_config_system.sql` - Room types & UI config
 
 ## 🎮 Using the Designer
 
