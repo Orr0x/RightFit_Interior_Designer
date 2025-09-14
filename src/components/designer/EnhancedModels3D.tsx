@@ -289,8 +289,8 @@ export const EnhancedCabinet3D: React.FC<Enhanced3DModelProps> = ({
       </group>
     );
   } else if (isPanDrawer) {
-    // Pan drawer unit with multiple drawers
-    const cabinetYPosition = plinthHeight / 2; // Define cabinetYPosition for pan drawers
+    // Pan drawer unit - IDENTICAL to base cabinet except drawer fronts
+    const cabinetYPosition = plinthHeight / 2; // Same as base cabinets
     
     return (
       <group
@@ -298,14 +298,14 @@ export const EnhancedCabinet3D: React.FC<Enhanced3DModelProps> = ({
         onClick={onClick}
         rotation={[0, element.rotation * Math.PI / 180, 0]}
       >
-        {/* Plinth */}
-        <mesh position={[0, -height/2 + plinthHeight/2, -0.1]}>
-          <boxGeometry args={[width, plinthHeight, depth - 0.2]} />
+        {/* IDENTICAL Plinth - same as base cabinets */}
+        <mesh position={[0, -height/2 + plinthHeight/2, 0]}>
+          <boxGeometry args={[width, plinthHeight, depth]} />
           <meshLambertMaterial color={plinthColor} />
         </mesh>
 
-        {/* Cabinet body */}
-        <mesh position={[0, plinthHeight/2, 0]}>
+        {/* IDENTICAL Cabinet body - same as base cabinets */}
+        <mesh position={[0, cabinetYPosition, 0]}>
           <boxGeometry args={[width, cabinetHeight, depth]} />
           <meshStandardMaterial
             color={isSelected ? selectedColor : cabinetMaterial}
@@ -455,8 +455,8 @@ export const EnhancedCabinet3D: React.FC<Enhanced3DModelProps> = ({
       >
         {/* Plinth */}
         {!isWallCabinet && (
-          <mesh position={[0, -height/2 + plinthHeight/2, -0.1]}>
-            <boxGeometry args={[width, plinthHeight, depth - 0.2]} />
+          <mesh position={[0, -height/2 + plinthHeight/2, 0]}>
+            <boxGeometry args={[width, plinthHeight, depth]} />
             <meshLambertMaterial color={plinthColor} />
           </mesh>
         )}
