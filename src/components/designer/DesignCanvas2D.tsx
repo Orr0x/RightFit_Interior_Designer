@@ -1712,9 +1712,10 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
       ctx.fillRect(pos.x, pos.y, legDepth, legLength);
       ctx.strokeRect(pos.x, pos.y, legDepth, legLength);
     } else {
-      // Standard rectangular drag preview
-      const width = draggedElement.width * zoom;
-      const height = (draggedElement.depth || draggedElement.height) * zoom; // Use depth for Y-axis in plan view
+      // Standard rectangular drag preview - ROTATION-AWARE DIMENSIONS
+      const effectiveDims = getEffectiveDimensions(draggedElement);
+      const width = effectiveDims.width * zoom;
+      const height = effectiveDims.depth * zoom; // Use effective depth for Y-axis in plan view
       
       // Preview fill
       ctx.fillStyle = draggedElement.color || '#8b4513';
@@ -2057,8 +2058,9 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
         finalY = snapToGrid(snapped.y);
       }
       
-      // Update element with final position - use effective footprint for plan view
-      const effectiveDims = getEffectiveDimensions(draggedElement);
+      // Update element with final position - use SNAPPED rotation for effective dimensions
+      const elementWithSnapRotation = { ...draggedElement, rotation: snapped.rotation };
+      const effectiveDims = getEffectiveDimensions(elementWithSnapRotation);
       let clampWidth = effectiveDims.width;
       let clampDepth = effectiveDims.depth;
       // Corner counter tops occupy a 90x90 footprint in plan view
