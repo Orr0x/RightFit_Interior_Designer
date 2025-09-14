@@ -12,14 +12,15 @@ A professional-grade interior design application built with React, TypeScript, a
 
 ### 🎨 Advanced Design Tools
 - **Multi-View 2D Planning**: Plan view, Front view, Back view, Left view, Right view
-- **Professional 3D Visualization**: Real-time 3D rendering with Three.js
+- **Professional 3D Visualization**: Real-time 3D rendering with Three.js and enhanced materials
+- **Database-Enhanced 3D Models**: Configurable materials, colors, and properties for all components
 - **Smart Component Placement**: Drag-and-drop with snap-to-grid functionality
 - **Precision Measurement**: Built-in ruler tools with real-time dimensions
 - **Grid System**: Snap-to-grid functionality for accurate alignment
 
 ### 🎛️ Professional Interface
-- **Comprehensive Component Library**: 154+ components across 8 room types
-- **Database-Driven Components**: Scalable component system with versioning
+- **Comprehensive Component Library**: 164 database-driven components across 8 room types
+- **100% Database-Driven System**: All components stored in Supabase with versioning and metadata
 - **Component Manager**: Professional UI for managing component library (DevTools)
 - **Enhanced Drag & Drop**: Precision component placement with visual feedback
 - **Smart Selection**: Click-to-select without accidental movement
@@ -196,7 +197,7 @@ src/
 │       ├── View3D.tsx         # 3D visualization
 │       ├── RoomTabs.tsx       # Room switching interface
 │       ├── ProjectDashboard.tsx # Project management
-│       └── ComponentLibrary.tsx # Component catalog
+│       └── CompactComponentSidebar.tsx # Database-driven component catalog
 ├── contexts/
 │   ├── AuthContext.tsx        # Authentication state
 │   └── ProjectContext.tsx     # Project and room state

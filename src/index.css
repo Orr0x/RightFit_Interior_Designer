@@ -25,6 +25,70 @@ body {
   line-height: 1.6;
 }
 
+/* 🎨 SLEEK SCROLLBAR DESIGN - Discrete & Beautiful */
+/* Webkit browsers (Chrome, Safari, Edge) */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(148, 163, 184, 0.2); /* Very faint slate */
+  border-radius: 3px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(148, 163, 184, 0.4); /* Slightly more visible on hover */
+  width: 8px; /* Slightly wider on hover */
+}
+
+::-webkit-scrollbar-thumb:active {
+  background: rgba(148, 163, 184, 0.6); /* More visible when dragging */
+}
+
+/* Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(148, 163, 184, 0.2) transparent;
+}
+
+/* Enhanced scrollbar for side panels */
+.sidebar-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(148, 163, 184, 0.15) transparent;
+  transition: scrollbar-color 0.3s ease;
+}
+
+.sidebar-scroll:hover {
+  scrollbar-color: rgba(148, 163, 184, 0.35) transparent;
+}
+
+/* Webkit version for side panels */
+.sidebar-scroll::-webkit-scrollbar {
+  width: 4px;
+  transition: width 0.3s ease;
+}
+
+.sidebar-scroll::-webkit-scrollbar-thumb {
+  background: rgba(148, 163, 184, 0.15);
+  border-radius: 2px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.sidebar-scroll:hover::-webkit-scrollbar {
+  width: 6px;
+}
+
+.sidebar-scroll:hover::-webkit-scrollbar-thumb {
+  background: rgba(148, 163, 184, 0.35);
+}
+
 /* Custom utility classes */
 .hero-fixed {
   background-attachment: fixed;

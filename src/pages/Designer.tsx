@@ -508,13 +508,13 @@ const Designer = () => {
 
   return (
     <ErrorBoundary>
-      <div className="min-h-screen bg-gray-50 flex flex-col">
+      <div className="h-screen bg-gray-50 flex flex-col overflow-hidden">
         <PerformanceMonitor 
           elementCount={currentRoomDesign.design_elements?.length || 0}
           onPerformanceIssue={(issue) => toast.warning(issue)}
         />
         
-        <header className="bg-white shadow-sm border-b px-4 py-3">
+        <header className="bg-white shadow-sm border-b px-4 py-3 flex-shrink-0">
           <div className="flex items-center justify-between w-full">
             {/* Left Section - Dashboard Button & Current Room */}
             <div className="flex items-center gap-3">
@@ -633,18 +633,20 @@ const Designer = () => {
         </header>
 
         {/* Room Tabs */}
-        <RoomTabs />
+        <div className="flex-shrink-0">
+          <RoomTabs />
+        </div>
 
         {/* Main Content */}
-        <div className="flex-1 flex">
+        <div className="flex-1 flex min-h-0">
           {/* Left Sidebar */}
-          <div className={`${showLeftPanel ? 'w-80' : 'w-0'} bg-white border-r flex flex-col smooth-transition overflow-hidden relative z-10`}>
+          <div className={`${showLeftPanel ? 'w-80' : 'w-0'} bg-white border-r flex flex-col smooth-transition overflow-hidden relative z-10 min-h-0`}>
             {showLeftPanel && (
               <>
-                <div className="p-4 border-b">
+                <div className="p-4 border-b flex-shrink-0">
                   <h2 className="font-semibold text-gray-900">Designer</h2>
                 </div>
-                <div className="flex-1 overflow-y-auto">
+                <div className="flex-1 overflow-y-auto sidebar-scroll min-h-0">
                   <CompactComponentSidebar
                     onAddElement={handleAddElement}
                     roomType={currentRoomDesign.room_type}
@@ -657,7 +659,7 @@ const Designer = () => {
           {/* Main Design Area */}
           <div className="flex-1 flex flex-col">
             {/* Toolbar */}
-            <div className="bg-white border-b px-4 py-2 flex items-center justify-between">
+            <div className="bg-white border-b px-4 py-2 flex items-center justify-between flex-shrink-0">
               <div className="flex items-center gap-4">
                 <DesignToolbar 
                   activeView={activeView}
@@ -693,7 +695,7 @@ const Designer = () => {
             </div>
 
             {/* Canvas Area */}
-            <div className="flex-1 p-4">
+            <div className="flex-1 p-4 min-h-0">
               <Card className="h-full design-canvas-card transition-all duration-300 ease-in-out shadow-lg hover:shadow-xl">
                 {activeView === '2d' && design ? (
                   <div className="h-full relative">
@@ -763,13 +765,13 @@ const Designer = () => {
           </div>
 
           {/* Right Sidebar - Properties Panel */}
-          <div className={`${showRightPanel ? 'w-80' : 'w-0'} bg-white border-l flex flex-col smooth-transition overflow-hidden relative z-10`}>
+          <div className={`${showRightPanel ? 'w-80' : 'w-0'} bg-white border-l flex flex-col smooth-transition overflow-hidden relative z-10 min-h-0`}>
             {showRightPanel && design && (
               <>
-                <div className="p-4 border-b">
+                <div className="p-4 border-b flex-shrink-0">
                   <h2 className="font-semibold text-gray-900">Properties</h2>
                 </div>
-                <div className="flex-1 overflow-y-auto">
+                <div className="flex-1 overflow-y-auto sidebar-scroll min-h-0">
                   <PropertiesPanel
                     selectedElement={selectedElement}
                     onUpdateElement={handleUpdateElement}

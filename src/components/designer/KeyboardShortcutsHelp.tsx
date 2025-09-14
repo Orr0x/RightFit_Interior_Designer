@@ -39,7 +39,7 @@ export const KeyboardShortcutsHelp: React.FC = () => {
           
           <Separator />
           
-          <div className="space-y-3 max-h-80 overflow-y-auto">
+          <div className="space-y-3 max-h-80 overflow-y-auto sidebar-scroll">
             {shortcuts.map((shortcut, index) => (
               <div key={index} className="flex items-center justify-between py-2 hover:bg-muted/50 rounded-md px-2 smooth-transition">
                 <span className="text-sm text-foreground font-medium">

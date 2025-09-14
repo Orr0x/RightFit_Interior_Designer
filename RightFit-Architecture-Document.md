@@ -132,7 +132,7 @@ The `View3D.tsx` component provides:
 
 ### 4.3 Component Library
 
-The `EnhancedSidebar.tsx` component offers:
+The `CompactComponentSidebar.tsx` component offers:
 
 - Categorized component library
 - Room type selection

@@ -51,8 +51,8 @@ RightFit Interior Designer is a React-based web application that provides profes
 
 ## Component Library Architecture
 
-### EnhancedSidebar Component
-The main component library is implemented in `src/components/designer/EnhancedSidebar.tsx` and provides:
+### CompactComponentSidebar Component
+The main component library is implemented in `src/components/designer/CompactComponentSidebar.tsx` and provides:
 
 #### Component Definition Interface
 ```typescript

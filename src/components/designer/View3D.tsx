@@ -4,6 +4,7 @@ import { OrbitControls, Environment, Grid, Text } from '@react-three/drei';
 import { DesignElement, Design } from '@/types/project';
 
 import * as THREE from 'three';
+import { SafeEnhancedRenderer } from './SafeEnhancedRenderer';
 import { 
   EnhancedCabinet3D, 
   EnhancedAppliance3D, 
@@ -178,139 +179,15 @@ export const View3D: React.FC<View3DProps> = ({
           {design.elements && design.elements.map((element) => {
             const isSelected = selectedElement?.id === element.id;
             
-            if (element.type === 'cabinet') {
-              return (
-                <EnhancedCabinet3D
-                  key={element.id}
-                  element={element}
-                  roomDimensions={roomDimensions}
-                  isSelected={isSelected}
-                  onClick={() => handleElementClick(element)}
-                />
-              );
-            }
-            
-            if (element.type === 'appliance') {
-              return (
-                <EnhancedAppliance3D
-                  key={element.id}
-                  element={element}
-                  roomDimensions={roomDimensions}
-                  isSelected={isSelected}
-                  onClick={() => handleElementClick(element)}
-                />
-              );
-            }
-            
-              if (element.type === 'counter-top') {
-                return (
-                  <EnhancedCounterTop3D
-                    key={element.id}
-                    element={element}
-                    roomDimensions={roomDimensions}
-                    isSelected={isSelected}
-                    onClick={() => handleElementClick(element)}
-                  />
-                );
-              }
-             
-              if (element.type === 'end-panel') {
-                return (
-                  <EnhancedEndPanel3D
-                    key={element.id}
-                    element={element}
-                    roomDimensions={roomDimensions}
-                    isSelected={isSelected}
-                    onClick={() => handleElementClick(element)}
-                  />
-                );
-              }
-              
-              if (element.type === 'window') {
-                return (
-                  <EnhancedWindow3D
-                    key={element.id}
-                    element={element}
-                    roomDimensions={roomDimensions}
-                    isSelected={isSelected}
-                    onClick={() => handleElementClick(element)}
-                  />
-                );
-              }
-              
-              if (element.type === 'door') {
-                return (
-                  <EnhancedDoor3D
-                    key={element.id}
-                    element={element}
-                    roomDimensions={roomDimensions}
-                    isSelected={isSelected}
-                    onClick={() => handleElementClick(element)}
-                  />
-                );
-              }
-              
-              if (element.type === 'flooring') {
-                return (
-                  <EnhancedFlooring3D
-                    key={element.id}
-                    element={element}
-                    roomDimensions={roomDimensions}
-                    isSelected={isSelected}
-                    onClick={() => handleElementClick(element)}
-                  />
-                );
-              }
-              
-              if (element.type === 'toe-kick') {
-                return (
-                  <EnhancedToeKick3D
-                    key={element.id}
-                    element={element}
-                    roomDimensions={roomDimensions}
-                    isSelected={isSelected}
-                    onClick={() => handleElementClick(element)}
-                  />
-                );
-              }
-              
-              if (element.type === 'cornice') {
-                return (
-                  <EnhancedCornice3D
-                    key={element.id}
-                    element={element}
-                    roomDimensions={roomDimensions}
-                    isSelected={isSelected}
-                    onClick={() => handleElementClick(element)}
-                  />
-                );
-              }
-              
-              if (element.type === 'pelmet') {
-                return (
-                  <EnhancedPelmet3D
-                    key={element.id}
-                    element={element}
-                    roomDimensions={roomDimensions}
-                    isSelected={isSelected}
-                    onClick={() => handleElementClick(element)}
-                  />
-                );
-              }
-              
-              if (element.type === 'wall-unit-end-panel') {
-                return (
-                  <EnhancedWallUnitEndPanel3D
-                    key={element.id}
-                    element={element}
-                    roomDimensions={roomDimensions}
-                    isSelected={isSelected}
-                    onClick={() => handleElementClick(element)}
-                  />
-                );
-              }
-              
-              return null;
+            return (
+              <SafeEnhancedRenderer
+                key={element.id}
+                element={element}
+                roomDimensions={roomDimensions}
+                isSelected={isSelected}
+                onClick={() => handleElementClick(element)}
+              />
+            );
           })}
           
           {/* Camera Controls */}

@@ -158,7 +158,7 @@ export const ComponentSelector: React.FC<ComponentSelectorProps> = ({
       </CardHeader>
 
       <Collapsible open={isOpen} onOpenChange={setIsOpen}>
-        <CollapsibleContent className="flex-1 overflow-auto">
+        <CollapsibleContent className="flex-1 overflow-auto sidebar-scroll">
           <CardContent className="pt-0 space-y-2">
             {Object.entries(groupedElements).map(([category, categoryElements]) => (
               <div key={category} className="border rounded-lg overflow-hidden">
@@ -180,7 +180,7 @@ export const ComponentSelector: React.FC<ComponentSelectorProps> = ({
                 </Button>
                 
                 {expandedCategories.has(category) && (
-                  <div className="bg-muted/20 max-h-40 overflow-auto">
+                  <div className="bg-muted/20 max-h-40 overflow-auto sidebar-scroll">
                     {categoryElements.map((element) => {
                       const isSelected = selectedElement?.id === element.id;
                       const isHidden = (element as any).hidden;

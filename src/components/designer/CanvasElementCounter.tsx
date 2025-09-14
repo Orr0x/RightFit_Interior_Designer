@@ -135,7 +135,7 @@ export const CanvasElementCounter: React.FC<CanvasElementCounterProps> = ({
       {isHovered && (
         <Card className="absolute top-full right-0 mt-2 w-80 max-h-[630px] overflow-hidden shadow-lg">
           <CardContent className="p-0">
-            <div className="max-h-[630px] overflow-y-auto">
+            <div className="max-h-[630px] overflow-y-auto sidebar-scroll">
               {Object.entries(groupedElements).map(([category, categoryElements]) => (
                 <div key={category} className="border-b border-border/50 last:border-b-0">
                   {/* Category Header */}

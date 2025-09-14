@@ -8,7 +8,7 @@ import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/component
 import { DesignElement, RoomType } from '@/types/project';
 import { useComponents } from '@/hooks/useComponents';
 import { LoadingSpinner } from '@/components/designer/LoadingSpinner';
-import { ComponentDefinition } from '@/data/components';
+// ComponentDefinition now comes from database via useComponents hook
 import { 
   Search, 
   ChevronDown, 
@@ -338,7 +338,7 @@ const CompactComponentSidebar: React.FC<CompactComponentSidebarProps> = ({
       </div>
 
       {/* Component Content */}
-      <div className="flex-1 overflow-y-auto space-y-4">
+      <div className="space-y-4 p-4">
         {/* Recently Used Section */}
         {recentComponents.length > 0 && (
           <div className="space-y-2">
