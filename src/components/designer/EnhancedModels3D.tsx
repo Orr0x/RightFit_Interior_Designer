@@ -692,9 +692,12 @@ export const EnhancedAppliance3D: React.FC<Enhanced3DModelProps> = ({
   onClick 
 }) => {
   const { x, z } = convertTo3D(element.x, element.y, roomDimensions.width, roomDimensions.height);
-  const width = element.width / 100;  // Convert cm to meters (X-axis)
-  const depth = element.depth / 100;  // Convert cm to meters (Y-axis)
-  const height = element.height / 100; // Convert cm to meters (Z-axis)
+  
+  // Safely convert dimensions - prevent NaN errors
+  const dimensions = safeConvertDimensions(element);
+  if (!dimensions) return null; // Don't render if dimensions are invalid
+  
+  const { width, depth, height } = dimensions;
   
   const selectedColor = '#ff6b6b';
   
@@ -1636,10 +1639,11 @@ export const EnhancedCounterTop3D: React.FC<Enhanced3DModelProps> = ({
 }) => {
   const { x, z } = convertTo3D(element.x, element.y, roomDimensions.width, roomDimensions.height);
   
-  // Convert dimensions from cm to meters
-  const width = element.width / 100;
-  const depth = element.depth / 100;
-  const height = element.height / 100;
+  // Safely convert dimensions - prevent NaN errors
+  const dimensions = safeConvertDimensions(element);
+  if (!dimensions) return null; // Don't render if dimensions are invalid
+  
+  const { width, depth, height } = dimensions;
   
   // Counter tops are positioned at 90cm (0.9m) off the ground, or use element.z if set
   const baseHeight = element.z ? element.z / 100 : 0.9; // Convert cm to meters
@@ -1763,10 +1767,11 @@ export const EnhancedCounterTop3D: React.FC<Enhanced3DModelProps> = ({
  }) => {
    const { x, z } = convertTo3D(element.x, element.y, roomDimensions.width, roomDimensions.height);
    
-   // Convert dimensions from cm to meters
-   const width = element.width / 100;
-   const depth = element.depth / 100;
-   const height = element.height / 100;
+   // Safely convert dimensions - prevent NaN errors
+   const dimensions = safeConvertDimensions(element);
+   if (!dimensions) return null; // Don't render if dimensions are invalid
+   
+   const { width, depth, height } = dimensions;
    
    // End panels are positioned at floor level
    const y = height / 2;
@@ -1835,10 +1840,11 @@ export const EnhancedWindow3D: React.FC<Enhanced3DModelProps> = ({
 }) => {
   const { x, z } = convertTo3D(element.x, element.y, roomDimensions.width, roomDimensions.height);
   
-  // Convert dimensions from cm to meters
-  const width = element.width / 100;
-  const depth = element.depth / 100;
-  const height = element.height / 100;
+  // Safely convert dimensions - prevent NaN errors
+  const dimensions = safeConvertDimensions(element);
+  if (!dimensions) return null; // Don't render if dimensions are invalid
+  
+  const { width, depth, height } = dimensions;
   
   // Windows are positioned at 90cm (0.9m) off the ground
   const baseHeight = 0.9;
@@ -1910,10 +1916,11 @@ export const EnhancedDoor3D: React.FC<Enhanced3DModelProps> = ({
 }) => {
   const { x, z } = convertTo3D(element.x, element.y, roomDimensions.width, roomDimensions.height);
   
-  // Convert dimensions from cm to meters
-  const width = element.width / 100;
-  const depth = element.depth / 100;
-  const height = element.height / 100;
+  // Safely convert dimensions - prevent NaN errors
+  const dimensions = safeConvertDimensions(element);
+  if (!dimensions) return null; // Don't render if dimensions are invalid
+  
+  const { width, depth, height } = dimensions;
   
   // Doors are positioned at floor level
   const y = height / 2;
@@ -1988,10 +1995,11 @@ export const EnhancedFlooring3D: React.FC<Enhanced3DModelProps> = ({
 }) => {
   const { x, z } = convertTo3D(element.x, element.y, roomDimensions.width, roomDimensions.height);
   
-  // Convert dimensions from cm to meters
-  const width = element.width / 100;
-  const depth = element.depth / 100;
-  const height = element.height / 100;
+  // Safely convert dimensions - prevent NaN errors
+  const dimensions = safeConvertDimensions(element);
+  if (!dimensions) return null; // Don't render if dimensions are invalid
+  
+  const { width, depth, height } = dimensions;
   
   // Flooring is positioned at floor level
   const y = height / 2;
@@ -2050,10 +2058,11 @@ export const EnhancedToeKick3D: React.FC<Enhanced3DModelProps> = ({
 }) => {
   const { x, z } = convertTo3D(element.x, element.y, roomDimensions.width, roomDimensions.height);
   
-  // Convert dimensions from cm to meters
-  const width = element.width / 100;
-  const depth = element.depth / 100;
-  const height = element.height / 100;
+  // Safely convert dimensions - prevent NaN errors
+  const dimensions = safeConvertDimensions(element);
+  if (!dimensions) return null; // Don't render if dimensions are invalid
+  
+  const { width, depth, height } = dimensions;
   
   // Toe kicks are positioned at floor level
   const y = height / 2;
@@ -2112,10 +2121,11 @@ export const EnhancedCornice3D: React.FC<Enhanced3DModelProps> = ({
 }) => {
   const { x, z } = convertTo3D(element.x, element.y, roomDimensions.width, roomDimensions.height);
   
-  // Convert dimensions from cm to meters
-  const width = element.width / 100;
-  const depth = element.depth / 100;
-  const height = element.height / 100;
+  // Safely convert dimensions - prevent NaN errors
+  const dimensions = safeConvertDimensions(element);
+  if (!dimensions) return null; // Don't render if dimensions are invalid
+  
+  const { width, depth, height } = dimensions;
   
   // Cornices are positioned at top of wall units (200cm height)
   const baseHeight = 2.0; // 200cm
@@ -2175,10 +2185,11 @@ export const EnhancedPelmet3D: React.FC<Enhanced3DModelProps> = ({
 }) => {
   const { x, z } = convertTo3D(element.x, element.y, roomDimensions.width, roomDimensions.height);
   
-  // Convert dimensions from cm to meters
-  const width = element.width / 100;
-  const depth = element.depth / 100;
-  const height = element.height / 100;
+  // Safely convert dimensions - prevent NaN errors
+  const dimensions = safeConvertDimensions(element);
+  if (!dimensions) return null; // Don't render if dimensions are invalid
+  
+  const { width, depth, height } = dimensions;
   
   // Pelmets are positioned at bottom of wall units (140cm height)
   const baseHeight = 1.4; // 140cm
@@ -2230,7 +2241,7 @@ export const EnhancedPelmet3D: React.FC<Enhanced3DModelProps> = ({
  * - Proper scale and proportions
  * - Positioned at 200cm height from floor
  */
-export const EnhancedWallUnitEndPanel3D: React.FC<Enhanced3DModelProps> = ({ 
+export const EnhancedWallUnitEndPanel3D: React.FC<Enhanced3DModelProps> = ({
   element, 
   roomDimensions, 
   isSelected, 
@@ -2238,10 +2249,11 @@ export const EnhancedWallUnitEndPanel3D: React.FC<Enhanced3DModelProps> = ({
 }) => {
   const { x, z } = convertTo3D(element.x, element.y, roomDimensions.width, roomDimensions.height);
   
-  // Convert dimensions from cm to meters
-  const width = element.width / 100;
-  const depth = element.depth / 100;
-  const height = element.height / 100;
+  // Safely convert dimensions - prevent NaN errors
+  const dimensions = safeConvertDimensions(element);
+  if (!dimensions) return null; // Don't render if dimensions are invalid
+  
+  const { width, depth, height } = dimensions;
   
   // Wall unit end panels are positioned at 200cm height from floor
   const baseHeight = 2.0; // 200cm
