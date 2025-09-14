@@ -53,7 +53,7 @@ const CompactComponentSidebar: React.FC<CompactComponentSidebarProps> = ({
   const [searchTerm, setSearchTerm] = useState('');
   const [sizeFilter, setSizeFilter] = useState<SizeFilter>('all');
   const [viewMode, setViewMode] = useState<ViewMode>('grid');
-  const [expandedCategories, setExpandedCategories] = useState<Set<string>>(new Set(['base-cabinets']));
+  const [expandedCategories, setExpandedCategories] = useState<Set<string>>(new Set(['Base Units']));
   const [recentlyUsed, setRecentlyUsed] = useState<string[]>([]);
 
   // 🚀 DATABASE-DRIVEN COMPONENTS! Load all 154 components from Supabase
@@ -115,7 +115,7 @@ const CompactComponentSidebar: React.FC<CompactComponentSidebarProps> = ({
     return filtered;
   }, [availableComponents, searchTerm, sizeFilter]);
 
-  // Group components by category
+  // Group components by category with custom ordering
   const componentsByCategory = useMemo(() => {
     const groups: Record<string, ComponentDefinition[]> = {};
     filteredComponents.forEach(component => {
@@ -124,7 +124,36 @@ const CompactComponentSidebar: React.FC<CompactComponentSidebarProps> = ({
       }
       groups[component.category].push(component);
     });
-    return groups;
+    
+    // Custom category order: Base Units, Drawer Units, Appliances, Tall Units, Wall Units, Worktops, Finishing, Flooring
+    const categoryOrder = [
+      'Base Units',
+      'Drawer Units', 
+      'Appliances',
+      'Tall Units',
+      'Wall Units',
+      'Worktops',
+      'Finishing',
+      'Flooring',
+      'Doors & Windows'
+    ];
+    
+    // Sort categories according to preferred order
+    const sortedGroups: Record<string, ComponentDefinition[]> = {};
+    categoryOrder.forEach(category => {
+      if (groups[category]) {
+        sortedGroups[category] = groups[category];
+      }
+    });
+    
+    // Add any remaining categories not in the order list
+    Object.keys(groups).forEach(category => {
+      if (!categoryOrder.includes(category)) {
+        sortedGroups[category] = groups[category];
+      }
+    });
+    
+    return sortedGroups;
   }, [filteredComponents]);
 
   // Get recently used components
@@ -134,21 +163,10 @@ const CompactComponentSidebar: React.FC<CompactComponentSidebarProps> = ({
       .filter(Boolean) as ComponentDefinition[];
   }, [recentlyUsed, availableComponents]);
 
-  // Category labels
+  // Category labels - now using clean database category names
   const getCategoryLabel = (category: string): string => {
-    const labels: Record<string, string> = {
-      'base-cabinets': 'Base Cabinets',
-      'wall-cabinets': 'Wall Cabinets',
-      'wall-units': 'Wall Units',
-      'appliances': 'Appliances',
-      'counter-tops': 'Counter Tops',
-      'end-panels': 'End Panels',
-      'tall-units': 'Tall Units',
-      'kitchen-larder': 'Larder Units',
-      'sinks': 'Sinks & Taps',
-      'accessories': 'Accessories'
-    };
-    return labels[category] || category.replace('-', ' ').replace(/\b\w/g, l => l.toUpperCase());
+    // The database now has clean category names, so just return them as-is
+    return category;
   };
 
   // Handle drag start - only serialize essential data (no React components)

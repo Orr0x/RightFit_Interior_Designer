@@ -55,9 +55,22 @@ export const Enhanced3D_v2: React.FC<Enhanced3DModelProps> = ({
   
   // EXACT COPY of original coordinate conversion
   const { x, z } = convertTo3D(element.x, element.y, roomDimensions.width, roomDimensions.height);
-  const width = element.width / 100;  // Convert cm to meters (X-axis)
-  const depth = element.depth / 100;  // Convert cm to meters (Y-axis)  
-  const height = element.height / 100; // Convert cm to meters (Z-axis)
+  
+  // Validate and convert dimensions - prevent NaN errors
+  const width = (element.width && !isNaN(element.width)) ? element.width / 100 : 0.6;  // Default 60cm
+  const depth = (element.depth && !isNaN(element.depth)) ? element.depth / 100 : 0.6;  // Default 60cm  
+  const height = (element.height && !isNaN(element.height)) ? element.height / 100 : 0.9; // Default 90cm
+  
+  // Early validation - don't render if dimensions are still invalid
+  if (isNaN(width) || isNaN(depth) || isNaN(height) || width <= 0 || depth <= 0 || height <= 0) {
+    console.warn('Enhanced3D_v2 has invalid dimensions:', { 
+      elementId: element.id, 
+      elementWidth: element.width, 
+      elementDepth: element.depth, 
+      elementHeight: element.height
+    });
+    return null; // Don't render invalid geometry
+  }
   
   // Enhanced material colors (database-configurable, with original fallbacks)
   const primaryColor = config?.primary_color || element.color || '#8B4513';

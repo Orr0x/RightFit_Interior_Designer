@@ -126,7 +126,17 @@ export const SafeEnhancedRenderer: React.FC<SafeEnhancedRendererProps> = ({
       }
     }
     
-    // Test enhanced version for standard cabinets only
+    // DRAWER UNITS: Always use original renderer (has fresh drawer code)
+    const isDrawerUnit = element.component_id?.includes('pan-drawers') || 
+                        element.id.includes('pan-drawers') ||
+                        element.style?.toLowerCase().includes('drawer');
+    
+    if (isDrawerUnit) {
+      console.log('🎯 Drawer unit detected - using ORIGINAL with fresh drawer code:', element.id);
+      return <EnhancedCabinet3D {...commonProps} />;
+    }
+    
+    // Test enhanced version for standard cabinets only (NOT drawers)
     if (testEnhancedCabinets) {
       try {
         console.log('🧪 Testing enhanced cabinet for:', element.id);

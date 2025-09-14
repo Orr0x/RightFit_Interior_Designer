@@ -37,6 +37,29 @@ const convertTo3D = (x: number, y: number, roomWidth: number, roomHeight: number
   };
 };
 
+// Utility function to safely convert dimensions and prevent NaN errors
+const safeConvertDimensions = (element: any) => {
+  const width = (element.width && !isNaN(element.width)) ? element.width / 100 : 0.6;  // Default 60cm
+  const depth = (element.depth && !isNaN(element.depth)) ? element.depth / 100 : 0.6;  // Default 60cm  
+  const height = (element.height && !isNaN(element.height)) ? element.height / 100 : 0.9; // Default 90cm
+  
+  // Validate final dimensions
+  if (isNaN(width) || isNaN(depth) || isNaN(height) || width <= 0 || depth <= 0 || height <= 0) {
+    console.warn('3D Model has invalid dimensions:', { 
+      elementId: element.id, 
+      elementWidth: element.width, 
+      elementDepth: element.depth, 
+      elementHeight: element.height,
+      calculatedWidth: width,
+      calculatedDepth: depth,
+      calculatedHeight: height
+    });
+    return null; // Return null to indicate invalid dimensions
+  }
+  
+  return { width, depth, height };
+};
+
 /**
  * EnhancedCabinet3D - Detailed 3D cabinet model
  * 
@@ -53,9 +76,12 @@ export const EnhancedCabinet3D: React.FC<Enhanced3DModelProps> = ({
   onClick 
 }) => {
   const { x, z } = convertTo3D(element.x, element.y, roomDimensions.width, roomDimensions.height);
-  const width = element.width / 100;  // Convert cm to meters (X-axis)
-  const depth = element.depth / 100;  // Convert cm to meters (Y-axis)
-  const height = element.height / 100; // Convert cm to meters (Z-axis)
+  
+  // Safely convert dimensions - prevent NaN errors
+  const dimensions = safeConvertDimensions(element);
+  if (!dimensions) return null; // Don't render if dimensions are invalid
+  
+  const { width, depth, height } = dimensions;
   
   // Determine cabinet type
   const isWallCabinet = element.style?.toLowerCase().includes('wall') || 
@@ -263,66 +289,117 @@ export const EnhancedCabinet3D: React.FC<Enhanced3DModelProps> = ({
       </group>
     );
   } else if (isPanDrawer) {
-    // Pan drawer unit with multiple drawers - FIXED HEIGHT AND TOE KICK
-    const cabinetYPosition = plinthHeight / 2; // Define cabinetYPosition for pan drawers
+    // BRAND NEW Pan Drawer - EXACT COPY of standard cabinet with drawer fronts
+    const cabinetYPosition = isWallCabinet ? 0 : plinthHeight / 2;
     
     return (
-      <group
-        position={[x + width / 2, yPosition, z + depth / 2]}
-        onClick={onClick}
+      <group 
+        position={[x + width / 2, yPosition, z + depth / 2]} 
+        onClick={onClick} 
         rotation={[0, element.rotation * Math.PI / 180, 0]}
       >
-        {/* Recessed plinth - same as base units */}
-        <mesh position={[0, -height/2 + plinthHeight/2, 0]}>
-          <boxGeometry args={[width, plinthHeight, depth]} />
-          <meshLambertMaterial color={plinthColor} />
-        </mesh>
+        {/* RECESSED PLINTH - matches base cabinets */}
+        {!isWallCabinet && (
+          <mesh position={[0, -height/2 + plinthHeight/2, -0.1]}>
+            <boxGeometry args={[width, plinthHeight, depth - 0.2]} />
+            <meshLambertMaterial color={plinthColor} />
+          </mesh>
+        )}
 
-        {/* Cabinet body - same height as base units */}
-        <mesh position={[0, plinthHeight/2, 0]}>
+        {/* EXACT COPY: Cabinet body from standard cabinet */}
+        <mesh position={[0, cabinetYPosition, 0]}>
           <boxGeometry args={[width, cabinetHeight, depth]} />
-          <meshStandardMaterial
-            color={isSelected ? selectedColor : cabinetMaterial}
-            roughness={0.7}
+          <meshStandardMaterial 
+            color={isSelected ? selectedColor : cabinetMaterial} 
+            roughness={0.7} 
             metalness={0.1}
           />
         </mesh>
 
-        {/* Drawer fronts with better detail */}
-        {/* Top drawer */}
-        <mesh position={[0, cabinetYPosition + doorHeight/3, depth / 2 + 0.01]}>
-          <boxGeometry args={[width - 0.05, doorHeight/3 - 0.02, 0.02]} />
-          <meshStandardMaterial color={doorColor} roughness={0.6} metalness={0.1} />
+        {/* THREE PERFECTLY ALIGNED DRAWER FRONTS - symmetrical with door edges */}
+        
+        {/* Calculate perfect alignment: door spans from +doorHeight/2 to -doorHeight/2 */}
+        {/* Each drawer: (doorHeight - 2*gap) / 3, positioned to align with door edges */}
+        
+        {/* PERFECTLY ALIGNED WITH DOOR EDGES - exact mathematical alignment */}
+        {/* Door spans: cabinetYPosition ± doorHeight/2 */}
+        {/* 3 drawers + 2 gaps = doorHeight, each drawer = (doorHeight - 2*gap)/3 */}
+        {/* Gap = doorHeight * 0.04, Drawer = doorHeight * 0.307 */}
+        
+        {/* Top drawer - TOP EDGE aligns with door TOP EDGE */}
+        <mesh position={[0, cabinetYPosition + doorHeight * 0.346, depth / 2 + 0.01]}>
+          <boxGeometry args={[width - 0.05, doorHeight * 0.307, 0.02]} />
+          <meshStandardMaterial
+            color={isSelected ? selectedColor : doorColor}
+            roughness={0.6}
+            metalness={0.1}
+          />
         </mesh>
-        {/* Centered handle for top drawer */}
-        <mesh position={[0, cabinetYPosition + doorHeight/3, depth / 2 + 0.03]}>
+        {/* Top drawer handle - centered */}
+        <mesh position={[0, cabinetYPosition + doorHeight * 0.346, depth / 2 + 0.03]}>
           <boxGeometry args={[0.15, 0.02, 0.02]} />
           <meshStandardMaterial color={handleColor} metalness={0.8} roughness={0.2} />
         </mesh>
 
-        {/* Middle drawer */}
+        {/* Middle drawer - perfectly centered */}
         <mesh position={[0, cabinetYPosition, depth / 2 + 0.01]}>
-          <boxGeometry args={[width - 0.05, doorHeight/3 - 0.02, 0.02]} />
-          <meshStandardMaterial color={doorColor} roughness={0.6} metalness={0.1} />
+          <boxGeometry args={[width - 0.05, doorHeight * 0.307, 0.02]} />
+          <meshStandardMaterial
+            color={isSelected ? selectedColor : doorColor}
+            roughness={0.6}
+            metalness={0.1}
+          />
         </mesh>
-        {/* Centered handle for middle drawer */}
+        {/* Middle drawer handle - centered */}
         <mesh position={[0, cabinetYPosition, depth / 2 + 0.03]}>
           <boxGeometry args={[0.15, 0.02, 0.02]} />
           <meshStandardMaterial color={handleColor} metalness={0.8} roughness={0.2} />
         </mesh>
 
-        {/* Bottom drawer */}
-        <mesh position={[0, cabinetYPosition - doorHeight/3, depth / 2 + 0.01]}>
-          <boxGeometry args={[width - 0.05, doorHeight/3 - 0.02, 0.02]} />
-          <meshStandardMaterial color={doorColor} roughness={0.6} metalness={0.1} />
+        {/* Bottom drawer - BOTTOM EDGE aligns with door BOTTOM EDGE */}
+        <mesh position={[0, cabinetYPosition - doorHeight * 0.346, depth / 2 + 0.01]}>
+          <boxGeometry args={[width - 0.05, doorHeight * 0.307, 0.02]} />
+          <meshStandardMaterial
+            color={isSelected ? selectedColor : doorColor}
+            roughness={0.6}
+            metalness={0.1}
+          />
         </mesh>
-        {/* Centered handle for bottom drawer */}
-        <mesh position={[0, cabinetYPosition - doorHeight/3, depth / 2 + 0.03]}>
+        {/* Bottom drawer handle - centered */}
+        <mesh position={[0, cabinetYPosition - doorHeight * 0.346, depth / 2 + 0.03]}>
           <boxGeometry args={[0.15, 0.02, 0.02]} />
           <meshStandardMaterial color={handleColor} metalness={0.8} roughness={0.2} />
         </mesh>
 
-        {/* Cabinet frame removed for cleaner appearance */}
+        {/* EQUAL GAP FRAME DIVIDERS - mathematically perfect spacing */}
+        {/* Gap positions: ±doorHeight * 0.173 (exactly between drawer centers) */}
+        <mesh position={[0, cabinetYPosition + doorHeight * 0.173, depth / 2 + 0.005]}>
+          <boxGeometry args={[width - 0.03, 0.01, 0.01]} />
+          <meshStandardMaterial 
+            color={isSelected ? selectedColor : cabinetMaterial} 
+            roughness={0.7} 
+            metalness={0.1}
+          />
+        </mesh>
+        
+        <mesh position={[0, cabinetYPosition - doorHeight * 0.173, depth / 2 + 0.005]}>
+          <boxGeometry args={[width - 0.03, 0.01, 0.01]} />
+          <meshStandardMaterial 
+            color={isSelected ? selectedColor : cabinetMaterial} 
+            roughness={0.7} 
+            metalness={0.1}
+          />
+        </mesh>
+
+        {/* EXACT COPY: Selection highlight from standard cabinet */}
+        {isSelected && (
+          <mesh position={[0, height / 2 + 0.01, 0]}>
+            <boxGeometry args={[width + 0.02, 0.02, depth + 0.02]} />
+            <meshLambertMaterial color="#00ff00" transparent opacity={0.5} />
+          </mesh>
+        )}
+
+        {/* Frame removed for cleaner appearance */}
       </group>
     );
   } else if (isBedroom && element.id.includes('wardrobe')) {
@@ -432,8 +509,8 @@ export const EnhancedCabinet3D: React.FC<Enhanced3DModelProps> = ({
       >
         {/* Plinth */}
         {!isWallCabinet && (
-          <mesh position={[0, -height/2 + plinthHeight/2, -0.1]}>
-            <boxGeometry args={[width, plinthHeight, depth - 0.2]} />
+          <mesh position={[0, -height/2 + plinthHeight/2, 0]}>
+            <boxGeometry args={[width, plinthHeight, depth]} />
             <meshLambertMaterial color={plinthColor} />
           </mesh>
         )}
@@ -615,9 +692,12 @@ export const EnhancedAppliance3D: React.FC<Enhanced3DModelProps> = ({
   onClick 
 }) => {
   const { x, z } = convertTo3D(element.x, element.y, roomDimensions.width, roomDimensions.height);
-  const width = element.width / 100;  // Convert cm to meters (X-axis)
-  const depth = element.depth / 100;  // Convert cm to meters (Y-axis)
-  const height = element.height / 100; // Convert cm to meters (Z-axis)
+  
+  // Safely convert dimensions - prevent NaN errors
+  const dimensions = safeConvertDimensions(element);
+  if (!dimensions) return null; // Don't render if dimensions are invalid
+  
+  const { width, depth, height } = dimensions;
   
   const selectedColor = '#ff6b6b';
   
@@ -1559,10 +1639,11 @@ export const EnhancedCounterTop3D: React.FC<Enhanced3DModelProps> = ({
 }) => {
   const { x, z } = convertTo3D(element.x, element.y, roomDimensions.width, roomDimensions.height);
   
-  // Convert dimensions from cm to meters
-  const width = element.width / 100;
-  const depth = element.depth / 100;
-  const height = element.height / 100;
+  // Safely convert dimensions - prevent NaN errors
+  const dimensions = safeConvertDimensions(element);
+  if (!dimensions) return null; // Don't render if dimensions are invalid
+  
+  const { width, depth, height } = dimensions;
   
   // Counter tops are positioned at 90cm (0.9m) off the ground, or use element.z if set
   const baseHeight = element.z ? element.z / 100 : 0.9; // Convert cm to meters
@@ -1686,10 +1767,11 @@ export const EnhancedCounterTop3D: React.FC<Enhanced3DModelProps> = ({
  }) => {
    const { x, z } = convertTo3D(element.x, element.y, roomDimensions.width, roomDimensions.height);
    
-   // Convert dimensions from cm to meters
-   const width = element.width / 100;
-   const depth = element.depth / 100;
-   const height = element.height / 100;
+   // Safely convert dimensions - prevent NaN errors
+   const dimensions = safeConvertDimensions(element);
+   if (!dimensions) return null; // Don't render if dimensions are invalid
+   
+   const { width, depth, height } = dimensions;
    
    // End panels are positioned at floor level
    const y = height / 2;
@@ -1758,10 +1840,11 @@ export const EnhancedWindow3D: React.FC<Enhanced3DModelProps> = ({
 }) => {
   const { x, z } = convertTo3D(element.x, element.y, roomDimensions.width, roomDimensions.height);
   
-  // Convert dimensions from cm to meters
-  const width = element.width / 100;
-  const depth = element.depth / 100;
-  const height = element.height / 100;
+  // Safely convert dimensions - prevent NaN errors
+  const dimensions = safeConvertDimensions(element);
+  if (!dimensions) return null; // Don't render if dimensions are invalid
+  
+  const { width, depth, height } = dimensions;
   
   // Windows are positioned at 90cm (0.9m) off the ground
   const baseHeight = 0.9;
@@ -1833,10 +1916,11 @@ export const EnhancedDoor3D: React.FC<Enhanced3DModelProps> = ({
 }) => {
   const { x, z } = convertTo3D(element.x, element.y, roomDimensions.width, roomDimensions.height);
   
-  // Convert dimensions from cm to meters
-  const width = element.width / 100;
-  const depth = element.depth / 100;
-  const height = element.height / 100;
+  // Safely convert dimensions - prevent NaN errors
+  const dimensions = safeConvertDimensions(element);
+  if (!dimensions) return null; // Don't render if dimensions are invalid
+  
+  const { width, depth, height } = dimensions;
   
   // Doors are positioned at floor level
   const y = height / 2;
@@ -1911,10 +1995,11 @@ export const EnhancedFlooring3D: React.FC<Enhanced3DModelProps> = ({
 }) => {
   const { x, z } = convertTo3D(element.x, element.y, roomDimensions.width, roomDimensions.height);
   
-  // Convert dimensions from cm to meters
-  const width = element.width / 100;
-  const depth = element.depth / 100;
-  const height = element.height / 100;
+  // Safely convert dimensions - prevent NaN errors
+  const dimensions = safeConvertDimensions(element);
+  if (!dimensions) return null; // Don't render if dimensions are invalid
+  
+  const { width, depth, height } = dimensions;
   
   // Flooring is positioned at floor level
   const y = height / 2;
@@ -1973,10 +2058,11 @@ export const EnhancedToeKick3D: React.FC<Enhanced3DModelProps> = ({
 }) => {
   const { x, z } = convertTo3D(element.x, element.y, roomDimensions.width, roomDimensions.height);
   
-  // Convert dimensions from cm to meters
-  const width = element.width / 100;
-  const depth = element.depth / 100;
-  const height = element.height / 100;
+  // Safely convert dimensions - prevent NaN errors
+  const dimensions = safeConvertDimensions(element);
+  if (!dimensions) return null; // Don't render if dimensions are invalid
+  
+  const { width, depth, height } = dimensions;
   
   // Toe kicks are positioned at floor level
   const y = height / 2;
@@ -2035,10 +2121,11 @@ export const EnhancedCornice3D: React.FC<Enhanced3DModelProps> = ({
 }) => {
   const { x, z } = convertTo3D(element.x, element.y, roomDimensions.width, roomDimensions.height);
   
-  // Convert dimensions from cm to meters
-  const width = element.width / 100;
-  const depth = element.depth / 100;
-  const height = element.height / 100;
+  // Safely convert dimensions - prevent NaN errors
+  const dimensions = safeConvertDimensions(element);
+  if (!dimensions) return null; // Don't render if dimensions are invalid
+  
+  const { width, depth, height } = dimensions;
   
   // Cornices are positioned at top of wall units (200cm height)
   const baseHeight = 2.0; // 200cm
@@ -2098,10 +2185,11 @@ export const EnhancedPelmet3D: React.FC<Enhanced3DModelProps> = ({
 }) => {
   const { x, z } = convertTo3D(element.x, element.y, roomDimensions.width, roomDimensions.height);
   
-  // Convert dimensions from cm to meters
-  const width = element.width / 100;
-  const depth = element.depth / 100;
-  const height = element.height / 100;
+  // Safely convert dimensions - prevent NaN errors
+  const dimensions = safeConvertDimensions(element);
+  if (!dimensions) return null; // Don't render if dimensions are invalid
+  
+  const { width, depth, height } = dimensions;
   
   // Pelmets are positioned at bottom of wall units (140cm height)
   const baseHeight = 1.4; // 140cm
@@ -2153,7 +2241,7 @@ export const EnhancedPelmet3D: React.FC<Enhanced3DModelProps> = ({
  * - Proper scale and proportions
  * - Positioned at 200cm height from floor
  */
-export const EnhancedWallUnitEndPanel3D: React.FC<Enhanced3DModelProps> = ({ 
+export const EnhancedWallUnitEndPanel3D: React.FC<Enhanced3DModelProps> = ({
   element, 
   roomDimensions, 
   isSelected, 
@@ -2161,10 +2249,11 @@ export const EnhancedWallUnitEndPanel3D: React.FC<Enhanced3DModelProps> = ({
 }) => {
   const { x, z } = convertTo3D(element.x, element.y, roomDimensions.width, roomDimensions.height);
   
-  // Convert dimensions from cm to meters
-  const width = element.width / 100;
-  const depth = element.depth / 100;
-  const height = element.height / 100;
+  // Safely convert dimensions - prevent NaN errors
+  const dimensions = safeConvertDimensions(element);
+  if (!dimensions) return null; // Don't render if dimensions are invalid
+  
+  const { width, depth, height } = dimensions;
   
   // Wall unit end panels are positioned at 200cm height from floor
   const baseHeight = 2.0; // 200cm

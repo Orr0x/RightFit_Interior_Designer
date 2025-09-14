@@ -31,15 +31,20 @@ export const PropertiesPanel: React.FC<PropertiesPanelProps> = ({
 }) => {
   // Helper functions for proper 3D dimension mapping
   const getElementDepth = (element: DesignElement): number => {
-    return element.depth ?? 60; // Default depth for cabinets
+    const depth = element.depth ?? 60; // Default depth for cabinets
+    return isNaN(depth) ? 60 : depth;
   };
 
   const getElementHeight = (element: DesignElement): number => {
-    return element.height ?? 90; // Default height for cabinets
+    const height = element.height ?? 90; // Default height for cabinets
+    return isNaN(height) ? 90 : height;
   };
 
   const updateElementDimension = (dimension: 'width' | 'depth' | 'height', value: number) => {
     if (!selectedElement) return;
+    
+    // Validate the value is not NaN
+    if (isNaN(value) || value < 0) return;
     
     const updates: Partial<DesignElement> = {};
     updates[dimension] = value;
@@ -50,8 +55,14 @@ export const PropertiesPanel: React.FC<PropertiesPanelProps> = ({
   // Always show height control - it's a fundamental 3D property
   const showHeightControl = true;
 
-  const [roomWidth, setRoomWidth] = useState(roomDimensions.width);
-  const [roomHeight, setRoomHeight] = useState(roomDimensions.height);
+  const [roomWidth, setRoomWidth] = useState(() => {
+    const width = roomDimensions.width || 600;
+    return isNaN(width) ? 600 : width;
+  });
+  const [roomHeight, setRoomHeight] = useState(() => {
+    const height = roomDimensions.height || 400;
+    return isNaN(height) ? 400 : height;
+  });
 
   // Room-specific color palettes
   const getRoomColors = (roomType: RoomType) => {
@@ -235,7 +246,12 @@ export const PropertiesPanel: React.FC<PropertiesPanelProps> = ({
                 id="room-width"
                 type="number"
                 value={roomWidth}
-                onChange={(e) => setRoomWidth(Number(e.target.value))}
+                onChange={(e) => {
+                  const value = Number(e.target.value);
+                  if (!isNaN(value) && value > 0) {
+                    setRoomWidth(value);
+                  }
+                }}
                 className="h-8 text-xs"
               />
             </div>
@@ -245,7 +261,12 @@ export const PropertiesPanel: React.FC<PropertiesPanelProps> = ({
                 id="room-height"
                 type="number"
                 value={roomHeight}
-                onChange={(e) => setRoomHeight(Number(e.target.value))}
+                onChange={(e) => {
+                  const value = Number(e.target.value);
+                  if (!isNaN(value) && value > 0) {
+                    setRoomHeight(value);
+                  }
+                }}
                 className="h-8 text-xs"
               />
             </div>
@@ -307,8 +328,13 @@ export const PropertiesPanel: React.FC<PropertiesPanelProps> = ({
                       <Label className="text-xs">X Position</Label>
                       <Input
                         type="number"
-                        value={Math.round(selectedElement.x)}
-                        onChange={(e) => onUpdateElement(selectedElement.id, { x: Number(e.target.value) })}
+                        value={Math.round(selectedElement.x || 0)}
+                        onChange={(e) => {
+                          const value = Number(e.target.value);
+                          if (!isNaN(value)) {
+                            onUpdateElement(selectedElement.id, { x: value });
+                          }
+                        }}
                         className="h-8 text-xs"
                       />
                     </div>
@@ -316,8 +342,13 @@ export const PropertiesPanel: React.FC<PropertiesPanelProps> = ({
                       <Label className="text-xs">Y Position</Label>
                       <Input
                         type="number"
-                        value={Math.round(selectedElement.y)}
-                        onChange={(e) => onUpdateElement(selectedElement.id, { y: Number(e.target.value) })}
+                        value={Math.round(selectedElement.y || 0)}
+                        onChange={(e) => {
+                          const value = Number(e.target.value);
+                          if (!isNaN(value)) {
+                            onUpdateElement(selectedElement.id, { y: value });
+                          }
+                        }}
                         className="h-8 text-xs"
                       />
                     </div>
@@ -328,8 +359,13 @@ export const PropertiesPanel: React.FC<PropertiesPanelProps> = ({
                       <Label className="text-xs">Width (cm)</Label>
                       <Input
                         type="number"
-                        value={selectedElement.width}
-                        onChange={(e) => updateElementDimension('width', Number(e.target.value))}
+                        value={selectedElement.width || 0}
+                        onChange={(e) => {
+                          const value = Number(e.target.value);
+                          if (!isNaN(value) && value > 0) {
+                            updateElementDimension('width', value);
+                          }
+                        }}
                         className="h-8 text-xs"
                       />
                     </div>
@@ -338,7 +374,12 @@ export const PropertiesPanel: React.FC<PropertiesPanelProps> = ({
                       <Input
                         type="number"
                         value={getElementDepth(selectedElement)}
-                        onChange={(e) => updateElementDimension('depth', Number(e.target.value))}
+                        onChange={(e) => {
+                          const value = Number(e.target.value);
+                          if (!isNaN(value) && value > 0) {
+                            updateElementDimension('depth', value);
+                          }
+                        }}
                         className="h-8 text-xs"
                       />
                     </div>
@@ -350,7 +391,12 @@ export const PropertiesPanel: React.FC<PropertiesPanelProps> = ({
                       <Input
                         type="number"
                         value={getElementHeight(selectedElement)}
-                        onChange={(e) => updateElementDimension('height', Number(e.target.value))}
+                        onChange={(e) => {
+                          const value = Number(e.target.value);
+                          if (!isNaN(value) && value > 0) {
+                            updateElementDimension('height', value);
+                          }
+                        }}
                         className="h-8 text-xs"
                       />
                     </div>
