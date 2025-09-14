@@ -2127,9 +2127,10 @@ export const EnhancedCornice3D: React.FC<Enhanced3DModelProps> = ({
   
   const { width, depth, height } = dimensions;
   
-  // Cornices are positioned at top of wall units (200cm height)
-  const baseHeight = 2.0; // 200cm
-  const y = baseHeight + (height / 2);
+  // Cornices are positioned ON TOP of wall units (not in front)
+  const wallUnitHeight = 0.6; // 60cm wall unit height
+  const wallUnitPosition = 1.4; // 140cm from floor (bottom of wall units)
+  const y = wallUnitPosition + wallUnitHeight + (height / 2); // ON TOP of wall units
   
   // Create materials
   const corniceMaterial = new THREE.MeshLambertMaterial({ 
@@ -2191,9 +2192,9 @@ export const EnhancedPelmet3D: React.FC<Enhanced3DModelProps> = ({
   
   const { width, depth, height } = dimensions;
   
-  // Pelmets are positioned at bottom of wall units (140cm height)
-  const baseHeight = 1.4; // 140cm
-  const y = baseHeight + (height / 2);
+  // Pelmets are positioned UNDER the bottom of wall units (not in front)
+  const wallUnitPosition = 1.4; // 140cm from floor (bottom of wall units)
+  const y = wallUnitPosition - (height / 2); // UNDER bottom of wall units
   
   // Create materials
   const pelmetMaterial = new THREE.MeshLambertMaterial({ 

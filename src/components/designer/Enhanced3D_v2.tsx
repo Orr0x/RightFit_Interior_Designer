@@ -327,8 +327,9 @@ export const Enhanced3D_v2: React.FC<Enhanced3DModelProps> = ({
   }
   
   function renderCornice() {
-    const baseHeight = 2.0; // Top of wall units
-    const yPos = baseHeight + (height / 2);
+    const wallUnitHeight = 0.6; // 60cm wall unit height
+    const wallUnitPosition = 1.4; // 140cm from floor (bottom of wall units)
+    const yPos = wallUnitPosition + wallUnitHeight + (height / 2); // ON TOP of wall units
     
     return (
       <group 
@@ -349,8 +350,8 @@ export const Enhanced3D_v2: React.FC<Enhanced3DModelProps> = ({
   }
   
   function renderPelmet() {
-    const baseHeight = 1.4; // Bottom of wall units
-    const yPos = baseHeight - (height / 2);
+    const wallUnitPosition = 1.4; // 140cm from floor (bottom of wall units)
+    const yPos = wallUnitPosition - (height / 2); // UNDER bottom of wall units
     
     return (
       <group 

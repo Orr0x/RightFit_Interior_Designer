@@ -1683,9 +1683,6 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
     const snapResult = getSnapPosition(draggedElement, roomPos.x, roomPos.y);
     const pos = roomToCanvas(snapResult.x, snapResult.y);
     
-    // Create element with snapped rotation for preview dimensions
-    const previewElement = { ...draggedElement, rotation: snapResult.rotation };
-    
     // Check if this is a corner counter top for L-shape preview
     const isCornerCounterTop = draggedElement.type === 'counter-top' && draggedElement.id.includes('counter-top-corner');
     
@@ -1715,8 +1712,8 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
       ctx.fillRect(pos.x, pos.y, legDepth, legLength);
       ctx.strokeRect(pos.x, pos.y, legDepth, legLength);
     } else {
-      // Standard rectangular drag preview - ROTATION-AWARE DIMENSIONS WITH SNAPPED ROTATION
-      const effectiveDims = getEffectiveDimensions(previewElement);
+      // Standard rectangular drag preview - ROTATION-AWARE DIMENSIONS
+      const effectiveDims = getEffectiveDimensions(draggedElement);
       const width = effectiveDims.width * zoom;
       const height = effectiveDims.depth * zoom; // Use effective depth for Y-axis in plan view
       
@@ -2165,12 +2162,21 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
 
       console.log('Drop Position:', { dropX, dropY, finalX: dropX, finalY: dropY });
 
-      // Create element with initial position for snapping
+      // Create initial element with rotation 0 for boundary checks
+      const tempElement = {
+        width: componentData.width,
+        depth: componentData.depth,
+        rotation: 0
+      };
+      
+      // Use effective dimensions for boundary checks (initially no rotation)
+      const effectiveDims = getEffectiveDimensions(tempElement);
+
       const newElement: DesignElement = {
         id: `${componentData.id}-${Date.now()}`,
         type: componentData.type,
-        x: dropX,
-        y: dropY,
+        x: snapToGrid(Math.max(0, Math.min(dropX, roomDimensions.width - effectiveDims.width))),
+        y: snapToGrid(Math.max(0, Math.min(dropY, roomDimensions.height - effectiveDims.depth))),
         width: componentData.width, // X-axis dimension
         depth: componentData.depth, // Y-axis dimension (front-to-back)
         height: componentData.height, // Z-axis dimension (bottom-to-top)
@@ -2181,16 +2187,9 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
 
       // Apply smart snapping for new elements
       const snapped = getSnapPosition(newElement, newElement.x, newElement.y);
-      
-      // Apply snapped position and rotation
       newElement.x = snapped.x;
       newElement.y = snapped.y;
       newElement.rotation = snapped.rotation;
-      
-      // Final boundary clamping using effective dimensions after snapping
-      const finalEffectiveDims = getEffectiveDimensions(newElement);
-      newElement.x = Math.max(0, Math.min(newElement.x, roomDimensions.width - finalEffectiveDims.width));
-      newElement.y = Math.max(0, Math.min(newElement.y, roomDimensions.height - finalEffectiveDims.depth));
 
       onAddElement(newElement);
     } catch (error) {
