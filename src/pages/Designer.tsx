@@ -375,6 +375,24 @@ const Designer = () => {
   const isDesignValidated = design ? lastValidatedDesign === JSON.stringify(design) : false;
 
   // Nudge functions for arrow key movement - 1cm precision nudges
+  // Helper function for rotation-aware dimensions in nudge operations
+  const getEffectiveDimensions = (element: { width: number; depth: number; rotation?: number }) => {
+    const rotation = element.rotation || 0;
+    const normalizedRotation = ((rotation % 360) + 360) % 360;
+    
+    // For 90° and 270° rotations, swap width and depth
+    if (normalizedRotation >= 45 && normalizedRotation < 135) {
+      // 90° rotation
+      return { width: element.depth, depth: element.width };
+    } else if (normalizedRotation >= 225 && normalizedRotation < 315) {
+      // 270° rotation  
+      return { width: element.depth, depth: element.width };
+    } else {
+      // 0° and 180° rotations (and close to them)
+      return { width: element.width, depth: element.depth };
+    }
+  };
+
   const handleNudgeLeft = () => {
     if (!selectedElement) return;
     const nudgeAmount = 1; // 1cm nudge
@@ -386,7 +404,9 @@ const Designer = () => {
   const handleNudgeRight = () => {
     if (!selectedElement || !currentRoomDesign) return;
     const nudgeAmount = 1; // 1cm nudge
-    const maxX = (currentRoomDesign.room_dimensions?.width || 800) - selectedElement.width;
+    // Use effective width for rotation-aware boundary checking
+    const effectiveDims = getEffectiveDimensions(selectedElement);
+    const maxX = (currentRoomDesign.room_dimensions?.width || 800) - effectiveDims.width;
     handleUpdateElement(selectedElement.id, {
       x: Math.min(maxX, selectedElement.x + nudgeAmount)
     });
@@ -403,7 +423,9 @@ const Designer = () => {
   const handleNudgeDown = () => {
     if (!selectedElement || !currentRoomDesign) return;
     const nudgeAmount = 1; // 1cm nudge
-    const maxY = (currentRoomDesign.room_dimensions?.height || 600) - selectedElement.height;
+    // Use effective depth for rotation-aware boundary checking
+    const effectiveDims = getEffectiveDimensions(selectedElement);
+    const maxY = (currentRoomDesign.room_dimensions?.height || 600) - effectiveDims.depth;
     handleUpdateElement(selectedElement.id, {
       y: Math.min(maxY, selectedElement.y + nudgeAmount)
     });
