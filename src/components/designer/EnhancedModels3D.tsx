@@ -289,63 +289,88 @@ export const EnhancedCabinet3D: React.FC<Enhanced3DModelProps> = ({
       </group>
     );
   } else if (isPanDrawer) {
-    // Pan drawer unit - IDENTICAL to base cabinet except drawer fronts
-    const cabinetYPosition = plinthHeight / 2; // Same as base cabinets
+    // BRAND NEW Pan Drawer - EXACT COPY of standard cabinet with drawer fronts
+    const cabinetYPosition = isWallCabinet ? 0 : plinthHeight / 2;
     
     return (
-      <group
-        position={[x + width / 2, yPosition, z + depth / 2]}
-        onClick={onClick}
+      <group 
+        position={[x + width / 2, yPosition, z + depth / 2]} 
+        onClick={onClick} 
         rotation={[0, element.rotation * Math.PI / 180, 0]}
       >
-        {/* IDENTICAL Plinth - same as base cabinets */}
-        <mesh position={[0, -height/2 + plinthHeight/2, 0]}>
-          <boxGeometry args={[width, plinthHeight, depth]} />
-          <meshLambertMaterial color={plinthColor} />
-        </mesh>
+        {/* EXACT COPY: Plinth from standard cabinet */}
+        {!isWallCabinet && (
+          <mesh position={[0, -height/2 + plinthHeight/2, 0]}>
+            <boxGeometry args={[width, plinthHeight, depth]} />
+            <meshLambertMaterial color={plinthColor} />
+          </mesh>
+        )}
 
-        {/* IDENTICAL Cabinet body - same as base cabinets */}
+        {/* EXACT COPY: Cabinet body from standard cabinet */}
         <mesh position={[0, cabinetYPosition, 0]}>
           <boxGeometry args={[width, cabinetHeight, depth]} />
-          <meshStandardMaterial
-            color={isSelected ? selectedColor : cabinetMaterial}
-            roughness={0.7}
+          <meshStandardMaterial 
+            color={isSelected ? selectedColor : cabinetMaterial} 
+            roughness={0.7} 
             metalness={0.1}
           />
         </mesh>
 
-        {/* Drawer fronts with better detail */}
+        {/* NEW: Three equal drawer fronts instead of single door */}
         {/* Top drawer */}
-        <mesh position={[0, cabinetYPosition + doorHeight/3, depth / 2 + 0.01]}>
-          <boxGeometry args={[width - 0.05, doorHeight/3 - 0.02, 0.02]} />
-          <meshStandardMaterial color={doorColor} roughness={0.6} metalness={0.1} />
+        <mesh position={[0, cabinetYPosition + doorHeight * 0.25, depth / 2 + 0.01]}>
+          <boxGeometry args={[width - 0.05, doorHeight * 0.3 - 0.02, 0.02]} />
+          <meshStandardMaterial
+            color={isSelected ? selectedColor : doorColor}
+            roughness={0.6}
+            metalness={0.1}
+          />
         </mesh>
-        <mesh position={[0, cabinetYPosition + doorHeight/3, depth / 2 + 0.03]}>
+        {/* Top drawer handle - centered */}
+        <mesh position={[0, cabinetYPosition + doorHeight * 0.25, depth / 2 + 0.03]}>
           <boxGeometry args={[0.15, 0.02, 0.02]} />
           <meshStandardMaterial color={handleColor} metalness={0.8} roughness={0.2} />
         </mesh>
 
         {/* Middle drawer */}
         <mesh position={[0, cabinetYPosition, depth / 2 + 0.01]}>
-          <boxGeometry args={[width - 0.05, doorHeight/3 - 0.02, 0.02]} />
-          <meshStandardMaterial color={doorColor} roughness={0.6} metalness={0.1} />
+          <boxGeometry args={[width - 0.05, doorHeight * 0.3 - 0.02, 0.02]} />
+          <meshStandardMaterial
+            color={isSelected ? selectedColor : doorColor}
+            roughness={0.6}
+            metalness={0.1}
+          />
         </mesh>
+        {/* Middle drawer handle - centered */}
         <mesh position={[0, cabinetYPosition, depth / 2 + 0.03]}>
           <boxGeometry args={[0.15, 0.02, 0.02]} />
           <meshStandardMaterial color={handleColor} metalness={0.8} roughness={0.2} />
         </mesh>
 
         {/* Bottom drawer */}
-        <mesh position={[0, cabinetYPosition - doorHeight/3, depth / 2 + 0.01]}>
-          <boxGeometry args={[width - 0.05, doorHeight/3 - 0.02, 0.02]} />
-          <meshStandardMaterial color={doorColor} roughness={0.6} metalness={0.1} />
+        <mesh position={[0, cabinetYPosition - doorHeight * 0.25, depth / 2 + 0.01]}>
+          <boxGeometry args={[width - 0.05, doorHeight * 0.3 - 0.02, 0.02]} />
+          <meshStandardMaterial
+            color={isSelected ? selectedColor : doorColor}
+            roughness={0.6}
+            metalness={0.1}
+          />
         </mesh>
-        <mesh position={[0, cabinetYPosition - doorHeight/3, depth / 2 + 0.03]}>
+        {/* Bottom drawer handle - centered */}
+        <mesh position={[0, cabinetYPosition - doorHeight * 0.25, depth / 2 + 0.03]}>
           <boxGeometry args={[0.15, 0.02, 0.02]} />
           <meshStandardMaterial color={handleColor} metalness={0.8} roughness={0.2} />
         </mesh>
 
-        {/* Cabinet frame removed for cleaner appearance */}
+        {/* EXACT COPY: Selection highlight from standard cabinet */}
+        {isSelected && (
+          <mesh position={[0, height / 2 + 0.01, 0]}>
+            <boxGeometry args={[width + 0.02, 0.02, depth + 0.02]} />
+            <meshLambertMaterial color="#00ff00" transparent opacity={0.5} />
+          </mesh>
+        )}
+
+        {/* Frame removed for cleaner appearance */}
       </group>
     );
   } else if (isBedroom && element.id.includes('wardrobe')) {
