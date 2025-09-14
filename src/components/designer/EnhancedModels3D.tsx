@@ -316,11 +316,19 @@ export const EnhancedCabinet3D: React.FC<Enhanced3DModelProps> = ({
           />
         </mesh>
 
-        {/* THREE SEPARATE DRAWER FRONTS - clearly defined individual drawers */}
+        {/* THREE PERFECTLY ALIGNED DRAWER FRONTS - symmetrical with door edges */}
         
-        {/* Top drawer - smaller with visible gaps */}
-        <mesh position={[0, cabinetYPosition + doorHeight * 0.3, depth / 2 + 0.01]}>
-          <boxGeometry args={[width - 0.05, doorHeight * 0.25, 0.02]} />
+        {/* Calculate perfect alignment: door spans from +doorHeight/2 to -doorHeight/2 */}
+        {/* Each drawer: (doorHeight - 2*gap) / 3, positioned to align with door edges */}
+        
+        {/* PERFECTLY ALIGNED WITH DOOR EDGES - exact mathematical alignment */}
+        {/* Door spans: cabinetYPosition ± doorHeight/2 */}
+        {/* 3 drawers + 2 gaps = doorHeight, each drawer = (doorHeight - 2*gap)/3 */}
+        {/* Gap = doorHeight * 0.04, Drawer = doorHeight * 0.307 */}
+        
+        {/* Top drawer - TOP EDGE aligns with door TOP EDGE */}
+        <mesh position={[0, cabinetYPosition + doorHeight * 0.346, depth / 2 + 0.01]}>
+          <boxGeometry args={[width - 0.05, doorHeight * 0.307, 0.02]} />
           <meshStandardMaterial
             color={isSelected ? selectedColor : doorColor}
             roughness={0.6}
@@ -328,14 +336,14 @@ export const EnhancedCabinet3D: React.FC<Enhanced3DModelProps> = ({
           />
         </mesh>
         {/* Top drawer handle - centered */}
-        <mesh position={[0, cabinetYPosition + doorHeight * 0.3, depth / 2 + 0.03]}>
+        <mesh position={[0, cabinetYPosition + doorHeight * 0.346, depth / 2 + 0.03]}>
           <boxGeometry args={[0.15, 0.02, 0.02]} />
           <meshStandardMaterial color={handleColor} metalness={0.8} roughness={0.2} />
         </mesh>
 
-        {/* Middle drawer - clearly separated */}
+        {/* Middle drawer - perfectly centered */}
         <mesh position={[0, cabinetYPosition, depth / 2 + 0.01]}>
-          <boxGeometry args={[width - 0.05, doorHeight * 0.25, 0.02]} />
+          <boxGeometry args={[width - 0.05, doorHeight * 0.307, 0.02]} />
           <meshStandardMaterial
             color={isSelected ? selectedColor : doorColor}
             roughness={0.6}
@@ -348,9 +356,9 @@ export const EnhancedCabinet3D: React.FC<Enhanced3DModelProps> = ({
           <meshStandardMaterial color={handleColor} metalness={0.8} roughness={0.2} />
         </mesh>
 
-        {/* Bottom drawer - clearly separated */}
-        <mesh position={[0, cabinetYPosition - doorHeight * 0.3, depth / 2 + 0.01]}>
-          <boxGeometry args={[width - 0.05, doorHeight * 0.25, 0.02]} />
+        {/* Bottom drawer - BOTTOM EDGE aligns with door BOTTOM EDGE */}
+        <mesh position={[0, cabinetYPosition - doorHeight * 0.346, depth / 2 + 0.01]}>
+          <boxGeometry args={[width - 0.05, doorHeight * 0.307, 0.02]} />
           <meshStandardMaterial
             color={isSelected ? selectedColor : doorColor}
             roughness={0.6}
@@ -358,14 +366,14 @@ export const EnhancedCabinet3D: React.FC<Enhanced3DModelProps> = ({
           />
         </mesh>
         {/* Bottom drawer handle - centered */}
-        <mesh position={[0, cabinetYPosition - doorHeight * 0.3, depth / 2 + 0.03]}>
+        <mesh position={[0, cabinetYPosition - doorHeight * 0.346, depth / 2 + 0.03]}>
           <boxGeometry args={[0.15, 0.02, 0.02]} />
           <meshStandardMaterial color={handleColor} metalness={0.8} roughness={0.2} />
         </mesh>
 
-        {/* CABINET FRAME DIVIDERS - visible separation between drawers */}
-        {/* Horizontal divider between top and middle */}
-        <mesh position={[0, cabinetYPosition + doorHeight * 0.15, depth / 2 + 0.005]}>
+        {/* EQUAL GAP FRAME DIVIDERS - mathematically perfect spacing */}
+        {/* Gap positions: ±doorHeight * 0.173 (exactly between drawer centers) */}
+        <mesh position={[0, cabinetYPosition + doorHeight * 0.173, depth / 2 + 0.005]}>
           <boxGeometry args={[width - 0.03, 0.01, 0.01]} />
           <meshStandardMaterial 
             color={isSelected ? selectedColor : cabinetMaterial} 
@@ -374,8 +382,7 @@ export const EnhancedCabinet3D: React.FC<Enhanced3DModelProps> = ({
           />
         </mesh>
         
-        {/* Horizontal divider between middle and bottom */}
-        <mesh position={[0, cabinetYPosition - doorHeight * 0.15, depth / 2 + 0.005]}>
+        <mesh position={[0, cabinetYPosition - doorHeight * 0.173, depth / 2 + 0.005]}>
           <boxGeometry args={[width - 0.03, 0.01, 0.01]} />
           <meshStandardMaterial 
             color={isSelected ? selectedColor : cabinetMaterial} 
