@@ -27,18 +27,24 @@ interface View3DProps {
   fitToScreenSignal?: number;
 }
 
-// Convert 2D coordinates to 3D world coordinates to match the 2D canvas positioning
+// Convert 2D coordinates to 3D world coordinates to match the 2D canvas positioning with validation
 const convertTo3D = (x: number, y: number, roomWidth: number, roomHeight: number) => {
+  // Validate input parameters to prevent NaN values
+  const safeX = isNaN(x) || x === undefined ? 0 : x;
+  const safeY = isNaN(y) || y === undefined ? 0 : y;
+  const safeRoomWidth = isNaN(roomWidth) || roomWidth === undefined ? 600 : roomWidth;
+  const safeRoomHeight = isNaN(roomHeight) || roomHeight === undefined ? 400 : roomHeight;
+  
   // Scale down the room to reasonable 3D size (divide by 100 to convert cm to meters-like units)
-  const roomWidthMeters = roomWidth / 100;
-  const roomHeightMeters = roomHeight / 100;
+  const roomWidthMeters = safeRoomWidth / 100;
+  const roomHeightMeters = safeRoomHeight / 100;
   
   // Convert to 3D coordinates matching 2D canvas positioning
   // In 2D canvas: (0,0) is top-left of room, positive X is right, positive Y is down
   // In 3D: map directly without centering - top-left of room should be top-left in 3D
   return {
-    x: (x / 100) - roomWidthMeters / 2,  // Convert to meters, center the room
-    z: (y / 100) - roomHeightMeters / 2  // Convert to meters, center the room on Z axis
+    x: (safeX / 100) - roomWidthMeters / 2,  // Convert to meters, center the room
+    z: (safeY / 100) - roomHeightMeters / 2  // Convert to meters, center the room on Z axis
   };
 };
 

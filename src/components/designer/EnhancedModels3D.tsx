@@ -26,14 +26,34 @@ interface Enhanced3DModelProps {
   onClick: () => void;
 }
 
-// Helper function to convert 2D coordinates to 3D world coordinates
+// Helper function to convert 2D coordinates to 3D world coordinates with validation
 const convertTo3D = (x: number, y: number, roomWidth: number, roomHeight: number) => {
-  const roomWidthMeters = roomWidth / 100;
-  const roomHeightMeters = roomHeight / 100;
+  // Validate input parameters to prevent NaN values
+  const safeX = isNaN(x) || x === undefined ? 0 : x;
+  const safeY = isNaN(y) || y === undefined ? 0 : y;
+  const safeRoomWidth = isNaN(roomWidth) || roomWidth === undefined ? 600 : roomWidth;
+  const safeRoomHeight = isNaN(roomHeight) || roomHeight === undefined ? 400 : roomHeight;
+  
+  const roomWidthMeters = safeRoomWidth / 100;
+  const roomHeightMeters = safeRoomHeight / 100;
   
   return {
-    x: (x / 100) - roomWidthMeters / 2,
-    z: (y / 100) - roomHeightMeters / 2
+    x: (safeX / 100) - roomWidthMeters / 2,
+    z: (safeY / 100) - roomHeightMeters / 2
+  };
+};
+
+// Helper function to validate element dimensions and prevent NaN values
+const validateElementDimensions = (element: DesignElement) => {
+  return {
+    x: isNaN(element.x) || element.x === undefined ? 0 : element.x,
+    y: isNaN(element.y) || element.y === undefined ? 0 : element.y,
+    z: isNaN(element.z) || element.z === undefined ? 0 : element.z,
+    width: isNaN(element.width) || element.width === undefined || element.width <= 0 ? 60 : element.width,
+    depth: isNaN(element.depth) || element.depth === undefined || element.depth <= 0 ? 60 : element.depth,
+    height: isNaN(element.height) || element.height === undefined || element.height <= 0 ? 90 : element.height,
+    rotation: isNaN(element.rotation) || element.rotation === undefined ? 0 : element.rotation,
+    name: element.name || 'Unnamed Component'
   };
 };
 
@@ -52,10 +72,13 @@ export const EnhancedCabinet3D: React.FC<Enhanced3DModelProps> = ({
   isSelected, 
   onClick 
 }) => {
-  const { x, z } = convertTo3D(element.x, element.y, roomDimensions.width, roomDimensions.height);
-  const width = element.width / 100;  // Convert cm to meters (X-axis)
-  const depth = element.depth / 100;  // Convert cm to meters (Y-axis)
-  const height = element.height / 100; // Convert cm to meters (Z-axis)
+  // Validate element dimensions to prevent NaN values
+  const validElement = validateElementDimensions(element);
+  
+  const { x, z } = convertTo3D(validElement.x, validElement.y, roomDimensions.width, roomDimensions.height);
+  const width = validElement.width / 100;  // Convert cm to meters (X-axis)
+  const depth = validElement.depth / 100;  // Convert cm to meters (Y-axis)
+  const height = validElement.height / 100; // Convert cm to meters (Z-axis)
   
   // Determine cabinet type
   const isWallCabinet = element.style?.toLowerCase().includes('wall') || 
@@ -125,7 +148,7 @@ export const EnhancedCabinet3D: React.FC<Enhanced3DModelProps> = ({
       <group 
         position={[x + centerX, yPosition, z + centerZ]} 
         onClick={onClick} 
-        rotation={[0, element.rotation * Math.PI / 180, 0]}
+        rotation={[0, validElement.rotation * Math.PI / 180, 0]}
       >
         {/* Plinths for base cabinets */}
         {!isWallCabinet && (
@@ -202,7 +225,7 @@ export const EnhancedCabinet3D: React.FC<Enhanced3DModelProps> = ({
       <group 
         position={[x + centerX, yPosition, z + centerZ]} 
         onClick={onClick} 
-        rotation={[0, element.rotation * Math.PI / 180, 0]}
+        rotation={[0, validElement.rotation * Math.PI / 180, 0]}
       >
         {/* Plinth for larder corner unit */}
         {!isWallCabinet && (
@@ -268,7 +291,7 @@ export const EnhancedCabinet3D: React.FC<Enhanced3DModelProps> = ({
       <group
         position={[x + width / 2, yPosition, z + depth / 2]}
         onClick={onClick}
-        rotation={[0, element.rotation * Math.PI / 180, 0]}
+        rotation={[0, validElement.rotation * Math.PI / 180, 0]}
       >
         {/* Plinth */}
         <mesh position={[0, -height/2 + plinthHeight/2, -0.1]}>
@@ -329,7 +352,7 @@ export const EnhancedCabinet3D: React.FC<Enhanced3DModelProps> = ({
       <group 
         position={[x + width / 2, yPosition, z + depth / 2]} 
         onClick={onClick} 
-        rotation={[0, element.rotation * Math.PI / 180, 0]}
+        rotation={[0, validElement.rotation * Math.PI / 180, 0]}
       >
         {/* Wardrobe body */}
         <mesh position={[0, 0, 0]}>
@@ -375,7 +398,7 @@ export const EnhancedCabinet3D: React.FC<Enhanced3DModelProps> = ({
       <group 
         position={[x + width / 2, yPosition, z + depth / 2]} 
         onClick={onClick} 
-        rotation={[0, element.rotation * Math.PI / 180, 0]}
+        rotation={[0, validElement.rotation * Math.PI / 180, 0]}
       >
         {/* Chest body */}
         <mesh position={[0, 0, 0]}>
@@ -420,7 +443,7 @@ export const EnhancedCabinet3D: React.FC<Enhanced3DModelProps> = ({
       <group 
         position={[x + width / 2, yPosition, z + depth / 2]} 
         onClick={onClick} 
-        rotation={[0, element.rotation * Math.PI / 180, 0]}
+        rotation={[0, validElement.rotation * Math.PI / 180, 0]}
       >
         {/* Plinth */}
         {!isWallCabinet && (
@@ -605,10 +628,13 @@ export const EnhancedAppliance3D: React.FC<Enhanced3DModelProps> = ({
   isSelected, 
   onClick 
 }) => {
-  const { x, z } = convertTo3D(element.x, element.y, roomDimensions.width, roomDimensions.height);
-  const width = element.width / 100;  // Convert cm to meters (X-axis)
-  const depth = element.depth / 100;  // Convert cm to meters (Y-axis)
-  const height = element.height / 100; // Convert cm to meters (Z-axis)
+  // Validate element dimensions to prevent NaN values
+  const validElement = validateElementDimensions(element);
+  
+  const { x, z } = convertTo3D(validElement.x, validElement.y, roomDimensions.width, roomDimensions.height);
+  const width = validElement.width / 100;  // Convert cm to meters (X-axis)
+  const depth = validElement.depth / 100;  // Convert cm to meters (Y-axis)
+  const height = validElement.height / 100; // Convert cm to meters (Z-axis)
   
   const selectedColor = '#ff6b6b';
   
@@ -667,7 +693,7 @@ export const EnhancedAppliance3D: React.FC<Enhanced3DModelProps> = ({
       <group 
         position={[x + width / 2, yPosition, z + bedDepth / 2]} 
         onClick={onClick} 
-        rotation={[0, element.rotation * Math.PI / 180, 0]}
+        rotation={[0, validElement.rotation * Math.PI / 180, 0]}
       >
         {/* Bed frame */}
         <mesh position={[0, -height/2 + frameHeight/2, 0]}>
@@ -716,7 +742,7 @@ export const EnhancedAppliance3D: React.FC<Enhanced3DModelProps> = ({
       <group 
         position={[x + width / 2, yPosition, z + sofaDepth / 2]} 
         onClick={onClick} 
-        rotation={[0, element.rotation * Math.PI / 180, 0]}
+        rotation={[0, validElement.rotation * Math.PI / 180, 0]}
       >
         {/* Sofa base */}
         <mesh position={[0, -height/2 + baseHeight/2, 0]}>
@@ -786,7 +812,7 @@ export const EnhancedAppliance3D: React.FC<Enhanced3DModelProps> = ({
       <group 
         position={[x + width / 2, yPosition, z + chairDepth / 2]} 
         onClick={onClick} 
-        rotation={[0, element.rotation * Math.PI / 180, 0]}
+        rotation={[0, validElement.rotation * Math.PI / 180, 0]}
       >
         {/* Chair seat */}
         <mesh position={[0, 0, 0]}>
@@ -836,7 +862,7 @@ export const EnhancedAppliance3D: React.FC<Enhanced3DModelProps> = ({
       <group 
         position={[x + width / 2, yPosition, z + tableDepth / 2]} 
         onClick={onClick} 
-        rotation={[0, element.rotation * Math.PI / 180, 0]}
+        rotation={[0, validElement.rotation * Math.PI / 180, 0]}
       >
         {/* Table top */}
         <mesh position={[0, 0, 0]}>
@@ -893,7 +919,7 @@ export const EnhancedAppliance3D: React.FC<Enhanced3DModelProps> = ({
       <group 
         position={[x + width / 2, yPosition + height/2, z + depth / 2]} 
         onClick={onClick} 
-        rotation={[0, element.rotation * Math.PI / 180, 0]}
+        rotation={[0, validElement.rotation * Math.PI / 180, 0]}
       >
         {/* TV screen */}
         <mesh position={[0, 0, 0]}>
@@ -943,7 +969,7 @@ export const EnhancedAppliance3D: React.FC<Enhanced3DModelProps> = ({
       <group 
         position={[x + width / 2, yPosition, z + depth / 2]} 
         onClick={onClick} 
-        rotation={[0, element.rotation * Math.PI / 180, 0]}
+        rotation={[0, validElement.rotation * Math.PI / 180, 0]}
       >
         {/* Main body */}
         <mesh>
@@ -1003,7 +1029,7 @@ export const EnhancedAppliance3D: React.FC<Enhanced3DModelProps> = ({
       <group
         position={[x + width / 2, yPosition, z + depth / 2]}
         onClick={onClick}
-        rotation={[0, element.rotation * Math.PI / 180, 0]}
+        rotation={[0, validElement.rotation * Math.PI / 180, 0]}
       >
         {/* Main appliance body */}
         <mesh>
@@ -1065,7 +1091,7 @@ export const EnhancedAppliance3D: React.FC<Enhanced3DModelProps> = ({
       <group
         position={[x + width / 2, yPosition, z + depth / 2]}
         onClick={onClick}
-        rotation={[0, element.rotation * Math.PI / 180, 0]}
+        rotation={[0, validElement.rotation * Math.PI / 180, 0]}
       >
         {/* Main appliance body */}
         <mesh>
@@ -1145,7 +1171,7 @@ export const EnhancedAppliance3D: React.FC<Enhanced3DModelProps> = ({
       <group
         position={[x + width / 2, yPosition, z + depth / 2]}
         onClick={onClick}
-        rotation={[0, element.rotation * Math.PI / 180, 0]}
+        rotation={[0, validElement.rotation * Math.PI / 180, 0]}
       >
         {/* Main appliance body */}
         <mesh>
@@ -1233,7 +1259,7 @@ export const EnhancedAppliance3D: React.FC<Enhanced3DModelProps> = ({
       <group
         position={[x + width / 2, yPosition, z + depth / 2]}
         onClick={onClick}
-        rotation={[0, element.rotation * Math.PI / 180, 0]}
+        rotation={[0, validElement.rotation * Math.PI / 180, 0]}
       >
         {/* Main appliance body */}
         <mesh>
@@ -1333,7 +1359,7 @@ export const EnhancedAppliance3D: React.FC<Enhanced3DModelProps> = ({
       <group
         position={[x + width / 2, yPosition, z + depth / 2]}
         onClick={onClick}
-        rotation={[0, element.rotation * Math.PI / 180, 0]}
+        rotation={[0, validElement.rotation * Math.PI / 180, 0]}
       >
         {/* Main body */}
         <mesh>
@@ -1537,15 +1563,19 @@ export const EnhancedCounterTop3D: React.FC<Enhanced3DModelProps> = ({
   isSelected, 
   onClick 
 }) => {
-  const { x, z } = convertTo3D(element.x, element.y, roomDimensions.width, roomDimensions.height);
+  // Validate element dimensions to prevent NaN values
+  const validElement = validateElementDimensions(element);
+  
+  const { x, z } = convertTo3D(validElement.x, validElement.y, roomDimensions.width, roomDimensions.height);
   
   // Convert dimensions from cm to meters
-  const width = element.width / 100;
-  const depth = element.depth / 100;
-  const height = element.height / 100;
+  const width = validElement.width / 100;
+  const depth = validElement.depth / 100;
+  const height = validElement.height / 100;
   
   // Counter tops are positioned at 90cm (0.9m) off the ground, or use element.z if set
-  const baseHeight = element.z ? element.z / 100 : 0.9; // Convert cm to meters
+  // Use validated Z property to prevent NaN values
+  const baseHeight = validElement.z / 100; // Convert cm to meters (already validated with default 0)
   const y = baseHeight + (height / 2);
   
   // Check if this is a corner counter top
@@ -1664,12 +1694,15 @@ export const EnhancedCounterTop3D: React.FC<Enhanced3DModelProps> = ({
    isSelected, 
    onClick 
  }) => {
-   const { x, z } = convertTo3D(element.x, element.y, roomDimensions.width, roomDimensions.height);
+   // Validate element dimensions to prevent NaN values
+   const validElement = validateElementDimensions(element);
+   
+   const { x, z } = convertTo3D(validElement.x, validElement.y, roomDimensions.width, roomDimensions.height);
    
    // Convert dimensions from cm to meters
-   const width = element.width / 100;
-   const depth = element.depth / 100;
-   const height = element.height / 100;
+   const width = validElement.width / 100;
+   const depth = validElement.depth / 100;
+   const height = validElement.height / 100;
    
    // End panels are positioned at floor level
    const y = height / 2;
@@ -1735,12 +1768,15 @@ export const EnhancedWindow3D: React.FC<Enhanced3DModelProps> = ({
   isSelected, 
   onClick 
 }) => {
-  const { x, z } = convertTo3D(element.x, element.y, roomDimensions.width, roomDimensions.height);
+  // Validate element dimensions to prevent NaN values
+  const validElement = validateElementDimensions(element);
+  
+  const { x, z } = convertTo3D(validElement.x, validElement.y, roomDimensions.width, roomDimensions.height);
   
   // Convert dimensions from cm to meters
-  const width = element.width / 100;
-  const depth = element.depth / 100;
-  const height = element.height / 100;
+  const width = validElement.width / 100;
+  const depth = validElement.depth / 100;
+  const height = validElement.height / 100;
   
   // Windows are positioned at 90cm (0.9m) off the ground
   const baseHeight = 0.9;
@@ -1809,12 +1845,15 @@ export const EnhancedDoor3D: React.FC<Enhanced3DModelProps> = ({
   isSelected, 
   onClick 
 }) => {
-  const { x, z } = convertTo3D(element.x, element.y, roomDimensions.width, roomDimensions.height);
+  // Validate element dimensions to prevent NaN values
+  const validElement = validateElementDimensions(element);
+  
+  const { x, z } = convertTo3D(validElement.x, validElement.y, roomDimensions.width, roomDimensions.height);
   
   // Convert dimensions from cm to meters
-  const width = element.width / 100;
-  const depth = element.depth / 100;
-  const height = element.height / 100;
+  const width = validElement.width / 100;
+  const depth = validElement.depth / 100;
+  const height = validElement.height / 100;
   
   // Doors are positioned at floor level
   const y = height / 2;
@@ -1886,12 +1925,15 @@ export const EnhancedFlooring3D: React.FC<Enhanced3DModelProps> = ({
   isSelected, 
   onClick 
 }) => {
-  const { x, z } = convertTo3D(element.x, element.y, roomDimensions.width, roomDimensions.height);
+  // Validate element dimensions to prevent NaN values
+  const validElement = validateElementDimensions(element);
+  
+  const { x, z } = convertTo3D(validElement.x, validElement.y, roomDimensions.width, roomDimensions.height);
   
   // Convert dimensions from cm to meters
-  const width = element.width / 100;
-  const depth = element.depth / 100;
-  const height = element.height / 100;
+  const width = validElement.width / 100;
+  const depth = validElement.depth / 100;
+  const height = validElement.height / 100;
   
   // Flooring is positioned at floor level
   const y = height / 2;
@@ -1947,12 +1989,15 @@ export const EnhancedToeKick3D: React.FC<Enhanced3DModelProps> = ({
   isSelected, 
   onClick 
 }) => {
-  const { x, z } = convertTo3D(element.x, element.y, roomDimensions.width, roomDimensions.height);
+  // Validate element dimensions to prevent NaN values
+  const validElement = validateElementDimensions(element);
+  
+  const { x, z } = convertTo3D(validElement.x, validElement.y, roomDimensions.width, roomDimensions.height);
   
   // Convert dimensions from cm to meters
-  const width = element.width / 100;
-  const depth = element.depth / 100;
-  const height = element.height / 100;
+  const width = validElement.width / 100;
+  const depth = validElement.depth / 100;
+  const height = validElement.height / 100;
   
   // Toe kicks are positioned at floor level
   const y = height / 2;
@@ -2008,12 +2053,15 @@ export const EnhancedCornice3D: React.FC<Enhanced3DModelProps> = ({
   isSelected, 
   onClick 
 }) => {
-  const { x, z } = convertTo3D(element.x, element.y, roomDimensions.width, roomDimensions.height);
+  // Validate element dimensions to prevent NaN values
+  const validElement = validateElementDimensions(element);
+  
+  const { x, z } = convertTo3D(validElement.x, validElement.y, roomDimensions.width, roomDimensions.height);
   
   // Convert dimensions from cm to meters
-  const width = element.width / 100;
-  const depth = element.depth / 100;
-  const height = element.height / 100;
+  const width = validElement.width / 100;
+  const depth = validElement.depth / 100;
+  const height = validElement.height / 100;
   
   // Cornices are positioned at top of wall units (200cm height)
   const baseHeight = 2.0; // 200cm
@@ -2070,12 +2118,15 @@ export const EnhancedPelmet3D: React.FC<Enhanced3DModelProps> = ({
   isSelected, 
   onClick 
 }) => {
-  const { x, z } = convertTo3D(element.x, element.y, roomDimensions.width, roomDimensions.height);
+  // Validate element dimensions to prevent NaN values
+  const validElement = validateElementDimensions(element);
+  
+  const { x, z } = convertTo3D(validElement.x, validElement.y, roomDimensions.width, roomDimensions.height);
   
   // Convert dimensions from cm to meters
-  const width = element.width / 100;
-  const depth = element.depth / 100;
-  const height = element.height / 100;
+  const width = validElement.width / 100;
+  const depth = validElement.depth / 100;
+  const height = validElement.height / 100;
   
   // Pelmets are positioned at bottom of wall units (140cm height)
   const baseHeight = 1.4; // 140cm
@@ -2132,12 +2183,15 @@ export const EnhancedWallUnitEndPanel3D: React.FC<Enhanced3DModelProps> = ({
   isSelected, 
   onClick 
 }) => {
-  const { x, z } = convertTo3D(element.x, element.y, roomDimensions.width, roomDimensions.height);
+  // Validate element dimensions to prevent NaN values
+  const validElement = validateElementDimensions(element);
+  
+  const { x, z } = convertTo3D(validElement.x, validElement.y, roomDimensions.width, roomDimensions.height);
   
   // Convert dimensions from cm to meters
-  const width = element.width / 100;
-  const depth = element.depth / 100;
-  const height = element.height / 100;
+  const width = validElement.width / 100;
+  const depth = validElement.depth / 100;
+  const height = validElement.height / 100;
   
   // Wall unit end panels are positioned at 200cm height from floor
   const baseHeight = 2.0; // 200cm

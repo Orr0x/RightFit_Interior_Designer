@@ -226,17 +226,17 @@ const CompactComponentSidebar: React.FC<CompactComponentSidebarProps> = ({
       return [component.id, ...filtered].slice(0, 6);
     });
 
-    // Create design element
+    // Create design element with proper structure
     const element: DesignElement = {
       id: `${component.id}-${Date.now()}`,
       name: component.name,
       type: component.type as any,
-      position: { x: 100, y: 100, z: 0 },
-      dimensions: {
-        width: component.width,
-        depth: component.depth,
-        height: component.height
-      },
+      x: 100,
+      y: 100,
+      z: 0,
+      width: component.width,
+      depth: component.depth,
+      height: component.height,
       color: component.color,
       rotation: 0
     };
