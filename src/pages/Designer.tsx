@@ -205,6 +205,13 @@ const Designer = () => {
   const handleUpdateElement = async (elementId: string, updates: Partial<DesignElement>) => {
     if (!currentRoomDesign) return;
 
+    console.log(`🔄 [Designer] handleUpdateElement called:`, {
+      elementId,
+      updates,
+      hasZUpdate: 'z' in updates,
+      zValue: updates.z
+    });
+
     // Save to history
     setHistory(prev => [...prev, { ...currentRoomDesign }]);
     setFuture([]);
@@ -212,6 +219,8 @@ const Designer = () => {
     const updatedElements = (currentRoomDesign.design_elements || []).map(el =>
       el.id === elementId ? { ...el, ...updates } : el
     );
+
+    console.log(`📋 [Designer] Updated element:`, updatedElements.find(el => el.id === elementId));
 
     await updateCurrentRoomDesign({
       design_elements: updatedElements,

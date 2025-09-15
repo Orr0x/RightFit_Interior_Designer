@@ -48,9 +48,18 @@ const validateElementDimensions = (element: DesignElement) => {
   // CRITICAL FIX: Always preserve user-set Z values, only default if truly missing
   let safeZ = 0; // Default for floor-mounted components
   
+  // DEBUG: Log Z value processing
+  console.log(`🔍 [validateElementDimensions] Processing element ${element.id}:`, {
+    elementZ: element.z,
+    isUndefined: element.z === undefined,
+    isNaN: isNaN(element.z as number),
+    elementType: element.type
+  });
+  
   // If Z is explicitly set (even to 0), ALWAYS use it - don't override user changes!
   if (element.z !== undefined && !isNaN(element.z)) {
     safeZ = element.z; // ALWAYS preserve user/system set Z values
+    console.log(`✅ [validateElementDimensions] Using existing Z value: ${safeZ}cm`);
   } else {
     // Only apply type-based defaults for completely missing Z values (legacy elements)
     if (element.type === 'cornice') {
@@ -66,6 +75,7 @@ const validateElementDimensions = (element: DesignElement) => {
     } else if (element.type === 'window') {
       safeZ = 90; // 90cm height for windows
     }
+    console.log(`🔧 [validateElementDimensions] Applied default Z value: ${safeZ}cm for type: ${element.type}`);
   }
 
   return {

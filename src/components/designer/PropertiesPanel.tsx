@@ -331,7 +331,16 @@ export const PropertiesPanel: React.FC<PropertiesPanelProps> = ({
                       <Input
                         type="number"
                         value={Math.round(selectedElement.z || 0)}
-                        onChange={(e) => onUpdateElement(selectedElement.id, { z: Number(e.target.value) })}
+                        onChange={(e) => {
+                          const newZ = Number(e.target.value);
+                          console.log(`🎛️ [PropertiesPanel] Z Position changed:`, {
+                            elementId: selectedElement.id,
+                            oldZ: selectedElement.z,
+                            newZ: newZ,
+                            elementType: selectedElement.type
+                          });
+                          onUpdateElement(selectedElement.id, { z: newZ });
+                        }}
                         className="h-8 text-xs"
                       />
                     </div>
