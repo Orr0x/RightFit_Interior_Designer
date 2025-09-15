@@ -271,7 +271,7 @@ const CompactComponentSidebar: React.FC<CompactComponentSidebarProps> = ({
     if (component.type === 'cornice') {
       defaultZ = 200; // 200cm height for cornice (top of wall units)
     } else if (component.type === 'pelmet') {
-      defaultZ = 124; // 124cm height for pelmet (bottom of wall units)
+      defaultZ = 140; // 140cm height for pelmet (FIXED: bottom of wall units)
     } else if (component.type === 'counter-top') {
       defaultZ = 90; // 90cm height for counter tops
     } else if (component.type === 'wall-cabinet' || component.id.includes('wall-cabinet')) {

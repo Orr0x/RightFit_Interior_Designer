@@ -45,16 +45,18 @@ const convertTo3D = (x: number, y: number, roomWidth: number, roomHeight: number
 
 // Helper function to validate element dimensions and prevent NaN values
 const validateElementDimensions = (element: DesignElement) => {
-  // Preserve the original Z value if it exists and is valid, otherwise use type-based defaults
+  // CRITICAL FIX: Always preserve user-set Z values, only default if truly missing
   let safeZ = 0; // Default for floor-mounted components
+  
+  // If Z is explicitly set (even to 0), ALWAYS use it - don't override user changes!
   if (element.z !== undefined && !isNaN(element.z)) {
-    safeZ = element.z; // Use existing valid Z value
+    safeZ = element.z; // ALWAYS preserve user/system set Z values
   } else {
-    // Apply type-based default Z positioning for legacy elements
+    // Only apply type-based defaults for completely missing Z values (legacy elements)
     if (element.type === 'cornice') {
       safeZ = 200; // 200cm height for cornice (top of wall units)
     } else if (element.type === 'pelmet') {
-      safeZ = 124; // 124cm height for pelmet (bottom of wall units)
+      safeZ = 140; // 140cm height for pelmet (FIXED: bottom of wall cabinets)
     } else if (element.type === 'counter-top') {
       safeZ = 90; // 90cm height for counter tops
     } else if (element.type === 'wall-cabinet' || element.id?.includes('wall-cabinet')) {
@@ -69,7 +71,7 @@ const validateElementDimensions = (element: DesignElement) => {
   return {
     x: isNaN(element.x) || element.x === undefined ? 0 : element.x,
     y: isNaN(element.y) || element.y === undefined ? 0 : element.y,
-    z: safeZ,
+    z: safeZ, // Now respects user changes and doesn't override
     width: isNaN(element.width) || element.width === undefined || element.width <= 0 ? 60 : element.width,
     depth: isNaN(element.depth) || element.depth === undefined || element.depth <= 0 ? 60 : element.depth,
     height: isNaN(element.height) || element.height === undefined || element.height <= 0 ? 90 : element.height,
@@ -2085,7 +2087,9 @@ export const EnhancedCornice3D: React.FC<Enhanced3DModelProps> = ({
   const height = validElement.height / 100;
   
   // Cornices are positioned at top of wall units (200cm height)
-  const baseHeight = 2.0; // 200cm
+  // Use the element's Z position if manually set, otherwise use default 200cm
+  const elementZ = validElement.z / 100; // Convert cm to meters
+  const baseHeight = elementZ > 0 ? elementZ : 2.0; // Use element Z or default 200cm
   const y = baseHeight + (height / 2);
   
   // Create materials
@@ -2150,7 +2154,9 @@ export const EnhancedPelmet3D: React.FC<Enhanced3DModelProps> = ({
   const height = validElement.height / 100;
   
   // Pelmets are positioned at bottom of wall units (140cm height)
-  const baseHeight = 1.4; // 140cm
+  // Use the element's Z position if manually set, otherwise use default 140cm
+  const elementZ = validElement.z / 100; // Convert cm to meters
+  const baseHeight = elementZ > 0 ? elementZ : 1.4; // Use element Z or default 140cm
   const y = baseHeight + (height / 2);
   
   // Create materials

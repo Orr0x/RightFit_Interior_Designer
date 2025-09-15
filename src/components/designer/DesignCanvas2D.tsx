@@ -585,12 +585,13 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
 
       ctx.save();
       
-      // Check if this is a corner counter top for proper rotation center
+      // Check if this is a corner counter top or corner wall cabinet for proper rotation center
       const isCornerCounterTop = element.type === 'counter-top' && element.id.includes('counter-top-corner');
+      const isCornerWallCabinet = element.type === 'cabinet' && element.id.includes('corner-wall-cabinet');
       
       // Apply rotation - convert degrees to radians if needed
-      if (isCornerCounterTop) {
-        // For L-shaped counter tops, rotate around the L-shape center (45cm, 45cm)
+      if (isCornerCounterTop || isCornerWallCabinet) {
+        // For L-shaped components, rotate around the L-shape center (45cm, 45cm)
         const lShapeCenterX = 45 * zoom; // Center of 90cm leg
         const lShapeCenterY = 45 * zoom; // Center of 90cm leg
         ctx.translate(pos.x + lShapeCenterX, pos.y + lShapeCenterY);
@@ -612,13 +613,36 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
         ctx.fillStyle = element.color || '#8b4513';
       }
       
-      // L-shape rendering (isCornerCounterTop already defined above)
+      // L-shape rendering for corner components
       
       if (isCornerCounterTop) {
         // Draw L-shaped corner counter top in plan view
         // Match the 3D geometry: 90cm legs with 60cm depth
         const legLength = 90 * zoom; // 90cm legs
         const legDepth = 60 * zoom;  // 60cm depth
+        
+        // X leg (horizontal section)
+        ctx.fillRect(0, 0, legLength, legDepth);
+        
+        // Z leg (vertical section) - positioned to form L-shape
+        ctx.fillRect(0, 0, legDepth, legLength);
+        
+        // Element border for L-shape (only when selected)
+        if (isSelected) {
+          ctx.strokeStyle = '#ff0000';
+          ctx.lineWidth = 2;
+          ctx.setLineDash([]);
+          
+          // Border for X leg
+          ctx.strokeRect(0, 0, legLength, legDepth);
+          // Border for Z leg  
+          ctx.strokeRect(0, 0, legDepth, legLength);
+        }
+      } else if (isCornerWallCabinet) {
+        // Draw L-shaped corner wall cabinet in plan view
+        // Match the 3D geometry: 90cm legs with 35cm depth (wall cabinet depth)
+        const legLength = 90 * zoom; // 90cm legs
+        const legDepth = 35 * zoom;  // 35cm depth for wall cabinets
         
         // X leg (horizontal section)
         ctx.fillRect(0, 0, legLength, legDepth);
@@ -657,8 +681,8 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
 
       // Selection handles (drawn after restore)
       if (isSelected) {
-        if (isCornerCounterTop) {
-          // For L-shaped counter tops, draw square selection handles (90cm x 90cm)
+        if (isCornerCounterTop || isCornerWallCabinet) {
+          // For L-shaped components, draw square selection handles (90cm x 90cm)
           const squareSize = 90 * zoom;
           drawSelectionHandles(ctx, pos.x, pos.y, squareSize, squareSize);
         } else {
@@ -1689,8 +1713,9 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
     const snapResult = getSnapPosition(draggedElement, roomPos.x, roomPos.y);
     const pos = roomToCanvas(snapResult.x, snapResult.y);
     
-    // Check if this is a corner counter top for L-shape preview
+    // Check if this is a corner component for L-shape preview
     const isCornerCounterTop = draggedElement.type === 'counter-top' && draggedElement.id.includes('counter-top-corner');
+    const isCornerWallCabinet = draggedElement.type === 'cabinet' && draggedElement.id.includes('corner-wall-cabinet');
     
     // Draw semi-transparent preview at snap position
     ctx.save();
@@ -1703,9 +1728,24 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
     ctx.setLineDash([5, 5]);
     
     if (isCornerCounterTop) {
-      // Draw L-shaped drag preview
+      // Draw L-shaped counter top drag preview
       const legLength = 90 * zoom; // 90cm legs
       const legDepth = 60 * zoom;  // 60cm depth
+      
+      // Preview fill
+      ctx.fillStyle = draggedElement.color || '#8b4513';
+      
+      // X leg (horizontal section)
+      ctx.fillRect(pos.x, pos.y, legLength, legDepth);
+      ctx.strokeRect(pos.x, pos.y, legLength, legDepth);
+      
+      // Z leg (vertical section)
+      ctx.fillRect(pos.x, pos.y, legDepth, legLength);
+      ctx.strokeRect(pos.x, pos.y, legDepth, legLength);
+    } else if (isCornerWallCabinet) {
+      // Draw L-shaped wall cabinet drag preview
+      const legLength = 90 * zoom; // 90cm legs
+      const legDepth = 35 * zoom;  // 35cm depth for wall cabinets
       
       // Preview fill
       ctx.fillStyle = draggedElement.color || '#8b4513';
@@ -2184,7 +2224,7 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
       if (componentData.type === 'cornice') {
         defaultZ = 200; // 200cm height for cornice (top of wall units)
       } else if (componentData.type === 'pelmet') {
-        defaultZ = 124; // 124cm height for pelmet (bottom of wall units)
+        defaultZ = 140; // 140cm height for pelmet (FIXED: bottom of wall units)
       } else if (componentData.type === 'counter-top') {
         defaultZ = 90; // 90cm height for counter tops
       } else if (componentData.type === 'wall-cabinet' || componentData.id?.includes('wall-cabinet')) {
@@ -2217,8 +2257,19 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
 
       onAddElement(newElement);
     } catch (error) {
-      console.warn('⚠️ Drop failed:', error instanceof Error ? error.message : 'Unknown error');
-      // Silently handle - this is expected for cancelled drags
+      // Enhanced error handling for different drop failure scenarios
+      if (error instanceof Error) {
+        if (error.message.includes('JSON')) {
+          console.warn('⚠️ Drop cancelled: Invalid component data (quick drag/release)');
+        } else if (error.message.includes('boundary')) {
+          console.warn('⚠️ Drop cancelled: Component dropped outside room boundaries');
+        } else {
+          console.warn('⚠️ Drop failed:', error.message);
+        }
+      } else {
+        console.warn('⚠️ Drop cancelled: Unknown reason (likely quick drag/release)');
+      }
+      // Silently handle - this is expected for cancelled drags and off-canvas drops
     }
   }, [canvasToRoom, snapToGrid, roomDimensions, getSnapPosition, onAddElement]);
 
