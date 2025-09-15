@@ -8,8 +8,9 @@ pnpm-debug.log*
 lerna-debug.log*
 
 # Environment variables - temporarily allow for setup
-# .env.local
-# .env.production
+.env
+.env.local
+.env.production
 .env.staging
 .env.*.local
 
