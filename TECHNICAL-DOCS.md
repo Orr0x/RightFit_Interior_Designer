@@ -157,6 +157,9 @@ npm run dev
 ### Environment Variables
 - `VITE_SUPABASE_URL`: Supabase project URL
 - `VITE_SUPABASE_ANON_KEY`: Supabase anonymous key
+- `VITE_SUPABASE_PROJECT_ID`: Supabase project ID
+
+**Security Note**: Environment files (`.env*`) are gitignored for security. Production deployments use GitHub Secrets.
 
 ## Deployment
 

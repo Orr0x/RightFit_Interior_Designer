@@ -4,9 +4,18 @@
 
 ### 1. Environment Variables
 
-Create the following environment variables in your production deployment platform:
+#### For GitHub Actions Deployment (Recommended)
+Set the following GitHub Secrets in your repository (Settings → Secrets and variables → Actions):
 
-#### Required Variables
+```bash
+VITE_SUPABASE_URL=your_production_supabase_url
+VITE_SUPABASE_ANON_KEY=your_production_supabase_anon_key  
+VITE_SUPABASE_PROJECT_ID=your_production_project_id
+```
+
+#### For Other Deployment Platforms
+Create the following environment variables in your deployment platform:
+
 ```bash
 VITE_SUPABASE_URL=your_production_supabase_url
 VITE_SUPABASE_ANON_KEY=your_production_supabase_anon_key

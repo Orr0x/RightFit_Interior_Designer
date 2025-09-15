@@ -230,6 +230,10 @@ npm run lint     # Run ESLint
 
 ## 🚀 Deployment
 
+### Using GitHub Actions (Recommended)
+1. Set GitHub Secrets: `VITE_SUPABASE_URL`, `VITE_SUPABASE_ANON_KEY`, `VITE_SUPABASE_PROJECT_ID`
+2. Push to main branch - automatic deployment via CI/CD
+
 ### Using Vercel/Netlify
 1. Build the project: `npm run build`
 2. Deploy the `dist` folder to your hosting platform
