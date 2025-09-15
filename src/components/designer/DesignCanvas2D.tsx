@@ -810,7 +810,7 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
 
       // Selection handles (drawn after restore)
       if (isSelected) {
-        if (isCornerCounterTop || isCornerWallCabinet || isCornerBaseCabinet) {
+        if (isCornerCounterTop || isCornerWallCabinet || isCornerBaseCabinet || isCornerTallUnit) {
           // For L-shaped components, draw square selection handles (90cm x 90cm)
           const squareSize = 90 * zoom;
           drawSelectionHandles(ctx, pos.x, pos.y, squareSize, squareSize);
@@ -2189,8 +2189,25 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
     if (!isDragging && active2DView === 'plan') {
       const roomPos = canvasToRoom(x, y);
       const hoveredEl = design.elements.find(element => {
-        return roomPos.x >= element.x && roomPos.x <= element.x + element.width &&
-               roomPos.y >= element.y && roomPos.y <= element.y + element.height;
+        // Check if this is a corner component that uses L-shaped footprint
+        const isCornerComponent = (element.type === 'counter-top' && element.id.includes('counter-top-corner')) ||
+                                 (element.type === 'cabinet' && element.id.includes('corner-wall-cabinet')) ||
+                                 (element.type === 'cabinet' && element.id.includes('corner-base-cabinet')) ||
+                                 (element.type === 'cabinet' && (
+                                   element.id.includes('corner-tall') || 
+                                   element.id.includes('corner-larder') ||
+                                   element.id.includes('larder-corner')
+                                 ));
+        
+        if (isCornerComponent) {
+          // L-shaped components use 90x90 footprint for hover detection
+          return roomPos.x >= element.x && roomPos.x <= element.x + 90 &&
+                 roomPos.y >= element.y && roomPos.y <= element.y + 90;
+        } else {
+          // Standard rectangular hover detection
+          return roomPos.x >= element.x && roomPos.x <= element.x + element.width &&
+                 roomPos.y >= element.y && roomPos.y <= element.y + element.height;
+        }
       });
       setHoveredElement(hoveredEl || null);
       
