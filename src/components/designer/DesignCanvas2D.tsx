@@ -1,5 +1,7 @@
 import React, { useRef, useEffect, useState, useCallback } from 'react';
 import { DesignElement, Design } from '../../types/project';
+import { ComponentService } from '@/services/ComponentService';
+import { RoomService } from '@/services/RoomService';
 
 // Throttle function for performance optimization
 const throttle = <T extends (...args: any[]) => void>(func: T, delay: number): T => {
@@ -44,11 +46,36 @@ interface DesignCanvas2DProps {
   onClearTapeMeasure?: () => void;
 }
 
-// Default room dimensions for kitchen (matching reference images)
-const DEFAULT_ROOM = {
+// Default room fallbacks (will be replaced by database values)
+const DEFAULT_ROOM_FALLBACK = {
   width: 600, // cm
   height: 400, // cm
   wallHeight: 240 // cm
+};
+
+// Room configuration cache
+let roomConfigCache: any = null;
+
+// Helper to get room configuration from database with caching
+const getRoomConfig = async (roomType: string, roomDimensions: any) => {
+  if (roomConfigCache) {
+    return roomConfigCache;
+  }
+
+  try {
+    const config = await RoomService.getRoomConfiguration(roomType as any, roomDimensions);
+    roomConfigCache = config;
+    return config;
+  } catch (err) {
+    console.warn('Failed to load room config, using fallback:', err);
+    const fallback = {
+      dimensions: roomDimensions || { width: 600, height: 400 },
+      wall_height: 240,
+      ceiling_height: 250
+    };
+    roomConfigCache = fallback;
+    return fallback;
+  }
 };
 
 // Canvas constants
@@ -58,26 +85,43 @@ const GRID_SIZE = 20; // Grid spacing in pixels
 const MIN_ZOOM = 0.5;
 const MAX_ZOOM = 3.0;
 
-// Component data for smart orientation
-const COMPONENT_DATA: Record<string, { 
-  hasDirection: boolean; 
-  doorSide: 'front' | 'back' | 'left' | 'right';
-  mountType: 'floor' | 'wall';
-  defaultDepth: number;
-}> = {
-  'cabinet': { hasDirection: true, doorSide: 'front', mountType: 'floor', defaultDepth: 60 },
-  'base-cabinet': { hasDirection: true, doorSide: 'front', mountType: 'floor', defaultDepth: 60 },
-  'wall-cabinet': { hasDirection: true, doorSide: 'front', mountType: 'wall', defaultDepth: 35 },
-  'appliance': { hasDirection: true, doorSide: 'front', mountType: 'floor', defaultDepth: 60 },
-  'counter-top': { hasDirection: false, doorSide: 'front', mountType: 'floor', defaultDepth: 60 },
-  'end-panel': { hasDirection: false, doorSide: 'front', mountType: 'floor', defaultDepth: 60 },
-  'window': { hasDirection: false, doorSide: 'front', mountType: 'wall', defaultDepth: 15 },
-  'door': { hasDirection: true, doorSide: 'front', mountType: 'floor', defaultDepth: 4 },
-  'flooring': { hasDirection: false, doorSide: 'front', mountType: 'floor', defaultDepth: 2 },
-  'toe-kick': { hasDirection: false, doorSide: 'front', mountType: 'floor', defaultDepth: 10 },
-  'cornice': { hasDirection: false, doorSide: 'front', mountType: 'wall', defaultDepth: 5 },
-  'pelmet': { hasDirection: false, doorSide: 'front', mountType: 'wall', defaultDepth: 8 },
-  'wall-unit-end-panel': { hasDirection: false, doorSide: 'front', mountType: 'wall', defaultDepth: 60 }
+// Component behavior cache for performance
+const componentBehaviorCache = new Map<string, any>();
+
+// Helper function to get component behavior from database with caching
+const getComponentBehavior = async (componentType: string) => {
+  if (componentBehaviorCache.has(componentType)) {
+    return componentBehaviorCache.get(componentType);
+  }
+
+  try {
+    const behavior = await ComponentService.getComponentBehavior(componentType);
+    // Add compatibility properties for existing code
+    const compatibleBehavior = {
+      ...behavior,
+      hasDirection: behavior.has_direction,
+      doorSide: behavior.door_side,
+      mountType: behavior.mount_type,
+      defaultDepth: await ComponentService.getDefaultDepth(componentType)
+    };
+    componentBehaviorCache.set(componentType, compatibleBehavior);
+    return compatibleBehavior;
+  } catch (err) {
+    console.warn(`Failed to load behavior for ${componentType}, using fallback:`, err);
+    // Fallback that matches old COMPONENT_DATA structure
+    const fallback = {
+      hasDirection: true,
+      doorSide: 'front',
+      mountType: 'floor',
+      defaultDepth: 60,
+      mount_type: 'floor',
+      has_direction: true,
+      door_side: 'front',
+      default_z_position: 0
+    };
+    componentBehaviorCache.set(componentType, fallback);
+    return fallback;
+  }
 };
 
 export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
@@ -120,7 +164,7 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
   }>({ vertical: [], horizontal: [], snapPoint: null });
 
   // Use design dimensions or default
-  const roomDimensions = design.roomDimensions || DEFAULT_ROOM;
+  const roomDimensions = design.roomDimensions || DEFAULT_ROOM_FALLBACK;
   
   // Room positioning - center the room in the canvas
   const roomPosition = {
@@ -143,6 +187,31 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
       y: (canvasY - roomPosition.y) / zoom
     };
   }, [roomPosition, zoom]);
+
+  // Preload component behaviors and room configuration
+  useEffect(() => {
+    const preloadData = async () => {
+      try {
+        // Load room configuration
+        await getRoomConfig(design.roomType, design.roomDimensions);
+        
+        // Preload common component behaviors (use actual database types)
+        const commonTypes = ['cabinet', 'appliance', 'counter-top', 'end-panel', 
+          'window', 'door', 'flooring', 'toe-kick', 'cornice', 'pelmet'];
+          
+        // Load all component behaviors in parallel
+        await Promise.all(
+          commonTypes.map(type => getComponentBehavior(type).catch(console.warn))
+        );
+        
+        console.log('🚀 [DesignCanvas2D] Preloaded component behaviors and room config');
+      } catch (err) {
+        console.warn('Failed to preload component data:', err);
+      }
+    };
+    
+    preloadData();
+  }, [design.roomType, design.roomDimensions]);
 
   // Snap to grid function
   const snapToGrid = useCallback((value: number) => {
@@ -295,7 +364,16 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
     }
 
     // Enhanced smart wall orientation - doors always face away from walls into the room
-    const componentData = COMPONENT_DATA[element.type];
+    // Get component behavior from cache (preloaded) or use fallback
+    const componentData = componentBehaviorCache.get(element.type) || {
+      hasDirection: true, doorSide: 'front', mountType: 'floor', defaultDepth: 60
+    };
+    
+    // Async preload behavior if not cached
+    if (!componentBehaviorCache.has(element.type)) {
+      getComponentBehavior(element.type).catch(console.warn);
+    }
+    
     if (componentData?.hasDirection) {
       // Use more generous wall snap distance for counter tops
       const wallSnapDistance = isCounterTop ? 50 : 35; // cm - more generous for counter tops
@@ -483,7 +561,7 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
 
     } else {
       // Elevation view - draw room as elevation (aligned to top)
-      const wallHeight = DEFAULT_ROOM.wallHeight * zoom;
+      const wallHeight = (roomConfigCache?.wall_height || DEFAULT_ROOM_FALLBACK.wallHeight) * zoom;
       const topY = roomPosition.y + 50; // Start from top with padding
       const floorY = topY + wallHeight; // Floor at bottom of wall height
 
@@ -534,7 +612,7 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
       ctx.fillText(widthText, roomPosition.x + roomWidth / 2, floorY + 20);
       
       // Wall height dimension (left side)
-      const heightText = `${DEFAULT_ROOM.wallHeight}cm`;
+      const heightText = `${roomConfigCache?.wall_height || DEFAULT_ROOM_FALLBACK.wallHeight}cm`;
       ctx.save();
       ctx.translate(roomPosition.x - 35, topY + wallHeight / 2);
       ctx.rotate(-Math.PI / 2);
@@ -589,9 +667,14 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
       const isCornerCounterTop = element.type === 'counter-top' && element.id.includes('counter-top-corner');
       const isCornerWallCabinet = element.type === 'cabinet' && element.id.includes('corner-wall-cabinet');
       const isCornerBaseCabinet = element.type === 'cabinet' && element.id.includes('corner-base-cabinet');
+      const isCornerTallUnit = element.type === 'cabinet' && (
+        element.id.includes('corner-tall') || 
+        element.id.includes('corner-larder') ||
+        element.id.includes('larder-corner')
+      );
       
       // Apply rotation - convert degrees to radians if needed
-      if (isCornerCounterTop || isCornerWallCabinet || isCornerBaseCabinet) {
+      if (isCornerCounterTop || isCornerWallCabinet || isCornerBaseCabinet || isCornerTallUnit) {
         // For L-shaped components, rotate around the L-shape center (45cm, 45cm)
         const lShapeCenterX = 45 * zoom; // Center of 90cm leg
         const lShapeCenterY = 45 * zoom; // Center of 90cm leg
@@ -667,6 +750,29 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
         // Match the 3D geometry: 90cm legs with 60cm depth (base cabinet depth)
         const legLength = 90 * zoom; // 90cm legs
         const legDepth = 60 * zoom;  // 60cm depth for base cabinets
+        
+        // X leg (horizontal section)
+        ctx.fillRect(0, 0, legLength, legDepth);
+        
+        // Z leg (vertical section) - positioned to form L-shape
+        ctx.fillRect(0, 0, legDepth, legLength);
+        
+        // Element border for L-shape (only when selected)
+        if (isSelected) {
+          ctx.strokeStyle = '#ff0000';
+          ctx.lineWidth = 2;
+          ctx.setLineDash([]);
+          
+          // Border for X leg
+          ctx.strokeRect(0, 0, legLength, legDepth);
+          // Border for Z leg  
+          ctx.strokeRect(0, 0, legDepth, legLength);
+        }
+      } else if (isCornerTallUnit) {
+        // Draw L-shaped corner tall unit in plan view
+        // Match the 3D geometry: 90cm legs with 60cm depth (tall unit depth)
+        const legLength = 90 * zoom; // 90cm legs
+        const legDepth = 60 * zoom;  // 60cm depth for tall units
         
         // X leg (horizontal section)
         ctx.fillRect(0, 0, legLength, legDepth);
@@ -769,9 +875,20 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
     
     if (!isCornerVisible && wall !== active2DView && wall !== 'center') return;
 
-    const componentData = COMPONENT_DATA[element.type] || { mountType: 'floor', defaultDepth: 60 };
+    // Get component behavior from cache or use fallback
+    const componentData = componentBehaviorCache.get(element.type) || { 
+      mountType: 'floor', 
+      defaultDepth: 60,
+      hasDirection: true,
+      doorSide: 'front'
+    };
+    
+    // Async preload behavior if not cached
+    if (!componentBehaviorCache.has(element.type)) {
+      getComponentBehavior(element.type).catch(console.warn);
+    }
     const roomWidth = roomDimensions.width * zoom;
-    const wallHeight = DEFAULT_ROOM.wallHeight * zoom;
+    const wallHeight = (roomConfigCache?.wall_height || DEFAULT_ROOM_FALLBACK.wallHeight) * zoom;
     const topY = roomPosition.y + 50; // Top of elevation view
     const floorY = topY + wallHeight; // Floor at bottom of wall height
     
@@ -794,72 +911,51 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
     }
     
     // Calculate vertical position and height based on component type
+    // Use database-driven elevation heights instead of hardcoded values
     let elementHeight: number;
     let yPos: number;
     
-    // More robust type checking for wall cabinets
-    const isWallCabinet = element.type.includes('wall-cabinet') ||
-                         element.type.includes('wall_cabinet') ||
-                         element.style?.toLowerCase().includes('wall');
+    // Get elevation height from database or use element's actual height
+    const useActualHeight = async (elementId: string, elementType: string) => {
+      try {
+        return await ComponentService.getElevationHeight(elementId, elementType);
+      } catch (err) {
+        console.warn(`Failed to get elevation height for ${elementId}:`, err);
+        return element.height; // Fallback to actual element height
+      }
+    };
     
-    if (isWallCabinet) {
-      // Wall cabinet dimensions and positioning
-      elementHeight = 70 * zoom; // Wall cabinet height (70cm)
-      const wallCabinetBottomHeight = 135 * zoom; // 135cm from floor (base cabinet + counter + gap)
-      yPos = floorY - wallCabinetBottomHeight - elementHeight; // Position from floor level
-    } else if (element.type === 'counter-top') {
-      // Counter top dimensions and positioning
-      elementHeight = 4 * zoom; // Counter top thickness (4cm)
-      const counterTopHeight = 90 * zoom; // 90cm from floor
-      yPos = floorY - counterTopHeight - elementHeight; // Position from floor level
-    } else if (element.type === 'end-panel') {
-      // End panel dimensions and positioning
-      elementHeight = element.height * zoom; // Use actual height from element
-      yPos = floorY - elementHeight; // Position from floor level
-    } else if (element.type === 'window') {
-      // Window dimensions and positioning
-      elementHeight = element.height * zoom; // Use actual height from element
-      const windowHeight = 90 * zoom; // 90cm from floor
-      yPos = floorY - windowHeight - elementHeight; // Position from floor level
-    } else if (element.type === 'door') {
-      // Door dimensions and positioning
-      elementHeight = element.height * zoom; // Use actual height from element
-      yPos = floorY - elementHeight; // Position from floor level
-    } else if (element.type === 'flooring') {
-      // Flooring dimensions and positioning
-      elementHeight = element.height * zoom; // Use actual height from element
-      yPos = floorY - elementHeight; // Position from floor level
-    } else if (element.type === 'toe-kick') {
-      // Toe kick dimensions and positioning
-      elementHeight = element.height * zoom; // Use actual height from element
-      yPos = floorY - elementHeight; // Position from floor level
-    } else if (element.type === 'cornice') {
-      // Cornice dimensions and positioning
-      elementHeight = element.height * zoom; // Use actual height from element
-      const corniceHeight = 200 * zoom; // 200cm from floor (top of wall units)
-      yPos = floorY - corniceHeight - elementHeight; // Position from floor level
-    } else if (element.type === 'pelmet') {
-      // Pelmet dimensions and positioning
-      elementHeight = element.height * zoom; // Use actual height from element
-      const pelmetHeight = 140 * zoom; // 140cm from floor (bottom of wall units)
-      yPos = floorY - pelmetHeight - elementHeight; // Position from floor level
-    } else if (element.type === 'wall-unit-end-panel') {
-      // Wall unit end panel dimensions and positioning
-      elementHeight = element.height * zoom; // Use actual height from element
-      const wallUnitHeight = 200 * zoom; // 200cm from floor
-      yPos = floorY - wallUnitHeight - elementHeight; // Position from floor level
-    } else if (element.type.includes('appliance')) {
-      if (element.style?.toLowerCase().includes('refrigerator')) {
-        elementHeight = 180 * zoom; // Tall refrigerator
-        yPos = floorY - elementHeight;
+    // Check if we have cached behavior for this component
+    const componentBehavior = componentBehaviorCache.get(element.type);
+    
+    // Determine elevation height - prioritize database values
+    let elevationHeightCm: number;
+    
+    if (componentBehavior?.elevation_height) {
+      // Use database elevation height
+      elevationHeightCm = componentBehavior.elevation_height;
+    } else {
+      // Use actual element height for tall units, larder cabinets, etc.
+      elevationHeightCm = element.height;
+    }
+    
+    elementHeight = elevationHeightCm * zoom;
+    
+    // Calculate Y position based on component mount type and Z position
+    if (componentBehavior?.mount_type === 'wall') {
+      // Wall-mounted components use their Z position
+      const mountHeight = (element.z || componentBehavior.default_z_position || 140) * zoom;
+      yPos = floorY - mountHeight - elementHeight;
+    } else {
+      // Floor-mounted components
+      if (element.z && element.z > 0) {
+        // Component has explicit Z position (e.g., raised appliances)
+        const mountHeight = element.z * zoom;
+        yPos = floorY - mountHeight - elementHeight;
       } else {
-        elementHeight = 85 * zoom; // Standard appliance height
+        // Floor level
         yPos = floorY - elementHeight;
       }
-    } else {
-      // Base cabinet (default)
-      elementHeight = 85 * zoom; // Standard base cabinet height
-      yPos = floorY - elementHeight;
     }
 
     // Draw detailed elevation view
@@ -1646,7 +1742,7 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
         : roomDimensions.height;
       
       // Horizontal ruler (bottom)
-      const wallHeight = DEFAULT_ROOM.wallHeight * zoom;
+      const wallHeight = (roomConfigCache?.wall_height || DEFAULT_ROOM_FALLBACK.wallHeight) * zoom;
       const topY = roomPosition.y + 50;
       const floorY = topY + wallHeight;
       const rulerY = floorY + 25;
@@ -1677,7 +1773,7 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
       ctx.lineTo(rulerX, floorY);
       ctx.stroke();
 
-      for (let h = 0; h <= DEFAULT_ROOM.wallHeight; h += 50) {
+      for (let h = 0; h <= (roomConfigCache?.wall_height || DEFAULT_ROOM_FALLBACK.wallHeight); h += 50) {
         const yPos = floorY - h * zoom;
         ctx.beginPath();
         ctx.moveTo(rulerX - 3, yPos);
@@ -1741,6 +1837,11 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
     const isCornerCounterTop = draggedElement.type === 'counter-top' && draggedElement.id.includes('counter-top-corner');
     const isCornerWallCabinet = draggedElement.type === 'cabinet' && draggedElement.id.includes('corner-wall-cabinet');
     const isCornerBaseCabinet = draggedElement.type === 'cabinet' && draggedElement.id.includes('corner-base-cabinet');
+    const isCornerTallUnit = draggedElement.type === 'cabinet' && (
+      draggedElement.id.includes('corner-tall') || 
+      draggedElement.id.includes('corner-larder') ||
+      draggedElement.id.includes('larder-corner')
+    );
     
     // Draw semi-transparent preview at snap position
     ctx.save();
@@ -1786,6 +1887,21 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
       // Draw L-shaped base cabinet drag preview
       const legLength = 90 * zoom; // 90cm legs
       const legDepth = 60 * zoom;  // 60cm depth for base cabinets
+      
+      // Preview fill
+      ctx.fillStyle = draggedElement.color || '#8b4513';
+      
+      // X leg (horizontal section)
+      ctx.fillRect(pos.x, pos.y, legLength, legDepth);
+      ctx.strokeRect(pos.x, pos.y, legLength, legDepth);
+      
+      // Z leg (vertical section)
+      ctx.fillRect(pos.x, pos.y, legDepth, legLength);
+      ctx.strokeRect(pos.x, pos.y, legDepth, legLength);
+    } else if (isCornerTallUnit) {
+      // Draw L-shaped tall unit drag preview
+      const legLength = 90 * zoom; // 90cm legs
+      const legDepth = 60 * zoom;  // 60cm depth for tall units
       
       // Preview fill
       ctx.fillStyle = draggedElement.color || '#8b4513';
@@ -2147,10 +2263,18 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
       const effectiveDims = getEffectiveDimensions(draggedElement);
       let clampWidth = effectiveDims.width;
       let clampDepth = effectiveDims.depth;
-      // Corner counter tops occupy a 90x90 footprint in plan view
+      // Corner components occupy a 90x90 footprint in plan view
       const isCornerCounterTop = draggedElement.type === 'counter-top' && draggedElement.id.includes('counter-top-corner');
-      if (isCornerCounterTop) {
-        clampWidth = 90;
+      const isCornerWallCabinet = draggedElement.type === 'cabinet' && draggedElement.id.includes('corner-wall-cabinet');
+      const isCornerBaseCabinet = draggedElement.type === 'cabinet' && draggedElement.id.includes('corner-base-cabinet');
+      const isCornerTallUnit = draggedElement.type === 'cabinet' && (
+        draggedElement.id.includes('corner-tall') || 
+        draggedElement.id.includes('corner-larder') ||
+        draggedElement.id.includes('larder-corner')
+      );
+      
+      if (isCornerCounterTop || isCornerWallCabinet || isCornerBaseCabinet || isCornerTallUnit) {
+        clampWidth = 90;  // L-shaped components use 90x90 footprint
         clampDepth = 90;
       }
 
@@ -2249,15 +2373,19 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
         return;
       }
 
-      // Create initial element with rotation 0 for boundary checks
-      const tempElement = {
-        width: componentData.width,
-        depth: componentData.depth,
-        rotation: 0
-      };
+      // Determine effective dimensions for boundary checks
+      // Corner components use 90x90 footprint regardless of their actual dimensions
+      const isCornerComponent = componentData.id?.includes('corner-') || 
+                               componentData.id?.includes('-corner') ||
+                               componentData.id?.includes('corner');
       
-      // Use effective dimensions for boundary checks (initially no rotation)
-      const effectiveDims = getEffectiveDimensions(tempElement);
+      let effectiveWidth = componentData.width;
+      let effectiveDepth = componentData.depth;
+      
+      if (isCornerComponent) {
+        effectiveWidth = 90;  // L-shaped components use 90x90 footprint
+        effectiveDepth = 90;
+      }
 
       // Set default Z position based on component type
       let defaultZ = 0; // Default for floor-mounted components
@@ -2357,7 +2485,7 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
         const roomWidth = active2DView === 'front' || active2DView === 'back'
           ? roomDimensions.width
           : roomDimensions.height;
-        const wallHeight = DEFAULT_ROOM.wallHeight;
+        const wallHeight = roomConfigCache?.wall_height || DEFAULT_ROOM_FALLBACK.wallHeight;
         const scaleX = (CANVAS_WIDTH * 0.8) / roomWidth;
         const scaleY = (CANVAS_HEIGHT * 0.6) / wallHeight;
         setZoom(Math.min(scaleX, scaleY, MAX_ZOOM));

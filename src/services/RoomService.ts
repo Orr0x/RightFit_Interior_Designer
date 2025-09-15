@@ -70,10 +70,11 @@ export class RoomService {
       if (error) {
         console.warn(`⚠️ [RoomService] No template found for ${roomType}, using defaults:`, error);
         // Fallback to reasonable defaults
+        const safeName = roomType ? roomType.charAt(0).toUpperCase() + roomType.slice(1) : 'Kitchen';
         const fallback: RoomTypeTemplate = {
           id: 'fallback',
-          room_type: roomType,
-          name: roomType.charAt(0).toUpperCase() + roomType.slice(1),
+          room_type: roomType || 'kitchen',
+          name: safeName,
           icon_name: 'Square',
           description: `${roomType} design`,
           default_width: 400,
