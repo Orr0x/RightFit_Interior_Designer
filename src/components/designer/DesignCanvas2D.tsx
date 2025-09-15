@@ -585,12 +585,13 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
 
       ctx.save();
       
-      // Check if this is a corner counter top or corner wall cabinet for proper rotation center
+      // Check if this is a corner component for proper rotation center
       const isCornerCounterTop = element.type === 'counter-top' && element.id.includes('counter-top-corner');
       const isCornerWallCabinet = element.type === 'cabinet' && element.id.includes('corner-wall-cabinet');
+      const isCornerBaseCabinet = element.type === 'cabinet' && element.id.includes('corner-base-cabinet');
       
       // Apply rotation - convert degrees to radians if needed
-      if (isCornerCounterTop || isCornerWallCabinet) {
+      if (isCornerCounterTop || isCornerWallCabinet || isCornerBaseCabinet) {
         // For L-shaped components, rotate around the L-shape center (45cm, 45cm)
         const lShapeCenterX = 45 * zoom; // Center of 90cm leg
         const lShapeCenterY = 45 * zoom; // Center of 90cm leg
@@ -661,6 +662,29 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
           // Border for Z leg  
           ctx.strokeRect(0, 0, legDepth, legLength);
         }
+      } else if (isCornerBaseCabinet) {
+        // Draw L-shaped corner base cabinet in plan view
+        // Match the 3D geometry: 90cm legs with 60cm depth (base cabinet depth)
+        const legLength = 90 * zoom; // 90cm legs
+        const legDepth = 60 * zoom;  // 60cm depth for base cabinets
+        
+        // X leg (horizontal section)
+        ctx.fillRect(0, 0, legLength, legDepth);
+        
+        // Z leg (vertical section) - positioned to form L-shape
+        ctx.fillRect(0, 0, legDepth, legLength);
+        
+        // Element border for L-shape (only when selected)
+        if (isSelected) {
+          ctx.strokeStyle = '#ff0000';
+          ctx.lineWidth = 2;
+          ctx.setLineDash([]);
+          
+          // Border for X leg
+          ctx.strokeRect(0, 0, legLength, legDepth);
+          // Border for Z leg  
+          ctx.strokeRect(0, 0, legDepth, legLength);
+        }
       } else {
         // Standard rectangular rendering
         ctx.fillRect(0, 0, width, depth);
@@ -681,7 +705,7 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
 
       // Selection handles (drawn after restore)
       if (isSelected) {
-        if (isCornerCounterTop || isCornerWallCabinet) {
+        if (isCornerCounterTop || isCornerWallCabinet || isCornerBaseCabinet) {
           // For L-shaped components, draw square selection handles (90cm x 90cm)
           const squareSize = 90 * zoom;
           drawSelectionHandles(ctx, pos.x, pos.y, squareSize, squareSize);
@@ -1716,6 +1740,7 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
     // Check if this is a corner component for L-shape preview
     const isCornerCounterTop = draggedElement.type === 'counter-top' && draggedElement.id.includes('counter-top-corner');
     const isCornerWallCabinet = draggedElement.type === 'cabinet' && draggedElement.id.includes('corner-wall-cabinet');
+    const isCornerBaseCabinet = draggedElement.type === 'cabinet' && draggedElement.id.includes('corner-base-cabinet');
     
     // Draw semi-transparent preview at snap position
     ctx.save();
@@ -1746,6 +1771,21 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
       // Draw L-shaped wall cabinet drag preview
       const legLength = 90 * zoom; // 90cm legs
       const legDepth = 35 * zoom;  // 35cm depth for wall cabinets
+      
+      // Preview fill
+      ctx.fillStyle = draggedElement.color || '#8b4513';
+      
+      // X leg (horizontal section)
+      ctx.fillRect(pos.x, pos.y, legLength, legDepth);
+      ctx.strokeRect(pos.x, pos.y, legLength, legDepth);
+      
+      // Z leg (vertical section)
+      ctx.fillRect(pos.x, pos.y, legDepth, legLength);
+      ctx.strokeRect(pos.x, pos.y, legDepth, legLength);
+    } else if (isCornerBaseCabinet) {
+      // Draw L-shaped base cabinet drag preview
+      const legLength = 90 * zoom; // 90cm legs
+      const legDepth = 60 * zoom;  // 60cm depth for base cabinets
       
       // Preview fill
       ctx.fillStyle = draggedElement.color || '#8b4513';
