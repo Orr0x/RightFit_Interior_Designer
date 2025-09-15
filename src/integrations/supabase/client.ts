@@ -8,8 +8,7 @@ const SUPABASE_ANON_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY;
 // Validate environment variables are present
 if (!SUPABASE_URL || !SUPABASE_ANON_KEY) {
   console.error('❌ Missing Supabase environment variables');
-  console.error('VITE_SUPABASE_URL:', SUPABASE_URL ? '✅ Set' : '❌ Missing');
-  console.error('VITE_SUPABASE_ANON_KEY:', SUPABASE_ANON_KEY ? '✅ Set' : '❌ Missing');
+  console.error('Please check that VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY are set');
   throw new Error('Missing required Supabase configuration');
 }
 

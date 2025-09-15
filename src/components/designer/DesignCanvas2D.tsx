@@ -2155,21 +2155,13 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
       const y = (e.clientY - rect.top) * scaleY;
       const roomPos = canvasToRoom(x, y);
 
-      // 🎯 DEBUG: Log coordinate conversion
-      console.log('Drop Debug:', {
-        mouse: { clientX: e.clientX, clientY: e.clientY },
-        canvasRect: rect,
-        canvasPos: { x, y },
-        roomPos,
-        component: { name: componentData.name, w: componentData.width, d: componentData.depth }
-      });
+      // Calculate drop position based on mouse coordinates
 
       // 🎯 FIX: Drop position should place component center at mouse position
       // The drag image center represents where the component center should be placed
       const dropX = roomPos.x - (componentData.width / 2);
       const dropY = roomPos.y - (componentData.depth / 2);
 
-      console.log('Drop Position:', { dropX, dropY, finalX: dropX, finalY: dropY });
 
       // 🎯 BOUNDARY CHECK: Prevent drops outside room boundaries
       if (dropX < -50 || dropY < -50 || dropX > roomDimensions.width + 50 || dropY > roomDimensions.height + 50) {
