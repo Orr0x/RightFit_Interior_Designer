@@ -45,10 +45,31 @@ const convertTo3D = (x: number, y: number, roomWidth: number, roomHeight: number
 
 // Helper function to validate element dimensions and prevent NaN values
 const validateElementDimensions = (element: DesignElement) => {
+  // Preserve the original Z value if it exists and is valid, otherwise use type-based defaults
+  let safeZ = 0; // Default for floor-mounted components
+  if (element.z !== undefined && !isNaN(element.z)) {
+    safeZ = element.z; // Use existing valid Z value
+  } else {
+    // Apply type-based default Z positioning for legacy elements
+    if (element.type === 'cornice') {
+      safeZ = 200; // 200cm height for cornice (top of wall units)
+    } else if (element.type === 'pelmet') {
+      safeZ = 124; // 124cm height for pelmet (bottom of wall units)
+    } else if (element.type === 'counter-top') {
+      safeZ = 90; // 90cm height for counter tops
+    } else if (element.type === 'wall-cabinet' || element.id?.includes('wall-cabinet')) {
+      safeZ = 140; // 140cm height for wall cabinets
+    } else if (element.type === 'wall-unit-end-panel') {
+      safeZ = 200; // 200cm height for wall unit end panels
+    } else if (element.type === 'window') {
+      safeZ = 90; // 90cm height for windows
+    }
+  }
+
   return {
     x: isNaN(element.x) || element.x === undefined ? 0 : element.x,
     y: isNaN(element.y) || element.y === undefined ? 0 : element.y,
-    z: isNaN(element.z) || element.z === undefined ? 0 : element.z,
+    z: safeZ,
     width: isNaN(element.width) || element.width === undefined || element.width <= 0 ? 60 : element.width,
     depth: isNaN(element.depth) || element.depth === undefined || element.depth <= 0 ? 60 : element.depth,
     height: isNaN(element.height) || element.height === undefined || element.height <= 0 ? 90 : element.height,

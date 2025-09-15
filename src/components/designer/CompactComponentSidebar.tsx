@@ -226,14 +226,30 @@ const CompactComponentSidebar: React.FC<CompactComponentSidebarProps> = ({
       return [component.id, ...filtered].slice(0, 6);
     });
 
-    // Create design element with proper structure
+    // Set default Z position based on component type
+    let defaultZ = 0; // Default for floor-mounted components
+    if (component.type === 'cornice') {
+      defaultZ = 200; // 200cm height for cornice (top of wall units)
+    } else if (component.type === 'pelmet') {
+      defaultZ = 124; // 124cm height for pelmet (bottom of wall units)
+    } else if (component.type === 'counter-top') {
+      defaultZ = 90; // 90cm height for counter tops
+    } else if (component.type === 'wall-cabinet' || component.id.includes('wall-cabinet')) {
+      defaultZ = 140; // 140cm height for wall cabinets
+    } else if (component.type === 'wall-unit-end-panel') {
+      defaultZ = 200; // 200cm height for wall unit end panels
+    } else if (component.type === 'window') {
+      defaultZ = 90; // 90cm height for windows
+    }
+
+    // Create design element with proper structure and default Z positioning
     const element: DesignElement = {
       id: `${component.id}-${Date.now()}`,
       name: component.name,
       type: component.type as any,
       x: 100,
       y: 100,
-      z: 0,
+      z: defaultZ,
       width: component.width,
       depth: component.depth,
       height: component.height,

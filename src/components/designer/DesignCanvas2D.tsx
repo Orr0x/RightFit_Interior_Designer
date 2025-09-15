@@ -2180,11 +2180,19 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
       const effectiveDims = getEffectiveDimensions(tempElement);
 
       // Set default Z position based on component type
-      let defaultZ = 0; // Default for most components
+      let defaultZ = 0; // Default for floor-mounted components
       if (componentData.type === 'cornice') {
         defaultZ = 200; // 200cm height for cornice (top of wall units)
       } else if (componentData.type === 'pelmet') {
         defaultZ = 124; // 124cm height for pelmet (bottom of wall units)
+      } else if (componentData.type === 'counter-top') {
+        defaultZ = 90; // 90cm height for counter tops
+      } else if (componentData.type === 'wall-cabinet' || componentData.id?.includes('wall-cabinet')) {
+        defaultZ = 140; // 140cm height for wall cabinets
+      } else if (componentData.type === 'wall-unit-end-panel') {
+        defaultZ = 200; // 200cm height for wall unit end panels
+      } else if (componentData.type === 'window') {
+        defaultZ = 90; // 90cm height for windows
       }
 
       const newElement: DesignElement = {
