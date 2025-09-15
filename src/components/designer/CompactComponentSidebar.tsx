@@ -338,7 +338,14 @@ const CompactComponentSidebar: React.FC<CompactComponentSidebarProps> = ({
       </div>
 
       {/* Component Content - Scrollable */}
-      <div className="flex-1 overflow-y-auto p-3 space-y-4 scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100">
+      <div 
+        className="flex-1 overflow-y-scroll p-3 space-y-4" 
+        style={{
+          scrollbarWidth: 'thin',
+          scrollbarColor: '#9ca3af #f3f4f6',
+          maxHeight: 'calc(100vh - 200px)' // Constrain height to force scrolling
+        }}
+      >
         {/* Recently Used Section */}
         {recentComponents.length > 0 && (
           <div className="space-y-2">

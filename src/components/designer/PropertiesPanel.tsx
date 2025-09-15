@@ -218,7 +218,12 @@ export const PropertiesPanel: React.FC<PropertiesPanelProps> = ({
   };
 
   return (
-    <div className="space-y-6 p-4">
+    <div className="h-full flex flex-col">
+      <div className="flex-1 overflow-y-scroll p-4 space-y-6" style={{
+        scrollbarWidth: 'thin',
+        scrollbarColor: '#9ca3af #f3f4f6',
+        maxHeight: 'calc(100vh - 200px)' // Constrain height to force scrolling
+      }}>
       {/* Room Properties */}
       <Card>
         <CardHeader>
@@ -642,6 +647,7 @@ export const PropertiesPanel: React.FC<PropertiesPanelProps> = ({
           )}
         </CardContent>
       </Card>
+      </div>
     </div>
   );
 };

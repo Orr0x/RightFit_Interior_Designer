@@ -2140,7 +2140,12 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
     if (!canvas) return;
 
     try {
-      const componentData = JSON.parse(e.dataTransfer.getData('component'));
+      const rawData = e.dataTransfer.getData('component');
+      if (!rawData || rawData.trim() === '') {
+        console.warn('⚠️ Drop cancelled: No component data (quick drag release)');
+        return;
+      }
+      const componentData = JSON.parse(rawData);
       const rect = canvas.getBoundingClientRect();
       // 🎯 FIX: Account for CSS scaling of canvas element
       const scaleX = CANVAS_WIDTH / rect.width;
@@ -2165,6 +2170,12 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
       const dropY = roomPos.y - (componentData.depth / 2);
 
       console.log('Drop Position:', { dropX, dropY, finalX: dropX, finalY: dropY });
+
+      // 🎯 BOUNDARY CHECK: Prevent drops outside room boundaries
+      if (dropX < -50 || dropY < -50 || dropX > roomDimensions.width + 50 || dropY > roomDimensions.height + 50) {
+        console.warn('⚠️ Drop cancelled: Component dropped outside room boundaries');
+        return;
+      }
 
       // Create initial element with rotation 0 for boundary checks
       const tempElement = {
@@ -2206,7 +2217,8 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
 
       onAddElement(newElement);
     } catch (error) {
-      // Error parsing dropped component - handled by toast
+      console.warn('⚠️ Drop failed:', error instanceof Error ? error.message : 'Unknown error');
+      // Silently handle - this is expected for cancelled drags
     }
   }, [canvasToRoom, snapToGrid, roomDimensions, getSnapPosition, onAddElement]);
 

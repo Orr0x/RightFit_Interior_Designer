@@ -508,7 +508,7 @@ const Designer = () => {
 
   return (
     <ErrorBoundary>
-      <div className="min-h-screen bg-gray-50 flex flex-col">
+      <div className="h-screen bg-gray-50 flex flex-col overflow-hidden">
         <PerformanceMonitor 
           elementCount={currentRoomDesign.design_elements?.length || 0}
           onPerformanceIssue={(issue) => toast.warning(issue)}
@@ -644,12 +644,10 @@ const Designer = () => {
                 <div className="p-4 border-b">
                   <h2 className="font-semibold text-gray-900">Designer</h2>
                 </div>
-                <div className="flex-1 overflow-y-auto">
-                  <CompactComponentSidebar
-                    onAddElement={handleAddElement}
-                    roomType={currentRoomDesign.room_type}
-                  />
-                </div>
+                <CompactComponentSidebar
+                  onAddElement={handleAddElement}
+                  roomType={currentRoomDesign.room_type}
+                />
               </>
             )}
           </div>
@@ -769,16 +767,14 @@ const Designer = () => {
                 <div className="p-4 border-b">
                   <h2 className="font-semibold text-gray-900">Properties</h2>
                 </div>
-                <div className="flex-1 overflow-y-auto">
-                  <PropertiesPanel
-                    selectedElement={selectedElement}
-                    onUpdateElement={handleUpdateElement}
-                    roomDimensions={design.roomDimensions}
-                    onUpdateRoomDimensions={handleUpdateRoomDimensions}
-                    roomType={design.roomType}
-                    active2DView={active2DView}
-                  />
-                </div>
+                <PropertiesPanel
+                  selectedElement={selectedElement}
+                  onUpdateElement={handleUpdateElement}
+                  roomDimensions={design.roomDimensions}
+                  onUpdateRoomDimensions={handleUpdateRoomDimensions}
+                  roomType={design.roomType}
+                  active2DView={active2DView}
+                />
               </>
             )}
           </div>

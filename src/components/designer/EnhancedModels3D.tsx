@@ -191,15 +191,6 @@ export const EnhancedCabinet3D: React.FC<Enhanced3DModelProps> = ({
           <meshStandardMaterial color={handleColor} metalness={0.8} roughness={0.2} />
         </mesh>
 
-        {/* Cabinet frames */}
-        <lineSegments position={[0, 0, cornerDepth / 2 - legLength / 2]}>
-          <edgesGeometry args={[new THREE.BoxGeometry(legLength, height, cornerDepth)]} />
-          <lineBasicMaterial color="#333" />
-        </lineSegments>
-        <lineSegments position={[cornerDepth / 2 - legLength / 2, 0, 0]}>
-          <edgesGeometry args={[new THREE.BoxGeometry(cornerDepth, height, legLength)]} />
-          <lineBasicMaterial color="#333" />
-        </lineSegments>
       </group>
     );
   } else if (isLarderCornerUnit) {
@@ -267,11 +258,6 @@ export const EnhancedCabinet3D: React.FC<Enhanced3DModelProps> = ({
           <meshStandardMaterial color={handleColor} metalness={0.8} roughness={0.2} />
         </mesh>
 
-        {/* Frame outline */}
-        <lineSegments>
-          <edgesGeometry args={[new THREE.BoxGeometry(width, height, depth)]} />
-          <lineBasicMaterial color="#333" />
-        </lineSegments>
       </group>
     );
   } else if (isPanDrawer) {
@@ -331,11 +317,6 @@ export const EnhancedCabinet3D: React.FC<Enhanced3DModelProps> = ({
           <meshStandardMaterial color={handleColor} metalness={0.8} roughness={0.2} />
         </mesh>
 
-        {/* Cabinet frame */}
-        <lineSegments>
-          <edgesGeometry args={[new THREE.BoxGeometry(width, height, depth)]} />
-          <lineBasicMaterial color="#333" />
-        </lineSegments>
       </group>
     );
   } else if (isBedroom && element.id.includes('wardrobe')) {
@@ -383,11 +364,6 @@ export const EnhancedCabinet3D: React.FC<Enhanced3DModelProps> = ({
           );
         })}
 
-        {/* Cabinet frame */}
-        <lineSegments>
-          <edgesGeometry args={[new THREE.BoxGeometry(width, height, depth)]} />
-          <lineBasicMaterial color="#333" />
-        </lineSegments>
       </group>
     );
   } else if (isBedroom && element.id.includes('chest')) {
@@ -434,11 +410,6 @@ export const EnhancedCabinet3D: React.FC<Enhanced3DModelProps> = ({
           );
         })}
 
-        {/* Frame */}
-        <lineSegments>
-          <edgesGeometry args={[new THREE.BoxGeometry(width, height, depth)]} />
-          <lineBasicMaterial color="#333" />
-        </lineSegments>
       </group>
     );
   } else {
@@ -614,11 +585,6 @@ export const EnhancedCabinet3D: React.FC<Enhanced3DModelProps> = ({
           </>
         )}
 
-        {/* Cabinet frame */}
-        <lineSegments>
-          <edgesGeometry args={[new THREE.BoxGeometry(width, height, depth)]} />
-          <lineBasicMaterial color="#333" />
-        </lineSegments>
       </group>
     );
   }
@@ -739,11 +705,6 @@ export const EnhancedAppliance3D: React.FC<Enhanced3DModelProps> = ({
           <meshStandardMaterial color="#F5F5F5" roughness={0.9} metalness={0} />
         </mesh>
         
-        {/* Frame outline */}
-        <lineSegments>
-          <edgesGeometry args={[new THREE.BoxGeometry(width, height, bedDepth)]} />
-          <lineBasicMaterial color="#333" />
-        </lineSegments>
       </group>
     );
   } else if (applianceType === 'sofa') {
@@ -815,11 +776,6 @@ export const EnhancedAppliance3D: React.FC<Enhanced3DModelProps> = ({
           />
         </mesh>
         
-        {/* Frame outline */}
-        <lineSegments>
-          <edgesGeometry args={[new THREE.BoxGeometry(width, height, sofaDepth)]} />
-          <lineBasicMaterial color="#333" />
-        </lineSegments>
       </group>
     );
   } else if (applianceType === 'chair') {
@@ -870,11 +826,6 @@ export const EnhancedAppliance3D: React.FC<Enhanced3DModelProps> = ({
           <meshStandardMaterial color="#2F4F4F" roughness={0.4} metalness={0.6} />
         </mesh>
         
-        {/* Frame outline */}
-        <lineSegments>
-          <edgesGeometry args={[new THREE.BoxGeometry(width, height, chairDepth)]} />
-          <lineBasicMaterial color="#333" />
-        </lineSegments>
       </group>
     );
   } else if (applianceType === 'table') {
@@ -931,11 +882,6 @@ export const EnhancedAppliance3D: React.FC<Enhanced3DModelProps> = ({
           />
         </mesh>
         
-        {/* Frame outline */}
-        <lineSegments>
-          <edgesGeometry args={[new THREE.BoxGeometry(width, height, tableDepth)]} />
-          <lineBasicMaterial color="#333" />
-        </lineSegments>
       </group>
     );
   } else if (applianceType === 'tv') {
@@ -989,11 +935,6 @@ export const EnhancedAppliance3D: React.FC<Enhanced3DModelProps> = ({
           />
         </mesh>
         
-        {/* Frame outline */}
-        <lineSegments>
-          <edgesGeometry args={[new THREE.BoxGeometry(width, height, tvThickness)]} />
-          <lineBasicMaterial color="#666" />
-        </lineSegments>
       </group>
     );
   } else if (applianceType === 'refrigerator') {
@@ -1054,11 +995,6 @@ export const EnhancedAppliance3D: React.FC<Enhanced3DModelProps> = ({
           <meshStandardMaterial color="#666666" />
         </mesh>
         
-        {/* Frame outline */}
-        <lineSegments>
-          <edgesGeometry args={[new THREE.BoxGeometry(width, height, depth)]} />
-          <lineBasicMaterial color="#666" />
-        </lineSegments>
       </group>
     );
   } else if (applianceType === 'dishwasher') {
@@ -1121,11 +1057,6 @@ export const EnhancedAppliance3D: React.FC<Enhanced3DModelProps> = ({
           <meshStandardMaterial color="#5fe968" emissive="#5fe968" emissiveIntensity={0.5} />
         </mesh>
         
-        {/* Frame outline */}
-        <lineSegments>
-          <edgesGeometry args={[new THREE.BoxGeometry(width, height, depth)]} />
-          <lineBasicMaterial color="#666" />
-        </lineSegments>
       </group>
     );
   } else if (applianceType === 'oven') {
@@ -1206,11 +1137,6 @@ export const EnhancedAppliance3D: React.FC<Enhanced3DModelProps> = ({
           />
         )}
         
-        {/* Frame outline */}
-        <lineSegments>
-          <edgesGeometry args={[new THREE.BoxGeometry(width, height, depth)]} />
-          <lineBasicMaterial color="#666" />
-        </lineSegments>
       </group>
     );
   } else if (applianceType === 'washing-machine') {
@@ -1299,11 +1225,6 @@ export const EnhancedAppliance3D: React.FC<Enhanced3DModelProps> = ({
           <meshStandardMaterial color="#444" />
         </mesh>
         
-        {/* Frame outline */}
-        <lineSegments>
-          <edgesGeometry args={[new THREE.BoxGeometry(width, height, depth)]} />
-          <lineBasicMaterial color="#666" />
-        </lineSegments>
       </group>
     );
   } else if (applianceType === 'tumble-dryer') {
@@ -1404,11 +1325,6 @@ export const EnhancedAppliance3D: React.FC<Enhanced3DModelProps> = ({
           <meshStandardMaterial color="#444" />
         </mesh>
         
-        {/* Frame outline */}
-        <lineSegments>
-          <edgesGeometry args={[new THREE.BoxGeometry(width, height, depth)]} />
-          <lineBasicMaterial color="#666" />
-        </lineSegments>
       </group>
     );
   } else {
@@ -1453,11 +1369,6 @@ export const EnhancedAppliance3D: React.FC<Enhanced3DModelProps> = ({
           <meshStandardMaterial color="#c0c0c0" metalness={0.8} roughness={0.2} />
         </mesh>
         
-        {/* Frame outline */}
-        <lineSegments>
-          <edgesGeometry args={[new THREE.BoxGeometry(width, height, depth)]} />
-          <lineBasicMaterial color="#666" />
-        </lineSegments>
       </group>
     );
   }
@@ -1805,11 +1716,6 @@ export const EnhancedCounterTop3D: React.FC<Enhanced3DModelProps> = ({
          </mesh>
        )}
        
-       {/* Frame outline */}
-       <lineSegments>
-         <edgesGeometry args={[new THREE.BoxGeometry(width, height, depth)]} />
-         <lineBasicMaterial color="#333" />
-       </lineSegments>
      </group>
    );
  };
@@ -1884,11 +1790,6 @@ export const EnhancedWindow3D: React.FC<Enhanced3DModelProps> = ({
         </mesh>
       )}
       
-      {/* Frame outline */}
-      <lineSegments>
-        <edgesGeometry args={[new THREE.BoxGeometry(width, height, depth)]} />
-        <lineBasicMaterial color="#333" />
-      </lineSegments>
     </group>
   );
 };
@@ -1966,11 +1867,6 @@ export const EnhancedDoor3D: React.FC<Enhanced3DModelProps> = ({
         </mesh>
       )}
       
-      {/* Frame outline */}
-      <lineSegments>
-        <edgesGeometry args={[new THREE.BoxGeometry(width, height, depth)]} />
-        <lineBasicMaterial color="#333" />
-      </lineSegments>
     </group>
   );
 };
@@ -2032,11 +1928,6 @@ export const EnhancedFlooring3D: React.FC<Enhanced3DModelProps> = ({
         </mesh>
       )}
       
-      {/* Frame outline */}
-      <lineSegments>
-        <edgesGeometry args={[new THREE.BoxGeometry(width, height, depth)]} />
-        <lineBasicMaterial color="#333" />
-      </lineSegments>
     </group>
   );
 };
@@ -2098,11 +1989,6 @@ export const EnhancedToeKick3D: React.FC<Enhanced3DModelProps> = ({
         </mesh>
       )}
       
-      {/* Frame outline */}
-      <lineSegments>
-        <edgesGeometry args={[new THREE.BoxGeometry(width, height, depth)]} />
-        <lineBasicMaterial color="#333" />
-      </lineSegments>
     </group>
   );
 };
@@ -2165,11 +2051,6 @@ export const EnhancedCornice3D: React.FC<Enhanced3DModelProps> = ({
         </mesh>
       )}
       
-      {/* Frame outline */}
-      <lineSegments>
-        <edgesGeometry args={[new THREE.BoxGeometry(width, height, depth)]} />
-        <lineBasicMaterial color="#333" />
-      </lineSegments>
     </group>
   );
 };
@@ -2232,11 +2113,6 @@ export const EnhancedPelmet3D: React.FC<Enhanced3DModelProps> = ({
         </mesh>
       )}
       
-      {/* Frame outline */}
-      <lineSegments>
-        <edgesGeometry args={[new THREE.BoxGeometry(width, height, depth)]} />
-        <lineBasicMaterial color="#333" />
-      </lineSegments>
     </group>
   );
 };
@@ -2299,11 +2175,6 @@ export const EnhancedWallUnitEndPanel3D: React.FC<Enhanced3DModelProps> = ({
         </mesh>
       )}
       
-      {/* Frame outline */}
-      <lineSegments>
-        <edgesGeometry args={[new THREE.BoxGeometry(width, height, depth)]} />
-        <lineBasicMaterial color="#333" />
-      </lineSegments>
     </group>
   );
 };
