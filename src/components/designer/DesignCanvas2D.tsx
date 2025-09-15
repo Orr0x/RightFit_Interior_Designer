@@ -2,10 +2,10 @@ import React, { useRef, useEffect, useState, useCallback } from 'react';
 import { DesignElement, Design } from '../../types/project';
 
 // Throttle function for performance optimization
-const throttle = (func: (...args: unknown[]) => void, delay: number) => {
+const throttle = <T extends (...args: any[]) => void>(func: T, delay: number): T => {
   let timeoutId: NodeJS.Timeout | null = null;
   let lastExecTime = 0;
-  return (...args: unknown[]) => {
+  return ((...args: any[]) => {
     const currentTime = Date.now();
     
     if (currentTime - lastExecTime > delay) {
@@ -18,7 +18,7 @@ const throttle = (func: (...args: unknown[]) => void, delay: number) => {
         lastExecTime = Date.now();
       }, delay - (currentTime - lastExecTime));
     }
-  };
+  }) as T;
 };
 
 
@@ -626,24 +626,28 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
         // Z leg (vertical section) - positioned to form L-shape
         ctx.fillRect(0, 0, legDepth, legLength);
         
-        // Element border for L-shape
-        ctx.strokeStyle = isSelected ? '#ff0000' : '#333';
-        ctx.lineWidth = isSelected ? 2 : 1;
-        ctx.setLineDash([]);
-        
-        // Border for X leg
-        ctx.strokeRect(0, 0, legLength, legDepth);
-        // Border for Z leg  
-        ctx.strokeRect(0, 0, legDepth, legLength);
+        // Element border for L-shape (only when selected)
+        if (isSelected) {
+          ctx.strokeStyle = '#ff0000';
+          ctx.lineWidth = 2;
+          ctx.setLineDash([]);
+          
+          // Border for X leg
+          ctx.strokeRect(0, 0, legLength, legDepth);
+          // Border for Z leg  
+          ctx.strokeRect(0, 0, legDepth, legLength);
+        }
       } else {
         // Standard rectangular rendering
         ctx.fillRect(0, 0, width, depth);
         
-        // Element border
-        ctx.strokeStyle = isSelected ? '#ff0000' : '#333';
-        ctx.lineWidth = isSelected ? 2 : 1;
-        ctx.setLineDash([]);
-        ctx.strokeRect(0, 0, width, depth);
+        // Element border (only when selected)
+        if (isSelected) {
+          ctx.strokeStyle = '#ff0000';
+          ctx.lineWidth = 2;
+          ctx.setLineDash([]);
+          ctx.strokeRect(0, 0, width, depth);
+        }
       }
 
       // In plan view, show solid blocks without cabinet details or text labels
@@ -824,10 +828,12 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
     
     ctx.fillRect(xPos, yPos, elementWidth, elementHeight);
 
-    // Element border
-    ctx.strokeStyle = isSelected ? '#ff0000' : '#333';
-    ctx.lineWidth = isSelected ? 2 : 1;
-    ctx.strokeRect(xPos, yPos, elementWidth, elementHeight);
+    // Element border (only when selected)
+    if (isSelected) {
+      ctx.strokeStyle = '#ff0000';
+      ctx.lineWidth = 2;
+      ctx.strokeRect(xPos, yPos, elementWidth, elementHeight);
+    }
 
     // Draw detailed fronts based on component type
     if (element.type.includes('cabinet')) {
@@ -2170,11 +2176,20 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
       // Use effective dimensions for boundary checks (initially no rotation)
       const effectiveDims = getEffectiveDimensions(tempElement);
 
+      // Set default Z position based on component type
+      let defaultZ = 0; // Default for most components
+      if (componentData.type === 'cornice') {
+        defaultZ = 200; // 200cm height for cornice (top of wall units)
+      } else if (componentData.type === 'pelmet') {
+        defaultZ = 124; // 124cm height for pelmet (bottom of wall units)
+      }
+
       const newElement: DesignElement = {
         id: `${componentData.id}-${Date.now()}`,
         type: componentData.type,
         x: snapToGrid(Math.max(0, Math.min(dropX, roomDimensions.width - effectiveDims.width))),
         y: snapToGrid(Math.max(0, Math.min(dropY, roomDimensions.height - effectiveDims.depth))),
+        z: defaultZ, // Set appropriate Z position
         width: componentData.width, // X-axis dimension
         depth: componentData.depth, // Y-axis dimension (front-to-back)
         height: componentData.height, // Z-axis dimension (bottom-to-top)

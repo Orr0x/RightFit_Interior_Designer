@@ -287,10 +287,10 @@ const CompactComponentSidebar: React.FC<CompactComponentSidebarProps> = ({
   }
 
   return (
-    <div className="p-3 space-y-4 h-full flex flex-col">
+    <div className="h-full flex flex-col">
       {/* 🎉 DATABASE-DRIVEN COMPONENT LIBRARY - {allComponents.length} components loaded! */}
-      {/* Header Controls */}
-      <div className="space-y-3">
+      {/* Header Controls - Fixed at top */}
+      <div className="p-3 space-y-3 flex-shrink-0 border-b">
         {/* Search Bar */}
         <div className="relative">
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
@@ -337,8 +337,8 @@ const CompactComponentSidebar: React.FC<CompactComponentSidebarProps> = ({
         </div>
       </div>
 
-      {/* Component Content */}
-      <div className="flex-1 overflow-y-auto space-y-4">
+      {/* Component Content - Scrollable */}
+      <div className="flex-1 overflow-y-auto p-3 space-y-4">
         {/* Recently Used Section */}
         {recentComponents.length > 0 && (
           <div className="space-y-2">

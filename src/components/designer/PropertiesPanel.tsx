@@ -302,7 +302,7 @@ export const PropertiesPanel: React.FC<PropertiesPanelProps> = ({
                     Position & Size
                   </Label>
                   
-                  <div className="grid grid-cols-2 gap-3">
+                  <div className="grid grid-cols-3 gap-2">
                     <div className="space-y-1">
                       <Label className="text-xs">X Position</Label>
                       <Input
@@ -318,6 +318,15 @@ export const PropertiesPanel: React.FC<PropertiesPanelProps> = ({
                         type="number"
                         value={Math.round(selectedElement.y)}
                         onChange={(e) => onUpdateElement(selectedElement.id, { y: Number(e.target.value) })}
+                        className="h-8 text-xs"
+                      />
+                    </div>
+                    <div className="space-y-1">
+                      <Label className="text-xs">Z Position</Label>
+                      <Input
+                        type="number"
+                        value={Math.round(selectedElement.z || 0)}
+                        onChange={(e) => onUpdateElement(selectedElement.id, { z: Number(e.target.value) })}
                         className="h-8 text-xs"
                       />
                     </div>
