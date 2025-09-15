@@ -77,10 +77,13 @@ export const useComponents = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  // Fetch all components
+  // Fetch all components with comprehensive debugging
   const fetchComponents = async () => {
     try {
       setLoading(true);
+      console.log('🔄 [useComponents] Starting component fetch from database...');
+      
+      const startTime = Date.now();
       const { data, error } = await supabase
         .from('components')
         .select('*')
@@ -88,15 +91,47 @@ export const useComponents = () => {
         .order('category')
         .order('name');
 
-      if (error) throw error;
+      const fetchTime = Date.now() - startTime;
+      console.log(`⏱️ [useComponents] Database query completed in ${fetchTime}ms`);
+
+      if (error) {
+        console.error('❌ [useComponents] Database error:', error);
+        throw error;
+      }
+      
+      const componentCount = data?.length || 0;
+      console.log(`✅ [useComponents] Loaded ${componentCount} components from database`);
+      
+      // Debug wall units specifically
+      const wallUnits = data?.filter(comp => comp.category === 'wall-units') || [];
+      console.log(`🏠 [useComponents] Wall units found: ${wallUnits.length}`);
+      if (wallUnits.length > 0) {
+        console.log('🏠 [useComponents] Wall unit components:', wallUnits.map(w => w.name));
+      } else {
+        console.warn('⚠️ [useComponents] NO WALL UNITS FOUND IN DATABASE!');
+      }
+      
+      // Debug categories
+      const categories = [...new Set(data?.map(comp => comp.category) || [])];
+      console.log('📂 [useComponents] Available categories:', categories.sort());
+      
+      // Debug kitchen components
+      const kitchenComponents = data?.filter(comp => comp.room_types?.includes('kitchen')) || [];
+      console.log(`🍳 [useComponents] Kitchen components: ${kitchenComponents.length}`);
       
       setComponents(data || []);
       setError(null);
     } catch (err) {
-      console.error('Error fetching components:', err);
+      console.error('💥 [useComponents] Fatal error fetching components:', err);
+      console.error('💥 [useComponents] Error details:', {
+        message: err instanceof Error ? err.message : 'Unknown error',
+        stack: err instanceof Error ? err.stack : undefined,
+        timestamp: new Date().toISOString()
+      });
       setError(err instanceof Error ? err.message : 'Failed to fetch components');
     } finally {
       setLoading(false);
+      console.log('🏁 [useComponents] Component fetch completed');
     }
   };
 

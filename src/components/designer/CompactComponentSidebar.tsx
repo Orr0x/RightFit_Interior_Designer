@@ -78,11 +78,27 @@ const CompactComponentSidebar: React.FC<CompactComponentSidebarProps> = ({
     }));
   }, [components]);
 
-  // Filter components for current room type
+  // Filter components for current room type with debugging
   const availableComponents = useMemo(() => {
-    return allComponents.filter(component => 
+    console.log(`🔍 [CompactComponentSidebar] Filtering components for room type: ${roomType}`);
+    console.log(`🔍 [CompactComponentSidebar] Total components loaded: ${allComponents.length}`);
+    
+    const filtered = allComponents.filter(component => 
       component.roomTypes.includes(roomType)
     );
+    
+    console.log(`🔍 [CompactComponentSidebar] Components available for ${roomType}: ${filtered.length}`);
+    
+    // Debug wall units specifically
+    const wallUnitsAvailable = filtered.filter(comp => comp.category === 'wall-units');
+    console.log(`🏠 [CompactComponentSidebar] Wall units available for ${roomType}: ${wallUnitsAvailable.length}`);
+    if (wallUnitsAvailable.length > 0) {
+      console.log('🏠 [CompactComponentSidebar] Available wall units:', wallUnitsAvailable.map(w => w.name));
+    } else {
+      console.warn(`⚠️ [CompactComponentSidebar] NO WALL UNITS AVAILABLE for room type: ${roomType}`);
+    }
+    
+    return filtered;
   }, [allComponents, roomType]);
 
   // Apply search and size filters
@@ -115,8 +131,10 @@ const CompactComponentSidebar: React.FC<CompactComponentSidebarProps> = ({
     return filtered;
   }, [availableComponents, searchTerm, sizeFilter]);
 
-  // Group components by category
+  // Group components by category with debugging
   const componentsByCategory = useMemo(() => {
+    console.log(`📂 [CompactComponentSidebar] Grouping ${filteredComponents.length} filtered components by category`);
+    
     const groups: Record<string, ComponentDefinition[]> = {};
     filteredComponents.forEach(component => {
       if (!groups[component.category]) {
@@ -124,6 +142,28 @@ const CompactComponentSidebar: React.FC<CompactComponentSidebarProps> = ({
       }
       groups[component.category].push(component);
     });
+    
+    const categoryList = Object.keys(groups).sort();
+    console.log('📂 [CompactComponentSidebar] Final categories with components:', categoryList);
+    
+    // Debug each category count
+    categoryList.forEach(category => {
+      const count = groups[category].length;
+      console.log(`📂 [CompactComponentSidebar] ${category}: ${count} components`);
+      
+      if (category === 'wall-units') {
+        console.log('🏠 [CompactComponentSidebar] Wall units in final group:', groups[category].map(w => w.name));
+      }
+    });
+    
+    // Check if wall-units category exists
+    if (!groups['wall-units']) {
+      console.error('❌ [CompactComponentSidebar] WALL-UNITS CATEGORY MISSING FROM FINAL GROUPS!');
+      console.log('📂 [CompactComponentSidebar] Available categories:', categoryList);
+    } else {
+      console.log(`✅ [CompactComponentSidebar] Wall-units category found with ${groups['wall-units'].length} components`);
+    }
+    
     return groups;
   }, [filteredComponents]);
 
@@ -273,27 +313,42 @@ const CompactComponentSidebar: React.FC<CompactComponentSidebarProps> = ({
     });
   };
 
-  // 🚀 Loading and error states for database components
+  // 🚀 Loading and error states for database components with debugging
   if (loading) {
+    console.log('⏳ [CompactComponentSidebar] Component sidebar in loading state');
     return (
       <div className="p-3 h-full flex flex-col items-center justify-center">
         <LoadingSpinner />
-        <p className="text-sm text-gray-600 mt-2">Loading 154 components from database...</p>
+        <p className="text-sm text-gray-600 mt-2">Loading components from database...</p>
+        <p className="text-xs text-gray-500 mt-1">Network: {navigator.onLine ? '🟢 Online' : '🔴 Offline'}</p>
       </div>
     );
   }
 
   if (error) {
+    console.error('💥 [CompactComponentSidebar] Component sidebar in error state:', error);
+    console.log('🌐 [CompactComponentSidebar] Network status:', {
+      online: navigator.onLine,
+      userAgent: navigator.userAgent,
+      timestamp: new Date().toISOString()
+    });
+    
     return (
       <div className="p-3 h-full flex flex-col items-center justify-center">
         <div className="text-red-500 text-center">
           <p className="font-medium">Failed to load components</p>
           <p className="text-sm text-gray-600 mt-1">{error}</p>
+          <p className="text-xs text-gray-500 mt-1">
+            Network: {navigator.onLine ? '🟢 Online' : '🔴 Offline'}
+          </p>
           <Button 
             variant="outline" 
             size="sm" 
             className="mt-3"
-            onClick={() => refetch()}
+            onClick={() => {
+              console.log('🔄 [CompactComponentSidebar] Manual retry requested');
+              refetch();
+            }}
           >
             Try Again
           </Button>
@@ -301,6 +356,10 @@ const CompactComponentSidebar: React.FC<CompactComponentSidebarProps> = ({
       </div>
     );
   }
+
+  // Debug summary when components are successfully loaded
+  console.log(`✅ [CompactComponentSidebar] Component sidebar rendered successfully`);
+  console.log(`✅ [CompactComponentSidebar] Summary: ${allComponents.length} total, ${availableComponents.length} for ${roomType}, ${Object.keys(componentsByCategory).length} categories`);
 
   return (
     <div className="h-full flex flex-col">
