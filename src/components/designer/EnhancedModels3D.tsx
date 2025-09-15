@@ -141,8 +141,19 @@ export const EnhancedCabinet3D: React.FC<Enhanced3DModelProps> = ({
   const isLarderOvenMicrowave = element.id.includes('larder-oven-microwave');
   const isLarderCoffeeMachine = element.id.includes('larder-coffee-machine');
   
-  // Set position based on cabinet type
-  const yPosition = isWallCabinet ? 2.0 - height / 2 : height / 2;
+  // Set position based on cabinet type and Z position
+  // Use validElement.z if set, otherwise use type-based defaults
+  let baseHeight: number;
+  if (validElement.z > 0) {
+    // User has set a custom Z position - use it
+    baseHeight = validElement.z / 100; // Convert cm to meters
+    console.log(`✅ [EnhancedCabinet3D] Using custom Z position: ${validElement.z}cm for ${element.id}`);
+  } else {
+    // Use type-based defaults
+    baseHeight = isWallCabinet ? 2.0 : 0; // Wall cabinets at 200cm, base cabinets on floor
+    console.log(`🔧 [EnhancedCabinet3D] Using default Z position: ${baseHeight * 100}cm for ${element.id} (${isWallCabinet ? 'wall' : 'base'} cabinet)`);
+  }
+  const yPosition = baseHeight + height / 2;
   
   // Material colors - more refined than basic colors
   const selectedColor = '#ff6b6b';
@@ -686,8 +697,18 @@ export const EnhancedAppliance3D: React.FC<Enhanced3DModelProps> = ({
                       element.id.includes('table') ? 'table' :
                       element.id.includes('tv') ? 'tv' : 'generic';
   
-  // Use actual element height
-  const yPosition = height / 2;
+  // Use Z position if set, otherwise use default (floor level)
+  let baseHeight: number;
+  if (validElement.z > 0) {
+    // User has set a custom Z position - use it
+    baseHeight = validElement.z / 100; // Convert cm to meters
+    console.log(`✅ [EnhancedAppliance3D] Using custom Z position: ${validElement.z}cm for ${element.id}`);
+  } else {
+    // Default to floor level for appliances
+    baseHeight = 0;
+    console.log(`🔧 [EnhancedAppliance3D] Using default Z position: 0cm for ${element.id} (floor level)`);
+  }
+  const yPosition = baseHeight + height / 2;
   
   // Base color based on appliance type
   const applianceColor = getApplianceColor(applianceType, element);
@@ -1811,8 +1832,17 @@ export const EnhancedWindow3D: React.FC<Enhanced3DModelProps> = ({
   const depth = validElement.depth / 100;
   const height = validElement.height / 100;
   
-  // Windows are positioned at 90cm (0.9m) off the ground
-  const baseHeight = 0.9;
+  // Windows - use Z position if set, otherwise default to 90cm
+  let baseHeight: number;
+  if (validElement.z > 0) {
+    // User has set a custom Z position - use it
+    baseHeight = validElement.z / 100; // Convert cm to meters
+    console.log(`✅ [Window3D] Using custom Z position: ${validElement.z}cm for ${element.id}`);
+  } else {
+    // Default to 90cm for windows
+    baseHeight = 0.9;
+    console.log(`🔧 [Window3D] Using default Z position: 90cm for ${element.id}`);
+  }
   const y = baseHeight + (height / 2);
   
   // Create materials
@@ -2230,8 +2260,17 @@ export const EnhancedWallUnitEndPanel3D: React.FC<Enhanced3DModelProps> = ({
   const depth = validElement.depth / 100;
   const height = validElement.height / 100;
   
-  // Wall unit end panels are positioned at 200cm height from floor
-  const baseHeight = 2.0; // 200cm
+  // Wall unit end panels - use Z position if set, otherwise default to 200cm
+  let baseHeight: number;
+  if (validElement.z > 0) {
+    // User has set a custom Z position - use it
+    baseHeight = validElement.z / 100; // Convert cm to meters
+    console.log(`✅ [WallUnitEndPanel3D] Using custom Z position: ${validElement.z}cm for ${element.id}`);
+  } else {
+    // Default to 200cm for wall unit end panels
+    baseHeight = 2.0;
+    console.log(`🔧 [WallUnitEndPanel3D] Using default Z position: 200cm for ${element.id}`);
+  }
   const y = baseHeight + (height / 2);
   
   // Create materials
