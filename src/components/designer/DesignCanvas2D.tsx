@@ -248,9 +248,8 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
     const guides = { vertical: [] as number[], horizontal: [] as number[] };
 
     // Get effective dimensions based on current rotation
-    const effectiveDims = getEffectiveDimensions(element);
-    let elementWidth = effectiveDims.width;
-    let elementDepth = effectiveDims.depth;
+    let elementWidth = element.width;
+    let elementDepth = element.depth;
     
     // Corner counter top behaves as a 90x90 square footprint in plan view
     const isCornerCounterTop = element.type === 'counter-top' && element.id.includes('counter-top-corner');
@@ -2260,9 +2259,8 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
       }
       
       // Update element with final position - use effective footprint for plan view
-      const effectiveDims = getEffectiveDimensions(draggedElement);
-      let clampWidth = effectiveDims.width;
-      let clampDepth = effectiveDims.depth;
+      let clampWidth = draggedElement.width;
+      let clampDepth = draggedElement.depth;
       // Corner components occupy a 90x90 footprint in plan view
       const isCornerCounterTop = draggedElement.type === 'counter-top' && draggedElement.id.includes('counter-top-corner');
       const isCornerWallCabinet = draggedElement.type === 'cabinet' && draggedElement.id.includes('corner-wall-cabinet');
@@ -2406,8 +2404,8 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
       const newElement: DesignElement = {
         id: `${componentData.id}-${Date.now()}`,
         type: componentData.type,
-        x: snapToGrid(Math.max(0, Math.min(dropX, roomDimensions.width - effectiveDims.width))),
-        y: snapToGrid(Math.max(0, Math.min(dropY, roomDimensions.height - effectiveDims.depth))),
+        x: snapToGrid(Math.max(0, Math.min(dropX, roomDimensions.width - effectiveWidth))),
+        y: snapToGrid(Math.max(0, Math.min(dropY, roomDimensions.height - effectiveDepth))),
         z: defaultZ, // Set appropriate Z position
         width: componentData.width, // X-axis dimension
         depth: componentData.depth, // Y-axis dimension (front-to-back)
