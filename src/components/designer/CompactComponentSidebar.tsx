@@ -7,6 +7,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 import { DesignElement, RoomType } from '@/types/project';
 import useOptimizedComponents from '@/hooks/useOptimizedComponents';
+import { useIsMobile } from '@/hooks/use-mobile';
 import { LoadingSpinner } from '@/components/designer/LoadingSpinner';
 // Define DatabaseComponent type locally since it may not be in generated types yet
 interface DatabaseComponent {
@@ -72,6 +73,7 @@ const CompactComponentSidebar: React.FC<CompactComponentSidebarProps> = ({
   onAddElement, 
   roomType 
 }) => {
+  const isMobile = useIsMobile();
   const [searchTerm, setSearchTerm] = useState('');
   const [sizeFilter, setSizeFilter] = useState<SizeFilter>('all');
   const [viewMode, setViewMode] = useState<ViewMode>('grid');
@@ -211,6 +213,38 @@ const CompactComponentSidebar: React.FC<CompactComponentSidebarProps> = ({
       'accessories': 'Accessories'
     };
     return labels[category] || category.replace('-', ' ').replace(/\b\w/g, l => l.toUpperCase());
+  };
+
+  // Handle mobile click-to-add - directly add component to canvas center
+  const handleMobileClickToAdd = (component: DatabaseComponent) => {
+    console.log('📱 [Mobile Click-to-Add] Adding component:', component.name);
+    
+    // Create a new design element positioned at canvas center
+    const newElement: DesignElement = {
+      id: `${component.component_id}-${Date.now()}`,
+      type: component.type as any,
+      x: 200, // Center-ish position (will be adjustable by dragging)
+      y: 150, // Center-ish position
+      z: 0, // Will be set by component behavior logic
+      width: component.width,
+      height: component.height,
+      depth: component.depth,
+      rotation: 0,
+      color: component.color || '#8B4513',
+      name: component.name,
+      category: component.category
+    };
+
+    // Add to canvas and update recently used
+    onAddElement(newElement);
+    
+    // Update recently used components
+    setRecentlyUsed(prev => {
+      const updated = [component.component_id, ...prev.filter(id => id !== component.component_id)];
+      return updated.slice(0, 5); // Keep only 5 most recent
+    });
+    
+    console.log('✅ [Mobile Click-to-Add] Component added to canvas at (200, 150)');
   };
 
   // Handle drag start - only serialize essential data (no React components)
@@ -515,6 +549,8 @@ const CompactComponentSidebar: React.FC<CompactComponentSidebarProps> = ({
                   viewMode={viewMode}
                   onDragStart={handleDragStart}
                   onSelect={handleComponentSelect}
+                  isMobile={isMobile}
+                  onMobileClickToAdd={handleMobileClickToAdd}
                 />
               ))}
             </div>
@@ -554,6 +590,8 @@ const CompactComponentSidebar: React.FC<CompactComponentSidebarProps> = ({
                       viewMode={viewMode}
                       onDragStart={handleDragStart}
                       onSelect={handleComponentSelect}
+                      isMobile={isMobile}
+                      onMobileClickToAdd={handleMobileClickToAdd}
                     />
                   ))}
                 </div>
@@ -591,22 +629,28 @@ interface CompactComponentCardProps {
   viewMode: ViewMode;
   onDragStart: (e: React.DragEvent, component: DatabaseComponent) => void;
   onSelect: (component: DatabaseComponent) => void;
+  isMobile: boolean;
+  onMobileClickToAdd: (component: DatabaseComponent) => void;
 }
 
 const CompactComponentCard: React.FC<CompactComponentCardProps> = ({
   component,
   viewMode,
   onDragStart,
-  onSelect
+  onSelect,
+  isMobile,
+  onMobileClickToAdd
 }) => {
   if (viewMode === 'list') {
     return (
       <Card
-        className="group hover:shadow-sm transition-all cursor-grab active:cursor-grabbing select-none border-l-4 hover:border-l-blue-500"
+        className={`group hover:shadow-sm transition-all select-none border-l-4 hover:border-l-blue-500 ${
+          isMobile ? 'cursor-pointer' : 'cursor-grab active:cursor-grabbing'
+        }`}
         style={{ borderLeftColor: component.color }}
-        draggable="true"
-        onDragStart={(e) => onDragStart(e, component)}
-        onClick={() => onSelect(component)}
+        draggable={!isMobile}
+        onDragStart={isMobile ? undefined : (e) => onDragStart(e, component)}
+        onClick={() => isMobile ? onMobileClickToAdd(component) : onSelect(component)}
       >
         <CardContent className="p-2">
           <div className="flex items-center justify-between">
@@ -633,10 +677,12 @@ const CompactComponentCard: React.FC<CompactComponentCardProps> = ({
 
   return (
     <Card
-      className="group hover:shadow-md transition-all cursor-grab active:cursor-grabbing select-none"
-      draggable="true"
-      onDragStart={(e) => onDragStart(e, component)}
-      onClick={() => onSelect(component)}
+      className={`group hover:shadow-md transition-all select-none ${
+        isMobile ? 'cursor-pointer' : 'cursor-grab active:cursor-grabbing'
+      }`}
+      draggable={!isMobile}
+      onDragStart={isMobile ? undefined : (e) => onDragStart(e, component)}
+      onClick={() => isMobile ? onMobileClickToAdd(component) : onSelect(component)}
     >
       <CardContent className="p-2">
         <div className="space-y-2">
