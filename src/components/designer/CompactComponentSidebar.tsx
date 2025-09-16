@@ -64,8 +64,13 @@ const CompactComponentSidebar: React.FC<CompactComponentSidebarProps> = ({
     return components || [];
   }, [components]);
 
-  // Filter components for current room type with debugging
+  // Filter components for current room type with debugging - only when not loading
   const availableComponents = useMemo(() => {
+    // Don't filter if still loading or no components yet
+    if (loading || allComponents.length === 0) {
+      return [];
+    }
+    
     console.log(`🔍 [CompactComponentSidebar] Filtering components for room type: ${roomType}`);
     console.log(`🔍 [CompactComponentSidebar] Total components loaded: ${allComponents.length}`);
     
@@ -75,7 +80,7 @@ const CompactComponentSidebar: React.FC<CompactComponentSidebarProps> = ({
     
     console.log(`🔍 [CompactComponentSidebar] Components available for ${roomType}: ${filtered.length}`);
     
-    // Debug wall units specifically
+    // Debug wall units specifically - only when we have actual data
     const wallUnitsAvailable = filtered.filter(comp => comp.category === 'wall-units');
     console.log(`🏠 [CompactComponentSidebar] Wall units available for ${roomType}: ${wallUnitsAvailable.length}`);
     if (wallUnitsAvailable.length > 0) {
@@ -85,7 +90,7 @@ const CompactComponentSidebar: React.FC<CompactComponentSidebarProps> = ({
     }
     
     return filtered;
-  }, [allComponents, roomType]);
+  }, [allComponents, roomType, loading]);
 
   // Apply search and size filters
   const filteredComponents = useMemo(() => {

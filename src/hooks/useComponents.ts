@@ -102,12 +102,10 @@ export const useComponents = () => {
       const componentCount = data?.length || 0;
       console.log(`✅ [useComponents] Loaded ${componentCount} components from database`);
       
-      // Debug wall units specifically
+      // Debug wall units specifically (only warn if actually missing)
       const wallUnits = data?.filter(comp => comp.category === 'wall-units') || [];
       console.log(`🏠 [useComponents] Wall units found: ${wallUnits.length}`);
-      if (wallUnits.length > 0) {
-        console.log('🏠 [useComponents] Wall unit components:', wallUnits.map(w => w.name));
-      } else {
+      if (wallUnits.length === 0) {
         console.warn('⚠️ [useComponents] NO WALL UNITS FOUND IN DATABASE!');
       }
       
