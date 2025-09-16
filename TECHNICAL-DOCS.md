@@ -37,6 +37,12 @@ RightFit Interior Designer is a React-based web application that provides profes
 - **Improved Hover Detection**: Accurate mouse hit testing for component selection
 - **Visual Feedback**: Enhanced drag states with proper opacity and visual cues
 
+### Performance Optimizations (Phase 4 - v2.2)
+- **Authentication Flow**: Fixed race conditions between AuthContext and ProjectContext
+- **Project Loading**: Projects now load immediately after login (no refresh required)
+- **Component Loading**: Optimized database-driven component system with proper loading states
+- **Error Handling**: Eliminated false "User Not Authorized" popup during app startup
+
 ## Database Schema
 
 ### Tables
@@ -187,6 +193,14 @@ Deploy migrations in order:
 - **Performance**: Monitor FPS and memory usage
 - **3D rendering**: Ensure hardware acceleration is enabled
 - **Authentication**: Verify RLS policies are configured
+
+### Known Issues
+- **Initial Component Loading Console Error**: Harmless race condition during app startup
+  - Error message: "WALL UNITS CATEGORY MISSING FROM FINAL GROUPS!"
+  - Appears once during initial load, then resolves automatically
+  - Root cause: Component filtering runs before database fetch completes
+  - Impact: None - purely cosmetic console error, invisible to end users
+  - Status: Documented, not fixing - does not affect application functionality
 
 ### Debug Tools
 - Performance Monitor (development only)
