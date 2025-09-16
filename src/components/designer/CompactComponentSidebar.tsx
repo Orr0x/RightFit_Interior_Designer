@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useMemo } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -218,10 +218,19 @@ const CompactComponentSidebar: React.FC<CompactComponentSidebarProps> = ({
     const scaleFactor = 1.15; // Increase by 15% to better match canvas components
     
     // Check if this is a corner component that uses L-shaped footprint (90x90cm)
-    const isCornerComponent = component.component_id?.includes('corner-') || 
-                             component.component_id?.includes('-corner') ||
-                             component.component_id?.includes('corner') ||
-                             component.component_id?.includes('larder-corner');
+    // Check both id and name since we're using ComponentDefinition interface
+    const componentIdentifier = component.id || component.name || '';
+    const isCornerComponent = componentIdentifier.toLowerCase().includes('corner') ||
+                             componentIdentifier.toLowerCase().includes('larder corner');
+    
+    // Debug logging to see what's happening
+    console.log('🔍 [Drag Preview Debug]:', {
+      id: component.id,
+      name: component.name,
+      isCornerComponent,
+      originalDimensions: `${component.width}x${component.depth}`,
+      previewDimensions: isCornerComponent ? '90x90' : `${component.width}x${component.depth}`
+    });
     
     let previewWidth, previewDepth;
     if (isCornerComponent) {
@@ -320,7 +329,7 @@ const CompactComponentSidebar: React.FC<CompactComponentSidebarProps> = ({
       defaultZ = 140; // 140cm height for pelmet (FIXED: bottom of wall units)
     } else if (component.type === 'counter-top') {
       defaultZ = 90; // 90cm height for counter tops
-    } else if (component.type === 'wall-cabinet' || component.id.includes('wall-cabinet')) {
+    } else if (component.type === 'cabinet' && component.id.includes('wall-cabinet')) {
       defaultZ = 140; // 140cm height for wall cabinets
     } else if (component.type === 'wall-unit-end-panel') {
       defaultZ = 200; // 200cm height for wall unit end panels

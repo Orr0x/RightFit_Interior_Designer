@@ -77,7 +77,7 @@
 - [ ] Memory leaks in 3D view with large designs
 
 ### 🟢 Minor
-- [ ] Console warnings in development mode
+- [x] ✅ **TypeScript errors in CompactComponentSidebar** - Fixed component_id vs id property mismatch
 - [ ] Occasional snap guide flickering
 - [ ] Drag preview sometimes shows system icons instead of component preview
 
@@ -138,5 +138,5 @@
 
 ---
 
-*Last updated: September 16, 2025*
+*Last updated: September 16, 2025 - Fixed TypeScript errors*
 *Next review: When current corner positioning issue is resolved*
