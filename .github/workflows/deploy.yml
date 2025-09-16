@@ -25,13 +25,13 @@ jobs:
       
       - name: Debug Environment Variables
         run: |
-          echo "🔍 Checking .env.production file..."
-          if [ -f ".env.production" ]; then
-            echo "✅ .env.production exists"
+          echo "🔍 Checking .env file..."
+          if [ -f ".env" ]; then
+            echo "✅ .env exists"
             echo "Contents (first 10 lines):"
-            head -10 .env.production
+            head -10 .env
           else
-            echo "❌ .env.production not found"
+            echo "❌ .env not found"
           fi
           echo ""
           echo "🔍 GitHub Secrets status:"
@@ -47,7 +47,7 @@ jobs:
           echo "🔍 Using GitHub Secrets for environment variables..."
           echo "VITE_SUPABASE_URL is set: $([ -n "$VITE_SUPABASE_URL" ] && echo 'YES' || echo 'NO')"
           echo "VITE_SUPABASE_ANON_KEY is set: $([ -n "$VITE_SUPABASE_ANON_KEY" ] && echo 'YES' || echo 'NO')"
-          npm run build:prod
+          npm run build
       
       - name: Create deployment package
         run: |
