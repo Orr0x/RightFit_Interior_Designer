@@ -234,16 +234,12 @@ export function ProjectProvider({ children }: { children: React.ReactNode }) {
   
   // Refs to avoid stale closures in intervals
   const stateRef = useRef(state);
-  const saveCurrentDesignRef = useRef(saveCurrentDesign);
+  const saveCurrentDesignRef = useRef<((showNotification?: boolean) => Promise<void>) | null>(null);
   
   // Update refs when values change
   useEffect(() => {
     stateRef.current = state;
   }, [state]);
-  
-  useEffect(() => {
-    saveCurrentDesignRef.current = saveCurrentDesign;
-  }, [saveCurrentDesign]);
 
   // Get current user - now uses AuthContext user instead of direct Supabase call
   const getCurrentUser = async () => {
@@ -782,6 +778,11 @@ export function ProjectProvider({ children }: { children: React.ReactNode }) {
     }
   }, [state.currentRoomDesign, updateCurrentRoomDesign, dispatch, toast]);
 
+  // Update ref after function is declared
+  useEffect(() => {
+    saveCurrentDesignRef.current = saveCurrentDesign;
+  }, [saveCurrentDesign]);
+
   // Auto-save functionality - memoized to prevent infinite loops
   const enableAutoSave = useCallback(() => {
     console.log('🔄 [ProjectContext] Enabling auto-save...');
@@ -836,7 +837,7 @@ export function ProjectProvider({ children }: { children: React.ReactNode }) {
         const currentState = stateRef.current;
         const currentSaveFunction = saveCurrentDesignRef.current;
         
-        if (currentState.hasUnsavedChanges && currentState.currentRoomDesign) {
+        if (currentState.hasUnsavedChanges && currentState.currentRoomDesign && currentSaveFunction) {
           console.log('💾 [ProjectContext] Auto-saving design...');
           try {
             await currentSaveFunction(false);
