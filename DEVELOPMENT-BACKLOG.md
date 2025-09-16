@@ -2,11 +2,24 @@
 
 ## 📋 Current Priority Issues
 
-### 🔴 HIGH PRIORITY - UI/UX Issues
-- [ ] **Corner Component Positioning Bug** - Only works in 2/4 corners (top-left, bottom-right work; top-right, bottom-left broken)
-  - Root cause: Corner detection uses 120x120cm instead of 90x90cm L-shaped footprint
-  - Affects: Corner tall units, corner wall cabinets, corner base cabinets, corner counter-tops
-  - Impact: Users cannot place corner components in all corners
+### 🔴 CRITICAL PRIORITY - Core Architecture Issues
+- [ ] **2D/3D Room Dimension Inconsistency** - Fundamental measurement and positioning problems
+  - **2D Wall Thickness Issue**: 2D walls have no thickness, causing positioning errors
+  - **Drop Position Misalignment**: Components drop relative to wall center line instead of inner face
+  - **Overlap Problem**: Components appear to overlap walls due to positioning against center line
+  - **Measurement Skew**: Room appears smaller in 3D than 2D due to wall thickness differences
+  - **Impact**: Inaccurate designs, components placed incorrectly, measurement inconsistencies
+  - **Priority**: HIGHEST - affects all room layouts and component positioning
+
+- [ ] **Component Boundary & Rotation System Overhaul** - Multiple interconnected positioning issues
+  - **Rotation Boundary Problem**: Component boundaries don't rotate with the component
+  - **Drag Image vs 2D Component Mismatch**: Different sizes/constraints between preview and actual placement
+  - **Corner Positioning Bug**: Only works in 2/4 corners (related to boundary calculation)
+  - **Solution Consideration**: May need separate horizontal/vertical models for accurate placement
+  - **Impact**: Users cannot accurately position or rotate components
+  - **Priority**: HIGHEST - core functionality broken
+
+### 🔴 HIGH PRIORITY - Dependent on Architecture Fixes
 - [x] ✅ **Wall Unit Load Issue** - Component timing/race condition causes loading failures
   - Root cause: Database components not loaded when sidebar renders
   - Impact: Users see "NO WALL UNITS AVAILABLE" error
@@ -58,8 +71,13 @@
   - Status: Documented, not fixing - does not affect functionality
   - User impact: Only visible in developer console, invisible to end users
 
+- [ ] **2D Elevation Views Implementation** - BLOCKED until architecture fixes complete
+  - **Dependency**: Requires accurate 2D/3D dimension consistency first
+  - **Scope**: Front, back, left, right elevation views with proper component rendering
+  - **Current Issues**: Tall units show as base height, corner doors on wrong elevations
+  - **Status**: POSTPONED until core positioning system is fixed
+
 ### 🟢 LOW PRIORITY - Enhancements
-- [ ] **Elevation View Improvements** - Corner cabinet door face rendering
 - [ ] **Component Model Updates** - Some components still have "DB" prefix
 - [ ] **3D View Enhancements** - Better lighting and materials
 - [ ] **Mobile Responsiveness** - Touch drag and drop support
@@ -164,6 +182,39 @@
 
 ---
 
+## 🎯 Recommended Action Plan
+
+### Phase 5: Core Architecture Fixes
+**Target**: v2.5 - Foundation Stability  
+**CRITICAL**: Must be completed before any other development
+
+1. **2D/3D Dimension Consistency**
+   - Implement proper wall thickness in 2D view
+   - Fix drop positioning to use wall inner face instead of center line
+   - Ensure room dimensions match between 2D and 3D views
+   - Update measurement tools to reflect accurate dimensions
+
+2. **Component Boundary & Rotation System**
+   - Implement proper rotated boundary calculations
+   - Sync drag image dimensions with actual component boundaries
+   - Fix corner positioning for all 4 corners
+   - Consider horizontal/vertical model variants if rotation boundaries prove unfeasible
+
+3. **Testing & Validation**
+   - Verify component placement accuracy in all corners
+   - Test measurement consistency between views
+   - Validate wall-to-component positioning
+   - Ensure drag preview matches final placement
+
+### Phase 6: Feature Implementation (Post-Architecture)
+**Target**: v2.6 - Enhanced User Experience
+- [ ] 2D Elevation Views (front, back, left, right)
+- [ ] Mobile responsiveness  
+- [ ] Advanced 3D features
+- [ ] Remaining UI/UX polish items
+
+---
+
 ## 📅 Version History
 
 ### v2.4 - Performance Optimization Complete (Current)
@@ -207,5 +258,5 @@
 
 ---
 
-*Last updated: September 16, 2025 - Phase 4 Performance Optimization Complete! 🚀*
-*Next review: When high priority UI/UX issues are addressed*
+*Last updated: September 16, 2025 - Phase 5 Architecture Issues Identified! 🎯*
+*Next review: After core 2D/3D positioning system is fixed*
