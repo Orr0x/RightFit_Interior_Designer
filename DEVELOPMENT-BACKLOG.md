@@ -3,6 +3,24 @@
 ## 📋 Current Priority Issues
 
 ### 🔴 CRITICAL PRIORITY - Core Architecture Issues
+
+- [ ] **URGENT: Production Deployment Crash Investigation** - Ceiling height implementation crashes production
+  - **Issue**: Recent ceiling height control feature causes complete production app crash on load
+  - **Status**: ⚠️ REVERTED (commit 02d9bea) - Production restored to stable state
+  - **Local vs Production**: Feature works perfectly locally, crashes in production environment
+  - **Potential Causes**: 
+    - Three.js "BatchedMesh" export warning during production build
+    - Environment-specific minification/bundling issues
+    - Memory constraints or resource allocation differences
+    - Unhandled production-specific error conditions
+  - **Investigation Required**: 
+    - Production error logs and stack traces
+    - Build environment comparison (Node.js, npm versions)
+    - Three.js version compatibility check
+    - Error boundary implementation for graceful fallback
+  - **Impact**: CRITICAL - blocks deployment of ceiling height feature
+  - **Priority**: URGENT - must resolve before any new feature deployment
+  - **Next Steps**: Investigate production logs, test production build locally, identify root cause
 - [ ] **2D/3D Room Dimension Inconsistency** - Fundamental measurement and positioning problems
   - **2D Wall Thickness Issue**: 2D walls have no thickness, causing positioning errors
   - **Drop Position Misalignment**: Components drop relative to wall center line instead of inner face
