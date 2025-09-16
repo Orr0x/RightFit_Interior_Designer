@@ -3,20 +3,7 @@ import { DesignElement } from '@/types/project';
 import * as THREE from 'three';
 import { Sofa, RectangleHorizontal } from 'lucide-react';
 
-// Import ComponentDefinition type
-interface ComponentDefinition {
-  id: string;
-  name: string;
-  type: 'cabinet' | 'appliance' | 'counter-top' | 'end-panel' | 'window' | 'door' | 'flooring' | 'toe-kick' | 'cornice' | 'pelmet' | 'wall-unit-end-panel';
-  width: number; // X-axis dimension (left-to-right)
-  depth: number; // Y-axis dimension (front-to-back)
-  height: number; // Z-axis dimension (bottom-to-top)
-  color: string;
-  category: string;
-  roomTypes: string[];
-  icon: React.ReactNode;
-  description: string;
-}
+// ComponentDefinition interface removed - using DatabaseComponent from useComponents hook
 
 // Interface for enhanced model props
 interface Enhanced3DModelProps {
@@ -1454,865 +1441,229 @@ export const EnhancedAppliance3D: React.FC<Enhanced3DModelProps> = ({
   }
 };
 
-/**
- * Enhanced3DFurniture - Collection of specialized furniture models
- * 
- * This component provides enhanced 3D furniture models that can be easily
- * added to the component library.
- */
-export const createFurnitureModels = (): Record<string, ComponentDefinition> => {
-  return {
-    // Living Room Furniture
-    'modern-sofa': {
-      id: 'modern-sofa',
-      name: 'Modern Sofa',
-      type: 'appliance',
-      width: 200,
-      depth: 80,
-      height: 80,
-      color: '#3A6EA5',
-      category: 'living-room',
-      roomTypes: ['media-wall'],
-      icon: <Sofa className="h-4 w-4" />,
-      description: 'Contemporary 3-seater sofa'
-    },
-    'armchair': {
-      id: 'armchair',
-      name: 'Armchair',
-      type: 'appliance',
-      width: 80,
-      depth: 80,
-      height: 80,
-      color: '#3A6EA5',
-      category: 'living-room',
-      roomTypes: ['media-wall'],
-      icon: <Sofa className="h-4 w-4" />,
-      description: 'Comfortable single armchair'
-    },
-    'coffee-table': {
-      id: 'coffee-table',
-      name: 'Coffee Table',
-      type: 'appliance',
-      width: 120,
-      depth: 60,
-      height: 45,
-      color: '#8B4513',
-      category: 'living-room',
-      roomTypes: ['media-wall'],
-      icon: <RectangleHorizontal className="h-4 w-4" />,
-      description: 'Rectangular coffee table'
-    },
-    
-    // Dining Room Furniture
-    'dining-table': {
-      id: 'dining-table',
-      name: 'Dining Table',
-      type: 'appliance',
-      width: 180,
-      depth: 90,
-      height: 75,
-      color: '#8B4513',
-      category: 'dining-room',
-      roomTypes: ['kitchen'],
-      icon: <RectangleHorizontal className="h-4 w-4" />,
-      description: 'Dining table for 6 people'
-    },
-    'dining-chair': {
-      id: 'dining-chair',
-      name: 'Dining Chair',
-      type: 'appliance',
-      width: 45,
-      depth: 45,
-      height: 90,
-      color: '#8B4513',
-      category: 'dining-room',
-      roomTypes: ['kitchen'],
-      icon: <Sofa className="h-4 w-4" />,
-      description: 'Standard dining chair'
-    },
-    
-    // Bedroom Additional Furniture
-    'dressing-table': {
-      id: 'dressing-table',
-      name: 'Dressing Table',
-      type: 'appliance',
-      width: 120,
-      depth: 50,
-      height: 75,
-      color: '#8B4513',
-      category: 'bedroom-furniture',
-      roomTypes: ['bedroom'],
-      icon: <RectangleHorizontal className="h-4 w-4" />,
-      description: 'Bedroom dressing table with mirror'
-    },
-    'ottoman': {
-      id: 'ottoman',
-      name: 'Ottoman',
-      type: 'appliance',
-      width: 60,
-      depth: 60,
-      height: 45,
-      color: '#6B8E23',
-      category: 'bedroom-furniture',
-      roomTypes: ['bedroom'],
-      icon: <Sofa className="h-4 w-4" />,
-      description: 'Bedroom ottoman/seat'
-    },
-    
-    // Office Furniture
-    'desk': {
-      id: 'desk',
-      name: 'Office Desk',
-      type: 'appliance',
-      width: 150,
-      depth: 75,
-      height: 75,
-      color: '#2F4F4F',
-      category: 'office',
-      roomTypes: ['bedroom', 'media-wall'],
-      icon: <RectangleHorizontal className="h-4 w-4" />,
-      description: 'Standard office desk'
-    },
-    'office-chair': {
-      id: 'office-chair',
-      name: 'Office Chair',
-      type: 'appliance',
-      width: 60,
-      depth: 60,
-      height: 110,
-      color: '#2F4F4F',
-      category: 'office',
-      roomTypes: ['bedroom', 'media-wall'],
-      icon: <Sofa className="h-4 w-4" />,
-      description: 'Ergonomic office chair'
-    },
-    'bookshelf': {
-      id: 'bookshelf',
-      name: 'Bookshelf',
-      type: 'cabinet',
-      width: 100,
-      depth: 30,
-      height: 200,
-      color: '#8B4513',
-      category: 'office',
-      roomTypes: ['bedroom', 'media-wall'],
-      icon: <RectangleHorizontal className="h-4 w-4" />,
-      description: 'Tall bookshelf'
-    }
-  };
-};
 
-/**
- * EnhancedCounterTop3D - Detailed 3D counter top model
- * 
- * Features:
- * - Realistic counter top with proper thickness
- * - Material textures for stone/wood surfaces
- * - Proper scale and proportions
- * - Positioned at 90cm height (0.9m) off ground
- */
-export const EnhancedCounterTop3D: React.FC<Enhanced3DModelProps> = ({ 
-  element, 
-  roomDimensions, 
-  isSelected, 
-  onClick 
-}) => {
-  // Validate element dimensions to prevent NaN values
+// Missing component exports restored after cleanup
+export const EnhancedCounterTop3D: React.FC<Enhanced3DModelProps> = ({ element, roomDimensions, isSelected, onClick }) => {
   const validElement = validateElementDimensions(element);
-  
   const { x, z } = convertTo3D(validElement.x, validElement.y, roomDimensions.width, roomDimensions.height);
-  
-  // Convert dimensions from cm to meters
   const width = validElement.width / 100;
   const depth = validElement.depth / 100;
   const height = validElement.height / 100;
-  
-  // Counter tops are positioned at 90cm (0.9m) off the ground, or use element.z if set
-  // Use validated Z property to prevent NaN values
-  const baseHeight = validElement.z / 100; // Convert cm to meters (already validated with default 0)
+  const baseHeight = validElement.z / 100;
   const y = baseHeight + (height / 2);
   
-  // Check if this is a corner counter top
-  const isCornerCounterTop = element.id.includes('counter-top-corner');
-  
-  // Create materials
-  const counterTopMaterial = new THREE.MeshLambertMaterial({ 
-    color: element.color || '#D2B48C' 
-  });
-  
-  const edgeMaterial = new THREE.MeshLambertMaterial({ 
-    color: '#B8860B' // Darker edge color
-  });
-  
   return (
-    <group 
-      position={[
-        // For corner counter tops, align to a 90cm x 90cm footprint center (0.45m, 0.45m)
-        isCornerCounterTop ? x + 0.45 : x + width / 2,
-        y,
-        isCornerCounterTop ? z + 0.45 : z + depth / 2
-      ]} 
-      onClick={onClick}
-      rotation={[0, element.rotation * Math.PI / 180, 0]}
-      onPointerOver={(e) => {
-        e.stopPropagation();
-        document.body.style.cursor = 'pointer';
-      }}
-      onPointerOut={() => {
-        document.body.style.cursor = 'auto';
-      }}
-    >
-      {isCornerCounterTop ? (
-        <>
-          {/* L-shaped corner counter top - Match corner cabinet geometry */}
-          {/* Use same dimensions as corner cabinets: 90cm leg length */}
-          {/* X leg (horizontal section) */}
-          <mesh position={[0, 0, 0.3 - 0.9/2]} castShadow receiveShadow>
-            <boxGeometry args={[0.9, height, 0.6]} />
-            <primitive object={counterTopMaterial} />
-          </mesh>
-          
-          {/* Z leg (vertical section) */}
-          <mesh position={[0.3 - 0.9/2, 0, 0]} castShadow receiveShadow>
-            <boxGeometry args={[0.6, height, 0.9]} />
-            <primitive object={counterTopMaterial} />
-          </mesh>
-          
-          {/* Edge details for L-shape - X leg */}
-          <mesh position={[0, 0, 0.3 - 0.9/2]} castShadow>
-            <boxGeometry args={[0.9, height * 0.1, 0.6]} />
-            <primitive object={edgeMaterial} />
-          </mesh>
-          
-          {/* Edge details for L-shape - Z leg */}
-          <mesh position={[0.3 - 0.9/2, 0, 0]} castShadow>
-            <boxGeometry args={[0.6, height * 0.1, 0.9]} />
-            <primitive object={edgeMaterial} />
-          </mesh>
-          
-          {/* Selection highlight for L-shape */}
-          {isSelected && (
-            <>
-              {/* X leg highlight */}
-              <mesh position={[0, height / 2 + 0.01, 0.3 - 0.9/2]}>
-                <boxGeometry args={[0.9 + 0.02, 0.02, 0.6 + 0.02]} />
-                <meshLambertMaterial color="#00ff00" transparent opacity={0.5} />
-              </mesh>
-              {/* Z leg highlight */}
-              <mesh position={[0.3 - 0.9/2, height / 2 + 0.01, 0]}>
-                <boxGeometry args={[0.6 + 0.02, 0.02, 0.9 + 0.02]} />
-                <meshLambertMaterial color="#00ff00" transparent opacity={0.5} />
-              </mesh>
-            </>
-          )}
-        </>
-      ) : (
-        <>
-          {/* Standard rectangular counter top */}
-          <mesh position={[0, 0, 0]} castShadow receiveShadow>
-            <boxGeometry args={[width, height, depth]} />
-            <primitive object={counterTopMaterial} />
-          </mesh>
-          
-          {/* Counter top edge - slightly darker for depth */}
-          <mesh position={[0, 0, 0]} castShadow>
-            <boxGeometry args={[width, height * 0.1, depth]} />
-            <primitive object={edgeMaterial} />
-          </mesh>
-          
-          {/* Selection highlight */}
-          {isSelected && (
-            <mesh position={[0, height / 2 + 0.01, 0]}>
-              <boxGeometry args={[width + 0.02, 0.02, depth + 0.02]} />
-              <meshLambertMaterial color="#00ff00" transparent opacity={0.5} />
-            </mesh>
-          )}
-        </>
+    <group position={[x + width / 2, y, z + depth / 2]} onClick={onClick} rotation={[0, element.rotation * Math.PI / 180, 0]}>
+      <mesh position={[0, 0, 0]} castShadow receiveShadow>
+        <boxGeometry args={[width, height, depth]} />
+        <meshLambertMaterial color={element.color || '#D2B48C'} />
+      </mesh>
+      {isSelected && (
+        <mesh position={[0, height / 2 + 0.01, 0]}>
+          <boxGeometry args={[width + 0.02, 0.02, depth + 0.02]} />
+          <meshLambertMaterial color="#00ff00" transparent opacity={0.5} />
+        </mesh>
       )}
     </group>
   );
 };
 
- /**
-  * EnhancedEndPanel3D - Detailed 3D end panel model
-  * 
-  * Features:
-  * - Realistic end panel with proper thickness
-  * - Material textures for wood finish
-  * - Proper scale and proportions
-  * - Positioned at floor level (Z=0)
-  */
- export const EnhancedEndPanel3D: React.FC<Enhanced3DModelProps> = ({ 
-   element, 
-   roomDimensions, 
-   isSelected, 
-   onClick 
- }) => {
-   // Validate element dimensions to prevent NaN values
-   const validElement = validateElementDimensions(element);
-   
-   const { x, z } = convertTo3D(validElement.x, validElement.y, roomDimensions.width, roomDimensions.height);
-   
-   // Convert dimensions from cm to meters
-   const width = validElement.width / 100;
-   const depth = validElement.depth / 100;
-   const height = validElement.height / 100;
-   
-   // End panels are positioned at floor level
-   const y = height / 2;
-   
-   // Create materials
-   const endPanelMaterial = new THREE.MeshLambertMaterial({ 
-     color: element.color || '#8B4513' 
-   });
-   
-   const edgeMaterial = new THREE.MeshLambertMaterial({ 
-     color: '#654321' // Darker edge color
-   });
-   
-   return (
-     <group 
-       position={[x + width / 2, y, z + depth / 2]} 
-       onClick={onClick}
-       rotation={[0, element.rotation * Math.PI / 180, 0]}
-       onPointerOver={(e) => {
-         e.stopPropagation();
-         document.body.style.cursor = 'pointer';
-       }}
-       onPointerOut={() => {
-         document.body.style.cursor = 'auto';
-       }}
-     >
-       {/* Main end panel surface */}
-       <mesh position={[0, 0, 0]} castShadow receiveShadow>
-         <boxGeometry args={[width, height, depth]} />
-         <primitive object={endPanelMaterial} />
-       </mesh>
-       
-       {/* End panel edge - slightly darker for depth */}
-       <mesh position={[0, 0, 0]} castShadow>
-         <boxGeometry args={[width, height * 0.1, depth]} />
-         <primitive object={edgeMaterial} />
-       </mesh>
-       
-       {/* Selection highlight */}
-       {isSelected && (
-         <mesh position={[0, height / 2 + 0.01, 0]}>
-           <boxGeometry args={[width + 0.02, 0.02, depth + 0.02]} />
-           <meshLambertMaterial color="#00ff00" transparent opacity={0.5} />
-         </mesh>
-       )}
-       
-     </group>
-   );
- };
-
-/**
- * EnhancedWindow3D - Detailed 3D window model
- * 
- * Features:
- * - Realistic window with frame and glass
- * - Material textures for frame and glass
- * - Proper scale and proportions
- * - Positioned at 90cm height from floor
- */
-export const EnhancedWindow3D: React.FC<Enhanced3DModelProps> = ({ 
-  element, 
-  roomDimensions, 
-  isSelected, 
-  onClick 
-}) => {
-  // Validate element dimensions to prevent NaN values
+// Missing exports that View3D.tsx needs
+export const EnhancedEndPanel3D: React.FC<Enhanced3DModelProps> = ({ element, roomDimensions, isSelected, onClick }) => {
   const validElement = validateElementDimensions(element);
-  
   const { x, z } = convertTo3D(validElement.x, validElement.y, roomDimensions.width, roomDimensions.height);
-  
-  // Convert dimensions from cm to meters
   const width = validElement.width / 100;
   const depth = validElement.depth / 100;
   const height = validElement.height / 100;
-  
-  // Windows - use Z position if set, otherwise default to 90cm
-  let baseHeight: number;
-  if (validElement.z > 0) {
-    // User has set a custom Z position - use it
-    baseHeight = validElement.z / 100; // Convert cm to meters
-    console.log(`✅ [Window3D] Using custom Z position: ${validElement.z}cm for ${element.id}`);
-  } else {
-    // Default to 90cm for windows
-    baseHeight = 0.9;
-    console.log(`🔧 [Window3D] Using default Z position: 90cm for ${element.id}`);
-  }
-  const y = baseHeight + (height / 2);
-  
-  // Create materials
-  const frameMaterial = new THREE.MeshLambertMaterial({ 
-    color: '#FFFFFF' 
-  });
-  
-  const glassMaterial = new THREE.MeshLambertMaterial({ 
-    color: '#E6F3FF',
-    transparent: true,
-    opacity: 0.7
-  });
+  const y = height / 2;
   
   return (
-    <group 
-      position={[x + width / 2, y, z + depth / 2]} 
-      onClick={onClick}
-      rotation={[0, element.rotation * Math.PI / 180, 0]}
-      onPointerOver={(e) => {
-        e.stopPropagation();
-        document.body.style.cursor = 'pointer';
-      }}
-      onPointerOut={() => {
-        document.body.style.cursor = 'auto';
-      }}
-    >
-      {/* Window frame */}
+    <group position={[x + width / 2, y, z + depth / 2]} onClick={onClick} rotation={[0, element.rotation * Math.PI / 180, 0]}>
       <mesh position={[0, 0, 0]} castShadow receiveShadow>
         <boxGeometry args={[width, height, depth]} />
-        <primitive object={frameMaterial} />
+        <meshLambertMaterial color={element.color || '#8B4513'} />
       </mesh>
-      
-      {/* Glass panel */}
-      <mesh position={[0, 0, depth / 2 + 0.01]}>
-        <boxGeometry args={[width - 0.1, height - 0.1, 0.01]} />
-        <primitive object={glassMaterial} />
+      {isSelected && (
+        <mesh position={[0, height / 2 + 0.01, 0]}>
+          <boxGeometry args={[width + 0.02, 0.02, depth + 0.02]} />
+          <meshLambertMaterial color="#00ff00" transparent opacity={0.5} />
+        </mesh>
+      )}
+    </group>
+  );
+};
+
+export const EnhancedWindow3D: React.FC<Enhanced3DModelProps> = ({ element, roomDimensions, isSelected, onClick }) => {
+  const validElement = validateElementDimensions(element);
+  const { x, z } = convertTo3D(validElement.x, validElement.y, roomDimensions.width, roomDimensions.height);
+  const width = validElement.width / 100;
+  const depth = validElement.depth / 100;
+  const height = validElement.height / 100;
+  const baseHeight = validElement.z > 0 ? validElement.z / 100 : 0.9;
+  const y = baseHeight + (height / 2);
+  
+  return (
+    <group position={[x + width / 2, y, z + depth / 2]} onClick={onClick} rotation={[0, element.rotation * Math.PI / 180, 0]}>
+      <mesh position={[0, 0, 0]} castShadow receiveShadow>
+        <boxGeometry args={[width, height, depth]} />
+        <meshLambertMaterial color="#FFFFFF" />
       </mesh>
-      
-      {/* Selection highlight */}
       {isSelected && (
         <mesh position={[0, 0, depth / 2 + 0.02]}>
           <boxGeometry args={[width + 0.02, height + 0.02, 0.01]} />
           <meshLambertMaterial color="#00ff00" transparent opacity={0.5} />
         </mesh>
       )}
-      
     </group>
   );
 };
 
-/**
- * EnhancedDoor3D - Detailed 3D door model
- * 
- * Features:
- * - Realistic door with frame and panel
- * - Material textures for wood finish
- * - Proper scale and proportions
- * - Positioned at floor level
- */
-export const EnhancedDoor3D: React.FC<Enhanced3DModelProps> = ({ 
-  element, 
-  roomDimensions, 
-  isSelected, 
-  onClick 
-}) => {
-  // Validate element dimensions to prevent NaN values
+export const EnhancedDoor3D: React.FC<Enhanced3DModelProps> = ({ element, roomDimensions, isSelected, onClick }) => {
   const validElement = validateElementDimensions(element);
-  
   const { x, z } = convertTo3D(validElement.x, validElement.y, roomDimensions.width, roomDimensions.height);
-  
-  // Convert dimensions from cm to meters
   const width = validElement.width / 100;
   const depth = validElement.depth / 100;
   const height = validElement.height / 100;
-  
-  // Doors are positioned at floor level
   const y = height / 2;
   
-  // Create materials
-  const doorMaterial = new THREE.MeshLambertMaterial({ 
-    color: element.color || '#8B4513' 
-  });
-  
-  const frameMaterial = new THREE.MeshLambertMaterial({ 
-    color: '#654321' // Darker frame color
-  });
-  
   return (
-    <group 
-      position={[x + width / 2, y, z + depth / 2]} 
-      onClick={onClick}
-      rotation={[0, element.rotation * Math.PI / 180, 0]}
-      onPointerOver={(e) => {
-        e.stopPropagation();
-        document.body.style.cursor = 'pointer';
-      }}
-      onPointerOut={() => {
-        document.body.style.cursor = 'auto';
-      }}
-    >
-      {/* Door frame */}
+    <group position={[x + width / 2, y, z + depth / 2]} onClick={onClick} rotation={[0, element.rotation * Math.PI / 180, 0]}>
       <mesh position={[0, 0, 0]} castShadow receiveShadow>
-        <boxGeometry args={[width + 0.1, height + 0.1, depth]} />
-        <primitive object={frameMaterial} />
+        <boxGeometry args={[width, height, depth]} />
+        <meshLambertMaterial color={element.color || '#8B4513'} />
       </mesh>
-      
-      {/* Door panel */}
-      <mesh position={[0, 0, depth / 2 + 0.01]}>
-        <boxGeometry args={[width, height, 0.02]} />
-        <primitive object={doorMaterial} />
-      </mesh>
-      
-      {/* Door handle */}
-      <mesh position={[width / 3, 0, depth / 2 + 0.03]}>
-        <boxGeometry args={[0.02, 0.1, 0.02]} />
-        <meshStandardMaterial color="#C0C0C0" metalness={0.8} roughness={0.2} />
-      </mesh>
-      
-      {/* Selection highlight */}
       {isSelected && (
         <mesh position={[0, 0, depth / 2 + 0.04]}>
           <boxGeometry args={[width + 0.02, height + 0.02, 0.01]} />
           <meshLambertMaterial color="#00ff00" transparent opacity={0.5} />
         </mesh>
       )}
-      
     </group>
   );
 };
 
-/**
- * EnhancedFlooring3D - Detailed 3D flooring model
- * 
- * Features:
- * - Realistic flooring with texture
- * - Material textures for different floor types
- * - Proper scale and proportions
- * - Positioned at floor level
- */
-export const EnhancedFlooring3D: React.FC<Enhanced3DModelProps> = ({ 
-  element, 
-  roomDimensions, 
-  isSelected, 
-  onClick 
-}) => {
-  // Validate element dimensions to prevent NaN values
+export const EnhancedFlooring3D: React.FC<Enhanced3DModelProps> = ({ element, roomDimensions, isSelected, onClick }) => {
   const validElement = validateElementDimensions(element);
-  
   const { x, z } = convertTo3D(validElement.x, validElement.y, roomDimensions.width, roomDimensions.height);
-  
-  // Convert dimensions from cm to meters
   const width = validElement.width / 100;
   const depth = validElement.depth / 100;
   const height = validElement.height / 100;
-  
-  // Flooring is positioned at floor level
   const y = height / 2;
   
-  // Create materials based on flooring type
-  const flooringMaterial = new THREE.MeshLambertMaterial({ 
-    color: element.color || '#DEB887' 
-  });
-  
   return (
-    <group 
-      position={[x + width / 2, y, z + depth / 2]} 
-      onClick={onClick}
-      rotation={[0, element.rotation * Math.PI / 180, 0]}
-      onPointerOver={(e) => {
-        e.stopPropagation();
-        document.body.style.cursor = 'pointer';
-      }}
-      onPointerOut={() => {
-        document.body.style.cursor = 'auto';
-      }}
-    >
-      {/* Flooring surface */}
+    <group position={[x + width / 2, y, z + depth / 2]} onClick={onClick} rotation={[0, element.rotation * Math.PI / 180, 0]}>
       <mesh position={[0, 0, 0]} castShadow receiveShadow>
         <boxGeometry args={[width, height, depth]} />
-        <primitive object={flooringMaterial} />
+        <meshLambertMaterial color={element.color || '#DEB887'} />
       </mesh>
-      
-      {/* Selection highlight */}
       {isSelected && (
         <mesh position={[0, height / 2 + 0.01, 0]}>
           <boxGeometry args={[width + 0.02, 0.02, depth + 0.02]} />
           <meshLambertMaterial color="#00ff00" transparent opacity={0.5} />
         </mesh>
       )}
-      
     </group>
   );
 };
 
-/**
- * EnhancedToeKick3D - Detailed 3D toe kick model
- * 
- * Features:
- * - Realistic toe kick with proper positioning
- * - Material textures for wood finish
- * - Proper scale and proportions
- * - Positioned at floor level
- */
-export const EnhancedToeKick3D: React.FC<Enhanced3DModelProps> = ({ 
-  element, 
-  roomDimensions, 
-  isSelected, 
-  onClick 
-}) => {
-  // Validate element dimensions to prevent NaN values
+export const EnhancedToeKick3D: React.FC<Enhanced3DModelProps> = ({ element, roomDimensions, isSelected, onClick }) => {
   const validElement = validateElementDimensions(element);
-  
   const { x, z } = convertTo3D(validElement.x, validElement.y, roomDimensions.width, roomDimensions.height);
-  
-  // Convert dimensions from cm to meters
   const width = validElement.width / 100;
   const depth = validElement.depth / 100;
   const height = validElement.height / 100;
-  
-  // Toe kicks are positioned at floor level
   const y = height / 2;
   
-  // Create materials
-  const toeKickMaterial = new THREE.MeshLambertMaterial({ 
-    color: element.color || '#FFFFFF' 
-  });
-  
   return (
-    <group 
-      position={[x + width / 2, y, z + depth / 2]} 
-      onClick={onClick}
-      rotation={[0, element.rotation * Math.PI / 180, 0]}
-      onPointerOver={(e) => {
-        e.stopPropagation();
-        document.body.style.cursor = 'pointer';
-      }}
-      onPointerOut={() => {
-        document.body.style.cursor = 'auto';
-      }}
-    >
-      {/* Toe kick panel */}
+    <group position={[x + width / 2, y, z + depth / 2]} onClick={onClick} rotation={[0, element.rotation * Math.PI / 180, 0]}>
       <mesh position={[0, 0, 0]} castShadow receiveShadow>
         <boxGeometry args={[width, height, depth]} />
-        <primitive object={toeKickMaterial} />
+        <meshLambertMaterial color={element.color || '#FFFFFF'} />
       </mesh>
-      
-      {/* Selection highlight */}
       {isSelected && (
         <mesh position={[0, height / 2 + 0.01, 0]}>
           <boxGeometry args={[width + 0.02, 0.02, depth + 0.02]} />
           <meshLambertMaterial color="#00ff00" transparent opacity={0.5} />
         </mesh>
       )}
-      
     </group>
   );
 };
 
-/**
- * EnhancedCornice3D - Detailed 3D cornice model
- * 
- * Features:
- * - Realistic cornice with proper positioning
- * - Material textures for wood finish
- * - Proper scale and proportions
- * - Positioned at top of wall units
- */
-export const EnhancedCornice3D: React.FC<Enhanced3DModelProps> = ({ 
-  element, 
-  roomDimensions, 
-  isSelected, 
-  onClick 
-}) => {
-  // Validate element dimensions to prevent NaN values
+export const EnhancedCornice3D: React.FC<Enhanced3DModelProps> = ({ element, roomDimensions, isSelected, onClick }) => {
   const validElement = validateElementDimensions(element);
-  
   const { x, z } = convertTo3D(validElement.x, validElement.y, roomDimensions.width, roomDimensions.height);
-  
-  // Convert dimensions from cm to meters
   const width = validElement.width / 100;
   const depth = validElement.depth / 100;
   const height = validElement.height / 100;
-  
-  // Cornices are positioned at top of wall units (200cm height)
-  // Use the element's Z position if manually set, otherwise use default 200cm
-  const elementZ = validElement.z / 100; // Convert cm to meters
-  const baseHeight = elementZ > 0 ? elementZ : 2.0; // Use element Z or default 200cm
+  const elementZ = validElement.z / 100;
+  const baseHeight = elementZ > 0 ? elementZ : 2.0;
   const y = baseHeight + (height / 2);
   
-  // Create materials
-  const corniceMaterial = new THREE.MeshLambertMaterial({ 
-    color: element.color || '#FFFFFF' 
-  });
-  
   return (
-    <group 
-      position={[x + width / 2, y, z + depth / 2]} 
-      onClick={onClick}
-      rotation={[0, element.rotation * Math.PI / 180, 0]}
-      onPointerOver={(e) => {
-        e.stopPropagation();
-        document.body.style.cursor = 'pointer';
-      }}
-      onPointerOut={() => {
-        document.body.style.cursor = 'auto';
-      }}
-    >
-      {/* Cornice panel */}
+    <group position={[x + width / 2, y, z + depth / 2]} onClick={onClick} rotation={[0, element.rotation * Math.PI / 180, 0]}>
       <mesh position={[0, 0, 0]} castShadow receiveShadow>
         <boxGeometry args={[width, height, depth]} />
-        <primitive object={corniceMaterial} />
+        <meshLambertMaterial color={element.color || '#FFFFFF'} />
       </mesh>
-      
-      {/* Selection highlight */}
       {isSelected && (
         <mesh position={[0, height / 2 + 0.01, 0]}>
           <boxGeometry args={[width + 0.02, 0.02, depth + 0.02]} />
           <meshLambertMaterial color="#00ff00" transparent opacity={0.5} />
         </mesh>
       )}
-      
     </group>
   );
 };
 
-/**
- * EnhancedPelmet3D - Detailed 3D pelmet model
- * 
- * Features:
- * - Realistic pelmet with proper positioning
- * - Material textures for wood finish
- * - Proper scale and proportions
- * - Positioned at bottom of wall units
- */
-export const EnhancedPelmet3D: React.FC<Enhanced3DModelProps> = ({ 
-  element, 
-  roomDimensions, 
-  isSelected, 
-  onClick 
-}) => {
-  // Validate element dimensions to prevent NaN values
+export const EnhancedPelmet3D: React.FC<Enhanced3DModelProps> = ({ element, roomDimensions, isSelected, onClick }) => {
   const validElement = validateElementDimensions(element);
-  
   const { x, z } = convertTo3D(validElement.x, validElement.y, roomDimensions.width, roomDimensions.height);
-  
-  // Convert dimensions from cm to meters
   const width = validElement.width / 100;
   const depth = validElement.depth / 100;
   const height = validElement.height / 100;
-  
-  // Pelmets are positioned at bottom of wall units (140cm height)
-  // Use the element's Z position if manually set, otherwise use default 140cm
-  const elementZ = validElement.z / 100; // Convert cm to meters
-  const baseHeight = elementZ > 0 ? elementZ : 1.4; // Use element Z or default 140cm
+  const elementZ = validElement.z / 100;
+  const baseHeight = elementZ > 0 ? elementZ : 1.4;
   const y = baseHeight + (height / 2);
   
-  // Create materials
-  const pelmetMaterial = new THREE.MeshLambertMaterial({ 
-    color: element.color || '#FFFFFF' 
-  });
-  
   return (
-    <group 
-      position={[x + width / 2, y, z + depth / 2]} 
-      onClick={onClick}
-      rotation={[0, element.rotation * Math.PI / 180, 0]}
-      onPointerOver={(e) => {
-        e.stopPropagation();
-        document.body.style.cursor = 'pointer';
-      }}
-      onPointerOut={() => {
-        document.body.style.cursor = 'auto';
-      }}
-    >
-      {/* Pelmet panel */}
+    <group position={[x + width / 2, y, z + depth / 2]} onClick={onClick} rotation={[0, element.rotation * Math.PI / 180, 0]}>
       <mesh position={[0, 0, 0]} castShadow receiveShadow>
         <boxGeometry args={[width, height, depth]} />
-        <primitive object={pelmetMaterial} />
+        <meshLambertMaterial color={element.color || '#FFFFFF'} />
       </mesh>
-      
-      {/* Selection highlight */}
       {isSelected && (
         <mesh position={[0, height / 2 + 0.01, 0]}>
           <boxGeometry args={[width + 0.02, 0.02, depth + 0.02]} />
           <meshLambertMaterial color="#00ff00" transparent opacity={0.5} />
         </mesh>
       )}
-      
     </group>
   );
 };
 
-/**
- * EnhancedWallUnitEndPanel3D - Detailed 3D wall unit end panel model
- * 
- * Features:
- * - Realistic wall unit end panel with proper positioning
- * - Material textures for wood finish
- * - Proper scale and proportions
- * - Positioned at 200cm height from floor
- */
-export const EnhancedWallUnitEndPanel3D: React.FC<Enhanced3DModelProps> = ({ 
-  element, 
-  roomDimensions, 
-  isSelected, 
-  onClick 
-}) => {
-  // Validate element dimensions to prevent NaN values
+export const EnhancedWallUnitEndPanel3D: React.FC<Enhanced3DModelProps> = ({ element, roomDimensions, isSelected, onClick }) => {
   const validElement = validateElementDimensions(element);
-  
   const { x, z } = convertTo3D(validElement.x, validElement.y, roomDimensions.width, roomDimensions.height);
-  
-  // Convert dimensions from cm to meters
   const width = validElement.width / 100;
   const depth = validElement.depth / 100;
   const height = validElement.height / 100;
-  
-  // Wall unit end panels - use Z position if set, otherwise default to 200cm
-  let baseHeight: number;
-  if (validElement.z > 0) {
-    // User has set a custom Z position - use it
-    baseHeight = validElement.z / 100; // Convert cm to meters
-    console.log(`✅ [WallUnitEndPanel3D] Using custom Z position: ${validElement.z}cm for ${element.id}`);
-  } else {
-    // Default to 200cm for wall unit end panels
-    baseHeight = 2.0;
-    console.log(`🔧 [WallUnitEndPanel3D] Using default Z position: 200cm for ${element.id}`);
-  }
+  const baseHeight = validElement.z > 0 ? validElement.z / 100 : 2.0;
   const y = baseHeight + (height / 2);
   
-  // Create materials
-  const endPanelMaterial = new THREE.MeshLambertMaterial({ 
-    color: element.color || '#8B4513' 
-  });
-  
   return (
-    <group 
-      position={[x + width / 2, y, z + depth / 2]} 
-      onClick={onClick}
-      rotation={[0, element.rotation * Math.PI / 180, 0]}
-      onPointerOver={(e) => {
-        e.stopPropagation();
-        document.body.style.cursor = 'pointer';
-      }}
-      onPointerOut={() => {
-        document.body.style.cursor = 'auto';
-      }}
-    >
-      {/* Wall unit end panel */}
+    <group position={[x + width / 2, y, z + depth / 2]} onClick={onClick} rotation={[0, element.rotation * Math.PI / 180, 0]}>
       <mesh position={[0, 0, 0]} castShadow receiveShadow>
         <boxGeometry args={[width, height, depth]} />
-        <primitive object={endPanelMaterial} />
+        <meshLambertMaterial color={element.color || '#8B4513'} />
       </mesh>
-      
-      {/* Selection highlight */}
       {isSelected && (
         <mesh position={[0, height / 2 + 0.01, 0]}>
           <boxGeometry args={[width + 0.02, 0.02, depth + 0.02]} />
           <meshLambertMaterial color="#00ff00" transparent opacity={0.5} />
         </mesh>
       )}
-      
     </group>
   );
 };
-
- /**
-  * To integrate these enhanced models with the existing component system:
-  * 
-  * 1. Import this file in View3D.tsx
-  * 2. Replace the Cabinet3D and Appliance3D components with the enhanced versions
-  * 3. Import createFurnitureModels in ComponentLibrary.tsx and add them to the component list
-  */
+// Missing component exports restored after cleanup

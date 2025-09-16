@@ -7,11 +7,23 @@
   - Root cause: Corner detection uses 120x120cm instead of 90x90cm L-shaped footprint
   - Affects: Corner tall units, corner wall cabinets, corner base cabinets, corner counter-tops
   - Impact: Users cannot place corner components in all corners
+- [ ] **Wall Unit Load Issue** - Existing projects show wall unit loading problems
+  - Impact: Users cannot access wall units in existing projects
+  - Status: Needs investigation
+- [ ] **Maximum Update Depth Exceeded** - Console errors when adding new projects
+  - Location: ProjectContext.tsx useEffect dependency issues
+  - Impact: Console warnings, potential performance issues
+  - Status: Needs investigation
 
 ### 🟡 MEDIUM PRIORITY - Database Migration Completion
 - [x] ✅ **Phase 1: Database Schema Expansion** - COMPLETED
 - [x] ✅ **Phase 2: Service Layer & Code Refactoring** - COMPLETED  
-- [ ] **Phase 3: Legacy Code Cleanup** - Remove any remaining hardcoded values
+- [x] ✅ **Phase 3: Legacy Code Cleanup** - COMPLETED
+  - Removed hardcoded components.tsx (558 lines)
+  - Removed duplicate ComponentDefinition interfaces
+  - Updated CompactComponentSidebar to use DatabaseComponent
+  - Restored missing 3D model exports
+  - 100% database-driven component system achieved
 - [ ] **Phase 4: Performance Optimization** - Optimize database queries and caching
 
 ### 🟢 LOW PRIORITY - Enhancements
@@ -19,6 +31,13 @@
 - [ ] **Component Model Updates** - Some components still have "DB" prefix
 - [ ] **3D View Enhancements** - Better lighting and materials
 - [ ] **Mobile Responsiveness** - Touch drag and drop support
+
+### 🛡️ DEVELOPMENT PROCESS - Infrastructure
+- [ ] **Cursor AI Safety Rules** - Create persistent AI guidelines in Cursor settings
+  - Terminal safety protocols (stop when output not visible)
+  - Git operation restrictions (user handles all git commands)
+  - Error handling procedures (ask before proceeding when uncertain)
+  - Development workflow guidelines (safe branches, backlog updates)
 
 ---
 
@@ -138,5 +157,5 @@
 
 ---
 
-*Last updated: September 16, 2025 - Fixed TypeScript errors*
-*Next review: When current corner positioning issue is resolved*
+*Last updated: September 16, 2025 - Phase 3 Database Migration Complete! 🎉*
+*Next review: When wall unit loading issue is resolved*

@@ -8,7 +8,7 @@ import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/component
 import { DesignElement, RoomType } from '@/types/project';
 import { useComponents } from '@/hooks/useComponents';
 import { LoadingSpinner } from '@/components/designer/LoadingSpinner';
-import { ComponentDefinition } from '@/data/components';
+import { DatabaseComponent } from '@/hooks/useComponents';
 import { 
   Search, 
   ChevronDown, 
@@ -59,23 +59,9 @@ const CompactComponentSidebar: React.FC<CompactComponentSidebarProps> = ({
   // 🚀 DATABASE-DRIVEN COMPONENTS! Load all 154 components from Supabase
   const { components, loading, error, refetch } = useComponents();
   
-  // Convert database components to ComponentDefinition format
+  // Use database components directly (no conversion needed)
   const allComponents = useMemo(() => {
-    if (!components) return [];
-    
-    return components.map(comp => ({
-      id: comp.component_id,
-      name: comp.name,
-      type: comp.type,
-      width: Number(comp.width),
-      depth: Number(comp.depth), 
-      height: Number(comp.height),
-      color: comp.color,
-      category: comp.category,
-      roomTypes: comp.room_types as RoomType[],
-      icon: getIconComponent(comp.icon_name),
-      description: comp.description
-    }));
+    return components || [];
   }, [components]);
 
   // Filter components for current room type with debugging
@@ -84,7 +70,7 @@ const CompactComponentSidebar: React.FC<CompactComponentSidebarProps> = ({
     console.log(`🔍 [CompactComponentSidebar] Total components loaded: ${allComponents.length}`);
     
     const filtered = allComponents.filter(component => 
-      component.roomTypes.includes(roomType)
+      component.room_types.includes(roomType)
     );
     
     console.log(`🔍 [CompactComponentSidebar] Components available for ${roomType}: ${filtered.length}`);
@@ -135,7 +121,7 @@ const CompactComponentSidebar: React.FC<CompactComponentSidebarProps> = ({
   const componentsByCategory = useMemo(() => {
     console.log(`📂 [CompactComponentSidebar] Grouping ${filteredComponents.length} filtered components by category`);
     
-    const groups: Record<string, ComponentDefinition[]> = {};
+    const groups: Record<string, DatabaseComponent[]> = {};
     filteredComponents.forEach(component => {
       if (!groups[component.category]) {
         groups[component.category] = [];
@@ -170,8 +156,8 @@ const CompactComponentSidebar: React.FC<CompactComponentSidebarProps> = ({
   // Get recently used components
   const recentComponents = useMemo(() => {
     return recentlyUsed
-      .map(id => availableComponents.find(c => c.id === id))
-      .filter(Boolean) as ComponentDefinition[];
+      .map(id => availableComponents.find(c => c.component_id === id))
+      .filter(Boolean) as DatabaseComponent[];
   }, [recentlyUsed, availableComponents]);
 
   // Category labels
@@ -192,10 +178,10 @@ const CompactComponentSidebar: React.FC<CompactComponentSidebarProps> = ({
   };
 
   // Handle drag start - only serialize essential data (no React components)
-  const handleDragStart = (e: React.DragEvent, component: ComponentDefinition) => {
+  const handleDragStart = (e: React.DragEvent, component: DatabaseComponent) => {
     // Create clean data object without React components for serialization
     const dragData = {
-      id: component.id,
+      id: component.component_id,
       name: component.name,
       type: component.type,
       width: component.width,
@@ -203,7 +189,7 @@ const CompactComponentSidebar: React.FC<CompactComponentSidebarProps> = ({
       height: component.height,
       color: component.color,
       category: component.category,
-      roomTypes: component.roomTypes,
+      roomTypes: component.room_types,
       description: component.description
     };
     
@@ -218,14 +204,14 @@ const CompactComponentSidebar: React.FC<CompactComponentSidebarProps> = ({
     const scaleFactor = 1.15; // Increase by 15% to better match canvas components
     
     // Check if this is a corner component that uses L-shaped footprint (90x90cm)
-    // Check both id and name since we're using ComponentDefinition interface
-    const componentIdentifier = component.id || component.name || '';
+    // Check both component_id and name since we're using DatabaseComponent interface
+    const componentIdentifier = component.component_id || component.name || '';
     const isCornerComponent = componentIdentifier.toLowerCase().includes('corner') ||
                              componentIdentifier.toLowerCase().includes('larder corner');
     
     // Debug logging to see what's happening
     console.log('🔍 [Drag Preview Debug]:', {
-      id: component.id,
+      id: component.component_id,
       name: component.name,
       isCornerComponent,
       originalDimensions: `${component.width}x${component.depth}`,
@@ -314,11 +300,11 @@ const CompactComponentSidebar: React.FC<CompactComponentSidebarProps> = ({
   };
 
   // Handle component selection (track recently used)
-  const handleComponentSelect = (component: ComponentDefinition) => {
+  const handleComponentSelect = (component: DatabaseComponent) => {
     // Add to recently used (limit to 6 items)
     setRecentlyUsed(prev => {
-      const filtered = prev.filter(id => id !== component.id);
-      return [component.id, ...filtered].slice(0, 6);
+      const filtered = prev.filter(id => id !== component.component_id);
+      return [component.component_id, ...filtered].slice(0, 6);
     });
 
     // Set default Z position based on component type
@@ -329,7 +315,7 @@ const CompactComponentSidebar: React.FC<CompactComponentSidebarProps> = ({
       defaultZ = 140; // 140cm height for pelmet (FIXED: bottom of wall units)
     } else if (component.type === 'counter-top') {
       defaultZ = 90; // 90cm height for counter tops
-    } else if (component.type === 'cabinet' && component.id.includes('wall-cabinet')) {
+    } else if (component.type === 'cabinet' && component.component_id.includes('wall-cabinet')) {
       defaultZ = 140; // 140cm height for wall cabinets
     } else if (component.type === 'wall-unit-end-panel') {
       defaultZ = 200; // 200cm height for wall unit end panels
@@ -563,10 +549,10 @@ const CompactComponentSidebar: React.FC<CompactComponentSidebarProps> = ({
 
 // Compact Component Card Component
 interface CompactComponentCardProps {
-  component: ComponentDefinition;
+  component: DatabaseComponent;
   viewMode: ViewMode;
-  onDragStart: (e: React.DragEvent, component: ComponentDefinition) => void;
-  onSelect: (component: ComponentDefinition) => void;
+  onDragStart: (e: React.DragEvent, component: DatabaseComponent) => void;
+  onSelect: (component: DatabaseComponent) => void;
 }
 
 const CompactComponentCard: React.FC<CompactComponentCardProps> = ({
@@ -588,7 +574,7 @@ const CompactComponentCard: React.FC<CompactComponentCardProps> = ({
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2 min-w-0 flex-1">
               <div className="flex-shrink-0">
-                {component.icon}
+                {getIconComponent(component.icon_name)}
               </div>
               <div className="min-w-0 flex-1">
                 <p className="text-xs font-medium truncate">{component.name}</p>
@@ -618,7 +604,7 @@ const CompactComponentCard: React.FC<CompactComponentCardProps> = ({
         <div className="space-y-2">
           <div className="flex items-center justify-between">
             <div className="flex-shrink-0">
-              {component.icon}
+              {getIconComponent(component.icon_name)}
             </div>
             <div
               className="w-3 h-3 rounded border"
