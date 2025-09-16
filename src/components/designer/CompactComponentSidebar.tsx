@@ -250,9 +250,11 @@ const CompactComponentSidebar: React.FC<CompactComponentSidebarProps> = ({
       id: component.component_id,
       name: component.name,
       isCornerComponent,
-      originalDimensions: `${component.width}x${component.depth}`,
+      originalDimensions: `${component.width}x${component.depth}x${component.height}`,
       previewDimensions: isCornerComponent ? '90x90' : `${component.width}x${component.depth}`
     });
+    
+    // Tall corner unit dimensions are now correct (90x90cm) after database migration
     
     let previewWidth, previewDepth;
     if (isCornerComponent) {
