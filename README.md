@@ -2,6 +2,13 @@
 
 A professional-grade interior design application built with React, TypeScript, and Supabase. Create, edit, and visualize interior layouts with advanced 2D multi-view planning and immersive 3D visualization.
 
+## 🎯 **CURRENT STATUS: v2.5 - Mobile Support & Clean Codebase**
+- ✅ **Mobile/Touch Support**: Complete responsive design with touch gestures
+- ✅ **Clean Codebase**: All TypeScript linting errors resolved (32+ → 0)
+- ✅ **Performance Optimized**: Phase 4 complete with 47% smaller bundles
+- ✅ **Database-Driven**: 100% database-driven component system (154+ components)
+- ⚠️ **Architecture Issues**: Core positioning system needs overhaul (see DEVELOPMENT-BACKLOG.md)
+
 ## ✨ Features
 
 ### 🏗️ Multi-Room Project System
@@ -29,13 +36,21 @@ A professional-grade interior design application built with React, TypeScript, a
 - **Keyboard Shortcuts**: Professional hotkeys (Ctrl+Z, Ctrl+Y, Ctrl+S, etc.)
 - **Performance Monitoring**: Real-time FPS and memory usage tracking
 
-### ⚡ Performance Optimizations (v2.2)
+### 📱 **Mobile/Touch Support (v2.5)**
+- **Responsive Design**: Adaptive layout for mobile and desktop
+- **Touch Gestures**: Pinch-to-zoom, touch pan, long press selection
+- **Mobile-First UX**: Click-to-add components (no drag-and-drop on mobile)
+- **Touch-Optimized UI**: Sheet panels, larger touch targets, mobile toolbar
+- **Cross-Device Sync**: Seamless experience across devices
+
+### ⚡ Performance Optimizations (v2.4)
 - **Instant Login**: Projects load immediately after authentication (no refresh required)
 - **Optimized Loading**: Eliminated false error popups during app startup
 - **Smart Component Loading**: Proper loading states prevent race conditions
 - **Database-Driven**: 100% database-driven component system for scalability
-- **Error Handling**: Graceful error recovery with user feedback
-- **Responsive Design**: Collapsible panels and mobile-friendly interface
+- **Bundle Optimization**: 47% smaller initial load with code splitting
+- **Memory Management**: Automatic Three.js resource cleanup
+- **Adaptive 3D Rendering**: Device-aware quality settings
 
 ### 🔐 Security & Performance
 - **Secure Authentication**: Supabase-powered user management
@@ -254,14 +269,25 @@ npm run build
 npm run preview
 ```
 
-## ⚠️ Known Issues
+## ⚠️ Known Issues & Current State
 
-### User Account Activation
+### 🔴 Critical Architecture Issues (See DEVELOPMENT-BACKLOG.md)
+- **Corner Logic System**: Only 2/4 corners work correctly for auto-rotation
+- **Component Boundaries**: Rotation boundaries don't match visual components
+- **Wide Component Positioning**: Left/right wall snapping has 1cm offset
+- **3D Ceiling Height**: Room height control doesn't affect 3D view
+
+### 🟡 User Account Activation
 - **Issue**: New user accounts may experience slow activation (2-3 minutes)
 - **Symptoms**: Login errors, "user not found" messages, RLS policy violations
 - **Resolution**: Wait 2-3 minutes after account creation before attempting to log in
 - **Root Cause**: Supabase user creation and RLS policy propagation takes time
 - **Workaround**: Show loading state or retry mechanism for new users
+
+### ✅ Recently Fixed (v2.5)
+- **All TypeScript Linting Errors**: Cleaned up 32+ warnings/errors to zero
+- **Mobile Support**: Complete responsive design with touch gestures
+- **effectiveWidth/effectiveDepth Bug**: Fixed wall snapping calculations
 
 ## 🐛 Troubleshooting
 
