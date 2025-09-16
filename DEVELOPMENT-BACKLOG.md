@@ -23,6 +23,7 @@
   - Impact: Poor onboarding experience, users may think signup failed
   - Root cause: Email validation → database sync → auth token refresh delay
   - **MOVED TO PHASE 4** - Authentication flow optimization
+  - **PRIORITY: END OF PHASE** - Test after other optimizations (may be resolved)
 - [ ] **Projects Don't Load on First Login** - Existing projects invisible until browser refresh
   - Impact: Users think their projects are lost, confusion and frustration
   - Root cause: Project data not loaded when dashboard renders
@@ -38,13 +39,15 @@
   - Restored missing 3D model exports
   - 100% database-driven component system achieved
 - [ ] **Phase 4: Performance Optimization** - IN PROGRESS
-  - Loading sequence optimization (auth popup, projects not loading)
-  - Authentication flow optimization (slow account activation)
-  - Component loading race conditions (wall units not available)
-  - Database query optimization and intelligent caching
-  - ProjectContext performance (update depth exceeded errors)
-  - 3D rendering performance improvements
-  - Bundle optimization and memory management
+  - **PRIORITY ORDER:**
+    1. Loading sequence optimization ("User Not Authorized" popup)
+    2. Project data loading (projects not visible on first login)
+    3. Component loading race conditions (wall units not available)
+    4. ProjectContext performance (update depth exceeded errors)
+    5. Database query optimization and intelligent caching
+    6. 3D rendering performance improvements
+    7. Bundle optimization and memory management
+    8. **FINAL:** Authentication flow optimization (test if still needed)
 
 ### 🟢 LOW PRIORITY - Enhancements
 - [ ] **Elevation View Improvements** - Corner cabinet door face rendering
