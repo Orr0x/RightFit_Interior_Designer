@@ -2,6 +2,7 @@ import React, { createContext, useContext, useReducer, useEffect, useState } fro
 import { Project, RoomDesign, RoomType, DesignElement } from '../types/project';
 import { supabase } from '../integrations/supabase/client';
 import { useToast } from '../hooks/use-toast';
+import { useAuth } from './AuthContext';
 import { Json } from '../integrations/supabase/types';
 
 // Helper function to transform database room design to TypeScript interface
@@ -225,14 +226,19 @@ const ProjectContext = createContext<ProjectContextType | undefined>(undefined);
 export function ProjectProvider({ children }: { children: React.ReactNode }) {
   const [state, dispatch] = useReducer(projectReducer, initialState);
   const { toast } = useToast();
+  const { user, isLoading } = useAuth();
 
   // Auto-save state
   const [autoSaveEnabled, setAutoSaveEnabled] = useState(true);
   const [autoSaveInterval, setAutoSaveInterval] = useState<NodeJS.Timeout | null>(null);
 
-  // Get current user
+  // Get current user - now uses AuthContext user instead of direct Supabase call
   const getCurrentUser = async () => {
-    const { data: { user } } = await supabase.auth.getUser();
+    // Use the authenticated user from AuthContext instead of making a new Supabase call
+    // This prevents race conditions where auth state isn't ready yet
+    if (!user) {
+      throw new Error('User not authenticated');
+    }
     return user;
   };
 
@@ -802,10 +808,21 @@ export function ProjectProvider({ children }: { children: React.ReactNode }) {
     };
   }, [autoSaveEnabled, state.currentRoomDesign]);
 
-  // Load user projects on mount
+  // Load user projects when auth is ready and user is available
   useEffect(() => {
-    loadUserProjects();
-  }, []);
+    // Only load projects if:
+    // 1. Auth context has finished loading
+    // 2. User is authenticated
+    if (!isLoading && user) {
+      console.log('🔐 [ProjectContext] Auth ready, loading user projects...');
+      loadUserProjects();
+    } else if (!isLoading && !user) {
+      // Auth finished loading but no user - clear any existing projects
+      console.log('🔐 [ProjectContext] No authenticated user, clearing projects');
+      dispatch({ type: 'SET_PROJECTS', payload: [] });
+      dispatch({ type: 'SET_LOADING', payload: false });
+    }
+  }, [isLoading, user]);
 
   const contextValue: ProjectContextType = {
     ...state,
