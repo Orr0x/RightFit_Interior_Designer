@@ -1,10 +1,12 @@
 /**
  * ComponentService - Database-driven component behavior and properties
  * Replaces hardcoded COMPONENT_DATA and elevation height constants
+ * Enhanced with intelligent caching and batch loading
  */
 
 import { supabase } from '@/integrations/supabase/client';
 import { RoomType } from '@/types/project';
+import { cacheManager, IntelligentCache } from './CacheService';
 
 export interface ComponentBehavior {
   mount_type: 'floor' | 'wall';
@@ -23,45 +25,140 @@ export interface ComponentElevationData {
   is_tall_unit: boolean;
 }
 
-/**
- * Cache for component behavior to avoid repeated database queries
- */
-class ComponentBehaviorCache {
-  private cache = new Map<string, ComponentBehavior>();
-  private elevationCache = new Map<string, ComponentElevationData>();
+// Enhanced caching with TTL and intelligent eviction
+const behaviorCache = cacheManager.getCache<ComponentBehavior>('component-behavior', {
+  ttl: 10 * 60 * 1000, // 10 minutes TTL
+  maxSize: 500,
+  enableBatching: true
+});
 
-  get(componentType: string): ComponentBehavior | null {
-    return this.cache.get(componentType) || null;
-  }
-
-  set(componentType: string, behavior: ComponentBehavior): void {
-    this.cache.set(componentType, behavior);
-  }
-
-  getElevation(componentId: string): ComponentElevationData | null {
-    return this.elevationCache.get(componentId) || null;
-  }
-
-  setElevation(componentId: string, data: ComponentElevationData): void {
-    this.elevationCache.set(componentId, data);
-  }
-
-  clear(): void {
-    this.cache.clear();
-    this.elevationCache.clear();
-  }
-}
-
-const behaviorCache = new ComponentBehaviorCache();
+const elevationCache = cacheManager.getCache<ComponentElevationData>('component-elevation', {
+  ttl: 10 * 60 * 1000, // 10 minutes TTL
+  maxSize: 1000,
+  enableBatching: true
+});
 
 export class ComponentService {
+  /**
+   * Batch load component behaviors for better performance
+   */
+  static async batchLoadComponentBehaviors(componentTypes: string[]): Promise<Map<string, ComponentBehavior>> {
+    console.log(`🔄 [ComponentService] Batch loading behaviors for ${componentTypes.length} component types`);
+    
+    // Check cache for existing entries
+    const results = new Map<string, ComponentBehavior>();
+    const uncachedTypes: string[] = [];
+
+    for (const type of componentTypes) {
+      const cached = behaviorCache.get(type);
+      if (cached) {
+        results.set(type, cached);
+      } else {
+        uncachedTypes.push(type);
+      }
+    }
+
+    if (uncachedTypes.length === 0) {
+      console.log(`⚡ [ComponentService] All ${componentTypes.length} behaviors found in cache`);
+      return results;
+    }
+
+    console.log(`🔍 [ComponentService] Loading ${uncachedTypes.length} uncached behaviors from database`);
+
+    try {
+      // Batch query for all uncached types
+      const { data, error } = await supabase
+        .from('components')
+        .select('type, mount_type, has_direction, door_side, default_z_position, elevation_height, corner_configuration, component_behavior')
+        .in('type', uncachedTypes);
+
+      if (error) {
+        console.warn('⚠️ [ComponentService] Batch query error:', error);
+      }
+
+      // Process results
+      const foundTypes = new Set<string>();
+      if (data) {
+        for (const item of data) {
+          const behavior: ComponentBehavior = {
+            mount_type: item.mount_type as 'floor' | 'wall',
+            has_direction: item.has_direction,
+            door_side: item.door_side as 'front' | 'back' | 'left' | 'right',
+            default_z_position: Number(item.default_z_position),
+            elevation_height: item.elevation_height ? Number(item.elevation_height) : undefined,
+            corner_configuration: item.corner_configuration || {},
+            component_behavior: item.component_behavior || {}
+          };
+
+          results.set(item.type, behavior);
+          behaviorCache.set(item.type, behavior);
+          foundTypes.add(item.type);
+        }
+      }
+
+      // Add fallbacks for types not found in database
+      for (const type of uncachedTypes) {
+        if (!foundTypes.has(type)) {
+          const fallback: ComponentBehavior = {
+            mount_type: 'floor',
+            has_direction: true,
+            door_side: 'front',
+            default_z_position: 0,
+            elevation_height: 85,
+            corner_configuration: {},
+            component_behavior: {}
+          };
+          results.set(type, fallback);
+          behaviorCache.set(type, fallback, 30 * 60 * 1000); // Cache fallbacks for 30 minutes
+        }
+      }
+
+      console.log(`✅ [ComponentService] Batch loaded ${results.size} component behaviors`);
+      return results;
+
+    } catch (err) {
+      console.error('💥 [ComponentService] Batch loading error:', err);
+      
+      // Return fallbacks for all uncached types
+      for (const type of uncachedTypes) {
+        if (!results.has(type)) {
+          const fallback: ComponentBehavior = {
+            mount_type: 'floor',
+            has_direction: true,
+            door_side: 'front',
+            default_z_position: 0,
+            elevation_height: 85,
+            corner_configuration: {},
+            component_behavior: {}
+          };
+          results.set(type, fallback);
+        }
+      }
+
+      return results;
+    }
+  }
+
+  /**
+   * Preload common component behaviors for performance
+   */
+  static async preloadCommonBehaviors(): Promise<void> {
+    const commonTypes = [
+      'cabinet', 'appliance', 'counter-top', 'end-panel',
+      'window', 'door', 'flooring', 'toe-kick', 'cornice', 'pelmet'
+    ];
+
+    console.log('🔥 [ComponentService] Preloading common component behaviors');
+    await this.batchLoadComponentBehaviors(commonTypes);
+  }
   /**
    * Get component behavior properties (replaces COMPONENT_DATA lookup)
    */
   static async getComponentBehavior(componentType: string): Promise<ComponentBehavior> {
-    // Check cache first
+    // Check intelligent cache first
     const cached = behaviorCache.get(componentType);
     if (cached) {
+      console.log(`⚡ [ComponentService] Cache hit for component type: ${componentType}`);
       return cached;
     }
 
@@ -87,7 +184,7 @@ export class ComponentService {
           corner_configuration: {},
           component_behavior: {}
         };
-        behaviorCache.set(componentType, fallback);
+        behaviorCache.set(componentType, fallback, 30 * 60 * 1000); // Cache fallbacks for 30 minutes
         return fallback;
       }
 
@@ -102,7 +199,7 @@ export class ComponentService {
       };
 
       behaviorCache.set(componentType, behavior);
-      console.log(`✅ [ComponentService] Loaded behavior for ${componentType}:`, behavior);
+      console.log(`✅ [ComponentService] Loaded and cached behavior for ${componentType}`);
       return behavior;
 
     } catch (err) {
@@ -125,9 +222,10 @@ export class ComponentService {
    * Get elevation height for component (fixes larder cabinet issue)
    */
   static async getElevationHeight(componentId: string, componentType: string): Promise<number> {
-    // Check cache first
-    const cached = behaviorCache.getElevation(componentId);
+    // Check intelligent cache first
+    const cached = elevationCache.get(componentId);
     if (cached) {
+      console.log(`⚡ [ComponentService] Cache hit for elevation: ${componentId}`);
       return cached.use_actual_height ? cached.height : (cached.elevation_height || cached.height);
     }
 
@@ -154,7 +252,7 @@ export class ComponentService {
         is_tall_unit: data.component_behavior?.is_tall_unit || false
       };
 
-      behaviorCache.setElevation(componentId, elevationData);
+      elevationCache.set(componentId, elevationData);
 
       // Determine which height to use
       if (elevationData.use_actual_height || elevationData.is_tall_unit) {

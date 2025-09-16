@@ -757,14 +757,8 @@ export function ProjectProvider({ children }: { children: React.ReactNode }) {
           title: "Design Saved",
           description: "Your design has been saved successfully.",
         });
-      } else {
-        // Show subtle auto-save notification
-        toast({
-          title: "Auto-saved",
-          description: "Your changes have been automatically saved.",
-          duration: 2000,
-        });
       }
+      // Auto-save notifications removed - status shown in header instead
 
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'Failed to save design';

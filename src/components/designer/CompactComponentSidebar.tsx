@@ -6,9 +6,31 @@ import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 import { DesignElement, RoomType } from '@/types/project';
-import { useComponents } from '@/hooks/useComponents';
+import useOptimizedComponents from '@/hooks/useOptimizedComponents';
 import { LoadingSpinner } from '@/components/designer/LoadingSpinner';
-import { DatabaseComponent } from '@/hooks/useComponents';
+// Define DatabaseComponent type locally since it may not be in generated types yet
+interface DatabaseComponent {
+  id: string;
+  component_id: string;
+  name: string;
+  description: string | null;
+  type: string;
+  category: string;
+  width: number;
+  height: number;
+  depth: number;
+  room_types: string[];
+  icon_name: string;
+  model_url: string | null;
+  thumbnail_url: string | null;
+  price: number | null;
+  deprecated: boolean;
+  tags: string[] | null;
+  metadata: any;
+  created_at: string;
+  updated_at: string;
+  color?: string; // Optional color property
+}
 import { 
   Search, 
   ChevronDown, 
@@ -57,7 +79,7 @@ const CompactComponentSidebar: React.FC<CompactComponentSidebarProps> = ({
   const [recentlyUsed, setRecentlyUsed] = useState<string[]>([]);
 
   // 🚀 DATABASE-DRIVEN COMPONENTS! Load all 154 components from Supabase
-  const { components, loading, error, refetch } = useComponents();
+  const { components, loading, error, refetch } = useOptimizedComponents();
   
   // Use database components directly (no conversion needed)
   const allComponents = useMemo(() => {
@@ -105,7 +127,7 @@ const CompactComponentSidebar: React.FC<CompactComponentSidebarProps> = ({
       const term = searchTerm.toLowerCase();
       filtered = filtered.filter(component =>
         component.name.toLowerCase().includes(term) ||
-        component.description.toLowerCase().includes(term) ||
+        (component.description && component.description.toLowerCase().includes(term)) ||
         component.category.toLowerCase().includes(term)
       );
     }
@@ -246,7 +268,7 @@ const CompactComponentSidebar: React.FC<CompactComponentSidebarProps> = ({
     // Style to look like the actual component footprint
     dragPreview.style.width = `${previewWidth}px`;
     dragPreview.style.height = `${previewDepth}px`; // depth becomes height in 2D
-    dragPreview.style.backgroundColor = component.color;
+    dragPreview.style.backgroundColor = component.color || '#8b5cf6';
     dragPreview.style.border = '2px solid #333';
     dragPreview.style.borderRadius = '3px';
     dragPreview.style.opacity = '0.8';
@@ -266,7 +288,7 @@ const CompactComponentSidebar: React.FC<CompactComponentSidebarProps> = ({
       const horizontalLeg = document.createElement('div');
       horizontalLeg.style.width = `${90 * scaleFactor}px`;
       horizontalLeg.style.height = `${legSize}px`;
-      horizontalLeg.style.backgroundColor = component.color;
+      horizontalLeg.style.backgroundColor = component.color || '#8b5cf6';
       horizontalLeg.style.border = '1px solid #333';
       horizontalLeg.style.position = 'absolute';
       horizontalLeg.style.top = '0px';
@@ -276,7 +298,7 @@ const CompactComponentSidebar: React.FC<CompactComponentSidebarProps> = ({
       const verticalLeg = document.createElement('div');
       verticalLeg.style.width = `${legSize}px`;
       verticalLeg.style.height = `${90 * scaleFactor}px`;
-      verticalLeg.style.backgroundColor = component.color;
+      verticalLeg.style.backgroundColor = component.color || '#8b5cf6';
       verticalLeg.style.border = '1px solid #333';
       verticalLeg.style.position = 'absolute';
       verticalLeg.style.top = '0px';

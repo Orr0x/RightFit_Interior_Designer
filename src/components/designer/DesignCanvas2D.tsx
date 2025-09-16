@@ -379,10 +379,19 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
       const cornerTolerance = 30; // cm tolerance for corner detection
       
       // Check if this is a corner unit placement
-      // For corner counter tops, use 90cm square dimensions for detection
+      // ALL corner components use 90cm square dimensions for detection
       const isCornerCounterTop = element.type === 'counter-top' && element.id.includes('counter-top-corner');
-      const detectionWidth = isCornerCounterTop ? 90 : elementWidth;
-      const detectionDepth = isCornerCounterTop ? 90 : elementDepth;
+      const isCornerWallCabinet = element.type === 'cabinet' && element.id.includes('corner-wall-cabinet');
+      const isCornerBaseCabinet = element.type === 'cabinet' && element.id.includes('corner-base-cabinet');
+      const isCornerTallUnit = element.type === 'cabinet' && (
+        element.id.includes('corner-tall') || 
+        element.id.includes('corner-larder') ||
+        element.id.includes('larder-corner')
+      );
+      const isAnyCornerComponent = isCornerCounterTop || isCornerWallCabinet || isCornerBaseCabinet || isCornerTallUnit;
+      
+      const detectionWidth = isAnyCornerComponent ? 90 : elementWidth;
+      const detectionDepth = isAnyCornerComponent ? 90 : elementDepth;
       
       const isCornerPosition = 
         (x <= cornerTolerance && y <= cornerTolerance) || // front-left corner
@@ -392,13 +401,13 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
       
       if (isCornerPosition) {
         // Special handling for corner units - they have specific orientations
-        // For corner counter tops, use 90cm square dimensions (isCornerCounterTop already defined above)
-        const cornerWidth = isCornerCounterTop ? 90 : elementWidth;
-        const cornerDepth = isCornerCounterTop ? 90 : elementDepth;
+        // ALL corner components use 90cm square dimensions for positioning
+        const cornerWidth = isAnyCornerComponent ? 90 : elementWidth;
+        const cornerDepth = isAnyCornerComponent ? 90 : elementDepth;
         
         if (x <= cornerTolerance && y <= cornerTolerance) {
-          // Front-left corner
-          if (isCornerCounterTop) {
+          // Front-left corner (TOP-LEFT)
+          if (isAnyCornerComponent) {
             rotation = 0; // L-shape faces down-right
           } else {
             rotation = 90; // door faces right (into room)
@@ -408,8 +417,8 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
           guides.vertical.push(0);
           guides.horizontal.push(0);
         } else if (x >= roomDimensions.width - cornerWidth - cornerTolerance && y <= cornerTolerance) {
-          // Front-right corner
-          if (isCornerCounterTop) {
+          // Front-right corner (TOP-RIGHT)
+          if (isAnyCornerComponent) {
             rotation = 270; // L-shape faces down-left
           } else {
             rotation = 270; // door faces left (into room)
@@ -419,8 +428,8 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
           guides.vertical.push(roomDimensions.width);
           guides.horizontal.push(0);
         } else if (x <= cornerTolerance && y >= roomDimensions.height - cornerDepth - cornerTolerance) {
-          // Back-left corner
-          if (isCornerCounterTop) {
+          // Back-left corner (BOTTOM-LEFT)
+          if (isAnyCornerComponent) {
             rotation = 90; // L-shape faces up-right
           } else {
             rotation = 90; // door faces right (into room)
@@ -430,8 +439,8 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
           guides.vertical.push(0);
           guides.horizontal.push(roomDimensions.height);
         } else if (x >= roomDimensions.width - cornerWidth - cornerTolerance && y >= roomDimensions.height - cornerDepth - cornerTolerance) {
-          // Back-right corner
-          if (isCornerCounterTop) {
+          // Back-right corner (BOTTOM-RIGHT)
+          if (isAnyCornerComponent) {
             rotation = 180; // L-shape faces up-left
           } else {
             rotation = 270; // door faces left (into room)

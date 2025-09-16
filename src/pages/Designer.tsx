@@ -4,25 +4,27 @@ import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Save, ArrowLeft, Layout, Box, Edit3, Shield, CheckCircle, Home } from 'lucide-react';
+import { Save, ArrowLeft, Layout, Box, Edit3, Shield, CheckCircle, Home, Settings, Gauge } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import { useProject } from '@/contexts/ProjectContext';
 import { useKeyboardShortcuts } from '@/hooks/useKeyboardShortcuts';
 import { DesignCanvas2D } from '@/components/designer/DesignCanvas2D';
-import { View3D } from '@/components/designer/View3D';
+import { AdaptiveView3D } from '@/components/designer/AdaptiveView3D';
 import CompactComponentSidebar from '@/components/designer/CompactComponentSidebar';
 import { CanvasElementCounter } from '@/components/designer/CanvasElementCounter';
 import { ViewSelector } from '@/components/designer/ViewSelector';
 import { DesignToolbar } from '@/components/designer/DesignToolbar';
 import { PropertiesPanel } from '@/components/designer/PropertiesPanel';
 import { ErrorBoundary } from '@/components/designer/ErrorBoundary';
-import { PerformanceMonitor } from '@/components/designer/PerformanceMonitor';
+import PerformanceMonitor from '@/components/designer/PerformanceMonitor';
 import { RoomTabs } from '@/components/designer/RoomTabs';
 import { KeyboardShortcutsHelp } from '@/components/designer/KeyboardShortcutsHelp';
 import { toast } from 'sonner';
 import { useDesignValidation } from '@/hooks/useDesignValidation';
 import { RoomDesign, DesignElement } from '@/types/project';
+import { ComponentService } from '@/services/ComponentService';
 import rightfitLogo from '@/assets/logo.png';
+import '@/utils/godMode'; // Load God mode utilities in development
 
 
 const Designer = () => {
@@ -56,6 +58,7 @@ const Designer = () => {
   const [showLeftPanel, setShowLeftPanel] = useState(true);
   const [showRightPanel, setShowRightPanel] = useState(true);
   const [lastValidatedDesign, setLastValidatedDesign] = useState<string | null>(null);
+  const [showPerformanceMonitor, setShowPerformanceMonitor] = useState(false);
 
   // Tape measure state - multi-measurement support
   const [completedMeasurements, setCompletedMeasurements] = useState<{ start: { x: number; y: number }, end: { x: number; y: number } }[]>([]);
@@ -68,6 +71,21 @@ const Designer = () => {
 
   // Initialize validation hook
   const { validateDesign, showValidationResults } = useDesignValidation();
+
+  // Preload common data for performance
+  useEffect(() => {
+    const preloadData = async () => {
+      try {
+        console.log('🚀 [Designer] Preloading common component behaviors for performance');
+        await ComponentService.preloadCommonBehaviors();
+        console.log('✅ [Designer] Preloading complete');
+      } catch (err) {
+        console.warn('⚠️ [Designer] Preloading failed (non-critical):', err);
+      }
+    };
+
+    preloadData();
+  }, []);
 
   // Determine what to show based on URL and project state
   useEffect(() => {
@@ -518,10 +536,6 @@ const Designer = () => {
   return (
     <ErrorBoundary>
       <div className="h-screen bg-gray-50 flex flex-col overflow-hidden">
-        <PerformanceMonitor 
-          elementCount={currentRoomDesign.design_elements?.length || 0}
-          onPerformanceIssue={(issue) => toast.warning(issue)}
-        />
         
         <header className="bg-white shadow-sm border-b px-4 py-3">
           <div className="flex items-center justify-between w-full">
@@ -618,6 +632,38 @@ const Designer = () => {
                   )}
                   
                   <KeyboardShortcutsHelp />
+                  
+                  {/* God Mode Dev Tools */}
+                  {user?.user_tier === 'god' && (
+                    <div className="flex items-center gap-2 ml-2 pl-2 border-l border-gray-300">
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        onClick={() => {
+                          console.log('🎯 [Designer] Performance Monitor toggle clicked, current state:', showPerformanceMonitor);
+                          setShowPerformanceMonitor(!showPerformanceMonitor);
+                        }}
+                        className="text-xs"
+                        title="Performance Monitor"
+                      >
+                        <Gauge className="h-4 w-4" />
+                      </Button>
+                      
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        onClick={() => {
+                          // Navigate to dev tools page
+                          console.log('🛠️ [Designer] Navigating to Dev Tools page');
+                          navigate('/dev');
+                        }}
+                        className="text-xs"
+                        title="Developer Tools"
+                      >
+                        <Settings className="h-4 w-4" />
+                      </Button>
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
@@ -647,16 +693,18 @@ const Designer = () => {
         {/* Main Content */}
         <div className="flex-1 flex">
           {/* Left Sidebar */}
-          <div className={`${showLeftPanel ? 'w-80' : 'w-0'} bg-white border-r flex flex-col smooth-transition overflow-hidden relative z-10`}>
+          <div className={`${showLeftPanel ? 'w-80' : 'w-0'} bg-white border-r flex flex-col smooth-transition overflow-hidden relative z-10 h-full`}>
             {showLeftPanel && (
               <>
                 <div className="p-4 border-b">
                   <h2 className="font-semibold text-gray-900">Designer</h2>
                 </div>
-                <CompactComponentSidebar
-                  onAddElement={handleAddElement}
-                  roomType={currentRoomDesign.room_type}
-                />
+                <div className="flex-1">
+                  <CompactComponentSidebar
+                    onAddElement={handleAddElement}
+                    roomType={currentRoomDesign.room_type}
+                  />
+                </div>
               </>
             )}
           </div>
@@ -745,7 +793,7 @@ const Designer = () => {
                   </div>
                 ) : design ? (
                   <div className="h-full relative">
-                    <View3D
+                    <AdaptiveView3D
                       key={`view3d-${currentRoomId}-${showLeftPanel}-${showRightPanel}`}
                       design={design}
                       selectedElement={selectedElement}
@@ -788,6 +836,14 @@ const Designer = () => {
             )}
           </div>
         </div>
+
+        {/* Performance Monitor - God Mode Only */}
+        {user?.user_tier === 'god' && (
+          <PerformanceMonitor
+            isVisible={showPerformanceMonitor}
+            onToggle={() => setShowPerformanceMonitor(!showPerformanceMonitor)}
+          />
+        )}
       </div>
     </ErrorBoundary>
   );

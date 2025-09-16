@@ -1,0 +1,598 @@
+/**
+ * AdaptiveView3D - 3D view with adaptive performance and quality settings
+ * Automatically adjusts rendering quality based on device capabilities
+ */
+
+import React, { Suspense, useEffect, useRef, useState, useMemo } from 'react';
+import { Canvas, useThree } from '@react-three/fiber';
+import { OrbitControls, Environment, Grid, Text } from '@react-three/drei';
+import { DesignElement, Design } from '@/types/project';
+import { performanceDetector, RenderQuality, DeviceCapabilities } from '@/services/PerformanceDetector';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import { Settings, Zap, Gauge } from 'lucide-react';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
+
+import * as THREE from 'three';
+import { 
+  EnhancedCabinet3D, 
+  EnhancedAppliance3D, 
+  EnhancedCounterTop3D, 
+  EnhancedEndPanel3D,
+  EnhancedWindow3D,
+  EnhancedDoor3D,
+  EnhancedFlooring3D,
+  EnhancedToeKick3D,
+  EnhancedCornice3D,
+  EnhancedPelmet3D,
+  EnhancedWallUnitEndPanel3D
+} from './EnhancedModels3D';
+
+interface AdaptiveView3DProps {
+  design: Design;
+  selectedElement: DesignElement | null;
+  onSelectElement: (element: DesignElement | null) => void;
+  activeTool?: 'select' | 'fit-screen' | 'pan' | 'tape-measure' | 'none';
+  showGrid?: boolean;
+  fitToScreenSignal?: number;
+}
+
+// Convert 2D coordinates to 3D world coordinates
+const convertTo3D = (x: number, y: number, roomWidth: number, roomHeight: number) => {
+  return {
+    x: (x / 100) - (roomWidth / 200),
+    z: (y / 100) - (roomHeight / 200)
+  };
+};
+
+// Adaptive Room component with quality-based features
+const AdaptiveRoom3D: React.FC<{ 
+  roomDimensions: { width: number; height: number }; 
+  quality: RenderQuality;
+}> = ({ roomDimensions, quality }) => {
+  const roomWidth = roomDimensions.width / 100;
+  const roomDepth = roomDimensions.height / 100;
+  const wallHeight = 2.5;
+
+  // Use simpler materials for low quality
+  const floorMaterial = quality.level === 'low' 
+    ? <meshBasicMaterial color="#f5f5f5" />
+    : <meshLambertMaterial color="#f5f5f5" />;
+
+  const wallMaterial = quality.level === 'low'
+    ? <meshBasicMaterial color="#ffffff" />
+    : <meshLambertMaterial color="#ffffff" />;
+
+  return (
+    <group>
+      {/* Floor */}
+      <mesh position={[0, -0.01, 0]} receiveShadow={quality.shadows}>
+        <boxGeometry args={[roomWidth, 0.02, roomDepth]} />
+        {floorMaterial}
+      </mesh>
+      
+      {/* Back Wall */}
+      <mesh position={[0, wallHeight / 2, -roomDepth / 2]} receiveShadow={quality.shadows}>
+        <boxGeometry args={[roomWidth, wallHeight, 0.1]} />
+        {wallMaterial}
+      </mesh>
+      
+      {/* Left Wall */}
+      <mesh position={[-roomWidth / 2, wallHeight / 2, 0]} receiveShadow={quality.shadows}>
+        <boxGeometry args={[0.1, wallHeight, roomDepth]} />
+        {wallMaterial}
+      </mesh>
+      
+      {/* Right Wall */}
+      <mesh position={[roomWidth / 2, wallHeight / 2, 0]} receiveShadow={quality.shadows}>
+        <boxGeometry args={[0.1, wallHeight, roomDepth]} />
+        {wallMaterial}
+      </mesh>
+      
+      {/* Room dimensions text - only show in medium/high quality */}
+      {quality.level !== 'low' && (
+        <Text
+          position={[0, 0.1, roomDepth / 2 - 0.2]}
+          rotation={[-Math.PI / 2, 0, 0]}
+          fontSize={0.2}
+          color="#666"
+        >
+          {roomDimensions.width}cm × {roomDimensions.height}cm
+        </Text>
+      )}
+    </group>
+  );
+};
+
+// Adaptive Lighting component
+const AdaptiveLighting: React.FC<{ quality: RenderQuality }> = ({ quality }) => {
+  if (quality.level === 'low') {
+    // Minimal lighting for performance
+    return (
+      <>
+        <ambientLight intensity={0.8} />
+      </>
+    );
+  }
+
+  if (quality.level === 'medium') {
+    // Balanced lighting
+    return (
+      <>
+        <ambientLight intensity={0.4} />
+        <directionalLight
+          position={[10, 10, 5]}
+          intensity={1}
+          castShadow={quality.shadows}
+          shadow-mapSize-width={quality.shadowMapSize}
+          shadow-mapSize-height={quality.shadowMapSize}
+        />
+      </>
+    );
+  }
+
+  // High quality lighting
+  return (
+    <>
+      <ambientLight intensity={0.4} />
+      <directionalLight
+        position={[10, 10, 5]}
+        intensity={1}
+        castShadow={quality.shadows}
+        shadow-mapSize-width={quality.shadowMapSize}
+        shadow-mapSize-height={quality.shadowMapSize}
+      />
+      <pointLight position={[0, 2, 0]} intensity={0.3} />
+      <pointLight position={[-2, 1.5, 2]} intensity={0.2} color="#fff8dc" />
+    </>
+  );
+};
+
+// Quality Settings UI
+const QualitySettings: React.FC<{
+  currentQuality: RenderQuality;
+  capabilities: DeviceCapabilities;
+  isAutoMode: boolean;
+  onQualityChange: (quality: RenderQuality) => void;
+  onAutoModeToggle: (auto: boolean) => void;
+}> = ({ currentQuality, capabilities, isAutoMode, onQualityChange, onAutoModeToggle }) => {
+  const qualityPresets = performanceDetector.getQualityPresets();
+
+  const getQualityColor = (level: string) => {
+    switch (level) {
+      case 'high': return 'bg-green-500';
+      case 'medium': return 'bg-yellow-500';
+      case 'low': return 'bg-red-500';
+      default: return 'bg-gray-500';
+    }
+  };
+
+  const getGPUColor = (tier: string) => {
+    switch (tier) {
+      case 'high': return 'text-green-600';
+      case 'medium': return 'text-yellow-600';
+      case 'low': return 'text-red-600';
+      default: return 'text-gray-600';
+    }
+  };
+
+  return (
+    <div className="absolute top-4 left-4 z-50">
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button variant="outline" size="sm" className="gap-2">
+            <Gauge className="h-4 w-4" />
+            <Badge className={`${getQualityColor(currentQuality.level)} text-white px-2 py-1 text-xs`}>
+              {currentQuality.level.toUpperCase()}
+            </Badge>
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent align="start" className="w-64">
+          <DropdownMenuLabel>3D Rendering Quality</DropdownMenuLabel>
+          <DropdownMenuSeparator />
+          
+          {/* Device Info */}
+          <div className="px-2 py-2 text-xs text-gray-600">
+            <div className="flex justify-between">
+              <span>GPU:</span>
+              <span className={getGPUColor(capabilities.gpuTier)}>
+                {capabilities.gpuTier.toUpperCase()}
+              </span>
+            </div>
+            <div className="flex justify-between">
+              <span>Memory:</span>
+              <span>{capabilities.memoryGB}GB</span>
+            </div>
+            <div className="flex justify-between">
+              <span>WebGL:</span>
+              <span>{capabilities.webglVersion}</span>
+            </div>
+          </div>
+          
+          <DropdownMenuSeparator />
+          
+          {/* Auto Mode Toggle */}
+          <DropdownMenuItem onClick={() => onAutoModeToggle(!isAutoMode)}>
+            <Zap className="h-4 w-4 mr-2" />
+            {isAutoMode ? '✅ Auto-Detect' : '⚙️ Manual Mode (Default)'}
+          </DropdownMenuItem>
+          
+          <DropdownMenuSeparator />
+          
+          {/* Quality Presets */}
+          <DropdownMenuItem 
+            onClick={() => onQualityChange(qualityPresets.high)}
+            disabled={isAutoMode}
+          >
+            <div className="flex items-center justify-between w-full">
+              <span>High Quality</span>
+              <Badge className="bg-green-500 text-white">
+                Shadows, AA, Full Detail
+              </Badge>
+            </div>
+          </DropdownMenuItem>
+          
+          <DropdownMenuItem 
+            onClick={() => onQualityChange(qualityPresets.medium)}
+            disabled={isAutoMode}
+          >
+            <div className="flex items-center justify-between w-full">
+              <span>Medium Quality</span>
+              <Badge className="bg-yellow-500 text-white">
+                Balanced Performance
+              </Badge>
+            </div>
+          </DropdownMenuItem>
+          
+          <DropdownMenuItem 
+            onClick={() => onQualityChange(qualityPresets.low)}
+            disabled={isAutoMode}
+          >
+            <div className="flex items-center justify-between w-full">
+              <span>Low Quality</span>
+              <Badge className="bg-red-500 text-white">
+                Maximum Performance
+              </Badge>
+            </div>
+          </DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
+    </div>
+  );
+};
+
+// Fit to Screen Controller
+const FitToScreenController: React.FC<{ 
+  roomDimensions: { width: number; height: number }; 
+  signal: number; 
+  controlsRef: React.RefObject<any>; 
+}> = ({ roomDimensions, signal, controlsRef }) => {
+  const { camera } = useThree();
+  
+  useEffect(() => {
+    if (!signal) return;
+    const maxDim = Math.max(roomDimensions.width, roomDimensions.height) / 100;
+    const distance = Math.max(4, maxDim * 1.2);
+    camera.position.set(distance, distance * 0.8, distance);
+    camera.updateProjectionMatrix();
+    if (controlsRef.current) {
+      controlsRef.current.target.set(0, 0, 0);
+      controlsRef.current.update();
+    }
+  }, [signal, roomDimensions.width, roomDimensions.height, camera, controlsRef]);
+  
+  return null;
+};
+
+export const AdaptiveView3D: React.FC<AdaptiveView3DProps> = ({
+  design,
+  selectedElement,
+  onSelectElement,
+  activeTool = 'select',
+  showGrid = true,
+  fitToScreenSignal = 0
+}) => {
+  const [capabilities, setCapabilities] = useState<DeviceCapabilities | null>(null);
+  const [currentQuality, setCurrentQuality] = useState<RenderQuality | null>(null);
+  const [isAutoMode, setIsAutoMode] = useState(false); // Default to manual mode
+  const [isInitializing, setIsInitializing] = useState(true);
+  const controlsRef = useRef<any>(null);
+
+  // Always define roomDimensions (before any early returns)
+  const roomDimensions = {
+    width: design?.roomDimensions?.width || 600,
+    height: design?.roomDimensions?.height || 400
+  };
+
+  // Filter elements based on quality settings (always call this hook)
+  const visibleElements = useMemo(() => {
+    if (!design?.elements) return [];
+    
+    // Limit elements for performance - use fallback if currentQuality is null
+    const maxElements = currentQuality?.maxElements || 100;
+    return design.elements.slice(0, maxElements);
+  }, [design?.elements, currentQuality?.maxElements]);
+
+  // Initialize performance detection
+  useEffect(() => {
+    const initializePerformance = async () => {
+      try {
+        const caps = await performanceDetector.detectCapabilities();
+        setCapabilities(caps);
+        // Default to medium quality instead of auto-detected
+        const mediumQuality = performanceDetector.getQualityPresets().medium;
+        setCurrentQuality(mediumQuality);
+        setIsInitializing(false);
+
+        console.log('🎮 [AdaptiveView3D] Performance detection complete:', {
+          gpu: caps.gpuTier,
+          recommended: caps.recommendedQuality.level,
+          defaultUsing: 'medium',
+          autoMode: false
+        });
+      } catch (error) {
+        console.error('❌ [AdaptiveView3D] Performance detection failed:', error);
+        // Fallback to medium quality
+        const fallback = performanceDetector.getQualityPresets().medium;
+        setCurrentQuality(fallback);
+        setIsInitializing(false);
+      }
+    };
+
+    initializePerformance();
+  }, []);
+
+  // Start frame rate monitoring in auto mode
+  useEffect(() => {
+    if (!isAutoMode || !capabilities) return;
+
+    performanceDetector.startFrameRateMonitoring((newQuality) => {
+      console.log('⚡ [AdaptiveView3D] Auto-adjusting quality:', newQuality.level);
+      setCurrentQuality(newQuality);
+    });
+
+    return () => {
+      performanceDetector.stopFrameRateMonitoring();
+    };
+  }, [isAutoMode, capabilities]);
+
+  // Safety checks - AFTER all hooks
+  if (!design || !design.roomDimensions || isInitializing || !currentQuality) {
+    return (
+      <div className="w-full h-full relative bg-gray-50 rounded-lg overflow-hidden flex items-center justify-center">
+        <div className="text-gray-500">
+          {isInitializing ? 'Optimizing 3D performance...' : 'Loading 3D View...'}
+        </div>
+      </div>
+    );
+  }
+
+  const handleElementClick = (element: DesignElement) => {
+    if (activeTool === 'select') {
+      onSelectElement(selectedElement?.id === element.id ? null : element);
+    }
+  };
+
+  const handleQualityChange = (newQuality: RenderQuality) => {
+    console.log('🎨 [AdaptiveView3D] Manual quality change:', newQuality.level);
+    setCurrentQuality(newQuality);
+  };
+
+  const handleAutoModeToggle = (auto: boolean) => {
+    console.log('🔄 [AdaptiveView3D] Auto mode:', auto ? 'enabled' : 'disabled');
+    setIsAutoMode(auto);
+    
+    if (auto && capabilities) {
+      // Reset to recommended quality
+      setCurrentQuality(capabilities.recommendedQuality);
+    }
+  };
+
+  return (
+    <div className="w-full h-full relative z-0 bg-gray-50 rounded-lg overflow-hidden">
+      {/* Quality Settings UI */}
+      {capabilities && (
+        <QualitySettings
+          currentQuality={currentQuality}
+          capabilities={capabilities}
+          isAutoMode={isAutoMode}
+          onQualityChange={handleQualityChange}
+          onAutoModeToggle={handleAutoModeToggle}
+        />
+      )}
+
+      <Canvas
+        camera={{
+          position: [5, 4, 5],
+          fov: 60
+        }}
+        shadows={currentQuality.shadows}
+        className="w-full h-full"
+        gl={{
+          antialias: currentQuality.antialias,
+          alpha: true, // Enable transparency to show container background
+          powerPreference: currentQuality.level === 'high' ? 'high-performance' : 'low-power'
+        }}
+      >
+        <Suspense fallback={null}>
+          {/* Adaptive Lighting */}
+          <AdaptiveLighting quality={currentQuality} />
+          
+          {/* Environment - only for medium/high quality */}
+          {currentQuality.environmentLighting && (
+            <Environment preset="apartment" />
+          )}
+          
+          {/* Adaptive Room */}
+          <AdaptiveRoom3D roomDimensions={roomDimensions} quality={currentQuality} />
+          
+          {/* Grid - simplified for low quality */}
+          {showGrid && (
+            <Grid
+              args={[roomDimensions.width / 100, roomDimensions.height / 100]}
+              cellSize={0.2}
+              cellThickness={currentQuality.level === 'low' ? 0.5 : 1}
+              cellColor="#e0e0e0"
+              sectionSize={1}
+              sectionThickness={currentQuality.level === 'low' ? 1 : 1.5}
+              sectionColor="#c0c0c0"
+              position={[0, 0, 0]}
+            />
+          )}
+          
+          {/* Design Elements - limited by quality */}
+          {visibleElements.map((element) => {
+            const isSelected = selectedElement?.id === element.id;
+            const { x, z } = convertTo3D(element.x, element.y, roomDimensions.width, roomDimensions.height);
+
+            // Render appropriate 3D model based on element type
+            switch (element.type) {
+              case 'cabinet':
+                return (
+                  <EnhancedCabinet3D
+                    key={element.id}
+                    element={element}
+                    roomDimensions={roomDimensions}
+                    isSelected={isSelected}
+                    onClick={() => handleElementClick(element)}
+                  />
+                );
+              case 'appliance':
+                return (
+                  <EnhancedAppliance3D
+                    key={element.id}
+                    element={element}
+                    roomDimensions={roomDimensions}
+                    isSelected={isSelected}
+                    onClick={() => handleElementClick(element)}
+                  />
+                );
+              case 'counter-top':
+                return (
+                  <EnhancedCounterTop3D
+                    key={element.id}
+                    element={element}
+                    roomDimensions={roomDimensions}
+                    isSelected={isSelected}
+                    onClick={() => handleElementClick(element)}
+                  />
+                );
+              case 'end-panel':
+                return (
+                  <EnhancedEndPanel3D
+                    key={element.id}
+                    element={element}
+                    roomDimensions={roomDimensions}
+                    isSelected={isSelected}
+                    onClick={() => handleElementClick(element)}
+                  />
+                );
+              case 'window':
+                return (
+                  <EnhancedWindow3D
+                    key={element.id}
+                    element={element}
+                    roomDimensions={roomDimensions}
+                    isSelected={isSelected}
+                    onClick={() => handleElementClick(element)}
+                  />
+                );
+              case 'door':
+                return (
+                  <EnhancedDoor3D
+                    key={element.id}
+                    element={element}
+                    roomDimensions={roomDimensions}
+                    isSelected={isSelected}
+                    onClick={() => handleElementClick(element)}
+                  />
+                );
+              case 'flooring':
+                return (
+                  <EnhancedFlooring3D
+                    key={element.id}
+                    element={element}
+                    roomDimensions={roomDimensions}
+                    isSelected={isSelected}
+                    onClick={() => handleElementClick(element)}
+                  />
+                );
+              case 'toe-kick':
+                return (
+                  <EnhancedToeKick3D
+                    key={element.id}
+                    element={element}
+                    roomDimensions={roomDimensions}
+                    isSelected={isSelected}
+                    onClick={() => handleElementClick(element)}
+                  />
+                );
+              case 'cornice':
+                return (
+                  <EnhancedCornice3D
+                    key={element.id}
+                    element={element}
+                    roomDimensions={roomDimensions}
+                    isSelected={isSelected}
+                    onClick={() => handleElementClick(element)}
+                  />
+                );
+              case 'pelmet':
+                return (
+                  <EnhancedPelmet3D
+                    key={element.id}
+                    element={element}
+                    roomDimensions={roomDimensions}
+                    isSelected={isSelected}
+                    onClick={() => handleElementClick(element)}
+                  />
+                );
+              case 'wall-unit-end-panel':
+                return (
+                  <EnhancedWallUnitEndPanel3D
+                    key={element.id}
+                    element={element}
+                    roomDimensions={roomDimensions}
+                    isSelected={isSelected}
+                    onClick={() => handleElementClick(element)}
+                  />
+                );
+              default:
+                return null;
+            }
+          })}
+          
+          {/* Controls */}
+          <OrbitControls
+            ref={controlsRef}
+            enablePan={activeTool === 'pan'}
+            enableZoom={true}
+            enableRotate={activeTool === 'select' || activeTool === 'pan'}
+            target={[0, 0, 0]}
+          />
+          
+          {/* Fit to Screen Controller */}
+          <FitToScreenController
+            roomDimensions={roomDimensions}
+            signal={fitToScreenSignal}
+            controlsRef={controlsRef}
+          />
+        </Suspense>
+      </Canvas>
+      
+      {/* Element count indicator for performance monitoring */}
+      {visibleElements.length < (design.elements?.length || 0) && (
+        <div className="absolute bottom-4 right-4 bg-yellow-500 text-white px-3 py-1 rounded-full text-xs">
+          Showing {visibleElements.length} of {design.elements?.length} elements
+        </div>
+      )}
+    </div>
+  );
+};

@@ -12,10 +12,8 @@ const DevToolsButton: React.FC = () => {
   const userTier = (user?.profile?.user_tier as UserTier) || UserTier.FREE;
   const permissions = getUserTierPermissions(userTier);
 
-  // Only show for users who have dev access
-  if (!permissions.canAccessGitUI && userTier !== UserTier.ADMIN && userTier !== UserTier.GOD) {
-    return null;
-  }
+  // Hide DevToolsButton - using header dev tools instead
+  return null;
 
   // Check if we're currently in dev mode (any route starting with /dev)
   const isInDevMode = location.pathname.startsWith('/dev');
