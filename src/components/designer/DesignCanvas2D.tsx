@@ -369,8 +369,6 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
   selectedElement,
   onSelectElement,
   onUpdateElement,
-  onDeleteElement,
-  onUpdateRoomDimensions,
   onAddElement,
   showGrid = true,
   showRuler = false,
@@ -411,7 +409,6 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
   
   // Touch events state
   const [touchZoomStart, setTouchZoomStart] = useState<number | null>(null);
-  const [touchPanStart, setTouchPanStart] = useState<{ x: number; y: number } | null>(null);
   
   // Helper function to get wall height (ceiling height) - prioritize room dimensions over cache
   const getWallHeight = useCallback(() => {
@@ -572,7 +569,6 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
       
       // Get effective dimensions for other element
       const otherEffectiveDims = getEffectiveDimensions(otherEl);
-      const otherElWidth = otherEffectiveDims.width;
       const otherElDepth = otherEffectiveDims.depth;
       
       // Horizontal alignment (same Y or adjacent Y)
@@ -1140,29 +1136,6 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
     }
   }, [active2DView, roomToCanvas, selectedElement, hoveredElement, zoom]);
 
-  // Draw cabinet details (doors, handles)
-  const drawCabinetDetails = (ctx: CanvasRenderingContext2D, width: number, height: number) => {
-    ctx.strokeStyle = '#555';
-    ctx.lineWidth = 1;
-    
-    // Door dividers
-    const doorWidth = width / 2;
-    ctx.beginPath();
-    ctx.moveTo(doorWidth, 0);
-    ctx.lineTo(doorWidth, height);
-    ctx.stroke();
-    
-    // Door handles
-    ctx.fillStyle = '#333';
-    const handleSize = 3;
-    const handleY = height / 2;
-    
-    // Left door handle
-    ctx.fillRect(doorWidth * 0.8 - handleSize/2, handleY - handleSize/2, handleSize, handleSize);
-    
-    // Right door handle  
-    ctx.fillRect(doorWidth * 1.2 - handleSize/2, handleY - handleSize/2, handleSize, handleSize);
-  };
 
   // Draw selection handles using rotated bounding box
   const drawSelectionHandles = (ctx: CanvasRenderingContext2D, element: DesignElement) => {
@@ -1195,14 +1168,6 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
     
     if (!isCornerVisible && wall !== active2DView && wall !== 'center') return;
 
-    // Get component behavior from cache or use fallback
-    const componentData = componentBehaviorCache.get(element.type) || { 
-      mountType: 'floor', 
-      defaultDepth: 60,
-      hasDirection: true,
-      doorSide: 'front'
-    };
-    
     // Async preload behavior if not cached
     if (!componentBehaviorCache.has(element.type)) {
       getComponentBehavior(element.type).catch(console.warn);
@@ -1211,9 +1176,7 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
     // Components are positioned within the inner room space, not including wall thickness
     const elevationWidth = roomDimensions.width * zoom; // Inner room width for front/back views
     const elevationDepth = roomDimensions.height * zoom; // Inner room depth for left/right views
-    const wallHeight = getWallHeight() * zoom;
     const floorY = roomPosition.innerY + (CANVAS_HEIGHT * 0.7); // Fixed floor position
-    const topY = floorY - wallHeight; // Ceiling moves up/down based on wall height
     
     // Calculate horizontal position - use innerX as baseline for all elevation views
     let xPos: number;
@@ -1597,7 +1560,7 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
   };
 
   // Draw detailed counter top elevation
-  const drawCounterTopElevationDetails = (ctx: CanvasRenderingContext2D, x: number, y: number, width: number, height: number, element: DesignElement) => {
+  const drawCounterTopElevationDetails = (ctx: CanvasRenderingContext2D, x: number, y: number, width: number, height: number, _element: DesignElement) => {
     ctx.strokeStyle = '#8B7355'; // Darker brown for counter top edge
     ctx.lineWidth = 1;
 
@@ -1630,7 +1593,7 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
   };
 
   // Draw detailed end panel elevation
-  const drawEndPanelElevationDetails = (ctx: CanvasRenderingContext2D, x: number, y: number, width: number, height: number, element: DesignElement) => {
+  const drawEndPanelElevationDetails = (ctx: CanvasRenderingContext2D, x: number, y: number, width: number, height: number, _element: DesignElement) => {
     ctx.strokeStyle = '#654321'; // Darker brown for end panel edge
     ctx.lineWidth = 1;
 
@@ -1663,7 +1626,7 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
   };
 
   // Draw detailed window elevation
-  const drawWindowElevationDetails = (ctx: CanvasRenderingContext2D, x: number, y: number, width: number, height: number, element: DesignElement) => {
+  const drawWindowElevationDetails = (ctx: CanvasRenderingContext2D, x: number, y: number, width: number, height: number, _element: DesignElement) => {
     ctx.strokeStyle = '#2F4F4F'; // Dark slate gray for window frame
     ctx.lineWidth = 2;
 
@@ -1696,7 +1659,7 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
   };
 
   // Draw detailed door elevation
-  const drawDoorElevationDetails = (ctx: CanvasRenderingContext2D, x: number, y: number, width: number, height: number, element: DesignElement) => {
+  const drawDoorElevationDetails = (ctx: CanvasRenderingContext2D, x: number, y: number, width: number, height: number, _element: DesignElement) => {
     ctx.strokeStyle = '#8B4513'; // Brown for door frame
     ctx.lineWidth = 2;
 
@@ -1812,7 +1775,7 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
   };
 
   // Draw detailed toe kick elevation
-  const drawToeKickElevationDetails = (ctx: CanvasRenderingContext2D, x: number, y: number, width: number, height: number, element: DesignElement) => {
+  const drawToeKickElevationDetails = (ctx: CanvasRenderingContext2D, x: number, y: number, width: number, height: number, _element: DesignElement) => {
     ctx.strokeStyle = '#654321'; // Dark brown for toe kick
     ctx.lineWidth = 1;
 
@@ -1840,7 +1803,7 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
   };
 
   // Draw detailed cornice elevation
-  const drawCorniceElevationDetails = (ctx: CanvasRenderingContext2D, x: number, y: number, width: number, height: number, element: DesignElement) => {
+  const drawCorniceElevationDetails = (ctx: CanvasRenderingContext2D, x: number, y: number, width: number, height: number, _element: DesignElement) => {
     ctx.strokeStyle = '#8B4513'; // Brown for cornice
     ctx.lineWidth = 1;
 
@@ -1872,7 +1835,7 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
   };
 
   // Draw detailed pelmet elevation
-  const drawPelmetElevationDetails = (ctx: CanvasRenderingContext2D, x: number, y: number, width: number, height: number, element: DesignElement) => {
+  const drawPelmetElevationDetails = (ctx: CanvasRenderingContext2D, x: number, y: number, width: number, height: number, _element: DesignElement) => {
     ctx.strokeStyle = '#8B4513'; // Brown for pelmet
     ctx.lineWidth = 1;
 
@@ -1907,7 +1870,7 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
   };
 
   // Draw detailed wall unit end panel elevation
-  const drawWallUnitEndPanelElevationDetails = (ctx: CanvasRenderingContext2D, x: number, y: number, width: number, height: number, element: DesignElement) => {
+  const drawWallUnitEndPanelElevationDetails = (ctx: CanvasRenderingContext2D, x: number, y: number, width: number, height: number, _element: DesignElement) => {
     ctx.strokeStyle = '#654321'; // Dark brown for wall unit end panel
     ctx.lineWidth = 1;
 
@@ -2002,7 +1965,7 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
   };
 
   // Determine if corner unit should show door face in current view
-  const shouldShowCornerDoorFace = (element: DesignElement, view: string): boolean => {
+  const shouldShowCornerDoorFace = (element: DesignElement, _view: string): boolean => {
     const cornerInfo = isCornerUnit(element);
     if (!cornerInfo.isCorner) return true; // Non-corner units always show door face
     
@@ -2048,7 +2011,6 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
     if (active2DView === 'plan') {
       // Horizontal ruler (top)
       const rulerY = roomPosition.innerY - 30;
-      const stepSize = 50 * zoom; // Every 50cm
       
       ctx.beginPath();
       ctx.moveTo(roomPosition.innerX, rulerY);
@@ -2683,15 +2645,10 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
     setDragThreshold({ exceeded: false, startElement: null }); // 🎯 Clear drag threshold
   }, [isDragging, draggedElement, canvasToRoom, currentMousePos, getSnapPosition, snapToGrid, onUpdateElement, roomDimensions, activeTool, onTapeMeasureClick]);
 
-  const handleWheel = useCallback((e: React.WheelEvent<HTMLCanvasElement>) => {
-    e.preventDefault();
-    const delta = e.deltaY > 0 ? 0.9 : 1.1;
-    setZoom(prev => Math.max(MIN_ZOOM, Math.min(MAX_ZOOM, prev * delta)));
-  }, []);
 
   // Touch event handlers
   const touchEventHandlers = useTouchEvents({
-    onTouchStart: useCallback((point: TouchPoint, event: TouchEvent) => {
+    onTouchStart: useCallback((point: TouchPoint, _event: TouchEvent) => {
       const canvas = canvasRef.current;
       if (!canvas) return;
 
@@ -2721,7 +2678,6 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
       if (activeTool === 'pan') {
         setIsDragging(true);
         setDragStart({ x, y });
-        setTouchPanStart({ x, y });
         return;
       }
 
@@ -2759,7 +2715,7 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
       }
     }, [activeTool, canvasToRoom, design.elements, onSelectElement, zoom]),
 
-    onTouchMove: useCallback((point: TouchPoint, event: TouchEvent) => {
+    onTouchMove: useCallback((point: TouchPoint, _event: TouchEvent) => {
       const canvas = canvasRef.current;
       if (!canvas) return;
 
@@ -2822,7 +2778,7 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
       }
     }, [isDragging, activeTool, dragStart, draggedElement, canvasToRoom, design.elements, active2DView, render, throttledSnapUpdate, onTapeMeasureMouseMove]),
 
-    onTouchEnd: useCallback((point: TouchPoint, event: TouchEvent) => {
+    onTouchEnd: useCallback((_point: TouchPoint, _event: TouchEvent) => {
       // Same logic as handleMouseUp
       if (isDragging && draggedElement) {
         const roomPos = canvasToRoom(currentMousePos.x, currentMousePos.y);
@@ -2903,25 +2859,24 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
       setDraggedElement(null);
       setSnapGuides({ vertical: [], horizontal: [], snapPoint: null });
       setDragThreshold({ exceeded: false, startElement: null });
-      setTouchPanStart(null);
     }, [isDragging, draggedElement, canvasToRoom, currentMousePos, getSnapPosition, snapToGrid, onUpdateElement, roomDimensions, activeTool, onTapeMeasureClick]),
 
-    onPinchStart: useCallback((distance: number, center: TouchPoint, event: TouchEvent) => {
+    onPinchStart: useCallback((_distance: number, _center: TouchPoint, _event: TouchEvent) => {
       setTouchZoomStart(zoom);
     }, [zoom]),
 
-    onPinchMove: useCallback((distance: number, scale: number, center: TouchPoint, event: TouchEvent) => {
+    onPinchMove: useCallback((_distance: number, scale: number, _center: TouchPoint, _event: TouchEvent) => {
       if (touchZoomStart !== null) {
         const newZoom = touchZoomStart * scale;
         setZoom(Math.max(MIN_ZOOM, Math.min(MAX_ZOOM, newZoom)));
       }
     }, [touchZoomStart]),
 
-    onPinchEnd: useCallback((event: TouchEvent) => {
+    onPinchEnd: useCallback((_event: TouchEvent) => {
       setTouchZoomStart(null);
     }, []),
 
-    onLongPress: useCallback((point: TouchPoint, event: TouchEvent) => {
+    onLongPress: useCallback((point: TouchPoint, _event: TouchEvent) => {
       // Handle long press for context menu or special actions
       const canvas = canvasRef.current;
       if (!canvas) return;
@@ -3023,8 +2978,8 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
       const wallSnappedPos = getWallSnappedPosition(
         dropX,
         dropY,
-        componentData.width,
-        componentData.depth,
+        effectiveWidth,
+        effectiveDepth,
         innerRoomBounds.width,
         innerRoomBounds.height,
         isCornerComponent

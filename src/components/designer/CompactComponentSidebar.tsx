@@ -231,8 +231,7 @@ const CompactComponentSidebar: React.FC<CompactComponentSidebarProps> = ({
       depth: component.depth,
       rotation: 0,
       color: component.color || '#8B4513',
-      name: component.name,
-      category: component.category
+      name: component.name
     };
 
     // Add to canvas and update recently used
