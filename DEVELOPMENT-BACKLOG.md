@@ -19,6 +19,14 @@
   - Impact: Looks like an error to users, poor UX
   - Root cause: Authentication check before context fully loads
   - **MOVED TO PHASE 4** - Loading sequence optimization
+- [ ] **Slow Account Activation** - New accounts take too long to gain app access
+  - Impact: Poor onboarding experience, users may think signup failed
+  - Root cause: Email validation → database sync → auth token refresh delay
+  - **MOVED TO PHASE 4** - Authentication flow optimization
+- [ ] **Projects Don't Load on First Login** - Existing projects invisible until browser refresh
+  - Impact: Users think their projects are lost, confusion and frustration
+  - Root cause: Project data not loaded when dashboard renders
+  - **MOVED TO PHASE 4** - Data loading sequence optimization
 
 ### 🟡 MEDIUM PRIORITY - Database Migration Completion
 - [x] ✅ **Phase 1: Database Schema Expansion** - COMPLETED
@@ -30,9 +38,11 @@
   - Restored missing 3D model exports
   - 100% database-driven component system achieved
 - [ ] **Phase 4: Performance Optimization** - IN PROGRESS
+  - Loading sequence optimization (auth popup, projects not loading)
+  - Authentication flow optimization (slow account activation)
+  - Component loading race conditions (wall units not available)
   - Database query optimization and intelligent caching
-  - Fix wall unit loading timing issues
-  - Remove annoying "user not authorized" red popup on app load
+  - ProjectContext performance (update depth exceeded errors)
   - 3D rendering performance improvements
   - Bundle optimization and memory management
 
