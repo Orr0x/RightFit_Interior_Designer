@@ -9,7 +9,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { useProject } from '@/contexts/ProjectContext';
 import { useKeyboardShortcuts } from '@/hooks/useKeyboardShortcuts';
 import { DesignCanvas2D } from '@/components/designer/DesignCanvas2D';
-import { AdaptiveView3D } from '@/components/designer/AdaptiveView3D';
+import { Lazy3DView } from '@/components/designer/Lazy3DView';
 import CompactComponentSidebar from '@/components/designer/CompactComponentSidebar';
 import { CanvasElementCounter } from '@/components/designer/CanvasElementCounter';
 import { ViewSelector } from '@/components/designer/ViewSelector';
@@ -793,7 +793,7 @@ const Designer = () => {
                   </div>
                 ) : design ? (
                   <div className="h-full relative">
-                    <AdaptiveView3D
+                    <Lazy3DView
                       key={`view3d-${currentRoomId}-${showLeftPanel}-${showRightPanel}`}
                       design={design}
                       selectedElement={selectedElement}

@@ -8,6 +8,7 @@ import { Canvas, useThree } from '@react-three/fiber';
 import { OrbitControls, Environment, Grid, Text } from '@react-three/drei';
 import { DesignElement, Design } from '@/types/project';
 import { performanceDetector, RenderQuality, DeviceCapabilities } from '@/services/PerformanceDetector';
+import { memoryManager } from '@/services/MemoryManager';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Settings, Zap, Gauge } from 'lucide-react';
@@ -362,6 +363,20 @@ export const AdaptiveView3D: React.FC<AdaptiveView3DProps> = ({
       performanceDetector.stopFrameRateMonitoring();
     };
   }, [isAutoMode, capabilities]);
+
+  // Setup memory management and cleanup
+  useEffect(() => {
+    // Start memory monitoring
+    memoryManager.monitorMemoryUsage();
+    memoryManager.setupAutomaticCleanup();
+
+    // Cleanup function for component unmount
+    return memoryManager.createCleanupFunction([
+      () => performanceDetector.stopFrameRateMonitoring(),
+      () => memoryManager.clearComponentCaches(),
+      () => console.log('🧹 [AdaptiveView3D] Component cleanup complete')
+    ]);
+  }, []);
 
   // Safety checks - AFTER all hooks
   if (!design || !design.roomDimensions || isInitializing || !currentQuality) {
