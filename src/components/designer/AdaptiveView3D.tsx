@@ -9,6 +9,7 @@ import { OrbitControls, Environment, Grid, Text } from '@react-three/drei';
 import { DesignElement, Design } from '@/types/project';
 import { performanceDetector, RenderQuality, DeviceCapabilities } from '@/services/PerformanceDetector';
 import { memoryManager } from '@/services/MemoryManager';
+import { useIsMobile } from '@/hooks/use-mobile';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Settings, Zap, Gauge } from 'lucide-react';
@@ -335,6 +336,7 @@ export const AdaptiveView3D: React.FC<AdaptiveView3DProps> = ({
   const [isAutoMode, setIsAutoMode] = useState(false); // Default to manual mode
   const [isInitializing, setIsInitializing] = useState(true);
   const controlsRef = useRef<any>(null);
+  const isMobile = useIsMobile();
 
   // Always define roomDimensions (before any early returns)
   const roomDimensions = {
@@ -614,13 +616,32 @@ export const AdaptiveView3D: React.FC<AdaptiveView3DProps> = ({
             }
           })}
           
-          {/* Controls */}
+          {/* Controls - Mobile Optimized */}
           <OrbitControls
             ref={controlsRef}
             enablePan={activeTool === 'pan'}
             enableZoom={true}
             enableRotate={activeTool === 'select' || activeTool === 'pan'}
             target={[0, 0, 0]}
+            // Mobile-optimized touch settings
+            enableDamping={true}
+            dampingFactor={isMobile ? 0.1 : 0.05}
+            rotateSpeed={isMobile ? 0.8 : 0.5}
+            panSpeed={isMobile ? 1.2 : 0.8}
+            zoomSpeed={isMobile ? 1.5 : 1.0}
+            minDistance={isMobile ? 1.5 : 2}
+            maxDistance={isMobile ? 20 : 15}
+            maxPolarAngle={Math.PI / 2.2}
+            // Touch-specific settings
+            touches={{
+              ONE: THREE.TOUCH.ROTATE,
+              TWO: THREE.TOUCH.DOLLY_PAN
+            }}
+            mouseButtons={{
+              LEFT: activeTool === 'pan' ? THREE.MOUSE.PAN : THREE.MOUSE.ROTATE,
+              MIDDLE: THREE.MOUSE.DOLLY,
+              RIGHT: THREE.MOUSE.PAN,
+            }}
           />
           
           {/* Fit to Screen Controller */}

@@ -2,6 +2,8 @@ import React, { useRef, useEffect, useState, useCallback } from 'react';
 import { DesignElement, Design } from '../../types/project';
 import { ComponentService } from '@/services/ComponentService';
 import { RoomService } from '@/services/RoomService';
+import { useTouchEvents, TouchPoint } from '@/hooks/useTouchEvents';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 // Throttle function for performance optimization
 const throttle = <T extends (...args: any[]) => void>(func: T, delay: number): T => {
@@ -403,6 +405,13 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
 
   // Use design dimensions or default
   const roomDimensions = design.roomDimensions || DEFAULT_ROOM_FALLBACK;
+  
+  // Mobile detection
+  const isMobile = useIsMobile();
+  
+  // Touch events state
+  const [touchZoomStart, setTouchZoomStart] = useState<number | null>(null);
+  const [touchPanStart, setTouchPanStart] = useState<{ x: number; y: number } | null>(null);
   
   // Helper function to get wall height (ceiling height) - prioritize room dimensions over cache
   const getWallHeight = useCallback(() => {
@@ -2680,6 +2689,263 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
     setZoom(prev => Math.max(MIN_ZOOM, Math.min(MAX_ZOOM, prev * delta)));
   }, []);
 
+  // Touch event handlers
+  const touchEventHandlers = useTouchEvents({
+    onTouchStart: useCallback((point: TouchPoint, event: TouchEvent) => {
+      const canvas = canvasRef.current;
+      if (!canvas) return;
+
+      // Convert touch coordinates to canvas coordinates
+      const rect = canvas.getBoundingClientRect();
+      const scaleX = CANVAS_WIDTH / rect.width;
+      const scaleY = CANVAS_HEIGHT / rect.height;
+      
+      const x = point.x * scaleX;
+      const y = point.y * scaleY;
+
+      // Check for zoom control touches
+      const controlsX = CANVAS_WIDTH - 100;
+      const controlsY = 20;
+      
+      if (x >= controlsX && x <= controlsX + 80 && y >= controlsY && y <= controlsY + 60) {
+        if (x <= controlsX + 40) {
+          // Zoom in
+          setZoom(prev => Math.min(MAX_ZOOM, prev * 1.2));
+        } else {
+          // Zoom out  
+          setZoom(prev => Math.max(MIN_ZOOM, prev / 1.2));
+        }
+        return;
+      }
+
+      if (activeTool === 'pan') {
+        setIsDragging(true);
+        setDragStart({ x, y });
+        setTouchPanStart({ x, y });
+        return;
+      }
+
+      // Handle tape measure tool
+      if (activeTool === 'tape-measure') {
+        setDragStart({ x, y });
+        return;
+      }
+
+      // Check for element touches
+      const roomPos = canvasToRoom(x, y);
+      const touchedElement = design.elements.find(element => {
+        // Special handling for corner counter tops - use square bounding box
+        const isCornerCounterTop = element.type === 'counter-top' && element.id.includes('counter-top-corner');
+        
+        if (isCornerCounterTop) {
+          // Use 90cm x 90cm square for corner counter tops
+          return roomPos.x >= element.x && roomPos.x <= element.x + 90 &&
+                 roomPos.y >= element.y && roomPos.y <= element.y + 90;
+        } else {
+          // Standard rectangular hit detection
+          return roomPos.x >= element.x && roomPos.x <= element.x + element.width &&
+                 roomPos.y >= element.y && roomPos.y <= element.y + (element.depth || element.height);
+        }
+      });
+
+      if (touchedElement) {
+        onSelectElement(touchedElement);
+        if (activeTool === 'select') {
+          setDragStart({ x, y });
+          setDragThreshold({ exceeded: false, startElement: touchedElement });
+        }
+      } else {
+        onSelectElement(null);
+      }
+    }, [activeTool, canvasToRoom, design.elements, onSelectElement, zoom]),
+
+    onTouchMove: useCallback((point: TouchPoint, event: TouchEvent) => {
+      const canvas = canvasRef.current;
+      if (!canvas) return;
+
+      const rect = canvas.getBoundingClientRect();
+      const scaleX = CANVAS_WIDTH / rect.width;
+      const scaleY = CANVAS_HEIGHT / rect.height;
+      
+      const x = point.x * scaleX;
+      const y = point.y * scaleY;
+      
+      // Always track current touch position for drag operations
+      setCurrentMousePos({ x, y });
+
+      // Handle hover detection (for touch devices, only when not dragging)
+      if (!isDragging && active2DView === 'plan') {
+        const roomPos = canvasToRoom(x, y);
+        const hoveredEl = design.elements.find(element => {
+          return isPointInRotatedComponent(roomPos.x, roomPos.y, element);
+        });
+        setHoveredElement(hoveredEl || null);
+      }
+
+      // Handle tape measure preview
+      if (activeTool === 'tape-measure' && onTapeMeasureMouseMove) {
+        onTapeMeasureMouseMove(x, y);
+      }
+
+      // Check drag threshold before starting drag
+      if (!isDragging && dragThreshold.startElement && activeTool === 'select') {
+        const deltaX = x - dragStart.x;
+        const deltaY = y - dragStart.y;
+        const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+        const DRAG_THRESHOLD = 10; // Increased threshold for touch (10px vs 5px for mouse)
+        
+        if (distance >= DRAG_THRESHOLD && !dragThreshold.exceeded) {
+          // Start dragging now that threshold is exceeded
+          setIsDragging(true);
+          setDraggedElement(dragThreshold.startElement);
+          setDragThreshold({ exceeded: true, startElement: dragThreshold.startElement });
+        }
+      }
+
+      if (!isDragging) return;
+
+      if (activeTool === 'pan') {
+        const deltaX = x - dragStart.x;
+        const deltaY = y - dragStart.y;
+        setPanOffset(prev => ({
+          x: prev.x + deltaX,
+          y: prev.y + deltaY
+        }));
+        setDragStart({ x, y });
+      } else if (draggedElement && activeTool === 'select') {
+        // Update snap guides with throttling to improve performance
+        const roomPos = canvasToRoom(x, y);
+        throttledSnapUpdate(roomPos, draggedElement);
+        
+        // Trigger re-render to show drag preview
+        requestAnimationFrame(() => render());
+      }
+    }, [isDragging, activeTool, dragStart, draggedElement, canvasToRoom, design.elements, active2DView, render, throttledSnapUpdate, onTapeMeasureMouseMove]),
+
+    onTouchEnd: useCallback((point: TouchPoint, event: TouchEvent) => {
+      // Same logic as handleMouseUp
+      if (isDragging && draggedElement) {
+        const roomPos = canvasToRoom(currentMousePos.x, currentMousePos.y);
+        
+        // Smart snap with walls and components
+        const snapped = getSnapPosition(draggedElement, roomPos.x, roomPos.y);
+        
+        // Apply light grid snapping only if not snapped to walls/components
+        let finalX = snapped.x;
+        let finalY = snapped.y;
+        
+        const isWallSnapped = snapped.guides.vertical.length > 0 || snapped.guides.horizontal.length > 0;
+        if (!isWallSnapped) {
+          finalX = snapToGrid(snapped.x);
+          finalY = snapToGrid(snapped.y);
+        }
+        
+        // Update element with final position
+        let clampWidth = draggedElement.width;
+        let clampDepth = draggedElement.depth;
+        
+        // Handle corner components
+        const isCornerCounterTop = draggedElement.type === 'counter-top' && draggedElement.id.includes('counter-top-corner');
+        const isCornerWallCabinet = draggedElement.type === 'cabinet' && draggedElement.id.includes('corner-wall-cabinet');
+        const isCornerBaseCabinet = draggedElement.type === 'cabinet' && draggedElement.id.includes('corner-base-cabinet');
+        const isCornerTallUnit = draggedElement.type === 'cabinet' && (
+          draggedElement.id.includes('corner-tall') || 
+          draggedElement.id.includes('corner-larder') ||
+          draggedElement.id.includes('larder-corner')
+        );
+        
+        if (isCornerCounterTop || isCornerWallCabinet || isCornerBaseCabinet || isCornerTallUnit) {
+          clampWidth = 90;  // L-shaped components use 90x90 footprint
+          clampDepth = 90;
+        }
+
+        // Apply Smart Wall Snapping for dragged elements
+        const isCornerComponent = isCornerCounterTop || isCornerWallCabinet || isCornerBaseCabinet || isCornerTallUnit;
+        
+        const dragWallSnappedPos = getWallSnappedPosition(
+          finalX,
+          finalY,
+          draggedElement.width,
+          draggedElement.depth || draggedElement.height,
+          innerRoomBounds.width,
+          innerRoomBounds.height,
+          isCornerComponent
+        );
+
+        // Use wall snapped position if snapped, otherwise clamp to boundaries
+        let finalClampedX, finalClampedY;
+        
+        if (dragWallSnappedPos.snappedToWall) {
+          finalClampedX = dragWallSnappedPos.x;
+          finalClampedY = dragWallSnappedPos.y;
+          
+          console.log(`🎯 [Touch Drag Snap] Element moved to ${dragWallSnappedPos.corner || 'wall'} at (${finalClampedX}, ${finalClampedY})`);
+        } else {
+          // Standard boundary clamping if not snapped to wall
+          finalClampedX = Math.max(0, Math.min(finalX, innerRoomBounds.width - clampWidth));
+          finalClampedY = Math.max(0, Math.min(finalY, innerRoomBounds.height - clampDepth));
+        }
+
+        onUpdateElement(draggedElement.id, {
+          x: dragWallSnappedPos.snappedToWall ? finalClampedX : snapToGrid(finalClampedX),
+          y: dragWallSnappedPos.snappedToWall ? finalClampedY : snapToGrid(finalClampedY),
+          rotation: snapped.rotation
+        });
+      }
+
+      // Handle tape measure clicks
+      if (activeTool === 'tape-measure' && onTapeMeasureClick && !isDragging) {
+        onTapeMeasureClick(currentMousePos.x, currentMousePos.y);
+      }
+
+      // Clear drag state
+      setIsDragging(false);
+      setDraggedElement(null);
+      setSnapGuides({ vertical: [], horizontal: [], snapPoint: null });
+      setDragThreshold({ exceeded: false, startElement: null });
+      setTouchPanStart(null);
+    }, [isDragging, draggedElement, canvasToRoom, currentMousePos, getSnapPosition, snapToGrid, onUpdateElement, roomDimensions, activeTool, onTapeMeasureClick]),
+
+    onPinchStart: useCallback((distance: number, center: TouchPoint, event: TouchEvent) => {
+      setTouchZoomStart(zoom);
+    }, [zoom]),
+
+    onPinchMove: useCallback((distance: number, scale: number, center: TouchPoint, event: TouchEvent) => {
+      if (touchZoomStart !== null) {
+        const newZoom = touchZoomStart * scale;
+        setZoom(Math.max(MIN_ZOOM, Math.min(MAX_ZOOM, newZoom)));
+      }
+    }, [touchZoomStart]),
+
+    onPinchEnd: useCallback((event: TouchEvent) => {
+      setTouchZoomStart(null);
+    }, []),
+
+    onLongPress: useCallback((point: TouchPoint, event: TouchEvent) => {
+      // Handle long press for context menu or special actions
+      const canvas = canvasRef.current;
+      if (!canvas) return;
+
+      const rect = canvas.getBoundingClientRect();
+      const scaleX = CANVAS_WIDTH / rect.width;
+      const scaleY = CANVAS_HEIGHT / rect.height;
+      
+      const x = point.x * scaleX;
+      const y = point.y * scaleY;
+      
+      const roomPos = canvasToRoom(x, y);
+      const longPressedElement = design.elements.find(element => {
+        return isPointInRotatedComponent(roomPos.x, roomPos.y, element);
+      });
+
+      if (longPressedElement) {
+        onSelectElement(longPressedElement);
+        // Could trigger a context menu here in the future
+        console.log(`🔗 [Long Press] Selected element: ${longPressedElement.type} at (${longPressedElement.x}, ${longPressedElement.y})`);
+      }
+    }, [canvasToRoom, design.elements, onSelectElement])
+  });
+
   // Handle drag over for drag and drop
   const handleDragOver = useCallback((e: React.DragEvent<HTMLCanvasElement>) => {
     e.preventDefault();
@@ -2836,6 +3102,14 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
   useEffect(() => {
     render();
   }, [render]);
+
+  // Attach touch events for mobile devices
+  useEffect(() => {
+    if (isMobile && canvasRef.current) {
+      const cleanup = touchEventHandlers.attachTouchEvents(canvasRef.current);
+      return cleanup;
+    }
+  }, [isMobile, touchEventHandlers]);
 
   // Fit to screen - different logic for elevation views
   useEffect(() => {

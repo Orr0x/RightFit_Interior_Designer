@@ -8,6 +8,7 @@ import { Save, ArrowLeft, Layout, Box, Edit3, Shield, CheckCircle, Home, Setting
 import { useAuth } from '@/contexts/AuthContext';
 import { useProject } from '@/contexts/ProjectContext';
 import { useKeyboardShortcuts } from '@/hooks/useKeyboardShortcuts';
+import { useIsMobile } from '@/hooks/use-mobile';
 import { DesignCanvas2D } from '@/components/designer/DesignCanvas2D';
 import { Lazy3DView } from '@/components/designer/Lazy3DView';
 import CompactComponentSidebar from '@/components/designer/CompactComponentSidebar';
@@ -19,6 +20,7 @@ import { ErrorBoundary } from '@/components/designer/ErrorBoundary';
 import PerformanceMonitor from '@/components/designer/PerformanceMonitor';
 import { RoomTabs } from '@/components/designer/RoomTabs';
 import { KeyboardShortcutsHelp } from '@/components/designer/KeyboardShortcutsHelp';
+import MobileDesignerLayout from '@/components/designer/MobileDesignerLayout';
 import { toast } from 'sonner';
 import { useDesignValidation } from '@/hooks/useDesignValidation';
 import { RoomDesign, DesignElement } from '@/types/project';
@@ -71,6 +73,9 @@ const Designer = () => {
 
   // Initialize validation hook
   const { validateDesign, showValidationResults } = useDesignValidation();
+  
+  // Mobile detection
+  const isMobile = useIsMobile();
 
   // Preload common data for performance
   useEffect(() => {
@@ -537,7 +542,7 @@ const Designer = () => {
     <ErrorBoundary>
       <div className="h-screen bg-gray-50 flex flex-col overflow-hidden">
         
-        <header className="bg-white shadow-sm border-b px-4 py-3">
+        <header className={`bg-white shadow-sm border-b px-4 py-3 ${isMobile ? 'hidden' : ''}`}>
           <div className="flex items-center justify-between w-full">
             {/* Left Section - Dashboard Button & Current Room */}
             <div className="flex items-center gap-3">
@@ -687,155 +692,183 @@ const Designer = () => {
           </div>
         </header>
 
-        {/* Room Tabs */}
-        <RoomTabs />
+        {/* Room Tabs - Hidden on Mobile */}
+        {!isMobile && <RoomTabs />}
 
-        {/* Main Content */}
-        <div className="flex-1 flex">
-          {/* Left Sidebar */}
-          <div className={`${showLeftPanel ? 'w-80' : 'w-0'} bg-white border-r flex flex-col smooth-transition overflow-hidden relative z-10 h-full`}>
-            {showLeftPanel && (
-              <>
-                <div className="p-4 border-b">
-                  <h2 className="font-semibold text-gray-900">Designer</h2>
-                </div>
-                <div className="flex-1">
-                  <CompactComponentSidebar
-                    onAddElement={handleAddElement}
+        {/* Main Content - Conditional Mobile/Desktop Layout */}
+        {isMobile && design ? (
+          <MobileDesignerLayout
+            design={design}
+            selectedElement={selectedElement}
+            onSelectElement={setSelectedElement}
+            onAddElement={handleAddElement}
+            onUpdateElement={handleUpdateElement}
+            onDeleteElement={handleDeleteElement}
+            onUpdateRoomDimensions={handleUpdateRoomDimensions}
+            activeView={activeView}
+            onViewChange={setActiveView}
+            active2DView={active2DView}
+            onActive2DViewChange={setActive2DView}
+            activeTool={activeTool}
+            onToolChange={handleToolChange}
+            showGrid={showGrid}
+            onToggleGrid={handleToggleGrid}
+            fitToScreenSignal={fitToScreenSignal}
+            onFitToScreen={handleFitToScreen}
+            completedMeasurements={completedMeasurements}
+            currentMeasureStart={currentMeasureStart}
+            tapeMeasurePreview={tapeMeasurePreview}
+            onTapeMeasureClick={handleTapeMeasureClick}
+            onTapeMeasureMouseMove={handleTapeMeasureMouseMove}
+            onClearTapeMeasure={handleClearTapeMeasure}
+          />
+        ) : (
+          <div className="flex-1 flex">
+            {/* Left Sidebar */}
+            <div className={`${showLeftPanel ? 'w-80' : 'w-0'} bg-white border-r flex flex-col smooth-transition overflow-hidden relative z-10 h-full`}>
+              {showLeftPanel && (
+                <>
+                  <div className="p-4 border-b">
+                    <h2 className="font-semibold text-gray-900">Designer</h2>
+                  </div>
+                  <div className="flex-1">
+                    <CompactComponentSidebar
+                      onAddElement={handleAddElement}
+                      roomType={currentRoomDesign.room_type}
+                    />
+                  </div>
+                </>
+              )}
+            </div>
+
+            {/* Main Design Area */}
+            <div className="flex-1 flex flex-col">
+              {/* Toolbar */}
+              <div className="bg-white border-b px-4 py-2 flex items-center justify-between">
+                <div className="flex items-center gap-4">
+                  <DesignToolbar 
+                    activeView={activeView}
+                    onViewChange={setActiveView}
+                    activeTool={activeTool}
+                    onToolChange={handleToolChange}
+                    showGrid={showGrid}
+                    onToggleGrid={handleToggleGrid}
+                    showRuler={showRuler}
+                    onToggleRuler={handleToggleRuler}
+                    onReset={handleReset}
+                    onCopy={handleCopyElement}
+                    onDelete={handleDeleteSelected}
+                    onFitScreen={handleFitToScreen}
+                    onUndo={handleUndo}
+                    onRedo={handleRedo}
+                    canCopy={!!selectedElement}
+                    canDelete={!!selectedElement}
+                    canUndo={history.length > 0}
+                    canRedo={future.length > 0}
+                    showLeftPanel={showLeftPanel}
+                    onToggleLeftPanel={() => setShowLeftPanel(prev => !prev)}
+                    showRightPanel={showRightPanel}
+                    onToggleRightPanel={() => setShowRightPanel(prev => !prev)}
+                    onSave={handleSaveDesign}
+                    onSaveNew={() => {}} // Not applicable in project mode
                     roomType={currentRoomDesign.room_type}
+                    elementCount={currentRoomDesign.design_elements?.length || 0}
+                    onValidateDesign={handleValidateDesign}
                   />
                 </div>
-              </>
-            )}
-          </div>
-
-          {/* Main Design Area */}
-          <div className="flex-1 flex flex-col">
-            {/* Toolbar */}
-            <div className="bg-white border-b px-4 py-2 flex items-center justify-between">
-              <div className="flex items-center gap-4">
-                <DesignToolbar 
-                  activeView={activeView}
-                  onViewChange={setActiveView}
-                  activeTool={activeTool}
-                  onToolChange={handleToolChange}
-                  showGrid={showGrid}
-                  onToggleGrid={handleToggleGrid}
-                  showRuler={showRuler}
-                  onToggleRuler={handleToggleRuler}
-                  onReset={handleReset}
-                  onCopy={handleCopyElement}
-                  onDelete={handleDeleteSelected}
-                  onFitScreen={handleFitToScreen}
-                  onUndo={handleUndo}
-                  onRedo={handleRedo}
-                  canCopy={!!selectedElement}
-                  canDelete={!!selectedElement}
-                  canUndo={history.length > 0}
-                  canRedo={future.length > 0}
-                  showLeftPanel={showLeftPanel}
-                  onToggleLeftPanel={() => setShowLeftPanel(prev => !prev)}
-                  showRightPanel={showRightPanel}
-                  onToggleRightPanel={() => setShowRightPanel(prev => !prev)}
-                  onSave={handleSaveDesign}
-                  onSaveNew={() => {}} // Not applicable in project mode
-                  roomType={currentRoomDesign.room_type}
-                  elementCount={currentRoomDesign.design_elements?.length || 0}
-                  onValidateDesign={handleValidateDesign}
-                />
+                
               </div>
-              
-            </div>
 
-            {/* Canvas Area */}
-            <div className="flex-1 p-4">
-              <Card className="h-full design-canvas-card transition-all duration-300 ease-in-out shadow-lg hover:shadow-xl">
-                {activeView === '2d' && design ? (
-                  <div className="h-full relative">
-                    <DesignCanvas2D
-                      key={`canvas-2d-${active2DView}-${currentRoomId}`}
-                      design={design}
-                      selectedElement={selectedElement}
-                      onSelectElement={setSelectedElement}
-                      onUpdateElement={handleUpdateElement}
-                      onDeleteElement={handleDeleteElement}
-                      onUpdateRoomDimensions={handleUpdateRoomDimensions}
-                      onAddElement={handleAddElement}
-                      showGrid={showGrid}
-                      showRuler={showRuler}
-                      activeTool={activeTool}
-                      fitToScreenSignal={fitToScreenSignal}
-                      active2DView={active2DView}
-                      completedMeasurements={completedMeasurements}
-                      currentMeasureStart={currentMeasureStart}
-                      tapeMeasurePreview={tapeMeasurePreview}
-                      onTapeMeasureClick={handleTapeMeasureClick}
-                      onTapeMeasureMouseMove={handleTapeMeasureMouseMove}
-                      onClearTapeMeasure={handleClearTapeMeasure}
-                    />
-                    
-                    {/* View Selector Overlay - Top Left */}
-                    <div className="absolute top-4 left-4 z-10">
-                      <ViewSelector
-                        activeView={active2DView}
-                        onViewChange={setActive2DView}
+              {/* Canvas Area */}
+              <div className="flex-1 p-4">
+                <Card className="h-full design-canvas-card transition-all duration-300 ease-in-out shadow-lg hover:shadow-xl">
+                  {activeView === '2d' && design ? (
+                    <div className="h-full relative">
+                      <DesignCanvas2D
+                        key={`canvas-2d-${active2DView}-${currentRoomId}`}
+                        design={design}
+                        selectedElement={selectedElement}
+                        onSelectElement={setSelectedElement}
+                        onUpdateElement={handleUpdateElement}
+                        onDeleteElement={handleDeleteElement}
+                        onUpdateRoomDimensions={handleUpdateRoomDimensions}
+                        onAddElement={handleAddElement}
+                        showGrid={showGrid}
+                        showRuler={showRuler}
+                        activeTool={activeTool}
+                        fitToScreenSignal={fitToScreenSignal}
+                        active2DView={active2DView}
+                        completedMeasurements={completedMeasurements}
+                        currentMeasureStart={currentMeasureStart}
+                        tapeMeasurePreview={tapeMeasurePreview}
+                        onTapeMeasureClick={handleTapeMeasureClick}
+                        onTapeMeasureMouseMove={handleTapeMeasureMouseMove}
+                        onClearTapeMeasure={handleClearTapeMeasure}
+                      />
+                      
+                      {/* View Selector Overlay - Top Left */}
+                      <div className="absolute top-4 left-4 z-10">
+                        <ViewSelector
+                          activeView={active2DView}
+                          onViewChange={setActive2DView}
+                        />
+                      </div>
+                      
+                      {/* Canvas Element Counter - Bottom Left */}
+                      <CanvasElementCounter
+                        elements={design.elements}
+                        selectedElement={selectedElement}
+                        onSelectElement={setSelectedElement}
+                        onUpdateElement={handleUpdateElement}
+                        onDeleteElement={handleDeleteElement}
                       />
                     </div>
-                    
-                    {/* Canvas Element Counter - Bottom Left */}
-                    <CanvasElementCounter
-                      elements={design.elements}
-                      selectedElement={selectedElement}
-                      onSelectElement={setSelectedElement}
-                      onUpdateElement={handleUpdateElement}
-                      onDeleteElement={handleDeleteElement}
-                    />
+                  ) : design ? (
+                    <div className="h-full relative">
+                      <Lazy3DView
+                        key={`view3d-${currentRoomId}-${showLeftPanel}-${showRightPanel}`}
+                        design={design}
+                        selectedElement={selectedElement}
+                        onSelectElement={setSelectedElement}
+                        activeTool={activeTool === 'tape-measure' ? 'select' : activeTool}
+                        showGrid={showGrid}
+                        fitToScreenSignal={fitToScreenSignal}
+                      />
+                      
+                      {/* Canvas Element Counter - Bottom Left */}
+                      <CanvasElementCounter
+                        elements={design.elements}
+                        selectedElement={selectedElement}
+                        onSelectElement={setSelectedElement}
+                        onUpdateElement={handleUpdateElement}
+                        onDeleteElement={handleDeleteElement}
+                      />
+                    </div>
+                  ) : null}
+                </Card>
+              </div>
+            </div>
+
+            {/* Right Sidebar - Properties Panel */}
+            <div className={`${showRightPanel ? 'w-80' : 'w-0'} bg-white border-l flex flex-col smooth-transition overflow-hidden relative z-10`}>
+              {showRightPanel && design && (
+                <>
+                  <div className="p-4 border-b">
+                    <h2 className="font-semibold text-gray-900">Properties</h2>
                   </div>
-                ) : design ? (
-                  <div className="h-full relative">
-                    <Lazy3DView
-                      key={`view3d-${currentRoomId}-${showLeftPanel}-${showRightPanel}`}
-                      design={design}
-                      selectedElement={selectedElement}
-                      onSelectElement={setSelectedElement}
-                      activeTool={activeTool === 'tape-measure' ? 'select' : activeTool}
-                      showGrid={showGrid}
-                      fitToScreenSignal={fitToScreenSignal}
-                    />
-                    
-                    {/* Canvas Element Counter - Bottom Left */}
-                    <CanvasElementCounter
-                      elements={design.elements}
-                      selectedElement={selectedElement}
-                      onSelectElement={setSelectedElement}
-                      onUpdateElement={handleUpdateElement}
-                      onDeleteElement={handleDeleteElement}
-                    />
-                  </div>
-                ) : null}
-              </Card>
+                  <PropertiesPanel
+                    selectedElement={selectedElement}
+                    onUpdateElement={handleUpdateElement}
+                    roomDimensions={design.roomDimensions}
+                    onUpdateRoomDimensions={handleUpdateRoomDimensions}
+                    roomType={design.roomType}
+                    active2DView={active2DView}
+                  />
+                </>
+              )}
             </div>
           </div>
-
-          {/* Right Sidebar - Properties Panel */}
-          <div className={`${showRightPanel ? 'w-80' : 'w-0'} bg-white border-l flex flex-col smooth-transition overflow-hidden relative z-10`}>
-            {showRightPanel && design && (
-              <>
-                <div className="p-4 border-b">
-                  <h2 className="font-semibold text-gray-900">Properties</h2>
-                </div>
-                <PropertiesPanel
-                  selectedElement={selectedElement}
-                  onUpdateElement={handleUpdateElement}
-                  roomDimensions={design.roomDimensions}
-                  onUpdateRoomDimensions={handleUpdateRoomDimensions}
-                  roomType={design.roomType}
-                  active2DView={active2DView}
-                />
-              </>
-            )}
-          </div>
-        </div>
+        )}
 
         {/* Performance Monitor - God Mode Only */}
         {user?.user_tier === 'god' && (
