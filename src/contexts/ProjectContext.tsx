@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useReducer, useEffect, useState, useCallback } from 'react';
+import React, { createContext, useContext, useReducer, useEffect, useState, useCallback, useRef } from 'react';
 import { Project, RoomDesign, RoomType, DesignElement } from '../types/project';
 import { supabase } from '../integrations/supabase/client';
 import { useToast } from '../hooks/use-toast';
@@ -231,6 +231,19 @@ export function ProjectProvider({ children }: { children: React.ReactNode }) {
   // Auto-save state
   const [autoSaveEnabled, setAutoSaveEnabled] = useState(true);
   const [autoSaveInterval, setAutoSaveInterval] = useState<NodeJS.Timeout | null>(null);
+  
+  // Refs to avoid stale closures in intervals
+  const stateRef = useRef(state);
+  const saveCurrentDesignRef = useRef(saveCurrentDesign);
+  
+  // Update refs when values change
+  useEffect(() => {
+    stateRef.current = state;
+  }, [state]);
+  
+  useEffect(() => {
+    saveCurrentDesignRef.current = saveCurrentDesign;
+  }, [saveCurrentDesign]);
 
   // Get current user - now uses AuthContext user instead of direct Supabase call
   const getCurrentUser = async () => {
@@ -804,26 +817,48 @@ export function ProjectProvider({ children }: { children: React.ReactNode }) {
     }
   }, [state.currentRoomDesign?.design_elements, state.currentRoomDesign?.room_dimensions]);
 
-  // Enable auto-save by default - fixed dependencies to prevent infinite loops
+  // Initialize auto-save when a room is loaded - simplified to prevent infinite loops
   useEffect(() => {
-    console.log('🔧 [ProjectContext] Auto-save effect triggered', { 
+    console.log('🔧 [ProjectContext] Auto-save initialization check', { 
       autoSaveEnabled, 
       hasInterval: !!autoSaveInterval,
-      hasCurrentRoom: !!state.currentRoomDesign 
+      hasCurrentRoom: !!state.currentRoomDesign,
+      roomId: state.currentRoomDesign?.id
     });
     
-    if (autoSaveEnabled && !autoSaveInterval && state.currentRoomDesign) {
-      console.log('🚀 [ProjectContext] Starting auto-save for current room');
-      enableAutoSave();
+    // Only start auto-save when we first get a room (and don't have an interval)
+    if (autoSaveEnabled && !autoSaveInterval && state.currentRoomDesign?.id) {
+      console.log('🚀 [ProjectContext] Initializing auto-save for room:', state.currentRoomDesign.id);
+      
+      // Create interval directly to avoid dependency issues
+      const interval = setInterval(async () => {
+        // Use refs to get current values and avoid stale closures
+        const currentState = stateRef.current;
+        const currentSaveFunction = saveCurrentDesignRef.current;
+        
+        if (currentState.hasUnsavedChanges && currentState.currentRoomDesign) {
+          console.log('💾 [ProjectContext] Auto-saving design...');
+          try {
+            await currentSaveFunction(false);
+          } catch (error) {
+            console.error('❌ [ProjectContext] Auto-save failed:', error);
+          }
+        }
+      }, 30000); // Auto-save every 30 seconds
+
+      setAutoSaveInterval(interval);
+      setAutoSaveEnabled(true);
     }
 
+    // Clean up interval when room changes or component unmounts
     return () => {
       if (autoSaveInterval) {
-        console.log('🧹 [ProjectContext] Cleaning up auto-save interval');
+        console.log('🧹 [ProjectContext] Cleaning up auto-save interval on room change');
         clearInterval(autoSaveInterval);
+        setAutoSaveInterval(null);
       }
     };
-  }, [autoSaveEnabled, enableAutoSave, autoSaveInterval, state.currentRoomDesign?.id]); // Only trigger on room ID change, not full room object
+  }, [state.currentRoomDesign?.id]); // Only depend on room ID change
 
   // Load user projects when auth is ready and user is available
   useEffect(() => {
