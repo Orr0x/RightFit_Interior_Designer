@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useReducer, useEffect, useState } from 'react';
+import React, { createContext, useContext, useReducer, useEffect, useState, useCallback } from 'react';
 import { Project, RoomDesign, RoomType, DesignElement } from '../types/project';
 import { supabase } from '../integrations/supabase/client';
 import { useToast } from '../hooks/use-toast';
@@ -724,11 +724,16 @@ export function ProjectProvider({ children }: { children: React.ReactNode }) {
     }
   };
 
-  const saveCurrentDesign = async (showNotification: boolean = true): Promise<void> => {
+  const saveCurrentDesign = useCallback(async (showNotification: boolean = true): Promise<void> => {
     try {
       if (!state.currentRoomDesign) {
         throw new Error('No room design to save');
       }
+
+      console.log('💾 [ProjectContext] Saving current design...', { 
+        roomId: state.currentRoomDesign.id, 
+        showNotification 
+      });
 
       await updateCurrentRoomDesign({
         updated_at: new Date().toISOString()
@@ -754,6 +759,7 @@ export function ProjectProvider({ children }: { children: React.ReactNode }) {
 
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'Failed to save design';
+      console.error('❌ [ProjectContext] Save failed:', errorMessage);
       
       toast({
         title: "Error",
@@ -761,10 +767,11 @@ export function ProjectProvider({ children }: { children: React.ReactNode }) {
         variant: "destructive",
       });
     }
-  };
+  }, [state.currentRoomDesign, updateCurrentRoomDesign, dispatch, toast]);
 
-  // Auto-save functionality
-  const enableAutoSave = () => {
+  // Auto-save functionality - memoized to prevent infinite loops
+  const enableAutoSave = useCallback(() => {
+    console.log('🔄 [ProjectContext] Enabling auto-save...');
     setAutoSaveEnabled(true);
     
     if (autoSaveInterval) {
@@ -773,20 +780,22 @@ export function ProjectProvider({ children }: { children: React.ReactNode }) {
 
     const interval = setInterval(async () => {
       if (state.hasUnsavedChanges && state.currentRoomDesign) {
+        console.log('💾 [ProjectContext] Auto-saving design...');
         await saveCurrentDesign(false); // Auto-save without showing main notification
       }
     }, 30000); // Auto-save every 30 seconds
 
     setAutoSaveInterval(interval);
-  };
+  }, [state.hasUnsavedChanges, state.currentRoomDesign, autoSaveInterval, saveCurrentDesign]);
 
-  const disableAutoSave = () => {
+  const disableAutoSave = useCallback(() => {
+    console.log('⏹️ [ProjectContext] Disabling auto-save...');
     setAutoSaveEnabled(false);
     if (autoSaveInterval) {
       clearInterval(autoSaveInterval);
       setAutoSaveInterval(null);
     }
-  };
+  }, [autoSaveInterval]);
 
   // Mark changes as unsaved when room design is updated
   useEffect(() => {
@@ -795,18 +804,26 @@ export function ProjectProvider({ children }: { children: React.ReactNode }) {
     }
   }, [state.currentRoomDesign?.design_elements, state.currentRoomDesign?.room_dimensions]);
 
-  // Enable auto-save by default
+  // Enable auto-save by default - fixed dependencies to prevent infinite loops
   useEffect(() => {
-    if (autoSaveEnabled && !autoSaveInterval) {
+    console.log('🔧 [ProjectContext] Auto-save effect triggered', { 
+      autoSaveEnabled, 
+      hasInterval: !!autoSaveInterval,
+      hasCurrentRoom: !!state.currentRoomDesign 
+    });
+    
+    if (autoSaveEnabled && !autoSaveInterval && state.currentRoomDesign) {
+      console.log('🚀 [ProjectContext] Starting auto-save for current room');
       enableAutoSave();
     }
 
     return () => {
       if (autoSaveInterval) {
+        console.log('🧹 [ProjectContext] Cleaning up auto-save interval');
         clearInterval(autoSaveInterval);
       }
     };
-  }, [autoSaveEnabled, state.currentRoomDesign]);
+  }, [autoSaveEnabled, enableAutoSave, autoSaveInterval, state.currentRoomDesign?.id]); // Only trigger on room ID change, not full room object
 
   // Load user projects when auth is ready and user is available
   useEffect(() => {
