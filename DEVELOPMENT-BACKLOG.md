@@ -7,13 +7,18 @@
   - Root cause: Corner detection uses 120x120cm instead of 90x90cm L-shaped footprint
   - Affects: Corner tall units, corner wall cabinets, corner base cabinets, corner counter-tops
   - Impact: Users cannot place corner components in all corners
-- [ ] **Wall Unit Load Issue** - Existing projects show wall unit loading problems
-  - Impact: Users cannot access wall units in existing projects
-  - Status: Needs investigation
+- [ ] **Wall Unit Load Issue** - Component timing/race condition causes loading failures
+  - Root cause: Database components not loaded when sidebar renders
+  - Impact: Users see "NO WALL UNITS AVAILABLE" error
+  - **MOVED TO PHASE 4** - Performance optimization issue
 - [ ] **Maximum Update Depth Exceeded** - Console errors when adding new projects
   - Location: ProjectContext.tsx useEffect dependency issues
   - Impact: Console warnings, potential performance issues
-  - Status: Needs investigation
+  - **MOVED TO PHASE 4** - Performance optimization issue
+- [ ] **"User Not Authorized" Red Popup** - Appears briefly on app load
+  - Impact: Looks like an error to users, poor UX
+  - Root cause: Authentication check before context fully loads
+  - **MOVED TO PHASE 4** - Loading sequence optimization
 
 ### 🟡 MEDIUM PRIORITY - Database Migration Completion
 - [x] ✅ **Phase 1: Database Schema Expansion** - COMPLETED
@@ -24,7 +29,12 @@
   - Updated CompactComponentSidebar to use DatabaseComponent
   - Restored missing 3D model exports
   - 100% database-driven component system achieved
-- [ ] **Phase 4: Performance Optimization** - Optimize database queries and caching
+- [ ] **Phase 4: Performance Optimization** - IN PROGRESS
+  - Database query optimization and intelligent caching
+  - Fix wall unit loading timing issues
+  - Remove annoying "user not authorized" red popup on app load
+  - 3D rendering performance improvements
+  - Bundle optimization and memory management
 
 ### 🟢 LOW PRIORITY - Enhancements
 - [ ] **Elevation View Improvements** - Corner cabinet door face rendering
