@@ -64,8 +64,13 @@ const CompactComponentSidebar: React.FC<CompactComponentSidebarProps> = ({
     return components || [];
   }, [components]);
 
-  // Filter components for current room type with debugging
+  // Filter components for current room type with debugging - only when not loading
   const availableComponents = useMemo(() => {
+    // Don't filter if still loading or no components yet
+    if (loading || allComponents.length === 0) {
+      return [];
+    }
+    
     console.log(`🔍 [CompactComponentSidebar] Filtering components for room type: ${roomType}`);
     console.log(`🔍 [CompactComponentSidebar] Total components loaded: ${allComponents.length}`);
     
@@ -75,17 +80,21 @@ const CompactComponentSidebar: React.FC<CompactComponentSidebarProps> = ({
     
     console.log(`🔍 [CompactComponentSidebar] Components available for ${roomType}: ${filtered.length}`);
     
-    // Debug wall units specifically
-    const wallUnitsAvailable = filtered.filter(comp => comp.category === 'wall-units');
-    console.log(`🏠 [CompactComponentSidebar] Wall units available for ${roomType}: ${wallUnitsAvailable.length}`);
-    if (wallUnitsAvailable.length > 0) {
-      console.log('🏠 [CompactComponentSidebar] Available wall units:', wallUnitsAvailable.map(w => w.name));
+    // Debug wall units specifically - check both possible category formats
+    const wallUnitsLowercase = filtered.filter(comp => comp.category === 'wall-units');
+    const wallUnitsTitle = filtered.filter(comp => comp.category === 'Wall Units');
+    const totalWallUnits = wallUnitsLowercase.length + wallUnitsTitle.length;
+    
+    console.log(`🏠 [CompactComponentSidebar] Wall units available for ${roomType}: ${totalWallUnits} (lowercase: ${wallUnitsLowercase.length}, title: ${wallUnitsTitle.length})`);
+    if (totalWallUnits > 0) {
+      const allWallUnits = [...wallUnitsLowercase, ...wallUnitsTitle];
+      console.log('🏠 [CompactComponentSidebar] Available wall units:', allWallUnits.map(w => w.name));
     } else {
       console.warn(`⚠️ [CompactComponentSidebar] NO WALL UNITS AVAILABLE for room type: ${roomType}`);
     }
     
     return filtered;
-  }, [allComponents, roomType]);
+  }, [allComponents, roomType, loading]);
 
   // Apply search and size filters
   const filteredComponents = useMemo(() => {
@@ -137,17 +146,22 @@ const CompactComponentSidebar: React.FC<CompactComponentSidebarProps> = ({
       const count = groups[category].length;
       console.log(`📂 [CompactComponentSidebar] ${category}: ${count} components`);
       
-      if (category === 'wall-units') {
+      // Check for wall units in both possible formats
+      if (category === 'wall-units' || category === 'Wall Units') {
         console.log('🏠 [CompactComponentSidebar] Wall units in final group:', groups[category].map(w => w.name));
       }
     });
     
-    // Check if wall-units category exists
-    if (!groups['wall-units']) {
-      console.error('❌ [CompactComponentSidebar] WALL-UNITS CATEGORY MISSING FROM FINAL GROUPS!');
+    // Check if wall units category exists (check both formats)
+    const hasWallUnitsLowercase = !!groups['wall-units'];
+    const hasWallUnitsTitle = !!groups['Wall Units'];
+    
+    if (!hasWallUnitsLowercase && !hasWallUnitsTitle) {
+      console.error('❌ [CompactComponentSidebar] WALL UNITS CATEGORY MISSING FROM FINAL GROUPS!');
       console.log('📂 [CompactComponentSidebar] Available categories:', categoryList);
     } else {
-      console.log(`✅ [CompactComponentSidebar] Wall-units category found with ${groups['wall-units'].length} components`);
+      const wallUnitsCount = (groups['wall-units']?.length || 0) + (groups['Wall Units']?.length || 0);
+      console.log(`✅ [CompactComponentSidebar] Wall units category found with ${wallUnitsCount} components`);
     }
     
     return groups;

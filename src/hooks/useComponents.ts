@@ -102,13 +102,15 @@ export const useComponents = () => {
       const componentCount = data?.length || 0;
       console.log(`✅ [useComponents] Loaded ${componentCount} components from database`);
       
-      // Debug wall units specifically
-      const wallUnits = data?.filter(comp => comp.category === 'wall-units') || [];
-      console.log(`🏠 [useComponents] Wall units found: ${wallUnits.length}`);
-      if (wallUnits.length > 0) {
-        console.log('🏠 [useComponents] Wall unit components:', wallUnits.map(w => w.name));
-      } else {
+      // Debug wall units specifically (check both possible category formats)
+      const wallUnitsLowercase = data?.filter(comp => comp.category === 'wall-units') || [];
+      const wallUnitsTitle = data?.filter(comp => comp.category === 'Wall Units') || [];
+      const totalWallUnits = wallUnitsLowercase.length + wallUnitsTitle.length;
+      
+      console.log(`🏠 [useComponents] Wall units found: ${totalWallUnits} (lowercase: ${wallUnitsLowercase.length}, title: ${wallUnitsTitle.length})`);
+      if (totalWallUnits === 0) {
         console.warn('⚠️ [useComponents] NO WALL UNITS FOUND IN DATABASE!');
+        console.log('🔍 [useComponents] Available categories:', [...new Set(data?.map(comp => comp.category) || [])].sort());
       }
       
       // Debug categories
