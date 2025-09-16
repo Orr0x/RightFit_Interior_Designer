@@ -50,7 +50,7 @@ interface DesignCanvas2DProps {
 const DEFAULT_ROOM_FALLBACK = {
   width: 600, // cm
   height: 400, // cm
-  wallHeight: 240 // cm - fallback only, should use roomDimensions.ceilingHeight
+  wallHeight: 240 // cm
 };
 
 // Room configuration cache
@@ -84,244 +84,6 @@ const CANVAS_HEIGHT = 800; // Large workspace
 const GRID_SIZE = 20; // Grid spacing in pixels
 const MIN_ZOOM = 0.5;
 const MAX_ZOOM = 3.0;
-
-// Wall thickness constants to match 3D implementation
-const WALL_THICKNESS = 10; // 10cm wall thickness (matches 3D: 0.1 meters)
-const WALL_CLEARANCE = 5; // 5cm clearance from walls for component placement
-const WALL_SNAP_THRESHOLD = 40; // Snap to wall if within 40cm
-
-// Helper function to calculate rotated bounding box for components
-const getRotatedBoundingBox = (element: DesignElement) => {
-  const rotation = (element.rotation || 0) * Math.PI / 180; // Convert to radians
-  
-  // Determine if this is a corner component with L-shaped footprint
-  const isCornerCounterTop = element.type === 'counter-top' && element.id.includes('counter-top-corner');
-  const isCornerWallCabinet = element.type === 'cabinet' && element.id.includes('corner-wall-cabinet');
-  const isCornerBaseCabinet = element.type === 'cabinet' && element.id.includes('corner-base-cabinet');
-  const isCornerTallUnit = element.type === 'cabinet' && (
-    element.id.includes('corner-tall') || 
-    element.id.includes('corner-larder') ||
-    element.id.includes('larder-corner')
-  );
-  
-  const isCornerComponent = isCornerCounterTop || isCornerWallCabinet || isCornerBaseCabinet || isCornerTallUnit;
-  
-  if (isCornerComponent) {
-    // L-shaped components use 90x90 footprint
-    const size = 90;
-    const centerX = element.x + 45; // Center of L-shape
-    const centerY = element.y + 45;
-    
-    // For L-shaped components, we use a 90x90 bounding box regardless of rotation
-    // This is a simplification but ensures consistent behavior
-    return {
-      minX: element.x,
-      minY: element.y,
-      maxX: element.x + size,
-      maxY: element.y + size,
-      centerX,
-      centerY,
-      width: size,
-      height: size,
-      isCorner: true
-    };
-  } else {
-    // Standard rectangular component
-    const width = element.width;
-    const height = element.depth || element.height;
-    const centerX = element.x + width / 2;
-    const centerY = element.y + height / 2;
-    
-    if (rotation === 0) {
-      // No rotation - simple case
-      return {
-        minX: element.x,
-        minY: element.y,
-        maxX: element.x + width,
-        maxY: element.y + height,
-        centerX,
-        centerY,
-        width,
-        height,
-        isCorner: false
-      };
-    } else {
-      // Calculate rotated bounding box
-      const cos = Math.cos(rotation);
-      const sin = Math.sin(rotation);
-      
-      // Calculate the four corners of the rotated rectangle
-      const corners = [
-        { x: -width / 2, y: -height / 2 },
-        { x: width / 2, y: -height / 2 },
-        { x: width / 2, y: height / 2 },
-        { x: -width / 2, y: height / 2 }
-      ];
-      
-      // Rotate each corner and find the bounding box
-      const rotatedCorners = corners.map(corner => ({
-        x: centerX + corner.x * cos - corner.y * sin,
-        y: centerY + corner.x * sin + corner.y * cos
-      }));
-      
-      const minX = Math.min(...rotatedCorners.map(c => c.x));
-      const minY = Math.min(...rotatedCorners.map(c => c.y));
-      const maxX = Math.max(...rotatedCorners.map(c => c.x));
-      const maxY = Math.max(...rotatedCorners.map(c => c.y));
-      
-      return {
-        minX,
-        minY,
-        maxX,
-        maxY,
-        centerX,
-        centerY,
-        width: maxX - minX,
-        height: maxY - minY,
-        isCorner: false
-      };
-    }
-  }
-};
-
-// Helper function to check if a point is inside a rotated component
-const isPointInRotatedComponent = (pointX: number, pointY: number, element: DesignElement) => {
-  const rotation = (element.rotation || 0) * Math.PI / 180;
-  
-  // Determine if this is a corner component
-  const isCornerComponent = (element.type === 'counter-top' && element.id.includes('counter-top-corner')) ||
-                           (element.type === 'cabinet' && element.id.includes('corner-wall-cabinet')) ||
-                           (element.type === 'cabinet' && element.id.includes('corner-base-cabinet')) ||
-                           (element.type === 'cabinet' && (
-                             element.id.includes('corner-tall') || 
-                             element.id.includes('corner-larder') ||
-                             element.id.includes('larder-corner')
-                           ));
-  
-  if (isCornerComponent) {
-    // L-shaped components use 90x90 footprint - simplified check
-    return pointX >= element.x && pointX <= element.x + 90 &&
-           pointY >= element.y && pointY <= element.y + 90;
-  } else {
-    // Standard rectangular component with rotation
-    const width = element.width;
-    const height = element.depth || element.height;
-    const centerX = element.x + width / 2;
-    const centerY = element.y + height / 2;
-    
-    if (rotation === 0) {
-      // No rotation - simple check
-      return pointX >= element.x && pointX <= element.x + width &&
-             pointY >= element.y && pointY <= element.y + height;
-    } else {
-      // Rotate the point relative to the component center
-      const cos = Math.cos(-rotation); // Negative rotation to transform point to component space
-      const sin = Math.sin(-rotation);
-      const dx = pointX - centerX;
-      const dy = pointY - centerY;
-      const rotatedX = dx * cos - dy * sin;
-      const rotatedY = dx * sin + dy * cos;
-      
-      // Check if the rotated point is within the original rectangle
-      return rotatedX >= -width / 2 && rotatedX <= width / 2 &&
-             rotatedY >= -height / 2 && rotatedY <= height / 2;
-    }
-  }
-};
-
-// Smart Wall Snapping System with 5cm clearance
-const getWallSnappedPosition = (
-  dropX: number, 
-  dropY: number, 
-  componentWidth: number, 
-  componentDepth: number, 
-  roomWidth: number, 
-  roomHeight: number,
-  isCornerComponent: boolean = false
-) => {
-  let snappedX = dropX;
-  let snappedY = dropY;
-  let snappedToWall = false;
-
-  // For corner components, use 90x90 footprint
-  const effectiveWidth = isCornerComponent ? 90 : componentWidth;
-  const effectiveDepth = isCornerComponent ? 90 : componentDepth;
-
-  // Calculate wall snap positions with 5cm clearance
-  const leftWallX = WALL_CLEARANCE;
-  const rightWallX = roomWidth - effectiveWidth - WALL_CLEARANCE;
-  const topWallY = WALL_CLEARANCE;
-  const bottomWallY = roomHeight - effectiveDepth - WALL_CLEARANCE;
-
-  // Check for corner snapping first (higher priority)
-  if (isCornerComponent) {
-    const cornerThreshold = WALL_SNAP_THRESHOLD;
-    
-    // Top-left corner: (5, 5)
-    if (dropX <= cornerThreshold && dropY <= cornerThreshold) {
-      return { x: leftWallX, y: topWallY, snappedToWall: true, corner: 'top-left' };
-    }
-    
-    // Top-right corner: (505, 5) for 90cm component in 600cm room
-    if (dropX >= roomWidth - cornerThreshold && dropY <= cornerThreshold) {
-      return { x: rightWallX, y: topWallY, snappedToWall: true, corner: 'top-right' };
-    }
-    
-    // Bottom-left corner: (5, 310) for 90cm component in 400cm room
-    if (dropX <= cornerThreshold && dropY >= roomHeight - cornerThreshold) {
-      return { x: leftWallX, y: bottomWallY, snappedToWall: true, corner: 'bottom-left' };
-    }
-    
-    // Bottom-right corner: (505, 310)
-    if (dropX >= roomWidth - cornerThreshold && dropY >= roomHeight - cornerThreshold) {
-      return { x: rightWallX, y: bottomWallY, snappedToWall: true, corner: 'bottom-right' };
-    }
-  }
-
-  // Wall snapping for all components (including corners if not in corner zones)
-  // CRITICAL FIX: dropX/dropY represent component's TOP-LEFT corner position
-  // Check both the component's start edge AND end edge for wall proximity
-  
-  // Snap to left wall - check if component's left edge is near left wall
-  if (dropX <= WALL_SNAP_THRESHOLD) {
-    snappedX = leftWallX;
-    snappedToWall = true;
-  }
-  // Snap to right wall - check if component's right edge would be near right wall boundary
-  else if (dropX + effectiveWidth >= roomWidth - WALL_SNAP_THRESHOLD) {
-    snappedX = rightWallX;
-    snappedToWall = true;
-  }
-  // ADDITIONAL: Also check if the drop position itself is near the right boundary
-  // This handles cases where wide components are dropped near the right edge
-  else if (dropX >= roomWidth - WALL_SNAP_THRESHOLD - effectiveWidth) {
-    snappedX = rightWallX;
-    snappedToWall = true;
-  }
-
-  // Snap to top wall - check if component's top edge is near top wall  
-  if (dropY <= WALL_SNAP_THRESHOLD) {
-    snappedY = topWallY;
-    snappedToWall = true;
-  }
-  // Snap to bottom wall - check if component's bottom edge would be near bottom wall boundary
-  else if (dropY + effectiveDepth >= roomHeight - WALL_SNAP_THRESHOLD) {
-    snappedY = bottomWallY;
-    snappedToWall = true;
-  }
-  // ADDITIONAL: Also check if the drop position itself is near the bottom boundary  
-  else if (dropY >= roomHeight - WALL_SNAP_THRESHOLD - effectiveDepth) {
-    snappedY = bottomWallY;
-    snappedToWall = true;
-  }
-
-  return { 
-    x: snappedX, 
-    y: snappedY, 
-    snappedToWall, 
-    corner: null 
-  };
-};
 
 // Component behavior cache for performance
 const componentBehaviorCache = new Map<string, any>();
@@ -404,47 +166,25 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
   // Use design dimensions or default
   const roomDimensions = design.roomDimensions || DEFAULT_ROOM_FALLBACK;
   
-  // Helper function to get wall height (ceiling height) - prioritize room dimensions over cache
-  const getWallHeight = useCallback(() => {
-    return roomDimensions.ceilingHeight || roomConfigCache?.wall_height || DEFAULT_ROOM_FALLBACK.wallHeight;
-  }, [roomDimensions.ceilingHeight]);
-  
-  // Calculate room bounds with wall thickness
-  // roomDimensions represents the INNER usable space (like 3D interior)
-  const innerRoomBounds = {
-    width: roomDimensions.width,
-    height: roomDimensions.height
-  };
-  
-  // Outer bounds include wall thickness (for drawing walls)
-  const outerRoomBounds = {
-    width: roomDimensions.width + (WALL_THICKNESS * 2),
-    height: roomDimensions.height + (WALL_THICKNESS * 2)
-  };
-  
-  // Room positioning - center the OUTER room in the canvas (including walls)
+  // Room positioning - center the room in the canvas
   const roomPosition = {
-    // Outer room position (for wall drawing)
-    outerX: (CANVAS_WIDTH / 2) - (outerRoomBounds.width * zoom / 2) + panOffset.x,
-    outerY: (CANVAS_HEIGHT / 2) - (outerRoomBounds.height * zoom / 2) + panOffset.y,
-    // Inner room position (for component placement)
-    innerX: (CANVAS_WIDTH / 2) - (innerRoomBounds.width * zoom / 2) + panOffset.x,
-    innerY: (CANVAS_HEIGHT / 2) - (innerRoomBounds.height * zoom / 2) + panOffset.y
+    x: (CANVAS_WIDTH / 2) - (roomDimensions.width * zoom / 2) + panOffset.x,
+    y: (CANVAS_HEIGHT / 2) - (roomDimensions.height * zoom / 2) + panOffset.y
   };
 
-  // Convert room coordinates to canvas coordinates (uses inner room for component placement)
+  // Convert room coordinates to canvas coordinates
   const roomToCanvas = useCallback((roomX: number, roomY: number) => {
     return {
-      x: roomPosition.innerX + (roomX * zoom),
-      y: roomPosition.innerY + (roomY * zoom)
+      x: roomPosition.x + (roomX * zoom),
+      y: roomPosition.y + (roomY * zoom)
     };
   }, [roomPosition, zoom]);
 
-  // Convert canvas coordinates to room coordinates (uses inner room for component placement)
+  // Convert canvas coordinates to room coordinates
   const canvasToRoom = useCallback((canvasX: number, canvasY: number) => {
     return {
-      x: (canvasX - roomPosition.innerX) / zoom,
-      y: (canvasY - roomPosition.innerY) / zoom
+      x: (canvasX - roomPosition.x) / zoom,
+      y: (canvasY - roomPosition.y) / zoom
     };
   }, [roomPosition, zoom]);
 
@@ -795,101 +535,58 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
 
   // Draw room within canvas
   const drawRoom = useCallback((ctx: CanvasRenderingContext2D) => {
-    const innerWidth = innerRoomBounds.width * zoom;
-    const innerHeight = innerRoomBounds.height * zoom;
-    const outerWidth = outerRoomBounds.width * zoom;
-    const outerHeight = outerRoomBounds.height * zoom;
-    const wallThickness = WALL_THICKNESS * zoom;
+    const roomWidth = roomDimensions.width * zoom;
+    const roomHeight = roomDimensions.height * zoom;
 
     if (active2DView === 'plan') {
-      // Plan view - draw walls with proper thickness
-      
-      // Draw outer walls (wall structure)
-      ctx.fillStyle = '#e5e5e5';
-      ctx.fillRect(roomPosition.outerX, roomPosition.outerY, outerWidth, outerHeight);
-      
-      // Draw inner room (usable space)
+      // Plan view - draw room as rectangle
       ctx.fillStyle = '#f9f9f9';
-      ctx.fillRect(roomPosition.innerX, roomPosition.innerY, innerWidth, innerHeight);
+      ctx.fillRect(roomPosition.x, roomPosition.y, roomWidth, roomHeight);
 
-      // Draw wall outlines
       ctx.strokeStyle = '#333';
       ctx.lineWidth = 2;
       ctx.setLineDash([]);
-      
-      // Outer wall boundary
-      ctx.strokeRect(roomPosition.outerX, roomPosition.outerY, outerWidth, outerHeight);
-      // Inner room boundary (where components can be placed)
-      ctx.strokeStyle = '#666';
-      ctx.lineWidth = 1;
-      ctx.strokeRect(roomPosition.innerX, roomPosition.innerY, innerWidth, innerHeight);
+      ctx.strokeRect(roomPosition.x, roomPosition.y, roomWidth, roomHeight);
 
       // Room dimensions labels
       ctx.fillStyle = '#666';
       ctx.font = '12px Arial';
       ctx.textAlign = 'center';
       
-      // Width label (top) - show inner room dimensions
+      // Width label (top)
       ctx.fillText(
-        `${roomDimensions.width}cm (inner)`,
-        roomPosition.innerX + innerWidth / 2,
-        roomPosition.outerY - 10
+        `${roomDimensions.width}cm`,
+        roomPosition.x + roomWidth / 2,
+        roomPosition.y - 10
       );
 
-      // Height label (left) - show inner room dimensions
+      // Height label (left)
       ctx.save();
-      ctx.translate(roomPosition.outerX - 25, roomPosition.innerY + innerHeight / 2);
+      ctx.translate(roomPosition.x - 20, roomPosition.y + roomHeight / 2);
       ctx.rotate(-Math.PI / 2);
-      ctx.fillText(`${roomDimensions.height}cm (inner)`, 0, 0);
-      ctx.restore();
-      
-      // Wall thickness labels
-      ctx.fillStyle = '#999';
-      ctx.font = '10px Arial';
-      ctx.textAlign = 'center';
-      
-      // Top wall thickness
-      ctx.fillText(
-        `${WALL_THICKNESS}cm`,
-        roomPosition.innerX + innerWidth / 2,
-        roomPosition.outerY + wallThickness / 2 + 3
-      );
-      
-      // Left wall thickness
-      ctx.save();
-      ctx.translate(roomPosition.outerX + wallThickness / 2, roomPosition.innerY + innerHeight / 2);
-      ctx.rotate(-Math.PI / 2);
-      ctx.fillText(`${WALL_THICKNESS}cm`, 0, 3);
+      ctx.fillText(`${roomDimensions.height}cm`, 0, 0);
       ctx.restore();
 
     } else {
-      // Elevation view - draw room as elevation (floor fixed, ceiling moves)
-      const wallHeight = getWallHeight() * zoom;
-      const floorY = roomPosition.innerY + (CANVAS_HEIGHT * 0.7); // Fixed floor position
-      const topY = floorY - wallHeight; // Ceiling moves up/down based on wall height
+      // Elevation view - draw room as elevation (aligned to top)
+      const wallHeight = (roomConfigCache?.wall_height || DEFAULT_ROOM_FALLBACK.wallHeight) * zoom;
+      const topY = roomPosition.y + 50; // Start from top with padding
+      const floorY = topY + wallHeight; // Floor at bottom of wall height
 
-      // CRITICAL FIX: Use appropriate dimension for each elevation view
-      let elevationRoomWidth: number;
-      if (active2DView === 'front' || active2DView === 'back') {
-        elevationRoomWidth = roomDimensions.width * zoom; // Use room width for front/back views
-      } else {
-        elevationRoomWidth = roomDimensions.height * zoom; // Use room depth for left/right views
-      }
-
-      // Draw wall boundaries 
+      // Draw wall boundaries
       ctx.fillStyle = '#f9f9f9';
-      ctx.fillRect(roomPosition.innerX, topY, elevationRoomWidth, wallHeight);
+      ctx.fillRect(roomPosition.x, topY, roomWidth, wallHeight);
 
       ctx.strokeStyle = '#333';
       ctx.lineWidth = 2;
-      ctx.strokeRect(roomPosition.innerX, topY, elevationRoomWidth, wallHeight);
+      ctx.strokeRect(roomPosition.x, topY, roomWidth, wallHeight);
 
       // Floor line
       ctx.strokeStyle = '#8B4513';
       ctx.lineWidth = 3;
       ctx.beginPath();
-      ctx.moveTo(roomPosition.innerX, floorY);
-      ctx.lineTo(roomPosition.innerX + elevationRoomWidth, floorY);
+      ctx.moveTo(roomPosition.x, floorY);
+      ctx.lineTo(roomPosition.x + roomWidth, floorY);
       ctx.stroke();
 
       // Wall label
@@ -904,28 +601,28 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
       };
       ctx.fillText(
         wallLabels[active2DView] || '',
-        roomPosition.innerX + elevationRoomWidth / 2,
-        roomPosition.innerY - 20
+        roomPosition.x + roomWidth / 2,
+        roomPosition.y - 20
       );
 
       // Dimension labels
       ctx.fillStyle = '#666';
       ctx.font = '12px Arial';
       
-      // Width dimension (bottom) - use inner room dimensions
+      // Width dimension (bottom)
       let widthText = '';
       if (active2DView === 'front' || active2DView === 'back') {
-        widthText = `${roomDimensions.width}cm (inner)`;
+        widthText = `${roomDimensions.width}cm`;
       } else {
-        widthText = `${roomDimensions.height}cm (inner)`;
+        widthText = `${roomDimensions.height}cm`;
       }
       ctx.textAlign = 'center';
-      ctx.fillText(widthText, roomPosition.innerX + elevationRoomWidth / 2, floorY + 20);
+      ctx.fillText(widthText, roomPosition.x + roomWidth / 2, floorY + 20);
       
       // Wall height dimension (left side)
-      const heightText = `${getWallHeight()}cm`;
+      const heightText = `${roomConfigCache?.wall_height || DEFAULT_ROOM_FALLBACK.wallHeight}cm`;
       ctx.save();
-      ctx.translate(roomPosition.innerX - 35, topY + wallHeight / 2);
+      ctx.translate(roomPosition.x - 35, topY + wallHeight / 2);
       ctx.rotate(-Math.PI / 2);
       ctx.textAlign = 'center';
       ctx.fillText(heightText, 0, 0);
@@ -934,7 +631,7 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
       // Height indicator line with arrows
       ctx.strokeStyle = '#999';
       ctx.lineWidth = 1;
-      const indicatorX = roomPosition.innerX - 25;
+      const indicatorX = roomPosition.x - 25;
       
       // Vertical line
       ctx.beginPath();
@@ -1122,7 +819,13 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
 
       // Selection handles (drawn after restore)
       if (isSelected) {
-        drawSelectionHandles(ctx, element);
+        if (isCornerCounterTop || isCornerWallCabinet || isCornerBaseCabinet || isCornerTallUnit) {
+          // For L-shaped components, draw square selection handles (90cm x 90cm)
+          const squareSize = 90 * zoom;
+          drawSelectionHandles(ctx, pos.x, pos.y, squareSize, squareSize);
+        } else {
+          drawSelectionHandles(ctx, pos.x, pos.y, width, depth);
+        }
       }
 
     } else {
@@ -1155,22 +858,16 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
     ctx.fillRect(doorWidth * 1.2 - handleSize/2, handleY - handleSize/2, handleSize, handleSize);
   };
 
-  // Draw selection handles using rotated bounding box
-  const drawSelectionHandles = (ctx: CanvasRenderingContext2D, element: DesignElement) => {
+  // Draw selection handles
+  const drawSelectionHandles = (ctx: CanvasRenderingContext2D, x: number, y: number, width: number, height: number) => {
     const handleSize = 8;
     ctx.fillStyle = '#ff6b6b';
     
-    // Get the rotated bounding box for the element
-    const bbox = getRotatedBoundingBox(element);
-    const canvasMin = roomToCanvas(bbox.minX, bbox.minY);
-    const canvasMax = roomToCanvas(bbox.maxX, bbox.maxY);
-    
-    // Draw handles at the corners of the bounding box
     const handles = [
-      { x: canvasMin.x - handleSize/2, y: canvasMin.y - handleSize/2 },
-      { x: canvasMax.x - handleSize/2, y: canvasMin.y - handleSize/2 },
-      { x: canvasMin.x - handleSize/2, y: canvasMax.y - handleSize/2 },
-      { x: canvasMax.x - handleSize/2, y: canvasMax.y - handleSize/2 }
+      { x: x - handleSize/2, y: y - handleSize/2 },
+      { x: x + width - handleSize/2, y: y - handleSize/2 },
+      { x: x - handleSize/2, y: y + height - handleSize/2 },
+      { x: x + width - handleSize/2, y: y + height - handleSize/2 }
     ];
     
     handles.forEach(handle => {
@@ -1198,90 +895,73 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
     if (!componentBehaviorCache.has(element.type)) {
       getComponentBehavior(element.type).catch(console.warn);
     }
-    // CRITICAL FIX: Elevation views should use inner room dimensions for proper alignment
-    // Components are positioned within the inner room space, not including wall thickness
-    const elevationWidth = roomDimensions.width * zoom; // Inner room width for front/back views
-    const elevationDepth = roomDimensions.height * zoom; // Inner room depth for left/right views
-    const wallHeight = getWallHeight() * zoom;
-    const floorY = roomPosition.innerY + (CANVAS_HEIGHT * 0.7); // Fixed floor position
-    const topY = floorY - wallHeight; // Ceiling moves up/down based on wall height
+    const roomWidth = roomDimensions.width * zoom;
+    const wallHeight = (roomConfigCache?.wall_height || DEFAULT_ROOM_FALLBACK.wallHeight) * zoom;
+    const topY = roomPosition.y + 50; // Top of elevation view
+    const floorY = topY + wallHeight; // Floor at bottom of wall height
     
-    // Calculate horizontal position - use innerX as baseline for all elevation views
+    // Calculate horizontal position
     let xPos: number;
     let elementWidth: number;
     
     if (active2DView === 'front' || active2DView === 'back') {
-      // Front/back walls: use X coordinate from plan view
-      xPos = roomPosition.innerX + (element.x / roomDimensions.width) * elevationWidth;
-      elementWidth = (element.width / roomDimensions.width) * elevationWidth;
+      xPos = roomPosition.x + (element.x / roomDimensions.width) * roomWidth;
+      elementWidth = (element.width / roomDimensions.width) * roomWidth;
     } else if (active2DView === 'left') {
       // Left wall view - flip horizontally (mirror Y coordinate)
       // When looking at left wall from inside room, far end of room appears on left side of view
-      const flippedY = roomDimensions.height - element.y - element.depth;
-      xPos = roomPosition.innerX + (flippedY / roomDimensions.height) * elevationDepth;
-      elementWidth = (element.depth / roomDimensions.height) * elevationDepth;
+      const flippedY = roomDimensions.height - element.y - element.height;
+      xPos = roomPosition.x + (flippedY / roomDimensions.height) * roomWidth;
+      elementWidth = (componentData.defaultDepth / roomDimensions.height) * roomWidth;
     } else { // right wall
-      // Right wall view: use Y coordinate from plan view  
-      xPos = roomPosition.innerX + (element.y / roomDimensions.height) * elevationDepth;
-      elementWidth = (element.depth / roomDimensions.height) * elevationDepth;
+      xPos = roomPosition.x + (element.y / roomDimensions.height) * roomWidth;
+      elementWidth = (componentData.defaultDepth / roomDimensions.height) * roomWidth;
     }
     
-    // Tall corner unit dimensions are now correct (90x90cm) after database migration
-    
     // Calculate vertical position and height based on component type
-    // REVERT TO SIMPLE HARDCODED APPROACH - database system was too complex
+    // Use database-driven elevation heights instead of hardcoded values
     let elementHeight: number;
     let yPos: number;
     
-    // Simple hardcoded elevation heights that were working before
+    // Get elevation height from database or use element's actual height
+    const useActualHeight = async (elementId: string, elementType: string) => {
+      try {
+        return await ComponentService.getElevationHeight(elementId, elementType);
+      } catch (err) {
+        console.warn(`Failed to get elevation height for ${elementId}:`, err);
+        return element.height; // Fallback to actual element height
+      }
+    };
+    
+    // Check if we have cached behavior for this component
+    const componentBehavior = componentBehaviorCache.get(element.type);
+    
+    // Determine elevation height - prioritize database values
     let elevationHeightCm: number;
     
-    // Determine elevation height based on component type and ID
-    if (element.type === 'cornice') {
-      elevationHeightCm = 30; // Cornice height
-    } else if (element.type === 'pelmet') {
-      elevationHeightCm = 20; // Pelmet height
-    } else if (element.type === 'counter-top') {
-      elevationHeightCm = 4; // Counter top thickness
-    } else if (element.type === 'cabinet' && element.id.includes('wall-cabinet')) {
-      elevationHeightCm = 70; // Wall cabinet height
-    } else if (element.type === 'cabinet' && (element.id.includes('tall') || element.id.includes('larder'))) {
-      elevationHeightCm = element.height; // Use actual height for tall units - THIS IS KEY!
-    } else if (element.type === 'cabinet') {
-      elevationHeightCm = 85; // Base cabinet height
-    } else if (element.type === 'appliance') {
-      elevationHeightCm = element.height; // Use actual height for appliances
-    } else if (element.type === 'window') {
-      elevationHeightCm = 100; // Window height
-    } else if (element.type === 'wall-unit-end-panel') {
-      elevationHeightCm = 70; // Wall unit end panel height
+    if (componentBehavior?.elevation_height) {
+      // Use database elevation height
+      elevationHeightCm = componentBehavior.elevation_height;
     } else {
-      elevationHeightCm = element.height; // Default to actual element height
+      // Use actual element height for tall units, larder cabinets, etc.
+      elevationHeightCm = element.height;
     }
     
     elementHeight = elevationHeightCm * zoom;
     
-    // Calculate Y position based on component Z position and type
-    if (element.z && element.z > 0) {
-      // Component has explicit Z position - use it
-      const mountHeight = element.z * zoom;
+    // Calculate Y position based on component mount type and Z position
+    if (componentBehavior?.mount_type === 'wall') {
+      // Wall-mounted components use their Z position
+      const mountHeight = (element.z || componentBehavior.default_z_position || 140) * zoom;
       yPos = floorY - mountHeight - elementHeight;
     } else {
-      // Default positioning based on type
-      if (element.type === 'cabinet' && element.id.includes('wall-cabinet')) {
-        // Wall cabinets at 140cm height
-        yPos = floorY - (140 * zoom) - elementHeight;
-      } else if (element.type === 'cornice') {
-        // Cornice at top of wall units (200cm)
-        yPos = floorY - (200 * zoom) - elementHeight;
-      } else if (element.type === 'pelmet') {
-        // Pelmet at bottom of wall units (140cm)
-        yPos = floorY - (140 * zoom);
-      } else if (element.type === 'window') {
-        // Windows at 90cm height
-        yPos = floorY - (90 * zoom) - elementHeight;
+      // Floor-mounted components
+      if (element.z && element.z > 0) {
+        // Component has explicit Z position (e.g., raised appliances)
+        const mountHeight = element.z * zoom;
+        yPos = floorY - mountHeight - elementHeight;
       } else {
-        // Floor level components
+        // Floor level
         yPos = floorY - elementHeight;
       }
     }
@@ -1418,41 +1098,11 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
       ctx.stroke();
       
       if (hasDoors && showDoorFace) {
-        // CRITICAL FIX: Corner units should have 30cm door (narrow section), not 60cm
-        // The door should be on the side OPPOSITE to the wall connection
-        const doorWidth = isCorner ? width * 0.33 : ((width - doorInset * 2) / doorCount); // Corner door is 30cm (~33% of 90cm)
+        const doorWidth = isCorner ? width * 0.6 : ((width - doorInset * 2) / doorCount); // Corner units have narrow doors
         const adjustedDoorHeight = height - doorInset * 2 - toeKickHeight; // Account for toe kick
         
         for (let i = 0; i < doorCount; i++) {
-          // CRITICAL FIX: Corner door position depends on which wall the unit is against
-          // Door should always be on the side OPPOSITE to the wall connection
-          let doorX: number;
-          
-          if (isCorner) {
-            // CRITICAL FIX: Corner units ALWAYS show door + panel in elevation views
-            // Door position is ALWAYS on the side AWAY from the wall we're viewing
-            // Simple rule: LEFT wall view = door on RIGHT, RIGHT wall view = door on LEFT
-            
-            if (active2DView === 'left') {
-              // Viewing LEFT wall: door on RIGHT side (away from left wall)
-              doorX = x + width - doorWidth - doorInset;
-            } else if (active2DView === 'right') {
-              // Viewing RIGHT wall: door on LEFT side (away from right wall)  
-              doorX = x + doorInset;
-            } else if (active2DView === 'front') {
-              // Viewing FRONT wall: door on RIGHT side (standard)
-              doorX = x + width - doorWidth - doorInset;
-            } else if (active2DView === 'back') {
-              // Viewing BACK wall: door on LEFT side (mirrored from front)
-              doorX = x + doorInset;
-            } else {
-              // Default: door on right side
-              doorX = x + width - doorWidth - doorInset;
-            }
-          } else {
-            // Standard cabinet door positioning
-            doorX = x + doorInset + i * doorWidth;
-          }
+          const doorX = isCorner ? x + doorInset : (x + doorInset + i * doorWidth);
           const doorY = y + doorInset;
           const doorH = adjustedDoorHeight;
           const doorW = isCorner ? doorWidth : (doorWidth - (i < doorCount - 1 ? 1 : 0));
@@ -1997,9 +1647,19 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
     const cornerInfo = isCornerUnit(element);
     if (!cornerInfo.isCorner) return true; // Non-corner units always show door face
     
-    // CRITICAL FIX: Corner units ALWAYS show door + panel in ALL elevation views
-    // Never show back panels - always show the door face with proper positioning
-    return true;
+    // Corner units show door face on one wall and back panel on adjacent wall
+    switch (cornerInfo.corner) {
+      case 'front-left':
+        return view === 'left'; // Door faces into room from left wall
+      case 'front-right':
+        return view === 'right'; // Door faces into room from right wall
+      case 'back-left':
+        return view === 'left'; // Door faces into room from left wall
+      case 'back-right':
+        return view === 'right'; // Door faces into room from right wall
+      default:
+        return true;
+    }
   };
 
   // Draw zoom controls
@@ -2038,16 +1698,16 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
 
     if (active2DView === 'plan') {
       // Horizontal ruler (top)
-      const rulerY = roomPosition.innerY - 30;
+      const rulerY = roomPosition.y - 30;
       const stepSize = 50 * zoom; // Every 50cm
       
       ctx.beginPath();
-      ctx.moveTo(roomPosition.innerX, rulerY);
-      ctx.lineTo(roomPosition.innerX + roomDimensions.width * zoom, rulerY);
+      ctx.moveTo(roomPosition.x, rulerY);
+      ctx.lineTo(roomPosition.x + roomDimensions.width * zoom, rulerY);
       ctx.stroke();
 
       for (let x = 0; x <= roomDimensions.width; x += 50) {
-        const xPos = roomPosition.innerX + x * zoom;
+        const xPos = roomPosition.x + x * zoom;
         ctx.beginPath();
         ctx.moveTo(xPos, rulerY - 5);
         ctx.lineTo(xPos, rulerY + 5);
@@ -2060,15 +1720,15 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
       }
 
       // Vertical ruler (left)
-      const rulerX = roomPosition.innerX - 30;
+      const rulerX = roomPosition.x - 30;
       
       ctx.beginPath();
-      ctx.moveTo(rulerX, roomPosition.innerY);
-      ctx.lineTo(rulerX, roomPosition.innerY + roomDimensions.height * zoom);
+      ctx.moveTo(rulerX, roomPosition.y);
+      ctx.lineTo(rulerX, roomPosition.y + roomDimensions.height * zoom);
       ctx.stroke();
 
       for (let y = 0; y <= roomDimensions.height; y += 50) {
-        const yPos = roomPosition.innerY + y * zoom;
+        const yPos = roomPosition.y + y * zoom;
         ctx.beginPath();
         ctx.moveTo(rulerX - 5, yPos);
         ctx.lineTo(rulerX + 5, yPos);
@@ -2090,18 +1750,18 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
         : roomDimensions.height;
       
       // Horizontal ruler (bottom)
-      const wallHeight = getWallHeight() * zoom;
-      const floorY = roomPosition.innerY + (CANVAS_HEIGHT * 0.7); // Fixed floor position
-      const topY = floorY - wallHeight; // Ceiling moves up/down based on wall height
+      const wallHeight = (roomConfigCache?.wall_height || DEFAULT_ROOM_FALLBACK.wallHeight) * zoom;
+      const topY = roomPosition.y + 50;
+      const floorY = topY + wallHeight;
       const rulerY = floorY + 25;
       
       ctx.beginPath();
-      ctx.moveTo(roomPosition.innerX, rulerY);
-      ctx.lineTo(roomPosition.innerX + roomWidth * zoom, rulerY);
+      ctx.moveTo(roomPosition.x, rulerY);
+      ctx.lineTo(roomPosition.x + roomWidth * zoom, rulerY);
       ctx.stroke();
 
       for (let x = 0; x <= roomWidth; x += 50) {
-        const xPos = roomPosition.innerX + x * zoom;
+        const xPos = roomPosition.x + x * zoom;
         ctx.beginPath();
         ctx.moveTo(xPos, rulerY - 3);
         ctx.lineTo(xPos, rulerY + 3);
@@ -2114,14 +1774,14 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
       }
 
       // Vertical ruler (right side)
-      const rulerX = roomPosition.innerX + roomWidth * zoom + 25;
+      const rulerX = roomPosition.x + roomWidth * zoom + 25;
       
       ctx.beginPath();
       ctx.moveTo(rulerX, topY);
       ctx.lineTo(rulerX, floorY);
       ctx.stroke();
 
-      for (let h = 0; h <= getWallHeight(); h += 50) {
+      for (let h = 0; h <= (roomConfigCache?.wall_height || DEFAULT_ROOM_FALLBACK.wallHeight); h += 50) {
         const yPos = floorY - h * zoom;
         ctx.beginPath();
         ctx.moveTo(rulerX - 3, yPos);
@@ -2538,8 +2198,25 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
     if (!isDragging && active2DView === 'plan') {
       const roomPos = canvasToRoom(x, y);
       const hoveredEl = design.elements.find(element => {
-        // Use the new rotation-aware boundary detection
-        return isPointInRotatedComponent(roomPos.x, roomPos.y, element);
+        // Check if this is a corner component that uses L-shaped footprint
+        const isCornerComponent = (element.type === 'counter-top' && element.id.includes('counter-top-corner')) ||
+                                 (element.type === 'cabinet' && element.id.includes('corner-wall-cabinet')) ||
+                                 (element.type === 'cabinet' && element.id.includes('corner-base-cabinet')) ||
+                                 (element.type === 'cabinet' && (
+                                   element.id.includes('corner-tall') || 
+                                   element.id.includes('corner-larder') ||
+                                   element.id.includes('larder-corner')
+                                 ));
+        
+        if (isCornerComponent) {
+          // L-shaped components use 90x90 footprint for hover detection
+          return roomPos.x >= element.x && roomPos.x <= element.x + 90 &&
+                 roomPos.y >= element.y && roomPos.y <= element.y + 90;
+        } else {
+          // Standard rectangular hover detection
+          return roomPos.x >= element.x && roomPos.x <= element.x + element.width &&
+                 roomPos.y >= element.y && roomPos.y <= element.y + element.height;
+        }
       });
       setHoveredElement(hoveredEl || null);
       
@@ -2625,38 +2302,36 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
         clampDepth = 90;
       }
 
-      // Apply Smart Wall Snapping for dragged elements
-      const isCornerComponent = isCornerCounterTop || isCornerWallCabinet || isCornerBaseCabinet || isCornerTallUnit;
+      // Enhanced boundary checking for rotated elements
+      // Ensure the element stays within room boundaries using effective dimensions
+      const clampedX = Math.max(0, Math.min(finalX, roomDimensions.width - clampWidth));
+      const clampedY = Math.max(0, Math.min(finalY, roomDimensions.height - clampDepth));
       
-      const dragWallSnappedPos = getWallSnappedPosition(
-        finalX,
-        finalY,
-        draggedElement.width,
-        draggedElement.depth || draggedElement.height,
-        innerRoomBounds.width,
-        innerRoomBounds.height,
-        isCornerComponent
-      );
-
-      // Use wall snapped position if snapped, otherwise clamp to boundaries
-      let finalClampedX, finalClampedY;
+      // Additional check: if element was snapped to a wall, ensure it stays snapped
+      let finalClampedX = clampedX;
+      let finalClampedY = clampedY;
       
-      if (dragWallSnappedPos.snappedToWall) {
-        finalClampedX = dragWallSnappedPos.x;
-        finalClampedY = dragWallSnappedPos.y;
-        
-        // Log drag snapping for debugging
-        console.log(`🎯 [Drag Snap] Element moved to ${dragWallSnappedPos.corner || 'wall'} at (${finalClampedX}, ${finalClampedY})`);
-      } else {
-        // Standard boundary clamping if not snapped to wall
-        finalClampedX = Math.max(0, Math.min(finalX, innerRoomBounds.width - clampWidth));
-        finalClampedY = Math.max(0, Math.min(finalY, innerRoomBounds.height - clampDepth));
+      if (snapped.guides.vertical.length > 0) {
+        // Element was snapped to a vertical wall, maintain that snap
+        if (snapped.guides.vertical.includes(0)) {
+          finalClampedX = 0; // Left wall
+        } else if (snapped.guides.vertical.includes(roomDimensions.width)) {
+          finalClampedX = roomDimensions.width - clampWidth; // Right wall
+        }
+      }
+      
+      if (snapped.guides.horizontal.length > 0) {
+        // Element was snapped to a horizontal wall, maintain that snap
+        if (snapped.guides.horizontal.includes(0)) {
+          finalClampedY = 0; // Top wall
+        } else if (snapped.guides.horizontal.includes(roomDimensions.height)) {
+          finalClampedY = roomDimensions.height - clampDepth; // Bottom wall
+        }
       }
 
       onUpdateElement(draggedElement.id, {
-        // CRITICAL FIX: Don't apply grid snapping if component was snapped to wall
-        x: dragWallSnappedPos.snappedToWall ? finalClampedX : snapToGrid(finalClampedX),
-        y: dragWallSnappedPos.snappedToWall ? finalClampedY : snapToGrid(finalClampedY),
+        x: finalClampedX,
+        y: finalClampedY,
         rotation: snapped.rotation
       });
     }
@@ -2716,10 +2391,9 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
       const dropY = roomPos.y - (componentData.depth / 2);
 
 
-      // 🎯 BOUNDARY CHECK: Prevent drops outside inner room boundaries (usable space)
-      // Components should only be placed within the inner room, not in the wall thickness
-      if (dropX < -50 || dropY < -50 || dropX > innerRoomBounds.width + 50 || dropY > innerRoomBounds.height + 50) {
-        console.warn('⚠️ Drop cancelled: Component dropped outside inner room boundaries');
+      // 🎯 BOUNDARY CHECK: Prevent drops outside room boundaries
+      if (dropX < -50 || dropY < -50 || dropX > roomDimensions.width + 50 || dropY > roomDimensions.height + 50) {
+        console.warn('⚠️ Drop cancelled: Component dropped outside room boundaries');
         return;
       }
 
@@ -2753,29 +2427,11 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
         defaultZ = 90; // 90cm height for windows
       }
 
-      // Apply Smart Wall Snapping with 5cm clearance
-      const wallSnappedPos = getWallSnappedPosition(
-        dropX,
-        dropY,
-        componentData.width,
-        componentData.depth,
-        innerRoomBounds.width,
-        innerRoomBounds.height,
-        isCornerComponent
-      );
-
-      // Log snapping results for debugging
-      if (wallSnappedPos.snappedToWall) {
-        console.log(`🎯 [Wall Snap] Component snapped to ${wallSnappedPos.corner || 'wall'} at (${wallSnappedPos.x}, ${wallSnappedPos.y})`);
-      }
-
       const newElement: DesignElement = {
         id: `${componentData.id}-${Date.now()}`,
         type: componentData.type,
-        // CRITICAL FIX: Don't apply grid snapping if component was snapped to wall
-        // Grid snapping can move components away from precise wall positions
-        x: wallSnappedPos.snappedToWall ? wallSnappedPos.x : snapToGrid(wallSnappedPos.x),
-        y: wallSnappedPos.snappedToWall ? wallSnappedPos.y : snapToGrid(wallSnappedPos.y),
+        x: snapToGrid(Math.max(0, Math.min(dropX, roomDimensions.width - effectiveWidth))),
+        y: snapToGrid(Math.max(0, Math.min(dropY, roomDimensions.height - effectiveDepth))),
         z: defaultZ, // Set appropriate Z position
         width: componentData.width, // X-axis dimension
         depth: componentData.depth, // Y-axis dimension (front-to-back)
@@ -2853,7 +2509,7 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
         const roomWidth = active2DView === 'front' || active2DView === 'back'
           ? roomDimensions.width
           : roomDimensions.height;
-        const wallHeight = getWallHeight();
+        const wallHeight = roomConfigCache?.wall_height || DEFAULT_ROOM_FALLBACK.wallHeight;
         const scaleX = (CANVAS_WIDTH * 0.8) / roomWidth;
         const scaleY = (CANVAS_HEIGHT * 0.6) / wallHeight;
         setZoom(Math.min(scaleX, scaleY, MAX_ZOOM));

@@ -122,7 +122,7 @@ const Designer = () => {
     id: currentRoomDesign.id,
     name: currentRoomDesign.name || 'Untitled Room',
     elements: currentRoomDesign.design_elements || [],
-    roomDimensions: currentRoomDesign.room_dimensions || { width: 800, height: 600, ceilingHeight: 240 },
+    roomDimensions: currentRoomDesign.room_dimensions || { width: 800, height: 600 },
     roomType: currentRoomDesign.room_type,
   } : null;
 
@@ -188,7 +188,7 @@ const Designer = () => {
     navigate('/dashboard');
   };
 
-  const handleUpdateRoomDimensions = async (dimensions: { width: number; height: number; ceilingHeight?: number }) => {
+  const handleUpdateRoomDimensions = async (dimensions: { width: number; height: number }) => {
     if (!currentRoomDesign) return;
 
     // Save to history

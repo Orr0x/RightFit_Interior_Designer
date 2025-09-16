@@ -45,41 +45,11 @@ interface AdaptiveView3DProps {
   fitToScreenSignal?: number;
 }
 
-// Convert 2D coordinates to 3D world coordinates accounting for wall thickness
+// Convert 2D coordinates to 3D world coordinates
 const convertTo3D = (x: number, y: number, roomWidth: number, roomHeight: number) => {
-  // CRITICAL FIX: Account for wall thickness in coordinate conversion
-  // 2D coordinates now represent positions within the inner room bounds (usable space)
-  const WALL_THICKNESS_CM = 10; // 10cm wall thickness (matches DesignCanvas2D)
-  const WALL_THICKNESS_METERS = WALL_THICKNESS_CM / 100; // Convert to meters
-  
-  // Scale down the room to reasonable 3D size
-  const roomWidthMeters = roomWidth / 100;
-  const roomHeightMeters = roomHeight / 100;
-  
-  // Convert 2D inner room coordinates to 3D world coordinates
-  // 2D coordinates represent positions within the inner usable space (after wall thickness)
-  // 3D needs to map these coordinates to the actual inner 3D space
-  
-  // Calculate the inner 3D room dimensions (subtracting wall thickness)
-  const inner3DWidth = roomWidthMeters - WALL_THICKNESS_METERS;
-  const inner3DHeight = roomHeightMeters - WALL_THICKNESS_METERS;
-  
-  // PRECISION FIX: Account for exact wall positioning
-  const halfWallThickness = WALL_THICKNESS_METERS / 2; // 5cm in meters
-  
-  // Calculate 3D inner boundaries (where wall inner faces are)
-  const innerLeftBoundary = -roomWidthMeters / 2 + halfWallThickness;
-  const innerRightBoundary = roomWidthMeters / 2 - halfWallThickness;
-  const innerBackBoundary = -roomHeightMeters / 2 + halfWallThickness;
-  const innerFrontBoundary = roomHeightMeters / 2 - halfWallThickness;
-  
-  // Map 2D coordinates directly to 3D inner space
-  const xRange = innerRightBoundary - innerLeftBoundary;
-  const zRange = innerFrontBoundary - innerBackBoundary;
-  
   return {
-    x: innerLeftBoundary + (x / roomWidth) * xRange,
-    z: innerBackBoundary + (y / roomHeight) * zRange
+    x: (x / 100) - (roomWidth / 200),
+    z: (y / 100) - (roomHeight / 200)
   };
 };
 

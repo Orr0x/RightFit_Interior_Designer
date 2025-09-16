@@ -27,7 +27,7 @@ interface View3DProps {
   fitToScreenSignal?: number;
 }
 
-// Convert 2D coordinates to 3D world coordinates accounting for wall thickness
+// Convert 2D coordinates to 3D world coordinates to match the 2D canvas positioning with validation
 const convertTo3D = (x: number, y: number, roomWidth: number, roomHeight: number) => {
   // Validate input parameters to prevent NaN values
   const safeX = isNaN(x) || x === undefined ? 0 : x;
@@ -35,55 +35,25 @@ const convertTo3D = (x: number, y: number, roomWidth: number, roomHeight: number
   const safeRoomWidth = isNaN(roomWidth) || roomWidth === undefined ? 600 : roomWidth;
   const safeRoomHeight = isNaN(roomHeight) || roomHeight === undefined ? 400 : roomHeight;
   
-  // CRITICAL FIX: Account for wall thickness in coordinate conversion
-  // 2D coordinates now represent positions within the inner room bounds (usable space)
-  // 3D room positioning needs to match this by offsetting for wall thickness
-  const WALL_THICKNESS_CM = 10; // 10cm wall thickness (matches DesignCanvas2D)
-  const WALL_THICKNESS_METERS = WALL_THICKNESS_CM / 100; // Convert to meters
-  
   // Scale down the room to reasonable 3D size (divide by 100 to convert cm to meters-like units)
   const roomWidthMeters = safeRoomWidth / 100;
   const roomHeightMeters = safeRoomHeight / 100;
   
-  // Convert 2D inner room coordinates to 3D world coordinates
-  // 2D coordinates represent positions within the inner usable space (after wall thickness)
-  // 3D needs to map these coordinates to the actual inner 3D space
-  
-  // Calculate the inner 3D room dimensions (subtracting wall thickness)
-  const inner3DWidth = roomWidthMeters - WALL_THICKNESS_METERS;
-  const inner3DHeight = roomHeightMeters - WALL_THICKNESS_METERS;
-  
-  // PRECISION FIX: Account for exact wall positioning
-  // 2D coordinates represent positions within inner room bounds
-  // 3D walls are positioned with their centers at ±roomWidth/2, ±roomHeight/2
-  // Inner faces of walls are at ±(roomWidth/2 - wallThickness/2)
-  
-  const halfWallThickness = WALL_THICKNESS_METERS / 2; // 5cm in meters
-  
-  // Calculate 3D inner boundaries (where wall inner faces are)
-  const innerLeftBoundary = -roomWidthMeters / 2 + halfWallThickness;   // Left wall inner face
-  const innerRightBoundary = roomWidthMeters / 2 - halfWallThickness;   // Right wall inner face  
-  const innerBackBoundary = -roomHeightMeters / 2 + halfWallThickness;  // Back wall inner face
-  const innerFrontBoundary = roomHeightMeters / 2 - halfWallThickness;  // Front wall inner face
-  
-  // Map 2D coordinates directly to 3D inner space
-  // 2D (0,0) maps to (innerLeftBoundary, innerBackBoundary)
-  // 2D (roomWidth, roomHeight) maps to (innerRightBoundary, innerFrontBoundary)
-  const xRange = innerRightBoundary - innerLeftBoundary;
-  const zRange = innerFrontBoundary - innerBackBoundary;
-  
+  // Convert to 3D coordinates matching 2D canvas positioning
+  // In 2D canvas: (0,0) is top-left of room, positive X is right, positive Y is down
+  // In 3D: map directly without centering - top-left of room should be top-left in 3D
   return {
-    x: innerLeftBoundary + (safeX / safeRoomWidth) * xRange,
-    z: innerBackBoundary + (safeY / safeRoomHeight) * zRange
+    x: (safeX / 100) - roomWidthMeters / 2,  // Convert to meters, center the room
+    z: (safeY / 100) - roomHeightMeters / 2  // Convert to meters, center the room on Z axis
   };
 };
 
 
 // Room Floor and Walls
-const Room3D: React.FC<{ roomDimensions: { width: number; height: number; ceilingHeight?: number } }> = ({ roomDimensions }) => {
+const Room3D: React.FC<{ roomDimensions: { width: number; height: number } }> = ({ roomDimensions }) => {
   const roomWidth = roomDimensions.width / 100;  // Convert cm to meters
   const roomDepth = roomDimensions.height / 100;
-  const wallHeight = (roomDimensions.ceilingHeight || 240) / 100;  // Use ceiling height from room dimensions or default to 240cm
+  const wallHeight = 2.5;
 
   return (
     <group>
@@ -144,8 +114,7 @@ export const View3D: React.FC<View3DProps> = ({
   // Ensure roomDimensions has default values
   const roomDimensions = {
     width: design.roomDimensions?.width || 600,
-    height: design.roomDimensions?.height || 400,
-    ceilingHeight: design.roomDimensions?.ceilingHeight || 240
+    height: design.roomDimensions?.height || 400
   };
 
   // Controller inside Canvas to handle fit-to-screen and controls target updates

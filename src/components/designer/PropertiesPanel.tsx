@@ -1,5 +1,5 @@
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -8,15 +8,15 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Badge } from '@/components/ui/badge';
-import { DesignElement, RoomType, RoomDimensions } from '@/types/project';
+import { DesignElement, RoomType } from '@/types/project';
 import { View2DMode } from '@/components/designer/ViewSelector';
 import { Ruler, Palette, Settings, Home, Wrench, Layers, Sparkles, RotateCcw, RotateCw } from 'lucide-react';
 
 interface PropertiesPanelProps {
   selectedElement: DesignElement | null;
   onUpdateElement: (elementId: string, updates: Partial<DesignElement>) => void;
-  roomDimensions: RoomDimensions;
-  onUpdateRoomDimensions: (dimensions: { width: number; height: number; ceilingHeight?: number }) => void;
+  roomDimensions: { width: number; height: number };
+  onUpdateRoomDimensions: (dimensions: { width: number; height: number }) => void;
   roomType: RoomType;
   active2DView: View2DMode;
 }
@@ -51,15 +51,7 @@ export const PropertiesPanel: React.FC<PropertiesPanelProps> = ({
   const showHeightControl = true;
 
   const [roomWidth, setRoomWidth] = useState(roomDimensions.width);
-  const [roomDepth, setRoomDepth] = useState(roomDimensions.height); // This is actually room depth (Y-axis)
-  const [roomCeilingHeight, setRoomCeilingHeight] = useState(roomDimensions.ceilingHeight || 240); // Load from database or default to 240cm
-
-  // Sync local state when roomDimensions prop changes (e.g., switching rooms)
-  useEffect(() => {
-    setRoomWidth(roomDimensions.width);
-    setRoomDepth(roomDimensions.height);
-    setRoomCeilingHeight(roomDimensions.ceilingHeight || 240);
-  }, [roomDimensions]);
+  const [roomHeight, setRoomHeight] = useState(roomDimensions.height);
 
   // Room-specific color palettes
   const getRoomColors = (roomType: RoomType) => {
@@ -222,18 +214,7 @@ export const PropertiesPanel: React.FC<PropertiesPanelProps> = ({
   };
 
   const handleRoomDimensionsUpdate = () => {
-    // Pass all three dimensions to the update handler
-    onUpdateRoomDimensions({ 
-      width: roomWidth, 
-      height: roomDepth,  // Legacy: height is actually depth (Y-axis)
-      ceilingHeight: roomCeilingHeight 
-    });
-    
-    console.log(`🏠 [Room Dimensions] Updated and saved to database:`, {
-      width: roomWidth,
-      depth: roomDepth,
-      ceilingHeight: roomCeilingHeight
-    });
+    onUpdateRoomDimensions({ width: roomWidth, height: roomHeight });
   };
 
   return (
@@ -243,8 +224,48 @@ export const PropertiesPanel: React.FC<PropertiesPanelProps> = ({
         scrollbarColor: '#9ca3af #f3f4f6',
         maxHeight: 'calc(100vh - 200px)' // Constrain height to force scrolling
       }}>
-      
-      {/* Element Properties - Show first when element is selected */}
+      {/* Room Properties */}
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center space-x-2 text-sm">
+            <Home className="h-4 w-4" />
+            <span>Room Dimensions</span>
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div className="grid grid-cols-2 gap-3">
+            <div className="space-y-1">
+              <Label htmlFor="room-width" className="text-xs">Width (cm)</Label>
+              <Input
+                id="room-width"
+                type="number"
+                value={roomWidth}
+                onChange={(e) => setRoomWidth(Number(e.target.value))}
+                className="h-8 text-xs"
+              />
+            </div>
+            <div className="space-y-1">
+              <Label htmlFor="room-height" className="text-xs">Height (cm)</Label>
+              <Input
+                id="room-height"
+                type="number"
+                value={roomHeight}
+                onChange={(e) => setRoomHeight(Number(e.target.value))}
+                className="h-8 text-xs"
+              />
+            </div>
+          </div>
+          <Button 
+            size="sm" 
+            onClick={handleRoomDimensionsUpdate}
+            className="w-full text-xs"
+          >
+            Update Room Size
+          </Button>
+        </CardContent>
+      </Card>
+
+      {/* Element Properties */}
       {selectedElement ? (
         <Card>
           <CardHeader>
@@ -325,7 +346,7 @@ export const PropertiesPanel: React.FC<PropertiesPanelProps> = ({
                     </div>
                   </div>
 
-                  <div className="grid grid-cols-3 gap-2">
+                  <div className="grid grid-cols-2 gap-3">
                     <div className="space-y-1">
                       <Label className="text-xs">Width (cm)</Label>
                       <Input
@@ -344,6 +365,9 @@ export const PropertiesPanel: React.FC<PropertiesPanelProps> = ({
                         className="h-8 text-xs"
                       />
                     </div>
+                  </div>
+
+                  {showHeightControl && (
                     <div className="space-y-1">
                       <Label className="text-xs">Height (cm)</Label>
                       <Input
@@ -353,7 +377,7 @@ export const PropertiesPanel: React.FC<PropertiesPanelProps> = ({
                         className="h-8 text-xs"
                       />
                     </div>
-                  </div>
+                  )}
 
                   <div className="space-y-2">
                     <Label className="text-xs">Rotation: {Math.round(selectedElement.rotation || 0)}°</Label>
@@ -602,61 +626,7 @@ export const PropertiesPanel: React.FC<PropertiesPanelProps> = ({
             </Tabs>
           </CardContent>
         </Card>
-      ) : null}
-
-      {/* Room Properties - Show at top when no element selected, at bottom when element is selected */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center space-x-2 text-sm">
-            <Home className="h-4 w-4" />
-            <span>Room Dimensions</span>
-          </CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="grid grid-cols-3 gap-2">
-            <div className="space-y-1">
-              <Label htmlFor="room-width" className="text-xs">Width (cm)</Label>
-              <Input
-                id="room-width"
-                type="number"
-                value={roomWidth}
-                onChange={(e) => setRoomWidth(Number(e.target.value))}
-                className="h-8 text-xs"
-              />
-            </div>
-            <div className="space-y-1">
-              <Label htmlFor="room-depth" className="text-xs">Depth (cm)</Label>
-              <Input
-                id="room-depth"
-                type="number"
-                value={roomDepth}
-                onChange={(e) => setRoomDepth(Number(e.target.value))}
-                className="h-8 text-xs"
-              />
-            </div>
-            <div className="space-y-1">
-              <Label htmlFor="room-height" className="text-xs">Height (cm)</Label>
-              <Input
-                id="room-height"
-                type="number"
-                value={roomCeilingHeight}
-                onChange={(e) => setRoomCeilingHeight(Number(e.target.value))}
-                className="h-8 text-xs"
-              />
-            </div>
-          </div>
-          <Button 
-            size="sm" 
-            onClick={handleRoomDimensionsUpdate}
-            className="w-full text-xs"
-          >
-            Update Room Size
-          </Button>
-        </CardContent>
-      </Card>
-
-      {/* Show "Select element" message only when no element is selected */}
-      {!selectedElement && (
+      ) : (
         <Card>
           <CardContent className="pt-6 text-center">
             <Settings className="h-12 w-12 text-gray-300 mx-auto mb-3" />

@@ -4,46 +4,20 @@
 
 ### 🔴 CRITICAL PRIORITY - Core Architecture Issues
 - [ ] **2D/3D Room Dimension Inconsistency** - Fundamental measurement and positioning problems
-  - ✅ **2D Wall Thickness Issue**: FIXED - 2D now renders walls with proper 10cm thickness
-  - ✅ **Drop Position Alignment**: FIXED - Components now drop relative to wall inner face (5cm clearance)
-  - ✅ **3D Coordinate Mapping**: FIXED - Proper conversion from 2D inner space to 3D coordinates
-  - ✅ **Wall Snapping System**: IMPLEMENTED - Smart wall detection with precise positioning
-  - ❌ **Wide Component Wall Snapping**: PARTIAL - Front/back walls work, left/right still have 1cm offset
-  - **Impact**: Most positioning issues resolved, minor precision adjustments needed
-  - **Priority**: HIGH - core functionality 90% complete, minor refinements needed
+  - **2D Wall Thickness Issue**: 2D walls have no thickness, causing positioning errors
+  - **Drop Position Misalignment**: Components drop relative to wall center line instead of inner face
+  - **Overlap Problem**: Components appear to overlap walls due to positioning against center line
+  - **Measurement Skew**: Room appears smaller in 3D than 2D due to wall thickness differences
+  - **Impact**: Inaccurate designs, components placed incorrectly, measurement inconsistencies
+  - **Priority**: HIGHEST - affects all room layouts and component positioning
 
 - [ ] **Component Boundary & Rotation System Overhaul** - Multiple interconnected positioning issues
   - **Rotation Boundary Problem**: Component boundaries don't rotate with the component
   - **Drag Image vs 2D Component Mismatch**: Different sizes/constraints between preview and actual placement
   - **Corner Positioning Bug**: Only works in 2/4 corners (related to boundary calculation)
-  - **Wide Component Wall Snapping**: Left/right walls still have positioning issues for width > depth components
   - **Solution Consideration**: May need separate horizontal/vertical models for accurate placement
   - **Impact**: Users cannot accurately position or rotate components
   - **Priority**: HIGHEST - core functionality broken
-
-- [ ] **Corner Logic System Deep Dive** - CRITICAL comprehensive corner system overhaul needed
-  - **Corner Auto-Rotation Bug**: Only works correctly in 2 out of 4 corners (opposite corner pairs)
-    - Top-left + Bottom-right corners work correctly
-    - Top-right + Bottom-left corners have rotation/positioning issues
-    - Affects ALL corner component types (base, wall, tall, counter-tops)
-  - **Corner Door Positioning in Elevation Views**: Inconsistent door placement across corners
-    - Door positioning logic partially fixed but still issues in some corner/elevation combinations
-    - Need unified system that works for all 4 corners in all elevation views
-  - **Corner Detection Logic**: Inconsistent behavior between different corner positions
-  - **L-shaped Boundary Calculations**: Rotation and positioning calculations don't account for L-shape properly
-  - **Root Cause**: Corner logic was developed incrementally, needs complete redesign
-  - **Impact**: Corner components (critical for kitchen design) unreliable and confusing for users
-  - **Priority**: CRITICAL - affects core kitchen design functionality
-  - **Recommended Solution**: Complete corner system rewrite with unified logic for all 4 corners
-
-- [ ] **3D View Ceiling Height Control Not Working** - Room height control works in elevation but not 3D
-  - **Issue**: Properties panel ceiling height control has no effect in 3D view
-  - **Status**: Interface updated, database storage working, elevation views work correctly
-  - **Root Cause**: 3D view components not re-rendering when ceiling height changes
-  - **Investigation Needed**: React state/props updates, 3D component lifecycle, Three.js mesh updates
-  - **Impact**: Users cannot see ceiling height changes in 3D mode
-  - **Priority**: HIGH - affects 3D room visualization accuracy
-  - **Workaround**: Users can see changes in elevation views
 
 ### 🔴 HIGH PRIORITY - Dependent on Architecture Fixes
 - [x] ✅ **Wall Unit Load Issue** - Component timing/race condition causes loading failures
@@ -210,64 +184,31 @@
 
 ## 🎯 Recommended Action Plan
 
-### Phase 5: Core Architecture Fixes (95% COMPLETE)
+### Phase 5: Core Architecture Fixes
 **Target**: v2.5 - Foundation Stability  
 **CRITICAL**: Must be completed before any other development
 
-1. ✅ **2D/3D Dimension Consistency** - COMPLETE
-   - ✅ Implement proper wall thickness in 2D view (10cm walls)
-   - ✅ Fix drop positioning to use wall inner face instead of center line
-   - ✅ Ensure room dimensions match between 2D and 3D views
-   - ✅ Update measurement tools to reflect accurate dimensions
-   - ✅ Fix tall corner unit dimensions (90x90cm database migration)
-   - ✅ Restore proper elevation heights for all component types
-   - ❌ **REMAINING**: Fine-tune left/right wall snapping for wide components (1cm offset)
+1. **2D/3D Dimension Consistency**
+   - Implement proper wall thickness in 2D view
+   - Fix drop positioning to use wall inner face instead of center line
+   - Ensure room dimensions match between 2D and 3D views
+   - Update measurement tools to reflect accurate dimensions
 
-2. **Component Boundary & Rotation System** - IDENTIFIED FOR PHASE 6
-   - ❌ **CRITICAL DISCOVERY**: Corner logic system needs complete overhaul
-   - ❌ **Auto-rotation**: Only works in 2/4 corners (opposite pairs)
-   - ❌ **Door positioning**: Inconsistent across corner/elevation combinations  
-   - ❌ **Boundary calculations**: L-shaped components not handled properly
-   - **STATUS**: Moved to dedicated "Corner Logic System Deep Dive" for comprehensive solution
+2. **Component Boundary & Rotation System**
+   - Implement proper rotated boundary calculations
+   - Sync drag image dimensions with actual component boundaries
+   - Fix corner positioning for all 4 corners
+   - Consider horizontal/vertical model variants if rotation boundaries prove unfeasible
 
-3. **Testing & Validation** - MOSTLY COMPLETE
-   - ❌ Corner placement accuracy (blocked by corner logic issues)
-   - ✅ Test measurement consistency between views
-   - ✅ Validate wall-to-component positioning (90% working)
-   - ✅ Elevation view rendering and positioning
+3. **Testing & Validation**
+   - Verify component placement accuracy in all corners
+   - Test measurement consistency between views
+   - Validate wall-to-component positioning
+   - Ensure drag preview matches final placement
 
-### Phase 6: Corner Logic System Overhaul (CRITICAL)
-**Target**: v2.6 - Complete Corner System Redesign
-**PRIORITY**: HIGHEST - Corner components are essential for kitchen design
-
-1. **Corner Auto-Rotation System Redesign**
-   - Analyze current rotation logic for all 4 corners
-   - Identify why only opposite corner pairs work (top-left+bottom-right vs top-right+bottom-left)
-   - Implement unified rotation system that works consistently across all corners
-   - Test with all corner component types (base, wall, tall, counter-tops)
-
-2. **Corner Door Positioning Unification**
-   - Create single, consistent door positioning algorithm for all elevation views
-   - Ensure doors always appear on correct side (away from wall connection)
-   - Test door positioning in all 4 corners × 4 elevation views = 16 combinations
-   - Eliminate current inconsistencies and edge cases
-
-3. **L-shaped Boundary System**
-   - Redesign boundary calculations to properly handle L-shaped footprints
-   - Implement rotation-aware boundary detection
-   - Fix hover detection, selection handles, and collision detection
-   - Ensure drag preview matches actual component boundaries
-
-4. **Corner Detection Logic Consolidation**
-   - Unify corner detection across different systems (placement, rendering, interaction)
-   - Create single source of truth for corner positioning logic
-   - Eliminate duplicate/conflicting corner detection code
-
-**SUCCESS CRITERIA**: All corner components work identically in all 4 corners with consistent behavior
-
-### Phase 7: Feature Implementation (Post-Corner-Fix)
-**Target**: v2.7 - Enhanced User Experience
-- [ ] 2D Elevation Views (front, back, left, right) - now unblocked
+### Phase 6: Feature Implementation (Post-Architecture)
+**Target**: v2.6 - Enhanced User Experience
+- [ ] 2D Elevation Views (front, back, left, right)
 - [ ] Mobile responsiveness  
 - [ ] Advanced 3D features
 - [ ] Remaining UI/UX polish items
@@ -317,5 +258,5 @@
 
 ---
 
-*Last updated: September 16, 2025 - Phase 5 Complete, Corner Logic System Deep Dive Added! 🎯*
-*Next review: After Phase 6 Corner Logic System Overhaul is complete*
+*Last updated: September 16, 2025 - Phase 5 Architecture Issues Identified! 🎯*
+*Next review: After core 2D/3D positioning system is fixed*
