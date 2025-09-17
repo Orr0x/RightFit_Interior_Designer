@@ -65,6 +65,21 @@ Use these for practical implementation:
    - Testing checklists and behavior configurations
    - Claude.ai artifact usage guidelines
 
+### **Phase 4: Strategic Context**
+Essential for understanding the bigger picture:
+
+9. **[09-CRITICAL-PROJECT-ASSESSMENT.md](./09-CRITICAL-PROJECT-ASSESSMENT.md)**
+   - Honest evaluation of current state and architecture
+   - Real problems vs. perceived problems
+   - Strategic recommendations for foundation rebuild
+   - Vision for what the app should actually become
+
+10. **[10-PROJECT-CONTEXT-AND-VISION.md](./10-PROJECT-CONTEXT-AND-VISION.md)**
+    - The real story: carpenter-turned-product-manager building vertical SaaS
+    - Market opportunity and competitive positioning
+    - Product management perspective and user stories
+    - Business strategy and go-to-market approach
+
 ---
 
 ## 🚨 **Critical Safety Rules**
