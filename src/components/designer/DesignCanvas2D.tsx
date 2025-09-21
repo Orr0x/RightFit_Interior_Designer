@@ -1001,9 +1001,21 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
       
       // Apply rotation - convert degrees to radians if needed
       if (isCornerCounterTop || isCornerWallCabinet || isCornerBaseCabinet || isCornerTallUnit) {
-        // For L-shaped components, rotate around the L-shape center (45cm, 45cm)
-        const lShapeCenterX = 45 * zoom; // Center of 90cm leg
-        const lShapeCenterY = 45 * zoom; // Center of 90cm leg
+        // For L-shaped components, rotate around the TRUE CENTROID (not bounding box center)
+        // Calculate TRUE centroid of L-shape (two rectangles)
+        // Rectangle 1 (horizontal): 90cm × 60cm, center at (45, 30)
+        // Rectangle 2 (vertical): 60cm × 90cm, center at (30, 45)
+        // Area-weighted centroid calculation:
+        const rect1Area = 90 * 60; // 5400
+        const rect2Area = 60 * 90; // 5400 
+        const totalArea = rect1Area + rect2Area; // 10800
+        
+        // Centroid coordinates (area-weighted average)
+        const centroidX = ((45 * rect1Area) + (30 * rect2Area)) / totalArea; // 37.5cm
+        const centroidY = ((30 * rect1Area) + (45 * rect2Area)) / totalArea; // 37.5cm
+        
+        const lShapeCenterX = centroidX * zoom;
+        const lShapeCenterY = centroidY * zoom;
         ctx.translate(pos.x + lShapeCenterX, pos.y + lShapeCenterY);
         ctx.rotate(rotation * Math.PI / 180);
         ctx.translate(-lShapeCenterX, -lShapeCenterY);
