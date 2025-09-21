@@ -1001,38 +1001,14 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
       
       // Apply rotation - convert degrees to radians if needed
       if (isCornerCounterTop || isCornerWallCabinet || isCornerBaseCabinet || isCornerTallUnit) {
-        // For L-shaped corner components, rotate around WALL CORNER POINT (not centroid)
-        // Corner cabinets are designed to fit into wall corners and should rotate around that corner
-        // Research shows: translate(pivot) -> rotate(angle) -> translate(-pivot) -> draw()
+        // For L-shaped components, rotate around the TRUE CENTROID - pivot point is correct
+        // FOCUS: The rotation CENTER is fine, the issue is the rotation ANGLES for each corner
+        const centroidX = 37.5 * zoom; // Correct centroid calculation  
+        const centroidY = 37.5 * zoom; // Correct centroid calculation
         
-        // Determine the wall corner point based on rotation
-        let cornerPivotX, cornerPivotY;
-        
-        switch(rotation) {
-          case 0:   // Top-left corner - pivot at top-left of component
-            cornerPivotX = 0;
-            cornerPivotY = 0;
-            break;
-          case 90:  // Bottom-left corner - pivot at bottom-left of component  
-            cornerPivotX = 0;
-            cornerPivotY = 90 * zoom;
-            break;
-          case 180: // Bottom-right corner - pivot at bottom-right of component
-            cornerPivotX = 90 * zoom;
-            cornerPivotY = 90 * zoom;
-            break;
-          case 270: // Top-right corner - pivot at top-right of component
-            cornerPivotX = 90 * zoom;
-            cornerPivotY = 0;
-            break;
-          default:
-            cornerPivotX = 0;
-            cornerPivotY = 0;
-        }
-        
-        ctx.translate(pos.x + cornerPivotX, pos.y + cornerPivotY);
+        ctx.translate(pos.x + centroidX, pos.y + centroidY);
         ctx.rotate(rotation * Math.PI / 180);
-        ctx.translate(-cornerPivotX, -cornerPivotY);
+        ctx.translate(-centroidX, -centroidY);
       } else {
         // Standard rectangular rotation from center
         ctx.translate(pos.x + width / 2, pos.y + depth / 2);

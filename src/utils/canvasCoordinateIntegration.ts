@@ -140,48 +140,43 @@ export class CanvasCoordinateIntegrator {
     // DIAGONAL CORNER LOGIC: L-shaped components have 2 diagonal pairs
     // Each diagonal pair mirrors each other's L-opening toward room center
     
-    // DIAGONAL SET 1: Top-Left ↔ Bottom-Right (both open toward center)
-    const diagonalSet1 = [
+    // FOCUS: Correct rotation angles based on which corner works (top-left at 0°)
+    // Top-left works at 0°, so let's figure out the correct angles for other corners
+    
+    const corners = [
       {
         name: 'top-left',
         condition: dropX <= cornerThreshold && dropY <= cornerThreshold,
         position: { x: bounds.minX, y: bounds.minY },
-        rotation: 0 // L opens down-right (toward room center)
+        rotation: 0 // WORKS - L opens down-right (toward room center)
       },
-      {
-        name: 'bottom-right',
-        condition: dropX >= (roomBounds.width - cornerThreshold) && dropY >= (roomBounds.height - cornerThreshold),
-        position: { x: bounds.maxX, y: bounds.maxY },
-        rotation: 180 // L opens up-left (toward room center) - DIAGONAL MIRROR of top-left
-      }
-    ];
-    
-    // DIAGONAL SET 2: Top-Right ↔ Bottom-Left (both open toward center)
-    const diagonalSet2 = [
       {
         name: 'top-right', 
         condition: dropX >= (roomBounds.width - cornerThreshold) && dropY <= cornerThreshold,
         position: { x: bounds.maxX, y: bounds.minY },
-        rotation: 270 // L opens down-left (toward room center)
+        rotation: 90 // Try 90° instead of 270° - L should open down-left
       },
       {
         name: 'bottom-left',
         condition: dropX <= cornerThreshold && dropY >= (roomBounds.height - cornerThreshold),
         position: { x: bounds.minX, y: bounds.maxY },
-        rotation: 90 // L opens up-right (toward room center) - DIAGONAL MIRROR of top-right
+        rotation: 270 // Try 270° instead of 90° - L should open up-right  
+      },
+      {
+        name: 'bottom-right',
+        condition: dropX >= (roomBounds.width - cornerThreshold) && dropY >= (roomBounds.height - cornerThreshold),
+        position: { x: bounds.maxX, y: bounds.maxY },
+        rotation: 180 // Keep 180° - L should open up-left
       }
     ];
     
-    // Combine both diagonal sets
-    const corners = [...diagonalSet1, ...diagonalSet2];
-    
     for (const corner of corners) {
       if (corner.condition) {
-        // Determine which diagonal set this corner belongs to
-        const diagonalInfo = diagonalSet1.includes(corner) ? 'Diagonal Set 1 (Top-Left ↔ Bottom-Right)' : 'Diagonal Set 2 (Top-Right ↔ Bottom-Left)';
+        // Log corner detection
+        const cornerInfo = `${corner.name} corner (rotation: ${corner.rotation}°)`;
         
         console.log(`🔲 [CanvasIntegrator] Corner placement MATCHED: ${corner.name} at (${corner.position.x}, ${corner.position.y}) with rotation ${corner.rotation}°`);
-        console.log(`🔄 [CanvasIntegrator] Using ${diagonalInfo} - L opens toward room center`);
+        console.log(`🔄 [CanvasIntegrator] Using ${cornerInfo} - L opens toward room center`);
         
         return {
           x: corner.position.x,
