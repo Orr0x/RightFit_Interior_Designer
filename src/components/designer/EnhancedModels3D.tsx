@@ -131,6 +131,7 @@ export const EnhancedCabinet3D: React.FC<Enhanced3DModelProps> = ({
   
   const isCornerCabinet = element.id.includes('corner-cabinet') || 
                         element.id.includes('l-shaped-test-cabinet') || 
+                        element.id.includes('new-corner-wall-cabinet') ||
                         element.style?.toLowerCase().includes('corner');
                         
   const isLarderCornerUnit = element.id.includes('larder-corner-unit');
