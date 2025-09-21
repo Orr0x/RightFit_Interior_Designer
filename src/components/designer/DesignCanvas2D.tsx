@@ -4,8 +4,6 @@ import { ComponentService } from '@/services/ComponentService';
 import { RoomService } from '@/services/RoomService';
 import { useTouchEvents, TouchPoint } from '@/hooks/useTouchEvents';
 import { useIsMobile } from '@/hooks/use-mobile';
-import { getEnhancedComponentPlacement } from '@/utils/canvasCoordinateIntegration';
-import { initializeCoordinateEngine } from '@/services/CoordinateTransformEngine';
 
 // Throttle function for performance optimization
 const throttle = <T extends (...args: any[]) => void>(func: T, delay: number): T => {
@@ -100,8 +98,8 @@ const getRotatedBoundingBox = (element: DesignElement) => {
   
   // Determine if this is a corner component with L-shaped footprint
   const isCornerCounterTop = element.type === 'counter-top' && element.id.includes('counter-top-corner');
-  const isCornerWallCabinet = element.type === 'cabinet' && (element.id.includes('corner-wall-cabinet') || element.id.includes('new-corner-wall-cabinet'));
-  const isCornerBaseCabinet = element.type === 'cabinet' && (element.id.includes('corner-base-cabinet') || element.id.includes('l-shaped-test-cabinet'));
+  const isCornerWallCabinet = element.type === 'cabinet' && element.id.includes('corner-wall-cabinet');
+  const isCornerBaseCabinet = element.type === 'cabinet' && element.id.includes('corner-base-cabinet');
   const isCornerTallUnit = element.type === 'cabinet' && (
     element.id.includes('corner-tall') || 
     element.id.includes('corner-larder') ||
@@ -111,22 +109,22 @@ const getRotatedBoundingBox = (element: DesignElement) => {
   const isCornerComponent = isCornerCounterTop || isCornerWallCabinet || isCornerBaseCabinet || isCornerTallUnit;
   
   if (isCornerComponent) {
-    // Corner components use their ACTUAL dimensions (no more hardcoded 90x90)
-    const width = element.width;
-    const height = element.depth || element.height;
-    const centerX = element.x + width / 2;
-    const centerY = element.y + height / 2;
+    // L-shaped components use 90x90 footprint
+    const size = 90;
+    const centerX = element.x + 45; // Center of L-shape
+    const centerY = element.y + 45;
     
-    // Use actual component dimensions for bounding box
+    // For L-shaped components, we use a 90x90 bounding box regardless of rotation
+    // This is a simplification but ensures consistent behavior
     return {
       minX: element.x,
       minY: element.y,
-      maxX: element.x + width,
-      maxY: element.y + height,
+      maxX: element.x + size,
+      maxY: element.y + size,
       centerX,
       centerY,
-      width: width,
-      height: height,
+      width: size,
+      height: size,
       isCorner: true
     };
   } else {
@@ -203,10 +201,9 @@ const isPointInRotatedComponent = (pointX: number, pointY: number, element: Desi
                            ));
   
   if (isCornerComponent) {
-    // L-shaped components use their actual square footprint - dynamic check
-    const squareSize = Math.min(element.width, element.depth); // Use smaller dimension for square
-    return pointX >= element.x && pointX <= element.x + squareSize &&
-           pointY >= element.y && pointY <= element.y + squareSize;
+    // L-shaped components use 90x90 footprint - simplified check
+    return pointX >= element.x && pointX <= element.x + 90 &&
+           pointY >= element.y && pointY <= element.y + 90;
   } else {
     // Standard rectangular component with rotation
     const width = element.width;
@@ -464,14 +461,6 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
         // Load room configuration
         await getRoomConfig(design.roomType, design.roomDimensions);
         
-        // Initialize the coordinate engine with current room dimensions
-        try {
-          initializeCoordinateEngine(design.roomDimensions);
-          console.log('🏗️ [DesignCanvas2D] Coordinate engine initialized for room:', design.roomDimensions);
-        } catch (error) {
-          console.warn('⚠️ [DesignCanvas2D] Failed to initialize coordinate engine:', error);
-        }
-        
         // Preload common component behaviors (use actual database types)
         const commonTypes = ['cabinet', 'appliance', 'counter-top', 'end-panel', 
           'window', 'door', 'flooring', 'toe-kick', 'cornice', 'pelmet'];
@@ -658,7 +647,7 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
       // ALL corner components use 90cm square dimensions for detection
       const isCornerCounterTop = element.type === 'counter-top' && element.id.includes('counter-top-corner');
       const isCornerWallCabinet = element.type === 'cabinet' && element.id.includes('corner-wall-cabinet');
-      const isCornerBaseCabinet = element.type === 'cabinet' && (element.id.includes('corner-base-cabinet') || element.id.includes('l-shaped-test-cabinet'));
+      const isCornerBaseCabinet = element.type === 'cabinet' && element.id.includes('corner-base-cabinet');
       const isCornerTallUnit = element.type === 'cabinet' && (
         element.id.includes('corner-tall') || 
         element.id.includes('corner-larder') ||
@@ -992,8 +981,8 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
       
       // Check if this is a corner component for proper rotation center
       const isCornerCounterTop = element.type === 'counter-top' && element.id.includes('counter-top-corner');
-      const isCornerWallCabinet = element.type === 'cabinet' && (element.id.includes('corner-wall-cabinet') || element.id.includes('new-corner-wall-cabinet'));
-      const isCornerBaseCabinet = element.type === 'cabinet' && (element.id.includes('corner-base-cabinet') || element.id.includes('l-shaped-test-cabinet'));
+      const isCornerWallCabinet = element.type === 'cabinet' && element.id.includes('corner-wall-cabinet');
+      const isCornerBaseCabinet = element.type === 'cabinet' && element.id.includes('corner-base-cabinet');
       const isCornerTallUnit = element.type === 'cabinet' && (
         element.id.includes('corner-tall') || 
         element.id.includes('corner-larder') ||
@@ -1001,10 +990,19 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
       );
       
       // Apply rotation - convert degrees to radians if needed
-      // SIMPLIFIED: Corner units are squares, so use standard center rotation for all
-      ctx.translate(pos.x + width / 2, pos.y + depth / 2);
-      ctx.rotate(rotation * Math.PI / 180);
-      ctx.translate(-width / 2, -depth / 2);
+      if (isCornerCounterTop || isCornerWallCabinet || isCornerBaseCabinet || isCornerTallUnit) {
+        // For L-shaped components, rotate around the L-shape center (45cm, 45cm)
+        const lShapeCenterX = 45 * zoom; // Center of 90cm leg
+        const lShapeCenterY = 45 * zoom; // Center of 90cm leg
+        ctx.translate(pos.x + lShapeCenterX, pos.y + lShapeCenterY);
+        ctx.rotate(rotation * Math.PI / 180);
+        ctx.translate(-lShapeCenterX, -lShapeCenterY);
+      } else {
+        // Standard rectangular rotation from center
+        ctx.translate(pos.x + width / 2, pos.y + depth / 2);
+        ctx.rotate(rotation * Math.PI / 180);
+        ctx.translate(-width / 2, -depth / 2);
+      }
 
       // Element fill
       if (isSelected) {
@@ -1018,72 +1016,96 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
       // L-shape rendering for corner components
       
       if (isCornerCounterTop) {
-        // DYNAMIC: Draw corner counter top as a SQUARE using actual dimensions
-        // This works with any square corner component (60x60, 90x90, etc.)
-        const squareSize = Math.min(element.width, element.depth) * zoom; // Use actual square size
+        // Draw L-shaped corner counter top in plan view
+        // Match the 3D geometry: 90cm legs with 60cm depth
+        const legLength = 90 * zoom; // 90cm legs
+        const legDepth = 60 * zoom;  // 60cm depth
         
-        // Draw simple square - no rotation needed
-        ctx.fillRect(0, 0, squareSize, squareSize);
+        // X leg (horizontal section)
+        ctx.fillRect(0, 0, legLength, legDepth);
         
-        // Element border for square (only when selected)
+        // Z leg (vertical section) - positioned to form L-shape
+        ctx.fillRect(0, 0, legDepth, legLength);
+        
+        // Element border for L-shape (only when selected)
         if (isSelected) {
           ctx.strokeStyle = '#ff0000';
           ctx.lineWidth = 2;
           ctx.setLineDash([]);
-          ctx.strokeRect(0, 0, squareSize, squareSize);
+          
+          // Border for X leg
+          ctx.strokeRect(0, 0, legLength, legDepth);
+          // Border for Z leg  
+          ctx.strokeRect(0, 0, legDepth, legLength);
         }
       } else if (isCornerWallCabinet) {
-        // SIMPLIFIED: Draw corner wall cabinet as a SQUARE using ACTUAL element dimensions
-        // For new 60x60 cabinet, this will be 60x60. For old 90x35 cabinet, use smaller dimension
-        const actualWidth = element.width * zoom;   // Use actual element width
-        const actualDepth = element.depth * zoom;   // Use actual element depth
+        // Draw L-shaped corner wall cabinet in plan view
+        // Match the 3D geometry: 90cm legs with 35cm depth (wall cabinet depth)
+        const legLength = 90 * zoom; // 90cm legs
+        const legDepth = 35 * zoom;  // 35cm depth for wall cabinets
         
-        // For square cabinets (like new 60x60), use full size. For rectangular (like old 90x35), use smaller
-        const squareSize = (actualWidth === actualDepth) ? actualWidth : Math.min(actualWidth, actualDepth);
+        // X leg (horizontal section)
+        ctx.fillRect(0, 0, legLength, legDepth);
         
-        // Center the square within the actual bounding box
-        const offsetX = (actualWidth - squareSize) / 2;  // Center horizontally
-        const offsetY = (actualDepth - squareSize) / 2;   // Center vertically
+        // Z leg (vertical section) - positioned to form L-shape
+        ctx.fillRect(0, 0, legDepth, legLength);
         
-        // Draw square centered in bounding box
-        ctx.fillRect(offsetX, offsetY, squareSize, squareSize);
-        
-        // Element border for square (only when selected)
+        // Element border for L-shape (only when selected)
         if (isSelected) {
           ctx.strokeStyle = '#ff0000';
           ctx.lineWidth = 2;
           ctx.setLineDash([]);
-          ctx.strokeRect(offsetX, offsetY, squareSize, squareSize);
+          
+          // Border for X leg
+          ctx.strokeRect(0, 0, legLength, legDepth);
+          // Border for Z leg  
+          ctx.strokeRect(0, 0, legDepth, legLength);
         }
       } else if (isCornerBaseCabinet) {
-        // DYNAMIC: Draw corner base cabinet as a SQUARE using actual dimensions
-        // This works with any square corner component (60x60, 90x90, etc.)
-        const squareSize = Math.min(element.width, element.depth) * zoom; // Use actual square size
+        // Draw L-shaped corner base cabinet in plan view
+        // Match the 3D geometry: 90cm legs with 60cm depth (base cabinet depth)
+        const legLength = 90 * zoom; // 90cm legs
+        const legDepth = 60 * zoom;  // 60cm depth for base cabinets
         
-        // Draw simple square - no rotation needed
-        ctx.fillRect(0, 0, squareSize, squareSize);
+        // X leg (horizontal section)
+        ctx.fillRect(0, 0, legLength, legDepth);
         
-        // Element border for square (only when selected)
+        // Z leg (vertical section) - positioned to form L-shape
+        ctx.fillRect(0, 0, legDepth, legLength);
+        
+        // Element border for L-shape (only when selected)
         if (isSelected) {
           ctx.strokeStyle = '#ff0000';
           ctx.lineWidth = 2;
           ctx.setLineDash([]);
-          ctx.strokeRect(0, 0, squareSize, squareSize);
+          
+          // Border for X leg
+          ctx.strokeRect(0, 0, legLength, legDepth);
+          // Border for Z leg  
+          ctx.strokeRect(0, 0, legDepth, legLength);
         }
       } else if (isCornerTallUnit) {
-        // DYNAMIC: Draw corner tall unit as a SQUARE using actual dimensions
-        // This works with any square corner component (60x60, 90x90, etc.)
-        const squareSize = Math.min(element.width, element.depth) * zoom; // Use actual square size
+        // Draw L-shaped corner tall unit in plan view
+        // Match the 3D geometry: 90cm legs with 60cm depth (tall unit depth)
+        const legLength = 90 * zoom; // 90cm legs
+        const legDepth = 60 * zoom;  // 60cm depth for tall units
         
-        // Draw simple square - no rotation needed
-        ctx.fillRect(0, 0, squareSize, squareSize);
+        // X leg (horizontal section)
+        ctx.fillRect(0, 0, legLength, legDepth);
         
-        // Element border for square (only when selected)
+        // Z leg (vertical section) - positioned to form L-shape
+        ctx.fillRect(0, 0, legDepth, legLength);
+        
+        // Element border for L-shape (only when selected)
         if (isSelected) {
           ctx.strokeStyle = '#ff0000';
           ctx.lineWidth = 2;
           ctx.setLineDash([]);
-          ctx.strokeRect(0, 0, squareSize, squareSize);
+          
+          // Border for X leg
+          ctx.strokeRect(0, 0, legLength, legDepth);
+          // Border for Z leg  
+          ctx.strokeRect(0, 0, legDepth, legLength);
         }
       } else {
         // Standard rectangular rendering
@@ -2132,7 +2154,7 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
     
     // Check if this is a corner component for L-shape preview
     const isCornerCounterTop = draggedElement.type === 'counter-top' && draggedElement.id.includes('counter-top-corner');
-    const isCornerWallCabinet = draggedElement.type === 'cabinet' && (draggedElement.id.includes('corner-wall-cabinet') || draggedElement.id.includes('new-corner-wall-cabinet'));
+    const isCornerWallCabinet = draggedElement.type === 'cabinet' && draggedElement.id.includes('corner-wall-cabinet');
     const isCornerBaseCabinet = draggedElement.type === 'cabinet' && draggedElement.id.includes('corner-base-cabinet');
     const isCornerTallUnit = draggedElement.type === 'cabinet' && (
       draggedElement.id.includes('corner-tall') || 
@@ -2151,51 +2173,65 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
     ctx.setLineDash([5, 5]);
     
     if (isCornerCounterTop) {
-      // DYNAMIC: Draw square counter top drag preview using actual dimensions
-      const squareSize = Math.min(draggedElement.width, draggedElement.depth) * zoom;
+      // Draw L-shaped counter top drag preview
+      const legLength = 90 * zoom; // 90cm legs
+      const legDepth = 60 * zoom;  // 60cm depth
       
       // Preview fill
       ctx.fillStyle = draggedElement.color || '#8b4513';
       
-      // Draw square preview (simplified)
-      ctx.fillRect(pos.x, pos.y, squareSize, squareSize);
-      ctx.strokeRect(pos.x, pos.y, squareSize, squareSize);
+      // X leg (horizontal section)
+      ctx.fillRect(pos.x, pos.y, legLength, legDepth);
+      ctx.strokeRect(pos.x, pos.y, legLength, legDepth);
+      
+      // Z leg (vertical section)
+      ctx.fillRect(pos.x, pos.y, legDepth, legLength);
+      ctx.strokeRect(pos.x, pos.y, legDepth, legLength);
     } else if (isCornerWallCabinet) {
-      // Draw SQUARE drag preview for corner wall cabinets (using actual dimensions)
-      const actualWidth = draggedElement.width * zoom;
-      const actualDepth = draggedElement.depth * zoom;
-      
-      // For square cabinets (like new 60x60), use full size. For rectangular (like old 90x35), use smaller
-      const squareSize = (actualWidth === actualDepth) ? actualWidth : Math.min(actualWidth, actualDepth);
+      // Draw L-shaped wall cabinet drag preview
+      const legLength = 90 * zoom; // 90cm legs
+      const legDepth = 35 * zoom;  // 35cm depth for wall cabinets
       
       // Preview fill
       ctx.fillStyle = draggedElement.color || '#8b4513';
       
-      // Draw square preview (centered if needed)
-      const offsetX = (actualWidth - squareSize) / 2;
-      const offsetY = (actualDepth - squareSize) / 2;
-      ctx.fillRect(pos.x + offsetX, pos.y + offsetY, squareSize, squareSize);
-      ctx.strokeRect(pos.x + offsetX, pos.y + offsetY, squareSize, squareSize);
+      // X leg (horizontal section)
+      ctx.fillRect(pos.x, pos.y, legLength, legDepth);
+      ctx.strokeRect(pos.x, pos.y, legLength, legDepth);
+      
+      // Z leg (vertical section)
+      ctx.fillRect(pos.x, pos.y, legDepth, legLength);
+      ctx.strokeRect(pos.x, pos.y, legDepth, legLength);
     } else if (isCornerBaseCabinet) {
-      // DYNAMIC: Draw square base cabinet drag preview using actual dimensions
-      const squareSize = Math.min(draggedElement.width, draggedElement.depth) * zoom;
+      // Draw L-shaped base cabinet drag preview
+      const legLength = 90 * zoom; // 90cm legs
+      const legDepth = 60 * zoom;  // 60cm depth for base cabinets
       
       // Preview fill
       ctx.fillStyle = draggedElement.color || '#8b4513';
       
-      // Draw square preview (simplified)
-      ctx.fillRect(pos.x, pos.y, squareSize, squareSize);
-      ctx.strokeRect(pos.x, pos.y, squareSize, squareSize);
+      // X leg (horizontal section)
+      ctx.fillRect(pos.x, pos.y, legLength, legDepth);
+      ctx.strokeRect(pos.x, pos.y, legLength, legDepth);
+      
+      // Z leg (vertical section)
+      ctx.fillRect(pos.x, pos.y, legDepth, legLength);
+      ctx.strokeRect(pos.x, pos.y, legDepth, legLength);
     } else if (isCornerTallUnit) {
-      // DYNAMIC: Draw square tall unit drag preview using actual dimensions
-      const squareSize = Math.min(draggedElement.width, draggedElement.depth) * zoom;
+      // Draw L-shaped tall unit drag preview
+      const legLength = 90 * zoom; // 90cm legs
+      const legDepth = 60 * zoom;  // 60cm depth for tall units
       
       // Preview fill
       ctx.fillStyle = draggedElement.color || '#8b4513';
       
-      // Draw square preview (simplified)
-      ctx.fillRect(pos.x, pos.y, squareSize, squareSize);
-      ctx.strokeRect(pos.x, pos.y, squareSize, squareSize);
+      // X leg (horizontal section)
+      ctx.fillRect(pos.x, pos.y, legLength, legDepth);
+      ctx.strokeRect(pos.x, pos.y, legLength, legDepth);
+      
+      // Z leg (vertical section)
+      ctx.fillRect(pos.x, pos.y, legDepth, legLength);
+      ctx.strokeRect(pos.x, pos.y, legDepth, legLength);
     } else {
       // Standard rectangular drag preview
       const width = draggedElement.width * zoom;
@@ -2545,7 +2581,7 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
       // Update element with final position - use effective footprint for plan view
       let clampWidth = draggedElement.width;
       let clampDepth = draggedElement.depth;
-      // DYNAMIC: Corner components use their actual square footprint
+      // Corner components occupy a 90x90 footprint in plan view
       const isCornerCounterTop = draggedElement.type === 'counter-top' && draggedElement.id.includes('counter-top-corner');
       const isCornerWallCabinet = draggedElement.type === 'cabinet' && draggedElement.id.includes('corner-wall-cabinet');
       const isCornerBaseCabinet = draggedElement.type === 'cabinet' && draggedElement.id.includes('corner-base-cabinet');
@@ -2556,23 +2592,21 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
       );
       
       if (isCornerCounterTop || isCornerWallCabinet || isCornerBaseCabinet || isCornerTallUnit) {
-        // Use actual square dimensions for corner components
-        const squareSize = Math.min(draggedElement.width, draggedElement.depth);
-        clampWidth = squareSize;
-        clampDepth = squareSize;
+        clampWidth = 90;  // L-shaped components use 90x90 footprint
+        clampDepth = 90;
       }
 
       // Apply Smart Wall Snapping for dragged elements
       const isCornerComponent = isCornerCounterTop || isCornerWallCabinet || isCornerBaseCabinet || isCornerTallUnit;
       
-      const dragWallSnappedPos = getEnhancedComponentPlacement(
+      const dragWallSnappedPos = getWallSnappedPosition(
         finalX,
         finalY,
         draggedElement.width,
         draggedElement.depth || draggedElement.height,
-        draggedElement.id,
-        draggedElement.type || 'cabinet',
-        design.roomDimensions
+        innerRoomBounds.width,
+        innerRoomBounds.height,
+        isCornerComponent
       );
 
       // Use wall snapped position if snapped, otherwise clamp to boundaries
@@ -2660,10 +2694,9 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
         const isCornerCounterTop = element.type === 'counter-top' && element.id.includes('counter-top-corner');
         
         if (isCornerCounterTop) {
-          // DYNAMIC: Use actual square dimensions for corner counter tops
-          const squareSize = Math.min(element.width, element.depth);
-          return roomPos.x >= element.x && roomPos.x <= element.x + squareSize &&
-                 roomPos.y >= element.y && roomPos.y <= element.y + squareSize;
+          // Use 90cm x 90cm square for corner counter tops
+          return roomPos.x >= element.x && roomPos.x <= element.x + 90 &&
+                 roomPos.y >= element.y && roomPos.y <= element.y + 90;
         } else {
           // Standard rectangular hit detection
           return roomPos.x >= element.x && roomPos.x <= element.x + element.width &&
@@ -2778,23 +2811,21 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
         );
         
         if (isCornerCounterTop || isCornerWallCabinet || isCornerBaseCabinet || isCornerTallUnit) {
-          // DYNAMIC: Use actual square dimensions for corner components
-          const squareSize = Math.min(draggedElement.width, draggedElement.depth);
-          clampWidth = squareSize;
-          clampDepth = squareSize;
+          clampWidth = 90;  // L-shaped components use 90x90 footprint
+          clampDepth = 90;
         }
 
         // Apply Smart Wall Snapping for dragged elements
         const isCornerComponent = isCornerCounterTop || isCornerWallCabinet || isCornerBaseCabinet || isCornerTallUnit;
         
-        const dragWallSnappedPos = getEnhancedComponentPlacement(
+        const dragWallSnappedPos = getWallSnappedPosition(
           finalX,
           finalY,
           draggedElement.width,
           draggedElement.depth || draggedElement.height,
-          draggedElement.id,
-          draggedElement.type || 'cabinet',
-          design.roomDimensions
+          innerRoomBounds.width,
+          innerRoomBounds.height,
+          isCornerComponent
         );
 
         // Use wall snapped position if snapped, otherwise clamp to boundaries
@@ -2899,9 +2930,11 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
       const roomPos = canvasToRoom(x, y);
 
       // Calculate drop position based on mouse coordinates
-      // The drag image center is already positioned correctly, so use mouse position directly
-      const dropX = roomPos.x;
-      const dropY = roomPos.y;
+
+      // 🎯 FIX: Drop position should place component center at mouse position
+      // The drag image center represents where the component center should be placed
+      const dropX = roomPos.x - (componentData.width / 2);
+      const dropY = roomPos.y - (componentData.depth / 2);
 
 
       // 🎯 BOUNDARY CHECK: Prevent drops outside inner room boundaries (usable space)
@@ -2911,13 +2944,19 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
         return;
       }
 
-      // Use actual component dimensions for ALL components (no more forced 90x90)
+      // Determine effective dimensions for boundary checks
+      // Corner components use 90x90 footprint regardless of their actual dimensions
       const isCornerComponent = componentData.id?.includes('corner-') || 
                                componentData.id?.includes('-corner') ||
                                componentData.id?.includes('corner');
       
-      const effectiveWidth = componentData.width;
-      const effectiveDepth = componentData.depth;
+      let effectiveWidth = componentData.width;
+      let effectiveDepth = componentData.depth;
+      
+      if (isCornerComponent) {
+        effectiveWidth = 90;  // L-shaped components use 90x90 footprint
+        effectiveDepth = 90;
+      }
 
       // Set default Z position based on component type
       let defaultZ = 0; // Default for floor-mounted components
@@ -2935,38 +2974,34 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
         defaultZ = 90; // 90cm height for windows
       }
 
-      // Apply Enhanced Component Placement using unified coordinate system
-      const placementResult = getEnhancedComponentPlacement(
+      // Apply Smart Wall Snapping with 5cm clearance
+      const wallSnappedPos = getWallSnappedPosition(
         dropX,
         dropY,
         effectiveWidth,
         effectiveDepth,
-        componentData.id,
-        componentData.type,
-        design.roomDimensions
+        innerRoomBounds.width,
+        innerRoomBounds.height,
+        isCornerComponent
       );
 
-      // Log placement results for debugging
-      if (placementResult.snappedToWall) {
-        console.log(`🎯 [Enhanced Placement] Component snapped to ${placementResult.corner || 'wall'} at (${placementResult.x}, ${placementResult.y}) with rotation ${placementResult.rotation}°`);
-      }
-      
-      // Validate placement
-      if (!placementResult.withinBounds) {
-        console.warn('⚠️ [Enhanced Placement] Component placement outside room bounds, adjusting...');
+      // Log snapping results for debugging
+      if (wallSnappedPos.snappedToWall) {
+        console.log(`🎯 [Wall Snap] Component snapped to ${wallSnappedPos.corner || 'wall'} at (${wallSnappedPos.x}, ${wallSnappedPos.y})`);
       }
 
       const newElement: DesignElement = {
         id: `${componentData.id}-${Date.now()}`,
         type: componentData.type,
-        // Use enhanced placement results with proper wall clearance and rotation
-        x: placementResult.snappedToWall ? placementResult.x : snapToGrid(placementResult.x),
-        y: placementResult.snappedToWall ? placementResult.y : snapToGrid(placementResult.y),
+        // CRITICAL FIX: Don't apply grid snapping if component was snapped to wall
+        // Grid snapping can move components away from precise wall positions
+        x: wallSnappedPos.snappedToWall ? wallSnappedPos.x : snapToGrid(wallSnappedPos.x),
+        y: wallSnappedPos.snappedToWall ? wallSnappedPos.y : snapToGrid(wallSnappedPos.y),
         z: defaultZ, // Set appropriate Z position
         width: componentData.width, // X-axis dimension
         depth: componentData.depth, // Y-axis dimension (front-to-back)
         height: componentData.height, // Z-axis dimension (bottom-to-top)
-        rotation: placementResult.rotation, // Use calculated rotation from enhanced placement
+        rotation: 0,
         color: componentData.color,
         style: componentData.name
       };
@@ -3086,4 +3121,3 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
     </div>
   );
 };
-

@@ -130,8 +130,6 @@ export const EnhancedCabinet3D: React.FC<Enhanced3DModelProps> = ({
                         element.id.includes('wall-cabinet');
   
   const isCornerCabinet = element.id.includes('corner-cabinet') || 
-                        element.id.includes('l-shaped-test-cabinet') || 
-                        element.id.includes('new-corner-wall-cabinet') ||
                         element.style?.toLowerCase().includes('corner');
                         
   const isLarderCornerUnit = element.id.includes('larder-corner-unit');
@@ -192,8 +190,8 @@ export const EnhancedCabinet3D: React.FC<Enhanced3DModelProps> = ({
   const cabinetHeight = isWallCabinet ? height : height - plinthHeight;
   const doorHeight = cabinetHeight - 0.05; // Door height with slight gap
   
-  // Corner cabinet specific dimensions - use actual element dimensions
-  const legLength = width; // Use the actual width dimension for L-shape legs (0.6m for 60cm, 0.9m for 90cm)
+  // Corner cabinet specific dimensions - restore original geometry
+  const legLength = 0.9; // 90cm leg length for corner cabinets (ORIGINAL - DO NOT CHANGE)
   
   // Specialized rendering for different cabinet types
   if (isCornerCabinet) {
@@ -1694,4 +1692,3 @@ export const EnhancedWallUnitEndPanel3D: React.FC<Enhanced3DModelProps> = ({ ele
   );
 };
 // Missing component exports restored after cleanup
-

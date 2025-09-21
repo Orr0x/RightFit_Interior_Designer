@@ -275,36 +275,6 @@
     "tags": []
   },
   {
-    "component_id": "l-shaped-test-cabinet",
-    "name": "L-Shaped Test Cabinet",
-    "type": "cabinet",
-    "width": 90,
-    "depth": 90,
-    "height": 90,
-    "color": "#FF6B35",
-    "category": "base-cabinets",
-    "room_types": [
-      "kitchen"
-    ],
-    "icon_name": "Square",
-    "description": "Test component with proper L-shaped geometry (2 x 90cm legs)",
-    "version": "1.0.0",
-    "deprecated": false,
-    "metadata": {
-      "isLShaped": true,
-      "legLength": 90,
-      "legDepth": 60,
-      "geometry": {
-        "type": "L-shaped",
-        "legs": [
-          { "x": 0, "y": 0, "width": 90, "depth": 60 },
-          { "x": 0, "y": 0, "width": 60, "depth": 90 }
-        ]
-      }
-    },
-    "tags": ["test", "l-shaped", "corner"]
-  },
-  {
     "component_id": "pan-drawers-50",
     "name": "Pan Drawers 50cm",
     "type": "cabinet",
@@ -455,28 +425,6 @@
     "deprecated": false,
     "metadata": {},
     "tags": []
-  },
-  {
-    "component_id": "new-corner-wall-cabinet",
-    "name": "New Corner Wall Cabinet",
-    "type": "cabinet",
-    "width": 60,
-    "depth": 60,
-    "height": 60,
-    "color": "#FF6B35",
-    "category": "wall-units",
-    "room_types": [
-      "kitchen"
-    ],
-    "icon_name": "Square",
-    "description": "Corner wall cabinet with proper 60x60x60 dimensions (60x60 square works like base cabinet)",
-    "version": "1.0.0",
-    "deprecated": false,
-    "metadata": {
-      "isCorner": true,
-      "mountType": "wall"
-    },
-    "tags": ["test", "corner", "wall"]
   },
   {
     "component_id": "refrigerator",

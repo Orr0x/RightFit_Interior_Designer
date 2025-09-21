@@ -13,7 +13,6 @@ INSERT INTO public.components (
 ('base-cabinet-50', 'Base Cabinet 50cm', 'cabinet', 50, 60, 90, '#8b4513', 'base-cabinets', ARRAY['kitchen'], 'Archive', 'Medium 50cm base cabinet', '1.0.0', false, '{}', '{}'),
 ('base-cabinet-60', 'Base Cabinet 60cm', 'cabinet', 60, 60, 90, '#8b4513', 'base-cabinets', ARRAY['kitchen'], 'Archive', 'Standard 60cm base cabinet', '1.0.0', false, '{}', '{}'),
 ('corner-cabinet', 'Corner Base Cabinet', 'cabinet', 90, 90, 90, '#8b4513', 'base-cabinets', ARRAY['kitchen'], 'Square', 'L-shaped corner base cabinet', '1.0.0', false, '{}', '{}'),
-('l-shaped-test-cabinet', 'L-Shaped Test Cabinet', 'cabinet', 90, 90, 90, '#FF6B35', 'base-cabinets', ARRAY['kitchen'], 'Square', 'Test component with proper L-shaped geometry (2 x 90cm legs)', '1.0.0', false, '{}', '{}'),
 ('pan-drawers-50', 'Pan Drawers 50cm', 'cabinet', 50, 60, 60, '#8b4513', 'base-drawers', ARRAY['kitchen'], 'RectangleHorizontal', 'Medium 50cm pan drawer unit', '1.0.0', false, '{}', '{}'),
 ('pan-drawers-60', 'Pan Drawers 60cm', 'cabinet', 60, 60, 60, '#8b4513', 'base-drawers', ARRAY['kitchen'], 'RectangleHorizontal', 'Standard 60cm pan drawer unit', '1.0.0', false, '{}', '{}'),
 ('pan-drawers-80', 'Pan Drawers 80cm', 'cabinet', 80, 60, 60, '#8b4513', 'base-drawers', ARRAY['kitchen'], 'RectangleHorizontal', 'Wide 80cm pan drawer unit', '1.0.0', false, '{}', '{}'),
@@ -22,7 +21,6 @@ INSERT INTO public.components (
 ('wall-cabinet-50', 'Wall Cabinet 50cm', 'cabinet', 50, 35, 60, '#a0522d', 'wall-units', ARRAY['kitchen'], 'Box', 'Medium 50cm wall cabinet', '1.0.0', false, '{}', '{}'),
 ('wall-cabinet-60', 'Wall Cabinet 60cm', 'cabinet', 60, 35, 60, '#a0522d', 'wall-units', ARRAY['kitchen'], 'Box', 'Standard 60cm wall cabinet', '1.0.0', false, '{}', '{}'),
 ('corner-wall-cabinet', 'Corner Wall Cabinet', 'cabinet', 90, 35, 60, '#a0522d', 'wall-units', ARRAY['kitchen'], 'Square', 'L-shaped corner wall cabinet', '1.0.0', false, '{}', '{}'),
-('new-corner-wall-cabinet', 'New Corner Wall Cabinet', 'cabinet', 60, 60, 60, '#FF6B35', 'wall-units', ARRAY['kitchen'], 'Square', 'Corner wall cabinet with proper 60x60x60 dimensions (60x60 square works like base cabinet)', '1.0.0', false, '{}', '{}'),
 ('refrigerator', 'Refrigerator', 'appliance', 60, 60, 180, '#c0c0c0', 'appliances', ARRAY['kitchen'], 'Refrigerator', 'Standard refrigerator', '1.0.0', false, '{}', '{}'),
 ('dishwasher', 'Dishwasher', 'appliance', 60, 60, 85, '#d3d3d3', 'appliances', ARRAY['kitchen'], 'Waves', 'Built-in dishwasher', '1.0.0', false, '{}', '{}'),
 ('oven', 'Built-in Oven', 'appliance', 60, 60, 60, '#2c2c2c', 'appliances', ARRAY['kitchen'], 'Microwave', 'Built-in electric oven', '1.0.0', false, '{}', '{}'),
@@ -68,7 +66,7 @@ ALTER TABLE public.components ENABLE ROW LEVEL SECURITY;
 DO $$
 BEGIN
   RAISE NOTICE 'Complete kitchen component library installed! 🍳';
-  RAISE NOTICE 'Added 39 kitchen components';
+  RAISE NOTICE 'Added 37 kitchen components';
   RAISE NOTICE 'Categories: base-cabinets, base-drawers, wall-units, appliances, kitchen-larder, kitchen-toe-kick, kitchen-cornice, kitchen-pelmet, kitchen-wall-unit-end-panels, utility-storage';
   RAISE NOTICE 'Kitchen design is now fully equipped! 🚀';
 END $$;

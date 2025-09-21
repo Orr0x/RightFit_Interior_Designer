@@ -27,7 +27,6 @@ import { RoomDesign, DesignElement } from '@/types/project';
 import { ComponentService } from '@/services/ComponentService';
 import rightfitLogo from '@/assets/logo.png';
 import '@/utils/godMode'; // Load God mode utilities in development
-import { testCurrentCoordinateSystem } from '@/utils/coordinateSystemDemo';
 
 
 const Designer = () => {
@@ -442,32 +441,6 @@ const Designer = () => {
     });
   };
 
-  // Test the new coordinate system
-  const handleTestCoordinateSystem = () => {
-    if (!design) {
-      toast.error('No design available for coordinate system testing');
-      return;
-    }
-    
-    console.log('🧪 [Designer] Testing coordinate system...');
-    toast.info('Testing coordinate system... Check console for results');
-    
-    try {
-      const results = testCurrentCoordinateSystem(design);
-      const passedCount = results.filter(r => r.passed).length;
-      const totalCount = results.length;
-      
-      if (passedCount === totalCount) {
-        toast.success(`✅ Coordinate system test PASSED! (${passedCount}/${totalCount})`);
-      } else {
-        toast.error(`❌ Coordinate system test FAILED! (${passedCount}/${totalCount})`);
-      }
-    } catch (error) {
-      console.error('❌ [Designer] Coordinate system test failed:', error);
-      toast.error('Coordinate system test failed - check console for details');
-    }
-  };
-
   // Keyboard shortcuts
   useKeyboardShortcuts({
     onUndo: history.length > 0 ? handleUndo : undefined,
@@ -801,7 +774,6 @@ const Designer = () => {
                     roomType={currentRoomDesign.room_type}
                     elementCount={currentRoomDesign.design_elements?.length || 0}
                     onValidateDesign={handleValidateDesign}
-                    onTestCoordinateSystem={handleTestCoordinateSystem}
                   />
                 </div>
                 
