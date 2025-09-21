@@ -1077,69 +1077,25 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
         const legLength = 90 * zoom; // 90cm legs
         const legDepth = 60 * zoom;  // 60cm depth for base cabinets
         
-        // ROTATION-AWARE L-SHAPE RENDERING to match 3D rotations
-        // The L-shape changes based on rotation to match wall-touch logic
-        switch (rotation) {
-          case 0: // Top-left corner: L opens down-right (legs touch top + left walls)
-            // X leg (horizontal, extends right)
-            ctx.fillRect(0, 0, legLength, legDepth);
-            // Z leg (vertical, extends down)  
-            ctx.fillRect(0, 0, legDepth, legLength);
-            break;
-            
-          case 90: // Bottom-left corner: L opens up-right (legs touch bottom + left walls)
-            // Z leg (vertical, extends up from left)
-            ctx.fillRect(0, 0, legDepth, legLength);
-            // X leg (horizontal, extends right from bottom)
-            ctx.fillRect(0, legLength - legDepth, legLength, legDepth);
-            break;
-            
-          case 180: // Bottom-right corner: L opens up-left (legs touch bottom + right walls)
-            // Z leg (vertical, extends up from right)
-            ctx.fillRect(legLength - legDepth, 0, legDepth, legLength);
-            // X leg (horizontal, extends left from bottom)
-            ctx.fillRect(0, legLength - legDepth, legLength, legDepth);
-            break;
-            
-          case 270: // Top-right corner: L opens down-left (legs touch top + right walls)
-            // Z leg (vertical, extends down from right)
-            ctx.fillRect(legLength - legDepth, 0, legDepth, legLength);
-            // X leg (horizontal, extends left from top) 
-            ctx.fillRect(0, 0, legLength, legDepth);
-            break;
-            
-          default: // Fallback to 0° if rotation not recognized
-            ctx.fillRect(0, 0, legLength, legDepth);
-            ctx.fillRect(0, 0, legDepth, legLength);
-        }
+        // L-SHAPE RENDERING: Draw standard L-shape, let canvas rotation handle orientation
+        // Canvas rotation is already applied above, so just draw the base L-shape
         
-        // Element border for L-shape (only when selected) - matches filled rectangles
+        // X leg (horizontal section) - 90cm x 60cm
+        ctx.fillRect(0, 0, legLength, legDepth);
+        
+        // Z leg (vertical section) - 60cm x 90cm, positioned to form L-shape
+        ctx.fillRect(0, 0, legDepth, legLength);
+        
+        // Element border for L-shape (only when selected) - let canvas rotation handle orientation
         if (isSelected) {
           ctx.strokeStyle = '#ff0000';
           ctx.lineWidth = 2;
           ctx.setLineDash([]);
           
-          switch (rotation) {
-            case 0:
-              ctx.strokeRect(0, 0, legLength, legDepth);
-              ctx.strokeRect(0, 0, legDepth, legLength);
-              break;
-            case 90:
-              ctx.strokeRect(0, 0, legDepth, legLength);
-              ctx.strokeRect(0, legLength - legDepth, legLength, legDepth);
-              break;
-            case 180:
-              ctx.strokeRect(legLength - legDepth, 0, legDepth, legLength);
-              ctx.strokeRect(0, legLength - legDepth, legLength, legDepth);
-              break;
-            case 270:
-              ctx.strokeRect(legLength - legDepth, 0, legDepth, legLength);
-              ctx.strokeRect(0, 0, legLength, legDepth);
-              break;
-            default:
-              ctx.strokeRect(0, 0, legLength, legDepth);
-              ctx.strokeRect(0, 0, legDepth, legLength);
-          }
+          // Border for X leg
+          ctx.strokeRect(0, 0, legLength, legDepth);
+          // Border for Z leg  
+          ctx.strokeRect(0, 0, legDepth, legLength);
         }
       } else if (isCornerTallUnit) {
         // Draw L-shaped corner tall unit in plan view
