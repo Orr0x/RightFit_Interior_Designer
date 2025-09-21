@@ -1032,20 +1032,27 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
           ctx.strokeRect(0, 0, squareSize, squareSize);
         }
       } else if (isCornerWallCabinet) {
-        // SIMPLIFIED: Draw corner wall cabinet using actual dimensions (90x35)
-        // This matches the bounding box and eliminates rotation complexity
-        const cabinetWidth = 90 * zoom;  // 90cm width
-        const cabinetDepth = 35 * zoom;  // 35cm depth (wall cabinet depth)
+        // SIMPLIFIED: Draw corner wall cabinet as a SQUARE in 2D
+        // Scale square to fit within the actual bounding box (90x35)
+        const actualWidth = 90 * zoom;  // 90cm actual width
+        const actualDepth = 35 * zoom;  // 35cm actual depth
         
-        // Draw rectangle using actual dimensions
-        ctx.fillRect(0, 0, cabinetWidth, cabinetDepth);
+        // Use the smaller dimension to ensure square fits in bounding box
+        const squareSize = Math.min(actualWidth, actualDepth); // 35cm square
         
-        // Element border using actual dimensions (only when selected)
+        // Center the square within the actual bounding box
+        const offsetX = (actualWidth - squareSize) / 2;  // Center horizontally
+        const offsetY = (actualDepth - squareSize) / 2;   // Center vertically (should be 0)
+        
+        // Draw square centered in bounding box
+        ctx.fillRect(offsetX, offsetY, squareSize, squareSize);
+        
+        // Element border for square (only when selected)
         if (isSelected) {
           ctx.strokeStyle = '#ff0000';
           ctx.lineWidth = 2;
           ctx.setLineDash([]);
-          ctx.strokeRect(0, 0, cabinetWidth, cabinetDepth);
+          ctx.strokeRect(offsetX, offsetY, squareSize, squareSize);
         }
       } else if (isCornerBaseCabinet) {
         // SIMPLIFIED: Draw corner cabinet as a SQUARE in 2D (90cm x 90cm)
