@@ -130,6 +130,7 @@ export const EnhancedCabinet3D: React.FC<Enhanced3DModelProps> = ({
                         element.id.includes('wall-cabinet');
   
   const isCornerCabinet = element.id.includes('corner-cabinet') || 
+                        element.id.includes('l-shaped-test-cabinet') || 
                         element.style?.toLowerCase().includes('corner');
                         
   const isLarderCornerUnit = element.id.includes('larder-corner-unit');
@@ -1692,3 +1693,4 @@ export const EnhancedWallUnitEndPanel3D: React.FC<Enhanced3DModelProps> = ({ ele
   );
 };
 // Missing component exports restored after cleanup
+
