@@ -2131,7 +2131,7 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
     
     // Check if this is a corner component for L-shape preview
     const isCornerCounterTop = draggedElement.type === 'counter-top' && draggedElement.id.includes('counter-top-corner');
-    const isCornerWallCabinet = draggedElement.type === 'cabinet' && draggedElement.id.includes('corner-wall-cabinet');
+    const isCornerWallCabinet = draggedElement.type === 'cabinet' && (draggedElement.id.includes('corner-wall-cabinet') || draggedElement.id.includes('new-corner-wall-cabinet'));
     const isCornerBaseCabinet = draggedElement.type === 'cabinet' && draggedElement.id.includes('corner-base-cabinet');
     const isCornerTallUnit = draggedElement.type === 'cabinet' && (
       draggedElement.id.includes('corner-tall') || 

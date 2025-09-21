@@ -352,16 +352,9 @@ const CompactComponentSidebar: React.FC<CompactComponentSidebarProps> = ({
     
     // Tall corner unit dimensions are now correct (90x90cm) after database migration
     
-    let previewWidth, previewDepth;
-    if (isCornerComponent) {
-      // L-shaped components use 90x90 footprint for drag preview
-      previewWidth = 90 * scaleFactor;
-      previewDepth = 90 * scaleFactor;
-    } else {
-      // Standard components use their actual dimensions
-      previewWidth = component.width * scaleFactor;
-      previewDepth = component.depth * scaleFactor;
-    }
+    // Use actual component dimensions for ALL components (no more hardcoded 90x90)
+    const previewWidth = component.width * scaleFactor;
+    const previewDepth = component.depth * scaleFactor;
 
     // Style to look like the actual component footprint
     dragPreview.style.width = `${previewWidth}px`;
@@ -379,12 +372,12 @@ const CompactComponentSidebar: React.FC<CompactComponentSidebarProps> = ({
     if (isCornerComponent) {
       dragPreview.style.backgroundColor = 'transparent';
       
-      // Create two rectangles to form L-shape
-      const legSize = 90 * scaleFactor / 2; // Each leg is half the total size
+      // Create two rectangles to form L-shape using actual component dimensions
+      const legSize = component.width * scaleFactor / 2; // Each leg is half the actual component size
       
       // Horizontal leg (top)
       const horizontalLeg = document.createElement('div');
-      horizontalLeg.style.width = `${90 * scaleFactor}px`;
+      horizontalLeg.style.width = `${component.width * scaleFactor}px`;
       horizontalLeg.style.height = `${legSize}px`;
       horizontalLeg.style.backgroundColor = component.color || '#8b5cf6';
       horizontalLeg.style.border = '1px solid #333';
@@ -395,7 +388,7 @@ const CompactComponentSidebar: React.FC<CompactComponentSidebarProps> = ({
       // Vertical leg (left)
       const verticalLeg = document.createElement('div');
       verticalLeg.style.width = `${legSize}px`;
-      verticalLeg.style.height = `${90 * scaleFactor}px`;
+      verticalLeg.style.height = `${component.width * scaleFactor}px`;
       verticalLeg.style.backgroundColor = component.color || '#8b5cf6';
       verticalLeg.style.border = '1px solid #333';
       verticalLeg.style.position = 'absolute';
