@@ -192,8 +192,8 @@ export const EnhancedCabinet3D: React.FC<Enhanced3DModelProps> = ({
   const cabinetHeight = isWallCabinet ? height : height - plinthHeight;
   const doorHeight = cabinetHeight - 0.05; // Door height with slight gap
   
-  // Corner cabinet specific dimensions - restore original geometry
-  const legLength = 0.9; // 90cm leg length for corner cabinets (ORIGINAL - DO NOT CHANGE)
+  // Corner cabinet specific dimensions - use actual element dimensions
+  const legLength = width; // Use the actual width dimension for L-shape legs (0.6m for 60cm, 0.9m for 90cm)
   
   // Specialized rendering for different cabinet types
   if (isCornerCabinet) {
