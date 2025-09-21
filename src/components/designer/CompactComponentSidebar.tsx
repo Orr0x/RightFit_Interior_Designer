@@ -335,7 +335,7 @@ const CompactComponentSidebar: React.FC<CompactComponentSidebarProps> = ({
     // Calculate scale to make drag preview match canvas size better
     const scaleFactor = 1.15; // Increase by 15% to better match canvas components
     
-    // Check if this is a corner component that uses L-shaped footprint (90x90cm)
+    // Check if this is a corner component that uses square footprint
     // Check both component_id and name since we're using DatabaseComponent interface
     const componentIdentifier = component.component_id || component.name || '';
     const isCornerComponent = componentIdentifier.toLowerCase().includes('corner') ||
@@ -347,7 +347,7 @@ const CompactComponentSidebar: React.FC<CompactComponentSidebarProps> = ({
       name: component.name,
       isCornerComponent,
       originalDimensions: `${component.width}x${component.depth}x${component.height}`,
-      previewDimensions: isCornerComponent ? '90x90' : `${component.width}x${component.depth}`
+      previewDimensions: isCornerComponent ? `${component.width}x${component.depth} (square)` : `${component.width}x${component.depth}`
     });
     
     // Tall corner unit dimensions are now correct (90x90cm) after database migration
@@ -368,35 +368,24 @@ const CompactComponentSidebar: React.FC<CompactComponentSidebarProps> = ({
     dragPreview.style.left = '-1000px';
     dragPreview.style.pointerEvents = 'none';
 
-    // For corner components, create L-shaped visual by adding inner divs
+    // For corner components, create simplified square preview
     if (isCornerComponent) {
       dragPreview.style.backgroundColor = 'transparent';
       
-      // Create two rectangles to form L-shape using actual component dimensions
-      const legSize = component.width * scaleFactor / 2; // Each leg is half the actual component size
+      // DYNAMIC: Create square preview for corner components (simplified)
+      const squareSize = Math.min(component.width, component.depth) * scaleFactor;
       
-      // Horizontal leg (top)
-      const horizontalLeg = document.createElement('div');
-      horizontalLeg.style.width = `${component.width * scaleFactor}px`;
-      horizontalLeg.style.height = `${legSize}px`;
-      horizontalLeg.style.backgroundColor = component.color || '#8b5cf6';
-      horizontalLeg.style.border = '1px solid #333';
-      horizontalLeg.style.position = 'absolute';
-      horizontalLeg.style.top = '0px';
-      horizontalLeg.style.left = '0px';
+      // Single square preview (simplified approach)
+      const squarePreview = document.createElement('div');
+      squarePreview.style.width = `${squareSize}px`;
+      squarePreview.style.height = `${squareSize}px`;
+      squarePreview.style.backgroundColor = component.color || '#8b5cf6';
+      squarePreview.style.border = '1px solid #333';
+      squarePreview.style.position = 'absolute';
+      squarePreview.style.top = '0px';
+      squarePreview.style.left = '0px';
       
-      // Vertical leg (left)
-      const verticalLeg = document.createElement('div');
-      verticalLeg.style.width = `${legSize}px`;
-      verticalLeg.style.height = `${component.width * scaleFactor}px`;
-      verticalLeg.style.backgroundColor = component.color || '#8b5cf6';
-      verticalLeg.style.border = '1px solid #333';
-      verticalLeg.style.position = 'absolute';
-      verticalLeg.style.top = '0px';
-      verticalLeg.style.left = '0px';
-      
-      dragPreview.appendChild(horizontalLeg);
-      dragPreview.appendChild(verticalLeg);
+      dragPreview.appendChild(squarePreview);
     }
     dragPreview.style.boxShadow = '0 4px 12px rgba(0,0,0,0.3)';
     dragPreview.style.display = 'flex';
@@ -416,7 +405,10 @@ const CompactComponentSidebar: React.FC<CompactComponentSidebarProps> = ({
     document.body.appendChild(dragPreview);
 
     // Set the component-shaped preview as drag image
-    e.dataTransfer.setDragImage(dragPreview, previewWidth / 2, previewDepth / 2);
+    // DYNAMIC: Set the drag image with center point based on actual dimensions
+    const centerX = isCornerComponent ? Math.min(component.width, component.depth) * scaleFactor / 2 : previewWidth / 2;
+    const centerY = isCornerComponent ? Math.min(component.width, component.depth) * scaleFactor / 2 : previewDepth / 2;
+    e.dataTransfer.setDragImage(dragPreview, centerX, centerY);
 
     // Clean up after drag
     setTimeout(() => {
