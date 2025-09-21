@@ -1077,14 +1077,15 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
         const legLength = 90 * zoom; // 90cm legs
         const legDepth = 60 * zoom;  // 60cm depth for base cabinets
         
-        // L-SHAPE RENDERING: Draw standard L-shape, let canvas rotation handle orientation
-        // Canvas rotation is already applied above, so just draw the base L-shape
+        // L-SHAPE RENDERING: Draw L-shape centered around rotation point (like 3D model)
+        // Canvas rotation is already applied above, draw L-shape relative to center
+        const halfLeg = legLength / 2; // 45cm offset to center the L-shape
         
-        // X leg (horizontal section) - 90cm x 60cm
-        ctx.fillRect(0, 0, legLength, legDepth);
+        // X leg (horizontal section) - 90cm x 60cm, centered
+        ctx.fillRect(-halfLeg, -halfLeg, legLength, legDepth);
         
-        // Z leg (vertical section) - 60cm x 90cm, positioned to form L-shape
-        ctx.fillRect(0, 0, legDepth, legLength);
+        // Z leg (vertical section) - 60cm x 90cm, centered to form L-shape
+        ctx.fillRect(-halfLeg, -halfLeg, legDepth, legLength);
         
         // Element border for L-shape (only when selected) - let canvas rotation handle orientation
         if (isSelected) {
@@ -1092,10 +1093,10 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
           ctx.lineWidth = 2;
           ctx.setLineDash([]);
           
-          // Border for X leg
-          ctx.strokeRect(0, 0, legLength, legDepth);
-          // Border for Z leg  
-          ctx.strokeRect(0, 0, legDepth, legLength);
+          // Border for X leg - centered
+          ctx.strokeRect(-halfLeg, -halfLeg, legLength, legDepth);
+          // Border for Z leg - centered
+          ctx.strokeRect(-halfLeg, -halfLeg, legDepth, legLength);
         }
       } else if (isCornerTallUnit) {
         // Draw L-shaped corner tall unit in plan view
