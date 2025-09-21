@@ -1072,27 +1072,74 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
           ctx.strokeRect(0, 0, legDepth, legLength);
         }
       } else if (isCornerBaseCabinet) {
-        // Draw L-shaped corner base cabinet in plan view
+        // Draw L-shaped corner base cabinet in plan view with ROTATION-AWARE geometry
         // Match the 3D geometry: 90cm legs with 60cm depth (base cabinet depth)
         const legLength = 90 * zoom; // 90cm legs
         const legDepth = 60 * zoom;  // 60cm depth for base cabinets
         
-        // X leg (horizontal section)
-        ctx.fillRect(0, 0, legLength, legDepth);
+        // ROTATION-AWARE L-SHAPE RENDERING to match 3D rotations
+        // The L-shape changes based on rotation to match wall-touch logic
+        switch (rotation) {
+          case 0: // Top-left corner: L opens down-right (legs touch top + left walls)
+            // X leg (horizontal, extends right)
+            ctx.fillRect(0, 0, legLength, legDepth);
+            // Z leg (vertical, extends down)  
+            ctx.fillRect(0, 0, legDepth, legLength);
+            break;
+            
+          case 90: // Bottom-left corner: L opens up-right (legs touch bottom + left walls)
+            // X leg (horizontal, extends right from bottom)
+            ctx.fillRect(0, legLength - legDepth, legLength, legDepth);
+            // Z leg (vertical, extends up)
+            ctx.fillRect(0, 0, legDepth, legLength);
+            break;
+            
+          case 180: // Bottom-right corner: L opens up-left (legs touch bottom + right walls)
+            // X leg (horizontal, extends left from bottom)
+            ctx.fillRect(0, legLength - legDepth, legLength, legDepth);
+            // Z leg (vertical, extends up from right)
+            ctx.fillRect(legLength - legDepth, 0, legDepth, legLength);
+            break;
+            
+          case 270: // Top-right corner: L opens down-left (legs touch top + right walls)
+            // X leg (horizontal, extends left from top) 
+            ctx.fillRect(0, 0, legLength, legDepth);
+            // Z leg (vertical, extends down from right)
+            ctx.fillRect(legLength - legDepth, 0, legDepth, legLength);
+            break;
+            
+          default: // Fallback to 0° if rotation not recognized
+            ctx.fillRect(0, 0, legLength, legDepth);
+            ctx.fillRect(0, 0, legDepth, legLength);
+        }
         
-        // Z leg (vertical section) - positioned to form L-shape
-        ctx.fillRect(0, 0, legDepth, legLength);
-        
-        // Element border for L-shape (only when selected)
+        // Element border for L-shape (only when selected) - matches filled rectangles
         if (isSelected) {
           ctx.strokeStyle = '#ff0000';
           ctx.lineWidth = 2;
           ctx.setLineDash([]);
           
-          // Border for X leg
-          ctx.strokeRect(0, 0, legLength, legDepth);
-          // Border for Z leg  
-          ctx.strokeRect(0, 0, legDepth, legLength);
+          switch (rotation) {
+            case 0:
+              ctx.strokeRect(0, 0, legLength, legDepth);
+              ctx.strokeRect(0, 0, legDepth, legLength);
+              break;
+            case 90:
+              ctx.strokeRect(0, legLength - legDepth, legLength, legDepth);
+              ctx.strokeRect(0, 0, legDepth, legLength);
+              break;
+            case 180:
+              ctx.strokeRect(0, legLength - legDepth, legLength, legDepth);
+              ctx.strokeRect(legLength - legDepth, 0, legDepth, legLength);
+              break;
+            case 270:
+              ctx.strokeRect(0, 0, legLength, legDepth);
+              ctx.strokeRect(legLength - legDepth, 0, legDepth, legLength);
+              break;
+            default:
+              ctx.strokeRect(0, 0, legLength, legDepth);
+              ctx.strokeRect(0, 0, legDepth, legLength);
+          }
         }
       } else if (isCornerTallUnit) {
         // Draw L-shaped corner tall unit in plan view
@@ -3135,3 +3182,4 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
     </div>
   );
 };
+
