@@ -9,7 +9,7 @@
 
 ## 🎯 Executive Summary
 
-The RightFit Interior Designer currently suffers from fundamental architectural issues in its 2D/3D view system that were caused by incremental development without unified design. This analysis identifies **6 critical architectural flaws** that require comprehensive redesign before further development can proceed effectively.
+The RightFit Interior Designer currently suffers from fundamental architectural issues in its 2D/3D view system that were caused by incremental development without unified design. This analysis identifies **7 critical architectural flaws** that require comprehensive redesign before further development can proceed effectively.
 
 **Key Issues Identified:**
 1. **Corner Logic Failure** - Only 50% of corner placements work correctly
@@ -17,9 +17,12 @@ The RightFit Interior Designer currently suffers from fundamental architectural 
 3. **Multi-View Coordinate Inconsistencies** - Complex transformations causing positioning errors
 4. **Room Configuration Limitations** - No support for non-rectangular rooms
 5. **Drag & Drop System Chaos** - Multiple conflicting coordinate systems causing UX confusion
-6. **3D Synchronization Issues** - 2D changes not properly reflected in 3D
+6. **Wall Measurement System Inconsistency** - Inner vs outer wall dimensions confusion
+7. **3D Synchronization Issues** - 2D changes not properly reflected in 3D
 
 **Critical Discovery**: The drag and drop system uses **3 completely different coordinate/scaling systems** (sidebar preview, canvas rendering, drop positioning) with no unified conversion logic, creating severe user experience issues where drag previews don't match actual component placement.
+
+**Additional Critical Finding**: Wall measurement inconsistency between 2D and 3D views - the inner wall dimensions (usable space) should be the true dimensions, but there are inconsistencies in whether walls are measured from center, inner face, or outer face across different system components.
 
 ---
 
@@ -363,7 +366,96 @@ const roomScale = /* various calculations */;  // Room coordinate conversions
 - **Size Expectations**: Component appears different size during drag vs after placement
 - **Precision Issues**: Fine positioning nearly impossible due to coordinate mismatches
 
-### **Issue #6: 3D Synchronization Problems**
+### **Issue #6: Wall Measurement System Inconsistency**
+
+**Priority**: 🔴 **CRITICAL** - Fundamental architecture flaw affecting all coordinate systems
+
+#### **Problem Description**
+The system has inconsistent approaches to wall measurements across 2D and 3D views, creating confusion about what room dimensions actually represent and causing coordinate system misalignments.
+
+#### **Critical Wall Measurement Issues**
+
+##### **1. Inner vs Outer vs Center Wall Measurements**
+```typescript
+// INCONSISTENT: Different systems measure walls differently
+
+// 2D System: Claims to use inner room bounds (usable space)
+const innerRoomBounds = {
+  width: roomDimensions.width,   // Should be inner usable width
+  height: roomDimensions.height  // Should be inner usable height
+};
+
+// 3D System: Accounts for wall thickness but inconsistently
+const convertTo3D = (x: number, y: number, roomWidth: number, roomHeight: number) => {
+  const WALL_THICKNESS_CM = 10;
+  const WALL_THICKNESS_METERS = WALL_THICKNESS_CM / 100;
+  
+  const roomWidthMeters = roomWidth / 100;    // Uses full room width?
+  const roomHeightMeters = roomHeight / 100;  // Uses full room height?
+  
+  // Then subtracts wall thickness - but which measurement is correct?
+  const inner3DWidth = roomWidthMeters - WALL_THICKNESS_METERS;
+};
+
+// Database: Room dimensions stored as what exactly?
+interface RoomDimensions {
+  width: number;   // Inner space? Outer space? Wall center-to-center?
+  height: number;  // Which measurement standard?
+}
+```
+
+##### **2. Component Placement Reference Point Confusion**
+```typescript
+// CRITICAL ISSUE: What do coordinates (0,0) represent?
+
+// Option A: (0,0) = Inner room corner (usable space corner)
+const innerSpacePlacement = {
+  x: 0, y: 0  // Component at inner wall face
+};
+
+// Option B: (0,0) = Wall center line intersection
+const wallCenterPlacement = {
+  x: 0, y: 0  // Component at wall center reference
+};
+
+// Option C: (0,0) = Outer wall corner (building structure corner)  
+const outerWallPlacement = {
+  x: 0, y: 0  // Component at outer wall face
+};
+
+// CURRENT SYSTEM: Mixed approach causing positioning chaos
+```
+
+##### **3. User Expectation vs System Reality**
+```typescript
+// USER EXPECTS: Room dimensions = usable interior space
+const userExpectation = {
+  "400cm wide room": "400cm of usable width for placing components",
+  "300cm deep room": "300cm of usable depth for placing components"
+};
+
+// SYSTEM REALITY: Unclear what room dimensions actually represent
+const systemBehavior = {
+  dragAndDrop: "Uses room dimensions directly for boundary checks",
+  twoDRendering: "Claims inner room bounds but calculations unclear", 
+  threeDRendering: "Subtracts wall thickness from room dimensions",
+  wallSnapping: "Uses clearance from walls but which wall face?"
+};
+```
+
+#### **Root Causes**
+1. **No Unified Wall Measurement Standard**: Each component interprets room dimensions differently
+2. **Unclear Coordinate System Origin**: (0,0) reference point inconsistent between systems
+3. **Wall Thickness Accounting**: Some systems account for wall thickness, others don't
+4. **Database Schema Ambiguity**: Room dimensions storage doesn't specify measurement standard
+
+#### **Impact Assessment**
+- **Coordinate System Chaos**: All positioning calculations affected by measurement uncertainty
+- **User Confusion**: Room dimensions don't match expected usable space
+- **Cross-System Inconsistency**: 2D placement doesn't match 3D visualization
+- **Component Positioning Errors**: Components appear in wrong positions due to reference point confusion
+
+### **Issue #7: 3D Synchronization Problems**
 
 **Priority**: 🔴 **MEDIUM** - Affects 3D visualization accuracy
 
@@ -382,29 +474,35 @@ Changes made in 2D views (especially ceiling height) don't properly synchronize 
 
 ### **Phase 1: Core Coordinate System Redesign**
 
-#### **Unified Coordinate Transform Engine**
+#### **Unified Coordinate Transform Engine with Wall Measurement Standard**
 ```typescript
 // NEW: Single source of truth for all coordinate transformations
+// CRITICAL: All coordinates use INNER ROOM SPACE as reference (usable space)
 class CoordinateTransformEngine {
   private roomConfig: RoomConfiguration;
-  private wallThickness: number = 10; // cm
+  private wallThickness: number = 10; // cm (standard interior wall)
   
-  // Core transformation methods
+  // FUNDAMENTAL PRINCIPLE: Room dimensions = inner usable space
+  // (0,0) = inner room corner (where components can be placed)
+  // All transformations maintain this standard across 2D/3D/drag-drop
+  
+  // Core transformation methods using inner space standard
   planToWorld(coords: PlanCoordinates): WorldCoordinates {
-    const wallOffset = this.wallThickness / 2;
+    // coords.x/y are already in inner room space (0 to roomWidth/roomHeight)
+    // No wall offset needed - coordinates are already relative to usable space
     return {
-      x: coords.x - this.roomConfig.width / 2 + wallOffset,
-      z: coords.y - this.roomConfig.height / 2 + wallOffset,
-      y: coords.z || 0
+      x: coords.x - this.roomConfig.innerWidth / 2,    // Center in world space
+      z: coords.y - this.roomConfig.innerHeight / 2,   // Center in world space  
+      y: coords.z || 0                                  // Height unchanged
     };
   }
   
+  // 3D world coordinates back to 2D inner room coordinates
   worldToPlan(coords: WorldCoordinates): PlanCoordinates {
-    const wallOffset = this.wallThickness / 2;
     return {
-      x: coords.x + this.roomConfig.width / 2 - wallOffset,
-      y: coords.z + this.roomConfig.height / 2 - wallOffset,
-      z: coords.y
+      x: coords.x + this.roomConfig.innerWidth / 2,    // Back to inner room space
+      y: coords.z + this.roomConfig.innerHeight / 2,   // Back to inner room space
+      z: coords.y                                       // Height unchanged
     };
   }
   
@@ -743,11 +841,15 @@ class DesignStateManager {
 
 ## 🎯 Implementation Roadmap
 
-### **Phase 1: Foundation (Week 1-2)**
-- [ ] Create unified coordinate transformation engine
-- [ ] Implement core coordinate system tests
-- [ ] Refactor basic 2D/3D coordinate conversions
-- [ ] Establish consistent wall thickness handling
+### **Phase 1: Foundation & Wall Measurement Standard (Week 1-2)**
+**CRITICAL**: Establish unified wall measurement standard before all other work
+- [ ] **Define Universal Wall Measurement Standard**: Inner room dimensions = usable space
+- [ ] **Establish (0,0) Reference Point**: Inner room corner (usable space origin)
+- [ ] **Update Database Schema**: Clarify that room dimensions represent inner usable space
+- [ ] Create unified coordinate transformation engine using inner space standard
+- [ ] Implement core coordinate system tests with wall measurement validation
+- [ ] Refactor basic 2D/3D coordinate conversions to use inner space consistently
+- [ ] Establish consistent wall thickness handling (inner face to inner face)
 
 ### **Phase 2: Drag & Drop System Overhaul (Week 2-3)**
 **PRIORITY**: Fix critical UX issues affecting all placements
