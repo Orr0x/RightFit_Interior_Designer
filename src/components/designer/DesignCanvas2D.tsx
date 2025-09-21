@@ -1001,24 +1001,38 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
       
       // Apply rotation - convert degrees to radians if needed
       if (isCornerCounterTop || isCornerWallCabinet || isCornerBaseCabinet || isCornerTallUnit) {
-        // For L-shaped components, rotate around the TRUE CENTROID (not bounding box center)
-        // Calculate TRUE centroid of L-shape (two rectangles)
-        // Rectangle 1 (horizontal): 90cm × 60cm, center at (45, 30)
-        // Rectangle 2 (vertical): 60cm × 90cm, center at (30, 45)
-        // Area-weighted centroid calculation:
-        const rect1Area = 90 * 60; // 5400
-        const rect2Area = 60 * 90; // 5400 
-        const totalArea = rect1Area + rect2Area; // 10800
+        // For L-shaped corner components, rotate around WALL CORNER POINT (not centroid)
+        // Corner cabinets are designed to fit into wall corners and should rotate around that corner
+        // Research shows: translate(pivot) -> rotate(angle) -> translate(-pivot) -> draw()
         
-        // Centroid coordinates (area-weighted average)
-        const centroidX = ((45 * rect1Area) + (30 * rect2Area)) / totalArea; // 37.5cm
-        const centroidY = ((30 * rect1Area) + (45 * rect2Area)) / totalArea; // 37.5cm
+        // Determine the wall corner point based on rotation
+        let cornerPivotX, cornerPivotY;
         
-        const lShapeCenterX = centroidX * zoom;
-        const lShapeCenterY = centroidY * zoom;
-        ctx.translate(pos.x + lShapeCenterX, pos.y + lShapeCenterY);
+        switch(rotation) {
+          case 0:   // Top-left corner - pivot at top-left of component
+            cornerPivotX = 0;
+            cornerPivotY = 0;
+            break;
+          case 90:  // Bottom-left corner - pivot at bottom-left of component  
+            cornerPivotX = 0;
+            cornerPivotY = 90 * zoom;
+            break;
+          case 180: // Bottom-right corner - pivot at bottom-right of component
+            cornerPivotX = 90 * zoom;
+            cornerPivotY = 90 * zoom;
+            break;
+          case 270: // Top-right corner - pivot at top-right of component
+            cornerPivotX = 90 * zoom;
+            cornerPivotY = 0;
+            break;
+          default:
+            cornerPivotX = 0;
+            cornerPivotY = 0;
+        }
+        
+        ctx.translate(pos.x + cornerPivotX, pos.y + cornerPivotY);
         ctx.rotate(rotation * Math.PI / 180);
-        ctx.translate(-lShapeCenterX, -lShapeCenterY);
+        ctx.translate(-cornerPivotX, -cornerPivotY);
       } else {
         // Standard rectangular rotation from center
         ctx.translate(pos.x + width / 2, pos.y + depth / 2);
