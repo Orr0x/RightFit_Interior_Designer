@@ -2908,19 +2908,9 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
       const roomPos = canvasToRoom(x, y);
 
       // Calculate drop position based on mouse coordinates
-
-      // 🎯 FIX: Drop position should place component center at mouse position
-      // The drag image center represents where the component center should be placed
-      const dropX = roomPos.x - (componentData.width / 2);
-      const dropY = roomPos.y - (componentData.depth / 2);
-
-      // DEBUG: Log drop positioning calculations
-      console.log('🎯 [Drop Debug] Positioning:', {
-        mouseRoom: roomPos,
-        componentData: { width: componentData.width, depth: componentData.depth },
-        dropPosition: { dropX, dropY },
-        effectiveSize: { effectiveWidth, effectiveDepth }
-      });
+      // The drag image center is already positioned correctly, so use mouse position directly
+      const dropX = roomPos.x;
+      const dropY = roomPos.y;
 
 
       // 🎯 BOUNDARY CHECK: Prevent drops outside inner room boundaries (usable space)

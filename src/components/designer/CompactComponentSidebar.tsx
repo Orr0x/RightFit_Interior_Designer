@@ -368,12 +368,35 @@ const CompactComponentSidebar: React.FC<CompactComponentSidebarProps> = ({
     dragPreview.style.left = '-1000px';
     dragPreview.style.pointerEvents = 'none';
 
-    // For corner components, create SQUARE visual (no more L-shaped drag previews)
-    // This matches the simplified square rendering used on the canvas
+    // For corner components, create L-shaped visual by adding inner divs
     if (isCornerComponent) {
-      // Keep the solid background color for square preview
-      dragPreview.style.backgroundColor = component.color || '#8b5cf6';
-      // No need for L-shaped inner divs - the square background is the preview
+      dragPreview.style.backgroundColor = 'transparent';
+      
+      // Create two rectangles to form L-shape using actual component dimensions
+      const legSize = component.width * scaleFactor / 2; // Each leg is half the actual component size
+      
+      // Horizontal leg (top)
+      const horizontalLeg = document.createElement('div');
+      horizontalLeg.style.width = `${component.width * scaleFactor}px`;
+      horizontalLeg.style.height = `${legSize}px`;
+      horizontalLeg.style.backgroundColor = component.color || '#8b5cf6';
+      horizontalLeg.style.border = '1px solid #333';
+      horizontalLeg.style.position = 'absolute';
+      horizontalLeg.style.top = '0px';
+      horizontalLeg.style.left = '0px';
+      
+      // Vertical leg (left)
+      const verticalLeg = document.createElement('div');
+      verticalLeg.style.width = `${legSize}px`;
+      verticalLeg.style.height = `${component.width * scaleFactor}px`;
+      verticalLeg.style.backgroundColor = component.color || '#8b5cf6';
+      verticalLeg.style.border = '1px solid #333';
+      verticalLeg.style.position = 'absolute';
+      verticalLeg.style.top = '0px';
+      verticalLeg.style.left = '0px';
+      
+      dragPreview.appendChild(horizontalLeg);
+      dragPreview.appendChild(verticalLeg);
     }
     dragPreview.style.boxShadow = '0 4px 12px rgba(0,0,0,0.3)';
     dragPreview.style.display = 'flex';
