@@ -2914,6 +2914,14 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
       const dropX = roomPos.x - (componentData.width / 2);
       const dropY = roomPos.y - (componentData.depth / 2);
 
+      // DEBUG: Log drop positioning calculations
+      console.log('🎯 [Drop Debug] Positioning:', {
+        mouseRoom: roomPos,
+        componentData: { width: componentData.width, depth: componentData.depth },
+        dropPosition: { dropX, dropY },
+        effectiveSize: { effectiveWidth, effectiveDepth }
+      });
+
 
       // 🎯 BOUNDARY CHECK: Prevent drops outside inner room boundaries (usable space)
       // Components should only be placed within the inner room, not in the wall thickness
