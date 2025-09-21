@@ -100,7 +100,7 @@ const getRotatedBoundingBox = (element: DesignElement) => {
   
   // Determine if this is a corner component with L-shaped footprint
   const isCornerCounterTop = element.type === 'counter-top' && element.id.includes('counter-top-corner');
-  const isCornerWallCabinet = element.type === 'cabinet' && element.id.includes('corner-wall-cabinet');
+  const isCornerWallCabinet = element.type === 'cabinet' && (element.id.includes('corner-wall-cabinet') || element.id.includes('new-corner-wall-cabinet'));
   const isCornerBaseCabinet = element.type === 'cabinet' && (element.id.includes('corner-base-cabinet') || element.id.includes('l-shaped-test-cabinet'));
   const isCornerTallUnit = element.type === 'cabinet' && (
     element.id.includes('corner-tall') || 
@@ -111,22 +111,22 @@ const getRotatedBoundingBox = (element: DesignElement) => {
   const isCornerComponent = isCornerCounterTop || isCornerWallCabinet || isCornerBaseCabinet || isCornerTallUnit;
   
   if (isCornerComponent) {
-    // L-shaped components use 90x90 footprint
-    const size = 90;
-    const centerX = element.x + 45; // Center of L-shape
-    const centerY = element.y + 45;
+    // Corner components use their ACTUAL dimensions (no more hardcoded 90x90)
+    const width = element.width;
+    const height = element.depth || element.height;
+    const centerX = element.x + width / 2;
+    const centerY = element.y + height / 2;
     
-    // For L-shaped components, we use a 90x90 bounding box regardless of rotation
-    // This is a simplification but ensures consistent behavior
+    // Use actual component dimensions for bounding box
     return {
       minX: element.x,
       minY: element.y,
-      maxX: element.x + size,
-      maxY: element.y + size,
+      maxX: element.x + width,
+      maxY: element.y + height,
       centerX,
       centerY,
-      width: size,
-      height: size,
+      width: width,
+      height: height,
       isCorner: true
     };
   } else {
@@ -2922,19 +2922,13 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
         return;
       }
 
-      // Determine effective dimensions for boundary checks
-      // Corner components use 90x90 footprint regardless of their actual dimensions
+      // Use actual component dimensions for ALL components (no more forced 90x90)
       const isCornerComponent = componentData.id?.includes('corner-') || 
                                componentData.id?.includes('-corner') ||
                                componentData.id?.includes('corner');
       
-      let effectiveWidth = componentData.width;
-      let effectiveDepth = componentData.depth;
-      
-      if (isCornerComponent) {
-        effectiveWidth = 90;  // L-shaped components use 90x90 footprint
-        effectiveDepth = 90;
-      }
+      const effectiveWidth = componentData.width;
+      const effectiveDepth = componentData.depth;
 
       // Set default Z position based on component type
       let defaultZ = 0; // Default for floor-mounted components
