@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useCallback } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -41,6 +41,7 @@ import {
   Filter,
   Clock,
   Square,
+  RefreshCw,
   Archive,
   Refrigerator,
   Waves,
@@ -82,6 +83,25 @@ const CompactComponentSidebar: React.FC<CompactComponentSidebarProps> = ({
 
   // 🚀 DATABASE-DRIVEN COMPONENTS! Load all 154 components from Supabase
   const { components, loading, error, refetch } = useOptimizedComponents();
+  
+  // Cache clearing for debugging duplicate categories
+  const clearCacheAndRefresh = useCallback(() => {
+    console.log('🧹 [CompactComponentSidebar] Clearing caches and refreshing components...');
+    
+    // Clear localStorage caches
+    if (typeof window !== 'undefined' && window.localStorage) {
+      const cacheKeys = Object.keys(localStorage).filter(key => 
+        key.startsWith('cache-') || 
+        key.startsWith('component-') ||
+        key.includes('components')
+      );
+      cacheKeys.forEach(key => localStorage.removeItem(key));
+      console.log(`🗑️ Cleared ${cacheKeys.length} cache entries`);
+    }
+    
+    // Force refresh components from database
+    refetch();
+  }, [refetch]);
   
   // Use database components directly (no conversion needed)
   const allComponents = useMemo(() => {
@@ -489,23 +509,36 @@ const CompactComponentSidebar: React.FC<CompactComponentSidebarProps> = ({
             </SelectContent>
           </Select>
 
-          <div className="flex border rounded-md">
+          <div className="flex gap-1">
+            {/* Cache Clear Button (temporary for debugging duplicates) */}
             <Button
-              variant={viewMode === 'grid' ? 'default' : 'ghost'}
+              variant="ghost"
               size="sm"
-              onClick={() => setViewMode('grid')}
-              className="h-8 w-8 p-0 rounded-r-none border-r"
+              onClick={clearCacheAndRefresh}
+              className="h-8 w-8 p-0"
+              title="Clear cache and refresh components"
             >
-              <Grid3X3 className="h-3 w-3" />
+              <RefreshCw className="h-3 w-3" />
             </Button>
-            <Button
-              variant={viewMode === 'list' ? 'default' : 'ghost'}
-              size="sm"
-              onClick={() => setViewMode('list')}
-              className="h-8 w-8 p-0 rounded-l-none"
-            >
-              <List className="h-3 w-3" />
-            </Button>
+            
+            <div className="flex border rounded-md">
+              <Button
+                variant={viewMode === 'grid' ? 'default' : 'ghost'}
+                size="sm"
+                onClick={() => setViewMode('grid')}
+                className="h-8 w-8 p-0 rounded-r-none border-r"
+              >
+                <Grid3X3 className="h-3 w-3" />
+              </Button>
+              <Button
+                variant={viewMode === 'list' ? 'default' : 'ghost'}
+                size="sm"
+                onClick={() => setViewMode('list')}
+                className="h-8 w-8 p-0 rounded-l-none"
+              >
+                <List className="h-3 w-3" />
+              </Button>
+            </div>
           </div>
         </div>
       </div>
