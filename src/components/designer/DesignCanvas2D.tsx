@@ -1032,19 +1032,20 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
           ctx.strokeRect(0, 0, squareSize, squareSize);
         }
       } else if (isCornerWallCabinet) {
-        // SIMPLIFIED: Draw corner wall cabinet as a SQUARE in 2D (90cm x 90cm)
-        // This eliminates rotation complexity while keeping 3D view accurate
-        const squareSize = 90 * zoom; // 90cm square
+        // SIMPLIFIED: Draw corner wall cabinet using actual dimensions (90x35)
+        // This matches the bounding box and eliminates rotation complexity
+        const cabinetWidth = 90 * zoom;  // 90cm width
+        const cabinetDepth = 35 * zoom;  // 35cm depth (wall cabinet depth)
         
-        // Draw simple square - no rotation needed
-        ctx.fillRect(0, 0, squareSize, squareSize);
+        // Draw rectangle using actual dimensions
+        ctx.fillRect(0, 0, cabinetWidth, cabinetDepth);
         
-        // Element border for square (only when selected)
+        // Element border using actual dimensions (only when selected)
         if (isSelected) {
           ctx.strokeStyle = '#ff0000';
           ctx.lineWidth = 2;
           ctx.setLineDash([]);
-          ctx.strokeRect(0, 0, squareSize, squareSize);
+          ctx.strokeRect(0, 0, cabinetWidth, cabinetDepth);
         }
       } else if (isCornerBaseCabinet) {
         // SIMPLIFIED: Draw corner cabinet as a SQUARE in 2D (90cm x 90cm)
