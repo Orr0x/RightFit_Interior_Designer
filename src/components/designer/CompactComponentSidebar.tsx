@@ -125,11 +125,11 @@ const CompactComponentSidebar: React.FC<CompactComponentSidebarProps> = ({
     id: 'test-corner-wall-001',
     component_id: 'new-corner-wall-cabinet',
     name: 'New Corner Wall Cabinet',
-    description: 'Corner wall cabinet with proper 60x60x30 dimensions (60x60 square works like base cabinet)',
+    description: 'Corner wall cabinet with proper 60x60x60 dimensions (60x60 square works like base cabinet)',
     type: 'cabinet',
     category: 'wall-units',
     width: 60,
-    height: 30, // 30cm height for wall cabinet
+    height: 60, // 60cm height for wall cabinet
     depth: 60,
     room_types: ['kitchen'],
     icon_name: 'Square',
