@@ -128,39 +128,60 @@ export class CanvasCoordinateIntegrator {
     depth: number, 
     bounds: any
   ): ComponentPlacementResult | null {
-    const cornerThreshold = 40; // 40cm threshold for corner detection
+    const cornerThreshold = 60; // Increased threshold for better corner detection
+    const roomBounds = this.coordinateEngine.getInnerRoomBounds();
     
-    // Check each corner with proper rotation logic
-    const corners = [
+    console.log('🔲 [CanvasIntegrator] Corner detection:', {
+      dropPosition: { x: dropX, y: dropY },
+      roomBounds,
+      threshold: cornerThreshold
+    });
+    
+    // DIAGONAL CORNER LOGIC: L-shaped components have 2 diagonal pairs
+    // Each diagonal pair mirrors each other's L-opening toward room center
+    
+    // DIAGONAL SET 1: Top-Left ↔ Bottom-Right (both open toward center)
+    const diagonalSet1 = [
       {
         name: 'top-left',
         condition: dropX <= cornerThreshold && dropY <= cornerThreshold,
         position: { x: bounds.minX, y: bounds.minY },
-        rotation: 0 // L-shape faces down-right
-      },
-      {
-        name: 'top-right', 
-        condition: dropX >= (bounds.maxX + width - cornerThreshold) && dropY <= cornerThreshold,
-        position: { x: bounds.maxX, y: bounds.minY },
-        rotation: 270 // L-shape faces down-left
-      },
-      {
-        name: 'bottom-left',
-        condition: dropX <= cornerThreshold && dropY >= (bounds.maxY + depth - cornerThreshold),
-        position: { x: bounds.minX, y: bounds.maxY },
-        rotation: 90 // L-shape faces up-right
+        rotation: 0 // L opens down-right (toward room center)
       },
       {
         name: 'bottom-right',
-        condition: dropX >= (bounds.maxX + width - cornerThreshold) && dropY >= (bounds.maxY + depth - cornerThreshold),
+        condition: dropX >= (roomBounds.width - cornerThreshold) && dropY >= (roomBounds.height - cornerThreshold),
         position: { x: bounds.maxX, y: bounds.maxY },
-        rotation: 180 // L-shape faces up-left
+        rotation: 180 // L opens up-left (toward room center) - DIAGONAL MIRROR of top-left
       }
     ];
     
+    // DIAGONAL SET 2: Top-Right ↔ Bottom-Left (both open toward center)
+    const diagonalSet2 = [
+      {
+        name: 'top-right', 
+        condition: dropX >= (roomBounds.width - cornerThreshold) && dropY <= cornerThreshold,
+        position: { x: bounds.maxX, y: bounds.minY },
+        rotation: 270 // L opens down-left (toward room center)
+      },
+      {
+        name: 'bottom-left',
+        condition: dropX <= cornerThreshold && dropY >= (roomBounds.height - cornerThreshold),
+        position: { x: bounds.minX, y: bounds.maxY },
+        rotation: 90 // L opens up-right (toward room center) - DIAGONAL MIRROR of top-right
+      }
+    ];
+    
+    // Combine both diagonal sets
+    const corners = [...diagonalSet1, ...diagonalSet2];
+    
     for (const corner of corners) {
       if (corner.condition) {
-        console.log(`🔲 [CanvasIntegrator] Corner placement: ${corner.name} at (${corner.position.x}, ${corner.position.y}) with rotation ${corner.rotation}°`);
+        // Determine which diagonal set this corner belongs to
+        const diagonalInfo = diagonalSet1.includes(corner) ? 'Diagonal Set 1 (Top-Left ↔ Bottom-Right)' : 'Diagonal Set 2 (Top-Right ↔ Bottom-Left)';
+        
+        console.log(`🔲 [CanvasIntegrator] Corner placement MATCHED: ${corner.name} at (${corner.position.x}, ${corner.position.y}) with rotation ${corner.rotation}°`);
+        console.log(`🔄 [CanvasIntegrator] Using ${diagonalInfo} - L opens toward room center`);
         
         return {
           x: corner.position.x,
@@ -173,6 +194,7 @@ export class CanvasCoordinateIntegrator {
       }
     }
     
+    console.log('🔲 [CanvasIntegrator] No corner match found');
     return null;
   }
   
@@ -192,31 +214,62 @@ export class CanvasCoordinateIntegrator {
     let rotation = 0;
     let snappedToWall = false;
     const snapThreshold = 40;
+    const roomBounds = this.coordinateEngine.getInnerRoomBounds();
     
-    // Snap to left wall
-    if (dropX <= snapThreshold) {
+    console.log('🎯 [CanvasIntegrator] Wall snapping check:', {
+      dropPosition: { x: dropX, y: dropY },
+      componentSize: { width, depth },
+      bounds,
+      roomBounds,
+      snapThreshold
+    });
+    
+    // CRITICAL FIX: Proper wall detection logic
+    // Check proximity to each wall individually
+    
+    // Left wall proximity
+    const leftWallDistance = dropX;
+    // Right wall proximity  
+    const rightWallDistance = roomBounds.width - (dropX + width);
+    // Top wall proximity (front)
+    const topWallDistance = dropY;
+    // Bottom wall proximity (back)
+    const bottomWallDistance = roomBounds.height - (dropY + depth);
+    
+    console.log('📏 [CanvasIntegrator] Wall distances:', {
+      left: leftWallDistance,
+      right: rightWallDistance, 
+      top: topWallDistance,
+      bottom: bottomWallDistance
+    });
+    
+    // Snap to closest wall if within threshold
+    if (leftWallDistance <= snapThreshold && leftWallDistance >= 0) {
       snappedX = bounds.minX;
       snappedToWall = true;
-      rotation = 90; // Face right (into room)
+      rotation = 0; // Face into room (right)
+      console.log('🎯 [CanvasIntegrator] Snapped to LEFT wall');
     }
-    // Snap to right wall
-    else if (dropX + width >= bounds.maxX + width - snapThreshold) {
+    else if (rightWallDistance <= snapThreshold && rightWallDistance >= 0) {
       snappedX = bounds.maxX;
       snappedToWall = true;
-      rotation = 270; // Face left (into room)
+      rotation = 180; // Face into room (left)
+      console.log('🎯 [CanvasIntegrator] Snapped to RIGHT wall');
     }
     
-    // Snap to top wall (front)
-    if (dropY <= snapThreshold) {
+    if (topWallDistance <= snapThreshold && topWallDistance >= 0) {
       snappedY = bounds.minY;
       snappedToWall = true;
-      if (rotation === 0) rotation = 0; // Face down (into room)
+      // Only override rotation if not already set by left/right wall
+      if (rotation === 0 && snappedX === dropX) rotation = 0; // Face into room (down)
+      console.log('🎯 [CanvasIntegrator] Snapped to TOP wall (front)');
     }
-    // Snap to bottom wall (back)
-    else if (dropY + depth >= bounds.maxY + depth - snapThreshold) {
+    else if (bottomWallDistance <= snapThreshold && bottomWallDistance >= 0) {
       snappedY = bounds.maxY;
       snappedToWall = true;
-      if (rotation === 0) rotation = 180; // Face up (into room)
+      // Only override rotation if not already set by left/right wall
+      if (rotation === 0 && snappedX === dropX) rotation = 180; // Face into room (up)
+      console.log('🎯 [CanvasIntegrator] Snapped to BOTTOM wall (back)');
     }
     
     return {
