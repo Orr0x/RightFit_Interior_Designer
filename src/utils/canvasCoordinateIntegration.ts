@@ -154,7 +154,7 @@ export class CanvasCoordinateIntegrator {
         name: 'top-right', 
         condition: dropX >= (roomBounds.width - cornerThreshold) && dropY <= cornerThreshold,
         position: { x: bounds.maxX, y: bounds.minY },
-        rotation: -90 // Position 2: CLOCKWISE 90° (negative for clockwise)
+        rotation: -270 // SWAPPED: Was -90, now -270 (270° clockwise)
       },
       {
         name: 'bottom-right',
@@ -166,7 +166,7 @@ export class CanvasCoordinateIntegrator {
         name: 'bottom-left',
         condition: dropX <= cornerThreshold && dropY >= (roomBounds.height - cornerThreshold),
         position: { x: bounds.minX, y: bounds.maxY },
-        rotation: -270 // Position 4: CLOCKWISE 270° (negative for clockwise)
+        rotation: -90 // SWAPPED: Was -270, now -90 (90° clockwise)
       }
     ];
     
