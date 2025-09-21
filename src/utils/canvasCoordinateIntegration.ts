@@ -148,25 +148,25 @@ export class CanvasCoordinateIntegrator {
         name: 'top-left',
         condition: dropX <= cornerThreshold && dropY <= cornerThreshold,
         position: { x: bounds.minX, y: bounds.minY },
-        rotation: 0 // USER CONFIRMED: Works correctly
+        rotation: 0 // Position 1: 0 degrees (baseline)
       },
       {
         name: 'top-right', 
         condition: dropX >= (roomBounds.width - cornerThreshold) && dropY <= cornerThreshold,
         position: { x: bounds.maxX, y: bounds.minY },
-        rotation: 90 // USER SPECIFIED: top right 90 degrees
+        rotation: -90 // Position 2: CLOCKWISE 90° (negative for clockwise)
       },
       {
         name: 'bottom-right',
         condition: dropX >= (roomBounds.width - cornerThreshold) && dropY >= (roomBounds.height - cornerThreshold),
         position: { x: bounds.maxX, y: bounds.maxY },
-        rotation: 180 // USER SPECIFIED: bottom right 180
+        rotation: -180 // Position 3: CLOCKWISE 180° (negative for clockwise)
       },
       {
         name: 'bottom-left',
         condition: dropX <= cornerThreshold && dropY >= (roomBounds.height - cornerThreshold),
         position: { x: bounds.minX, y: bounds.maxY },
-        rotation: 270 // USER SPECIFIED: bottom left 270
+        rotation: -270 // Position 4: CLOCKWISE 270° (negative for clockwise)
       }
     ];
     
