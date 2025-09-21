@@ -1017,50 +1017,34 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
       // L-shape rendering for corner components
       
       if (isCornerCounterTop) {
-        // Draw L-shaped corner counter top in plan view
-        // Match the 3D geometry: 90cm legs with 60cm depth
-        const legLength = 90 * zoom; // 90cm legs
-        const legDepth = 60 * zoom;  // 60cm depth
+        // SIMPLIFIED: Draw corner counter top as a SQUARE in 2D (90cm x 90cm)
+        // This eliminates rotation complexity while keeping 3D view accurate
+        const squareSize = 90 * zoom; // 90cm square
         
-        // X leg (horizontal section)
-        ctx.fillRect(0, 0, legLength, legDepth);
+        // Draw simple square - no rotation needed
+        ctx.fillRect(0, 0, squareSize, squareSize);
         
-        // Z leg (vertical section) - positioned to form L-shape
-        ctx.fillRect(0, 0, legDepth, legLength);
-        
-        // Element border for L-shape (only when selected)
+        // Element border for square (only when selected)
         if (isSelected) {
           ctx.strokeStyle = '#ff0000';
           ctx.lineWidth = 2;
           ctx.setLineDash([]);
-          
-          // Border for X leg
-          ctx.strokeRect(0, 0, legLength, legDepth);
-          // Border for Z leg  
-          ctx.strokeRect(0, 0, legDepth, legLength);
+          ctx.strokeRect(0, 0, squareSize, squareSize);
         }
       } else if (isCornerWallCabinet) {
-        // Draw L-shaped corner wall cabinet in plan view
-        // Match the 3D geometry: 90cm legs with 35cm depth (wall cabinet depth)
-        const legLength = 90 * zoom; // 90cm legs
-        const legDepth = 35 * zoom;  // 35cm depth for wall cabinets
+        // SIMPLIFIED: Draw corner wall cabinet as a SQUARE in 2D (90cm x 90cm)
+        // This eliminates rotation complexity while keeping 3D view accurate
+        const squareSize = 90 * zoom; // 90cm square
         
-        // X leg (horizontal section)
-        ctx.fillRect(0, 0, legLength, legDepth);
+        // Draw simple square - no rotation needed
+        ctx.fillRect(0, 0, squareSize, squareSize);
         
-        // Z leg (vertical section) - positioned to form L-shape
-        ctx.fillRect(0, 0, legDepth, legLength);
-        
-        // Element border for L-shape (only when selected)
+        // Element border for square (only when selected)
         if (isSelected) {
           ctx.strokeStyle = '#ff0000';
           ctx.lineWidth = 2;
           ctx.setLineDash([]);
-          
-          // Border for X leg
-          ctx.strokeRect(0, 0, legLength, legDepth);
-          // Border for Z leg  
-          ctx.strokeRect(0, 0, legDepth, legLength);
+          ctx.strokeRect(0, 0, squareSize, squareSize);
         }
       } else if (isCornerBaseCabinet) {
         // SIMPLIFIED: Draw corner cabinet as a SQUARE in 2D (90cm x 90cm)
