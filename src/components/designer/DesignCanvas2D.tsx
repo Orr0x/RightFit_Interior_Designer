@@ -2620,14 +2620,14 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
       // Apply Smart Wall Snapping for dragged elements
       const isCornerComponent = isCornerCounterTop || isCornerWallCabinet || isCornerBaseCabinet || isCornerTallUnit;
       
-      const dragWallSnappedPos = getWallSnappedPosition(
+      const dragWallSnappedPos = getEnhancedComponentPlacement(
         finalX,
         finalY,
         draggedElement.width,
         draggedElement.depth || draggedElement.height,
-        innerRoomBounds.width,
-        innerRoomBounds.height,
-        isCornerComponent
+        draggedElement.id,
+        draggedElement.type || 'cabinet',
+        design.roomDimensions
       );
 
       // Use wall snapped position if snapped, otherwise clamp to boundaries
@@ -2839,14 +2839,14 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
         // Apply Smart Wall Snapping for dragged elements
         const isCornerComponent = isCornerCounterTop || isCornerWallCabinet || isCornerBaseCabinet || isCornerTallUnit;
         
-        const dragWallSnappedPos = getWallSnappedPosition(
+        const dragWallSnappedPos = getEnhancedComponentPlacement(
           finalX,
           finalY,
           draggedElement.width,
           draggedElement.depth || draggedElement.height,
-          innerRoomBounds.width,
-          innerRoomBounds.height,
-          isCornerComponent
+          draggedElement.id,
+          draggedElement.type || 'cabinet',
+          design.roomDimensions
         );
 
         // Use wall snapped position if snapped, otherwise clamp to boundaries
