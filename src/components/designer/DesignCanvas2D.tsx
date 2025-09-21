@@ -2165,20 +2165,21 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
       ctx.fillRect(pos.x, pos.y, legDepth, legLength);
       ctx.strokeRect(pos.x, pos.y, legDepth, legLength);
     } else if (isCornerWallCabinet) {
-      // Draw L-shaped wall cabinet drag preview
-      const legLength = 90 * zoom; // 90cm legs
-      const legDepth = 35 * zoom;  // 35cm depth for wall cabinets
+      // Draw SQUARE drag preview for corner wall cabinets (using actual dimensions)
+      const actualWidth = draggedElement.width * zoom;
+      const actualDepth = draggedElement.depth * zoom;
+      
+      // For square cabinets (like new 60x60), use full size. For rectangular (like old 90x35), use smaller
+      const squareSize = (actualWidth === actualDepth) ? actualWidth : Math.min(actualWidth, actualDepth);
       
       // Preview fill
       ctx.fillStyle = draggedElement.color || '#8b4513';
       
-      // X leg (horizontal section)
-      ctx.fillRect(pos.x, pos.y, legLength, legDepth);
-      ctx.strokeRect(pos.x, pos.y, legLength, legDepth);
-      
-      // Z leg (vertical section)
-      ctx.fillRect(pos.x, pos.y, legDepth, legLength);
-      ctx.strokeRect(pos.x, pos.y, legDepth, legLength);
+      // Draw square preview (centered if needed)
+      const offsetX = (actualWidth - squareSize) / 2;
+      const offsetY = (actualDepth - squareSize) / 2;
+      ctx.fillRect(pos.x + offsetX, pos.y + offsetY, squareSize, squareSize);
+      ctx.strokeRect(pos.x + offsetX, pos.y + offsetY, squareSize, squareSize);
     } else if (isCornerBaseCabinet) {
       // Draw L-shaped base cabinet drag preview
       const legLength = 90 * zoom; // 90cm legs
