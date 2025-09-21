@@ -9,14 +9,17 @@
 
 ## 🎯 Executive Summary
 
-The RightFit Interior Designer currently suffers from fundamental architectural issues in its 2D/3D view system that were caused by incremental development without unified design. This analysis identifies **5 critical architectural flaws** that require comprehensive redesign before further development can proceed effectively.
+The RightFit Interior Designer currently suffers from fundamental architectural issues in its 2D/3D view system that were caused by incremental development without unified design. This analysis identifies **6 critical architectural flaws** that require comprehensive redesign before further development can proceed effectively.
 
 **Key Issues Identified:**
 1. **Corner Logic Failure** - Only 50% of corner placements work correctly
 2. **Component Boundary Mismatch** - Visual vs interaction boundaries don't align
 3. **Multi-View Coordinate Inconsistencies** - Complex transformations causing positioning errors
 4. **Room Configuration Limitations** - No support for non-rectangular rooms
-5. **3D Synchronization Issues** - 2D changes not properly reflected in 3D
+5. **Drag & Drop System Chaos** - Multiple conflicting coordinate systems causing UX confusion
+6. **3D Synchronization Issues** - 2D changes not properly reflected in 3D
+
+**Critical Discovery**: The drag and drop system uses **3 completely different coordinate/scaling systems** (sidebar preview, canvas rendering, drop positioning) with no unified conversion logic, creating severe user experience issues where drag previews don't match actual component placement.
 
 ---
 
@@ -28,6 +31,7 @@ The RightFit Interior Designer currently suffers from fundamental architectural 
 | Component | File | Purpose | Issues |
 |-----------|------|---------|---------|
 | **2D Canvas** | `DesignCanvas2D.tsx` | Multi-view 2D rendering | Complex view logic, coordinate transforms |
+| **Component Sidebar** | `CompactComponentSidebar.tsx` | Drag preview creation | Scale factor chaos, L-shape complexity |
 | **3D Renderer** | `AdaptiveView3D.tsx` | 3D visualization | Coordinate conversion, ceiling height bugs |
 | **View Selector** | `ViewSelector.tsx` | View mode switching | Limited to basic rectangular rooms |
 | **Component Service** | `ComponentService.ts` | Database-driven behaviors | Corner configuration incomplete |
@@ -268,7 +272,98 @@ interface AdvancedRoomConfiguration {
 3. **Custom Polygons**: For irregular room shapes
 4. **Angled Ceilings**: For under-stairs storage (future)
 
-### **Issue #5: 3D Synchronization Problems**
+### **Issue #5: Drag & Drop System Inconsistencies**
+
+**Priority**: 🔴 **HIGH** - Critical UX issue affecting all component placements
+
+#### **Problem Description**
+The drag and drop system has multiple conflicting size and coordinate systems, causing severe disconnects between drag preview, canvas rendering, and actual component placement.
+
+#### **Critical Inconsistencies Identified**
+
+##### **1. Multiple Conflicting Size Systems**
+```typescript
+// PROBLEMATIC: Three different size calculation systems
+// 1. Drag Preview Size (Sidebar)
+const dragPreviewSize = {
+  width: `${component.width * 1.15}px`,    // Pixels with 1.15 scale
+  height: `${component.depth * 1.15}px`    // Depth becomes height in 2D
+};
+
+// 2. Canvas Rendering Size (Canvas)
+const canvasRenderSize = {
+  width: element.width * zoom,              // CM with zoom factor
+  height: element.depth * zoom              // Different zoom calculations
+};
+
+// 3. Drop Position Size (Drop Handler)
+const dropPositionSize = {
+  centerX: roomPos.x - (componentData.width / 2),  // Raw CM dimensions
+  centerY: roomPos.y - (componentData.depth / 2)   // No scale factors applied
+};
+```
+
+##### **2. Drag Image Center vs Drop Position Mismatch**
+```typescript
+// DRAG IMAGE: Center set in pixels with scale factor
+e.dataTransfer.setDragImage(dragPreview, previewWidth / 2, previewDepth / 2);
+// previewWidth = component.width * 1.15 (pixels)
+
+// DROP POSITION: Center calculated in room coordinates
+const dropX = roomPos.x - (componentData.width / 2);  // Raw centimeters
+const dropY = roomPos.y - (componentData.depth / 2);  // No scale conversion
+
+// RESULT: Drag image center ≠ actual drop position center
+```
+
+##### **3. L-Shaped Component Preview Confusion**
+```typescript
+// COMPLEX L-SHAPED DRAG PREVIEW: Creates visual L-shape in sidebar
+if (isCornerComponent) {
+  const legSize = 90 * scaleFactor / 2; // 45px legs with scale
+  // Creates two div rectangles to form L-shape
+  horizontalLeg.style.width = `${legSize}px`;
+  verticalLeg.style.height = `${legSize}px`;
+}
+
+// CANVAS L-SHAPED PREVIEW: Different L-shape calculation
+const drawLShapedDragPreview = () => {
+  const legLength = 90 * zoom;  // 90cm with zoom factor
+  const legDepth = 60 * zoom;   // Different depth per component type
+  // Draws rectangles with stroke, not filled shapes
+};
+
+// DROP POSITIONING: Uses simple 90x90 bounding box
+if (isCornerComponent) {
+  effectiveWidth = 90;   // Ignores actual L-shape
+  effectiveDepth = 90;   // Simplifies to square
+}
+```
+
+##### **4. Scale Factor Chaos**
+```typescript
+// MULTIPLE UNCOORDINATED SCALE FACTORS
+const sidebarScale = 1.15;                    // Drag preview scale
+const canvasScale = CANVAS_WIDTH / rect.width; // CSS to canvas scale
+const zoomScale = zoom;                       // User zoom level
+const roomScale = /* various calculations */;  // Room coordinate conversions
+
+// NO UNIFIED SCALING SYSTEM - Each component uses different factors
+```
+
+#### **Root Causes**
+1. **No Unified Coordinate System**: Each part of the drag/drop flow uses different coordinate spaces
+2. **Mixed Unit Systems**: Pixels, centimeters, and scaled values mixed without conversion
+3. **Incremental Development**: Drag system built piecemeal without unified design
+4. **Scale Factor Proliferation**: Multiple scale factors applied without coordination
+
+#### **User Impact**
+- **Placement Confusion**: Users can't predict where components will land based on drag preview
+- **L-Shape Misalignment**: Corner components appear in wrong positions relative to drag image
+- **Size Expectations**: Component appears different size during drag vs after placement
+- **Precision Issues**: Fine positioning nearly impossible due to coordinate mismatches
+
+### **Issue #6: 3D Synchronization Problems**
 
 **Priority**: 🔴 **MEDIUM** - Affects 3D visualization accuracy
 
@@ -391,7 +486,67 @@ class CornerLogicEngine {
 }
 ```
 
-### **Phase 3: Component Boundary System**
+### **Phase 3: Unified Drag & Drop System**
+
+#### **Coordinate-Aware Drag System**
+```typescript
+// NEW: Single source of truth for drag and drop coordinates
+interface DragDropCoordinateSystem {
+  // Unified scaling system
+  pixelsToRoomCoordinates(pixels: number): number;
+  roomCoordinatesToPixels(cm: number): number;
+  
+  // Drag preview sizing that matches canvas rendering
+  calculateDragPreviewSize(component: DatabaseComponent): PreviewDimensions;
+  
+  // Drop position that aligns with drag image center
+  calculateDropPosition(
+    mousePosition: Point,
+    component: DatabaseComponent,
+    dragImageCenter: Point
+  ): RoomCoordinates;
+}
+
+class UnifiedDragDropEngine {
+  private coordinateSystem: DragDropCoordinateSystem;
+  
+  // Create drag preview that exactly matches canvas appearance
+  createDragPreview(component: DatabaseComponent): HTMLElement {
+    const previewSize = this.coordinateSystem.calculateDragPreviewSize(component);
+    
+    if (component.isCorner) {
+      return this.createLShapedPreview(component, previewSize);
+    } else {
+      return this.createRectangularPreview(component, previewSize);
+    }
+  }
+  
+  // Handle drop with precise coordinate alignment
+  handleComponentDrop(
+    dropEvent: DragEvent,
+    canvas: HTMLCanvasElement
+  ): PlacementResult {
+    const mousePos = this.getMousePosition(dropEvent, canvas);
+    const componentData = this.getComponentData(dropEvent);
+    const dragImageCenter = this.getDragImageCenter(componentData);
+    
+    // Calculate drop position to align with drag image center
+    const dropPosition = this.coordinateSystem.calculateDropPosition(
+      mousePos,
+      componentData,
+      dragImageCenter
+    );
+    
+    return {
+      position: dropPosition,
+      rotation: this.calculateAutoRotation(dropPosition, componentData),
+      boundaries: this.calculateComponentBoundaries(componentData, dropPosition)
+    };
+  }
+}
+```
+
+### **Phase 4: Component Boundary System**
 
 #### **Rotation-Aware Boundary Detection**
 ```typescript
@@ -594,40 +749,51 @@ class DesignStateManager {
 - [ ] Refactor basic 2D/3D coordinate conversions
 - [ ] Establish consistent wall thickness handling
 
-### **Phase 2: Corner Logic Overhaul (Week 3-4)**
+### **Phase 2: Drag & Drop System Overhaul (Week 2-3)**
+**PRIORITY**: Fix critical UX issues affecting all placements
+- [ ] Implement unified DragDropCoordinateSystem with single scaling logic
+- [ ] Create drag preview sizing that exactly matches canvas components
+- [ ] Fix drag image center vs drop position alignment
+- [ ] Redesign L-shaped component drag previews to be accurate
+- [ ] Eliminate competing scale factors (1.15x sidebar, zoom, CSS scaling)
+- [ ] Test drag/drop precision across all component types
+
+### **Phase 3: Corner Logic Overhaul (Week 4-5)**
 - [ ] Design and implement unified corner detection system
 - [ ] Create comprehensive corner rotation logic
 - [ ] Implement proper L-shaped boundary calculations
 - [ ] Test all 4 corner positions with all component types
+- [ ] Integrate corner logic with new drag/drop system
 
-### **Phase 3: Boundary System (Week 5)**
+### **Phase 4: Boundary System (Week 6)**
 - [ ] Implement rotation-aware boundary detection
 - [ ] Fix component selection and hover issues
 - [ ] Create proper L-shaped interaction boundaries
-- [ ] Synchronize drag preview with actual placement
+- [ ] Ensure boundaries match visual representation exactly
 
-### **Phase 4: Multi-View Consistency (Week 6)**
+### **Phase 5: Multi-View Consistency (Week 7)**
 - [ ] Simplify elevation view coordinate transformations
 - [ ] Unify component positioning across all views
 - [ ] Fix door placement logic for all corner/view combinations
 - [ ] Implement comprehensive cross-view testing
 
-### **Phase 5: Room Configuration (Week 7-8)**
+### **Phase 6: Room Configuration (Week 8-9)**
 - [ ] Design flexible room shape system
 - [ ] Implement L-shaped and U-shaped room support
 - [ ] Create room configuration validation
 - [ ] Prepare groundwork for angled ceilings
 
-### **Phase 6: 3D Synchronization (Week 9)**
+### **Phase 7: 3D Synchronization (Week 10)**
 - [ ] Implement unified state management system
 - [ ] Fix ceiling height synchronization
 - [ ] Ensure component placement consistency
 - [ ] Performance optimization for real-time sync
 
-### **Phase 7: Testing & Validation (Week 10)**
+### **Phase 8: Testing & Validation (Week 11)**
 - [ ] Comprehensive automated testing
 - [ ] Manual testing of all corner positions
 - [ ] Cross-view consistency validation
+- [ ] Drag/drop precision testing across devices
 - [ ] Performance testing and optimization
 
 ---
@@ -701,6 +867,76 @@ describe('Component Boundary System', () => {
 }
 ```
 
+### **Drag & Drop System Tests**
+```typescript
+describe('Unified Drag & Drop System', () => {
+  test('drag preview size matches canvas component size', () => {
+    const testComponents = createVariousSizedComponents();
+    
+    testComponents.forEach(component => {
+      const dragPreview = createDragPreview(component);
+      const canvasComponent = renderComponentOnCanvas(component);
+      
+      // Verify drag preview dimensions match canvas rendering
+      const previewBounds = getDragPreviewBounds(dragPreview);
+      const canvasBounds = getCanvasComponentBounds(canvasComponent);
+      
+      expect(previewBounds.width).toBeCloseTo(canvasBounds.width, 1);
+      expect(previewBounds.height).toBeCloseTo(canvasBounds.height, 1);
+    });
+  });
+  
+  test('drop position aligns with drag image center', () => {
+    const testComponents = createTestComponents();
+    const dropPositions = generateTestDropPositions();
+    
+    testComponents.forEach(component => {
+      dropPositions.forEach(mousePos => {
+        const dragImageCenter = calculateDragImageCenter(component);
+        const dropResult = simulateComponentDrop(component, mousePos);
+        const expectedCenter = calculateExpectedComponentCenter(dropResult);
+        
+        // Verify component center matches where drag image center was dropped
+        expect(expectedCenter.x).toBeCloseTo(mousePos.x, 0.5);
+        expect(expectedCenter.y).toBeCloseTo(mousePos.y, 0.5);
+      });
+    });
+  });
+  
+  test('L-shaped component drag previews accurately represent footprint', () => {
+    const cornerComponents = createCornerTestComponents();
+    
+    cornerComponents.forEach(component => {
+      const dragPreview = createLShapedDragPreview(component);
+      const actualFootprint = calculateLShapedFootprint(component);
+      
+      // Verify L-shaped preview regions match actual component regions
+      const previewRegions = extractLShapeRegions(dragPreview);
+      expect(previewRegions).toMatchLShapeFootprint(actualFootprint);
+    });
+  });
+  
+  test('unified scaling system eliminates coordinate mismatches', () => {
+    const scalingTests = [
+      { zoom: 0.5, canvasScale: 1.2 },
+      { zoom: 1.0, canvasScale: 0.8 },
+      { zoom: 2.0, canvasScale: 1.5 }
+    ];
+    
+    scalingTests.forEach(({ zoom, canvasScale }) => {
+      const coordinateSystem = new DragDropCoordinateSystem(zoom, canvasScale);
+      
+      // Test round-trip coordinate conversion
+      const testCm = 120; // 120cm component
+      const pixels = coordinateSystem.roomCoordinatesToPixels(testCm);
+      const backToCm = coordinateSystem.pixelsToRoomCoordinates(pixels);
+      
+      expect(backToCm).toBeCloseTo(testCm, 0.1);
+    });
+  });
+}
+```
+
 ### **Cross-View Consistency Tests**
 ```typescript
 describe('Multi-View Synchronization', () => {
@@ -741,6 +977,9 @@ describe('Multi-View Synchronization', () => {
 ## 📋 Success Criteria
 
 ### **Functional Requirements**
+- [ ] **Drag & Drop Precision**: Drag preview size and drop position exactly match final placement
+- [ ] **L-Shaped Drag Previews**: Corner component previews accurately show footprint shape
+- [ ] **Coordinate System Unity**: Single scaling system eliminates positioning mismatches
 - [ ] **Corner Placement**: All 4 corner positions work reliably for all component types
 - [ ] **Auto-Rotation**: Consistent rotation behavior across all corners
 - [ ] **Boundary Accuracy**: Component interaction boundaries match visual representation
@@ -755,6 +994,9 @@ describe('Multi-View Synchronization', () => {
 - [ ] **Scalability**: System handles rooms with 100+ components
 
 ### **User Experience Requirements**
+- [ ] **Predictable Drag & Drop**: Users can accurately predict placement from drag preview
+- [ ] **Visual Size Consistency**: Component appears same size during drag and after placement
+- [ ] **Precise Positioning**: Fine component positioning possible with drag and drop
 - [ ] **Intuitive Corner Placement**: Users can easily place corner components
 - [ ] **Predictable Behavior**: Consistent results across all corners and views
 - [ ] **Visual Feedback**: Clear indication of component boundaries and orientation
