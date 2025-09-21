@@ -54,6 +54,7 @@ interface DesignToolbarProps {
   roomType: RoomType;
   elementCount: number;
   onValidateDesign: () => void;
+  onTestCoordinateSystem?: () => void;
 }
 
 export const DesignToolbar: React.FC<DesignToolbarProps> = ({
@@ -83,7 +84,8 @@ export const DesignToolbar: React.FC<DesignToolbarProps> = ({
   onSaveNew,
   roomType,
   elementCount,
-  onValidateDesign
+  onValidateDesign,
+  onTestCoordinateSystem
 }) => {
   const getRoomIcon = (roomType: RoomType) => {
     const iconMap = {
@@ -356,8 +358,27 @@ export const DesignToolbar: React.FC<DesignToolbarProps> = ({
             </div>
           </div>
 
-          {/* Right Section - Right Panel Toggle */}
+          {/* Right Section - Test & Panel Controls */}
           <div className="flex items-center gap-2">
+            {/* Coordinate System Test Button - Phase 1 Development */}
+            {onTestCoordinateSystem && (
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button 
+                    variant="outline" 
+                    size="sm"
+                    onClick={onTestCoordinateSystem}
+                    className="hover-scale fast-transition text-xs px-2"
+                  >
+                    🧪 Test Coords
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>Test Phase 1 Coordinate System</p>
+                </TooltipContent>
+              </Tooltip>
+            )}
+            
             <Tooltip>
               <TooltipTrigger asChild>
                 <Button 
