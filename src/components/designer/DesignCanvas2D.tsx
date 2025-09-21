@@ -4,6 +4,8 @@ import { ComponentService } from '@/services/ComponentService';
 import { RoomService } from '@/services/RoomService';
 import { useTouchEvents, TouchPoint } from '@/hooks/useTouchEvents';
 import { useIsMobile } from '@/hooks/use-mobile';
+import { getEnhancedComponentPlacement } from '@/utils/canvasCoordinateIntegration';
+import { initializeCoordinateEngine } from '@/services/CoordinateTransformEngine';
 
 // Throttle function for performance optimization
 const throttle = <T extends (...args: any[]) => void>(func: T, delay: number): T => {
@@ -460,6 +462,14 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
       try {
         // Load room configuration
         await getRoomConfig(design.roomType, design.roomDimensions);
+        
+        // Initialize the coordinate engine with current room dimensions
+        try {
+          initializeCoordinateEngine(design.roomDimensions);
+          console.log('🏗️ [DesignCanvas2D] Coordinate engine initialized for room:', design.roomDimensions);
+        } catch (error) {
+          console.warn('⚠️ [DesignCanvas2D] Failed to initialize coordinate engine:', error);
+        }
         
         // Preload common component behaviors (use actual database types)
         const commonTypes = ['cabinet', 'appliance', 'counter-top', 'end-panel', 
@@ -2974,34 +2984,38 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
         defaultZ = 90; // 90cm height for windows
       }
 
-      // Apply Smart Wall Snapping with 5cm clearance
-      const wallSnappedPos = getWallSnappedPosition(
+      // Apply Enhanced Component Placement using unified coordinate system
+      const placementResult = getEnhancedComponentPlacement(
         dropX,
         dropY,
         effectiveWidth,
         effectiveDepth,
-        innerRoomBounds.width,
-        innerRoomBounds.height,
-        isCornerComponent
+        componentData.id,
+        componentData.type,
+        design.roomDimensions
       );
 
-      // Log snapping results for debugging
-      if (wallSnappedPos.snappedToWall) {
-        console.log(`🎯 [Wall Snap] Component snapped to ${wallSnappedPos.corner || 'wall'} at (${wallSnappedPos.x}, ${wallSnappedPos.y})`);
+      // Log placement results for debugging
+      if (placementResult.snappedToWall) {
+        console.log(`🎯 [Enhanced Placement] Component snapped to ${placementResult.corner || 'wall'} at (${placementResult.x}, ${placementResult.y}) with rotation ${placementResult.rotation}°`);
+      }
+      
+      // Validate placement
+      if (!placementResult.withinBounds) {
+        console.warn('⚠️ [Enhanced Placement] Component placement outside room bounds, adjusting...');
       }
 
       const newElement: DesignElement = {
         id: `${componentData.id}-${Date.now()}`,
         type: componentData.type,
-        // CRITICAL FIX: Don't apply grid snapping if component was snapped to wall
-        // Grid snapping can move components away from precise wall positions
-        x: wallSnappedPos.snappedToWall ? wallSnappedPos.x : snapToGrid(wallSnappedPos.x),
-        y: wallSnappedPos.snappedToWall ? wallSnappedPos.y : snapToGrid(wallSnappedPos.y),
+        // Use enhanced placement results with proper wall clearance and rotation
+        x: placementResult.snappedToWall ? placementResult.x : snapToGrid(placementResult.x),
+        y: placementResult.snappedToWall ? placementResult.y : snapToGrid(placementResult.y),
         z: defaultZ, // Set appropriate Z position
         width: componentData.width, // X-axis dimension
         depth: componentData.depth, // Y-axis dimension (front-to-back)
         height: componentData.height, // Z-axis dimension (bottom-to-top)
-        rotation: 0,
+        rotation: placementResult.rotation, // Use calculated rotation from enhanced placement
         color: componentData.color,
         style: componentData.name
       };
