@@ -55,9 +55,9 @@ export class CanvasCoordinateIntegrator {
     // Determine if this is a corner component
     const isCornerComponent = this.isCornerComponent(componentId);
     
-    // Use effective dimensions
-    const effectiveWidth = isCornerComponent ? 90 : componentWidth;
-    const effectiveDepth = isCornerComponent ? 90 : componentDepth;
+    // Use actual component dimensions (no more forcing corner components to 90x90)
+    const effectiveWidth = componentWidth;
+    const effectiveDepth = componentDepth;
     
     console.log('🎯 [CanvasIntegrator] Calculating placement:', {
       dropPosition: { x: dropX, y: dropY },
