@@ -1000,21 +1000,10 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
       );
       
       // Apply rotation - convert degrees to radians if needed
-      if (isCornerCounterTop || isCornerWallCabinet || isCornerBaseCabinet || isCornerTallUnit) {
-        // For L-shaped components, rotate around the TRUE CENTROID - pivot point is correct
-        // FOCUS: The rotation CENTER is fine, the issue is the rotation ANGLES for each corner
-        const centroidX = 37.5 * zoom; // Correct centroid calculation  
-        const centroidY = 37.5 * zoom; // Correct centroid calculation
-        
-        ctx.translate(pos.x + centroidX, pos.y + centroidY);
-        ctx.rotate(rotation * Math.PI / 180);
-        ctx.translate(-centroidX, -centroidY);
-      } else {
-        // Standard rectangular rotation from center
-        ctx.translate(pos.x + width / 2, pos.y + depth / 2);
-        ctx.rotate(rotation * Math.PI / 180);
-        ctx.translate(-width / 2, -depth / 2);
-      }
+      // SIMPLIFIED: Corner units are squares, so use standard center rotation for all
+      ctx.translate(pos.x + width / 2, pos.y + depth / 2);
+      ctx.rotate(rotation * Math.PI / 180);
+      ctx.translate(-width / 2, -depth / 2);
 
       // Element fill
       if (isSelected) {
@@ -1074,59 +1063,34 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
           ctx.strokeRect(0, 0, legDepth, legLength);
         }
       } else if (isCornerBaseCabinet) {
-        // Draw L-shaped corner base cabinet in plan view with ROTATION-AWARE geometry
-        // Match the 3D geometry: 90cm legs with 60cm depth (base cabinet depth)
-        const legLength = 90 * zoom; // 90cm legs
-        const legDepth = 60 * zoom;  // 60cm depth for base cabinets
+        // SIMPLIFIED: Draw corner cabinet as a SQUARE in 2D (90cm x 90cm)
+        // This eliminates rotation complexity while keeping 3D view accurate
+        const squareSize = 90 * zoom; // 90cm square
         
-        // L-SHAPE RENDERING: Match 3D model positioning exactly
-        // 3D positions legs relative to center with specific offsets
-        // Canvas rotation is already applied above
+        // Draw simple square - no rotation needed
+        ctx.fillRect(0, 0, squareSize, squareSize);
         
-        // Calculate offsets to match 3D model positioning
-        // 3D X leg: position=[0, y, cornerDepth/2 - legLength/2] = [0, y, -15]
-        // 3D Z leg: position=[cornerDepth/2 - legLength/2, y, 0] = [-15, y, 0]
-        const legOffset = (legDepth / 2) - (legLength / 2); // 30 - 45 = -15
-        
-        // X leg (horizontal section) - 90cm x 60cm, positioned like 3D
-        ctx.fillRect(0, legOffset, legLength, legDepth);
-        
-        // Z leg (vertical section) - 60cm x 90cm, positioned like 3D  
-        ctx.fillRect(legOffset, 0, legDepth, legLength);
-        
-        // Element border for L-shape (only when selected) - let canvas rotation handle orientation
+        // Element border for square (only when selected)
         if (isSelected) {
           ctx.strokeStyle = '#ff0000';
           ctx.lineWidth = 2;
           ctx.setLineDash([]);
-          
-          // Border for X leg - positioned like 3D
-          ctx.strokeRect(0, legOffset, legLength, legDepth);
-          // Border for Z leg - positioned like 3D
-          ctx.strokeRect(legOffset, 0, legDepth, legLength);
+          ctx.strokeRect(0, 0, squareSize, squareSize);
         }
       } else if (isCornerTallUnit) {
-        // Draw L-shaped corner tall unit in plan view
-        // Match the 3D geometry: 90cm legs with 60cm depth (tall unit depth)
-        const legLength = 90 * zoom; // 90cm legs
-        const legDepth = 60 * zoom;  // 60cm depth for tall units
+        // SIMPLIFIED: Draw corner tall unit as a SQUARE in 2D (90cm x 90cm)
+        // This eliminates rotation complexity while keeping 3D view accurate
+        const squareSize = 90 * zoom; // 90cm square
         
-        // X leg (horizontal section)
-        ctx.fillRect(0, 0, legLength, legDepth);
+        // Draw simple square - no rotation needed
+        ctx.fillRect(0, 0, squareSize, squareSize);
         
-        // Z leg (vertical section) - positioned to form L-shape
-        ctx.fillRect(0, 0, legDepth, legLength);
-        
-        // Element border for L-shape (only when selected)
+        // Element border for square (only when selected)
         if (isSelected) {
           ctx.strokeStyle = '#ff0000';
           ctx.lineWidth = 2;
           ctx.setLineDash([]);
-          
-          // Border for X leg
-          ctx.strokeRect(0, 0, legLength, legDepth);
-          // Border for Z leg  
-          ctx.strokeRect(0, 0, legDepth, legLength);
+          ctx.strokeRect(0, 0, squareSize, squareSize);
         }
       } else {
         // Standard rectangular rendering
