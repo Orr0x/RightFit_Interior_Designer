@@ -1077,15 +1077,20 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
         const legLength = 90 * zoom; // 90cm legs
         const legDepth = 60 * zoom;  // 60cm depth for base cabinets
         
-        // L-SHAPE RENDERING: Draw L-shape centered around rotation point (like 3D model)
-        // Canvas rotation is already applied above, draw L-shape relative to center
-        const halfLeg = legLength / 2; // 45cm offset to center the L-shape
+        // L-SHAPE RENDERING: Match 3D model positioning exactly
+        // 3D positions legs relative to center with specific offsets
+        // Canvas rotation is already applied above
         
-        // X leg (horizontal section) - 90cm x 60cm, centered
-        ctx.fillRect(-halfLeg, -halfLeg, legLength, legDepth);
+        // Calculate offsets to match 3D model positioning
+        // 3D X leg: position=[0, y, cornerDepth/2 - legLength/2] = [0, y, -15]
+        // 3D Z leg: position=[cornerDepth/2 - legLength/2, y, 0] = [-15, y, 0]
+        const legOffset = (legDepth / 2) - (legLength / 2); // 30 - 45 = -15
         
-        // Z leg (vertical section) - 60cm x 90cm, centered to form L-shape
-        ctx.fillRect(-halfLeg, -halfLeg, legDepth, legLength);
+        // X leg (horizontal section) - 90cm x 60cm, positioned like 3D
+        ctx.fillRect(0, legOffset, legLength, legDepth);
+        
+        // Z leg (vertical section) - 60cm x 90cm, positioned like 3D  
+        ctx.fillRect(legOffset, 0, legDepth, legLength);
         
         // Element border for L-shape (only when selected) - let canvas rotation handle orientation
         if (isSelected) {
@@ -1093,10 +1098,10 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
           ctx.lineWidth = 2;
           ctx.setLineDash([]);
           
-          // Border for X leg - centered
-          ctx.strokeRect(-halfLeg, -halfLeg, legLength, legDepth);
-          // Border for Z leg - centered
-          ctx.strokeRect(-halfLeg, -halfLeg, legDepth, legLength);
+          // Border for X leg - positioned like 3D
+          ctx.strokeRect(0, legOffset, legLength, legDepth);
+          // Border for Z leg - positioned like 3D
+          ctx.strokeRect(legOffset, 0, legDepth, legLength);
         }
       } else if (isCornerTallUnit) {
         // Draw L-shaped corner tall unit in plan view
