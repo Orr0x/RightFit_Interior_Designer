@@ -85,70 +85,8 @@ const CompactComponentSidebar: React.FC<CompactComponentSidebarProps> = ({
   
   // Use database components directly (no conversion needed)
   const allComponents = useMemo(() => {
-  // L-SHAPED TEST COMPONENT - Orange corner cabinet with proper geometry
-  const lShapedTestComponent: DatabaseComponent = {
-    id: 'test-l-shaped-001',
-    component_id: 'l-shaped-test-cabinet',
-    name: 'L-Shaped Test Cabinet',
-    description: 'Test component with proper L-shaped geometry (2 x 90cm legs)',
-    type: 'cabinet',
-    category: 'base-cabinets',
-    width: 90,
-    height: 90,
-    depth: 90,
-    room_types: ['kitchen'],
-    icon_name: 'Square',
-    color: '#FF6B35', // Orange color to distinguish from regular cabinets
-    model_url: null,
-    thumbnail_url: null,
-    price: null,
-    deprecated: false,
-    tags: ['test', 'l-shaped', 'corner'],
-    metadata: {
-      isLShaped: true,
-      legLength: 90,
-      legDepth: 60,
-      geometry: {
-        type: 'L-shaped',
-        legs: [
-          { x: 0, y: 0, width: 90, depth: 60 },    // Horizontal leg
-          { x: 0, y: 0, width: 60, depth: 90 }     // Vertical leg  
-        ]
-      }
-    },
-    created_at: new Date().toISOString(),
-    updated_at: new Date().toISOString()
-  };
-
-  // New Corner Wall Cabinet - based on working base unit approach
-  const newCornerWallCabinet: DatabaseComponent = {
-    id: 'test-corner-wall-001',
-    component_id: 'new-corner-wall-cabinet',
-    name: 'New Corner Wall Cabinet',
-    description: 'Corner wall cabinet with proper 60x60x60 dimensions (60x60 square works like base cabinet)',
-    type: 'cabinet',
-    category: 'wall-units',
-    width: 60,
-    height: 60, // 60cm height for wall cabinet
-    depth: 60,
-    room_types: ['kitchen'],
-    icon_name: 'Square',
-    color: '#FF6B35', // Orange color like the test base cabinet
-    model_url: null,
-    thumbnail_url: null,
-    price: null,
-    deprecated: false,
-    tags: ['test', 'corner', 'wall'],
-    metadata: {
-      isCorner: true,
-      mountType: 'wall'
-    },
-    created_at: new Date().toISOString(),
-    updated_at: new Date().toISOString()
-  };
-
-    const baseComponents = components || [];
-    return [...baseComponents, lShapedTestComponent, newCornerWallCabinet];
+    // All components now come from database - no hardcoded components
+    return components || [];
   }, [components]);
 
   // Filter components for current room type with debugging - only when not loading
