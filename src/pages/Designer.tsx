@@ -283,29 +283,6 @@ const Designer = () => {
     setSelectedElement(null);
   };
 
-  // Test function to create sample sink components
-  const createTestSink = (sinkType: 'kitchen' | 'butler', position: { x: number; y: number }) => {
-    const sinkId = sinkType === 'kitchen' ? 'kitchen-sink-60cm' : 'butler-sink-60cm';
-    const sinkName = sinkType === 'kitchen' ? 'Kitchen Sink 60cm' : 'Butler Sink 60cm';
-    
-    const testSink: DesignElement = {
-      id: sinkId,
-      name: sinkName,
-      type: 'sink',
-      x: position.x,
-      y: position.y,
-      z: sinkType === 'kitchen' ? 75 : 65, // Kitchen sinks at 75cm, butler sinks at 65cm
-      width: 60,
-      depth: 60,
-      height: sinkType === 'kitchen' ? 20 : 30, // Different heights for different sink types
-      color: sinkType === 'kitchen' ? '#C0C0C0' : '#FFFFFF',
-      rotation: 0,
-      zIndex: getDefaultZIndex('sink', sinkId),
-      isVisible: true
-    };
-    
-    handleAddElement(testSink);
-  };
 
   // Toolbar functions
   const handleToolChange = (tool: 'select' | 'fit-screen' | 'pan' | 'tape-measure' | 'none') => {
@@ -849,21 +826,6 @@ const Designer = () => {
                     onTestCoordinateSystem={handleTestCoordinateSystem}
                   />
                   
-                  {/* Test Sink Buttons */}
-                  <div className="flex gap-2 ml-4">
-                    <button
-                      onClick={() => createTestSink('kitchen', { x: 100, y: 100 })}
-                      className="px-3 py-1 bg-blue-500 text-white rounded text-sm hover:bg-blue-600"
-                    >
-                      Test Kitchen Sink
-                    </button>
-                    <button
-                      onClick={() => createTestSink('butler', { x: 200, y: 100 })}
-                      className="px-3 py-1 bg-green-500 text-white rounded text-sm hover:bg-green-600"
-                    >
-                      Test Butler Sink
-                    </button>
-                  </div>
                 </div>
                 
               </div>

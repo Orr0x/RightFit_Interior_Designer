@@ -32,6 +32,7 @@ This document provides a comprehensive overview of implemented features versus p
 - ✅ **Component Categories**: Multiple organized categories per room type
 - ✅ **Smart Placement**: Auto-orientation based on wall proximity
 - ✅ **Component Behaviors**: Mount type, direction, door placement logic
+- ⚠️ **Sink Models**: Professional 3D/2D rendering implemented - more work needed for production-ready quality
 
 ### 📱 **Mobile & Touch Support** (v2.5 Complete)
 - ✅ **Touch Gestures**: Pinch-to-zoom, touch pan, long press selection
