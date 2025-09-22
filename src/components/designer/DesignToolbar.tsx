@@ -22,7 +22,9 @@ import {
   Bath,
   Tv,
   Grid2X2,
-  RulerIcon
+  RulerIcon,
+  Square,
+  Palette
 } from 'lucide-react';
 import { RoomType } from '@/types/project';
 
@@ -35,6 +37,10 @@ interface DesignToolbarProps {
   onToggleGrid: () => void;
   showRuler: boolean;
   onToggleRuler: () => void;
+  showWireframe: boolean;
+  onToggleWireframe: () => void;
+  showColorDetail: boolean;
+  onToggleColorDetail: () => void;
   onReset: () => void;
   onCopy: () => void;
   onDelete: () => void;
@@ -66,6 +72,10 @@ export const DesignToolbar: React.FC<DesignToolbarProps> = ({
   onToggleGrid,
   showRuler,
   onToggleRuler,
+  showWireframe,
+  onToggleWireframe,
+  showColorDetail,
+  onToggleColorDetail,
   onReset,
   onCopy,
   onDelete,
@@ -293,6 +303,38 @@ export const DesignToolbar: React.FC<DesignToolbarProps> = ({
                 </TooltipTrigger>
                 <TooltipContent>
                   <p>Measurement tool - click two points to measure</p>
+                </TooltipContent>
+              </Tooltip>
+              
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button 
+                    variant={showWireframe ? 'default' : 'ghost'} 
+                    size="sm"
+                    onClick={onToggleWireframe}
+                    className="hover-scale fast-transition"
+                  >
+                    <Square className="h-4 w-4" />
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>Toggle wireframe outlines</p>
+                </TooltipContent>
+              </Tooltip>
+              
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button 
+                    variant={showColorDetail ? 'default' : 'ghost'} 
+                    size="sm"
+                    onClick={onToggleColorDetail}
+                    className="hover-scale fast-transition"
+                  >
+                    <Palette className="h-4 w-4" />
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>Toggle color details</p>
                 </TooltipContent>
               </Tooltip>
 

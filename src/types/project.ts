@@ -101,7 +101,61 @@ export interface DesignElement {
   style?: string;
   color?: string;
   material?: string;
+  // Layering and visibility properties
+  zIndex: number; // Rendering layer order (lower = behind, higher = in front)
+  isVisible: boolean; // Whether the component is visible in the 2D plan view
 }
+
+// Z-Index layering system for 2D plan view rendering
+export const getDefaultZIndex = (type: DesignElement['type'], id?: string): number => {
+  // Check if this is a wall cabinet based on ID
+  const isWallCabinet = id && (
+    id.includes('wall-cabinet') || 
+    id.includes('corner-wall-cabinet') || 
+    id.includes('new-corner-wall-cabinet')
+  );
+  
+  // Check if this is a tall unit (floor-standing but full height)
+  const isTallUnit = id && (
+    id.includes('tall') || 
+    id.includes('larder') || 
+    id.includes('corner-tall') ||
+    id.includes('corner-larder') ||
+    id.includes('larder-corner')
+  );
+
+  switch (type) {
+    case 'flooring':
+      return 1.0; // Bottom layer
+    case 'cabinet':
+      if (isWallCabinet) {
+        return 4.0; // Wall cabinets - above countertops
+      } else if (isTallUnit) {
+        return 2.0; // Tall units - base level (floor-standing)
+      } else {
+        return 2.0; // Base cabinets - base level
+      }
+    case 'appliance': // Appliances (floor-standing)
+    case 'end-panel': // Base unit end panels
+    case 'toe-kick': // Base level trim
+      return 2.0; // Base units layer
+    case 'counter-top':
+      return 3.0; // Work surface layer - above base units, below wall units
+    case 'wall-unit-end-panel': // Wall unit end panels
+      return 4.0; // Wall units layer
+    case 'pelmet':
+      return 4.5; // Below wall units
+    case 'cornice':
+      return 5.0; // Above wall units
+    case 'window':
+    case 'door':
+      return 6.0; // Doors and windows
+    case 'wall':
+      return 0.5; // Walls (behind everything)
+    default:
+      return 2.0; // Default to base layer
+  }
+};
 
 // Database response types (what we get from Supabase)
 export interface ProjectRow {

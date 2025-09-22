@@ -23,7 +23,8 @@ import { KeyboardShortcutsHelp } from '@/components/designer/KeyboardShortcutsHe
 import MobileDesignerLayout from '@/components/designer/MobileDesignerLayout';
 import { toast } from 'sonner';
 import { useDesignValidation } from '@/hooks/useDesignValidation';
-import { RoomDesign, DesignElement } from '@/types/project';
+import { RoomDesign, DesignElement, getDefaultZIndex } from '@/types/project';
+import { migrateElements } from '@/utils/migrateElements';
 import { ComponentService } from '@/services/ComponentService';
 import rightfitLogo from '@/assets/logo.png';
 import '@/utils/godMode'; // Load God mode utilities in development
@@ -57,6 +58,8 @@ const Designer = () => {
   const [activeTool, setActiveTool] = useState<'select' | 'fit-screen' | 'pan' | 'tape-measure' | 'none'>('select');
   const [showGrid, setShowGrid] = useState(true);
   const [showRuler, setShowRuler] = useState(false);
+  const [showWireframe, setShowWireframe] = useState(false);
+  const [showColorDetail, setShowColorDetail] = useState(true);
   const [fitToScreenSignal, setFitToScreenSignal] = useState(0);
   const [showLeftPanel, setShowLeftPanel] = useState(true);
   const [showRightPanel, setShowRightPanel] = useState(true);
@@ -127,7 +130,7 @@ const Designer = () => {
   const design = currentRoomDesign ? {
     id: currentRoomDesign.id,
     name: currentRoomDesign.name || 'Untitled Room',
-    elements: currentRoomDesign.design_elements || [],
+    elements: migrateElements(currentRoomDesign.design_elements || []),
     roomDimensions: currentRoomDesign.room_dimensions || { width: 800, height: 600, ceilingHeight: 240 },
     roomType: currentRoomDesign.room_type,
   } : null;
@@ -213,14 +216,25 @@ const Designer = () => {
     setHistory(prev => [...prev, { ...currentRoomDesign }]);
     setFuture([]);
 
+    // Assign default zIndex and isVisible values if not already set
+    const defaultZIndex = getDefaultZIndex(element.type, element.id);
+    const elementWithDefaults: DesignElement = {
+      ...element,
+      zIndex: element.zIndex ?? defaultZIndex,
+      isVisible: element.isVisible ?? true
+    };
+    
+    // Debug logging for layering
+    console.log(`🎯 [Layering] Element: ${element.id} (${element.type}) -> zIndex: ${defaultZIndex}`);
+
     // Add the new element to the design
-    const updatedElements = [...(currentRoomDesign.design_elements || []), element];
+    const updatedElements = [...(currentRoomDesign.design_elements || []), elementWithDefaults];
     await updateCurrentRoomDesign({
       design_elements: updatedElements,
     });
 
     // Select the newly added element
-    setSelectedElement(element);
+    setSelectedElement(elementWithDefaults);
     
     // Show success message
     toast.success(`Added ${element.name} to design`);
@@ -740,6 +754,10 @@ const Designer = () => {
             onToolChange={handleToolChange}
             showGrid={showGrid}
             onToggleGrid={handleToggleGrid}
+            showWireframe={showWireframe}
+            onToggleWireframe={() => setShowWireframe(prev => !prev)}
+            showColorDetail={showColorDetail}
+            onToggleColorDetail={() => setShowColorDetail(prev => !prev)}
             fitToScreenSignal={fitToScreenSignal}
             onFitToScreen={handleFitToScreen}
             completedMeasurements={completedMeasurements}
@@ -782,6 +800,10 @@ const Designer = () => {
                     onToggleGrid={handleToggleGrid}
                     showRuler={showRuler}
                     onToggleRuler={handleToggleRuler}
+                    showWireframe={showWireframe}
+                    onToggleWireframe={() => setShowWireframe(prev => !prev)}
+                    showColorDetail={showColorDetail}
+                    onToggleColorDetail={() => setShowColorDetail(prev => !prev)}
                     onReset={handleReset}
                     onCopy={handleCopyElement}
                     onDelete={handleDeleteSelected}
@@ -823,6 +845,8 @@ const Designer = () => {
                         onAddElement={handleAddElement}
                         showGrid={showGrid}
                         showRuler={showRuler}
+                        showWireframe={showWireframe}
+                        showColorDetail={showColorDetail}
                         activeTool={activeTool}
                         fitToScreenSignal={fitToScreenSignal}
                         active2DView={active2DView}

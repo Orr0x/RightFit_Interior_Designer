@@ -53,6 +53,10 @@ interface MobileDesignerLayoutProps {
   onToolChange: (tool: 'select' | 'fit-screen' | 'pan' | 'tape-measure' | 'none') => void;
   showGrid: boolean;
   onToggleGrid: () => void;
+  showWireframe: boolean;
+  onToggleWireframe: () => void;
+  showColorDetail: boolean;
+  onToggleColorDetail: () => void;
   fitToScreenSignal: number;
   onFitToScreen: () => void;
   
@@ -81,6 +85,10 @@ export const MobileDesignerLayout: React.FC<MobileDesignerLayoutProps> = ({
   onToolChange,
   showGrid,
   onToggleGrid,
+  showWireframe,
+  onToggleWireframe,
+  showColorDetail,
+  onToggleColorDetail,
   fitToScreenSignal,
   onFitToScreen,
   completedMeasurements = [],
@@ -263,6 +271,8 @@ export const MobileDesignerLayout: React.FC<MobileDesignerLayoutProps> = ({
                 onAddElement={onAddElement}
                 showGrid={showGrid}
                 showRuler={false}
+                showWireframe={showWireframe}
+                showColorDetail={showColorDetail}
                 activeTool={activeTool}
                 fitToScreenSignal={fitToScreenSignal}
                 active2DView={active2DView}

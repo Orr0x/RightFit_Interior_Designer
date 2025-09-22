@@ -99,10 +99,8 @@ export const ComponentSelector: React.FC<ComponentSelectorProps> = ({
   };
 
   const handleElementVisibilityToggle = (element: DesignElement) => {
-    // For now, we'll use a custom property to track visibility
-    // In a full implementation, this might be part of the element state
-    const isHidden = (element as any).hidden;
-    onUpdateElement(element.id, { ...(element as any), hidden: !isHidden });
+    // Toggle the isVisible property
+    onUpdateElement(element.id, { isVisible: !element.isVisible });
   };
 
   if (elements.length === 0) {
@@ -183,7 +181,7 @@ export const ComponentSelector: React.FC<ComponentSelectorProps> = ({
                   <div className="bg-muted/20 max-h-40 overflow-auto">
                     {categoryElements.map((element) => {
                       const isSelected = selectedElement?.id === element.id;
-                      const isHidden = (element as any).hidden;
+                      const isHidden = !element.isVisible;
                       
                       return (
                         <div

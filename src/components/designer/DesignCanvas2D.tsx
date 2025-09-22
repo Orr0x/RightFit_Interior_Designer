@@ -38,6 +38,8 @@ interface DesignCanvas2DProps {
   onAddElement: (element: DesignElement) => void;
   showGrid?: boolean;
   showRuler?: boolean;
+  showWireframe?: boolean;
+  showColorDetail?: boolean;
   activeTool?: 'select' | 'fit-screen' | 'pan' | 'tape-measure' | 'none';
   fitToScreenSignal?: number;
   active2DView: 'plan' | 'front' | 'back' | 'left' | 'right';
@@ -375,6 +377,8 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
   onAddElement,
   showGrid = true,
   showRuler = false,
+  showWireframe = false,
+  showColorDetail = true,
   activeTool = 'select',
   fitToScreenSignal = 0,
   active2DView = 'plan',
@@ -982,7 +986,7 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
     const isHovered = hoveredElement?.id === element.id;
     
     if (active2DView === 'plan') {
-      // Plan view rendering - use width × depth for top-down view
+      // Plan view rendering - Support both color detail and wireframe overlays
       const pos = roomToCanvas(element.x, element.y);
       const width = element.width * zoom;
       const depth = (element.depth || element.height) * zoom; // Use depth for Y-axis in plan view
@@ -1000,106 +1004,63 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
         element.id.includes('larder-corner')
       );
       
+      const isCornerComponent = isCornerCounterTop || isCornerWallCabinet || isCornerBaseCabinet || isCornerTallUnit;
+      
       // Apply rotation - convert degrees to radians if needed
-      // SIMPLIFIED: Corner units are squares, so use standard center rotation for all
       ctx.translate(pos.x + width / 2, pos.y + depth / 2);
       ctx.rotate(rotation * Math.PI / 180);
       ctx.translate(-width / 2, -depth / 2);
 
-      // Element fill
-      if (isSelected) {
-        ctx.fillStyle = '#ff6b6b';
-      } else if (isHovered) {
-        ctx.fillStyle = '#b0b0b0';
-      } else {
-        ctx.fillStyle = element.color || '#8b4513';
+      // COLOR DETAIL RENDERING (if enabled)
+      if (showColorDetail) {
+        // Element fill
+        if (isSelected) {
+          ctx.fillStyle = '#ff6b6b';
+        } else if (isHovered) {
+          ctx.fillStyle = '#b0b0b0';
+        } else {
+          ctx.fillStyle = element.color || '#8b4513';
+        }
+        
+        if (isCornerComponent) {
+          // Corner components: Draw as square
+          const squareSize = Math.min(element.width, element.depth) * zoom;
+          ctx.fillRect(0, 0, squareSize, squareSize);
+        } else {
+          // Standard components: Draw as rectangle
+          ctx.fillRect(0, 0, width, depth);
+        }
       }
-      
-      // L-shape rendering for corner components
-      
-      if (isCornerCounterTop) {
-        // DYNAMIC: Draw corner counter top as a SQUARE using actual dimensions
-        // This works with any square corner component (60x60, 90x90, etc.)
-        const squareSize = Math.min(element.width, element.depth) * zoom; // Use actual square size
+
+      // WIREFRAME OVERLAY (if enabled)
+      if (showWireframe) {
+        ctx.strokeStyle = '#000000'; // Black wireframe outlines
+        ctx.lineWidth = 0.5; // Ultra-thin lines as requested
+        ctx.setLineDash([]);
         
-        // Draw simple square - no rotation needed
-        ctx.fillRect(0, 0, squareSize, squareSize);
-        
-        // Element border for square (only when selected)
-        if (isSelected) {
-          ctx.strokeStyle = '#ff0000';
-          ctx.lineWidth = 2;
-          ctx.setLineDash([]);
+        if (isCornerComponent) {
+          // Corner components: Draw as square wireframe
+          const squareSize = Math.min(element.width, element.depth) * zoom;
           ctx.strokeRect(0, 0, squareSize, squareSize);
-        }
-      } else if (isCornerWallCabinet) {
-        // SIMPLIFIED: Draw corner wall cabinet as a SQUARE using ACTUAL element dimensions
-        // For new 60x60 cabinet, this will be 60x60. For old 90x35 cabinet, use smaller dimension
-        const actualWidth = element.width * zoom;   // Use actual element width
-        const actualDepth = element.depth * zoom;   // Use actual element depth
-        
-        // For square cabinets (like new 60x60), use full size. For rectangular (like old 90x35), use smaller
-        const squareSize = (actualWidth === actualDepth) ? actualWidth : Math.min(actualWidth, actualDepth);
-        
-        // Center the square within the actual bounding box
-        const offsetX = (actualWidth - squareSize) / 2;  // Center horizontally
-        const offsetY = (actualDepth - squareSize) / 2;   // Center vertically
-        
-        // Draw square centered in bounding box
-        ctx.fillRect(offsetX, offsetY, squareSize, squareSize);
-        
-        // Element border for square (only when selected)
-        if (isSelected) {
-          ctx.strokeStyle = '#ff0000';
-          ctx.lineWidth = 2;
-          ctx.setLineDash([]);
-          ctx.strokeRect(offsetX, offsetY, squareSize, squareSize);
-        }
-      } else if (isCornerBaseCabinet) {
-        // DYNAMIC: Draw corner base cabinet as a SQUARE using actual dimensions
-        // This works with any square corner component (60x60, 90x90, etc.)
-        const squareSize = Math.min(element.width, element.depth) * zoom; // Use actual square size
-        
-        // Draw simple square - no rotation needed
-        ctx.fillRect(0, 0, squareSize, squareSize);
-        
-        // Element border for square (only when selected)
-        if (isSelected) {
-          ctx.strokeStyle = '#ff0000';
-          ctx.lineWidth = 2;
-          ctx.setLineDash([]);
-          ctx.strokeRect(0, 0, squareSize, squareSize);
-        }
-      } else if (isCornerTallUnit) {
-        // DYNAMIC: Draw corner tall unit as a SQUARE using actual dimensions
-        // This works with any square corner component (60x60, 90x90, etc.)
-        const squareSize = Math.min(element.width, element.depth) * zoom; // Use actual square size
-        
-        // Draw simple square - no rotation needed
-        ctx.fillRect(0, 0, squareSize, squareSize);
-        
-        // Element border for square (only when selected)
-        if (isSelected) {
-          ctx.strokeStyle = '#ff0000';
-          ctx.lineWidth = 2;
-          ctx.setLineDash([]);
-          ctx.strokeRect(0, 0, squareSize, squareSize);
-        }
-      } else {
-        // Standard rectangular rendering
-        ctx.fillRect(0, 0, width, depth);
-        
-        // Element border (only when selected)
-        if (isSelected) {
-          ctx.strokeStyle = '#ff0000';
-          ctx.lineWidth = 2;
-          ctx.setLineDash([]);
+        } else {
+          // Standard components: Draw as rectangular wireframe
           ctx.strokeRect(0, 0, width, depth);
         }
       }
 
-      // In plan view, show solid blocks without cabinet details or text labels
-      // Cabinet details and text are not appropriate for top-down view
+      // Selection overlay - Red outline when selected (drawn on top of everything)
+      if (isSelected) {
+        ctx.strokeStyle = '#ff0000';
+        ctx.lineWidth = 2;
+        ctx.setLineDash([]);
+        
+        if (isCornerComponent) {
+          const squareSize = Math.min(element.width, element.depth) * zoom;
+          ctx.strokeRect(0, 0, squareSize, squareSize);
+        } else {
+          ctx.strokeRect(0, 0, width, depth);
+        }
+      }
 
       ctx.restore();
 
@@ -1112,7 +1073,7 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
       // Elevation view rendering
       drawElementElevation(ctx, element, isSelected, isHovered);
     }
-  }, [active2DView, roomToCanvas, selectedElement, hoveredElement, zoom]);
+  }, [active2DView, roomToCanvas, selectedElement, hoveredElement, zoom, showWireframe, showColorDetail]);
 
 
   // Draw selection handles using rotated bounding box
@@ -2140,75 +2101,62 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
       draggedElement.id.includes('larder-corner')
     );
     
-    // Draw semi-transparent preview at snap position
+    const isCornerComponent = isCornerCounterTop || isCornerWallCabinet || isCornerBaseCabinet || isCornerTallUnit;
+    
+    // Draw preview at snap position (plan view only)
     ctx.save();
-    ctx.globalAlpha = 0.7;
+    ctx.globalAlpha = 0.8;
     
     // Preview border - green if snapping, red if not
     const isSnapped = Math.abs(snapResult.x - roomPos.x) > 0.1 || Math.abs(snapResult.y - roomPos.y) > 0.1;
-    ctx.strokeStyle = isSnapped ? '#00ff00' : '#ff6b6b';
+    const previewColor = isSnapped ? '#00ff00' : '#ff6b6b';
+    
+    // COLOR DETAIL PREVIEW (if enabled)
+    if (showColorDetail) {
+      ctx.fillStyle = draggedElement.color || '#8b4513';
+      
+      if (isCornerComponent) {
+        const squareSize = Math.min(draggedElement.width, draggedElement.depth) * zoom;
+        ctx.fillRect(pos.x, pos.y, squareSize, squareSize);
+      } else {
+        const width = draggedElement.width * zoom;
+        const height = (draggedElement.depth || draggedElement.height) * zoom;
+        ctx.fillRect(pos.x, pos.y, width, height);
+      }
+    }
+    
+    // WIREFRAME PREVIEW (if enabled)
+    if (showWireframe) {
+      ctx.strokeStyle = '#000000';
+      ctx.lineWidth = 0.5;
+      ctx.setLineDash([]);
+      
+      if (isCornerComponent) {
+        const squareSize = Math.min(draggedElement.width, draggedElement.depth) * zoom;
+        ctx.strokeRect(pos.x, pos.y, squareSize, squareSize);
+      } else {
+        const width = draggedElement.width * zoom;
+        const height = (draggedElement.depth || draggedElement.height) * zoom;
+        ctx.strokeRect(pos.x, pos.y, width, height);
+      }
+    }
+    
+    // Preview border outline
+    ctx.strokeStyle = previewColor;
     ctx.lineWidth = 2;
     ctx.setLineDash([5, 5]);
     
-    if (isCornerCounterTop) {
-      // DYNAMIC: Draw square counter top drag preview using actual dimensions
+    if (isCornerComponent) {
       const squareSize = Math.min(draggedElement.width, draggedElement.depth) * zoom;
-      
-      // Preview fill
-      ctx.fillStyle = draggedElement.color || '#8b4513';
-      
-      // Draw square preview (simplified)
-      ctx.fillRect(pos.x, pos.y, squareSize, squareSize);
-      ctx.strokeRect(pos.x, pos.y, squareSize, squareSize);
-    } else if (isCornerWallCabinet) {
-      // Draw SQUARE drag preview for corner wall cabinets (using actual dimensions)
-      const actualWidth = draggedElement.width * zoom;
-      const actualDepth = draggedElement.depth * zoom;
-      
-      // For square cabinets (like new 60x60), use full size. For rectangular (like old 90x35), use smaller
-      const squareSize = (actualWidth === actualDepth) ? actualWidth : Math.min(actualWidth, actualDepth);
-      
-      // Preview fill
-      ctx.fillStyle = draggedElement.color || '#8b4513';
-      
-      // Draw square preview (centered if needed)
-      const offsetX = (actualWidth - squareSize) / 2;
-      const offsetY = (actualDepth - squareSize) / 2;
-      ctx.fillRect(pos.x + offsetX, pos.y + offsetY, squareSize, squareSize);
-      ctx.strokeRect(pos.x + offsetX, pos.y + offsetY, squareSize, squareSize);
-    } else if (isCornerBaseCabinet) {
-      // DYNAMIC: Draw square base cabinet drag preview using actual dimensions
-      const squareSize = Math.min(draggedElement.width, draggedElement.depth) * zoom;
-      
-      // Preview fill
-      ctx.fillStyle = draggedElement.color || '#8b4513';
-      
-      // Draw square preview (simplified)
-      ctx.fillRect(pos.x, pos.y, squareSize, squareSize);
-      ctx.strokeRect(pos.x, pos.y, squareSize, squareSize);
-    } else if (isCornerTallUnit) {
-      // DYNAMIC: Draw square tall unit drag preview using actual dimensions
-      const squareSize = Math.min(draggedElement.width, draggedElement.depth) * zoom;
-      
-      // Preview fill
-      ctx.fillStyle = draggedElement.color || '#8b4513';
-      
-      // Draw square preview (simplified)
-      ctx.fillRect(pos.x, pos.y, squareSize, squareSize);
       ctx.strokeRect(pos.x, pos.y, squareSize, squareSize);
     } else {
-      // Standard rectangular drag preview
       const width = draggedElement.width * zoom;
-      const height = (draggedElement.depth || draggedElement.height) * zoom; // Use depth for Y-axis in plan view
-      
-      // Preview fill
-      ctx.fillStyle = draggedElement.color || '#8b4513';
-      ctx.fillRect(pos.x, pos.y, width, height);
+      const height = (draggedElement.depth || draggedElement.height) * zoom;
       ctx.strokeRect(pos.x, pos.y, width, height);
     }
     
     ctx.restore();
-  }, [isDragging, draggedElement, currentMousePos, canvasToRoom, roomToCanvas, zoom, getSnapPosition]);
+  }, [isDragging, draggedElement, currentMousePos, canvasToRoom, roomToCanvas, zoom, getSnapPosition, showWireframe, showColorDetail]);
 
   // Draw tape measure - multi-measurement support
   const drawTapeMeasure = useCallback((ctx: CanvasRenderingContext2D) => {
@@ -2331,14 +2279,25 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
     // Draw room
     drawRoom(ctx);
 
-    // Draw elements
-    const elementsToRender = active2DView === 'plan'
+    // Draw elements with proper layering and visibility
+    let elementsToRender = active2DView === 'plan'
       ? design.elements
       : design.elements.filter(el => {
           const wall = getElementWall(el);
           const isCornerVisible = isCornerVisibleInView(el, active2DView);
           return wall === active2DView || wall === 'center' || isCornerVisible;
         });
+
+    // Filter out invisible elements
+    elementsToRender = elementsToRender.filter(element => element.isVisible !== false);
+
+    // Sort elements by zIndex for proper layering (lower zIndex = drawn first/behind)
+    elementsToRender.sort((a, b) => (a.zIndex || 0) - (b.zIndex || 0));
+    
+    // Debug logging for layering order
+    if (elementsToRender.length > 0) {
+      console.log(`🎯 [Rendering] Elements in order:`, elementsToRender.map(el => `${el.id} (${el.type}) -> zIndex: ${el.zIndex}`));
+    }
 
     elementsToRender.forEach(element => {
       // Always draw all elements, but make dragged element semi-transparent
@@ -2411,9 +2370,25 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
       return;
     }
 
-    // Check for element clicks
+    // Check for element clicks - use same filtering and ordering as rendering
     const roomPos = canvasToRoom(x, y);
-    const clickedElement = design.elements.find(element => {
+    
+    // Filter and sort elements the same way as rendering (but in reverse order for selection)
+    let elementsToCheck = active2DView === 'plan'
+      ? design.elements
+      : design.elements.filter(el => {
+          const wall = getElementWall(el);
+          const isCornerVisible = isCornerVisibleInView(el, active2DView);
+          return wall === active2DView || wall === 'center' || isCornerVisible;
+        });
+
+    // Filter out invisible elements
+    elementsToCheck = elementsToCheck.filter(element => element.isVisible !== false);
+
+    // Sort elements by zIndex in DESCENDING order (highest zIndex first) for selection
+    elementsToCheck.sort((a, b) => (b.zIndex || 0) - (a.zIndex || 0));
+    
+    const clickedElement = elementsToCheck.find(element => {
       // Special handling for corner counter tops - use square bounding box
       const isCornerCounterTop = element.type === 'counter-top' && element.id.includes('counter-top-corner');
       
@@ -2472,7 +2447,23 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
     // Handle hover detection
     if (!isDragging && active2DView === 'plan') {
       const roomPos = canvasToRoom(x, y);
-      const hoveredEl = design.elements.find(element => {
+      
+      // Use same filtering and ordering as selection for hover detection
+      let elementsToCheck = active2DView === 'plan'
+        ? design.elements
+        : design.elements.filter(el => {
+            const wall = getElementWall(el);
+            const isCornerVisible = isCornerVisibleInView(el, active2DView);
+            return wall === active2DView || wall === 'center' || isCornerVisible;
+          });
+
+      // Filter out invisible elements
+      elementsToCheck = elementsToCheck.filter(element => element.isVisible !== false);
+
+      // Sort elements by zIndex in DESCENDING order (highest zIndex first) for hover
+      elementsToCheck.sort((a, b) => (b.zIndex || 0) - (a.zIndex || 0));
+      
+      const hoveredEl = elementsToCheck.find(element => {
         // Use the new rotation-aware boundary detection
         return isPointInRotatedComponent(roomPos.x, roomPos.y, element);
       });
@@ -2699,7 +2690,23 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
       // Handle hover detection (for touch devices, only when not dragging)
       if (!isDragging && active2DView === 'plan') {
         const roomPos = canvasToRoom(x, y);
-        const hoveredEl = design.elements.find(element => {
+        
+        // Use same filtering and ordering as selection for hover detection
+        let elementsToCheck = active2DView === 'plan'
+          ? design.elements
+          : design.elements.filter(el => {
+              const wall = getElementWall(el);
+              const isCornerVisible = isCornerVisibleInView(el, active2DView);
+              return wall === active2DView || wall === 'center' || isCornerVisible;
+            });
+
+        // Filter out invisible elements
+        elementsToCheck = elementsToCheck.filter(element => element.isVisible !== false);
+
+        // Sort elements by zIndex in DESCENDING order (highest zIndex first) for hover
+        elementsToCheck.sort((a, b) => (b.zIndex || 0) - (a.zIndex || 0));
+        
+        const hoveredEl = elementsToCheck.find(element => {
           return isPointInRotatedComponent(roomPos.x, roomPos.y, element);
         });
         setHoveredElement(hoveredEl || null);

@@ -85,8 +85,7 @@ export const CanvasElementCounter: React.FC<CanvasElementCounterProps> = ({
   };
 
   const handleElementVisibilityToggle = (element: DesignElement) => {
-    const isHidden = (element as any).hidden;
-    onUpdateElement(element.id, { ...(element as any), hidden: !isHidden });
+    onUpdateElement(element.id, { isVisible: !element.isVisible });
   };
 
   const handleMouseEnter = () => {
@@ -148,7 +147,7 @@ export const CanvasElementCounter: React.FC<CanvasElementCounterProps> = ({
                   <div className="divide-y divide-border/30">
                     {categoryElements.map((element) => {
                       const isSelected = selectedElement?.id === element.id;
-                      const isHidden = (element as any).hidden;
+                      const isHidden = !element.isVisible;
                       
                       return (
                         <div
