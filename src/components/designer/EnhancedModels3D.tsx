@@ -1713,11 +1713,11 @@ export const EnhancedSink3D: React.FC<Enhanced3DModelProps> = ({ element, roomDi
   // Calculate base height based on mounting type
   let baseHeight: number;
   if (isButlerSink) {
-    // Butler sinks sit on base units (90cm height)
+    // Butler sinks sit on base units (90cm height) - positioned at base unit top
     baseHeight = validElement.z > 0 ? validElement.z / 100 : 0.9; // 90cm base unit height
   } else {
-    // Kitchen sinks sit on worktops (90cm + 4cm worktop = 94cm)
-    baseHeight = validElement.z > 0 ? validElement.z / 100 : 0.94; // 94cm worktop height
+    // Kitchen sinks sit on worktops - top should be at 96cm (worktop height)
+    baseHeight = validElement.z > 0 ? validElement.z / 100 : 0.96; // 96cm worktop height
   }
   
   const yPosition = baseHeight + (height / 2);
@@ -1727,9 +1727,21 @@ export const EnhancedSink3D: React.FC<Enhanced3DModelProps> = ({ element, roomDi
   const rimColor = isButlerSink ? '#F8F8F8' : '#B0B0B0'; // Slightly different rim color
   const drainColor = '#2F2F2F'; // Dark drain color
   
-  // Sink dimensions
-  const sinkDepth = isFarmhouseSink ? 0.25 : 0.20; // 25cm for farmhouse, 20cm for standard
-  const rimHeight = 0.02; // 2cm rim height
+  // Sink dimensions - different for butler vs kitchen sinks
+  let sinkDepth: number;
+  let rimHeight: number;
+  
+  if (isButlerSink) {
+    sinkDepth = 0.30; // 30cm deep for butler sinks (deeper for utility)
+    rimHeight = 0.03; // 3cm rim height for butler sinks (thicker rim)
+  } else if (isFarmhouseSink) {
+    sinkDepth = 0.25; // 25cm for farmhouse
+    rimHeight = 0.02; // 2cm rim height
+  } else {
+    sinkDepth = 0.20; // 20cm for standard kitchen sinks
+    rimHeight = 0.02; // 2cm rim height
+  }
+  
   const bowlDepth = sinkDepth - rimHeight; // Bowl depth
   
   return (
@@ -1770,15 +1782,30 @@ export const EnhancedSink3D: React.FC<Enhanced3DModelProps> = ({ element, roomDi
         </group>
       ) : (
         // Single Bowl Sink
-        <mesh position={[0, 0, 0]} castShadow receiveShadow>
-          <cylinderGeometry args={[width * 0.4, width * 0.38, bowlDepth, 32]} />
-          <meshLambertMaterial color={sinkColor} />
-        </mesh>
+        isButlerSink ? (
+          // Butler sink - more rectangular/square shape
+          <mesh position={[0, 0, 0]} castShadow receiveShadow>
+            <boxGeometry args={[width * 0.8, bowlDepth, depth * 0.8]} />
+            <meshLambertMaterial color={sinkColor} />
+          </mesh>
+        ) : (
+          // Kitchen sink - circular bowl
+          <mesh position={[0, 0, 0]} castShadow receiveShadow>
+            <cylinderGeometry args={[width * 0.4, width * 0.38, bowlDepth, 32]} />
+            <meshLambertMaterial color={sinkColor} />
+          </mesh>
+        )
       )}
       
       {/* Sink Rim */}
       <mesh position={[0, bowlDepth / 2 + rimHeight / 2, 0]} castShadow receiveShadow>
-        <cylinderGeometry args={[width * 0.45, width * 0.45, rimHeight, 32]} />
+        {isButlerSink ? (
+          // Butler sink - rectangular rim
+          <boxGeometry args={[width * 0.9, rimHeight, depth * 0.9]} />
+        ) : (
+          // Kitchen sink - circular rim
+          <cylinderGeometry args={[width * 0.45, width * 0.45, rimHeight, 32]} />
+        )}
         <meshLambertMaterial color={rimColor} />
       </mesh>
       

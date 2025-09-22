@@ -1269,7 +1269,9 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
     } else if (element.type === 'wall-unit-end-panel') {
       elevationHeightCm = 70; // Wall unit end panel height
     } else if (element.type === 'sink') {
-      elevationHeightCm = 15; // Sink bowl depth
+      // Different heights for butler vs kitchen sinks
+      const isButlerSink = element.id.includes('butler-sink') || element.id.includes('butler') || element.id.includes('base-unit-sink');
+      elevationHeightCm = isButlerSink ? 30 : 20; // 30cm for butler sinks, 20cm for kitchen sinks
     } else {
       elevationHeightCm = element.height; // Default to actual element height
     }
@@ -1295,6 +1297,16 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
       } else if (element.type === 'window') {
         // Windows at 90cm height
         yPos = floorY - (90 * zoom) - elementHeight;
+      } else if (element.type === 'sink') {
+        // Sink positioning based on type
+        const isButlerSink = element.id.includes('butler-sink') || element.id.includes('butler') || element.id.includes('base-unit-sink');
+        if (isButlerSink) {
+          // Butler sinks at base unit height (90cm)
+          yPos = floorY - (90 * zoom) - elementHeight;
+        } else {
+          // Kitchen sinks at worktop height (96cm)
+          yPos = floorY - (96 * zoom) - elementHeight;
+        }
       } else {
         // Floor level components
         yPos = floorY - elementHeight;

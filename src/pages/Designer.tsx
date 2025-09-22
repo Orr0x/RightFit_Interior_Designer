@@ -294,9 +294,10 @@ const Designer = () => {
       type: 'sink',
       x: position.x,
       y: position.y,
+      z: sinkType === 'kitchen' ? 96 : 90, // Kitchen sinks at 96cm (worktop), butler at 90cm (base unit)
       width: 60,
       depth: 60,
-      height: 15,
+      height: sinkType === 'kitchen' ? 20 : 30, // Different heights for different sink types
       color: sinkType === 'kitchen' ? '#C0C0C0' : '#FFFFFF',
       rotation: 0,
       zIndex: getDefaultZIndex('sink', sinkId),
