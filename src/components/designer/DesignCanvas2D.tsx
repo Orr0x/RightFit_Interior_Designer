@@ -1159,7 +1159,7 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
     } else if (element.type === 'cabinet' && (element.id.includes('tall') || element.id.includes('larder'))) {
       elevationHeightCm = element.height; // Use actual height for tall units - THIS IS KEY!
     } else if (element.type === 'cabinet') {
-      elevationHeightCm = 85; // Base cabinet height
+      elevationHeightCm = 90; // Base cabinet height
     } else if (element.type === 'appliance') {
       elevationHeightCm = element.height; // Use actual height for appliances
     } else if (element.type === 'window') {
