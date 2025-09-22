@@ -1710,8 +1710,15 @@ export const EnhancedSink3D: React.FC<Enhanced3DModelProps> = ({ element, roomDi
   const isDoubleBowl = element.id.includes('double-bowl') || element.id.includes('double');
   const isIslandSink = element.id.includes('island');
   
-  // Calculate base height - both sinks at Z position 70cm
-  const baseHeight = validElement.z > 0 ? validElement.z / 100 : 0.70; // 70cm for both sink types
+  // Calculate base height based on sink type
+  let baseHeight: number;
+  if (isButlerSink) {
+    // Butler sinks at Z position 65cm
+    baseHeight = validElement.z > 0 ? validElement.z / 100 : 0.65; // 65cm for butler sinks
+  } else {
+    // Kitchen sinks at Z position 75cm
+    baseHeight = validElement.z > 0 ? validElement.z / 100 : 0.75; // 75cm for kitchen sinks
+  }
   
   const yPosition = baseHeight + (height / 2);
   
