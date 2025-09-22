@@ -7,6 +7,7 @@ import { useState, useEffect, useMemo, useCallback } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { RoomType } from '@/types/project';
 import { cacheManager } from '@/services/CacheService';
+import { ComponentService } from '@/services/ComponentService';
 // Define DatabaseComponent type locally since it may not be in generated types yet
 interface DatabaseComponent {
   id: string;
@@ -92,15 +93,20 @@ export const useOptimizedComponents = () => {
       }
 
       const componentData = data || [];
-      console.log(`✅ [useOptimizedComponents] Loaded ${componentData.length} components`);
+      
+      // Add sink components from ComponentService
+      const sinkComponents = ComponentService.getSinkComponents();
+      const allComponents = [...componentData, ...sinkComponents];
+      
+      console.log(`✅ [useOptimizedComponents] Loaded ${componentData.length} database components + ${sinkComponents.length} sink components = ${allComponents.length} total`);
 
       // Cache the results
-      componentCache.set('all-components', componentData);
-      setComponents(componentData);
+      componentCache.set('all-components', allComponents);
+      setComponents(allComponents);
       setLastFetchTime(Date.now());
 
       // Pre-warm category and room type caches
-      warmCaches(componentData);
+      warmCaches(allComponents);
 
       // Debug logging
       logDebugInfo(componentData);

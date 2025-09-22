@@ -1709,6 +1709,7 @@ export const EnhancedSink3D: React.FC<Enhanced3DModelProps> = ({ element, roomDi
   const isUndermountSink = element.id.includes('undermount');
   const isDoubleBowl = element.id.includes('double-bowl') || element.id.includes('double');
   const isIslandSink = element.id.includes('island');
+  const hasDrainingBoard = element.id.includes('draining-board') || element.metadata?.has_draining_board;
   
   // Calculate base height based on sink type
   let baseHeight: number;
@@ -1797,17 +1798,44 @@ export const EnhancedSink3D: React.FC<Enhanced3DModelProps> = ({ element, roomDi
         )
       )}
       
-      {/* Sink Rim */}
-      <mesh position={[0, bowlDepth / 2 + rimHeight / 2, 0]} castShadow receiveShadow>
-        {isButlerSink ? (
-          // Butler sink - rectangular rim
-          <boxGeometry args={[width * 0.9, rimHeight, depth * 0.9]} />
-        ) : (
-          // Kitchen sink - circular rim
-          <cylinderGeometry args={[width * 0.45, width * 0.45, rimHeight, 32]} />
-        )}
-        <meshLambertMaterial color={rimColor} />
-      </mesh>
+                  {/* Sink Rim */}
+                  <mesh position={[0, bowlDepth / 2 + rimHeight / 2, 0]} castShadow receiveShadow>
+                    {isButlerSink ? (
+                      // Butler sink - rectangular rim
+                      <boxGeometry args={[width * 0.9, rimHeight, depth * 0.9]} />
+                    ) : (
+                      // Kitchen sink - circular rim
+                      <cylinderGeometry args={[width * 0.45, width * 0.45, rimHeight, 32]} />
+                    )}
+                    <meshLambertMaterial color={rimColor} />
+                  </mesh>
+                  
+                  {/* Draining Board */}
+                  {hasDrainingBoard && (
+                    <group>
+                      {/* Draining Board Surface */}
+                      <mesh position={[0, bowlDepth / 2 + rimHeight + 0.01, depth * 0.3]} castShadow receiveShadow>
+                        <boxGeometry args={[width * 0.8, 0.02, depth * 0.4]} />
+                        <meshLambertMaterial color={rimColor} />
+                      </mesh>
+                      {/* Draining Board Grooves */}
+                      {Array.from({ length: 8 }, (_, i) => (
+                        <mesh 
+                          key={i}
+                          position={[
+                            (i - 3.5) * (width * 0.8) / 8, 
+                            bowlDepth / 2 + rimHeight + 0.02, 
+                            depth * 0.3
+                          ]} 
+                          castShadow 
+                          receiveShadow
+                        >
+                          <boxGeometry args={[0.01, 0.01, depth * 0.4]} />
+                          <meshLambertMaterial color="#E0E0E0" />
+                        </mesh>
+                      ))}
+                    </group>
+                  )}
       
       {/* Farmhouse Sink Apron Front */}
       {isFarmhouseSink && (

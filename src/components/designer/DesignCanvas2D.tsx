@@ -985,6 +985,7 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
     const isButlerSink = element.id.includes('butler-sink') || element.id.includes('butler') || element.id.includes('base-unit-sink');
     const isDoubleBowl = element.id.includes('double-bowl') || element.id.includes('double');
     const isCornerSink = element.id.includes('corner-sink');
+    const hasDrainingBoard = element.id.includes('draining-board') || element.metadata?.has_draining_board;
     const isFarmhouseSink = element.id.includes('farmhouse');
     
     // Sink colors
@@ -1076,6 +1077,23 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
       ctx.beginPath();
       ctx.arc(width * 0.5, holeY, holeSize/2, 0, 2 * Math.PI);
       ctx.fill();
+    }
+    
+    // Draw draining board if present
+    if (hasDrainingBoard) {
+      ctx.fillStyle = rimColor;
+      ctx.fillRect(width * 0.1, depth * 0.6, width * 0.8, depth * 0.3);
+      
+      // Draw draining board grooves
+      ctx.strokeStyle = '#E0E0E0';
+      ctx.lineWidth = 0.5;
+      for (let i = 0; i < 8; i++) {
+        const x = width * 0.1 + (i + 0.5) * (width * 0.8) / 8;
+        ctx.beginPath();
+        ctx.moveTo(x, depth * 0.6);
+        ctx.lineTo(x, depth * 0.9);
+        ctx.stroke();
+      }
     }
   }, []);
 
@@ -1960,6 +1978,7 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
     const isDoubleBowl = element.id.includes('double-bowl') || element.id.includes('double');
     const isCornerSink = element.id.includes('corner-sink');
     const isFarmhouseSink = element.id.includes('farmhouse');
+    const hasDrainingBoard = element.id.includes('draining-board') || element.metadata?.has_draining_board;
     
     // Sink colors
     const sinkColor = isButlerSink ? '#FFFFFF' : '#C0C0C0'; // White ceramic for butler, stainless steel for kitchen
@@ -2028,6 +2047,27 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
     } else {
       // Single hole for single bowl
       ctx.fillRect(x + width/2 - holeSize/2, holeY, holeSize, holeSize);
+    }
+    
+    // Draw draining board if present
+    if (hasDrainingBoard) {
+      const drainingBoardY = y - height * 0.3; // Position above the sink
+      const drainingBoardHeight = height * 0.2;
+      
+      // Draining board surface
+      ctx.fillStyle = rimColor;
+      ctx.fillRect(x, drainingBoardY, width, drainingBoardHeight);
+      
+      // Draining board grooves
+      ctx.strokeStyle = '#E0E0E0';
+      ctx.lineWidth = 1;
+      for (let i = 0; i < 8; i++) {
+        const grooveX = x + (i + 0.5) * (width / 8);
+        ctx.beginPath();
+        ctx.moveTo(grooveX, drainingBoardY);
+        ctx.lineTo(grooveX, drainingBoardY + drainingBoardHeight);
+        ctx.stroke();
+      }
     }
     
     // Draw edge detail
