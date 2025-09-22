@@ -34,7 +34,8 @@ import {
   EnhancedToeKick3D,
   EnhancedCornice3D,
   EnhancedPelmet3D,
-  EnhancedWallUnitEndPanel3D
+  EnhancedWallUnitEndPanel3D,
+  EnhancedSink3D
 } from './EnhancedModels3D';
 
 interface AdaptiveView3DProps {
@@ -604,6 +605,16 @@ export const AdaptiveView3D: React.FC<AdaptiveView3DProps> = ({
               case 'wall-unit-end-panel':
                 return (
                   <EnhancedWallUnitEndPanel3D
+                    key={element.id}
+                    element={element}
+                    roomDimensions={roomDimensions}
+                    isSelected={isSelected}
+                    onClick={() => handleElementClick(element)}
+                  />
+                );
+              case 'sink':
+                return (
+                  <EnhancedSink3D
                     key={element.id}
                     element={element}
                     roomDimensions={roomDimensions}

@@ -88,7 +88,7 @@ export interface Design {
 export interface DesignElement {
   id: string;
   name?: string; // Component name for display and debugging
-  type: 'wall' | 'cabinet' | 'appliance' | 'counter-top' | 'end-panel' | 'window' | 'door' | 'flooring' | 'toe-kick' | 'cornice' | 'pelmet' | 'wall-unit-end-panel';
+  type: 'wall' | 'cabinet' | 'appliance' | 'counter-top' | 'end-panel' | 'window' | 'door' | 'flooring' | 'toe-kick' | 'cornice' | 'pelmet' | 'wall-unit-end-panel' | 'sink';
   x: number; // X position in room
   y: number; // Y position in room
   z?: number; // Z position in room (height off ground)
@@ -124,6 +124,13 @@ export const getDefaultZIndex = (type: DesignElement['type'], id?: string): numb
     id.includes('larder-corner')
   );
 
+  // Check if this is a butler sink (base unit mounted)
+  const isButlerSink = id && (
+    id.includes('butler-sink') || 
+    id.includes('butler') ||
+    id.includes('base-unit-sink')
+  );
+
   switch (type) {
     case 'flooring':
       return 1.0; // Bottom layer
@@ -141,6 +148,12 @@ export const getDefaultZIndex = (type: DesignElement['type'], id?: string): numb
       return 2.0; // Base units layer
     case 'counter-top':
       return 3.0; // Work surface layer - above base units, below wall units
+    case 'sink':
+      if (isButlerSink) {
+        return 2.5; // Butler sinks - above base units, below worktops
+      } else {
+        return 3.5; // Kitchen sinks - above worktops, below wall units
+      }
     case 'wall-unit-end-panel': // Wall unit end panels
       return 4.0; // Wall units layer
     case 'pelmet':

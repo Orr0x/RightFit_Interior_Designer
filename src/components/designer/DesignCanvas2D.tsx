@@ -980,6 +980,105 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
     }
   }, [roomDimensions, roomPosition, zoom, active2DView]);
 
+  // Draw sink in plan view with realistic bowl representation
+  const drawSinkPlanView = useCallback((ctx: CanvasRenderingContext2D, element: DesignElement, width: number, depth: number, isSelected: boolean, isHovered: boolean) => {
+    const isButlerSink = element.id.includes('butler-sink') || element.id.includes('butler') || element.id.includes('base-unit-sink');
+    const isDoubleBowl = element.id.includes('double-bowl') || element.id.includes('double');
+    const isCornerSink = element.id.includes('corner-sink');
+    const isFarmhouseSink = element.id.includes('farmhouse');
+    
+    // Sink colors
+    const sinkColor = isButlerSink ? '#FFFFFF' : '#C0C0C0'; // White ceramic for butler, stainless steel for kitchen
+    const rimColor = isButlerSink ? '#F8F8F8' : '#B0B0B0';
+    
+    // Draw sink rim (outer edge)
+    ctx.fillStyle = rimColor;
+    ctx.fillRect(0, 0, width, depth);
+    
+    // Draw sink bowl(s)
+    ctx.fillStyle = sinkColor;
+    
+    if (isDoubleBowl) {
+      // Double bowl sink
+      const bowlWidth = width * 0.4;
+      const bowlDepth = depth * 0.8;
+      const leftBowlX = width * 0.1;
+      const rightBowlX = width * 0.5;
+      const bowlY = depth * 0.1;
+      
+      // Left bowl
+      ctx.beginPath();
+      ctx.ellipse(leftBowlX + bowlWidth/2, bowlY + bowlDepth/2, bowlWidth/2, bowlDepth/2, 0, 0, 2 * Math.PI);
+      ctx.fill();
+      
+      // Right bowl
+      ctx.beginPath();
+      ctx.ellipse(rightBowlX + bowlWidth/2, bowlY + bowlDepth/2, bowlWidth/2, bowlDepth/2, 0, 0, 2 * Math.PI);
+      ctx.fill();
+      
+      // Center divider
+      ctx.fillStyle = rimColor;
+      ctx.fillRect(width * 0.45, bowlY, width * 0.1, bowlDepth);
+      
+    } else if (isCornerSink) {
+      // Corner sink (L-shaped)
+      const mainBowlWidth = width * 0.6;
+      const mainBowlDepth = depth * 0.6;
+      const mainBowlX = width * 0.2;
+      const mainBowlY = depth * 0.2;
+      
+      // Main bowl
+      ctx.beginPath();
+      ctx.ellipse(mainBowlX + mainBowlWidth/2, mainBowlY + mainBowlDepth/2, mainBowlWidth/2, mainBowlDepth/2, 0, 0, 2 * Math.PI);
+      ctx.fill();
+      
+      // Corner extension
+      const cornerWidth = width * 0.3;
+      const cornerDepth = depth * 0.3;
+      ctx.fillRect(mainBowlX + mainBowlWidth * 0.7, mainBowlY + mainBowlDepth * 0.7, cornerWidth, cornerDepth);
+      
+    } else {
+      // Single bowl sink
+      const bowlWidth = width * 0.7;
+      const bowlDepth = depth * 0.8;
+      const bowlX = width * 0.15;
+      const bowlY = depth * 0.1;
+      
+      ctx.beginPath();
+      ctx.ellipse(bowlX + bowlWidth/2, bowlY + bowlDepth/2, bowlWidth/2, bowlDepth/2, 0, 0, 2 * Math.PI);
+      ctx.fill();
+    }
+    
+    // Draw drain
+    ctx.fillStyle = '#2F2F2F';
+    const drainSize = Math.min(width, depth) * 0.1;
+    const drainX = width/2 - drainSize/2;
+    const drainY = depth/2 - drainSize/2;
+    ctx.beginPath();
+    ctx.arc(drainX + drainSize/2, drainY + drainSize/2, drainSize/2, 0, 2 * Math.PI);
+    ctx.fill();
+    
+    // Draw faucet mounting holes
+    ctx.fillStyle = '#2F2F2F';
+    const holeSize = Math.min(width, depth) * 0.03;
+    const holeY = depth * 0.2;
+    
+    if (isDoubleBowl) {
+      // Two holes for double bowl
+      ctx.beginPath();
+      ctx.arc(width * 0.25, holeY, holeSize/2, 0, 2 * Math.PI);
+      ctx.fill();
+      ctx.beginPath();
+      ctx.arc(width * 0.75, holeY, holeSize/2, 0, 2 * Math.PI);
+      ctx.fill();
+    } else {
+      // Single hole for single bowl
+      ctx.beginPath();
+      ctx.arc(width * 0.5, holeY, holeSize/2, 0, 2 * Math.PI);
+      ctx.fill();
+    }
+  }, []);
+
   // Draw element with smart rendering
   const drawElement = useCallback((ctx: CanvasRenderingContext2D, element: DesignElement) => {
     const isSelected = selectedElement?.id === element.id;
@@ -1022,7 +1121,10 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
           ctx.fillStyle = element.color || '#8b4513';
         }
         
-        if (isCornerComponent) {
+        if (element.type === 'sink') {
+          // Sink rendering - draw bowl shape
+          drawSinkPlanView(ctx, element, width, depth, isSelected, isHovered);
+        } else if (isCornerComponent) {
           // Corner components: Draw as square
           const squareSize = Math.min(element.width, element.depth) * zoom;
           ctx.fillRect(0, 0, squareSize, squareSize);
@@ -1166,6 +1268,8 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
       elevationHeightCm = 100; // Window height
     } else if (element.type === 'wall-unit-end-panel') {
       elevationHeightCm = 70; // Wall unit end panel height
+    } else if (element.type === 'sink') {
+      elevationHeightCm = 15; // Sink bowl depth
     } else {
       elevationHeightCm = element.height; // Default to actual element height
     }
@@ -1241,6 +1345,8 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
       drawPelmetElevationDetails(ctx, xPos, yPos, elementWidth, elementHeight, element);
     } else if (element.type === 'wall-unit-end-panel') {
       drawWallUnitEndPanelElevationDetails(ctx, xPos, yPos, elementWidth, elementHeight, element);
+    } else if (element.type === 'sink') {
+      drawSinkElevationDetails(ctx, xPos, yPos, elementWidth, elementHeight, element);
     }
 
     ctx.restore();
@@ -1832,6 +1938,88 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
     
     // Draw edge detail
     ctx.strokeStyle = '#654321';
+    ctx.lineWidth = 1;
+    ctx.strokeRect(x, y, width, height);
+  };
+
+  // Draw detailed sink elevation with realistic bowl representation
+  const drawSinkElevationDetails = (ctx: CanvasRenderingContext2D, x: number, y: number, width: number, height: number, element: DesignElement) => {
+    const isButlerSink = element.id.includes('butler-sink') || element.id.includes('butler') || element.id.includes('base-unit-sink');
+    const isDoubleBowl = element.id.includes('double-bowl') || element.id.includes('double');
+    const isCornerSink = element.id.includes('corner-sink');
+    const isFarmhouseSink = element.id.includes('farmhouse');
+    
+    // Sink colors
+    const sinkColor = isButlerSink ? '#FFFFFF' : '#C0C0C0'; // White ceramic for butler, stainless steel for kitchen
+    const rimColor = isButlerSink ? '#F8F8F8' : '#B0B0B0';
+    const drainColor = '#2F2F2F';
+    
+    // Draw sink rim (top edge)
+    ctx.fillStyle = rimColor;
+    ctx.fillRect(x, y, width, height * 0.1); // 10% of height for rim
+    
+    // Draw sink bowl
+    ctx.fillStyle = sinkColor;
+    const bowlY = y + height * 0.1;
+    const bowlHeight = height * 0.9;
+    
+    if (isDoubleBowl) {
+      // Double bowl sink
+      const leftBowlWidth = width * 0.45;
+      const rightBowlWidth = width * 0.45;
+      const centerDivider = width * 0.1;
+      
+      // Left bowl
+      ctx.fillRect(x, bowlY, leftBowlWidth, bowlHeight);
+      
+      // Right bowl
+      ctx.fillRect(x + leftBowlWidth + centerDivider, bowlY, rightBowlWidth, bowlHeight);
+      
+      // Center divider
+      ctx.fillStyle = rimColor;
+      ctx.fillRect(x + leftBowlWidth, bowlY, centerDivider, bowlHeight);
+      
+    } else if (isCornerSink) {
+      // Corner sink (L-shaped)
+      const mainBowlWidth = width * 0.7;
+      const mainBowlHeight = height * 0.7;
+      
+      // Main bowl
+      ctx.fillRect(x, bowlY, mainBowlWidth, mainBowlHeight);
+      
+      // Corner extension
+      const cornerWidth = width * 0.2;
+      const cornerHeight = height * 0.2;
+      ctx.fillRect(x + mainBowlWidth * 0.8, bowlY + mainBowlHeight * 0.8, cornerWidth, cornerHeight);
+      
+    } else {
+      // Single bowl sink
+      ctx.fillRect(x, bowlY, width, bowlHeight);
+    }
+    
+    // Draw drain
+    ctx.fillStyle = drainColor;
+    const drainSize = Math.min(width, height) * 0.15;
+    const drainX = x + width/2 - drainSize/2;
+    const drainY = y + height/2 - drainSize/2;
+    ctx.fillRect(drainX, drainY, drainSize, drainSize);
+    
+    // Draw faucet mounting holes
+    ctx.fillStyle = drainColor;
+    const holeSize = Math.min(width, height) * 0.05;
+    const holeY = y + height * 0.2;
+    
+    if (isDoubleBowl) {
+      // Two holes for double bowl
+      ctx.fillRect(x + width * 0.25 - holeSize/2, holeY, holeSize, holeSize);
+      ctx.fillRect(x + width * 0.75 - holeSize/2, holeY, holeSize, holeSize);
+    } else {
+      // Single hole for single bowl
+      ctx.fillRect(x + width/2 - holeSize/2, holeY, holeSize, holeSize);
+    }
+    
+    // Draw edge detail
+    ctx.strokeStyle = isButlerSink ? '#E0E0E0' : '#A0A0A0';
     ctx.lineWidth = 1;
     ctx.strokeRect(x, y, width, height);
   };

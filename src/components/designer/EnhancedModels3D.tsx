@@ -1693,5 +1693,131 @@ export const EnhancedWallUnitEndPanel3D: React.FC<Enhanced3DModelProps> = ({ ele
     </group>
   );
 };
+
+// Enhanced Sink 3D Component with realistic professional models
+export const EnhancedSink3D: React.FC<Enhanced3DModelProps> = ({ element, roomDimensions, isSelected, onClick }) => {
+  const validElement = validateElementDimensions(element);
+  const { x, z } = convertTo3D(validElement.x, validElement.y, roomDimensions.width, roomDimensions.height);
+  const width = validElement.width / 100;
+  const depth = validElement.depth / 100;
+  const height = validElement.height / 100;
+  
+  // Determine sink type and mounting based on ID
+  const isButlerSink = element.id.includes('butler-sink') || element.id.includes('butler') || element.id.includes('base-unit-sink');
+  const isCornerSink = element.id.includes('corner-sink');
+  const isFarmhouseSink = element.id.includes('farmhouse');
+  const isUndermountSink = element.id.includes('undermount');
+  const isDoubleBowl = element.id.includes('double-bowl') || element.id.includes('double');
+  const isIslandSink = element.id.includes('island');
+  
+  // Calculate base height based on mounting type
+  let baseHeight: number;
+  if (isButlerSink) {
+    // Butler sinks sit on base units (90cm height)
+    baseHeight = validElement.z > 0 ? validElement.z / 100 : 0.9; // 90cm base unit height
+  } else {
+    // Kitchen sinks sit on worktops (90cm + 4cm worktop = 94cm)
+    baseHeight = validElement.z > 0 ? validElement.z / 100 : 0.94; // 94cm worktop height
+  }
+  
+  const yPosition = baseHeight + (height / 2);
+  
+  // Material colors based on sink type
+  const sinkColor = isButlerSink ? '#FFFFFF' : '#C0C0C0'; // White ceramic for butler, stainless steel for kitchen
+  const rimColor = isButlerSink ? '#F8F8F8' : '#B0B0B0'; // Slightly different rim color
+  const drainColor = '#2F2F2F'; // Dark drain color
+  
+  // Sink dimensions
+  const sinkDepth = isFarmhouseSink ? 0.25 : 0.20; // 25cm for farmhouse, 20cm for standard
+  const rimHeight = 0.02; // 2cm rim height
+  const bowlDepth = sinkDepth - rimHeight; // Bowl depth
+  
+  return (
+    <group position={[x + width / 2, yPosition, z + depth / 2]} onClick={onClick} rotation={[0, element.rotation * Math.PI / 180, 0]}>
+      {/* Main Sink Bowl(s) */}
+      {isDoubleBowl ? (
+        // Double Bowl Sink
+        <group>
+          {/* Left Bowl */}
+          <mesh position={[-width * 0.25, 0, 0]} castShadow receiveShadow>
+            <cylinderGeometry args={[width * 0.2, width * 0.18, bowlDepth, 32]} />
+            <meshLambertMaterial color={sinkColor} />
+          </mesh>
+          {/* Right Bowl */}
+          <mesh position={[width * 0.25, 0, 0]} castShadow receiveShadow>
+            <cylinderGeometry args={[width * 0.2, width * 0.18, bowlDepth, 32]} />
+            <meshLambertMaterial color={sinkColor} />
+          </mesh>
+          {/* Center Divider */}
+          <mesh position={[0, 0, 0]} castShadow receiveShadow>
+            <boxGeometry args={[0.02, bowlDepth, depth * 0.8]} />
+            <meshLambertMaterial color={sinkColor} />
+          </mesh>
+        </group>
+      ) : isCornerSink ? (
+        // Corner Sink (L-shaped)
+        <group>
+          {/* Main Bowl */}
+          <mesh position={[0, 0, 0]} castShadow receiveShadow>
+            <cylinderGeometry args={[width * 0.35, width * 0.32, bowlDepth, 32]} />
+            <meshLambertMaterial color={sinkColor} />
+          </mesh>
+          {/* Corner Extension */}
+          <mesh position={[width * 0.2, 0, width * 0.2]} castShadow receiveShadow>
+            <boxGeometry args={[width * 0.3, bowlDepth, width * 0.3]} />
+            <meshLambertMaterial color={sinkColor} />
+          </mesh>
+        </group>
+      ) : (
+        // Single Bowl Sink
+        <mesh position={[0, 0, 0]} castShadow receiveShadow>
+          <cylinderGeometry args={[width * 0.4, width * 0.38, bowlDepth, 32]} />
+          <meshLambertMaterial color={sinkColor} />
+        </mesh>
+      )}
+      
+      {/* Sink Rim */}
+      <mesh position={[0, bowlDepth / 2 + rimHeight / 2, 0]} castShadow receiveShadow>
+        <cylinderGeometry args={[width * 0.45, width * 0.45, rimHeight, 32]} />
+        <meshLambertMaterial color={rimColor} />
+      </mesh>
+      
+      {/* Farmhouse Sink Apron Front */}
+      {isFarmhouseSink && (
+        <mesh position={[0, bowlDepth / 2, -depth / 2 + 0.01]} castShadow receiveShadow>
+          <boxGeometry args={[width * 0.9, bowlDepth + rimHeight, 0.02]} />
+          <meshLambertMaterial color={sinkColor} />
+        </mesh>
+      )}
+      
+      {/* Drain */}
+      <mesh position={[0, -bowlDepth / 2 + 0.01, 0]} castShadow receiveShadow>
+        <cylinderGeometry args={[0.05, 0.05, 0.02, 16]} />
+        <meshLambertMaterial color={drainColor} />
+      </mesh>
+      
+      {/* Faucet Mounting Holes */}
+      <mesh position={[width * 0.3, bowlDepth / 2 + rimHeight / 2, 0]} castShadow receiveShadow>
+        <cylinderGeometry args={[0.015, 0.015, rimHeight, 16]} />
+        <meshLambertMaterial color={drainColor} />
+      </mesh>
+      {isDoubleBowl && (
+        <mesh position={[-width * 0.3, bowlDepth / 2 + rimHeight / 2, 0]} castShadow receiveShadow>
+          <cylinderGeometry args={[0.015, 0.015, rimHeight, 16]} />
+          <meshLambertMaterial color={drainColor} />
+        </mesh>
+      )}
+      
+      {/* Selection Highlight */}
+      {isSelected && (
+        <mesh position={[0, bowlDepth / 2 + rimHeight + 0.01, 0]}>
+          <cylinderGeometry args={[width * 0.5, width * 0.5, 0.02, 32]} />
+          <meshLambertMaterial color="#00ff00" transparent opacity={0.5} />
+        </mesh>
+      )}
+    </group>
+  );
+};
+
 // Missing component exports restored after cleanup
 

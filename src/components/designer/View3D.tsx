@@ -15,7 +15,8 @@ import {
   EnhancedToeKick3D,
   EnhancedCornice3D,
   EnhancedPelmet3D,
-  EnhancedWallUnitEndPanel3D
+  EnhancedWallUnitEndPanel3D,
+  EnhancedSink3D
 } from './EnhancedModels3D';
 
 interface View3DProps {
@@ -338,6 +339,18 @@ export const View3D: React.FC<View3DProps> = ({
               if (element.type === 'wall-unit-end-panel') {
                 return (
                   <EnhancedWallUnitEndPanel3D
+                    key={element.id}
+                    element={element}
+                    roomDimensions={roomDimensions}
+                    isSelected={isSelected}
+                    onClick={() => handleElementClick(element)}
+                  />
+                );
+              }
+              
+              if (element.type === 'sink') {
+                return (
+                  <EnhancedSink3D
                     key={element.id}
                     element={element}
                     roomDimensions={roomDimensions}
