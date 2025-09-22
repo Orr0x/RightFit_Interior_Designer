@@ -992,11 +992,16 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
     const sinkColor = isButlerSink ? '#FFFFFF' : '#C0C0C0'; // White ceramic for butler, stainless steel for kitchen
     const rimColor = isButlerSink ? '#F8F8F8' : '#B0B0B0';
     
-    // Draw sink rim (outer edge)
+    // Draw sink rim (outer edge) with gradient effect
     ctx.fillStyle = rimColor;
     ctx.fillRect(0, 0, width, depth);
-    
-    // Draw sink bowl(s)
+
+    // Add subtle rim highlight
+    ctx.fillStyle = isButlerSink ? '#FFFFFF' : '#E0E0E0';
+    ctx.fillRect(0, 0, width, depth * 0.1); // Top edge highlight
+    ctx.fillRect(0, 0, width * 0.1, depth); // Left edge highlight
+
+    // Draw sink bowl(s) with improved shapes
     ctx.fillStyle = sinkColor;
     
     if (isDoubleBowl) {
@@ -1007,14 +1012,31 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
       const rightBowlX = width * 0.5;
       const bowlY = depth * 0.1;
       
-      // Left bowl
+      // Left bowl with more realistic shape
       ctx.beginPath();
-      ctx.ellipse(leftBowlX + bowlWidth/2, bowlY + bowlDepth/2, bowlWidth/2, bowlDepth/2, 0, 0, 2 * Math.PI);
+      const leftBowlRadiusX = bowlWidth/2 * 0.9;
+      const leftBowlRadiusY = bowlDepth/2 * 0.95;
+      ctx.ellipse(leftBowlX + bowlWidth/2, bowlY + bowlDepth/2, leftBowlRadiusX, leftBowlRadiusY, 0, 0, 2 * Math.PI);
       ctx.fill();
-      
-      // Right bowl
+
+      // Left bowl inner shadow/highlight
+      ctx.fillStyle = isButlerSink ? '#F0F0F0' : '#D0D0D0';
       ctx.beginPath();
-      ctx.ellipse(rightBowlX + bowlWidth/2, bowlY + bowlDepth/2, bowlWidth/2, bowlDepth/2, 0, 0, 2 * Math.PI);
+      ctx.ellipse(leftBowlX + bowlWidth/2, bowlY + bowlDepth/2 - bowlDepth * 0.1, leftBowlRadiusX * 0.7, leftBowlRadiusY * 0.3, 0, 0, 2 * Math.PI);
+      ctx.fill();
+
+      // Right bowl with more realistic shape
+      ctx.fillStyle = sinkColor;
+      ctx.beginPath();
+      const rightBowlRadiusX = bowlWidth/2 * 0.9;
+      const rightBowlRadiusY = bowlDepth/2 * 0.95;
+      ctx.ellipse(rightBowlX + bowlWidth/2, bowlY + bowlDepth/2, rightBowlRadiusX, rightBowlRadiusY, 0, 0, 2 * Math.PI);
+      ctx.fill();
+
+      // Right bowl inner shadow/highlight
+      ctx.fillStyle = isButlerSink ? '#F0F0F0' : '#D0D0D0';
+      ctx.beginPath();
+      ctx.ellipse(rightBowlX + bowlWidth/2, bowlY + bowlDepth/2 - bowlDepth * 0.1, rightBowlRadiusX * 0.7, rightBowlRadiusY * 0.3, 0, 0, 2 * Math.PI);
       ctx.fill();
       
       // Center divider
@@ -1022,31 +1044,53 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
       ctx.fillRect(width * 0.45, bowlY, width * 0.1, bowlDepth);
       
     } else if (isCornerSink) {
-      // Corner sink (L-shaped)
+      // Corner sink (L-shaped) with improved shape
       const mainBowlWidth = width * 0.6;
       const mainBowlDepth = depth * 0.6;
       const mainBowlX = width * 0.2;
       const mainBowlY = depth * 0.2;
-      
-      // Main bowl
+
+      // Main bowl with more realistic shape
       ctx.beginPath();
-      ctx.ellipse(mainBowlX + mainBowlWidth/2, mainBowlY + mainBowlDepth/2, mainBowlWidth/2, mainBowlDepth/2, 0, 0, 2 * Math.PI);
+      const mainBowlRadiusX = mainBowlWidth/2 * 0.9;
+      const mainBowlRadiusY = mainBowlDepth/2 * 0.95;
+      ctx.ellipse(mainBowlX + mainBowlWidth/2, mainBowlY + mainBowlDepth/2, mainBowlRadiusX, mainBowlRadiusY, 0, 0, 2 * Math.PI);
+      ctx.fill();
+
+      // Main bowl inner shadow/highlight
+      ctx.fillStyle = isButlerSink ? '#F0F0F0' : '#D0D0D0';
+      ctx.beginPath();
+      ctx.ellipse(mainBowlX + mainBowlWidth/2, mainBowlY + mainBowlDepth/2 - mainBowlDepth * 0.1, mainBowlRadiusX * 0.7, mainBowlRadiusY * 0.3, 0, 0, 2 * Math.PI);
       ctx.fill();
       
-      // Corner extension
+      // Corner extension with highlight
       const cornerWidth = width * 0.3;
       const cornerDepth = depth * 0.3;
+      ctx.fillStyle = sinkColor;
       ctx.fillRect(mainBowlX + mainBowlWidth * 0.7, mainBowlY + mainBowlDepth * 0.7, cornerWidth, cornerDepth);
+
+      // Corner extension highlight
+      ctx.fillStyle = isButlerSink ? '#F0F0F0' : '#D0D0D0';
+      ctx.fillRect(mainBowlX + mainBowlWidth * 0.7, mainBowlY + mainBowlDepth * 0.7, cornerWidth * 0.8, cornerDepth * 0.8);
       
     } else {
-      // Single bowl sink
+      // Single bowl sink with improved shape
       const bowlWidth = width * 0.7;
       const bowlDepth = depth * 0.8;
       const bowlX = width * 0.15;
       const bowlY = depth * 0.1;
-      
+
+      // Main bowl
       ctx.beginPath();
-      ctx.ellipse(bowlX + bowlWidth/2, bowlY + bowlDepth/2, bowlWidth/2, bowlDepth/2, 0, 0, 2 * Math.PI);
+      const bowlRadiusX = bowlWidth/2 * 0.9;
+      const bowlRadiusY = bowlDepth/2 * 0.95;
+      ctx.ellipse(bowlX + bowlWidth/2, bowlY + bowlDepth/2, bowlRadiusX, bowlRadiusY, 0, 0, 2 * Math.PI);
+      ctx.fill();
+
+      // Bowl inner shadow/highlight
+      ctx.fillStyle = isButlerSink ? '#F0F0F0' : '#D0D0D0';
+      ctx.beginPath();
+      ctx.ellipse(bowlX + bowlWidth/2, bowlY + bowlDepth/2 - bowlDepth * 0.1, bowlRadiusX * 0.7, bowlRadiusY * 0.3, 0, 0, 2 * Math.PI);
       ctx.fill();
     }
     
@@ -1079,21 +1123,36 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
       ctx.fill();
     }
     
-    // Draw draining board if present
+    // Draw draining board if present with improved appearance
     if (hasDrainingBoard) {
+      // Main draining board surface
       ctx.fillStyle = rimColor;
-      ctx.fillRect(width * 0.1, depth * 0.6, width * 0.8, depth * 0.3);
-      
-      // Draw draining board grooves
-      ctx.strokeStyle = '#E0E0E0';
-      ctx.lineWidth = 0.5;
-      for (let i = 0; i < 8; i++) {
-        const x = width * 0.1 + (i + 0.5) * (width * 0.8) / 8;
+      ctx.fillRect(width * 0.05, depth * 0.65, width * 0.9, depth * 0.3);
+
+      // Draining board highlight
+      ctx.fillStyle = isButlerSink ? '#FFFFFF' : '#E8E8E8';
+      ctx.fillRect(width * 0.05, depth * 0.65, width * 0.9, depth * 0.05);
+
+      // Draw draining board grooves with improved appearance
+      ctx.strokeStyle = isButlerSink ? '#E0E0E0' : '#D0D0D0';
+      ctx.lineWidth = 1;
+      for (let i = 0; i < 10; i++) {
+        const x = width * 0.05 + (i + 0.5) * (width * 0.9) / 10;
         ctx.beginPath();
-        ctx.moveTo(x, depth * 0.6);
-        ctx.lineTo(x, depth * 0.9);
+        ctx.moveTo(x, depth * 0.65);
+        ctx.lineTo(x, depth * 0.95);
+        ctx.stroke();
+
+        // Add subtle shadow to grooves
+        ctx.strokeStyle = isButlerSink ? '#D0D0D0' : '#C0C0C0';
+        ctx.beginPath();
+        ctx.moveTo(x + 0.5, depth * 0.65);
+        ctx.lineTo(x + 0.5, depth * 0.95);
         ctx.stroke();
       }
+
+      // Reset stroke style
+      ctx.strokeStyle = '#000000';
     }
   }, []);
 
@@ -1985,47 +2044,81 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
     const rimColor = isButlerSink ? '#F8F8F8' : '#B0B0B0';
     const drainColor = '#2F2F2F';
     
-    // Draw sink rim (top edge)
+    // Draw sink rim (top edge) with improved appearance
     ctx.fillStyle = rimColor;
     ctx.fillRect(x, y, width, height * 0.1); // 10% of height for rim
-    
-    // Draw sink bowl
+
+    // Add rim highlight
+    ctx.fillStyle = isButlerSink ? '#FFFFFF' : '#E0E0E0';
+    ctx.fillRect(x, y, width, height * 0.03); // Top highlight
+
+    // Add side rim detail
+    ctx.fillRect(x, y, width * 0.02, height * 0.1); // Left rim edge
+    ctx.fillRect(x + width - width * 0.02, y, width * 0.02, height * 0.1); // Right rim edge
+
+    // Draw sink bowl with improved appearance
     ctx.fillStyle = sinkColor;
     const bowlY = y + height * 0.1;
     const bowlHeight = height * 0.9;
     
     if (isDoubleBowl) {
-      // Double bowl sink
+      // Double bowl sink with improved appearance
       const leftBowlWidth = width * 0.45;
       const rightBowlWidth = width * 0.45;
       const centerDivider = width * 0.1;
-      
-      // Left bowl
+
+      // Left bowl with highlight
       ctx.fillRect(x, bowlY, leftBowlWidth, bowlHeight);
-      
-      // Right bowl
+
+      // Left bowl inner highlight
+      ctx.fillStyle = isButlerSink ? '#F0F0F0' : '#D0D0D0';
+      ctx.fillRect(x + 2, bowlY + 2, leftBowlWidth - 4, bowlHeight * 0.3);
+
+      // Right bowl with highlight
+      ctx.fillStyle = sinkColor;
       ctx.fillRect(x + leftBowlWidth + centerDivider, bowlY, rightBowlWidth, bowlHeight);
-      
-      // Center divider
+
+      // Right bowl inner highlight
+      ctx.fillStyle = isButlerSink ? '#F0F0F0' : '#D0D0D0';
+      ctx.fillRect(x + leftBowlWidth + centerDivider + 2, bowlY + 2, rightBowlWidth - 4, bowlHeight * 0.3);
+
+      // Center divider with depth
       ctx.fillStyle = rimColor;
       ctx.fillRect(x + leftBowlWidth, bowlY, centerDivider, bowlHeight);
+
+      // Center divider highlight
+      ctx.fillStyle = isButlerSink ? '#FFFFFF' : '#E0E0E0';
+      ctx.fillRect(x + leftBowlWidth, bowlY, centerDivider * 0.3, bowlHeight);
       
     } else if (isCornerSink) {
-      // Corner sink (L-shaped)
+      // Corner sink (L-shaped) with improved appearance
       const mainBowlWidth = width * 0.7;
       const mainBowlHeight = height * 0.7;
-      
-      // Main bowl
+
+      // Main bowl with highlight
       ctx.fillRect(x, bowlY, mainBowlWidth, mainBowlHeight);
-      
-      // Corner extension
-      const cornerWidth = width * 0.2;
-      const cornerHeight = height * 0.2;
-      ctx.fillRect(x + mainBowlWidth * 0.8, bowlY + mainBowlHeight * 0.8, cornerWidth, cornerHeight);
+
+      // Main bowl inner highlight
+      ctx.fillStyle = isButlerSink ? '#F0F0F0' : '#D0D0D0';
+      ctx.fillRect(x + 2, bowlY + 2, mainBowlWidth - 4, mainBowlHeight * 0.3);
+
+      // Corner extension with highlight
+      ctx.fillStyle = sinkColor;
+      const cornerWidth = width * 0.3;
+      const cornerHeight = height * 0.3;
+      ctx.fillRect(x + mainBowlWidth * 0.7, bowlY + mainBowlHeight * 0.7, cornerWidth, cornerHeight);
+
+      // Corner extension highlight
+      ctx.fillStyle = isButlerSink ? '#F0F0F0' : '#D0D0D0';
+      ctx.fillRect(x + mainBowlWidth * 0.7 + 1, bowlY + mainBowlHeight * 0.7 + 1, cornerWidth - 2, cornerHeight * 0.5);
       
     } else {
-      // Single bowl sink
+      // Single bowl sink with improved appearance
       ctx.fillRect(x, bowlY, width, bowlHeight);
+
+      // Single bowl inner highlight
+      ctx.fillStyle = isButlerSink ? '#F0F0F0' : '#D0D0D0';
+      ctx.fillRect(x + 2, bowlY + 2, width - 4, bowlHeight * 0.3);
     }
     
     // Draw drain
@@ -2049,25 +2142,39 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
       ctx.fillRect(x + width/2 - holeSize/2, holeY, holeSize, holeSize);
     }
     
-    // Draw draining board if present
+    // Draw draining board if present with improved appearance
     if (hasDrainingBoard) {
       const drainingBoardY = y - height * 0.3; // Position above the sink
       const drainingBoardHeight = height * 0.2;
-      
+
       // Draining board surface
       ctx.fillStyle = rimColor;
       ctx.fillRect(x, drainingBoardY, width, drainingBoardHeight);
-      
-      // Draining board grooves
-      ctx.strokeStyle = '#E0E0E0';
+
+      // Draining board highlight
+      ctx.fillStyle = isButlerSink ? '#FFFFFF' : '#E8E8E8';
+      ctx.fillRect(x, drainingBoardY, width, drainingBoardHeight * 0.25);
+
+      // Draining board grooves with improved appearance
+      ctx.strokeStyle = isButlerSink ? '#E0E0E0' : '#D0D0D0';
       ctx.lineWidth = 1;
-      for (let i = 0; i < 8; i++) {
-        const grooveX = x + (i + 0.5) * (width / 8);
+      for (let i = 0; i < 10; i++) {
+        const grooveX = x + (i + 0.5) * (width / 10);
         ctx.beginPath();
         ctx.moveTo(grooveX, drainingBoardY);
         ctx.lineTo(grooveX, drainingBoardY + drainingBoardHeight);
         ctx.stroke();
+
+        // Add subtle shadow to grooves
+        ctx.strokeStyle = isButlerSink ? '#D0D0D0' : '#C0C0C0';
+        ctx.beginPath();
+        ctx.moveTo(grooveX + 0.5, drainingBoardY);
+        ctx.lineTo(grooveX + 0.5, drainingBoardY + drainingBoardHeight);
+        ctx.stroke();
       }
+
+      // Reset stroke style
+      ctx.strokeStyle = '#000000';
     }
     
     // Draw edge detail

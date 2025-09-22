@@ -1731,18 +1731,26 @@ export const EnhancedSink3D: React.FC<Enhanced3DModelProps> = ({ element, roomDi
   // Sink dimensions - different for butler vs kitchen sinks
   let sinkDepth: number;
   let rimHeight: number;
-  
+  let bowlRadius: number;
+  let rimThickness: number;
+
   if (isButlerSink) {
     sinkDepth = 0.30; // 30cm deep for butler sinks (deeper for utility)
     rimHeight = 0.03; // 3cm rim height for butler sinks (thicker rim)
+    bowlRadius = width * 0.35; // More rectangular bowl for butler sinks
+    rimThickness = 0.02; // 2cm thick rim
   } else if (isFarmhouseSink) {
     sinkDepth = 0.25; // 25cm for farmhouse
-    rimHeight = 0.02; // 2cm rim height
+    rimHeight = 0.025; // 2.5cm rim height
+    bowlRadius = width * 0.4; // Large bowl for farmhouse
+    rimThickness = 0.03; // 3cm thick rim
   } else {
     sinkDepth = 0.20; // 20cm for standard kitchen sinks
-    rimHeight = 0.02; // 2cm rim height
+    rimHeight = 0.025; // 2.5cm rim height
+    bowlRadius = width * 0.38; // Standard bowl size
+    rimThickness = 0.02; // 2cm thick rim
   }
-  
+
   const bowlDepth = sinkDepth - rimHeight; // Bowl depth
   
   return (
@@ -1790,24 +1798,33 @@ export const EnhancedSink3D: React.FC<Enhanced3DModelProps> = ({ element, roomDi
             <meshLambertMaterial color={sinkColor} />
           </mesh>
         ) : (
-          // Kitchen sink - circular bowl
-          <mesh position={[0, 0, 0]} castShadow receiveShadow>
-            <cylinderGeometry args={[width * 0.4, width * 0.38, bowlDepth, 32]} />
-            <meshLambertMaterial color={sinkColor} />
-          </mesh>
+                    // Kitchen sink - circular bowl with realistic shape
+                    <mesh position={[0, 0, 0]} castShadow receiveShadow>
+                      <cylinderGeometry args={[bowlRadius, bowlRadius - 0.01, bowlDepth, 32]} />
+                      <meshStandardMaterial
+                        color={sinkColor}
+                        metalness={isButlerSink ? 0.0 : 0.7}
+                        roughness={isButlerSink ? 0.1 : 0.3}
+                        envMapIntensity={0.5}
+                      />
+                    </mesh>
         )
       )}
       
                   {/* Sink Rim */}
                   <mesh position={[0, bowlDepth / 2 + rimHeight / 2, 0]} castShadow receiveShadow>
                     {isButlerSink ? (
-                      // Butler sink - rectangular rim
-                      <boxGeometry args={[width * 0.9, rimHeight, depth * 0.9]} />
+                      // Butler sink - rectangular rim with thickness
+                      <boxGeometry args={[width, rimHeight, depth]} />
                     ) : (
-                      // Kitchen sink - circular rim
-                      <cylinderGeometry args={[width * 0.45, width * 0.45, rimHeight, 32]} />
+                      // Kitchen sink - circular rim with thickness
+                      <cylinderGeometry args={[bowlRadius + rimThickness, bowlRadius + rimThickness, rimHeight, 32]} />
                     )}
-                    <meshLambertMaterial color={rimColor} />
+                    <meshStandardMaterial
+                      color={rimColor}
+                      metalness={isButlerSink ? 0.0 : 0.6}
+                      roughness={isButlerSink ? 0.2 : 0.4}
+                    />
                   </mesh>
                   
                   {/* Draining Board */}
@@ -1815,51 +1832,93 @@ export const EnhancedSink3D: React.FC<Enhanced3DModelProps> = ({ element, roomDi
                     <group>
                       {/* Draining Board Surface */}
                       <mesh position={[0, bowlDepth / 2 + rimHeight + 0.01, depth * 0.3]} castShadow receiveShadow>
-                        <boxGeometry args={[width * 0.8, 0.02, depth * 0.4]} />
-                        <meshLambertMaterial color={rimColor} />
+                        <boxGeometry args={[width * 0.9, 0.015, depth * 0.5]} />
+                        <meshStandardMaterial
+                          color={rimColor}
+                          metalness={isButlerSink ? 0.0 : 0.5}
+                          roughness={isButlerSink ? 0.3 : 0.5}
+                        />
                       </mesh>
-                      {/* Draining Board Grooves */}
-                      {Array.from({ length: 8 }, (_, i) => (
-                        <mesh 
+                      {/* Draining Board Grooves - more realistic curved grooves */}
+                      {Array.from({ length: 10 }, (_, i) => (
+                        <mesh
                           key={i}
                           position={[
-                            (i - 3.5) * (width * 0.8) / 8, 
-                            bowlDepth / 2 + rimHeight + 0.02, 
+                            (i - 4.5) * (width * 0.9) / 10,
+                            bowlDepth / 2 + rimHeight + 0.008,
                             depth * 0.3
-                          ]} 
-                          castShadow 
+                          ]}
+                          castShadow
                           receiveShadow
                         >
-                          <boxGeometry args={[0.01, 0.01, depth * 0.4]} />
-                          <meshLambertMaterial color="#E0E0E0" />
+                          <cylinderGeometry args={[0.005, 0.005, depth * 0.5, 8]} />
+                          <meshStandardMaterial
+                            color="#D0D0D0"
+                            metalness={isButlerSink ? 0.0 : 0.6}
+                            roughness={isButlerSink ? 0.2 : 0.4}
+                          />
                         </mesh>
                       ))}
+                      {/* Draining Board Edge Detail */}
+                      <mesh position={[0, bowlDepth / 2 + rimHeight + 0.01, depth * 0.55]} castShadow receiveShadow>
+                        <boxGeometry args={[width * 0.9, 0.01, 0.02]} />
+                        <meshStandardMaterial
+                          color="#A0A0A0"
+                          metalness={isButlerSink ? 0.0 : 0.8}
+                          roughness={isButlerSink ? 0.2 : 0.3}
+                        />
+                      </mesh>
                     </group>
                   )}
       
       {/* Farmhouse Sink Apron Front */}
       {isFarmhouseSink && (
         <mesh position={[0, bowlDepth / 2, -depth / 2 + 0.01]} castShadow receiveShadow>
-          <boxGeometry args={[width * 0.9, bowlDepth + rimHeight, 0.02]} />
-          <meshLambertMaterial color={sinkColor} />
+          <boxGeometry args={[width, bowlDepth + rimHeight, 0.03]} />
+          <meshStandardMaterial
+            color={sinkColor}
+            metalness={0.0}
+            roughness={0.1}
+          />
         </mesh>
       )}
       
-      {/* Drain */}
+      {/* Drain with more realistic design */}
       <mesh position={[0, -bowlDepth / 2 + 0.01, 0]} castShadow receiveShadow>
-        <cylinderGeometry args={[0.05, 0.05, 0.02, 16]} />
-        <meshLambertMaterial color={drainColor} />
+        <cylinderGeometry args={[0.04, 0.04, 0.02, 16]} />
+        <meshStandardMaterial
+          color={drainColor}
+          metalness={0.8}
+          roughness={0.2}
+        />
       </mesh>
-      
-      {/* Faucet Mounting Holes */}
-      <mesh position={[width * 0.3, bowlDepth / 2 + rimHeight / 2, 0]} castShadow receiveShadow>
-        <cylinderGeometry args={[0.015, 0.015, rimHeight, 16]} />
-        <meshLambertMaterial color={drainColor} />
+
+      {/* Drain Surround */}
+      <mesh position={[0, -bowlDepth / 2 + 0.011, 0]} castShadow receiveShadow>
+        <cylinderGeometry args={[0.06, 0.06, 0.005, 16]} />
+        <meshStandardMaterial
+          color="#404040"
+          metalness={0.7}
+          roughness={0.3}
+        />
       </mesh>
-      {isDoubleBowl && (
-        <mesh position={[-width * 0.3, bowlDepth / 2 + rimHeight / 2, 0]} castShadow receiveShadow>
-          <cylinderGeometry args={[0.015, 0.015, rimHeight, 16]} />
-          <meshLambertMaterial color={drainColor} />
+
+      {/* Faucet Mounting Holes with better positioning */}
+      {isDoubleBowl ? (
+        <>
+          <mesh position={[width * 0.25, bowlDepth / 2 + rimHeight + 0.01, -depth * 0.2]} castShadow receiveShadow>
+            <cylinderGeometry args={[0.015, 0.015, 0.01, 8]} />
+            <meshStandardMaterial color={drainColor} metalness={0.8} roughness={0.2} />
+          </mesh>
+          <mesh position={[width * 0.75, bowlDepth / 2 + rimHeight + 0.01, -depth * 0.2]} castShadow receiveShadow>
+            <cylinderGeometry args={[0.015, 0.015, 0.01, 8]} />
+            <meshStandardMaterial color={drainColor} metalness={0.8} roughness={0.2} />
+          </mesh>
+        </>
+      ) : (
+        <mesh position={[0, bowlDepth / 2 + rimHeight + 0.01, -depth * 0.2]} castShadow receiveShadow>
+          <cylinderGeometry args={[0.015, 0.015, 0.01, 8]} />
+          <meshStandardMaterial color={drainColor} metalness={0.8} roughness={0.2} />
         </mesh>
       )}
       
