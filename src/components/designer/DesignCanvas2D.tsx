@@ -1298,15 +1298,8 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
         // Windows at 90cm height
         yPos = floorY - (90 * zoom) - elementHeight;
       } else if (element.type === 'sink') {
-        // Sink positioning based on type
-        const isButlerSink = element.id.includes('butler-sink') || element.id.includes('butler') || element.id.includes('base-unit-sink');
-        if (isButlerSink) {
-          // Butler sinks at base unit height (90cm)
-          yPos = floorY - (90 * zoom) - elementHeight;
-        } else {
-          // Kitchen sinks at worktop height (96cm)
-          yPos = floorY - (96 * zoom) - elementHeight;
-        }
+        // All sinks at Z position 70cm
+        yPos = floorY - (70 * zoom) - elementHeight;
       } else {
         // Floor level components
         yPos = floorY - elementHeight;

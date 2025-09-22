@@ -149,11 +149,7 @@ export const getDefaultZIndex = (type: DesignElement['type'], id?: string): numb
     case 'counter-top':
       return 3.0; // Work surface layer - above base units, below wall units
     case 'sink':
-      if (isButlerSink) {
-        return 2.5; // Butler sinks - above base units, below worktops
-      } else {
-        return 3.5; // Kitchen sinks - above worktops, below wall units
-      }
+      return 3.5; // All sinks - above worktops, below wall units
     case 'wall-unit-end-panel': // Wall unit end panels
       return 4.0; // Wall units layer
     case 'pelmet':

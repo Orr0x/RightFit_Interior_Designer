@@ -294,7 +294,7 @@ const Designer = () => {
       type: 'sink',
       x: position.x,
       y: position.y,
-      z: sinkType === 'kitchen' ? 96 : 90, // Kitchen sinks at 96cm (worktop), butler at 90cm (base unit)
+      z: 70, // Both sinks at Z position 70cm
       width: 60,
       depth: 60,
       height: sinkType === 'kitchen' ? 20 : 30, // Different heights for different sink types

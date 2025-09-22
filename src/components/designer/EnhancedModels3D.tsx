@@ -1710,15 +1710,8 @@ export const EnhancedSink3D: React.FC<Enhanced3DModelProps> = ({ element, roomDi
   const isDoubleBowl = element.id.includes('double-bowl') || element.id.includes('double');
   const isIslandSink = element.id.includes('island');
   
-  // Calculate base height based on mounting type
-  let baseHeight: number;
-  if (isButlerSink) {
-    // Butler sinks sit on base units (90cm height) - positioned at base unit top
-    baseHeight = validElement.z > 0 ? validElement.z / 100 : 0.9; // 90cm base unit height
-  } else {
-    // Kitchen sinks sit on worktops - top should be at 96cm (worktop height)
-    baseHeight = validElement.z > 0 ? validElement.z / 100 : 0.96; // 96cm worktop height
-  }
+  // Calculate base height - both sinks at Z position 70cm
+  const baseHeight = validElement.z > 0 ? validElement.z / 100 : 0.70; // 70cm for both sink types
   
   const yPosition = baseHeight + (height / 2);
   
