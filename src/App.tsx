@@ -23,6 +23,8 @@ import GalleryManager from "./pages/GalleryManager";
 import ComponentManagerPage from "./pages/ComponentManagerPage";
 import Blog from "./pages/Blog";
 import BlogPost from "./pages/BlogPost";
+import EggerBoards from "./pages/EggerBoards";
+import Finishes from "./pages/Finishes";
 import DevToolsButton from "./components/DevToolsButton";
 import { AuthProvider } from "./contexts/AuthContext";
 import { ProjectProvider } from "./contexts/ProjectContext";
@@ -60,6 +62,8 @@ const App = () => (
               <Route path="/dev/components" element={<ComponentManagerPage />} />
               <Route path="/blog" element={<Blog />} />
               <Route path="/blog/:slug" element={<BlogPost />} />
+              <Route path="/egger-boards" element={<EggerBoards />} />
+              <Route path="/finishes" element={<Finishes />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
             <DevToolsButton />
