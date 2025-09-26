@@ -56,7 +56,6 @@ const Home = () => {
               <a href="/" className="block lg:inline py-2 lg:py-0 text-gray-800 hover:text-blue-600 transition-colors">Home</a>
               <a href="#services" className="block lg:inline py-2 lg:py-0 text-gray-800 hover:text-blue-600 transition-colors">Services</a>
               <a href="#gallery" className="block lg:inline py-2 lg:py-0 text-gray-800 hover:text-blue-600 transition-colors">Gallery</a>
-              <Link to="/webp-gallery" className="block lg:inline py-2 lg:py-0 text-gray-800 hover:text-blue-600 transition-colors">WebP Gallery</Link>
               <Link to="/blog" className="block lg:inline py-2 lg:py-0 text-gray-800 hover:text-blue-600 transition-colors">Blog</Link>
               <Link to="/egger-boards" className="block lg:inline py-2 lg:py-0 text-gray-800 hover:text-blue-600 transition-colors">Materials & Finishes</Link>
               <a href="#contact" className="block lg:inline py-2 lg:py-0 text-gray-800 hover:text-blue-600 transition-colors">Contact</a>

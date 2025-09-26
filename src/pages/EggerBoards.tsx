@@ -7,21 +7,26 @@ import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card'
 import { Button } from '../components/ui/button';
 import { Package, ChevronLeft, ChevronRight } from 'lucide-react';
 import {
-  EggerBoardsData,
-  EggerBoardProduct,
-  parseEggerBoardsCSV
-} from '../utils/eggerBoardsData';
-import {
   ColoursData,
   ColourFinish,
   parseColoursCSV
 } from '../utils/coloursData';
+import {
+  WebPDecorGroup,
+  parseWebPImagesCSV
+} from '../utils/webpImagesData';
+import {
+  EggerBoardsData,
+  EggerBoardProduct,
+  parseEggerBoardsCSV
+} from '../utils/eggerBoardsData';
 
 export default function EggerBoards() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isNavVisible, setIsNavVisible] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
   const [activeTab, setActiveTab] = useState<'materials' | 'finishes'>('materials');
+  const [webpData, setWebpData] = useState<{ decors: WebPDecorGroup[], categories: string[], totalDecors: number } | null>(null);
   const [boardsData, setBoardsData] = useState<EggerBoardsData | null>(null);
   const [coloursData, setColoursData] = useState<ColoursData | null>(null);
   const [loading, setLoading] = useState(true);
@@ -47,22 +52,44 @@ export default function EggerBoards() {
         setLoading(true);
         setError(null);
 
-        // Load both datasets
-        const [boardsResponse, coloursResponse] = await Promise.all([
+        // Load all datasets
+        const [webpResponse, boardsResponse, coloursResponse] = await Promise.all([
+          fetch('/webp-images.csv'),
           fetch('/Boards.csv'),
           fetch('/colours.csv')
         ]);
 
-        // Load boards data
+        // Read response texts (only once per response!)
+        let webpCsvText = '';
+        let boardsCsvText = '';
+        let coloursCsvText = '';
+
+        if (webpResponse.ok) {
+          webpCsvText = await webpResponse.text();
+        }
+
         if (boardsResponse.ok) {
-          const boardsCsvText = await boardsResponse.text();
+          boardsCsvText = await boardsResponse.text();
+        }
+
+        if (coloursResponse.ok) {
+          coloursCsvText = await coloursResponse.text();
+        }
+
+        // Load WebP data (combined with boards data)
+        if (webpCsvText) {
+          const parsedWebpData = parseWebPImagesCSV(webpCsvText, boardsCsvText);
+          setWebpData(parsedWebpData);
+        }
+
+        // Load boards data for fallback
+        if (boardsCsvText) {
           const parsedBoardsData = parseEggerBoardsCSV(boardsCsvText);
           setBoardsData(parsedBoardsData);
         }
 
         // Load colours data
-        if (coloursResponse.ok) {
-          const coloursCsvText = await coloursResponse.text();
+        if (coloursCsvText) {
           const parsedColoursData = parseColoursCSV(coloursCsvText);
           setColoursData(parsedColoursData);
         } else {
@@ -82,11 +109,11 @@ export default function EggerBoards() {
 
   // Process data for display based on active tab
   const processedData = useMemo(() => {
-    if (activeTab === 'materials' && boardsData) {
+    if (activeTab === 'materials' && webpData) {
       return {
-        items: boardsData.products.sort((a, b) => a.decor_name.localeCompare(b.decor_name)),
-        totalItems: boardsData.products.length,
-        categories: boardsData.decorCategories.length,
+        items: webpData.decors.sort((a, b) => a.decor_name.localeCompare(b.decor_name)),
+        totalItems: webpData.totalDecors,
+        categories: webpData.categories.length,
         itemType: 'materials'
       };
     } else if (activeTab === 'finishes' && coloursData) {
@@ -98,7 +125,7 @@ export default function EggerBoards() {
       };
     }
     return { items: [], totalItems: 0, categories: 0, itemType: 'materials' };
-  }, [activeTab, boardsData, coloursData]);
+  }, [activeTab, webpData, coloursData]);
 
   // Reset to page 1 when tab changes
   useEffect(() => {
@@ -269,7 +296,7 @@ export default function EggerBoards() {
                   : 'border-transparent text-gray-500 hover:text-gray-700'
               }`}
             >
-              Materials ({processedData.itemType === 'materials' ? processedData.totalItems : (boardsData?.products.length || 0)})
+              Materials ({processedData.itemType === 'materials' ? processedData.totalItems : (webpData?.totalDecors || 0)})
             </button>
             <button
               onClick={() => setActiveTab('finishes')}
@@ -288,29 +315,61 @@ export default function EggerBoards() {
       {/* Main Content */}
       <main className="bg-white" id="materials">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-          {/* Dynamic Stats */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
-            <div className="text-center">
-              <div className="text-3xl font-bold text-blue-600 mb-2">
-                {processedData.totalItems}
+
+          {/* Top Pagination Controls */}
+          {totalPages > 1 && (
+            <div className="flex items-center justify-center space-x-3 mb-8">
+              <Button
+                variant="outline"
+                size="lg"
+                onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+                disabled={currentPage === 1}
+                className="h-12 px-6"
+              >
+                <ChevronLeft className="w-5 h-5 mr-2" />
+                Previous
+              </Button>
+
+              {/* Page numbers */}
+              <div className="flex items-center space-x-2">
+                {Array.from({ length: Math.min(totalPages, 7) }, (_, i) => {
+                  let pageNum;
+                  if (totalPages <= 7) {
+                    pageNum = i + 1;
+                  } else if (currentPage <= 4) {
+                    pageNum = i + 1;
+                  } else if (currentPage >= totalPages - 3) {
+                    pageNum = totalPages - 6 + i;
+                  } else {
+                    pageNum = currentPage - 3 + i;
+                  }
+
+                  return (
+                    <Button
+                      key={pageNum}
+                      variant={currentPage === pageNum ? "default" : "outline"}
+                      size="lg"
+                      onClick={() => setCurrentPage(pageNum)}
+                      className="min-w-[50px] h-12"
+                    >
+                      {pageNum}
+                    </Button>
+                  );
+                })}
               </div>
-              <div className="text-gray-600">
-                {activeTab === 'materials' ? 'Premium Materials' : 'Paint Colours'}
-              </div>
+
+              <Button
+                variant="outline"
+                size="lg"
+                onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+                disabled={currentPage === totalPages}
+                className="h-12 px-6"
+              >
+                Next
+                <ChevronRight className="w-5 h-5 ml-2" />
+              </Button>
             </div>
-            <div className="text-center">
-              <div className="text-3xl font-bold text-blue-600 mb-2">
-                {processedData.categories}
-              </div>
-              <div className="text-gray-600">Categories</div>
-            </div>
-            <div className="text-center">
-              <div className="text-3xl font-bold text-blue-600 mb-2">
-                132
-              </div>
-              <div className="text-gray-600">Years Experience</div>
-            </div>
-          </div>
+          )}
 
           {/* Results Info */}
           <div className="mb-8 flex items-center justify-center">
@@ -324,8 +383,8 @@ export default function EggerBoards() {
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
               {paginatedItems.map((item) => {
                 if (activeTab === 'materials') {
-                  const material = item as EggerBoardProduct;
-                  return <BoardCard key={material.decor_id} product={material} />;
+                  const decorGroup = item as WebPDecorGroup;
+                  return <BoardCard key={decorGroup.decor_id} decorGroup={decorGroup} />;
                 } else {
                   const finish = item as ColourFinish;
                   return <ColourCard key={finish.colour_id} finish={finish} />;

@@ -25,7 +25,7 @@ import Blog from "./pages/Blog";
 import BlogPost from "./pages/BlogPost";
 import EggerBoards from "./pages/EggerBoards";
 import Finishes from "./pages/Finishes";
-import WebpGallery from "./pages/WebpGallery";
+import ProductPage from "./pages/ProductPage";
 import DevToolsButton from "./components/DevToolsButton";
 import { AuthProvider } from "./contexts/AuthContext";
 import { ProjectProvider } from "./contexts/ProjectContext";
@@ -64,8 +64,8 @@ const App = () => (
               <Route path="/blog" element={<Blog />} />
               <Route path="/blog/:slug" element={<BlogPost />} />
               <Route path="/egger-boards" element={<EggerBoards />} />
+              <Route path="/product/:decorId" element={<ProductPage />} />
               <Route path="/finishes" element={<Finishes />} />
-              <Route path="/webp-gallery" element={<WebpGallery />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
             <DevToolsButton />
