@@ -1,8 +1,15 @@
 // Import Excel data to Supabase EGGER database
-const fs = require('fs');
-const path = require('path');
-const { createClient } = require('@supabase/supabase-js');
-require('dotenv').config();
+import fs from 'fs';
+import path from 'path';
+import { createClient } from '@supabase/supabase-js';
+import dotenv from 'dotenv';
+import { fileURLToPath } from 'url';
+
+dotenv.config();
+
+// ES module equivalent of __dirname
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 // Supabase configuration
 const supabaseUrl = process.env.VITE_SUPABASE_URL;

@@ -1,6 +1,8 @@
 // Test script for EGGER database integration
-const { createClient } = require('@supabase/supabase-js');
-require('dotenv').config();
+import { createClient } from '@supabase/supabase-js';
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 const supabaseUrl = process.env.VITE_SUPABASE_URL;
 const supabaseKey = process.env.VITE_SUPABASE_ANON_KEY;
@@ -73,13 +75,14 @@ async function testEggerDatabase() {
     const { data: firstDecor, error: decorError } = await supabase
       .from('egger_decors')
       .select('*')
-      .limit(1)
-      .single();
+      .limit(1);
     
     if (decorError) {
       console.log(`   ❌ Get first decor: ${decorError.message}`);
+    } else if (firstDecor && firstDecor.length > 0) {
+      console.log(`   ✅ Get first decor: ${firstDecor[0].decor_name} (${firstDecor[0].decor_id})`);
     } else {
-      console.log(`   ✅ Get first decor: ${firstDecor.decor_name} (${firstDecor.decor_id})`);
+      console.log(`   ✅ Get first decor: No records found (database is empty)`);
     }
 
     // Test search functionality
@@ -98,30 +101,34 @@ async function testEggerDatabase() {
     // Test 4: Test relationships
     console.log('\n4️⃣ Testing relationships...');
     
-    if (firstDecor) {
+    if (firstDecor && firstDecor.length > 0) {
+      const decor = firstDecor[0];
+      
       // Get images for first decor
       const { data: images, error: imagesError } = await supabase
         .from('egger_images')
         .select('*')
-        .eq('decor_id', firstDecor.decor_id);
+        .eq('decor_id', decor.decor_id);
       
       if (imagesError) {
         console.log(`   ❌ Get images: ${imagesError.message}`);
       } else {
-        console.log(`   ✅ Get images: ${images.length} images for ${firstDecor.decor_id}`);
+        console.log(`   ✅ Get images: ${images.length} images for ${decor.decor_id}`);
       }
 
       // Get combinations for first decor
       const { data: combinations, error: combinationsError } = await supabase
         .from('egger_combinations')
         .select('*')
-        .eq('decor_id', firstDecor.decor_id);
+        .eq('decor_id', decor.decor_id);
       
       if (combinationsError) {
         console.log(`   ❌ Get combinations: ${combinationsError.message}`);
       } else {
-        console.log(`   ✅ Get combinations: ${combinations.length} combinations for ${firstDecor.decor_id}`);
+        console.log(`   ✅ Get combinations: ${combinations.length} combinations for ${decor.decor_id}`);
       }
+    } else {
+      console.log(`   ✅ Relationships: No data to test (database is empty)`);
     }
 
     console.log('\n🎉 Database integration test completed!');
