@@ -5,7 +5,7 @@ import { BoardCard } from '../components/ui/BoardCard';
 import { ColourCard } from '../components/ui/ColourCard';
 import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card';
 import { Button } from '../components/ui/button';
-import { Package, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Package, ChevronLeft, ChevronRight, Database, FileText } from 'lucide-react';
 import {
   ColoursData,
   ColourFinish,
@@ -20,19 +20,26 @@ import {
   EggerBoardProduct,
   parseEggerBoardsCSV
 } from '../utils/eggerBoardsData';
+import { eggerDataService, EnhancedEggerProduct } from '../services/EggerDataService';
 
 export default function EggerBoards() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isNavVisible, setIsNavVisible] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
   const [activeTab, setActiveTab] = useState<'materials' | 'finishes'>('materials');
+  
+  // Data state
   const [webpData, setWebpData] = useState<{ decors: WebPDecorGroup[], categories: string[], totalDecors: number } | null>(null);
   const [boardsData, setBoardsData] = useState<EggerBoardsData | null>(null);
   const [coloursData, setColoursData] = useState<ColoursData | null>(null);
+  const [databaseProducts, setDatabaseProducts] = useState<EnhancedEggerProduct[]>([]);
+  
+  // UI state
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage] = useState(20); // Show 20 items per page
+  const [itemsPerPage] = useState(20);
+  const [dataSource, setDataSource] = useState<'database' | 'csv' | 'unknown'>('unknown');
 
   useEffect(() => {
     const handleScroll = () => {
@@ -45,12 +52,32 @@ export default function EggerBoards() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, [lastScrollY]);
 
-  // Load CSV data on component mount
+  // Load data on component mount - try database first, fallback to CSV
   useEffect(() => {
     const loadData = async () => {
       try {
         setLoading(true);
         setError(null);
+
+        // Try database first
+        try {
+          console.log('🔄 Attempting to load data from database...');
+          const result = await eggerDataService.getDecors(1, 100); // Load first 100 items
+          
+          if (result.data.length > 0) {
+            console.log('✅ Database data loaded successfully');
+            setDatabaseProducts(result.data);
+            setDataSource('database');
+            setLoading(false);
+            return;
+          }
+        } catch (dbError) {
+          console.warn('⚠️ Database not available, falling back to CSV:', dbError);
+        }
+
+        // Fallback to CSV data
+        console.log('🔄 Loading data from CSV files...');
+        setDataSource('csv');
 
         // Load all datasets
         const [webpResponse, boardsResponse, coloursResponse] = await Promise.all([
@@ -95,6 +122,8 @@ export default function EggerBoards() {
         } else {
           console.warn('Could not load colours data - finishes tab may not work');
         }
+
+        console.log('✅ CSV data loaded successfully');
       } catch (err) {
         setError(err instanceof Error ? err.message : 'Failed to load data');
         console.error('Error loading data:', err);
@@ -107,9 +136,16 @@ export default function EggerBoards() {
   }, []);
 
 
-  // Process data for display based on active tab
+  // Process data for display based on active tab and data source
   const processedData = useMemo(() => {
-    if (activeTab === 'materials' && webpData) {
+    if (dataSource === 'database' && activeTab === 'materials') {
+      return {
+        items: databaseProducts.sort((a, b) => a.decor_name.localeCompare(b.decor_name)),
+        totalItems: databaseProducts.length,
+        categories: new Set(databaseProducts.map(p => p.category).filter(Boolean)).size,
+        itemType: 'materials'
+      };
+    } else if (dataSource === 'csv' && activeTab === 'materials' && webpData) {
       return {
         items: webpData.decors.sort((a, b) => a.decor_name.localeCompare(b.decor_name)),
         totalItems: webpData.totalDecors,
@@ -125,7 +161,7 @@ export default function EggerBoards() {
       };
     }
     return { items: [], totalItems: 0, categories: 0, itemType: 'materials' };
-  }, [activeTab, webpData, coloursData]);
+  }, [activeTab, webpData, coloursData, databaseProducts, dataSource]);
 
   // Reset to page 1 when tab changes
   useEffect(() => {
@@ -207,6 +243,26 @@ export default function EggerBoards() {
             <Link to="/" className="flex items-center gap-3">
               <img src={rightfitLogo} alt="RightFit Interiors logo" className="h-16 w-auto" />
             </Link>
+
+            {/* Data Source Indicator */}
+            <div className="flex items-center gap-2 text-sm text-gray-600">
+              {dataSource === 'database' ? (
+                <>
+                  <Database className="w-4 h-4 text-green-600" />
+                  <span className="text-green-600 font-medium">Database</span>
+                </>
+              ) : dataSource === 'csv' ? (
+                <>
+                  <FileText className="w-4 h-4 text-orange-600" />
+                  <span className="text-orange-600 font-medium">CSV Files</span>
+                </>
+              ) : (
+                <>
+                  <Package className="w-4 h-4 text-gray-400" />
+                  <span className="text-gray-400">Loading...</span>
+                </>
+              )}
+            </div>
 
             <button
               className="lg:hidden p-2"
@@ -383,8 +439,13 @@ export default function EggerBoards() {
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
               {paginatedItems.map((item) => {
                 if (activeTab === 'materials') {
-                  const decorGroup = item as WebPDecorGroup;
-                  return <BoardCard key={decorGroup.decor_id} decorGroup={decorGroup} />;
+                  if (dataSource === 'database') {
+                    const enhancedProduct = item as EnhancedEggerProduct;
+                    return <EnhancedBoardCard key={enhancedProduct.decor_id} product={enhancedProduct} />;
+                  } else {
+                    const decorGroup = item as WebPDecorGroup;
+                    return <BoardCard key={decorGroup.decor_id} decorGroup={decorGroup} />;
+                  }
                 } else {
                   const finish = item as ColourFinish;
                   return <ColourCard key={finish.colour_id} finish={finish} />;
@@ -514,6 +575,98 @@ export default function EggerBoards() {
         </div>
       </footer>
     </>
+  );
+}
+
+// Enhanced Board Card Component for Database Products
+function EnhancedBoardCard({ product }: { product: EnhancedEggerProduct }) {
+  return (
+    <Card className="group hover:shadow-xl transition-all duration-300 bg-white rounded-2xl overflow-hidden border border-gray-100">
+      <div className="relative">
+        {product.images.length > 0 && (
+          <img
+            src={product.images[0].image_url}
+            alt={product.decor_name}
+            className="w-full h-64 object-cover group-hover:scale-105 transition-transform duration-300"
+            loading="lazy"
+          />
+        )}
+        
+        {/* Enhanced badges */}
+        <div className="absolute top-4 left-4 flex flex-col gap-2">
+          {product.has_combinations && (
+            <div className="bg-green-500 text-white px-3 py-1 rounded-full text-sm font-medium flex items-center gap-1">
+              <Star className="w-4 h-4" />
+              {product.combination_count} matches
+            </div>
+          )}
+          {product.availability.some(a => a.availability_status === 'in_stock') && (
+            <div className="bg-blue-500 text-white px-3 py-1 rounded-full text-sm font-medium">
+              In Stock
+            </div>
+          )}
+        </div>
+
+        {/* Price badge */}
+        {product.cost_per_sqm && (
+          <div className="absolute top-4 right-4 bg-white text-gray-900 px-3 py-1 rounded-full text-sm font-medium shadow-md">
+            £{product.cost_per_sqm.toFixed(2)}/m²
+          </div>
+        )}
+      </div>
+
+      <CardContent className="p-6">
+        <div className="space-y-3">
+          <h3 className="text-xl font-bold text-gray-900 group-hover:text-blue-600 transition-colors">
+            {product.decor_name}
+          </h3>
+          
+          <p className="text-sm text-gray-600 font-mono">{product.decor_id}</p>
+          
+          <div className="flex items-center gap-2 text-sm text-gray-500">
+            <span className="bg-gray-100 px-2 py-1 rounded">{product.texture}</span>
+            {product.category && (
+              <span className="bg-blue-100 text-blue-800 px-2 py-1 rounded">{product.category}</span>
+            )}
+          </div>
+
+          {/* Enhanced info */}
+          <div className="space-y-2 text-sm text-gray-600">
+            {product.availability.length > 0 && (
+              <div className="flex items-center gap-2">
+                <Clock className="w-4 h-4" />
+                <span>{product.availability[0].lead_time_days} days lead time</span>
+              </div>
+            )}
+            
+            {product.interior_match && (
+              <div className="flex items-center gap-2">
+                <Users className="w-4 h-4" />
+                <span>{product.interior_match.room_types.join(', ')}</span>
+              </div>
+            )}
+          </div>
+
+          {/* Action buttons */}
+          <div className="flex gap-2 pt-4">
+            <Button asChild className="flex-1 bg-blue-600 hover:bg-blue-700">
+              <Link to={`/product/${product.decor_id}`}>
+                View Details
+              </Link>
+            </Button>
+            {product.product_page_url && (
+              <Button
+                variant="outline"
+                onClick={() => window.open(product.product_page_url, '_blank')}
+                className="px-4"
+              >
+                EGGER
+              </Button>
+            )}
+          </div>
+        </div>
+      </CardContent>
+    </Card>
   );
 }
 
