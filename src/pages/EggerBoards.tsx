@@ -5,7 +5,10 @@ import { BoardCard } from '../components/ui/BoardCard';
 import { ColourCard } from '../components/ui/ColourCard';
 import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card';
 import { Button } from '../components/ui/button';
-import { Package, ChevronLeft, ChevronRight, Database, FileText } from 'lucide-react';
+import { Input } from '../components/ui/input';
+import { Badge } from '../components/ui/badge';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../components/ui/select';
+import { Package, ChevronLeft, ChevronRight, Database, FileText, Clock, Star, Users, DollarSign, Search, Filter, X, SlidersHorizontal } from 'lucide-react';
 import {
   ColoursData,
   ColourFinish,
@@ -40,6 +43,15 @@ export default function EggerBoards() {
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(20);
   const [dataSource, setDataSource] = useState<'database' | 'csv' | 'unknown'>('unknown');
+  
+  // Search and filter state
+  const [searchQuery, setSearchQuery] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState<string>('all');
+  const [selectedTexture, setSelectedTexture] = useState<string>('all');
+  const [selectedColorFamily, setSelectedColorFamily] = useState<string>('all');
+  const [selectedAvailability, setSelectedAvailability] = useState<string>('all');
+  const [sortBy, setSortBy] = useState<'name' | 'newest' | 'popular'>('name');
+  const [showFilters, setShowFilters] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -62,7 +74,7 @@ export default function EggerBoards() {
         // Try database first
         try {
           console.log('🔄 Attempting to load data from database...');
-          const result = await eggerDataService.getDecors(1, 100); // Load first 100 items
+          const result = await eggerDataService.getDecors(1, 1000); // Load all items
           
           if (result.data.length > 0) {
             console.log('✅ Database data loaded successfully');
@@ -136,37 +148,170 @@ export default function EggerBoards() {
   }, []);
 
 
-  // Process data for display based on active tab and data source
-  const processedData = useMemo(() => {
-    if (dataSource === 'database' && activeTab === 'materials') {
+  // Extract filter options from data
+  const filterOptions = useMemo(() => {
+    if (dataSource === 'database' && databaseProducts.length > 0) {
+      const categories = [...new Set(databaseProducts.map(p => p.category).filter(Boolean))];
+      const textures = [...new Set(databaseProducts.map(p => p.texture).filter(Boolean))];
+      const colorFamilies = [...new Set(databaseProducts.map(p => p.color_family).filter(Boolean))];
+      const availabilityStatuses = [...new Set(
+        databaseProducts.flatMap(p => 
+          p.availability?.map(a => a.availability_status) || []
+        ).filter(Boolean)
+      )];
+
       return {
-        items: databaseProducts.sort((a, b) => a.decor_name.localeCompare(b.decor_name)),
-        totalItems: databaseProducts.length,
-        categories: new Set(databaseProducts.map(p => p.category).filter(Boolean)).size,
-        itemType: 'materials'
+        categories: categories.sort(),
+        textures: textures.sort(),
+        colorFamilies: colorFamilies.sort(),
+        availabilityStatuses: availabilityStatuses.sort()
       };
-    } else if (dataSource === 'csv' && activeTab === 'materials' && webpData) {
+    } else if (webpData && boardsData) {
+      // Extract from CSV data
+      const categories = [...new Set(webpData.categories)];
+      const textures = [...new Set(webpData.decors.map(d => d.texture).filter(Boolean))];
+      
       return {
-        items: webpData.decors.sort((a, b) => a.decor_name.localeCompare(b.decor_name)),
-        totalItems: webpData.totalDecors,
-        categories: webpData.categories.length,
-        itemType: 'materials'
-      };
-    } else if (activeTab === 'finishes' && coloursData) {
-      return {
-        items: coloursData.finishes.sort((a, b) => a.name.localeCompare(b.name)),
-        totalItems: coloursData.totalFinishes,
-        categories: coloursData.categories.length,
-        itemType: 'finishes'
+        categories: categories.sort(),
+        textures: textures.sort(),
+        colorFamilies: ['Grey', 'White', 'Brown', 'Black', 'Beige', 'Blue'],
+        availabilityStatuses: ['in_stock', 'limited', 'out_of_stock']
       };
     }
-    return { items: [], totalItems: 0, categories: 0, itemType: 'materials' };
-  }, [activeTab, webpData, coloursData, databaseProducts, dataSource]);
+    
+    return {
+      categories: [],
+      textures: [],
+      colorFamilies: [],
+      availabilityStatuses: []
+    };
+  }, [dataSource, databaseProducts, webpData, boardsData]);
 
-  // Reset to page 1 when tab changes
+  // Filter and search logic
+  const filteredProducts = useMemo(() => {
+    let products: any[] = [];
+    
+    if (dataSource === 'database' && activeTab === 'materials') {
+      products = [...databaseProducts];
+    } else if (dataSource === 'csv' && activeTab === 'materials' && webpData) {
+      products = [...webpData.decors];
+    } else if (activeTab === 'finishes' && coloursData) {
+      products = [...coloursData.finishes];
+    }
+
+    // Apply search filter
+    if (searchQuery) {
+      products = products.filter(product => {
+        const searchableText = [
+          product.decor_name || product.decorName || product.name || '',
+          product.decor_id || product.decorId || '',
+          product.decor || '',
+          product.texture || '',
+          product.category || '',
+          product.color_family || ''
+        ].join(' ').toLowerCase();
+        
+        return searchableText.includes(searchQuery.toLowerCase());
+      });
+    }
+
+    // Apply category filter
+    if (selectedCategory !== 'all') {
+      products = products.filter(product => 
+        (product.category || product.decorName || product.name || '').toLowerCase().includes(selectedCategory.toLowerCase())
+      );
+    }
+
+    // Apply texture filter
+    if (selectedTexture !== 'all') {
+      products = products.filter(product => 
+        product.texture === selectedTexture
+      );
+    }
+
+    // Apply color family filter
+    if (selectedColorFamily !== 'all') {
+      products = products.filter(product => 
+        product.color_family === selectedColorFamily
+      );
+    }
+
+    // Apply availability filter (database only)
+    if (selectedAvailability !== 'all' && dataSource === 'database') {
+      products = products.filter(product => {
+        return product.availability?.some((a: any) => a.availability_status === selectedAvailability);
+      });
+    }
+
+    // Apply sorting
+    products.sort((a, b) => {
+      switch (sortBy) {
+        case 'name':
+          const nameA = a.decor_name || a.decorName || a.name || '';
+          const nameB = b.decor_name || b.decorName || b.name || '';
+          return nameA.localeCompare(nameB);
+        case 'newest':
+          const dateA = new Date(a.created_at || a.updated_at || 0);
+          const dateB = new Date(b.created_at || b.updated_at || 0);
+          return dateB.getTime() - dateA.getTime();
+        case 'popular':
+          // Mock popularity based on combinations count or image count
+          const popularityA = (a.combinations?.length || 0) + (a.images?.length || 0);
+          const popularityB = (b.combinations?.length || 0) + (b.images?.length || 0);
+          return popularityB - popularityA;
+        default:
+          return 0;
+      }
+    });
+
+    return products;
+  }, [
+    dataSource,
+    activeTab,
+    databaseProducts,
+    webpData,
+    coloursData,
+    searchQuery,
+    selectedCategory,
+    selectedTexture,
+    selectedColorFamily,
+    selectedAvailability,
+    sortBy
+  ]);
+
+  // Process data for display
+  const processedData = useMemo(() => {
+    return {
+      items: filteredProducts,
+      totalItems: filteredProducts.length,
+      categories: filterOptions.categories.length,
+      itemType: activeTab
+    };
+  }, [filteredProducts, filterOptions.categories.length, activeTab]);
+
+  // Reset to page 1 when tab changes or filters change
   useEffect(() => {
     setCurrentPage(1);
-  }, [activeTab]);
+  }, [activeTab, searchQuery, selectedCategory, selectedTexture, selectedColorFamily, selectedAvailability, sortBy]);
+
+  // Clear all filters
+  const clearFilters = () => {
+    setSearchQuery('');
+    setSelectedCategory('all');
+    setSelectedTexture('all');
+    setSelectedColorFamily('all');
+    setSelectedAvailability('all');
+    setSortBy('name');
+  };
+
+  // Count active filters
+  const activeFiltersCount = [
+    searchQuery,
+    selectedCategory !== 'all' ? selectedCategory : null,
+    selectedTexture !== 'all' ? selectedTexture : null,
+    selectedColorFamily !== 'all' ? selectedColorFamily : null,
+    selectedAvailability !== 'all' ? selectedAvailability : null
+  ].filter(Boolean).length;
 
   // Pagination calculations
   const totalPages = Math.ceil(processedData.items.length / itemsPerPage);
@@ -364,6 +509,220 @@ export default function EggerBoards() {
             >
               Finishes ({processedData.itemType === 'finishes' ? processedData.totalItems : (coloursData?.totalFinishes || 0)})
             </button>
+          </div>
+        </div>
+      </div>
+
+      {/* Search and Filters */}
+      <div className="bg-gray-50 border-b border-gray-200">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+          {/* Search Bar */}
+          <div className="flex flex-col lg:flex-row gap-4 items-center justify-between mb-6">
+            <div className="relative flex-1 max-w-md">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+              <Input
+                type="text"
+                placeholder={`Search ${activeTab}...`}
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="pl-10 pr-4 py-2 w-full"
+              />
+              {searchQuery && (
+                <button
+                  onClick={() => setSearchQuery('')}
+                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              )}
+            </div>
+
+            <div className="flex items-center gap-4">
+              {/* Sort Dropdown */}
+              <Select value={sortBy} onValueChange={(value) => setSortBy(value as 'name' | 'newest' | 'popular')}>
+                <SelectTrigger className="w-40">
+                  <SelectValue placeholder="Sort by" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="name">Name A-Z</SelectItem>
+                  <SelectItem value="newest">Newest First</SelectItem>
+                  <SelectItem value="popular">Most Popular</SelectItem>
+                </SelectContent>
+              </Select>
+
+              {/* Filter Toggle */}
+              <Button
+                variant="outline"
+                onClick={() => setShowFilters(!showFilters)}
+                className="relative"
+              >
+                <SlidersHorizontal className="w-4 h-4 mr-2" />
+                Filters
+                {activeFiltersCount > 0 && (
+                  <Badge className="ml-2 bg-blue-600 text-white text-xs px-2 py-0.5">
+                    {activeFiltersCount}
+                  </Badge>
+                )}
+              </Button>
+
+              {/* Clear Filters */}
+              {activeFiltersCount > 0 && (
+                <Button
+                  variant="ghost"
+                  onClick={clearFilters}
+                  className="text-gray-500 hover:text-gray-700"
+                >
+                  Clear All
+                </Button>
+              )}
+            </div>
+          </div>
+
+          {/* Filter Panel */}
+          {showFilters && (
+            <div className="bg-white rounded-lg border border-gray-200 p-6 mb-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                {/* Category Filter */}
+                {filterOptions.categories.length > 0 && (
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Category</label>
+                    <Select value={selectedCategory} onValueChange={setSelectedCategory}>
+                      <SelectTrigger>
+                        <SelectValue placeholder="All Categories" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="all">All Categories</SelectItem>
+                        {filterOptions.categories.map((category) => (
+                          <SelectItem key={category} value={category}>
+                            {category}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                )}
+
+                {/* Texture Filter */}
+                {filterOptions.textures.length > 0 && (
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Texture</label>
+                    <Select value={selectedTexture} onValueChange={setSelectedTexture}>
+                      <SelectTrigger>
+                        <SelectValue placeholder="All Textures" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="all">All Textures</SelectItem>
+                        {filterOptions.textures.map((texture) => (
+                          <SelectItem key={texture} value={texture}>
+                            {texture}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                )}
+
+                {/* Color Family Filter */}
+                {filterOptions.colorFamilies.length > 0 && (
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Color Family</label>
+                    <Select value={selectedColorFamily} onValueChange={setSelectedColorFamily}>
+                      <SelectTrigger>
+                        <SelectValue placeholder="All Colors" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="all">All Colors</SelectItem>
+                        {filterOptions.colorFamilies.map((color) => (
+                          <SelectItem key={color} value={color}>
+                            {color}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                )}
+
+                {/* Availability Filter (Database only) */}
+                {dataSource === 'database' && filterOptions.availabilityStatuses.length > 0 && (
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Availability</label>
+                    <Select value={selectedAvailability} onValueChange={setSelectedAvailability}>
+                      <SelectTrigger>
+                        <SelectValue placeholder="All Status" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="all">All Status</SelectItem>
+                        {filterOptions.availabilityStatuses.map((status) => (
+                          <SelectItem key={status} value={status}>
+                            {status.replace('_', ' ').toUpperCase()}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
+
+          {/* Results Summary */}
+          <div className="flex items-center justify-between mb-6">
+            <div className="text-gray-600">
+              Showing <span className="font-medium">{Math.min(startIndex + 1, processedData.totalItems)}</span> to{' '}
+              <span className="font-medium">{Math.min(endIndex, processedData.totalItems)}</span> of{' '}
+              <span className="font-medium">{processedData.totalItems}</span> {activeTab}
+              {activeFiltersCount > 0 && (
+                <span className="ml-2 text-blue-600">
+                  ({activeFiltersCount} filter{activeFiltersCount !== 1 ? 's' : ''} applied)
+                </span>
+              )}
+            </div>
+
+            {/* Active Filters Tags */}
+            {activeFiltersCount > 0 && (
+              <div className="flex items-center gap-2 flex-wrap">
+                {searchQuery && (
+                  <Badge variant="secondary" className="flex items-center gap-1">
+                    Search: "{searchQuery}"
+                    <button onClick={() => setSearchQuery('')}>
+                      <X className="w-3 h-3" />
+                    </button>
+                  </Badge>
+                )}
+                {selectedCategory !== 'all' && (
+                  <Badge variant="secondary" className="flex items-center gap-1">
+                    Category: {selectedCategory}
+                    <button onClick={() => setSelectedCategory('all')}>
+                      <X className="w-3 h-3" />
+                    </button>
+                  </Badge>
+                )}
+                {selectedTexture !== 'all' && (
+                  <Badge variant="secondary" className="flex items-center gap-1">
+                    Texture: {selectedTexture}
+                    <button onClick={() => setSelectedTexture('all')}>
+                      <X className="w-3 h-3" />
+                    </button>
+                  </Badge>
+                )}
+                {selectedColorFamily !== 'all' && (
+                  <Badge variant="secondary" className="flex items-center gap-1">
+                    Color: {selectedColorFamily}
+                    <button onClick={() => setSelectedColorFamily('all')}>
+                      <X className="w-3 h-3" />
+                    </button>
+                  </Badge>
+                )}
+                {selectedAvailability !== 'all' && (
+                  <Badge variant="secondary" className="flex items-center gap-1">
+                    Status: {selectedAvailability.replace('_', ' ').toUpperCase()}
+                    <button onClick={() => setSelectedAvailability('all')}>
+                      <X className="w-3 h-3" />
+                    </button>
+                  </Badge>
+                )}
+              </div>
+            )}
           </div>
         </div>
       </div>
@@ -583,13 +942,24 @@ function EnhancedBoardCard({ product }: { product: EnhancedEggerProduct }) {
   return (
     <Card className="group hover:shadow-xl transition-all duration-300 bg-white rounded-2xl overflow-hidden border border-gray-100">
       <div className="relative">
-        {product.images.length > 0 && (
-          <img
-            src={product.images[0].image_url}
-            alt={product.decor_name}
-            className="w-full h-64 object-cover group-hover:scale-105 transition-transform duration-300"
-            loading="lazy"
-          />
+        {product.images.length > 0 ? (
+          <div className="relative w-full h-64 overflow-hidden">
+            <img
+              src={product.images[0].image_url}
+              alt={product.decor_name}
+              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+              loading="lazy"
+            />
+            {product.images.length > 1 && (
+              <div className="absolute top-2 right-2 bg-black bg-opacity-50 text-white px-2 py-1 rounded-full text-xs">
+                +{product.images.length - 1} more
+              </div>
+            )}
+          </div>
+        ) : (
+          <div className="w-full h-64 bg-gray-200 flex items-center justify-center">
+            <span className="text-gray-400">No image</span>
+          </div>
         )}
         
         {/* Enhanced badges */}

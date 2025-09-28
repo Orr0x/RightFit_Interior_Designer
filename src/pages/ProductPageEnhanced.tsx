@@ -56,7 +56,7 @@ export default function ProductPageEnhanced() {
       try {
         setLoading(true);
         setError(null);
-
+        
         console.log('🔄 [ProductPage] Loading EGGER product data...');
         console.log('🔍 [ProductPage] Looking for decor_id:', decorId);
         
@@ -124,7 +124,7 @@ export default function ProductPageEnhanced() {
               <Button variant="outline" className="w-full">
                 Go to Homepage
               </Button>
-          </Link>
+            </Link>
           </div>
         </div>
       </div>
@@ -136,7 +136,7 @@ export default function ProductPageEnhanced() {
       {/* Enhanced Navigation */}
       <nav
         className={`fixed top-0 left-0 right-0 z-50 bg-white shadow-lg transition-transform duration-300 ${
-        isNavVisible ? 'translate-y-0' : '-translate-y-full'
+          isNavVisible ? 'translate-y-0' : '-translate-y-full'
         }`}
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -218,106 +218,60 @@ export default function ProductPageEnhanced() {
 
           {/* Main Content */}
           <div className="grid lg:grid-cols-2 gap-12 mb-16">
-            {/* Dual-Image System: Board Images + WebP Gallery */}
+            {/* Enhanced Image Gallery */}
             <div className="relative">
-              {productData.board_images && productData.board_images.length > 0 ? (
+              {productData.images && productData.images.length > 0 ? (
                 <div className="space-y-4">
-                  {/* High-Quality Board Images (Hero Section) */}
-                  <div className="space-y-3">
-                    <div className="flex items-center justify-between mb-2">
-                      <h3 className="text-sm font-medium text-gray-700">Product Board Images</h3>
-                      <Badge variant="outline" className="text-xs">High Quality PNG</Badge>
+                  {/* Primary Image Display */}
+                  <div className="aspect-[16/9] bg-gray-200 rounded-lg overflow-hidden relative group">
+                    <img
+                      src={productData.images[selectedImageIndex]?.image_url || productData.images[0].image_url}
+                      alt={`${productData.decor_name} view ${selectedImageIndex + 1}`}
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                      onError={(e) => {
+                        console.log('❌ [ProductPage] Image failed to load');
+                        e.currentTarget.src = 'https://via.placeholder.com/800x450?text=EGGER+Product+Image';
+                      }}
+                    />
+                    <div className="absolute top-4 left-4 bg-red-600 text-white px-3 py-1 rounded-full text-sm font-medium">
+                      {selectedImageIndex + 1} of {productData.images.length}
                     </div>
-                    
-                    {/* Main Board Image */}
-                    <div className="aspect-[16/9] bg-gray-200 rounded-lg overflow-hidden relative group">
-                      <img
-                        src={productData.board_images.find(img => img.is_main_board)?.image_url || productData.board_images[0].image_url}
-                        alt={`${productData.decor_name} main board`}
-                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                        onError={(e) => {
-                          console.log('❌ [ProductPage] Board image failed to load');
-                          e.currentTarget.src = 'https://via.placeholder.com/800x450?text=EGGER+Board+Image';
-                        }}
-                      />
-                      <div className="absolute top-4 left-4 bg-red-600 text-white px-3 py-1 rounded-full text-sm font-medium">
-                        Main Board View
-                      </div>
-                      <div className="absolute top-4 right-4 bg-black bg-opacity-50 text-white px-3 py-1 rounded-full text-sm">
-                        High-Res PNG
-                      </div>
+                    <div className="absolute top-4 right-4 bg-black bg-opacity-50 text-white px-3 py-1 rounded-full text-sm">
+                      {productData.images[selectedImageIndex]?.image_type?.toUpperCase() || 'IMAGE'}
                     </div>
-                    
-                    {/* Board Image Thumbnails */}
-                    {productData.board_images.length > 1 && (
-                      <div className="grid grid-cols-2 gap-3">
-                        {productData.board_images.map((boardImg, index) => (
-                          <div key={index} className="aspect-[4/3] bg-gray-200 rounded-lg overflow-hidden relative group cursor-pointer">
-                            <img
-                              src={boardImg.image_url}
-                              alt={`${productData.decor_name} ${boardImg.is_main_board ? 'main board' : 'close-up'}`}
-                              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                              onError={(e) => {
-                                e.currentTarget.src = 'https://via.placeholder.com/400x300?text=Board+Image';
-                              }}
-                            />
-                            <div className="absolute bottom-2 left-2 bg-white bg-opacity-90 px-2 py-1 rounded text-xs font-medium">
-                              {boardImg.is_main_board ? 'Main Board' : 'Close-up Detail'}
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                    )}
                   </div>
                   
-                  {/* WebP Gallery Images (Additional Views) */}
-                  {productData.images && productData.images.length > 0 && (
-                    <div className="space-y-3 pt-4 border-t border-gray-200">
-                      <div className="flex items-center justify-between">
-                        <h3 className="text-sm font-medium text-gray-700">Additional Gallery</h3>
-                        <Badge variant="outline" className="text-xs">
-                          {productData.images.length} WebP Images
-                        </Badge>
-                      </div>
-                      
-                      <div className="grid grid-cols-4 gap-2">
-                        {productData.images.slice(0, 8).map((image, index) => (
-                          <div 
-                            key={index} 
-                            className="aspect-square bg-gray-200 rounded-lg overflow-hidden cursor-pointer hover:ring-2 hover:ring-red-300 transition-all"
-                            onClick={() => setSelectedImageIndex(index)}
-                          >
-                            <img
-                              src={image.image_url}
-                              alt={`${productData.decor_name} gallery ${index + 1}`}
-                              className="w-full h-full object-cover"
-                              onError={(e) => {
-                                e.currentTarget.src = 'https://via.placeholder.com/100x100?text=Gallery';
-                              }}
-                            />
-                          </div>
-                        ))}
-                      </div>
-                      
-                      {productData.images.length > 8 && (
-                        <div className="text-center">
-                          <Button variant="outline" size="sm">
-                            View All {productData.images.length} Gallery Images
-                          </Button>
+                  {/* Image Thumbnails */}
+                  {productData.images.length > 1 && (
+                    <div className="grid grid-cols-6 gap-2">
+                      {productData.images.map((image, index) => (
+                        <div 
+                          key={index} 
+                          className={`aspect-square bg-gray-200 rounded-lg overflow-hidden cursor-pointer transition-all ${
+                            selectedImageIndex === index 
+                              ? 'ring-2 ring-red-600 ring-offset-2' 
+                              : 'hover:ring-2 hover:ring-gray-300'
+                          }`}
+                          onClick={() => setSelectedImageIndex(index)}
+                        >
+                          <img
+                            src={image.image_url}
+                            alt={`${productData.decor_name} thumbnail ${index + 1}`}
+                            className="w-full h-full object-cover"
+                            onError={(e) => {
+                              e.currentTarget.src = 'https://via.placeholder.com/100x100?text=No+Image';
+                            }}
+                          />
                         </div>
-                      )}
+                      ))}
                     </div>
                   )}
                   
-                  {/* Image System Info */}
-                  <div className="bg-blue-50 rounded-lg p-4 border border-blue-200">
-                    <div className="flex items-center justify-between text-sm">
-                      <div className="text-blue-800">
-                        <strong>Dual-Image System:</strong> High-quality board images + fast-loading gallery
-                      </div>
-                      <div className="text-blue-600 text-xs">
-                        {productData.board_images.length} Board • {productData.images.length} Gallery
-                      </div>
+                  {/* Image Info */}
+                  <div className="bg-gray-50 rounded-lg p-4">
+                    <div className="flex items-center justify-between text-sm text-gray-600">
+                      <span>Image Types: {[...new Set(productData.images.map(img => img.image_type))].join(', ').toUpperCase()}</span>
+                      <span>High Resolution Available</span>
                     </div>
                   </div>
                 </div>
@@ -325,7 +279,7 @@ export default function ProductPageEnhanced() {
                 <div className="aspect-square bg-gray-200 rounded-lg flex items-center justify-center">
                   <div className="text-center">
                     <div className="text-gray-400 mb-4 text-4xl">📷</div>
-                    <p className="text-gray-600">No board images available</p>
+                    <p className="text-gray-600">No images available</p>
                     <p className="text-gray-500 text-sm mt-2">Contact EGGER for product imagery</p>
                   </div>
                 </div>
@@ -408,7 +362,7 @@ export default function ProductPageEnhanced() {
                 </Card>
               )}
 
-              {/* Enhanced Product Combinations with Full Data */}
+              {/* Product Combinations */}
               {productData.combinations && Array.isArray(productData.combinations) && productData.combinations.length > 0 && (
                 <Card>
                   <CardHeader>
@@ -418,105 +372,36 @@ export default function ProductPageEnhanced() {
                         Recommended Combinations
                       </div>
                       <Badge className="bg-purple-100 text-purple-800">
-                        {productData.combinations.length} Professional Matches
+                        {productData.combinations.length} Matches
                       </Badge>
                     </CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <div className="grid gap-4">
-                      {productData.combinations.map((combo, index) => {
-                        // Find the full product data for this combination
-                        const recommendedProduct = productData.recommended_products?.find(
-                          p => p.decor_id === combo.recommended_decor_id
-                        );
-                        
-                        return (
-                          <Link 
-                            key={index} 
-                            to={`/product/${encodeURIComponent(combo.recommended_decor_id)}`}
-                            className="block group"
-                          >
-                            <div className="bg-gradient-to-r from-purple-50 to-blue-50 p-4 rounded-lg border border-purple-100 group-hover:border-purple-300 group-hover:shadow-lg transition-all duration-300">
-                              <div className="flex items-start space-x-4">
-                                {/* Product Image */}
-                                <div className="w-16 h-16 bg-gradient-to-br from-purple-100 to-blue-100 rounded-lg overflow-hidden flex-shrink-0 group-hover:scale-105 transition-transform">
-                                  {(recommendedProduct as any)?.primary_image?.image_url ? (
-                                    <img
-                                      src={(recommendedProduct as any).primary_image.image_url}
-                                      alt={recommendedProduct?.decor_name || combo.recommended_decor_id}
-                                      className="w-full h-full object-cover"
-                                      onError={(e) => {
-                                        // Fallback to decor code display
-                                        e.currentTarget.style.display = 'none';
-                                        const nextElement = e.currentTarget.nextElementSibling as HTMLElement;
-                                        if (nextElement) nextElement.style.display = 'flex';
-                                      }}
-                                    />
-                                  ) : null}
-                                  <div className="w-full h-full bg-gradient-to-br from-purple-100 to-blue-100 flex items-center justify-center" style={{ display: (recommendedProduct as any)?.primary_image?.image_url ? 'none' : 'flex' }}>
-                                    <div className="text-purple-600 text-xl font-bold">
-                                      {combo.recommended_decor_id.split(' ')[0]}
-                                    </div>
-                                  </div>
-                                </div>
-                                
-                                {/* Product Details */}
-                                <div className="flex-1 min-w-0">
-                                  <div className="flex items-start justify-between mb-2">
-              <div>
-                                      <h4 className="font-semibold text-gray-900 group-hover:text-purple-700 transition-colors">
-                                        {recommendedProduct?.decor_name || combo.recommended_decor_id}
-                                      </h4>
-                                      <p className="text-sm text-gray-600">
-                                        {combo.recommended_decor_id} • {recommendedProduct?.texture || 'EGGER Texture'}
-                                      </p>
-                                    </div>
-                                    <div className="flex items-center space-x-2 flex-shrink-0">
-                                      <Badge variant="outline" className="text-xs bg-white">
-                                        EGGER Match
-                                      </Badge>
-                                      <ExternalLink className="w-4 h-4 text-gray-400 group-hover:text-purple-600 transition-colors" />
-                                    </div>
-                                  </div>
-                                  
-                                  <div className="flex items-center space-x-4 text-xs text-gray-500">
-                                    {recommendedProduct?.category && (
-                                      <span className="flex items-center">
-                                        <div className="w-2 h-2 bg-purple-400 rounded-full mr-1"></div>
-                                        {recommendedProduct.category}
-                                      </span>
-                                    )}
-                                    {recommendedProduct?.color_family && (
-                                      <span className="flex items-center">
-                                        <div className="w-2 h-2 bg-blue-400 rounded-full mr-1"></div>
-                                        {recommendedProduct.color_family}
-                                      </span>
-                                    )}
-                                    <span className="flex items-center">
-                                      <Star className="w-3 h-3 text-yellow-500 mr-1" />
-                                      Professional Match
-                                    </span>
-                </div>
-
-                                  <p className="text-sm text-gray-600 mt-2">
-                                    {recommendedProduct?.description?.substring(0, 120) || 
-                                     'Professional EGGER combination recommendation for harmonious interior design'}
-                                    {recommendedProduct?.description && recommendedProduct.description.length > 120 && '...'}
-                </p>
-              </div>
+                    <div className="space-y-3">
+                      {productData.combinations.map((combo, index) => (
+                        <Link 
+                          key={index} 
+                          to={`/product/${encodeURIComponent(combo.recommended_decor_id)}`}
+                          className="block group"
+                        >
+                          <div className="bg-purple-50 p-4 rounded-lg border border-purple-100 group-hover:border-purple-300 group-hover:shadow-md transition-all">
+                            <div className="flex items-center justify-between mb-2">
+                              <div className="font-medium text-gray-900 group-hover:text-purple-700">
+                                {combo.recommended_decor_id}
+                              </div>
+                              <div className="flex items-center space-x-2">
+                                <Badge variant="outline" className="text-xs">
+                                  EGGER Match
+                                </Badge>
+                                <ExternalLink className="w-4 h-4 text-gray-400 group-hover:text-purple-600" />
                               </div>
                             </div>
-                          </Link>
-                        );
-                      })}
-                    </div>
-                    
-                    {/* Combination Summary */}
-                    <div className="mt-4 p-3 bg-gray-50 rounded-lg">
-                      <div className="flex items-center justify-between text-sm text-gray-600">
-                        <span>Professional EGGER combinations for {productData.decor_name}</span>
-                        <span>{productData.combinations.length} harmonious matches available</span>
-                      </div>
+                            <div className="text-sm text-gray-600">
+                              Professional EGGER combination recommendation for harmonious design
+                            </div>
+                          </div>
+                        </Link>
+                      ))}
                     </div>
                   </CardContent>
                 </Card>
@@ -543,15 +428,15 @@ export default function ProductPageEnhanced() {
                   >
                     <Ruler className="w-4 h-4 mr-2" />
                     Use in Designer
-                </Button>
-                <Button
-                  variant="outline"
+                  </Button>
+                  <Button
+                    variant="outline"
                     className="border-gray-300 text-gray-700 hover:bg-gray-50"
                     onClick={copyProductDetails}
-                >
+                  >
                     <Copy className="w-4 h-4 mr-2" />
                     Copy Details
-                </Button>
+                  </Button>
                 </div>
               </div>
             </div>
@@ -597,46 +482,25 @@ export default function ProductPageEnhanced() {
                       <div>
                         <span className="text-gray-600">Image Gallery:</span>
                         <div className="font-medium text-gray-900">
-                          {productData.board_images?.length || 0} Board + {productData.images?.length || 0} Gallery
+                          {productData.images?.length || 0} High-Res Images
                         </div>
                       </div>
                     </div>
                   </CardContent>
                 </Card>
               </div>
-          </div>
+            </div>
 
-            {/* Enhanced Image Display - Use Close-up Board Image */}
+            {/* Enhanced Image Display */}
             <div className="relative">
-            {productData.board_images && productData.board_images.length > 0 ? (
-                <div className="aspect-square bg-gray-200 rounded-lg overflow-hidden relative group">
-                  <img 
-                    src={productData.board_images.find(img => img.is_closeup)?.image_url || productData.board_images[1]?.image_url || productData.board_images[0].image_url}
-                    alt={`${productData.decor_name} close-up detail`}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                    onError={(e) => {
-                      console.log('❌ [ProductPage] Board detail image failed to load');
-                      e.currentTarget.src = 'https://via.placeholder.com/400x400?text=EGGER+Board+Detail';
-                    }}
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                  <div className="absolute bottom-4 left-4 right-4 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                    <p className="text-sm font-medium">
-                      Visualize this decor in the RightFit Interior Design Suite
-                    </p>
-                  </div>
-                  <div className="absolute top-4 right-4 bg-white bg-opacity-90 px-2 py-1 rounded text-xs font-medium text-gray-800">
-                    High-Res Detail
-                  </div>
-                </div>
-              ) : productData.images && productData.images.length > 0 ? (
+              {productData.images && productData.images.length > 0 ? (
                 <div className="aspect-square bg-gray-200 rounded-lg overflow-hidden relative group">
                   <img 
                     src={productData.images.find(img => img.is_primary)?.image_url || productData.images[0].image_url}
                     alt={`${productData.decor_name} detail view`}
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                     onError={(e) => {
-                      console.log('❌ [ProductPage] Gallery image failed to load');
+                      console.log('❌ [ProductPage] Detail image failed to load');
                       e.currentTarget.src = 'https://via.placeholder.com/400x400?text=EGGER+Product+Image';
                     }}
                   />
@@ -654,8 +518,8 @@ export default function ProductPageEnhanced() {
                     <span className="text-gray-600">Product Image Not Available</span>
                     <p className="text-gray-500 text-sm mt-2">Contact EGGER for imagery</p>
                   </div>
-              </div>
-            )}
+                </div>
+              )}
             </div>
           </div>
         </div>
@@ -663,8 +527,8 @@ export default function ProductPageEnhanced() {
 
       {/* Interior Match Section */}
       {productData.interior_match && productData.interior_match.interior_style && (
-      <section className="py-16 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <section className="py-16 bg-white">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-12">
               <h2 className="text-3xl font-bold text-gray-900 mb-4">
                 Interior Match: Created for Harmonious Designs
@@ -672,8 +536,8 @@ export default function ProductPageEnhanced() {
               <p className="text-lg text-gray-600 max-w-3xl mx-auto">
                 Professional design coordination with EGGER's Interior Match system
               </p>
-                  </div>
-
+            </div>
+            
             <div className="grid lg:grid-cols-2 gap-12 items-center">
               <div className="relative">
                 <div className="aspect-[4/3] bg-gradient-to-br from-red-50 to-red-100 rounded-lg overflow-hidden">
@@ -698,33 +562,33 @@ export default function ProductPageEnhanced() {
                     <div className="bg-white bg-opacity-90 px-6 py-3 rounded-lg">
                       <div className="text-red-600 text-2xl font-bold">Interior MATCH</div>
                     </div>
+                  </div>
                 </div>
               </div>
-            </div>
-
+              
               <div>
                 <Card className="mb-6">
-                <CardHeader>
+                  <CardHeader>
                     <CardTitle className="flex items-center">
                       <CheckCircle className="w-5 h-5 text-green-600 mr-2" />
                       Design Coordination Benefits
                     </CardTitle>
-                </CardHeader>
+                  </CardHeader>
                   <CardContent>
                     <div className="prose text-gray-700">
                       <p className="leading-relaxed">
                         {productData.interior_match.design_notes || 
                         'With the Interior Match, you benefit from coordinated combination options for furniture and flooring. The decor package includes same-decor and colour-coordinated flooring as well as furniture and interior design products. This allows you to create coordinated modern designs.'}
                       </p>
-                  </div>
-                </CardContent>
-              </Card>
-
-              <Card>
-                <CardHeader>
+                    </div>
+                  </CardContent>
+                </Card>
+                
+                <Card>
+                  <CardHeader>
                     <CardTitle>Match Details</CardTitle>
-                </CardHeader>
-                <CardContent>
+                  </CardHeader>
+                  <CardContent>
                     <div className="space-y-3 text-sm">
                       <div className="flex items-center">
                         <div className="w-2 h-2 bg-red-600 rounded-full mr-3"></div>
@@ -743,13 +607,13 @@ export default function ProductPageEnhanced() {
                         <span className="text-gray-600">Design System:</span>
                         <span className="font-medium text-gray-900 ml-2">EGGER Interior Match</span>
                       </div>
-                  </div>
-                </CardContent>
-              </Card>
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
             </div>
           </div>
-        </div>
-      </section>
+        </section>
       )}
 
       {/* Enhanced Footer */}
