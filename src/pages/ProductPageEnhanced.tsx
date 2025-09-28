@@ -232,21 +232,19 @@ export default function ProductPageEnhanced() {
                 </CardContent>
               </Card>
 
-              {/* Quick Actions */}
+              {/* Quick Info Badges */}
               <div className="flex flex-wrap gap-3">
-                <button 
-                  onClick={() => productData.product_page_url && window.open(productData.product_page_url, '_blank')}
-                  className="inline-flex items-center px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
-                >
-                  <ExternalLink className="w-4 h-4 mr-2" />
-                  Official Product Page
-                </button>
                 <Badge variant="outline" className="px-3 py-2">
                   {productData.images?.length || 0} Images Available
                 </Badge>
                 {productData.availability && productData.availability.length > 0 && (
                   <Badge variant="outline" className="bg-green-50 text-green-700 px-3 py-2">
-                    {productData.availability.length} Product Types
+                    {productData.availability.length} Product Types Available
+                  </Badge>
+                )}
+                {productData.combinations && productData.combinations.length > 0 && (
+                  <Badge variant="outline" className="bg-blue-50 text-blue-700 px-3 py-2">
+                    {productData.combinations.length} Recommended Combinations
                   </Badge>
                 )}
               </div>
@@ -542,6 +540,178 @@ export default function ProductPageEnhanced() {
         </div>
       </section>
 
+      {/* Product Specifications Section */}
+      <section className="py-12 bg-gray-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-8">
+            <h2 className="text-3xl font-bold text-gray-900 mb-4">Product Specifications</h2>
+            <p className="text-lg text-gray-600">Technical details and product information</p>
+          </div>
+          
+          <div className="max-w-4xl mx-auto">
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center">
+                  <Info className="w-5 h-5 text-blue-600 mr-2" />
+                  Technical Information
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-sm">
+                  <div>
+                    <span className="text-gray-600">Decor ID:</span>
+                    <div className="font-medium text-gray-900 mt-1">{productData.decor_id}</div>
+                  </div>
+                  <div>
+                    <span className="text-gray-600">Surface Texture:</span>
+                    <div className="font-medium text-gray-900 mt-1">{productData.texture}</div>
+                  </div>
+                  <div>
+                    <span className="text-gray-600">Product Name:</span>
+                    <div className="font-medium text-gray-900 mt-1">{productData.decor_name}</div>
+                  </div>
+                  <div>
+                    <span className="text-gray-600">Data Source:</span>
+                    <div className="font-medium text-green-600 mt-1">Official Data</div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+      </section>
+
+      {/* Available Product Types Section */}
+      {productData.availability && Array.isArray(productData.availability) && productData.availability.length > 0 && (
+        <section className="py-12 bg-white">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center mb-8">
+              <h2 className="text-3xl font-bold text-gray-900 mb-4">Available Product Types</h2>
+              <p className="text-lg text-gray-600">This decor is available in {productData.availability.length} different product types</p>
+            </div>
+            
+            <div className="max-w-4xl mx-auto">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                {productData.availability.map((item, index) => (
+                  <div key={index} className="flex items-center p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
+                    <div className="w-12 h-12 mr-4 bg-green-100 rounded-full flex items-center justify-center">
+                      {item.product_type === 'Decorative Faced Boards' && '🔲'}
+                      {item.product_type === 'Edging' && '📏'}
+                      {item.product_type === 'Laminates' && '📋'}
+                      {item.product_type === 'Worktops' && '🔳'}
+                      {item.product_type === 'Compact Laminate' && '📐'}
+                      {item.product_type === 'Splashbacks' && '🪟'}
+                      {item.product_type === 'Upstands' && '📐'}
+                      {!['Decorative Faced Boards', 'Edging', 'Laminates', 'Worktops', 'Compact Laminate', 'Splashbacks', 'Upstands'].includes(item.product_type) && '📦'}
+                    </div>
+                    <div className="flex-1">
+                      <div className="font-medium text-gray-900">
+                        {item.product_type}
+                      </div>
+                      <div className="flex items-center mt-1">
+                        <div className="w-2 h-2 rounded-full bg-green-500 mr-2" />
+                        <span className="text-sm text-gray-600">Available</span>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* Recommended Combinations Section */}
+      {productData.combinations && Array.isArray(productData.combinations) && productData.combinations.length > 0 && (
+        <section className="py-12 bg-gray-50">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center mb-8">
+              <h2 className="text-3xl font-bold text-gray-900 mb-4">Recommended Combinations</h2>
+              <p className="text-lg text-gray-600">Professional decor combinations for harmonious design</p>
+            </div>
+            
+            <div className="max-w-6xl mx-auto">
+              <div className="grid gap-6">
+                {productData.combinations.map((combo, index) => {
+                  const recommendedProduct = productData.recommended_products?.find(
+                    p => p.decor_id === combo.recommended_decor_id
+                  );
+                  
+                  return (
+                    <div key={index} className="bg-white border border-gray-200 rounded-lg p-6 hover:shadow-md transition-shadow">
+                      <div className="flex items-start space-x-6">
+                        {/* Product Image */}
+                        <div className="w-24 h-24 bg-gray-100 rounded-lg overflow-hidden flex-shrink-0">
+                          {(recommendedProduct as any)?.primary_image ? (
+                            <img
+                              src={(recommendedProduct as any).primary_image.image_url}
+                              alt={`${combo.recommended_decor_id} preview`}
+                              className="w-full h-full object-cover"
+                              onError={(e) => {
+                                e.currentTarget.src = 'https://via.placeholder.com/96x96?text=Decor';
+                              }}
+                            />
+                          ) : (
+                            <div className="w-full h-full flex items-center justify-center text-gray-400 text-xs">
+                              No Image
+                            </div>
+                          )}
+                        </div>
+                        
+                        {/* Product Details */}
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-start justify-between">
+                            <div>
+                              <h3 className="text-lg font-semibold text-gray-900">
+                                {recommendedProduct?.decor_name || combo.recommended_decor_id}
+                              </h3>
+                              <p className="text-gray-600 mt-1">
+                                {combo.recommended_decor_id} • {recommendedProduct?.texture || 'Texture'}
+                              </p>
+                            </div>
+                            <div className="flex items-center space-x-2 ml-4">
+                              <Badge variant="outline" className="bg-white">
+                                Match
+                              </Badge>
+                            </div>
+                          </div>
+                          
+                          <div className="mt-3">
+                            <p className="text-gray-600 line-clamp-2">
+                              {recommendedProduct?.description?.substring(0, 150) || 
+                               'Professional combination recommendation for harmonious interior design'}
+                              {recommendedProduct?.description && recommendedProduct.description.length > 150 && '...'}
+                            </p>
+                          </div>
+                          
+                          <div className="mt-4 flex items-center justify-between">
+                            <div className="text-sm text-gray-500">
+                              Match Type: <span className="capitalize font-medium text-gray-700">{combo.match_type}</span>
+                            </div>
+                            <Link 
+                              to={`/product/${encodeURIComponent(combo.recommended_decor_id)}`}
+                              className="inline-flex items-center text-red-600 hover:text-red-700 font-medium text-sm"
+                            >
+                              View Product Details
+                              <ExternalLink className="w-4 h-4 ml-1" />
+                            </Link>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+              
+              <div className="text-center mt-8 p-4 bg-blue-50 rounded-lg">
+                <p className="text-sm text-blue-800">
+                  <strong>{productData.combinations.length} professional combinations</strong> recommended for {productData.decor_name}
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* Interior Match Section */}
       {productData.interior_match && productData.interior_match.interior_style && (
@@ -633,6 +803,45 @@ export default function ProductPageEnhanced() {
           </div>
         </section>
       )}
+
+      {/* Bottom Action Buttons */}
+      <section className="py-12 bg-white border-t border-gray-200">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-8">
+            <h2 className="text-2xl font-bold text-gray-900 mb-4">Take Action</h2>
+            <p className="text-gray-600">Explore this decor further or use it in your design projects</p>
+          </div>
+          
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <Button 
+              onClick={() => productData.product_page_url && window.open(productData.product_page_url, '_blank')}
+              className="bg-red-600 hover:bg-red-700 text-white px-8 py-3"
+              size="lg"
+            >
+              <ExternalLink className="w-5 h-5 mr-2" />
+              View on EGGER Official Website
+            </Button>
+            
+            <Button 
+              variant="outline" 
+              className="px-8 py-3 border-blue-600 text-blue-600 hover:bg-blue-50"
+              size="lg"
+            >
+              <Palette className="w-5 h-5 mr-2" />
+              Use in Designer
+            </Button>
+            
+            <Button 
+              variant="outline" 
+              className="px-8 py-3"
+              size="lg"
+            >
+              <Copy className="w-5 h-5 mr-2" />
+              Copy Details
+            </Button>
+          </div>
+        </div>
+      </section>
 
       {/* Enhanced Footer */}
       <footer className="bg-gray-900 text-white py-12">
