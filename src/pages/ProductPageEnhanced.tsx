@@ -183,9 +183,6 @@ export default function ProductPageEnhanced() {
                     <Badge className="bg-red-600 text-white">
                       {productData.texture} Texture
                     </Badge>
-                    <Badge variant="outline" className="text-xs bg-green-50 text-green-700 border-green-200">
-                      Official Data
-                    </Badge>
                   </div>
                 </div>
               </div>
@@ -232,24 +229,6 @@ export default function ProductPageEnhanced() {
                 </CardContent>
               </Card>
 
-              {/* Quick Actions */}
-              <div className="flex flex-wrap gap-3">
-                <button 
-                  onClick={() => productData.product_page_url && window.open(productData.product_page_url, '_blank')}
-                  className="inline-flex items-center px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
-                >
-                  <ExternalLink className="w-4 h-4 mr-2" />
-                  Official Product Page
-                </button>
-                <Badge variant="outline" className="px-3 py-2">
-                  {productData.images?.length || 0} Images Available
-                </Badge>
-                {productData.availability && productData.availability.length > 0 && (
-                  <Badge variant="outline" className="bg-green-50 text-green-700 px-3 py-2">
-                    {productData.availability.length} Product Types
-                  </Badge>
-                )}
-              </div>
             </div>
 
             {/* Enhanced Image Display */}
@@ -282,6 +261,252 @@ export default function ProductPageEnhanced() {
                     <span className="text-gray-600">Product Image Not Available</span>
                     <p className="text-gray-500 text-sm mt-2">Contact for imagery</p>
                   </div>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Section 1: Product Board Images + Available Product Types */}
+      <section className="py-12 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid lg:grid-cols-2 gap-12 lg:items-center">
+            {/* Left Side: Product Board Images */}
+            <div>
+              <div className="flex items-center justify-between mb-4">
+                <h2 className="text-2xl font-bold text-gray-900">Product Board Images</h2>
+              </div>
+              
+              {productData.board_images && productData.board_images.length > 0 ? (
+                <div className="space-y-4">
+                  {/* Main Board Image */}
+                  <div className="aspect-[16/9] bg-gray-200 rounded-lg overflow-hidden relative group">
+                    <img
+                      src={productData.board_images.find(img => img.is_main_board)?.image_url || productData.board_images[0].image_url}
+                      alt={`${productData.decor_name} main board`}
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                      onError={(e) => {
+                        e.currentTarget.src = 'https://via.placeholder.com/800x450?text=Board+Image';
+                      }}
+                    />
+                    <div className="absolute top-4 left-4 bg-red-600 text-white px-3 py-1 rounded-full text-sm font-medium">
+                      Main Board View
+                    </div>
+                    <div className="absolute top-4 right-4 bg-black bg-opacity-50 text-white px-3 py-1 rounded-full text-sm">
+                      High-Res PNG
+                    </div>
+                  </div>
+                  
+                  {/* Board Image Thumbnails */}
+                  {productData.board_images.length > 1 && (
+                    <div className="grid grid-cols-2 gap-3">
+                      {productData.board_images.map((boardImg, index) => (
+                        <div key={index} className="aspect-[4/3] bg-gray-200 rounded-lg overflow-hidden relative group cursor-pointer">
+                          <img
+                            src={boardImg.image_url}
+                            alt={`${productData.decor_name} ${boardImg.is_main_board ? 'main board' : 'close-up'}`}
+                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                            onError={(e) => {
+                              e.currentTarget.src = 'https://via.placeholder.com/400x300?text=Board+Image';
+                            }}
+                          />
+                          <div className="absolute bottom-2 left-2 bg-white bg-opacity-90 px-2 py-1 rounded text-xs font-medium">
+                            {boardImg.is_main_board ? 'Main Board' : 'Close-up Detail'}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              ) : (
+                <div className="aspect-square bg-gray-200 rounded-lg flex items-center justify-center">
+                  <div className="text-center">
+                    <div className="text-gray-400 mb-4 text-4xl">📷</div>
+                    <p className="text-gray-600">No board images available</p>
+                    <p className="text-gray-500 text-sm mt-2">Contact for product imagery</p>
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* Right Side: Available Product Types */}
+            <div>
+              <div className="flex items-center mb-4">
+                <Package className="w-5 h-5 text-green-600 mr-2" />
+                <h2 className="text-2xl font-bold text-gray-900">Available Product Types</h2>
+                {productData.availability && productData.availability.length > 0 && (
+                  <Badge className="bg-green-100 text-green-800 ml-4">
+                    {productData.availability.length} Types
+                  </Badge>
+                )}
+              </div>
+              
+              {productData.availability && Array.isArray(productData.availability) && productData.availability.length > 0 ? (
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {productData.availability.map((item, index) => (
+                    <div key={index} className="flex items-center p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
+                      <div className="w-12 h-12 mr-4 bg-green-100 rounded-full flex items-center justify-center">
+                        {item.product_type === 'Decorative Faced Boards' && '🔲'}
+                        {item.product_type === 'Edging' && '📏'}
+                        {item.product_type === 'Laminates' && '📋'}
+                        {item.product_type === 'Worktops' && '🔳'}
+                        {item.product_type === 'Compact Laminate' && '📐'}
+                        {item.product_type === 'Splashbacks' && '🪟'}
+                        {item.product_type === 'Upstands' && '📐'}
+                        {!['Decorative Faced Boards', 'Edging', 'Laminates', 'Worktops', 'Compact Laminate', 'Splashbacks', 'Upstands'].includes(item.product_type) && '📦'}
+                      </div>
+                      <div className="flex-1">
+                        <div className="font-medium text-gray-900">
+                          {item.product_type}
+                        </div>
+                        <div className="flex items-center mt-1">
+                          <div className="w-2 h-2 rounded-full bg-green-500 mr-2" />
+                          <span className="text-sm text-gray-600">Available</span>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <div className="text-center py-8 text-gray-500">
+                  <Package className="w-12 h-12 mx-auto mb-4 text-gray-300" />
+                  <p>No product type information available</p>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Section 2: Recommended Combinations + Additional Gallery */}
+      <section className="py-12 bg-gray-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid lg:grid-cols-2 gap-12 lg:items-center">
+            {/* Left Side: Recommended Combinations */}
+            <div>
+              <div className="flex items-center mb-4">
+                <Palette className="w-5 h-5 text-purple-600 mr-2" />
+                <h2 className="text-2xl font-bold text-gray-900">Recommended Combinations</h2>
+              </div>
+              
+              {productData.combinations && Array.isArray(productData.combinations) && productData.combinations.length > 0 ? (
+                <div className="space-y-4">
+                  {productData.combinations.slice(0, 3).map((combo, index) => {
+                    const recommendedProduct = productData.recommended_products?.find(
+                      p => p.decor_id === combo.recommended_decor_id
+                    );
+                    
+                    return (
+                      <div key={index} className="bg-white border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow">
+                        <div className="flex items-start space-x-4">
+                          {/* Product Image */}
+                          <div className="w-16 h-16 bg-gray-100 rounded-lg overflow-hidden flex-shrink-0">
+                            {(recommendedProduct as any)?.primary_image ? (
+                              <img
+                                src={(recommendedProduct as any).primary_image.image_url}
+                                alt={`${combo.recommended_decor_id} preview`}
+                                className="w-full h-full object-cover"
+                                onError={(e) => {
+                                  e.currentTarget.src = 'https://via.placeholder.com/64x64?text=Decor';
+                                }}
+                              />
+                            ) : (
+                              <div className="w-full h-full flex items-center justify-center text-gray-400 text-xs">
+                                No Image
+                              </div>
+                            )}
+                          </div>
+                          
+                          {/* Product Details */}
+                          <div className="flex-1 min-w-0">
+                            <div className="flex items-start justify-between">
+                              <div>
+                                <h3 className="font-semibold text-gray-900 text-sm">
+                                  {recommendedProduct?.decor_name || combo.recommended_decor_id}
+                                </h3>
+                                <p className="text-xs text-gray-600">
+                                  {combo.recommended_decor_id} • {recommendedProduct?.texture || 'Texture'}
+                                </p>
+                              </div>
+                              <Badge variant="outline" className="text-xs bg-white">
+                                EGGER Match
+                              </Badge>
+                            </div>
+                            
+                            <div className="mt-2">
+                              <p className="text-xs text-gray-600 line-clamp-2">
+                                Professional EGGER combination recommendation for harmonious interior design
+                              </p>
+                            </div>
+                            
+                            <div className="mt-2 flex items-center justify-between">
+                              <div className="text-xs text-gray-500">
+                                <span className="capitalize">{combo.match_type}</span> Match
+                              </div>
+                              <Link 
+                                to={`/product/${encodeURIComponent(combo.recommended_decor_id)}`}
+                                className="text-xs text-red-600 hover:text-red-700 font-medium"
+                              >
+                                View Details →
+                              </Link>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              ) : (
+                <div className="text-center py-8 text-gray-500">
+                  <Palette className="w-12 h-12 mx-auto mb-4 text-gray-300" />
+                  <p>No combination recommendations available</p>
+                </div>
+              )}
+            </div>
+
+            {/* Right Side: Additional Gallery */}
+            <div>
+              <div className="flex items-center mb-4">
+                <Eye className="w-5 h-5 text-blue-600 mr-2" />
+                <h2 className="text-2xl font-bold text-gray-900">Additional Gallery</h2>
+              </div>
+              
+              {productData.images && productData.images.length > 0 ? (
+                <div className="space-y-4">
+                  {/* Gallery Grid */}
+                  <div className="grid grid-cols-3 gap-3">
+                    {productData.images.slice(0, 9).map((image, index) => (
+                      <div 
+                        key={index} 
+                        className="aspect-square bg-gray-200 rounded-lg overflow-hidden cursor-pointer hover:ring-2 hover:ring-blue-300 transition-all group"
+                      >
+                        <img
+                          src={image.image_url}
+                          alt={`${productData.decor_name} gallery ${index + 1}`}
+                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                          onError={(e) => {
+                            e.currentTarget.src = 'https://via.placeholder.com/200x200?text=Gallery';
+                          }}
+                        />
+                      </div>
+                    ))}
+                  </div>
+                  
+                  {/* View All Button */}
+                  {productData.images.length > 9 && (
+                    <div className="text-center">
+                      <Button variant="outline" className="border-blue-600 text-blue-600 hover:bg-blue-50">
+                        <Eye className="w-4 h-4 mr-2" />
+                        View All {productData.images.length} Gallery Images
+                      </Button>
+                    </div>
+                  )}
+                </div>
+              ) : (
+                <div className="text-center py-8 text-gray-500">
+                  <Eye className="w-12 h-12 mx-auto mb-4 text-gray-300" />
+                  <p>No additional gallery images available</p>
                 </div>
               )}
             </div>
@@ -559,13 +784,22 @@ export default function ProductPageEnhanced() {
             <div className="grid lg:grid-cols-2 gap-12 items-center">
               <div className="relative">
                 <div className="aspect-[4/3] bg-gradient-to-br from-red-50 to-red-100 rounded-lg overflow-hidden">
-                  {productData.images && productData.images.length > 1 ? (
+                  {productData.board_images && productData.board_images.length > 0 ? (
                     <img 
-                      src={productData.images[1].image_url}
+                      src={productData.board_images.find(img => img.is_closeup)?.image_url || productData.board_images[1]?.image_url || productData.board_images[0].image_url}
                       alt="Interior Match Application"
                       className="w-full h-full object-cover"
                       onError={(e) => {
-                        e.currentTarget.src = productData.images[0].image_url;
+                        e.currentTarget.src = productData.images?.find(img => img.is_primary)?.image_url || productData.images?.[0]?.image_url || 'https://via.placeholder.com/600x400?text=Interior+Match';
+                      }}
+                    />
+                  ) : productData.images && productData.images.length > 0 ? (
+                    <img 
+                      src={productData.images.find(img => img.is_primary)?.image_url || productData.images[0].image_url}
+                      alt="Interior Match Application"
+                      className="w-full h-full object-cover"
+                      onError={(e) => {
+                        e.currentTarget.src = 'https://via.placeholder.com/600x400?text=Interior+Match';
                       }}
                     />
                   ) : (
@@ -633,6 +867,45 @@ export default function ProductPageEnhanced() {
           </div>
         </section>
       )}
+
+      {/* Bottom Action Buttons */}
+      <section className="py-12 bg-white border-t border-gray-200">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-8">
+            <h2 className="text-2xl font-bold text-gray-900 mb-4">Take Action</h2>
+            <p className="text-gray-600">Explore this decor further or use it in your design projects</p>
+          </div>
+          
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <Button 
+              onClick={() => productData.product_page_url && window.open(productData.product_page_url, '_blank')}
+              className="bg-red-600 hover:bg-red-700 text-white px-8 py-3"
+              size="lg"
+            >
+              <ExternalLink className="w-5 h-5 mr-2" />
+              View on EGGER Official Website
+            </Button>
+            
+            <Button 
+              variant="outline" 
+              className="px-8 py-3 border-blue-600 text-blue-600 hover:bg-blue-50"
+              size="lg"
+            >
+              <Palette className="w-5 h-5 mr-2" />
+              Use in Designer
+            </Button>
+            
+            <Button 
+              variant="outline" 
+              className="px-8 py-3"
+              size="lg"
+            >
+              <Copy className="w-5 h-5 mr-2" />
+              Copy Details
+            </Button>
+          </div>
+        </div>
+      </section>
 
       {/* Enhanced Footer */}
       <footer className="bg-gray-900 text-white py-12">
