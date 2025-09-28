@@ -142,7 +142,7 @@ export class EggerDataService {
   }
 
   // Get all decors with pagination and filtering
-  async getDecors(page = 1, limit = 1000, filters: EggerSearchFilters = {}): Promise<EggerSearchResult> {
+  async getDecors(page = 1, limit = 0, filters: EggerSearchFilters = {}): Promise<EggerSearchResult> {
     try {
       let query = supabase
         .from('egger_decors')
@@ -169,9 +169,17 @@ export class EggerDataService {
         query = query.lte('cost_per_sqm', filters.price_max);
       }
 
-      const { data, error, count } = await query
-        .range((page - 1) * limit, page * limit - 1)
-        .limit(limit);
+      // Apply pagination only if limit > 0, otherwise get all
+      let result;
+      if (limit > 0) {
+        result = await query
+          .range((page - 1) * limit, page * limit - 1)
+          .limit(limit);
+      } else {
+        result = await query; // Get all records
+      }
+      
+      const { data, error, count } = result;
 
       if (error) throw error;
 

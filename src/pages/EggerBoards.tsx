@@ -74,7 +74,7 @@ export default function EggerBoards() {
         // Try database first
         try {
           // console.log('🔄 Attempting to load data from database...');
-          const result = await eggerDataService.getDecors(1, 200); // Reduced initial load for better performance
+          const result = await eggerDataService.getDecors(1, 0); // Load all decors (limit=0 means no limit)
           
           if (result.data.length > 0) {
             // console.log('✅ Database data loaded successfully');
