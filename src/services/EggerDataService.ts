@@ -215,7 +215,7 @@ export class EggerDataService {
         .limit(2);
 
       if (error || !boardImages) {
-        console.log('⚠️ No board images found for:', decorId);
+        // console.log('⚠️ No board images found for:', decorId);
         return [];
       }
 
@@ -229,7 +229,7 @@ export class EggerDataService {
         is_closeup: index === 1      // Second image is close-up
       }));
 
-      console.log(`🖼️ Found ${convertedBoardImages.length} board images for ${decorId}`);
+      // console.log(`🖼️ Found ${convertedBoardImages.length} board images for ${decorId}`);
       return convertedBoardImages;
 
     } catch (error) {
@@ -241,7 +241,7 @@ export class EggerDataService {
   // Get enhanced product with all relationships
   async getEnhancedProduct(decorId: string): Promise<EnhancedEggerProduct | null> {
     try {
-      console.log('🔍 Fetching enhanced product for decor_id:', decorId);
+      // console.log('🔍 Fetching enhanced product for decor_id:', decorId);
       
       // Get main decor
       const { data: decor, error: decorError } = await supabase
@@ -251,15 +251,15 @@ export class EggerDataService {
         .single();
 
       if (decorError) {
-        console.log('❌ Decor error:', decorError.message);
+        console.error('❌ Decor error:', decorError.message);
         return null;
       }
       if (!decor) {
-        console.log('❌ No decor found for:', decorId);
+        console.warn('⚠️ No decor found for:', decorId);
         return null;
       }
       
-      console.log('✅ Found decor:', decor.decor_name);
+      // console.log('✅ Found decor:', decor.decor_name);
 
       // Get related data in parallel
       const [imagesResult, boardImagesResult, combinationsResult, availabilityResult, interiorMatchResult] = await Promise.all([
@@ -339,11 +339,11 @@ export class EggerDataService {
         // Sort by priority score (highest first)
         filteredImages.sort((a, b) => (b as any).priority_score - (a as any).priority_score);
 
-        console.log('🎯 Smart image prioritization results:');
-        filteredImages.slice(0, 3).forEach((img, index) => {
-          console.log(`   ${index + 1}. Priority: ${(img as any).priority_score} - ${(img as any).priority_reasoning}`);
-          console.log(`      URL: ${img.image_url.substring(0, 60)}...`);
-        });
+        // console.log('🎯 Smart image prioritization results:');
+        // filteredImages.slice(0, 3).forEach((img, index) => {
+        //   console.log(`   ${index + 1}. Priority: ${(img as any).priority_score} - ${(img as any).priority_reasoning}`);
+        //   console.log(`      URL: ${img.image_url.substring(0, 60)}...`);
+        // });
       }
 
       // Get recommended products with their images
@@ -382,14 +382,14 @@ export class EggerDataService {
         recommended_products: recommendedProducts
       };
       
-      console.log('📊 Enhanced product data with dual-image system:', {
-        decor_name: enhancedProduct.decor_name,
-        webp_gallery_images: enhancedProduct.images.length,
-        board_images: enhancedProduct.board_images.length,
-        combinations_count: enhancedProduct.combinations.length,
-        availability_count: enhancedProduct.availability.length,
-        has_interior_match: !!enhancedProduct.interior_match
-      });
+      // console.log('📊 Enhanced product data with dual-image system:', {
+      //   decor_name: enhancedProduct.decor_name,
+      //   webp_gallery_images: enhancedProduct.images.length,
+      //   board_images: enhancedProduct.board_images.length,
+      //   combinations_count: enhancedProduct.combinations.length,
+      //   availability_count: enhancedProduct.availability.length,
+      //   has_interior_match: !!enhancedProduct.interior_match
+      // });
       
       return enhancedProduct;
 

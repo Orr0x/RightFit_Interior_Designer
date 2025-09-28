@@ -57,23 +57,23 @@ export default function ProductPageEnhanced() {
         setLoading(true);
         setError(null);
 
-        console.log('🔄 [ProductPage] Loading EGGER product data...');
-        console.log('🔍 [ProductPage] Looking for decor_id:', decorId);
+        // console.log('🔄 [ProductPage] Loading EGGER product data...');
+        // console.log('🔍 [ProductPage] Looking for decor_id:', decorId);
         
         const enhancedProduct = await eggerDataService.getEnhancedProduct(decorId);
         
         if (enhancedProduct) {
-          console.log('✅ [ProductPage] Real EGGER data loaded successfully');
-          console.log('📊 [ProductPage] Data completeness:', {
-            basic_info: '100%',
-            images: enhancedProduct.images?.length > 0 ? '100%' : '0%',
-            availability: enhancedProduct.availability?.length > 0 ? '100%' : '0%',
-            combinations: enhancedProduct.combinations?.length > 0 ? '100%' : '0%',
-            interior_match: enhancedProduct.interior_match ? '100%' : '0%'
-          });
+          // console.log('✅ [ProductPage] Real EGGER data loaded successfully');
+          // console.log('📊 [ProductPage] Data completeness:', {
+          //   basic_info: '100%',
+          //   images: enhancedProduct.images?.length > 0 ? '100%' : '0%',
+          //   availability: enhancedProduct.availability?.length > 0 ? '100%' : '0%',
+          //   combinations: enhancedProduct.combinations?.length > 0 ? '100%' : '0%',
+          //   interior_match: enhancedProduct.interior_match ? '100%' : '0%'
+          // });
           setProductData(enhancedProduct);
         } else {
-          console.log('⚠️ [ProductPage] Product not found:', decorId);
+          console.warn('⚠️ [ProductPage] Product not found:', decorId);
           setError('Product not found');
         }
       } catch (err) {
@@ -236,7 +236,7 @@ export default function ProductPageEnhanced() {
                         alt={`${productData.decor_name} main board`}
                         className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                         onError={(e) => {
-                          console.log('❌ [ProductPage] Board image failed to load');
+                          // console.log('❌ [ProductPage] Board image failed to load');
                           e.currentTarget.src = 'https://via.placeholder.com/800x450?text=EGGER+Board+Image';
                         }}
                       />
@@ -615,7 +615,7 @@ export default function ProductPageEnhanced() {
                     alt={`${productData.decor_name} close-up detail`}
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                     onError={(e) => {
-                      console.log('❌ [ProductPage] Board detail image failed to load');
+                      // console.log('❌ [ProductPage] Board detail image failed to load');
                       e.currentTarget.src = 'https://via.placeholder.com/400x400?text=EGGER+Board+Detail';
                     }}
                   />
@@ -636,7 +636,7 @@ export default function ProductPageEnhanced() {
                     alt={`${productData.decor_name} detail view`}
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                     onError={(e) => {
-                      console.log('❌ [ProductPage] Gallery image failed to load');
+                      // console.log('❌ [ProductPage] Gallery image failed to load');
                       e.currentTarget.src = 'https://via.placeholder.com/400x400?text=EGGER+Product+Image';
                     }}
                   />

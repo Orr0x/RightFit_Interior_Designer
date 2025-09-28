@@ -73,11 +73,11 @@ export default function EggerBoards() {
 
         // Try database first
         try {
-          console.log('🔄 Attempting to load data from database...');
-          const result = await eggerDataService.getDecors(1, 1000); // Load all items
+          // console.log('🔄 Attempting to load data from database...');
+          const result = await eggerDataService.getDecors(1, 200); // Reduced initial load for better performance
           
           if (result.data.length > 0) {
-            console.log('✅ Database data loaded successfully');
+            // console.log('✅ Database data loaded successfully');
             setDatabaseProducts(result.data);
             setDataSource('database');
             setLoading(false);
@@ -88,7 +88,7 @@ export default function EggerBoards() {
         }
 
         // Fallback to CSV data
-        console.log('🔄 Loading data from CSV files...');
+        // console.log('🔄 Loading data from CSV files...');
         setDataSource('csv');
 
         // Load all datasets
@@ -135,7 +135,7 @@ export default function EggerBoards() {
           console.warn('Could not load colours data - finishes tab may not work');
         }
 
-        console.log('✅ CSV data loaded successfully');
+        // console.log('✅ CSV data loaded successfully');
       } catch (err) {
         setError(err instanceof Error ? err.message : 'Failed to load data');
         console.error('Error loading data:', err);
