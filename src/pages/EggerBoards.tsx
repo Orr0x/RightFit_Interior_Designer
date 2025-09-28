@@ -72,6 +72,7 @@ export default function EggerBoards() {
         setError(null);
 
         // Try database first
+        let databaseLoaded = false;
         try {
           // console.log('🔄 Attempting to load data from database...');
           const result = await eggerDataService.getDecors(1, 0); // Load all decors (limit=0 means no limit)
@@ -80,39 +81,53 @@ export default function EggerBoards() {
             // console.log('✅ Database data loaded successfully');
             setDatabaseProducts(result.data);
             setDataSource('database');
-            setLoading(false);
-            return;
+            databaseLoaded = true;
           }
         } catch (dbError) {
           console.warn('⚠️ Database not available, falling back to CSV:', dbError);
         }
 
-        // Fallback to CSV data
-        // console.log('🔄 Loading data from CSV files...');
-        setDataSource('csv');
+        // Always load colours data (needed for finishes tab)
+        // Load materials CSV data only if database wasn't loaded
+        const fetchPromises = [fetch('/colours.csv')];
+        
+        if (!databaseLoaded) {
+          // console.log('🔄 Loading materials data from CSV files...');
+          setDataSource('csv');
+          fetchPromises.push(fetch('/webp-images.csv'), fetch('/Boards.csv'));
+        } else {
+          // console.log('🔄 Loading only colours data (materials from database)...');
+        }
 
-        // Load all datasets
-        const [webpResponse, boardsResponse, coloursResponse] = await Promise.all([
-          fetch('/webp-images.csv'),
-          fetch('/Boards.csv'),
-          fetch('/colours.csv')
-        ]);
+        const responses = await Promise.all(fetchPromises);
+        const coloursResponse = responses[0];
+        const webpResponse = databaseLoaded ? null : responses[1];
+        const boardsResponse = databaseLoaded ? null : responses[2];
+
+        console.log('📡 Fetch responses:', {
+          webp: webpResponse ? { ok: webpResponse.ok, status: webpResponse.status } : 'skipped (database)',
+          boards: boardsResponse ? { ok: boardsResponse.ok, status: boardsResponse.status } : 'skipped (database)',
+          colours: { ok: coloursResponse.ok, status: coloursResponse.status }
+        });
 
         // Read response texts (only once per response!)
         let webpCsvText = '';
         let boardsCsvText = '';
         let coloursCsvText = '';
 
-        if (webpResponse.ok) {
+        if (webpResponse && webpResponse.ok) {
           webpCsvText = await webpResponse.text();
         }
 
-        if (boardsResponse.ok) {
+        if (boardsResponse && boardsResponse.ok) {
           boardsCsvText = await boardsResponse.text();
         }
 
         if (coloursResponse.ok) {
           coloursCsvText = await coloursResponse.text();
+          console.log('📄 Colours CSV loaded, length:', coloursCsvText.length);
+        } else {
+          console.error('❌ Colours CSV fetch failed:', coloursResponse.status, coloursResponse.statusText);
         }
 
         // Load WebP data (combined with boards data)
@@ -129,10 +144,17 @@ export default function EggerBoards() {
 
         // Load colours data
         if (coloursCsvText) {
+          console.log('📄 Colours CSV text length:', coloursCsvText.length);
           const parsedColoursData = parseColoursCSV(coloursCsvText);
+          console.log('✅ Colours data loaded:', {
+            totalFinishes: parsedColoursData.totalFinishes,
+            categories: parsedColoursData.categories,
+            firstFinish: parsedColoursData.finishes[0]
+          });
           setColoursData(parsedColoursData);
+          console.log('🔧 Colours data state set, should be available now');
         } else {
-          console.warn('Could not load colours data - finishes tab may not work');
+          console.warn('❌ Could not load colours data - finishes tab may not work');
         }
 
         // console.log('✅ CSV data loaded successfully');
@@ -150,7 +172,17 @@ export default function EggerBoards() {
 
   // Extract filter options from data
   const filterOptions = useMemo(() => {
-    if (dataSource === 'database' && databaseProducts.length > 0) {
+    if (activeTab === 'finishes' && coloursData) {
+      // Handle finishes data
+      const categories = [...new Set(coloursData.finishes.map(f => f.category).filter(Boolean))];
+      
+      return {
+        categories: categories.sort(),
+        textures: [], // Finishes don't have textures
+        colorFamilies: [], // Finishes don't have color families in the same way
+        availabilityStatuses: [] // Finishes don't have availability status
+      };
+    } else if (dataSource === 'database' && databaseProducts.length > 0) {
       const categories = [...new Set(databaseProducts.map(p => p.category).filter(Boolean))];
       const textures = [...new Set(databaseProducts.map(p => p.texture).filter(Boolean))];
       const colorFamilies = [...new Set(databaseProducts.map(p => p.color_family).filter(Boolean))];
@@ -185,7 +217,7 @@ export default function EggerBoards() {
       colorFamilies: [],
       availabilityStatuses: []
     };
-  }, [dataSource, databaseProducts, webpData, boardsData]);
+  }, [activeTab, dataSource, databaseProducts, webpData, boardsData, coloursData]);
 
   // Filter and search logic
   const filteredProducts = useMemo(() => {
@@ -196,20 +228,36 @@ export default function EggerBoards() {
     } else if (dataSource === 'csv' && activeTab === 'materials' && webpData) {
       products = [...webpData.decors];
     } else if (activeTab === 'finishes' && coloursData) {
+      console.log('🔍 Loading finishes data:', { coloursData, finishesCount: coloursData.finishes.length });
       products = [...coloursData.finishes];
+    } else if (activeTab === 'finishes') {
+      console.log('❌ No colours data available for finishes:', { coloursData, activeTab });
     }
 
     // Apply search filter
     if (searchQuery) {
       products = products.filter(product => {
-        const searchableText = [
-          product.decor_name || product.decorName || product.name || '',
-          product.decor_id || product.decorId || '',
-          product.decor || '',
-          product.texture || '',
-          product.category || '',
-          product.color_family || ''
-        ].join(' ').toLowerCase();
+        let searchableText = '';
+        
+        if (activeTab === 'finishes') {
+          // Handle finishes (ColourFinish objects)
+          searchableText = [
+            product.colour_name || product.name || '',
+            product.number || '',
+            product.description || '',
+            product.category || ''
+          ].join(' ').toLowerCase();
+        } else {
+          // Handle materials (Egger products)
+          searchableText = [
+            product.decor_name || product.decorName || product.name || '',
+            product.decor_id || product.decorId || '',
+            product.decor || '',
+            product.texture || '',
+            product.category || '',
+            product.color_family || ''
+          ].join(' ').toLowerCase();
+        }
         
         return searchableText.includes(searchQuery.toLowerCase());
       });
@@ -217,20 +265,26 @@ export default function EggerBoards() {
 
     // Apply category filter
     if (selectedCategory !== 'all') {
-      products = products.filter(product => 
-        (product.category || product.decorName || product.name || '').toLowerCase().includes(selectedCategory.toLowerCase())
-      );
+      products = products.filter(product => {
+        if (activeTab === 'finishes') {
+          // Handle finishes (ColourFinish objects)
+          return (product.category || product.colour_name || product.name || '').toLowerCase().includes(selectedCategory.toLowerCase());
+        } else {
+          // Handle materials (Egger products)
+          return (product.category || product.decorName || product.name || '').toLowerCase().includes(selectedCategory.toLowerCase());
+        }
+      });
     }
 
-    // Apply texture filter
-    if (selectedTexture !== 'all') {
+    // Apply texture filter (only for materials)
+    if (selectedTexture !== 'all' && activeTab === 'materials') {
       products = products.filter(product => 
         product.texture === selectedTexture
       );
     }
 
-    // Apply color family filter
-    if (selectedColorFamily !== 'all') {
+    // Apply color family filter (only for materials)
+    if (selectedColorFamily !== 'all' && activeTab === 'materials') {
       products = products.filter(product => 
         product.color_family === selectedColorFamily
       );
@@ -497,7 +551,7 @@ export default function EggerBoards() {
                   : 'border-transparent text-gray-500 hover:text-gray-700'
               }`}
             >
-              Materials ({processedData.itemType === 'materials' ? processedData.totalItems : (webpData?.totalDecors || 0)})
+              Materials ({dataSource === 'database' ? databaseProducts.length : (webpData?.totalDecors || 0)})
             </button>
             <button
               onClick={() => setActiveTab('finishes')}
@@ -507,7 +561,7 @@ export default function EggerBoards() {
                   : 'border-transparent text-gray-500 hover:text-gray-700'
               }`}
             >
-              Finishes ({processedData.itemType === 'finishes' ? processedData.totalItems : (coloursData?.totalFinishes || 0)})
+              Finishes ({coloursData?.totalFinishes || 0})
             </button>
           </div>
         </div>

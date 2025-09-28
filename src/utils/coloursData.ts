@@ -53,9 +53,9 @@ export function parseColoursCSV(csvText: string): ColoursData {
       hover_url,
       description,
       // Derived fields
-      colour_id: number,
+      colour_id: name.toLowerCase().replace(/\s+/g, '-'), // Use name as unique key
       colour_name: name,
-      colour_code: `#${number}`, // Using number as color code for now
+      colour_code: number ? `#${number}` : `#${name.toLowerCase().replace(/\s+/g, '')}`, // Use number or generate from name
       category: 'Paint' // All seem to be paints from Farrow & Ball
     });
   }
