@@ -98,7 +98,7 @@ export default function ProductPageEnhanced() {
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-red-600 mx-auto mb-4"></div>
-          <p className="text-gray-600 text-lg">Loading EGGER product details...</p>
+          <p className="text-gray-600 text-lg">Loading product details...</p>
           <p className="text-gray-500 text-sm mt-2">Fetching authentic data from database...</p>
         </div>
       </div>
@@ -111,13 +111,13 @@ export default function ProductPageEnhanced() {
         <div className="text-center max-w-md mx-auto px-4">
           <div className="text-6xl mb-4">🔍</div>
           <h1 className="text-2xl font-bold text-gray-900 mb-2">Product Not Found</h1>
-          <p className="text-gray-600 mb-2">{error || 'The requested EGGER product could not be found.'}</p>
+          <p className="text-gray-600 mb-2">{error || 'The requested product could not be found.'}</p>
           <p className="text-gray-500 text-sm mb-6">Product ID: {decorId}</p>
           <div className="space-y-3">
             <Link to="/egger-boards">
               <Button className="w-full">
                 <ArrowLeft className="w-4 h-4 mr-2" />
-                Back to EGGER Gallery
+                Back to Materials Gallery
               </Button>
             </Link>
             <Link to="/">
@@ -144,7 +144,7 @@ export default function ProductPageEnhanced() {
             <div className="flex items-center space-x-4">
               <Link to="/egger-boards" className="flex items-center text-gray-600 hover:text-red-600 transition-colors">
                 <ArrowLeft className="w-5 h-5 mr-2" />
-                Back to EGGER Gallery
+                Back to Materials Gallery
               </Link>
             </div>
             <div className="flex items-center space-x-2">
@@ -165,7 +165,7 @@ export default function ProductPageEnhanced() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Breadcrumb */}
           <nav className="flex items-center space-x-2 text-sm text-gray-500 mb-8">
-            <Link to="/egger-boards" className="hover:text-red-600 transition-colors">EGGER Materials Gallery</Link>
+            <Link to="/egger-boards" className="hover:text-red-600 transition-colors">Materials Gallery</Link>
             <span>›</span>
             <span className="text-red-600 font-medium">{productData.decor_name}</span>
           </nav>
@@ -191,7 +191,7 @@ export default function ProductPageEnhanced() {
               </div>
             </div>
             <p className="text-lg text-gray-600">
-              Professional EGGER decor with authentic materials data and high-quality imagery
+              Professional decor with authentic materials data and high-quality imagery
             </p>
           </div>
 
@@ -237,7 +237,7 @@ export default function ProductPageEnhanced() {
                         className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                         onError={(e) => {
                           // console.log('❌ [ProductPage] Board image failed to load');
-                          e.currentTarget.src = 'https://via.placeholder.com/800x450?text=EGGER+Board+Image';
+                          e.currentTarget.src = 'https://via.placeholder.com/800x450?text=Board+Image';
                         }}
                       />
                       <div className="absolute top-4 left-4 bg-red-600 text-white px-3 py-1 rounded-full text-sm font-medium">
@@ -616,7 +616,7 @@ export default function ProductPageEnhanced() {
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                     onError={(e) => {
                       // console.log('❌ [ProductPage] Board detail image failed to load');
-                      e.currentTarget.src = 'https://via.placeholder.com/400x400?text=EGGER+Board+Detail';
+                      e.currentTarget.src = 'https://via.placeholder.com/400x400?text=Board+Detail';
                     }}
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
@@ -637,7 +637,7 @@ export default function ProductPageEnhanced() {
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                     onError={(e) => {
                       // console.log('❌ [ProductPage] Gallery image failed to load');
-                      e.currentTarget.src = 'https://via.placeholder.com/400x400?text=EGGER+Product+Image';
+                      e.currentTarget.src = 'https://via.placeholder.com/400x400?text=Product+Image';
                     }}
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
@@ -762,13 +762,13 @@ export default function ProductPageEnhanced() {
                 <span className="font-semibold text-white">RightFit Interior Designer</span>
               </div>
               <p className="text-gray-300 text-sm">
-                Professional interior design tools with authentic EGGER materials database.
+                Professional interior design tools with authentic materials database.
               </p>
             </div>
             <div>
               <h3 className="font-semibold text-white mb-4">Navigation</h3>
               <div className="space-y-2 text-sm">
-                <Link to="/egger-boards" className="block text-gray-300 hover:text-white transition-colors">EGGER Materials Gallery</Link>
+                <Link to="/egger-boards" className="block text-gray-300 hover:text-white transition-colors">Materials Gallery</Link>
                 <Link to="/designer" className="block text-gray-300 hover:text-white transition-colors">Interior Designer Tool</Link>
                 <Link to="/" className="block text-gray-300 hover:text-white transition-colors">Homepage</Link>
               </div>

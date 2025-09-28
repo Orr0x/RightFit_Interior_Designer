@@ -135,7 +135,7 @@ export default function EnhancedEggerBoards() {
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
           <Loader2 className="h-12 w-12 animate-spin text-blue-600 mx-auto mb-4" />
-          <p className="text-gray-600">Loading EGGER materials from database...</p>
+          <p className="text-gray-600">Loading materials from database...</p>
         </div>
       </div>
     );
@@ -166,7 +166,7 @@ export default function EnhancedEggerBoards() {
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center">
               <img src={rightfitLogo} alt="RightFit" className="h-8 w-auto" />
-              <span className="ml-2 text-xl font-bold text-gray-900">EGGER Database</span>
+              <span className="ml-2 text-xl font-bold text-gray-900">Materials Database</span>
             </div>
             <div className="flex items-center space-x-4">
               <Button variant="outline" size="sm">
@@ -185,10 +185,10 @@ export default function EnhancedEggerBoards() {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center">
               <h1 className="text-4xl font-bold text-gray-900 mb-4">
-                EGGER Materials Database
+                Materials Database
               </h1>
               <p className="text-xl text-gray-600 mb-8">
-                Professional EGGER materials with intelligent recommendations and real-time availability
+                Professional materials with intelligent recommendations and real-time availability
               </p>
               
               {/* Stats */}

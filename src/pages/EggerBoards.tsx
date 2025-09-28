@@ -356,7 +356,7 @@ export default function EggerBoards() {
       <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center">
         <div className="text-center">
           <Package className="w-12 h-12 animate-spin mx-auto mb-4 text-blue-600" />
-          <p className="text-lg text-gray-600">Loading EGGER Boards...</p>
+          <p className="text-lg text-gray-600">Loading Materials...</p>
         </div>
       </div>
     );
