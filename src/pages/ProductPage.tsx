@@ -160,8 +160,8 @@ export default function ProductPageEnhanced() {
         </div>
       </nav>
 
-      {/* Enhanced Hero Section */}
-      <section className="pt-16 bg-white">
+      {/* Enhanced Hero Section with Product Details & Character */}
+      <section className="pt-16 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Breadcrumb */}
           <nav className="flex items-center space-x-2 text-sm text-gray-500 mb-8">
@@ -170,30 +170,146 @@ export default function ProductPageEnhanced() {
             <span className="text-red-600 font-medium">{productData.decor_name}</span>
           </nav>
 
-          {/* Product Title & Quick Info */}
-          <div className="mb-8">
-            <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between mb-4">
-              <h1 className="text-4xl lg:text-5xl font-bold text-gray-900 mb-2 lg:mb-0">
-                {productData.decor_id} {productData.decor_name}
-              </h1>
-              <div className="flex items-center space-x-3">
-                <Badge className="bg-red-600 text-white">
-                  {productData.texture} Texture
-                </Badge>
-                <Badge variant="outline">
-                  {productData.images?.length || 0} Images
+          {/* Hero: Product Details & Character */}
+          <div className="grid lg:grid-cols-2 gap-12 items-center py-8">
+            <div>
+              {/* Product Title & Quick Info */}
+              <div className="mb-8">
+                <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between mb-4">
+                  <h1 className="text-4xl lg:text-5xl font-bold text-gray-900 mb-4 lg:mb-0">
+                    {productData.decor_id} {productData.decor_name}
+                  </h1>
+                  <div className="flex flex-wrap items-center gap-2">
+                    <Badge className="bg-red-600 text-white">
+                      {productData.texture} Texture
+                    </Badge>
+                    <Badge variant="outline" className="text-xs bg-green-50 text-green-700 border-green-200">
+                      Official Data
+                    </Badge>
+                  </div>
+                </div>
+              </div>
+
+              {/* Character Description */}
+              <div className="prose prose-lg text-gray-700 mb-8">
+                <h2 className="text-2xl font-bold text-gray-900 mb-4">
+                  Product Details & Character
+                </h2>
+                <p className="text-lg leading-relaxed mb-6">
+                  {productData.colour_character_text || productData.description || 
+                  `${productData.decor_name} features the ${productData.texture} texture, offering exceptional quality and authentic appearance. This decor is designed for professional interior applications, providing both aesthetic appeal and practical durability for modern design projects.`}
+                </p>
+              </div>
+
+              {/* Technical Details */}
+              <Card className="mb-6">
+                <CardHeader>
+                  <CardTitle>Technical Information</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="grid grid-cols-2 gap-4 text-sm">
+                    <div>
+                      <span className="text-gray-600">Surface Texture:</span>
+                      <div className="font-medium text-gray-900">{productData.texture}</div>
+                    </div>
+                    <div>
+                      <span className="text-gray-600">Product Family:</span>
+                      <div className="font-medium text-gray-900">{productData.decor}</div>
+                    </div>
+                    <div>
+                      <span className="text-gray-600">Available Types:</span>
+                      <div className="font-medium text-gray-900">
+                        {productData.availability?.length || 0} Product Types
+                      </div>
+                    </div>
+                    <div>
+                      <span className="text-gray-600">Image Gallery:</span>
+                      <div className="font-medium text-gray-900">
+                        {productData.board_images?.length || 0} Board + {productData.images?.length || 0} Gallery
+                      </div>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Quick Actions */}
+              <div className="flex flex-wrap gap-3">
+                <button 
+                  onClick={() => productData.product_page_url && window.open(productData.product_page_url, '_blank')}
+                  className="inline-flex items-center px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
+                >
+                  <ExternalLink className="w-4 h-4 mr-2" />
+                  Official Product Page
+                </button>
+                <Badge variant="outline" className="px-3 py-2">
+                  {productData.images?.length || 0} Images Available
                 </Badge>
                 {productData.availability && productData.availability.length > 0 && (
-                  <Badge variant="outline" className="bg-green-50 text-green-700">
+                  <Badge variant="outline" className="bg-green-50 text-green-700 px-3 py-2">
                     {productData.availability.length} Product Types
                   </Badge>
                 )}
               </div>
             </div>
-            <p className="text-lg text-gray-600">
-              Professional decor with authentic materials data and high-quality imagery
-            </p>
+
+            {/* Enhanced Image Display - Use Close-up Board Image */}
+            <div className="relative">
+              {productData.board_images && productData.board_images.length > 0 ? (
+                <div className="aspect-square bg-gray-200 rounded-lg overflow-hidden relative group">
+                  <img 
+                    src={productData.board_images.find(img => img.is_closeup)?.image_url || productData.board_images[1]?.image_url || productData.board_images[0].image_url}
+                    alt={`${productData.decor_name} close-up detail`}
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                    onError={(e) => {
+                      // console.log('❌ [ProductPage] Board detail image failed to load');
+                      e.currentTarget.src = 'https://via.placeholder.com/400x400?text=Board+Detail';
+                    }}
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                  <div className="absolute bottom-4 left-4 right-4 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                    <p className="text-sm font-medium">
+                      Visualize this decor in the RightFit Interior Design Suite
+                    </p>
+                  </div>
+                  <div className="absolute top-4 right-4 bg-white bg-opacity-90 px-2 py-1 rounded text-xs font-medium text-gray-800">
+                    High-Res Detail
+                  </div>
+                </div>
+              ) : productData.images && productData.images.length > 0 ? (
+                <div className="aspect-square bg-gray-200 rounded-lg overflow-hidden relative group">
+                  <img 
+                    src={productData.images.find(img => img.is_primary)?.image_url || productData.images[0].image_url}
+                    alt={`${productData.decor_name} detail view`}
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                    onError={(e) => {
+                      // console.log('❌ [ProductPage] Gallery image failed to load');
+                      e.currentTarget.src = 'https://via.placeholder.com/400x400?text=Product+Image';
+                    }}
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                  <div className="absolute bottom-4 left-4 right-4 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                    <p className="text-sm font-medium">
+                      Visualize this decor in the RightFit Interior Design Suite
+                    </p>
+                  </div>
+                </div>
+              ) : (
+                <div className="aspect-square bg-gray-200 rounded-lg flex items-center justify-center">
+                  <div className="text-center">
+                    <div className="text-gray-400 mb-4 text-4xl">🎨</div>
+                    <span className="text-gray-600">Product Image Not Available</span>
+                    <p className="text-gray-500 text-sm mt-2">Contact for imagery</p>
+                  </div>
+                </div>
+              )}
+            </div>
           </div>
+        </div>
+      </section>
+
+      {/* Gallery Section */}
+      <section className="py-8 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
           {/* Tab Navigation */}
           <div className="border-b border-gray-200 mb-8">
@@ -559,107 +675,6 @@ export default function ProductPageEnhanced() {
         </div>
       </section>
 
-      {/* Product Details Section */}
-      <section className="py-16 bg-gray-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
-            <div>
-              <h2 className="text-3xl font-bold text-gray-900 mb-6">
-                Product Details & Character
-              </h2>
-              <div className="prose prose-lg text-gray-700">
-                <p className="text-lg leading-relaxed mb-6">
-                  {productData.colour_character_text || productData.description || 
-                  `${productData.decor_name} features the ${productData.texture} texture, offering exceptional quality and authentic appearance. This EGGER decor is designed for professional interior applications, providing both aesthetic appeal and practical durability for modern design projects.`}
-                </p>
-                
-                {/* Technical Details */}
-                <Card>
-                  <CardHeader>
-                    <CardTitle>Technical Information</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="grid grid-cols-2 gap-4 text-sm">
-                      <div>
-                        <span className="text-gray-600">Surface Texture:</span>
-                        <div className="font-medium text-gray-900">{productData.texture}</div>
-                      </div>
-                      <div>
-                        <span className="text-gray-600">Product Family:</span>
-                        <div className="font-medium text-gray-900">{productData.decor}</div>
-                      </div>
-                      <div>
-                        <span className="text-gray-600">Available Types:</span>
-                        <div className="font-medium text-gray-900">
-                          {productData.availability?.length || 0} Product Types
-                        </div>
-                      </div>
-                      <div>
-                        <span className="text-gray-600">Image Gallery:</span>
-                        <div className="font-medium text-gray-900">
-                          {productData.board_images?.length || 0} Board + {productData.images?.length || 0} Gallery
-                        </div>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              </div>
-          </div>
-
-            {/* Enhanced Image Display - Use Close-up Board Image */}
-            <div className="relative">
-            {productData.board_images && productData.board_images.length > 0 ? (
-                <div className="aspect-square bg-gray-200 rounded-lg overflow-hidden relative group">
-                  <img 
-                    src={productData.board_images.find(img => img.is_closeup)?.image_url || productData.board_images[1]?.image_url || productData.board_images[0].image_url}
-                    alt={`${productData.decor_name} close-up detail`}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                    onError={(e) => {
-                      // console.log('❌ [ProductPage] Board detail image failed to load');
-                      e.currentTarget.src = 'https://via.placeholder.com/400x400?text=Board+Detail';
-                    }}
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                  <div className="absolute bottom-4 left-4 right-4 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                    <p className="text-sm font-medium">
-                      Visualize this decor in the RightFit Interior Design Suite
-                    </p>
-                  </div>
-                  <div className="absolute top-4 right-4 bg-white bg-opacity-90 px-2 py-1 rounded text-xs font-medium text-gray-800">
-                    High-Res Detail
-                  </div>
-                </div>
-              ) : productData.images && productData.images.length > 0 ? (
-                <div className="aspect-square bg-gray-200 rounded-lg overflow-hidden relative group">
-                  <img 
-                    src={productData.images.find(img => img.is_primary)?.image_url || productData.images[0].image_url}
-                    alt={`${productData.decor_name} detail view`}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                    onError={(e) => {
-                      // console.log('❌ [ProductPage] Gallery image failed to load');
-                      e.currentTarget.src = 'https://via.placeholder.com/400x400?text=Product+Image';
-                    }}
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                  <div className="absolute bottom-4 left-4 right-4 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                    <p className="text-sm font-medium">
-                      Visualize this decor in the RightFit Interior Design Suite
-                    </p>
-                  </div>
-                </div>
-              ) : (
-                <div className="aspect-square bg-gray-200 rounded-lg flex items-center justify-center">
-                  <div className="text-center">
-                    <div className="text-gray-400 mb-4 text-4xl">🎨</div>
-                    <span className="text-gray-600">Product Image Not Available</span>
-                    <p className="text-gray-500 text-sm mt-2">Contact EGGER for imagery</p>
-                  </div>
-              </div>
-            )}
-            </div>
-          </div>
-        </div>
-      </section>
 
       {/* Interior Match Section */}
       {productData.interior_match && productData.interior_match.interior_style && (
