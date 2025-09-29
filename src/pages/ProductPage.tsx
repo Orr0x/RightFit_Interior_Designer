@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import rightfitLogo from '@/assets/logo.png';
+import StandardNavigation from '../components/shared/StandardNavigation';
 import { Button } from '../components/ui/button';
 import { Badge } from '../components/ui/badge';
 import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card';
 import {
-  ArrowLeft,
   ExternalLink,
   Ruler,
   Clock,
@@ -25,30 +24,8 @@ export default function ProductPageEnhanced() {
   const [productData, setProductData] = useState<EnhancedEggerProduct | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [isNavVisible, setIsNavVisible] = useState(true);
-  const [lastScrollY, setLastScrollY] = useState(0);
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
 
-  // Navigation scroll effect
-  useEffect(() => {
-    const controlNavbar = () => {
-      if (typeof window !== 'undefined') {
-        if (window.scrollY > lastScrollY && window.scrollY > 100) {
-          setIsNavVisible(false);
-        } else {
-          setIsNavVisible(true);
-        }
-        setLastScrollY(window.scrollY);
-      }
-    };
-
-    if (typeof window !== 'undefined') {
-      window.addEventListener('scroll', controlNavbar);
-      return () => {
-        window.removeEventListener('scroll', controlNavbar);
-      };
-    }
-  }, [lastScrollY]);
 
   useEffect(() => {
     const loadProductData = async () => {
@@ -133,32 +110,18 @@ export default function ProductPageEnhanced() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Enhanced Navigation */}
-      <nav
-        className={`fixed top-0 left-0 right-0 z-50 bg-white shadow-lg transition-transform duration-300 ${
-        isNavVisible ? 'translate-y-0' : '-translate-y-full'
-        }`}
-      >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16">
-            <div className="flex items-center space-x-4">
-              <Link to="/egger-boards" className="flex items-center text-gray-600 hover:text-red-600 transition-colors">
-                <ArrowLeft className="w-5 h-5 mr-2" />
-                Back to Materials Gallery
-              </Link>
-            </div>
-            <div className="flex items-center space-x-2">
-              <img src={rightfitLogo} alt="RightFit" className="h-8 w-auto" />
-              <span className="font-semibold text-gray-900">RightFit Interior Designer</span>
-            </div>
-            <div className="flex items-center space-x-2">
-              <Badge variant="outline" className="text-xs bg-green-50 text-green-700 border-green-200">
-                EGGER Official Data
-              </Badge>
-            </div>
-          </div>
-        </div>
-      </nav>
+      {/* Standard Navigation */}
+      <StandardNavigation 
+        currentPage="materials"
+        showBackButton={true}
+        backButtonText="Back to Materials Gallery"
+        backButtonLink="/egger-boards"
+        additionalContent={
+          <Badge variant="outline" className="text-xs bg-green-50 text-green-700 border-green-200">
+            EGGER Official Data
+          </Badge>
+        }
+      />
 
       {/* Enhanced Hero Section with Product Details & Character */}
       <section className="pt-16 bg-gray-50">
