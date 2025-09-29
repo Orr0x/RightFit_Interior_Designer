@@ -18,6 +18,14 @@ export function ColourCard({ finish, className = '' }: ColourCardProps) {
   const [isHovered, setIsHovered] = useState(false);
   const cardRef = useRef<HTMLDivElement>(null);
 
+  // Debug logging
+  console.log('🎨 ColourCard render:', {
+    colour_id: finish.colour_id,
+    colour_name: finish.colour_name,
+    colour_number: finish.colour_number,
+    url: `/finishes/${finish.colour_id}`
+  });
+
   // Intersection observer for lazy loading
   useEffect(() => {
     const observer = new IntersectionObserver(

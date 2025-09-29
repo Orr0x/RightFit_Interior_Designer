@@ -296,7 +296,7 @@ export default function EggerBoards() {
           // Generate colour_id the same way CSV parser does
           const colour_id = `${dbFinish.color_name.toLowerCase().replace(/\s+/g, '-')}-${dbFinish.color_number}`;
           
-          return {
+          const result = {
             colour_id: colour_id,
             colour_name: dbFinish.color_name,
             colour_number: dbFinish.color_number,
@@ -309,6 +309,18 @@ export default function EggerBoards() {
             hex: dbFinish.main_color_hex,
             rgb: dbFinish.main_color_rgb
           };
+          
+          // Debug logging for first few items
+          if (products.length < 3) {
+            console.log('🔧 Database to ColourFinish conversion:', {
+              original: dbFinish.finish_id,
+              generated: colour_id,
+              url: `/finishes/${colour_id}`,
+              result
+            });
+          }
+          
+          return result;
         });
         
         // Set data source to hybrid when using both database and CSV
