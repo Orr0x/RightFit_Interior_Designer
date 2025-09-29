@@ -293,8 +293,11 @@ export default function EggerBoards() {
         // Convert database data to ColourFinish format, merging with CSV data
         products = databaseFinishes.map(dbFinish => {
           const csvData = csvDataMap.get(dbFinish.color_number);
+          // Generate colour_id the same way CSV parser does
+          const colour_id = `${dbFinish.color_name.toLowerCase().replace(/\s+/g, '-')}-${dbFinish.color_number}`;
+          
           return {
-            colour_id: dbFinish.finish_id,
+            colour_id: colour_id,
             colour_name: dbFinish.color_name,
             colour_number: dbFinish.color_number,
             product_url: dbFinish.product_url,
