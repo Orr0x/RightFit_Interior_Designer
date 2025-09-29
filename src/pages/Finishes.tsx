@@ -11,6 +11,7 @@ import {
   ColourFinish,
   parseColoursCSV
 } from '../utils/coloursData';
+import { farrowBallDataService } from '../services/FarrowBallDataService';
 
 export default function Finishes() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -33,12 +34,13 @@ export default function Finishes() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, [lastScrollY]);
 
-  // Load CSV data on component mount
+  // Load data on component mount - try database first, fallback to CSV
   useEffect(() => {
     const loadColoursData = async () => {
       try {
         setLoading(true);
-        // Fetch the CSV file from the public folder
+        
+        // Use CSV data for correct thumbnails, database for detailed product pages
         const response = await fetch('/colours.csv');
         if (!response.ok) {
           throw new Error('Failed to load colours data');
@@ -46,6 +48,7 @@ export default function Finishes() {
         const csvText = await response.text();
         const parsedData = parseColoursCSV(csvText);
         setColoursData(parsedData);
+        console.log('📄 Colours data loaded from CSV:', parsedData.totalFinishes, 'finishes');
       } catch (err) {
         setError(err instanceof Error ? err.message : 'Failed to load data');
         console.error('Error loading colours data:', err);
@@ -81,9 +84,9 @@ export default function Finishes() {
         // Preload image of each finish on the next page
         for (let i = nextPageStart; i < nextPageEnd && i < processedFinishes.length; i++) {
           const finish = processedFinishes[i];
-          if (finish.image_url) {
+          if (finish.thumb_url) {
             const img = new Image();
-            img.src = finish.image_url;
+            img.src = finish.thumb_url;
           }
         }
       }
@@ -207,7 +210,7 @@ export default function Finishes() {
             </div>
             <div className="text-center">
               <div className="text-3xl font-bold text-blue-600 mb-2">
-                {coloursData?.categories.length || 0}
+                {coloursData?.categories?.length || 0}
               </div>
               <div className="text-gray-600">Categories</div>
             </div>

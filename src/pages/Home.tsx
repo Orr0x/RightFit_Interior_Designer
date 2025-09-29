@@ -57,7 +57,8 @@ const Home = () => {
               <a href="#services" className="block lg:inline py-2 lg:py-0 text-gray-800 hover:text-blue-600 transition-colors">Services</a>
               <a href="#gallery" className="block lg:inline py-2 lg:py-0 text-gray-800 hover:text-blue-600 transition-colors">Gallery</a>
               <Link to="/blog" className="block lg:inline py-2 lg:py-0 text-gray-800 hover:text-blue-600 transition-colors">Blog</Link>
-              <Link to="/egger-boards" className="block lg:inline py-2 lg:py-0 text-gray-800 hover:text-blue-600 transition-colors">Materials & Finishes</Link>
+              <Link to="/egger-boards" className="block lg:inline py-2 lg:py-0 text-gray-800 hover:text-blue-600 transition-colors">Materials</Link>
+              <Link to="/finishes" className="block lg:inline py-2 lg:py-0 text-gray-800 hover:text-blue-600 transition-colors">Finishes</Link>
               <a href="#contact" className="block lg:inline py-2 lg:py-0 text-gray-800 hover:text-blue-600 transition-colors">Contact</a>
               <Link to="/app" className="block lg:inline py-2 lg:py-0 text-gray-800 hover:text-blue-600 transition-colors font-medium">Interior Designer</Link>
               <a href="#contact" className="block lg:inline mt-2 lg:mt-0 bg-blue-600 text-white px-4 py-2 rounded-full font-semibold hover:bg-blue-700 transition-colors">Free consultation</a>

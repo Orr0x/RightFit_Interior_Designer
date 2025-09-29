@@ -9,11 +9,7 @@ import { Input } from '../components/ui/input';
 import { Badge } from '../components/ui/badge';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../components/ui/select';
 import { Package, ChevronLeft, ChevronRight, Database, FileText, Clock, Star, Users, DollarSign, Search, Filter, X, SlidersHorizontal } from 'lucide-react';
-import {
-  ColoursData,
-  ColourFinish,
-  parseColoursCSV
-} from '../utils/coloursData';
+// Removed finishes-related imports - this page now only shows materials
 import {
   WebPDecorGroup,
   parseWebPImagesCSV
@@ -29,12 +25,12 @@ export default function EggerBoards() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isNavVisible, setIsNavVisible] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
-  const [activeTab, setActiveTab] = useState<'materials' | 'finishes'>('materials');
+  // Removed tab system - this page now only shows materials
   
   // Data state
   const [webpData, setWebpData] = useState<{ decors: WebPDecorGroup[], categories: string[], totalDecors: number } | null>(null);
   const [boardsData, setBoardsData] = useState<EggerBoardsData | null>(null);
-  const [coloursData, setColoursData] = useState<ColoursData | null>(null);
+  // Removed coloursData - this page now only shows materials
   const [databaseProducts, setDatabaseProducts] = useState<EnhancedEggerProduct[]>([]);
   
   // UI state
@@ -142,20 +138,7 @@ export default function EggerBoards() {
           setBoardsData(parsedBoardsData);
         }
 
-        // Load colours data
-        if (coloursCsvText) {
-          console.log('📄 Colours CSV text length:', coloursCsvText.length);
-          const parsedColoursData = parseColoursCSV(coloursCsvText);
-          console.log('✅ Colours data loaded:', {
-            totalFinishes: parsedColoursData.totalFinishes,
-            categories: parsedColoursData.categories,
-            firstFinish: parsedColoursData.finishes[0]
-          });
-          setColoursData(parsedColoursData);
-          console.log('🔧 Colours data state set, should be available now');
-        } else {
-          console.warn('❌ Could not load colours data - finishes tab may not work');
-        }
+        // Removed colours data loading - this page now only shows materials
 
         // console.log('✅ CSV data loaded successfully');
       } catch (err) {
@@ -170,19 +153,9 @@ export default function EggerBoards() {
   }, []);
 
 
-  // Extract filter options from data
+  // Extract filter options from materials data only
   const filterOptions = useMemo(() => {
-    if (activeTab === 'finishes' && coloursData) {
-      // Handle finishes data
-      const categories = [...new Set(coloursData.finishes.map(f => f.category).filter(Boolean))];
-      
-      return {
-        categories: categories.sort(),
-        textures: [], // Finishes don't have textures
-        colorFamilies: [], // Finishes don't have color families in the same way
-        availabilityStatuses: [] // Finishes don't have availability status
-      };
-    } else if (dataSource === 'database' && databaseProducts.length > 0) {
+    if (dataSource === 'database' && databaseProducts.length > 0) {
       const categories = [...new Set(databaseProducts.map(p => p.category).filter(Boolean))];
       const textures = [...new Set(databaseProducts.map(p => p.texture).filter(Boolean))];
       const colorFamilies = [...new Set(databaseProducts.map(p => p.color_family).filter(Boolean))];
@@ -217,74 +190,50 @@ export default function EggerBoards() {
       colorFamilies: [],
       availabilityStatuses: []
     };
-  }, [activeTab, dataSource, databaseProducts, webpData, boardsData, coloursData]);
+  }, [dataSource, databaseProducts, webpData, boardsData]);
 
-  // Filter and search logic
+  // Filter and search logic for materials only
   const filteredProducts = useMemo(() => {
     let products: any[] = [];
     
-    if (dataSource === 'database' && activeTab === 'materials') {
+    if (dataSource === 'database') {
       products = [...databaseProducts];
-    } else if (dataSource === 'csv' && activeTab === 'materials' && webpData) {
+    } else if (dataSource === 'csv' && webpData) {
       products = [...webpData.decors];
-    } else if (activeTab === 'finishes' && coloursData) {
-      console.log('🔍 Loading finishes data:', { coloursData, finishesCount: coloursData.finishes.length });
-      products = [...coloursData.finishes];
-    } else if (activeTab === 'finishes') {
-      console.log('❌ No colours data available for finishes:', { coloursData, activeTab });
     }
 
-    // Apply search filter
+    // Apply search filter for materials
     if (searchQuery) {
       products = products.filter(product => {
-        let searchableText = '';
-        
-        if (activeTab === 'finishes') {
-          // Handle finishes (ColourFinish objects)
-          searchableText = [
-            product.colour_name || product.name || '',
-            product.number || '',
-            product.description || '',
-            product.category || ''
-          ].join(' ').toLowerCase();
-        } else {
-          // Handle materials (Egger products)
-          searchableText = [
-            product.decor_name || product.decorName || product.name || '',
-            product.decor_id || product.decorId || '',
-            product.decor || '',
-            product.texture || '',
-            product.category || '',
-            product.color_family || ''
-          ].join(' ').toLowerCase();
-        }
+        const searchableText = [
+          product.decor_name || product.decorName || product.name || '',
+          product.decor_id || product.decorId || '',
+          product.decor || '',
+          product.texture || '',
+          product.category || '',
+          product.color_family || ''
+        ].join(' ').toLowerCase();
         
         return searchableText.includes(searchQuery.toLowerCase());
       });
     }
 
-    // Apply category filter
+    // Apply category filter for materials
     if (selectedCategory !== 'all') {
       products = products.filter(product => {
-        if (activeTab === 'finishes') {
-          // Handle finishes (ColourFinish objects)
-          return (product.category || product.colour_name || product.name || '').toLowerCase().includes(selectedCategory.toLowerCase());
-        } else {
-          // Handle materials (Egger products)
-          return (product.category || product.decorName || product.name || '').toLowerCase().includes(selectedCategory.toLowerCase());
-        }
+        return (product.category || product.decorName || product.name || '').toLowerCase().includes(selectedCategory.toLowerCase());
       });
     }
 
-    // Apply texture filter (only for materials)
-    if (selectedTexture !== 'all' && activeTab === 'materials') {
+    // Apply texture filter
+    if (selectedTexture !== 'all') {
       products = products.filter(product => 
         product.texture === selectedTexture
       );
     }
 
-    // Apply color family filter (only for materials)
-    if (selectedColorFamily !== 'all' && activeTab === 'materials') {
+    // Apply color family filter
+    if (selectedColorFamily !== 'all') {
       products = products.filter(product => 
         product.color_family === selectedColorFamily
       );
@@ -321,10 +270,9 @@ export default function EggerBoards() {
     return products;
   }, [
     dataSource,
-    activeTab,
+    // Removed activeTab and coloursData - this page now only shows materials
     databaseProducts,
     webpData,
-    coloursData,
     searchQuery,
     selectedCategory,
     selectedTexture,
@@ -339,14 +287,14 @@ export default function EggerBoards() {
       items: filteredProducts,
       totalItems: filteredProducts.length,
       categories: filterOptions.categories.length,
-      itemType: activeTab
+      itemType: 'materials'
     };
-  }, [filteredProducts, filterOptions.categories.length, activeTab]);
+  }, [filteredProducts, filterOptions.categories.length]);
 
   // Reset to page 1 when tab changes or filters change
   useEffect(() => {
     setCurrentPage(1);
-  }, [activeTab, searchQuery, selectedCategory, selectedTexture, selectedColorFamily, selectedAvailability, sortBy]);
+  }, [searchQuery, selectedCategory, selectedTexture, selectedColorFamily, selectedAvailability, sortBy]);
 
   // Clear all filters
   const clearFilters = () => {
@@ -385,18 +333,11 @@ export default function EggerBoards() {
         // Preload first image of each item on the next page
         for (let i = nextPageStart; i < nextPageEnd && i < processedData.items.length; i++) {
           const item = processedData.items[i];
-          if (processedData.itemType === 'materials') {
-            const materialItem = item as EggerBoardProduct;
-            if (materialItem.images.length > 0) {
-              const img = new Image();
-              img.src = materialItem.images[0];
-            }
-          } else if (processedData.itemType === 'finishes') {
-            const finishItem = item as ColourFinish;
-            if (finishItem.thumb_url) {
-              const img = new Image();
-              img.src = finishItem.thumb_url;
-            }
+          // Only handle materials (removed finishes)
+          const materialItem = item as EggerBoardProduct;
+          if (materialItem.images && materialItem.images.length > 0) {
+            const img = new Image();
+            img.src = materialItem.images[0];
           }
         }
       }
@@ -430,63 +371,28 @@ export default function EggerBoards() {
   }
 
   return (
-    <>
-      {/* Floating Navbar */}
-      <header
-        className={`fixed top-0 left-0 w-full z-50 transition-transform duration-300 bg-white border-b border-gray-200 ${
-          isNavVisible ? 'translate-y-0' : '-translate-y-full'
-        }`}
-      >
-        <div className="container mx-auto px-4">
-          <div className="flex items-center justify-between py-4">
-            <Link to="/" className="flex items-center gap-3">
-              <img src={rightfitLogo} alt="RightFit Interiors logo" className="h-16 w-auto" />
-            </Link>
-
-            {/* Data Source Indicator */}
-            <div className="flex items-center gap-2 text-sm text-gray-600">
-              {dataSource === 'database' ? (
-                <>
-                  <Database className="w-4 h-4 text-green-600" />
-                  <span className="text-green-600 font-medium">Database</span>
-                </>
-              ) : dataSource === 'csv' ? (
-                <>
-                  <FileText className="w-4 h-4 text-orange-600" />
-                  <span className="text-orange-600 font-medium">CSV Files</span>
-                </>
-              ) : (
-                <>
-                  <Package className="w-4 h-4 text-gray-400" />
-                  <span className="text-gray-400">Loading...</span>
-                </>
-              )}
-            </div>
-
-            <button
-              className="lg:hidden p-2"
-              onClick={() => setIsMenuOpen(!isMenuOpen)}
-              aria-controls="nav-menu"
-              aria-expanded={isMenuOpen}
-            >
-              <span className="block w-6 h-0.5 bg-gray-800 mb-1.5 transition-all"></span>
-              <span className="block w-6 h-0.5 bg-gray-800 mb-1.5 transition-all"></span>
-              <span className="block w-6 h-0.5 bg-gray-800 transition-all"></span>
-            </button>
-
-            <nav className={`lg:flex lg:items-center lg:gap-6 ${isMenuOpen ? 'block' : 'hidden'} lg:block absolute lg:relative top-full lg:top-auto left-4 lg:left-auto right-4 lg:right-auto bg-white lg:bg-transparent border lg:border-0 rounded-lg lg:rounded-none shadow-lg lg:shadow-none p-3 lg:p-0`}>
-              <a href="/" className="block lg:inline py-2 lg:py-0 text-gray-800 hover:text-blue-600 transition-colors">Home</a>
-              <a href="#services" className="block lg:inline py-2 lg:py-0 text-gray-800 hover:text-blue-600 transition-colors">Services</a>
-              <a href="#gallery" className="block lg:inline py-2 lg:py-0 text-gray-800 hover:text-blue-600 transition-colors">Gallery</a>
-              <Link to="/blog" className="block lg:inline py-2 lg:py-0 text-gray-800 hover:text-blue-600 transition-colors">Blog</Link>
-              <Link to="/egger-boards" className="block lg:inline py-2 lg:py-0 text-blue-600 font-medium">Materials & Finishes</Link>
-              <a href="#contact" className="block lg:inline py-2 lg:py-0 text-gray-800 hover:text-blue-600 transition-colors">Contact</a>
-              <Link to="/app" className="block lg:inline py-2 lg:py-0 text-gray-800 hover:text-blue-600 transition-colors font-medium">Interior Designer</Link>
-              <a href="#contact" className="block lg:inline mt-2 lg:mt-0 bg-blue-600 text-white px-4 py-2 rounded-full font-semibold hover:bg-blue-700 transition-colors">Free consultation</a>
-            </nav>
-          </div>
+    <div className="font-poppins">
+      {/* Data Source Indicator - moved to top right corner */}
+      <div className="fixed top-4 right-4 z-40 bg-white/90 backdrop-blur-sm rounded-lg px-3 py-2 shadow-lg border">
+        <div className="flex items-center gap-2 text-sm text-gray-600">
+          {dataSource === 'database' ? (
+            <>
+              <Database className="w-4 h-4 text-green-600" />
+              <span className="text-green-600 font-medium">Database</span>
+            </>
+          ) : dataSource === 'csv' ? (
+            <>
+              <FileText className="w-4 h-4 text-orange-600" />
+              <span className="text-orange-600 font-medium">CSV Files</span>
+            </>
+          ) : (
+            <>
+              <Package className="w-4 h-4 text-gray-400" />
+              <span className="text-gray-400">Loading...</span>
+            </>
+          )}
         </div>
-      </header>
+      </div>
 
       {/* Hero Section */}
       <section
@@ -498,16 +404,13 @@ export default function EggerBoards() {
         <div className="absolute inset-0 bg-black bg-opacity-55"></div>
         <div className="relative z-10 container mx-auto px-4">
           <h1 className="text-4xl lg:text-5xl xl:text-6xl font-bold mb-4 leading-tight">
-            {activeTab === 'materials' ? 'Premium Materials Collection' : 'Premium Finishes Collection'}
+            Premium Materials Collection
           </h1>
           <p className="text-xl lg:text-2xl font-light mb-8 text-gray-200 max-w-3xl mx-auto">
-            {activeTab === 'materials'
-              ? 'Explore our extensive collection of EGGER MFC boards and premium materials for your furniture and interior design projects.'
-              : 'Discover our extensive range of colours and finishes for your interior design projects. From bold statement colours to subtle neutrals.'
-            }
+            Explore our extensive collection of EGGER MFC boards and premium materials for your furniture and interior design projects.
           </p>
           <a href="#materials" className="inline-block bg-blue-600 text-white px-8 py-4 rounded-xl font-semibold text-lg hover:bg-blue-700 transition-colors shadow-lg">
-            Explore {activeTab === 'materials' ? 'Materials' : 'Finishes'}
+            Explore Materials
           </a>
         </div>
 
@@ -515,21 +418,18 @@ export default function EggerBoards() {
         <div className="relative z-10 flex flex-wrap justify-center gap-6 mt-16 py-8 bg-white bg-opacity-85 text-gray-800 border-t border-b border-gray-200">
           <div className="flex-1 text-center max-w-64 min-w-48">
             <div className="font-semibold mb-1">
-              {activeTab === 'materials' ? 'Premium Quality' : 'Farrow & Ball Collection'}
+              Premium Quality
             </div>
             <div className="text-sm text-gray-600">
-              {activeTab === 'materials'
-                ? 'EGGER MFC boards for professional results.'
-                : 'Premium paint colours from the renowned British manufacturer.'
-              }
+              EGGER MFC boards for professional results.
             </div>
           </div>
           <div className="flex-1 text-center max-w-64 min-w-48">
             <div className="font-semibold mb-1">
-              {activeTab === 'materials' ? 'Extensive Range' : 'Heritage Quality'}
+              Extensive Range
             </div>
             <div className="text-sm text-gray-600">
-              {processedData.totalItems} {activeTab === 'materials' ? 'materials' : 'finishes'} across {processedData.categories} categories.
+              {processedData.totalItems} materials across {processedData.categories} categories.
             </div>
           </div>
           <div className="flex-1 text-center max-w-64 min-w-48">
@@ -539,33 +439,7 @@ export default function EggerBoards() {
         </div>
       </section>
 
-      {/* Tab Navigation */}
-      <div className="bg-white border-b border-gray-200 sticky top-20 z-40">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex space-x-8 justify-center">
-            <button
-              onClick={() => setActiveTab('materials')}
-              className={`py-4 px-6 font-medium text-lg border-b-2 transition-colors ${
-                activeTab === 'materials'
-                  ? 'border-blue-600 text-blue-600'
-                  : 'border-transparent text-gray-500 hover:text-gray-700'
-              }`}
-            >
-              Materials ({dataSource === 'database' ? databaseProducts.length : (webpData?.totalDecors || 0)})
-            </button>
-            <button
-              onClick={() => setActiveTab('finishes')}
-              className={`py-4 px-6 font-medium text-lg border-b-2 transition-colors ${
-                activeTab === 'finishes'
-                  ? 'border-blue-600 text-blue-600'
-                  : 'border-transparent text-gray-500 hover:text-gray-700'
-              }`}
-            >
-              Finishes ({coloursData?.totalFinishes || 0})
-            </button>
-          </div>
-        </div>
-      </div>
+      {/* Removed tab navigation - this page now only shows materials */}
 
       {/* Search and Filters */}
       <div className="bg-gray-50 border-b border-gray-200">
@@ -576,7 +450,7 @@ export default function EggerBoards() {
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
               <Input
                 type="text"
-                placeholder={`Search ${activeTab}...`}
+                placeholder="Search materials..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className="pl-10 pr-4 py-2 w-full"
@@ -724,7 +598,7 @@ export default function EggerBoards() {
             <div className="text-gray-600">
               Showing <span className="font-medium">{Math.min(startIndex + 1, processedData.totalItems)}</span> to{' '}
               <span className="font-medium">{Math.min(endIndex, processedData.totalItems)}</span> of{' '}
-              <span className="font-medium">{processedData.totalItems}</span> {activeTab}
+              <span className="font-medium">{processedData.totalItems}</span> materials
               {activeFiltersCount > 0 && (
                 <span className="ml-2 text-blue-600">
                   ({activeFiltersCount} filter{activeFiltersCount !== 1 ? 's' : ''} applied)
@@ -843,7 +717,7 @@ export default function EggerBoards() {
           {/* Results Info */}
           <div className="mb-8 flex items-center justify-center">
             <p className="text-gray-600 text-lg">
-              Showing {startIndex + 1}-{Math.min(endIndex, processedData.items.length)} of {processedData.items.length} {activeTab === 'materials' ? 'materials' : 'finishes'}
+              Showing {startIndex + 1}-{Math.min(endIndex, processedData.items.length)} of {processedData.items.length} materials
             </p>
           </div>
 
@@ -851,7 +725,7 @@ export default function EggerBoards() {
           {paginatedItems.length > 0 ? (
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
               {paginatedItems.map((item) => {
-                if (activeTab === 'materials') {
+                // Always show materials (removed tab system)
                   if (dataSource === 'database') {
                     const enhancedProduct = item as EnhancedEggerProduct;
                     return <EnhancedBoardCard key={enhancedProduct.decor_id} product={enhancedProduct} />;
@@ -870,10 +744,10 @@ export default function EggerBoards() {
               <CardContent className="p-16 text-center">
                 <Package className="w-20 h-20 mx-auto mb-6 text-gray-300" />
                 <h3 className="text-2xl font-semibold text-gray-600 mb-3">
-                  No {activeTab === 'materials' ? 'materials' : 'finishes'} found
+                  No materials found
                 </h3>
                 <p className="text-gray-500 text-lg">
-                  Unable to load the {activeTab === 'materials' ? 'materials' : 'finishes'} collection at this time.
+                  Unable to load the materials collection at this time.
                 </p>
               </CardContent>
             </Card>
@@ -1091,6 +965,7 @@ function EnhancedBoardCard({ product }: { product: EnhancedEggerProduct }) {
         </div>
       </CardContent>
     </Card>
+    </div>
   );
 }
 

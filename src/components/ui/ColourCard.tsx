@@ -171,6 +171,19 @@ export function ColourCard({ finish, className = '' }: ColourCardProps) {
             onClick={() => window.open(finish.product_url, '_blank')}
           >
             <ExternalLink className="w-4 h-4 mr-2" />
+            Farrow & Ball
+          </Button>
+          <Button
+            size="sm"
+            variant="default"
+            className="flex-1 text-sm h-9"
+            onClick={() => {
+              // Use the finish_id from the database (colour_id field)
+              const colorId = finish.colour_id || finish.name.toLowerCase().replace(/\s+/g, '-');
+              window.location.href = `/farrow-ball/${colorId}`;
+            }}
+          >
+            <ImageIcon className="w-4 h-4 mr-2" />
             View Details
           </Button>
         </div>

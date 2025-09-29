@@ -26,6 +26,7 @@ import BlogPost from "./pages/BlogPost";
 import EggerBoards from "./pages/EggerBoards";
 import Finishes from "./pages/Finishes";
 import ProductPage from "./pages/ProductPage";
+import FarrowBallProductPage from "./pages/FarrowBallProductPage";
 import DevToolsButton from "./components/DevToolsButton";
 import { AuthProvider } from "./contexts/AuthContext";
 import { ProjectProvider } from "./contexts/ProjectContext";
@@ -66,6 +67,7 @@ const App = () => (
               <Route path="/egger-boards" element={<EggerBoards />} />
               <Route path="/product/:decorId" element={<ProductPage />} />
               <Route path="/finishes" element={<Finishes />} />
+              <Route path="/farrow-ball/:colorId" element={<FarrowBallProductPage />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
             <DevToolsButton />
