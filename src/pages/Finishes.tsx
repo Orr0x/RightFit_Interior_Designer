@@ -5,18 +5,21 @@ import { ColourCard } from '../components/ui/ColourCard';
 import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card';
 import { Button } from '../components/ui/button';
 import { Badge } from '../components/ui/badge';
-import { Package, ChevronLeft, ChevronRight, Palette } from 'lucide-react';
+import { Package, ChevronLeft, ChevronRight, Palette, Database, FileText } from 'lucide-react';
 import {
   ColoursData,
   ColourFinish,
   parseColoursCSV
 } from '../utils/coloursData';
+import { farrowBallDataService, FarrowBallFinish } from '../services/FarrowBallDataService';
 
 export default function Finishes() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isNavVisible, setIsNavVisible] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
   const [coloursData, setColoursData] = useState<ColoursData | null>(null);
+  const [databaseFinishes, setDatabaseFinishes] = useState<FarrowBallFinish[]>([]);
+  const [dataSource, setDataSource] = useState<'database' | 'csv' | 'unknown'>('unknown');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
@@ -33,12 +36,34 @@ export default function Finishes() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, [lastScrollY]);
 
-  // Load CSV data on component mount
+  // Load data on component mount - try database first, fallback to CSV
   useEffect(() => {
-    const loadColoursData = async () => {
+    const loadData = async () => {
       try {
         setLoading(true);
-        // Fetch the CSV file from the public folder
+        setError(null);
+
+        // Try database first
+        let databaseLoaded = false;
+        try {
+          console.log('🔄 Attempting to load Farrow & Ball data from database...');
+          const databaseData = await farrowBallDataService.getAllFinishes();
+          
+          if (databaseData.length > 0) {
+            console.log('✅ Database data loaded successfully:', databaseData.length, 'finishes');
+            setDatabaseFinishes(databaseData);
+            setDataSource('database');
+            databaseLoaded = true;
+          } else {
+            console.warn('⚠️ Database returned empty result, falling back to CSV');
+          }
+        } catch (dbError) {
+          console.warn('⚠️ Database temporarily unavailable, using CSV data');
+          console.warn('Reason:', dbError);
+        }
+
+        // Always load CSV data as fallback or for additional features
+        console.log('🔄 Loading CSV data...');
         const response = await fetch('/colours.csv');
         if (!response.ok) {
           throw new Error('Failed to load colours data');
@@ -46,22 +71,52 @@ export default function Finishes() {
         const csvText = await response.text();
         const parsedData = parseColoursCSV(csvText);
         setColoursData(parsedData);
+        
+        if (!databaseLoaded) {
+          setDataSource('csv');
+          console.log('📄 Using CSV data for finishes');
+        } else {
+          console.log('📄 CSV data loaded as backup');
+        }
       } catch (err) {
         setError(err instanceof Error ? err.message : 'Failed to load data');
-        console.error('Error loading colours data:', err);
+        console.error('❌ Error loading data:', err);
       } finally {
         setLoading(false);
       }
     };
 
-    loadColoursData();
+    loadData();
   }, []);
+
+  // Convert database data to ColourFinish format
+  const convertDatabaseToColourFinish = (dbFinish: FarrowBallFinish): ColourFinish => {
+    return {
+      colour_id: dbFinish.finish_id,
+      colour_name: dbFinish.color_name,
+      colour_number: dbFinish.color_number,
+      product_url: dbFinish.product_url,
+      thumb_url: dbFinish.main_color_hex, // Use hex color as thumbnail
+      hover_url: dbFinish.main_color_hex, // Use hex color as hover
+      description: dbFinish.description,
+      hex: dbFinish.main_color_hex,
+      rgb: dbFinish.main_color_rgb
+    };
+  };
 
   // Process finishes for display
   const processedFinishes = useMemo(() => {
-    if (!coloursData) return [];
-    return coloursData.finishes.sort((a, b) => a.colour_name.localeCompare(b.colour_name));
-  }, [coloursData]);
+    if (dataSource === 'database' && databaseFinishes.length > 0) {
+      // Convert database data to ColourFinish format
+      return databaseFinishes
+        .map(convertDatabaseToColourFinish)
+        .sort((a, b) => a.colour_name.localeCompare(b.colour_name));
+    } else if (coloursData) {
+      // Use CSV data as fallback
+      return coloursData.finishes.sort((a, b) => a.colour_name.localeCompare(b.colour_name));
+    }
+    return [];
+  }, [dataSource, databaseFinishes, coloursData]);
 
   // Pagination calculations
   const totalPages = Math.ceil(processedFinishes.length / itemsPerPage);
@@ -185,7 +240,7 @@ export default function Finishes() {
           </div>
           <div className="flex-1 text-center max-w-64 min-w-48">
             <div className="font-semibold mb-1">Heritage Quality</div>
-            <div className="text-sm text-gray-600">{coloursData?.totalFinishes || 0} carefully curated colours with rich histories.</div>
+            <div className="text-sm text-gray-600">{processedFinishes.length} carefully curated colours with rich histories.</div>
           </div>
           <div className="flex-1 text-center max-w-64 min-w-48">
             <div className="font-semibold mb-1">Perfect Match</div>
@@ -201,21 +256,21 @@ export default function Finishes() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
             <div className="text-center">
               <div className="text-3xl font-bold text-blue-600 mb-2">
-                {coloursData?.totalFinishes || 0}
+                {processedFinishes.length}
               </div>
               <div className="text-gray-600">Paint Colours</div>
             </div>
             <div className="text-center">
               <div className="text-3xl font-bold text-blue-600 mb-2">
-                {coloursData?.categories.length || 0}
+                {dataSource === 'database' ? 'Database' : 'CSV'}
               </div>
-              <div className="text-gray-600">Categories</div>
+              <div className="text-gray-600">Data Source</div>
             </div>
             <div className="text-center">
               <div className="text-3xl font-bold text-blue-600 mb-2">
-                132
+                {dataSource === 'database' ? '✅' : '📄'}
               </div>
-              <div className="text-gray-600">Years Experience</div>
+              <div className="text-gray-600">Status</div>
             </div>
           </div>
 
