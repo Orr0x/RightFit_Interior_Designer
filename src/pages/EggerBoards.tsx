@@ -123,6 +123,12 @@ export default function EggerBoards() {
           console.log('🔄 Loading Farrow & Ball finishes from database...');
           const finishesData = await farrowBallDataService.getAllFinishes();
           
+          console.log('🔍 Raw finishes data from database:', {
+            length: finishesData.length,
+            firstItem: finishesData[0],
+            sampleIds: finishesData.slice(0, 3).map(f => f.finish_id)
+          });
+          
           if (finishesData.length > 0) {
             console.log('✅ Finishes database data loaded successfully:', finishesData.length, 'finishes');
             setDatabaseFinishes(finishesData);
@@ -278,21 +284,19 @@ export default function EggerBoards() {
     } else if (dataSource === 'csv' && activeTab === 'materials' && webpData) {
       products = [...webpData.decors];
     } else if (activeTab === 'finishes') {
-      if (finishesDataSource === 'database' && databaseFinishes.length > 0 && coloursData) {
-        console.log('🔍 Loading finishes data from database + CSV hybrid:', { 
-          databaseCount: databaseFinishes.length, 
-          csvCount: coloursData.finishes.length 
+      console.log('🔍 Finishes tab - checking data sources:', {
+        finishesDataSource,
+        databaseFinishesLength: databaseFinishes.length,
+        coloursDataLength: coloursData?.finishes?.length || 0
+      });
+      
+      if (finishesDataSource === 'database' && databaseFinishes.length > 0) {
+        console.log('🔍 Loading finishes data from database only:', { 
+          databaseCount: databaseFinishes.length
         });
         
-        // Create a map of CSV data by color number for quick lookup
-        const csvDataMap = new Map();
-        coloursData.finishes.forEach(csvFinish => {
-          csvDataMap.set(csvFinish.colour_number, csvFinish);
-        });
-        
-        // Convert database data to ColourFinish format, merging with CSV data
+        // Convert database data to ColourFinish format
         products = databaseFinishes.map(dbFinish => {
-          const csvData = csvDataMap.get(dbFinish.color_number);
           // Generate colour_id the same way CSV parser does
           const colour_id = `${dbFinish.color_name.toLowerCase().replace(/\s+/g, '-')}-${dbFinish.color_number}`;
           
@@ -301,11 +305,10 @@ export default function EggerBoards() {
             colour_name: dbFinish.color_name,
             colour_number: dbFinish.color_number,
             product_url: dbFinish.product_url,
-            // Use CSV data for thumbnails (actual color swatches)
-            thumb_url: csvData?.thumb_url || dbFinish.main_color_hex,
-            hover_url: csvData?.hover_url || dbFinish.main_color_hex,
-            // Use database data for detailed description
-            description: dbFinish.description || csvData?.description || '',
+            // Use color hex as thumbnail (will be styled as color swatch)
+            thumb_url: dbFinish.main_color_hex,
+            hover_url: dbFinish.main_color_hex,
+            description: dbFinish.description || '',
             hex: dbFinish.main_color_hex,
             rgb: dbFinish.main_color_rgb
           };
@@ -323,8 +326,8 @@ export default function EggerBoards() {
           return result;
         });
         
-        // Set data source to hybrid when using both database and CSV
-        setFinishesDataSource('hybrid');
+        // Set data source to database
+        setFinishesDataSource('database');
       } else if (coloursData) {
         console.log('🔍 Loading finishes data from CSV only:', { coloursData, finishesCount: coloursData.finishes.length });
         products = [...coloursData.finishes];

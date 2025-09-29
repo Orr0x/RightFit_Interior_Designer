@@ -79,60 +79,78 @@ export function ColourCard({ finish, className = '' }: ColourCardProps) {
           </div>
         )}
 
-        {/* Main finish image or fallback */}
+        {/* Color swatch or image */}
         {isInView && (
           <>
-            {!imageLoaded && !imageError && (
-              <div className="w-full h-full flex items-center justify-center bg-gray-200">
-                <Palette className="w-8 h-8 text-gray-400 animate-spin" />
+            {/* Check if we have a color swatch (hex color) or image URL */}
+            {finish.thumb_url && finish.thumb_url.startsWith('#') ? (
+              // Color swatch display
+              <div 
+                className="w-full h-full transition-all duration-300 group-hover:scale-105"
+                style={{ 
+                  backgroundColor: finish.thumb_url,
+                  background: `linear-gradient(135deg, ${finish.thumb_url} 0%, ${finish.thumb_url}dd 100%)`
+                }}
+              >
+                {/* Optional: Add a subtle pattern or texture */}
+                <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent"></div>
               </div>
-            )}
-
-            {/* Show actual image if loaded successfully */}
-            {imageLoaded && !imageError && (
+            ) : (
+              // Image display (fallback for CSV data)
               <>
-                {/* Background image (thumb or hover) */}
-                <img
-                  src={currentImageUrl}
-                  alt={finish.name}
-                  className="w-full h-full object-cover transition-all duration-300 group-hover:scale-105"
-                  loading="lazy"
-                  onLoad={() => setImageLoaded(true)}
-                  onError={handleImageError}
-                />
+                {!imageLoaded && !imageError && (
+                  <div className="w-full h-full flex items-center justify-center bg-gray-200">
+                    <Palette className="w-8 h-8 text-gray-400 animate-spin" />
+                  </div>
+                )}
 
-                {/* Show hover image as overlay when hovering */}
-                {isHovered && finish.hover_url && finish.hover_url !== currentImageUrl && (
-                  <div className="absolute inset-0 opacity-0 hover:opacity-100 transition-opacity duration-300">
+                {/* Show actual image if loaded successfully */}
+                {imageLoaded && !imageError && (
+                  <>
+                    {/* Background image (thumb or hover) */}
                     <img
-                      src={finish.hover_url}
-                      alt={`${finish.name} - Hover`}
-                      className="w-full h-full object-cover"
+                      src={currentImageUrl}
+                      alt={finish.name}
+                      className="w-full h-full object-cover transition-all duration-300 group-hover:scale-105"
                       loading="lazy"
+                      onLoad={() => setImageLoaded(true)}
+                      onError={handleImageError}
                     />
+
+                    {/* Show hover image as overlay when hovering */}
+                    {isHovered && finish.hover_url && finish.hover_url !== currentImageUrl && (
+                      <div className="absolute inset-0 opacity-0 hover:opacity-100 transition-opacity duration-300">
+                        <img
+                          src={finish.hover_url}
+                          alt={`${finish.name} - Hover`}
+                          className="w-full h-full object-cover"
+                          loading="lazy"
+                        />
+                      </div>
+                    )}
+                  </>
+                )}
+
+                {/* Fallback: Show placeholder with finish info */}
+                {imageError && imageLoaded && (
+                  <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-gray-100 to-gray-200">
+                    <div className="text-center p-6">
+                      <Palette className="w-16 h-16 mx-auto mb-4 text-gray-400" />
+                      <h3 className="font-semibold text-lg mb-2 text-gray-700">
+                        {finish.name}
+                      </h3>
+                      <p className="text-sm text-gray-500 mb-2">
+                        No.{finish.number}
+                      </p>
+                      <div className="flex justify-center">
+                        <span className="px-2 py-1 bg-gray-200 rounded text-xs text-gray-600">
+                          {finish.category}
+                        </span>
+                      </div>
+                    </div>
                   </div>
                 )}
               </>
-            )}
-
-            {/* Fallback: Show placeholder with finish info */}
-            {imageError && imageLoaded && (
-              <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-gray-100 to-gray-200">
-                <div className="text-center p-6">
-                  <Palette className="w-16 h-16 mx-auto mb-4 text-gray-400" />
-                  <h3 className="font-semibold text-lg mb-2 text-gray-700">
-                    {finish.name}
-                  </h3>
-                  <p className="text-sm text-gray-500 mb-2">
-                    No.{finish.number}
-                  </p>
-                  <div className="flex justify-center">
-                    <span className="px-2 py-1 bg-gray-200 rounded text-xs text-gray-600">
-                      {finish.category}
-                    </span>
-                  </div>
-                </div>
-              </div>
             )}
           </>
         )}
