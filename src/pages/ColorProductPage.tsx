@@ -61,7 +61,7 @@ export default function ColorProductPage() {
           <CardContent className="p-6 text-center">
             <p className="text-red-600 mb-4">Failed to load color data</p>
             <p className="text-gray-600 text-sm">{error || 'Color not found.'}</p>
-            <Link to="/finishes" className="mt-4 inline-flex items-center text-blue-600 hover:underline">
+            <Link to="/egger-boards?tab=finishes" className="mt-4 inline-flex items-center text-blue-600 hover:underline">
               <ArrowLeft className="w-4 h-4 mr-2" /> Back to Finishes Gallery
             </Link>
           </CardContent>
@@ -77,10 +77,10 @@ export default function ColorProductPage() {
     <div className="min-h-screen" style={{ backgroundColor: `${colorData.main_color_hex}20` }}>
       {/* Standard Navigation */}
       <StandardNavigation 
-        currentPage="finishes"
+        currentPage="materials"
         showBackButton={true}
         backButtonText="Back to Finishes Gallery"
-        backButtonLink="/finishes"
+        backButtonLink="/egger-boards?tab=finishes"
         additionalContent={
           <Badge variant="outline" className="text-xs bg-green-50 text-green-700 border-green-200">
             Farrow & Ball Official Data
@@ -93,7 +93,7 @@ export default function ColorProductPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Breadcrumb */}
           <nav className="flex items-center space-x-2 text-sm text-gray-500 mb-8">
-            <Link to="/finishes" className="hover:text-blue-600 transition-colors">Finishes Gallery</Link>
+            <Link to="/egger-boards?tab=finishes" className="hover:text-blue-600 transition-colors">Finishes Gallery</Link>
             <span>›</span>
             <span className="text-blue-600 font-medium">{colorData.color_name}</span>
           </nav>

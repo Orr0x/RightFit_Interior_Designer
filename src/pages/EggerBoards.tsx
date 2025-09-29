@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 import StandardNavigation from '../components/shared/StandardNavigation';
 import { BoardCard } from '../components/ui/BoardCard';
 import { ColourCard } from '../components/ui/ColourCard';
@@ -27,6 +27,7 @@ import { eggerDataService, EnhancedEggerProduct } from '../services/EggerDataSer
 import { farrowBallDataService, FarrowBallFinish } from '../services/FarrowBallDataService';
 
 export default function EggerBoards() {
+  const [searchParams] = useSearchParams();
   const [activeTab, setActiveTab] = useState<'materials' | 'finishes'>('materials');
   
   // Data state
@@ -44,6 +45,16 @@ export default function EggerBoards() {
   const [itemsPerPage] = useState(20);
   const [dataSource, setDataSource] = useState<'database' | 'csv' | 'unknown'>('unknown');
   const [retryCount, setRetryCount] = useState(0);
+  
+  // Handle tab parameter from URL
+  useEffect(() => {
+    const tabParam = searchParams.get('tab');
+    if (tabParam === 'finishes') {
+      setActiveTab('finishes');
+    } else if (tabParam === 'materials') {
+      setActiveTab('materials');
+    }
+  }, [searchParams]);
   
   // Retry database connection periodically
   useEffect(() => {
