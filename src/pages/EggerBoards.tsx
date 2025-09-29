@@ -40,6 +40,20 @@ export default function EggerBoards() {
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(20);
   const [dataSource, setDataSource] = useState<'database' | 'csv' | 'unknown'>('unknown');
+  const [retryCount, setRetryCount] = useState(0);
+  
+  // Retry database connection periodically
+  useEffect(() => {
+    if (dataSource === 'csv' && retryCount < 3) {
+      const retryTimer = setTimeout(() => {
+        console.log(`🔄 Retrying database connection (attempt ${retryCount + 1}/3)...`);
+        setRetryCount(prev => prev + 1);
+        setLoading(true);
+      }, 30000); // Retry every 30 seconds
+      
+      return () => clearTimeout(retryTimer);
+    }
+  }, [dataSource, retryCount]);
   
   // Search and filter state
   const [searchQuery, setSearchQuery] = useState('');
@@ -58,20 +72,36 @@ export default function EggerBoards() {
         setLoading(true);
         setError(null);
 
-        // Try database first
+        // Try database first with timeout and reduced data
         let databaseLoaded = false;
         try {
-          // console.log('🔄 Attempting to load data from database...');
-          const result = await eggerDataService.getDecors(1, 0); // Load all decors (limit=0 means no limit)
+          console.log('🔄 Attempting to load data from database (optimized)...');
+          
+          // Load only essential data to reduce bandwidth
+          const databasePromise = eggerDataService.getDecors(1, 50); // Limit to 50 records
+          const timeoutPromise = new Promise((_, reject) => 
+            setTimeout(() => reject(new Error('Database request timeout')), 5000) // Shorter timeout
+          );
+          
+          const result = await Promise.race([databasePromise, timeoutPromise]) as any;
           
           if (result.data.length > 0) {
-            // console.log('✅ Database data loaded successfully');
+            console.log('✅ Database data loaded successfully:', result.data.length, 'products');
             setDatabaseProducts(result.data);
             setDataSource('database');
             databaseLoaded = true;
+          } else {
+            console.warn('⚠️ Database returned empty result, falling back to CSV');
           }
         } catch (dbError) {
-          console.warn('⚠️ Database not available, falling back to CSV:', dbError);
+          console.warn('⚠️ Database temporarily unavailable, using CSV data');
+          console.warn('Reason:', dbError.message);
+          
+          // If it's a resource error, we'll use CSV for now
+          if (dbError.message.includes('INSUFFICIENT_RESOURCES') || 
+              dbError.message.includes('timeout')) {
+            console.log('📄 Using CSV data due to Supabase limits (will retry database later)');
+          }
         }
 
         // Always load colours data (needed for finishes tab)
