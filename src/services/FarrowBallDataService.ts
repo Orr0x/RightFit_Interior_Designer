@@ -24,6 +24,8 @@ export interface FarrowBallFinish {
   room_categories: string[];
   price_info: any;
   availability: any;
+  thumb_url?: string;
+  hover_url?: string;
   created_at: string;
   updated_at: string;
 }

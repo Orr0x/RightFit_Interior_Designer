@@ -12,7 +12,8 @@ import { Package, ChevronLeft, ChevronRight, Clock, Star, Users, DollarSign, Sea
 import {
   ColoursData,
   ColourFinish,
-  parseColoursCSV
+  parseColoursCSV,
+  loadColoursFromDatabase
 } from '../utils/coloursData';
 import {
   WebPDecorGroup,
@@ -198,19 +199,33 @@ export default function EggerBoards() {
           setBoardsData(parsedBoardsData);
         }
 
-        // Load colours data
-        if (coloursCsvText) {
-          console.log('📄 Colours CSV text length:', coloursCsvText.length);
-          const parsedColoursData = parseColoursCSV(coloursCsvText);
-          console.log('✅ Colours data loaded:', {
-            totalFinishes: parsedColoursData.totalFinishes,
-            categories: parsedColoursData.categories,
-            firstFinish: parsedColoursData.finishes[0]
+        // Load colours data from database
+        try {
+          console.log('🔄 Loading colours from database...');
+          const databaseColoursData = await loadColoursFromDatabase();
+          console.log('✅ Database colours data loaded:', {
+            totalFinishes: databaseColoursData.totalFinishes,
+            categories: databaseColoursData.categories,
+            firstFinish: databaseColoursData.finishes[0]
           });
-          setColoursData(parsedColoursData);
-          console.log('🔧 Colours data state set, should be available now');
-        } else {
-          console.warn('❌ Could not load colours data - finishes tab may not work');
+          setColoursData(databaseColoursData);
+          console.log('🔧 Database colours data state set, should be available now');
+        } catch (dbError) {
+          console.warn('⚠️ Database colours loading failed, falling back to CSV:', dbError);
+          // Fallback to CSV if database fails
+          if (coloursCsvText) {
+            console.log('📄 Colours CSV text length:', coloursCsvText.length);
+            const parsedColoursData = parseColoursCSV(coloursCsvText);
+            console.log('✅ CSV Colours data loaded:', {
+              totalFinishes: parsedColoursData.totalFinishes,
+              categories: parsedColoursData.categories,
+              firstFinish: parsedColoursData.finishes[0]
+            });
+            setColoursData(parsedColoursData);
+            console.log('🔧 CSV Colours data state set, should be available now');
+          } else {
+            console.warn('❌ Could not load colours data from database or CSV - finishes tab may not work');
+          }
         }
 
         // console.log('✅ CSV data loaded successfully');
@@ -304,11 +319,14 @@ export default function EggerBoards() {
             colour_id: colour_id,
             colour_name: dbFinish.color_name,
             colour_number: dbFinish.color_number,
+            name: dbFinish.color_name,  // ColourCard expects 'name'
+            number: dbFinish.color_number,  // ColourCard expects 'number'
             product_url: dbFinish.product_url,
-            // Use color hex as thumbnail (will be styled as color swatch)
-            thumb_url: dbFinish.main_color_hex,
-            hover_url: dbFinish.main_color_hex,
+            // Use actual image URLs if available, fallback to hex color
+            thumb_url: dbFinish.thumb_url || dbFinish.main_color_hex,
+            hover_url: dbFinish.hover_url || dbFinish.main_color_hex,
             description: dbFinish.description || '',
+            category: 'Paint',  // ColourCard expects 'category'
             hex: dbFinish.main_color_hex,
             rgb: dbFinish.main_color_rgb
           };

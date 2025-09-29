@@ -18,13 +18,8 @@ export function ColourCard({ finish, className = '' }: ColourCardProps) {
   const [isHovered, setIsHovered] = useState(false);
   const cardRef = useRef<HTMLDivElement>(null);
 
-  // Debug logging
-  console.log('🎨 ColourCard render:', {
-    colour_id: finish.colour_id,
-    colour_name: finish.colour_name,
-    colour_number: finish.colour_number,
-    url: `/finishes/${finish.colour_id}`
-  });
+  // Debug logging (commented out for production)
+  // console.log('🎨 ColourCard render:', { colour_id: finish.colour_id, imageLoaded, imageError });
 
   // Intersection observer for lazy loading
   useEffect(() => {
@@ -53,7 +48,7 @@ export function ColourCard({ finish, className = '' }: ColourCardProps) {
 
   // Start loading image when component comes into view
   useEffect(() => {
-    if (isInView && !imageLoaded && !imageError) {
+    if (isInView && !imageLoaded && !imageError && finish.thumb_url && !finish.thumb_url.startsWith('#')) {
       const img = new Image();
       img.onload = () => setImageLoaded(true);
       img.onerror = handleImageError;
@@ -72,16 +67,24 @@ export function ColourCard({ finish, className = '' }: ColourCardProps) {
       onMouseLeave={() => setIsHovered(false)}
     >
       <div className="relative aspect-[4/3] overflow-hidden bg-gray-100">
+        {/* Debug logs removed for cleaner console */}
+        
         {/* Loading placeholder */}
         {!isInView && (
-          <div className="w-full h-full flex items-center justify-center bg-gray-200 animate-pulse">
-            <Palette className="w-12 h-12 text-gray-400" />
+          <div className="w-full h-full flex items-center justify-center bg-red-200 animate-pulse border-4 border-red-500">
+            <div className="text-center">
+              <Palette className="w-12 h-12 text-red-600 mx-auto mb-2" />
+              <p className="text-red-800 font-bold">NOT IN VIEW</p>
+              <p className="text-xs text-red-600">{finish.name}</p>
+            </div>
           </div>
         )}
 
         {/* Color swatch or image */}
         {isInView && (
           <>
+            {/* Display logic for images vs color swatches */}
+            
             {/* Check if we have a color swatch (hex color) or image URL */}
             {finish.thumb_url && finish.thumb_url.startsWith('#') ? (
               // Color swatch display
@@ -133,20 +136,34 @@ export function ColourCard({ finish, className = '' }: ColourCardProps) {
 
                 {/* Fallback: Show placeholder with finish info */}
                 {imageError && imageLoaded && (
-                  <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-gray-100 to-gray-200">
+                  <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-red-100 to-red-200 border-2 border-red-300">
                     <div className="text-center p-6">
-                      <Palette className="w-16 h-16 mx-auto mb-4 text-gray-400" />
-                      <h3 className="font-semibold text-lg mb-2 text-gray-700">
-                        {finish.name}
+                      <Palette className="w-16 h-16 mx-auto mb-4 text-red-400" />
+                      <h3 className="font-semibold text-lg mb-2 text-red-700">
+                        IMAGE FAILED
                       </h3>
+                      <h4 className="font-medium text-sm mb-1 text-gray-700">
+                        {finish.name}
+                      </h4>
                       <p className="text-sm text-gray-500 mb-2">
                         No.{finish.number}
                       </p>
                       <div className="flex justify-center">
-                        <span className="px-2 py-1 bg-gray-200 rounded text-xs text-gray-600">
+                        <span className="px-2 py-1 bg-red-200 rounded text-xs text-red-600">
                           {finish.category}
                         </span>
                       </div>
+                    </div>
+                  </div>
+                )}
+
+                {/* Show loading state more clearly */}
+                {!imageLoaded && !imageError && finish.thumb_url && !finish.thumb_url.startsWith('#') && (
+                  <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-blue-100 to-blue-200 border-2 border-blue-300">
+                    <div className="text-center p-6">
+                      <Palette className="w-8 h-8 text-blue-400 animate-spin mx-auto mb-2" />
+                      <p className="text-sm text-blue-600">Loading Image...</p>
+                      <p className="text-xs text-gray-500 mt-1">{finish.name}</p>
                     </div>
                   </div>
                 )}

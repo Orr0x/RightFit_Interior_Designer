@@ -152,3 +152,72 @@ export function sortFinishes(finishes: ColourFinish[], sortBy: 'name' | 'number'
       return sorted;
   }
 }
+
+/**
+ * Load colours data from Supabase database
+ * @returns Parsed colour finishes from database
+ */
+export async function loadColoursFromDatabase(): Promise<ColoursData> {
+  try {
+    // Import Supabase client here to avoid circular dependencies
+    const { createClient } = await import('@supabase/supabase-js');
+    
+    const supabase = createClient(
+      import.meta.env.VITE_SUPABASE_URL,
+      import.meta.env.VITE_SUPABASE_ANON_KEY
+    );
+
+    console.log('🔄 Loading Farrow & Ball finishes from database...');
+    
+    const { data, error } = await supabase
+      .from('farrow_ball_finishes')
+      .select('*')
+      .order('color_name');
+
+    if (error) {
+      console.error('❌ Database error:', error);
+      throw new Error(`Database error: ${error.message}`);
+    }
+
+    if (!data || data.length === 0) {
+      console.warn('⚠️ No finishes found in database');
+      return { finishes: [], categories: [], totalFinishes: 0 };
+    }
+
+    console.log(`✅ Loaded ${data.length} finishes from database`);
+
+    // Transform database records to ColourFinish format
+    const finishes: ColourFinish[] = data.map(record => ({
+      name: record.color_name,
+      number: record.color_number,
+      product_url: record.product_url || '',
+      thumb_url: record.thumb_url || '',
+      hover_url: record.hover_url || '',
+      description: record.description || '',
+      // Derived fields
+      colour_id: record.finish_id,
+      colour_name: record.color_name,
+      colour_code: record.color_number,
+      category: 'Paint'
+    }));
+
+    // Filter out finishes without image URLs for now to see what's working
+    const finishesWithImages = finishes.filter(f => f.thumb_url && f.hover_url);
+    const finishesWithoutImages = finishes.filter(f => !f.thumb_url || !f.hover_url);
+
+    console.log(`🖼️ Finishes with images: ${finishesWithImages.length}`);
+    console.log(`⚠️ Finishes without images: ${finishesWithoutImages.length}`);
+
+    // Extract unique categories
+    const categories = [...new Set(finishes.map(f => f.category))].sort();
+
+    return {
+      finishes: finishes, // Return all finishes, not just those with images
+      categories,
+      totalFinishes: finishes.length
+    };
+  } catch (error) {
+    console.error('❌ Error loading colours from database:', error);
+    throw error;
+  }
+}

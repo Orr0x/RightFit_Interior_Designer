@@ -73,8 +73,19 @@ export default function ColorProductPage() {
   const mainImage = colorData.farrow_ball_images.find(img => img.is_main_image) || colorData.farrow_ball_images[0];
   const colorSchemes = colorData.farrow_ball_color_schemes || [];
 
+  // Convert rgb to rgba with 20% opacity
+  const rgbToRgba = (rgb: string, opacity: number) => {
+    // Convert "rgb(193, 195, 101)" to "rgba(193, 195, 101, 0.2)"
+    return rgb.replace('rgb(', 'rgba(').replace(')', `, ${opacity})`);
+  };
+
+  const backgroundStyle = {
+    backgroundColor: rgbToRgba(colorData.main_color_rgb, 0.2),
+    backgroundImage: `linear-gradient(${rgbToRgba(colorData.main_color_rgb, 0.2)}, ${rgbToRgba(colorData.main_color_rgb, 0.2)})`
+  };
+
   return (
-    <div className="min-h-screen" style={{ backgroundColor: `${colorData.main_color_hex}20` }}>
+    <div className="min-h-screen" style={backgroundStyle}>
       {/* Standard Navigation */}
       <StandardNavigation 
         currentPage="materials"
@@ -89,7 +100,7 @@ export default function ColorProductPage() {
       />
 
       {/* Enhanced Hero Section with Color Details */}
-      <section className="pt-16 bg-gray-50">
+      <section className="pt-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Breadcrumb */}
           <nav className="flex items-center space-x-2 text-sm text-gray-500 mb-8">
@@ -216,7 +227,7 @@ export default function ColorProductPage() {
 
       {/* Color Schemes Section */}
       {colorSchemes.length > 0 && (
-        <section className="py-16 bg-white">
+        <section className="py-16">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-12">
               <h2 className="text-3xl font-bold text-gray-900 mb-4">
@@ -263,7 +274,7 @@ export default function ColorProductPage() {
 
       {/* Additional Images Section */}
       {colorData.farrow_ball_images.length > 1 && (
-        <section className="py-16 bg-gray-50">
+        <section className="py-16">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-12">
               <h2 className="text-3xl font-bold text-gray-900 mb-4">
