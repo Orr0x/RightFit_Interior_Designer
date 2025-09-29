@@ -36,7 +36,7 @@ export default function EggerBoards() {
   const [coloursData, setColoursData] = useState<ColoursData | null>(null);
   const [databaseProducts, setDatabaseProducts] = useState<EnhancedEggerProduct[]>([]);
   const [databaseFinishes, setDatabaseFinishes] = useState<FarrowBallFinish[]>([]);
-  const [finishesDataSource, setFinishesDataSource] = useState<'database' | 'csv' | 'unknown'>('unknown');
+  const [finishesDataSource, setFinishesDataSource] = useState<'database' | 'csv' | 'hybrid' | 'unknown'>('unknown');
   
   // UI state
   const [loading, setLoading] = useState(true);
@@ -278,22 +278,40 @@ export default function EggerBoards() {
     } else if (dataSource === 'csv' && activeTab === 'materials' && webpData) {
       products = [...webpData.decors];
     } else if (activeTab === 'finishes') {
-      if (finishesDataSource === 'database' && databaseFinishes.length > 0) {
-        console.log('🔍 Loading finishes data from database:', { finishesCount: databaseFinishes.length });
-        // Convert database data to ColourFinish format
-        products = databaseFinishes.map(dbFinish => ({
-          colour_id: dbFinish.finish_id,
-          colour_name: dbFinish.color_name,
-          colour_number: dbFinish.color_number,
-          product_url: dbFinish.product_url,
-          thumb_url: dbFinish.main_color_hex, // Use hex color as thumbnail
-          hover_url: dbFinish.main_color_hex, // Use hex color as hover
-          description: dbFinish.description,
-          hex: dbFinish.main_color_hex,
-          rgb: dbFinish.main_color_rgb
-        }));
+      if (finishesDataSource === 'database' && databaseFinishes.length > 0 && coloursData) {
+        console.log('🔍 Loading finishes data from database + CSV hybrid:', { 
+          databaseCount: databaseFinishes.length, 
+          csvCount: coloursData.finishes.length 
+        });
+        
+        // Create a map of CSV data by color number for quick lookup
+        const csvDataMap = new Map();
+        coloursData.finishes.forEach(csvFinish => {
+          csvDataMap.set(csvFinish.colour_number, csvFinish);
+        });
+        
+        // Convert database data to ColourFinish format, merging with CSV data
+        products = databaseFinishes.map(dbFinish => {
+          const csvData = csvDataMap.get(dbFinish.color_number);
+          return {
+            colour_id: dbFinish.finish_id,
+            colour_name: dbFinish.color_name,
+            colour_number: dbFinish.color_number,
+            product_url: dbFinish.product_url,
+            // Use CSV data for thumbnails (actual color swatches)
+            thumb_url: csvData?.thumb_url || dbFinish.main_color_hex,
+            hover_url: csvData?.hover_url || dbFinish.main_color_hex,
+            // Use database data for detailed description
+            description: dbFinish.description || csvData?.description || '',
+            hex: dbFinish.main_color_hex,
+            rgb: dbFinish.main_color_rgb
+          };
+        });
+        
+        // Set data source to hybrid when using both database and CSV
+        setFinishesDataSource('hybrid');
       } else if (coloursData) {
-        console.log('🔍 Loading finishes data from CSV:', { coloursData, finishesCount: coloursData.finishes.length });
+        console.log('🔍 Loading finishes data from CSV only:', { coloursData, finishesCount: coloursData.finishes.length });
         products = [...coloursData.finishes];
       } else {
         console.log('❌ No finishes data available:', { coloursData, databaseFinishes, finishesDataSource, activeTab });
@@ -502,7 +520,7 @@ export default function EggerBoards() {
       {/* Standard Navigation */}
       <StandardNavigation 
         currentPage="materials" 
-        dataSource={dataSource}
+        dataSource={activeTab === 'finishes' ? finishesDataSource : dataSource}
       />
 
       {/* Hero Section */}

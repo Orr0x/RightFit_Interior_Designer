@@ -53,6 +53,11 @@ export default function StandardNavigation({
             <FileText className="w-4 h-4 text-orange-600" />
             <span className="text-orange-600 font-medium">CSV Files</span>
           </>
+        ) : dataSource === 'hybrid' ? (
+          <>
+            <Database className="w-4 h-4 text-blue-600" />
+            <span className="text-blue-600 font-medium">Hybrid</span>
+          </>
         ) : (
           <>
             <Package className="w-4 h-4 text-gray-400" />
