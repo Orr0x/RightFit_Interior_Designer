@@ -24,6 +24,7 @@ import {
   parseEggerBoardsCSV
 } from '../utils/eggerBoardsData';
 import { eggerDataService, EnhancedEggerProduct } from '../services/EggerDataService';
+import { farrowBallDataService, FarrowBallFinish } from '../services/FarrowBallDataService';
 
 export default function EggerBoards() {
   const [activeTab, setActiveTab] = useState<'materials' | 'finishes'>('materials');
@@ -33,6 +34,8 @@ export default function EggerBoards() {
   const [boardsData, setBoardsData] = useState<EggerBoardsData | null>(null);
   const [coloursData, setColoursData] = useState<ColoursData | null>(null);
   const [databaseProducts, setDatabaseProducts] = useState<EnhancedEggerProduct[]>([]);
+  const [databaseFinishes, setDatabaseFinishes] = useState<FarrowBallFinish[]>([]);
+  const [finishesDataSource, setFinishesDataSource] = useState<'database' | 'csv' | 'unknown'>('unknown');
   
   // UI state
   const [loading, setLoading] = useState(true);
@@ -102,6 +105,25 @@ export default function EggerBoards() {
               dbError.message.includes('timeout')) {
             console.log('📄 Using CSV data due to Supabase limits (will retry database later)');
           }
+        }
+
+        // Load finishes data from database
+        try {
+          console.log('🔄 Loading Farrow & Ball finishes from database...');
+          const finishesData = await farrowBallDataService.getAllFinishes();
+          
+          if (finishesData.length > 0) {
+            console.log('✅ Finishes database data loaded successfully:', finishesData.length, 'finishes');
+            setDatabaseFinishes(finishesData);
+            setFinishesDataSource('database');
+          } else {
+            console.warn('⚠️ Finishes database returned empty result, falling back to CSV');
+            setFinishesDataSource('csv');
+          }
+        } catch (finishesDbError) {
+          console.warn('⚠️ Finishes database temporarily unavailable, using CSV data');
+          console.warn('Reason:', finishesDbError);
+          setFinishesDataSource('csv');
         }
 
         // Always load colours data (needed for finishes tab)
@@ -244,11 +266,27 @@ export default function EggerBoards() {
       products = [...databaseProducts];
     } else if (dataSource === 'csv' && activeTab === 'materials' && webpData) {
       products = [...webpData.decors];
-    } else if (activeTab === 'finishes' && coloursData) {
-      console.log('🔍 Loading finishes data:', { coloursData, finishesCount: coloursData.finishes.length });
-      products = [...coloursData.finishes];
     } else if (activeTab === 'finishes') {
-      console.log('❌ No colours data available for finishes:', { coloursData, activeTab });
+      if (finishesDataSource === 'database' && databaseFinishes.length > 0) {
+        console.log('🔍 Loading finishes data from database:', { finishesCount: databaseFinishes.length });
+        // Convert database data to ColourFinish format
+        products = databaseFinishes.map(dbFinish => ({
+          colour_id: dbFinish.finish_id,
+          colour_name: dbFinish.color_name,
+          colour_number: dbFinish.color_number,
+          product_url: dbFinish.product_url,
+          thumb_url: dbFinish.main_color_hex, // Use hex color as thumbnail
+          hover_url: dbFinish.main_color_hex, // Use hex color as hover
+          description: dbFinish.description,
+          hex: dbFinish.main_color_hex,
+          rgb: dbFinish.main_color_rgb
+        }));
+      } else if (coloursData) {
+        console.log('🔍 Loading finishes data from CSV:', { coloursData, finishesCount: coloursData.finishes.length });
+        products = [...coloursData.finishes];
+      } else {
+        console.log('❌ No finishes data available:', { coloursData, databaseFinishes, finishesDataSource, activeTab });
+      }
     }
 
     // Apply search filter
@@ -342,6 +380,8 @@ export default function EggerBoards() {
     databaseProducts,
     webpData,
     coloursData,
+    databaseFinishes,
+    finishesDataSource,
     searchQuery,
     selectedCategory,
     selectedTexture,

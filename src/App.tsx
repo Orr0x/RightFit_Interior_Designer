@@ -24,7 +24,6 @@ import ComponentManagerPage from "./pages/ComponentManagerPage";
 import Blog from "./pages/Blog";
 import BlogPost from "./pages/BlogPost";
 import EggerBoards from "./pages/EggerBoards";
-import Finishes from "./pages/Finishes";
 import ProductPage from "./pages/ProductPage";
 import ColorProductPage from "./pages/ColorProductPage";
 import DevToolsButton from "./components/DevToolsButton";
@@ -66,7 +65,6 @@ const App = () => (
               <Route path="/blog/:slug" element={<BlogPost />} />
               <Route path="/egger-boards" element={<EggerBoards />} />
               <Route path="/product/:decorId" element={<ProductPage />} />
-              <Route path="/finishes" element={<Finishes />} />
               <Route path="/finishes/:finishId" element={<ColorProductPage />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
