@@ -1,9 +1,10 @@
 import React, { useState, useRef, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { ColourFinish, getThumbnailUrl } from '../../utils/coloursData';
 import { Card, CardContent } from './card';
 import { Button } from './button';
 import { Badge } from './badge';
-import { ExternalLink, ImageIcon, Palette } from 'lucide-react';
+import { ExternalLink, ImageIcon, Palette, Eye } from 'lucide-react';
 
 interface ColourCardProps {
   finish: ColourFinish;
@@ -171,7 +172,18 @@ export function ColourCard({ finish, className = '' }: ColourCardProps) {
             onClick={() => window.open(finish.product_url, '_blank')}
           >
             <ExternalLink className="w-4 h-4 mr-2" />
-            View Details
+            Farrow & Ball
+          </Button>
+          <Button
+            size="sm"
+            variant="default"
+            className="flex-1 text-sm h-9"
+            asChild
+          >
+            <Link to={`/finishes/${finish.colour_id}`}>
+              <Eye className="w-4 h-4 mr-2" />
+              View Product
+            </Link>
           </Button>
         </div>
       </div>
