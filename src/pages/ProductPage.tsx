@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
+import rightfitLogo from '@/assets/logo.png';
 import StandardNavigation from '../components/shared/StandardNavigation';
 import { Button } from '../components/ui/button';
 import { Badge } from '../components/ui/badge';
