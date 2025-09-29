@@ -77,10 +77,10 @@ export default function EggerBoards() {
         try {
           console.log('🔄 Attempting to load data from database (optimized)...');
           
-          // Load only essential data to reduce bandwidth
-          const databasePromise = eggerDataService.getDecors(1, 50); // Limit to 50 records
+          // Load all materials from database
+          const databasePromise = eggerDataService.getDecors(1, 0); // Load all records
           const timeoutPromise = new Promise((_, reject) => 
-            setTimeout(() => reject(new Error('Database request timeout')), 5000) // Shorter timeout
+            setTimeout(() => reject(new Error('Database request timeout')), 15000) // Longer timeout for all data
           );
           
           const result = await Promise.race([databasePromise, timeoutPromise]) as any;
