@@ -1479,11 +1479,52 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
 
     if (isWallCabinet) {
       // Wall cabinet - typically 2 doors, NO toe kick
-      const doorCount = width > 80 ? 2 : 1;
-      const doorWidth = (width - doorInset * 2) / doorCount;
+      // Check if it's a corner unit - corner wall units should have 1 door
+      const cornerInfo = isCornerUnit(element);
+      const isCorner = cornerInfo.isCorner;
+      const doorCount = isCorner ? 1 : (width > 80 ? 2 : 1);
+      // Corner wall units should have thin doors like base corner units (33% of width)
+      const doorWidth = isCorner ? width * 0.33 : ((width - doorInset * 2) / doorCount);
       
       for (let i = 0; i < doorCount; i++) {
-        const doorX = x + doorInset + i * doorWidth;
+        let doorX: number;
+        
+        if (isCorner) {
+          // CORNER WALL DOOR POSITIONING: Use centerline logic with manual override support
+          // Manual override takes precedence
+          if (element.cornerDoorSide && element.cornerDoorSide !== 'auto') {
+            doorX = element.cornerDoorSide === 'left' 
+              ? x + doorInset
+              : x + width - doorWidth - doorInset;
+          } else {
+            // Automatic centerline logic based on current view
+            let isLeftSide: boolean;
+            
+            if (active2DView === 'front' || active2DView === 'back') {
+              // For front/back views: Left side of room = door on right, Right side = door on left
+              const roomCenter = roomDimensions.width / 2;
+              isLeftSide = element.x < roomCenter;
+            } else {
+              // For left/right views: Front side of room = door on right, Back side = door on left
+              const roomCenter = roomDimensions.height / 2;
+              isLeftSide = element.y < roomCenter;
+            }
+            
+            // For left elevation view, the logic is inverted
+            if (active2DView === 'left') {
+              doorX = isLeftSide 
+                ? x + doorInset                     // Left side door
+                : x + width - doorWidth - doorInset; // Right side door
+            } else {
+              doorX = isLeftSide 
+                ? x + width - doorWidth - doorInset  // Right side door
+                : x + doorInset;                     // Left side door
+            }
+          }
+        } else {
+          // Standard wall cabinet door positioning
+          doorX = x + doorInset + i * doorWidth;
+        }
         const doorY = y + doorInset;
         const doorH = height - doorInset * 2; // Full height for wall cabinets (no toe kick)
         
@@ -1535,25 +1576,36 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
           let doorX: number;
           
           if (isCorner) {
-            // CRITICAL FIX: Corner units ALWAYS show door + panel in elevation views
-            // Door position is ALWAYS on the side AWAY from the wall we're viewing
-            // Simple rule: LEFT wall view = door on RIGHT, RIGHT wall view = door on LEFT
-            
-            if (active2DView === 'left') {
-              // Viewing LEFT wall: door on RIGHT side (away from left wall)
-              doorX = x + width - doorWidth - doorInset;
-            } else if (active2DView === 'right') {
-              // Viewing RIGHT wall: door on LEFT side (away from right wall)  
-              doorX = x + doorInset;
-            } else if (active2DView === 'front') {
-              // Viewing FRONT wall: door on RIGHT side (standard)
-              doorX = x + width - doorWidth - doorInset;
-            } else if (active2DView === 'back') {
-              // Viewing BACK wall: door on LEFT side (mirrored from front)
-              doorX = x + doorInset;
+            // CORNER DOOR POSITIONING: Use centerline logic with manual override support
+            // Manual override takes precedence
+            if (element.cornerDoorSide && element.cornerDoorSide !== 'auto') {
+              doorX = element.cornerDoorSide === 'left' 
+                ? x + doorInset
+                : x + width - doorWidth - doorInset;
             } else {
-              // Default: door on right side
-              doorX = x + width - doorWidth - doorInset;
+              // Automatic centerline logic based on current view
+              let isLeftSide: boolean;
+              
+              if (active2DView === 'front' || active2DView === 'back') {
+                // For front/back views: Left side of room = door on right, Right side = door on left
+                const roomCenter = roomDimensions.width / 2;
+                isLeftSide = element.x < roomCenter;
+              } else {
+                // For left/right views: Front side of room = door on right, Back side = door on left
+                const roomCenter = roomDimensions.height / 2;
+                isLeftSide = element.y < roomCenter;
+              }
+              
+              // For left elevation view, the logic is inverted
+              if (active2DView === 'left') {
+                doorX = isLeftSide 
+                  ? x + doorInset                     // Left side door
+                  : x + width - doorWidth - doorInset; // Right side door
+              } else {
+                doorX = isLeftSide 
+                  ? x + width - doorWidth - doorInset  // Right side door
+                  : x + doorInset;                     // Left side door
+              }
             }
           } else {
             // Standard cabinet door positioning
