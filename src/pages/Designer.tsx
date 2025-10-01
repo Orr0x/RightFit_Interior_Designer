@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
@@ -14,6 +14,7 @@ import { Lazy3DView } from '@/components/designer/Lazy3DView';
 import CompactComponentSidebar from '@/components/designer/CompactComponentSidebar';
 import { CanvasElementCounter } from '@/components/designer/CanvasElementCounter';
 import { ViewSelector } from '@/components/designer/ViewSelector';
+import { ZoomController } from '@/components/designer/ZoomController';
 import { DesignToolbar } from '@/components/designer/DesignToolbar';
 import { PropertiesPanel } from '@/components/designer/PropertiesPanel';
 import { ErrorBoundary } from '@/components/designer/ErrorBoundary';
@@ -65,6 +66,16 @@ const Designer = () => {
   const [showRightPanel, setShowRightPanel] = useState(true);
   const [lastValidatedDesign, setLastValidatedDesign] = useState<string | null>(null);
   const [showPerformanceMonitor, setShowPerformanceMonitor] = useState(false);
+  const [canvasZoom, setCanvasZoom] = useState(1.0);
+
+  // Zoom control functions
+  const handleZoomIn = useCallback(() => {
+    setCanvasZoom(prev => Math.min(4.0, prev * 1.2));
+  }, []);
+  
+  const handleZoomOut = useCallback(() => {
+    setCanvasZoom(prev => Math.max(0.5, prev / 1.2));
+  }, []);
 
   // Tape measure state - multi-measurement support
   const [completedMeasurements, setCompletedMeasurements] = useState<{ start: { x: number; y: number }, end: { x: number; y: number } }[]>([]);
@@ -857,13 +868,21 @@ const Designer = () => {
                         onTapeMeasureClick={handleTapeMeasureClick}
                         onTapeMeasureMouseMove={handleTapeMeasureMouseMove}
                         onClearTapeMeasure={handleClearTapeMeasure}
+                        onZoomChange={setCanvasZoom}
+                        onZoomIn={handleZoomIn}
+                        onZoomOut={handleZoomOut}
                       />
                       
-                      {/* View Selector Overlay - Top Left */}
-                      <div className="absolute top-4 left-4 z-10">
+                      {/* View Selector and Zoom Controller - Top Left */}
+                      <div className="absolute top-4 left-4 z-10 flex flex-col gap-4">
                         <ViewSelector
                           activeView={active2DView}
                           onViewChange={setActive2DView}
+                        />
+                        <ZoomController
+                          zoom={canvasZoom}
+                          onZoomIn={handleZoomIn}
+                          onZoomOut={handleZoomOut}
                         />
                       </div>
                       

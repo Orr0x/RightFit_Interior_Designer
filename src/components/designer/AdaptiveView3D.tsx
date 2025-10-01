@@ -630,7 +630,7 @@ export const AdaptiveView3D: React.FC<AdaptiveView3DProps> = ({
           {/* Controls - Mobile Optimized */}
           <OrbitControls
             ref={controlsRef}
-            enablePan={activeTool === 'pan'}
+            enablePan={true} // Always enable panning for right-click support
             enableZoom={true}
             enableRotate={activeTool === 'select' || activeTool === 'pan'}
             target={[0, 0, 0]}
@@ -639,6 +639,12 @@ export const AdaptiveView3D: React.FC<AdaptiveView3DProps> = ({
             dampingFactor={isMobile ? 0.1 : 0.05}
             rotateSpeed={isMobile ? 0.8 : 0.5}
             panSpeed={isMobile ? 1.2 : 0.8}
+            // Right-click panning support
+            mouseButtons={{
+              LEFT: THREE.MOUSE.ROTATE,
+              MIDDLE: THREE.MOUSE.DOLLY,
+              RIGHT: THREE.MOUSE.PAN
+            }}
             zoomSpeed={isMobile ? 1.5 : 1.0}
             minDistance={isMobile ? 1.5 : 2}
             maxDistance={isMobile ? 20 : 15}

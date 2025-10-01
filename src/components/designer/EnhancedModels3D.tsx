@@ -494,8 +494,12 @@ export const EnhancedCabinet3D: React.FC<Enhanced3DModelProps> = ({
       </group>
     );
   } else {
-    // Standard cabinet with door
+    // Standard cabinet with door(s) - width-based door count
     const cabinetYPosition = isWallCabinet ? 0 : plinthHeight / 2;
+    
+    // Door count logic: cabinets 60cm or less = single door, wider = double doors
+    const doorCount = width > 0.6 ? 2 : 1; // 0.6m = 60cm threshold
+    const doorWidth = (width - 0.05) / doorCount;
     
     return (
       <group 
@@ -521,21 +525,28 @@ export const EnhancedCabinet3D: React.FC<Enhanced3DModelProps> = ({
           />
         </mesh>
 
-        {/* Cabinet door with improved material */}
-        <mesh position={[0, cabinetYPosition, depth / 2 + 0.01]}>
-          <boxGeometry args={[width - 0.05, doorHeight, 0.02]} />
-          <meshStandardMaterial 
-            color={doorColor} 
-            roughness={0.6} 
-            metalness={0.1}
-          />
-        </mesh>
-
-        {/* Door handle with metallic finish */}
-        <mesh position={[width / 2 - 0.05, cabinetYPosition, depth / 2 + 0.03]}>
-          <boxGeometry args={[0.02, 0.15, 0.02]} />
-          <meshStandardMaterial color={handleColor} metalness={0.8} roughness={0.2} />
-        </mesh>
+        {/* Cabinet doors with improved material */}
+        {Array.from({ length: doorCount }).map((_, index) => {
+          const doorPosition = -width/2 + doorWidth/2 + index * doorWidth;
+          return (
+            <React.Fragment key={index}>
+              <mesh position={[doorPosition, cabinetYPosition, depth / 2 + 0.01]}>
+                <boxGeometry args={[doorWidth - 0.02, doorHeight, 0.02]} />
+                <meshStandardMaterial 
+                  color={doorColor} 
+                  roughness={0.6} 
+                  metalness={0.1}
+                />
+              </mesh>
+              
+              {/* Door handle with metallic finish */}
+              <mesh position={[doorPosition + (doorCount === 1 ? doorWidth * 0.3 : (index === 0 ? doorWidth * 0.3 : -doorWidth * 0.3)), cabinetYPosition, depth / 2 + 0.03]}>
+                <boxGeometry args={[0.02, 0.15, 0.02]} />
+                <meshStandardMaterial color={handleColor} metalness={0.8} roughness={0.2} />
+              </mesh>
+            </React.Fragment>
+          );
+        })}
 
         {/* Larder-specific appliance elements */}
         {isLarderFridge && (

@@ -50,6 +50,10 @@ interface DesignCanvas2DProps {
   onTapeMeasureClick?: (x: number, y: number) => void;
   onTapeMeasureMouseMove?: (x: number, y: number) => void;
   onClearTapeMeasure?: () => void;
+  // Zoom control props
+  onZoomChange?: (zoom: number) => void;
+  onZoomIn?: () => void;
+  onZoomOut?: () => void;
 }
 
 // Default room fallbacks (will be replaced by database values)
@@ -85,11 +89,11 @@ const getRoomConfig = async (roomType: string, roomDimensions: any) => {
 };
 
 // Canvas constants
-const CANVAS_WIDTH = 1200; // Large workspace
-const CANVAS_HEIGHT = 800; // Large workspace
+const CANVAS_WIDTH = 1600; // Larger workspace for better zoom
+const CANVAS_HEIGHT = 1200; // Larger workspace for better zoom
 const GRID_SIZE = 20; // Grid spacing in pixels
 const MIN_ZOOM = 0.5;
-const MAX_ZOOM = 3.0;
+const MAX_ZOOM = 4.0; // Increased to take advantage of larger canvas
 
 // Wall thickness constants to match 3D implementation
 const WALL_THICKNESS = 10; // 10cm wall thickness (matches 3D: 0.1 meters)
@@ -388,7 +392,11 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
   tapeMeasurePreview = null,
   onTapeMeasureClick,
   onTapeMeasureMouseMove,
-  onClearTapeMeasure
+  onClearTapeMeasure,
+  // Zoom control props
+  onZoomChange,
+  onZoomIn,
+  onZoomOut
 }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -396,6 +404,30 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
   // State management
   const [zoom, setZoom] = useState(1.0);
   const [panOffset, setPanOffset] = useState({ x: 0, y: 0 });
+  
+  // Notify parent of zoom changes
+  useEffect(() => {
+    if (onZoomChange) {
+      onZoomChange(zoom);
+    }
+  }, [zoom, onZoomChange]);
+  
+  // Zoom control functions
+  const handleZoomIn = useCallback(() => {
+    if (onZoomIn) {
+      onZoomIn();
+    } else {
+      setZoom(prev => Math.min(MAX_ZOOM, prev * 1.2));
+    }
+  }, [onZoomIn]);
+  
+  const handleZoomOut = useCallback(() => {
+    if (onZoomOut) {
+      onZoomOut();
+    } else {
+      setZoom(prev => Math.max(MIN_ZOOM, prev / 1.2));
+    }
+  }, [onZoomOut]);
   const [isDragging, setIsDragging] = useState(false);
   const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
   const [currentMousePos, setCurrentMousePos] = useState({ x: 0, y: 0 });
@@ -435,30 +467,36 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
     height: roomDimensions.height + (WALL_THICKNESS * 2)
   };
   
-  // Room positioning - center the OUTER room in the canvas (including walls)
+  // Room positioning - align rooms to top-center of the canvas for better space utilization
   // For elevation views, use different centering logic
   const roomPosition = (() => {
     if (active2DView === 'left' || active2DView === 'right') {
-      // Left/Right elevation views: center based on room depth and wall height
+      // Left/Right elevation views: top-center based on room depth and wall height
       const wallHeight = getWallHeight();
       const roomDepth = roomDimensions.height; // Use height as depth for side views
+      const topMargin = 100; // Space from top of canvas
       return {
         // Outer room position (for wall drawing)
         outerX: (CANVAS_WIDTH / 2) - (roomDepth * zoom / 2) + panOffset.x,
-        outerY: (CANVAS_HEIGHT / 2) - (wallHeight * zoom / 2) + panOffset.y,
+        outerY: topMargin + panOffset.y,
         // Inner room position (for component placement)
         innerX: (CANVAS_WIDTH / 2) - (roomDepth * zoom / 2) + panOffset.x,
-        innerY: (CANVAS_HEIGHT / 2) - (wallHeight * zoom / 2) + panOffset.y
+        innerY: topMargin + panOffset.y
       };
     } else {
-      // Plan, Front, Back views: use standard centering
+      // Plan, Front, Back views: top-center alignment
+      const topMargin = 100; // Space from top of canvas
+      // For plan view, center the inner room and add wall thickness around it
+      const innerX = (CANVAS_WIDTH / 2) - (innerRoomBounds.width * zoom / 2) + panOffset.x;
+      const innerY = topMargin + panOffset.y;
+      const wallThickness = WALL_THICKNESS * zoom;
       return {
-        // Outer room position (for wall drawing)
-        outerX: (CANVAS_WIDTH / 2) - (outerRoomBounds.width * zoom / 2) + panOffset.x,
-        outerY: (CANVAS_HEIGHT / 2) - (outerRoomBounds.height * zoom / 2) + panOffset.y,
+        // Outer room position (for wall drawing) - centered around inner room
+        outerX: innerX - wallThickness,
+        outerY: innerY - wallThickness,
         // Inner room position (for component placement)
-        innerX: (CANVAS_WIDTH / 2) - (innerRoomBounds.width * zoom / 2) + panOffset.x,
-        innerY: (CANVAS_HEIGHT / 2) - (innerRoomBounds.height * zoom / 2) + panOffset.y
+        innerX: innerX,
+        innerY: innerY
       };
     }
   })();
@@ -903,7 +941,7 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
     } else {
       // Elevation view - draw room as elevation (floor fixed, ceiling moves)
       const wallHeight = getWallHeight() * zoom;
-      const floorY = roomPosition.innerY + (CANVAS_HEIGHT * 0.7); // Fixed floor position
+      const floorY = roomPosition.innerY + (CANVAS_HEIGHT * 0.4); // Fixed floor position (adjusted for top-center alignment)
       const topY = floorY - wallHeight; // Ceiling moves up/down based on wall height
 
       // CRITICAL FIX: Use appropriate dimension for each elevation view
@@ -1312,8 +1350,26 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
     // Components are positioned within the inner room space, not including wall thickness
     const elevationWidth = roomDimensions.width * zoom; // Inner room width for front/back views
     const elevationDepth = roomDimensions.height * zoom; // Inner room depth for left/right views
-    const floorY = roomPosition.innerY + (CANVAS_HEIGHT * 0.7); // Fixed floor position
+    const floorY = roomPosition.innerY + (CANVAS_HEIGHT * 0.4); // Fixed floor position (adjusted for top-center alignment)
     
+    // Calculate rotation-aware dimensions
+    const rotation = (element.rotation || 0) * Math.PI / 180;
+    const isRotated = Math.abs(Math.sin(rotation)) > 0.1; // 90° or 270° rotation
+    
+    // Get effective dimensions based on rotation
+    let effectiveWidth: number;
+    let effectiveDepth: number;
+    
+    if (isRotated) {
+      // When rotated 90° or 270°, width and depth are swapped
+      effectiveWidth = element.depth;
+      effectiveDepth = element.width;
+    } else {
+      // Normal orientation
+      effectiveWidth = element.width;
+      effectiveDepth = element.depth;
+    }
+
     // Calculate horizontal position - use innerX as baseline for all elevation views
     let xPos: number;
     let elementWidth: number;
@@ -1321,17 +1377,31 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
     if (active2DView === 'front' || active2DView === 'back') {
       // Front/back walls: use X coordinate from plan view
       xPos = roomPosition.innerX + (element.x / roomDimensions.width) * elevationWidth;
-      elementWidth = (element.width / roomDimensions.width) * elevationWidth;
+      elementWidth = (effectiveWidth / roomDimensions.width) * elevationWidth;
     } else if (active2DView === 'left') {
       // Left wall view - flip horizontally (mirror Y coordinate)
       // When looking at left wall from inside room, far end of room appears on left side of view
-      const flippedY = roomDimensions.height - element.y - element.depth;
+      const flippedY = roomDimensions.height - element.y - effectiveDepth;
       xPos = roomPosition.innerX + (flippedY / roomDimensions.height) * elevationDepth;
-      elementWidth = (element.depth / roomDimensions.height) * elevationDepth;
+      
+      // For worktops/counter-tops, use depth as width (length along wall)
+      // For cabinets and other components, use effective width (length along wall)
+      if (element.type === 'counter-top') {
+        elementWidth = (element.depth / roomDimensions.height) * elevationDepth;
+      } else {
+        elementWidth = (effectiveWidth / roomDimensions.height) * elevationDepth; // Use rotation-aware width
+      }
     } else { // right wall
       // Right wall view: use Y coordinate from plan view  
       xPos = roomPosition.innerX + (element.y / roomDimensions.height) * elevationDepth;
-      elementWidth = (element.depth / roomDimensions.height) * elevationDepth;
+      
+      // For worktops/counter-tops, use depth as width (length along wall)
+      // For cabinets and other components, use effective width (length along wall)
+      if (element.type === 'counter-top') {
+        elementWidth = (element.depth / roomDimensions.height) * elevationDepth;
+      } else {
+        elementWidth = (effectiveWidth / roomDimensions.height) * elevationDepth; // Use rotation-aware width
+      }
     }
     
     // Tall corner unit dimensions are now correct (90x90cm) after database migration
@@ -1471,6 +1541,11 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
   const drawCabinetElevationDetails = (ctx: CanvasRenderingContext2D, x: number, y: number, width: number, height: number, element: DesignElement) => {
     const doorInset = 3;
     const handleSize = Math.max(2, width * 0.02);
+    
+    // Calculate rotation-aware dimensions for door count
+    const rotation = (element.rotation || 0) * Math.PI / 180;
+    const isRotated = Math.abs(Math.sin(rotation)) > 0.1; // 90° or 270° rotation
+    const effectiveWidth = isRotated ? element.depth : element.width;
     const showDoorFace = shouldShowCornerDoorFace(element, active2DView);
     
     ctx.strokeStyle = '#4a3728';
@@ -1508,7 +1583,7 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
       // Check if it's a corner unit - corner wall units should have 1 door
       const cornerInfo = isCornerUnit(element);
       const isCorner = cornerInfo.isCorner;
-      const doorCount = isCorner ? 1 : (width > 80 ? 2 : 1);
+      const doorCount = isCorner ? 1 : (effectiveWidth > 60 ? 2 : 1);
       // Corner wall units should have thin doors like base corner units (33% of width)
       const doorWidth = isCorner ? width * 0.33 : ((width - doorInset * 2) / doorCount);
       
@@ -1574,7 +1649,7 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
       const isCorner = cornerInfo.isCorner;
       
       // Corner units have different door configurations
-      const doorCount = isCorner ? 1 : (width > 100 ? 2 : 1);
+      const doorCount = isCorner ? 1 : (effectiveWidth > 60 ? 2 : 1);
       const toeKickHeight = 8 * zoom; // 8cm toe kick
       
       // Draw toe kick (recessed area at bottom)
@@ -2338,30 +2413,7 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
     return true;
   };
 
-  // Draw zoom controls
-  const drawZoomControls = useCallback((ctx: CanvasRenderingContext2D) => {
-    const controlsX = CANVAS_WIDTH - 100;
-    const controlsY = 20;
-    
-    // Background
-    ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
-    ctx.fillRect(controlsX, controlsY, 80, 60);
-    ctx.strokeStyle = '#ccc';
-    ctx.lineWidth = 1;
-    ctx.strokeRect(controlsX, controlsY, 80, 60);
-    
-    // Zoom percentage
-    ctx.fillStyle = '#333';
-    ctx.font = '12px Arial';
-    ctx.textAlign = 'center';
-    ctx.fillText(`${Math.round(zoom * 100)}%`, controlsX + 40, controlsY + 20);
-    
-    // Zoom controls
-    ctx.fillStyle = '#666';
-    ctx.font = '16px Arial';
-    ctx.fillText('+', controlsX + 20, controlsY + 45);
-    ctx.fillText('-', controlsX + 60, controlsY + 45);
-  }, [zoom]);
+  // Zoom controls removed - now handled by React component in Designer.tsx
 
   // Draw ruler/tape measure
   const drawRuler = useCallback((ctx: CanvasRenderingContext2D) => {
@@ -2426,7 +2478,7 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
       
       // Horizontal ruler (bottom)
       const wallHeight = getWallHeight() * zoom;
-      const floorY = roomPosition.innerY + (CANVAS_HEIGHT * 0.7); // Fixed floor position
+      const floorY = roomPosition.innerY + (CANVAS_HEIGHT * 0.4); // Fixed floor position (adjusted for top-center alignment)
       const topY = floorY - wallHeight; // Ceiling moves up/down based on wall height
       const rulerY = floorY + 25;
       
@@ -2745,13 +2797,10 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
     // Draw tape measure
     drawTapeMeasure(ctx);
 
-    // Draw zoom controls
-    drawZoomControls(ctx);
-
     // Draw ruler
     drawRuler(ctx);
 
-  }, [drawGrid, drawRoom, drawElement, drawSnapGuides, drawDragPreview, drawTapeMeasure, drawZoomControls, drawRuler, design.elements, active2DView, draggedElement, isDragging]);
+  }, [drawGrid, drawRoom, drawElement, drawSnapGuides, drawDragPreview, drawTapeMeasure, drawRuler, design.elements, active2DView, draggedElement, isDragging]);
 
 
   // Mouse event handlers
@@ -2767,22 +2816,18 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
     const x = (e.clientX - rect.left) * scaleX;
     const y = (e.clientY - rect.top) * scaleY;
 
-    // Check for zoom control clicks
-    const controlsX = CANVAS_WIDTH - 100;
-    const controlsY = 20;
-    
-    if (x >= controlsX && x <= controlsX + 80 && y >= controlsY && y <= controlsY + 60) {
-      if (x <= controlsX + 40) {
-        // Zoom in
-        setZoom(prev => Math.min(MAX_ZOOM, prev * 1.2));
-      } else {
-        // Zoom out  
-        setZoom(prev => Math.max(MIN_ZOOM, prev / 1.2));
-      }
+    // Zoom control clicks now handled by React component in Designer.tsx
+
+    // Right-click for panning (regardless of active tool)
+    if (e.button === 2) { // Right mouse button
+      e.preventDefault(); // Prevent context menu
+      setIsDragging(true);
+      setDragStart({ x, y });
       return;
     }
 
-    if (activeTool === 'pan') {
+    // Left-click pan tool (legacy support)
+    if (activeTool === 'pan' && e.button === 0) {
       setIsDragging(true);
       setDragStart({ x, y });
       return;
@@ -2922,7 +2967,8 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
 
     if (!isDragging) return;
 
-    if (activeTool === 'pan') {
+    // Handle panning (both right-click and pan tool)
+    if (activeTool === 'pan' || (isDragging && !draggedElement)) {
       const deltaX = x - dragStart.x;
       const deltaY = y - dragStart.y;
       setPanOffset(prev => ({
@@ -2939,6 +2985,11 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
       requestAnimationFrame(() => render());
     }
   }, [isDragging, activeTool, dragStart, draggedElement, canvasToRoom, design.elements, active2DView, render, throttledSnapUpdate, snapGuides, onTapeMeasureMouseMove]);
+
+  // Prevent context menu on right-click
+  const handleContextMenu = useCallback((e: React.MouseEvent<HTMLCanvasElement>) => {
+    e.preventDefault();
+  }, []);
 
   const handleMouseUp = useCallback(() => {
     if (isDragging && draggedElement) {
@@ -3042,20 +3093,7 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
       const x = point.x * scaleX;
       const y = point.y * scaleY;
 
-      // Check for zoom control touches
-      const controlsX = CANVAS_WIDTH - 100;
-      const controlsY = 20;
-      
-      if (x >= controlsX && x <= controlsX + 80 && y >= controlsY && y <= controlsY + 60) {
-        if (x <= controlsX + 40) {
-          // Zoom in
-          setZoom(prev => Math.min(MAX_ZOOM, prev * 1.2));
-        } else {
-          // Zoom out  
-          setZoom(prev => Math.max(MIN_ZOOM, prev / 1.2));
-        }
-        return;
-      }
+      // Zoom control touches now handled by React component in Designer.tsx
 
       if (activeTool === 'pan') {
         setIsDragging(true);
@@ -3475,8 +3513,8 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
       // Top-center alignment: move view up slightly
       setPanOffset({ x: 0, y: -50 });
     } else if (active2DView === 'left' || active2DView === 'right') {
-      // Left/Right views - 250% zoom, centered
-      setZoom(2.5); // 250% zoom
+      // Left/Right views - 170% zoom, centered (same as front/back)
+      setZoom(1.7); // 170% zoom
       setPanOffset({ x: 0, y: 0 });
     }
   }, [active2DView, roomDimensions, getWallHeight]);
@@ -3493,8 +3531,8 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
         setZoom(1.7); // 170% zoom
         setPanOffset({ x: 0, y: -50 });
       } else if (active2DView === 'left' || active2DView === 'right') {
-        // Left/Right views - 250% zoom, centered
-        setZoom(2.5); // 250% zoom
+        // Left/Right views - 170% zoom, centered (same as front/back)
+        setZoom(1.7); // 170% zoom
         setPanOffset({ x: 0, y: 0 });
       }
     }
@@ -3514,13 +3552,7 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
         onMouseDown={handleMouseDown}
         onMouseMove={handleMouseMove}
         onMouseUp={handleMouseUp}
-        onContextMenu={(e) => {
-          e.preventDefault();
-          if (activeTool === 'tape-measure' && onClearTapeMeasure) {
-            // Right-click clears tape measure
-            onClearTapeMeasure();
-          }
-        }}
+        onContextMenu={handleContextMenu}
         onDrop={handleDrop}
         onDragOver={handleDragOver}
         style={{
