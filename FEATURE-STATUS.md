@@ -80,7 +80,7 @@ This document provides a comprehensive overview of implemented features versus p
 ### 🎨 **Materials Database & Product Pages** (v2.7 Complete)
 - ✅ **EGGER Integration**: 313+ professional materials with official data
 - ✅ **Supabase Database**: Complete star schema with decors, combinations, availability, interior matches
-- ✅ **Smart Image System**: Dual-image system (high-quality PNG boards + fast WebP gallery)
+- ✅ **Smart Image System**: High-quality PNG boards with optimized loading
 - ✅ **Enhanced Product Pages**: Professional paired-layout design with real data
 - ✅ **Paired Section Layout**: Product Board Images + Available Product Types, Recommended Combinations + Additional Gallery
 - ✅ **Interior Match Integration**: Uses hero images with gradient overlays for consistent branding

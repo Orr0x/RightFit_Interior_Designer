@@ -7,7 +7,7 @@
 - **Root Cause**: Tab counter was using `processedData.totalItems` which changes based on active tab
 - **Fix**: Updated counter logic to use direct data source counts:
   ```typescript
-  Materials ({dataSource === 'database' ? databaseProducts.length : (webpData?.totalDecors || 0)})
+  Materials ({dataSource === 'database' ? databaseProducts.length : (boardsData?.totalItems || 0)})
   ```
 
 ### 2. **Finishes Data Loading Issue**
@@ -20,7 +20,7 @@
   
   if (!databaseLoaded) {
     // Load materials CSV only if database wasn't loaded
-    fetchPromises.push(fetch('/webp-images.csv'), fetch('/Boards.csv'));
+    fetchPromises.push(fetch('/Boards.csv'));
   }
   ```
 

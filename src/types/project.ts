@@ -104,6 +104,8 @@ export interface DesignElement {
   // Layering and visibility properties
   zIndex: number; // Rendering layer order (lower = behind, higher = in front)
   isVisible: boolean; // Whether the component is visible in the 2D plan view
+  // Corner unit door positioning
+  cornerDoorSide?: 'left' | 'right' | 'auto'; // Manual override for corner unit door side (auto = use centerline logic)
 }
 
 // Z-Index layering system for 2D plan view rendering

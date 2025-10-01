@@ -5,6 +5,23 @@ import { useToast } from '../hooks/use-toast';
 import { useAuth } from './AuthContext';
 import { Json } from '../integrations/supabase/types';
 
+// Helper function to transform database project to TypeScript interface
+function transformProject(dbProject: Record<string, unknown>): Project {
+  return {
+    id: dbProject.id as string,
+    user_id: dbProject.user_id as string,
+    name: dbProject.name as string,
+    description: (dbProject.description as string) || undefined, // Convert null to undefined
+    thumbnail_url: (dbProject.thumbnail_url as string) || undefined, // Convert null to undefined
+    is_public: dbProject.is_public as boolean,
+    created_at: dbProject.created_at as string,
+    updated_at: dbProject.updated_at as string,
+    room_designs: Array.isArray(dbProject.room_designs)
+      ? dbProject.room_designs.map(transformRoomDesign)
+      : [],
+  };
+}
+
 // Helper function to transform database room design to TypeScript interface
 function transformRoomDesign(dbRoomDesign: Record<string, unknown>): RoomDesign {
   return {
@@ -146,7 +163,7 @@ function projectReducer(state: ProjectState, action: ProjectAction): ProjectStat
       
       const updatedProject = {
         ...state.currentProject,
-        room_designs: [...state.currentProject.room_designs, action.payload]
+        room_designs: [...(state.currentProject.room_designs || []), action.payload]
       };
       
       return {
@@ -164,7 +181,7 @@ function projectReducer(state: ProjectState, action: ProjectAction): ProjectStat
       
       const projectWithUpdatedRoom = {
         ...state.currentProject,
-        room_designs: state.currentProject.room_designs.map(rd =>
+        room_designs: (state.currentProject.room_designs || []).map(rd =>
           rd.id === action.payload.id ? action.payload : rd
         )
       };
@@ -187,7 +204,7 @@ function projectReducer(state: ProjectState, action: ProjectAction): ProjectStat
       
       const projectWithRemovedRoom = {
         ...state.currentProject,
-        room_designs: state.currentProject.room_designs.filter(rd => rd.id !== action.payload)
+        room_designs: (state.currentProject.room_designs || []).filter(rd => rd.id !== action.payload)
       };
       
       return {
@@ -273,9 +290,10 @@ export function ProjectProvider({ children }: { children: React.ReactNode }) {
 
       if (error) {
         // Check if error is due to missing table
-        if (error.message.includes('relation "projects" does not exist') ||
-            error.message.includes('table "projects" does not exist') ||
-            error.code === 'PGRST116' || error.code === '42P01') {
+        const errorObj = error as { message?: string; code?: string };
+        if (errorObj.message?.includes('relation "projects" does not exist') ||
+            errorObj.message?.includes('table "projects" does not exist') ||
+            errorObj.code === 'PGRST116' || errorObj.code === '42P01') {
           
           toast({
             title: "Database Setup Required",
@@ -288,10 +306,11 @@ export function ProjectProvider({ children }: { children: React.ReactNode }) {
         throw error;
       }
 
-      const newProject: Project = {
-        ...data,
-        room_designs: []
-      };
+      if (!data) {
+        throw new Error('Failed to create project');
+      }
+
+      const newProject: Project = transformProject(data);
 
       dispatch({ type: 'ADD_PROJECT', payload: newProject });
       
@@ -330,9 +349,10 @@ export function ProjectProvider({ children }: { children: React.ReactNode }) {
 
       if (error) {
         // Check if error is due to missing table
-        if (error.message.includes('relation "projects" does not exist') ||
-            error.message.includes('table "projects" does not exist') ||
-            error.code === 'PGRST116' || error.code === '42P01') {
+        const errorObj = error as { message?: string; code?: string };
+        if (errorObj.message?.includes('relation "projects" does not exist') ||
+            errorObj.message?.includes('table "projects" does not exist') ||
+            errorObj.code === 'PGRST116' || errorObj.code === '42P01') {
           
           toast({
             title: "Database Setup Required",
@@ -345,15 +365,16 @@ export function ProjectProvider({ children }: { children: React.ReactNode }) {
         throw error;
       }
 
-      const project: Project = {
-        ...data,
-        room_designs: (data.room_designs || []).map(transformRoomDesign)
-      };
+      if (!data) {
+        throw new Error('Project not found');
+      }
+
+      const project: Project = transformProject(data);
 
       dispatch({ type: 'SET_CURRENT_PROJECT', payload: project });
 
       // Auto-select first room if available
-      if (project.room_designs.length > 0) {
+      if (project.room_designs && project.room_designs.length > 0) {
         const firstRoom = project.room_designs[0];
         dispatch({
           type: 'SET_CURRENT_ROOM',
@@ -386,8 +407,12 @@ export function ProjectProvider({ children }: { children: React.ReactNode }) {
 
       if (error) throw error;
 
+      if (!data) {
+        throw new Error('Project not found');
+      }
+
       const updatedProject: Project = {
-        ...data,
+        ...transformProject(data),
         room_designs: state.currentProject?.room_designs || []
       };
 
@@ -450,7 +475,7 @@ export function ProjectProvider({ children }: { children: React.ReactNode }) {
       dispatch({ type: 'SET_LOADING', payload: true });
 
       // Check if room type already exists in the current project
-      const existingRoomsOfType = state.currentProject?.room_designs.filter(rd => rd.room_type === roomType) || [];
+      const existingRoomsOfType = (state.currentProject?.room_designs || []).filter(rd => rd.room_type === roomType);
       
       if (existingRoomsOfType.length > 0) {
         dispatch({ type: 'SET_LOADING', payload: false });
@@ -458,9 +483,14 @@ export function ProjectProvider({ children }: { children: React.ReactNode }) {
         const roomDisplayNames: Record<RoomType, string> = {
           kitchen: 'Kitchen',
           bedroom: 'Bedroom',
+          'master-bedroom': 'Master Bedroom',
+          'guest-bedroom': 'Guest Bedroom',
           bathroom: 'Bathroom',
+          ensuite: 'Ensuite',
           'living-room': 'Living Room',
           'dining-room': 'Dining Room',
+          office: 'Office',
+          'dressing-room': 'Dressing Room',
           utility: 'Utility Room',
           'under-stairs': 'Under Stairs',
         };
@@ -480,9 +510,14 @@ export function ProjectProvider({ children }: { children: React.ReactNode }) {
         const roomDisplayNames: Record<RoomType, string> = {
           kitchen: 'Kitchen',
           bedroom: 'Bedroom',
+          'master-bedroom': 'Master Bedroom',
+          'guest-bedroom': 'Guest Bedroom',
           bathroom: 'Bathroom',
+          ensuite: 'Ensuite',
           'living-room': 'Living Room',
           'dining-room': 'Dining Room',
+          office: 'Office',
+          'dressing-room': 'Dressing Room',
           utility: 'Utility Room',
           'under-stairs': 'Under Stairs',
         };
@@ -550,7 +585,7 @@ export function ProjectProvider({ children }: { children: React.ReactNode }) {
         throw new Error('No project loaded');
       }
 
-      const roomDesign = state.currentProject.room_designs.find(rd => rd.id === roomId);
+      const roomDesign = (state.currentProject.room_designs || []).find(rd => rd.id === roomId);
       if (!roomDesign) {
         throw new Error('Room design not found');
       }
@@ -639,7 +674,7 @@ export function ProjectProvider({ children }: { children: React.ReactNode }) {
 
       // If we deleted the current room, auto-select another room
       if (wasCurrentRoom && state.currentProject) {
-        const remainingRooms = state.currentProject.room_designs.filter(rd => rd.id !== roomId);
+        const remainingRooms = (state.currentProject.room_designs || []).filter(rd => rd.id !== roomId);
         
         if (remainingRooms.length > 0) {
           // Select the first remaining room
@@ -696,9 +731,10 @@ export function ProjectProvider({ children }: { children: React.ReactNode }) {
 
       if (error) {
         // Check if error is due to missing table (migration not deployed)
-        if (error.message.includes('relation "projects" does not exist') ||
-            error.message.includes('table "projects" does not exist') ||
-            error.code === 'PGRST116' || error.code === '42P01') {
+        const errorObj = error as { message?: string; code?: string };
+        if (errorObj.message?.includes('relation "projects" does not exist') ||
+            errorObj.message?.includes('table "projects" does not exist') ||
+            errorObj.code === 'PGRST116' || errorObj.code === '42P01') {
           
           // Projects table does not exist - migrations need to be deployed
           dispatch({ type: 'SET_PROJECTS', payload: [] });
@@ -714,10 +750,12 @@ export function ProjectProvider({ children }: { children: React.ReactNode }) {
         throw error;
       }
 
-      const projects: Project[] = data.map(project => ({
-        ...project,
-        room_designs: (project.room_designs || []).map(transformRoomDesign)
-      }));
+      if (!data) {
+        dispatch({ type: 'SET_PROJECTS', payload: [] });
+        return;
+      }
+
+      const projects: Project[] = data.map(transformProject);
 
       dispatch({ type: 'SET_PROJECTS', payload: projects });
 

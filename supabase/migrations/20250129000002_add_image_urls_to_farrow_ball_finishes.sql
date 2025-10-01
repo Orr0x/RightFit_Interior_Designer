@@ -14,3 +14,4 @@ COMMENT ON COLUMN farrow_ball_finishes.thumb_url IS 'URL for the thumbnail image
 COMMENT ON COLUMN farrow_ball_finishes.hover_url IS 'URL for the hover image of the color swatch';
 
 
+
