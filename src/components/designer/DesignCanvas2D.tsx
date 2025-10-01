@@ -436,14 +436,32 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
   };
   
   // Room positioning - center the OUTER room in the canvas (including walls)
-  const roomPosition = {
-    // Outer room position (for wall drawing)
-    outerX: (CANVAS_WIDTH / 2) - (outerRoomBounds.width * zoom / 2) + panOffset.x,
-    outerY: (CANVAS_HEIGHT / 2) - (outerRoomBounds.height * zoom / 2) + panOffset.y,
-    // Inner room position (for component placement)
-    innerX: (CANVAS_WIDTH / 2) - (innerRoomBounds.width * zoom / 2) + panOffset.x,
-    innerY: (CANVAS_HEIGHT / 2) - (innerRoomBounds.height * zoom / 2) + panOffset.y
-  };
+  // For elevation views, use different centering logic
+  const roomPosition = (() => {
+    if (active2DView === 'left' || active2DView === 'right') {
+      // Left/Right elevation views: center based on room depth and wall height
+      const wallHeight = getWallHeight();
+      const roomDepth = roomDimensions.height; // Use height as depth for side views
+      return {
+        // Outer room position (for wall drawing)
+        outerX: (CANVAS_WIDTH / 2) - (roomDepth * zoom / 2) + panOffset.x,
+        outerY: (CANVAS_HEIGHT / 2) - (wallHeight * zoom / 2) + panOffset.y,
+        // Inner room position (for component placement)
+        innerX: (CANVAS_WIDTH / 2) - (roomDepth * zoom / 2) + panOffset.x,
+        innerY: (CANVAS_HEIGHT / 2) - (wallHeight * zoom / 2) + panOffset.y
+      };
+    } else {
+      // Plan, Front, Back views: use standard centering
+      return {
+        // Outer room position (for wall drawing)
+        outerX: (CANVAS_WIDTH / 2) - (outerRoomBounds.width * zoom / 2) + panOffset.x,
+        outerY: (CANVAS_HEIGHT / 2) - (outerRoomBounds.height * zoom / 2) + panOffset.y,
+        // Inner room position (for component placement)
+        innerX: (CANVAS_WIDTH / 2) - (innerRoomBounds.width * zoom / 2) + panOffset.x,
+        innerY: (CANVAS_HEIGHT / 2) - (innerRoomBounds.height * zoom / 2) + panOffset.y
+      };
+    }
+  })();
 
   // Convert room coordinates to canvas coordinates (uses inner room for component placement)
   const roomToCanvas = useCallback((roomX: number, roomY: number) => {
@@ -451,7 +469,7 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
       x: roomPosition.innerX + (roomX * zoom),
       y: roomPosition.innerY + (roomY * zoom)
     };
-  }, [roomPosition, zoom]);
+  }, [roomPosition, zoom, active2DView]);
 
   // Convert canvas coordinates to room coordinates (uses inner room for component placement)
   const canvasToRoom = useCallback((canvasX: number, canvasY: number) => {
@@ -459,7 +477,7 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
       x: (canvasX - roomPosition.innerX) / zoom,
       y: (canvasY - roomPosition.innerY) / zoom
     };
-  }, [roomPosition, zoom]);
+  }, [roomPosition, zoom, active2DView]);
 
   // Preload component behaviors and room configuration
   useEffect(() => {
@@ -1250,7 +1268,7 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
 
     } else {
       // Elevation view rendering
-      drawElementElevation(ctx, element, isSelected, isHovered);
+      drawElementElevation(ctx, element, isSelected, isHovered, showWireframe);
     }
   }, [active2DView, roomToCanvas, selectedElement, hoveredElement, zoom, showWireframe, showColorDetail]);
 
@@ -1279,7 +1297,7 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
   };
 
   // Draw element in elevation view with detailed fronts
-  const drawElementElevation = (ctx: CanvasRenderingContext2D, element: DesignElement, isSelected: boolean, isHovered: boolean) => {
+  const drawElementElevation = (ctx: CanvasRenderingContext2D, element: DesignElement, isSelected: boolean, isHovered: boolean, showWireframe: boolean) => {
     // Check if element should be visible in current elevation view
     const wall = getElementWall(element);
     const isCornerVisible = isCornerVisibleInView(element, active2DView);
@@ -1408,6 +1426,14 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
     if (isSelected) {
       ctx.strokeStyle = '#ff0000';
       ctx.lineWidth = 2;
+      ctx.strokeRect(xPos, yPos, elementWidth, elementHeight);
+    }
+
+    // WIREFRAME OVERLAY (if enabled) - for elevation views
+    if (showWireframe) {
+      ctx.strokeStyle = '#000000'; // Black wireframe outlines
+      ctx.lineWidth = 0.5; // Ultra-thin lines as requested
+      ctx.setLineDash([]);
       ctx.strokeRect(xPos, yPos, elementWidth, elementHeight);
     }
 
@@ -3437,30 +3463,42 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
     }
   }, [isMobile, touchEventHandlers]);
 
+  // Auto-fit when switching to different views with specific zoom and alignment
+  useEffect(() => {
+    if (active2DView === 'plan') {
+      // Plan view - 150% zoom, centered
+      setZoom(1.5); // 150% zoom
+      setPanOffset({ x: 0, y: 0 });
+    } else if (active2DView === 'front' || active2DView === 'back') {
+      // Front/Back views - 170% zoom, top-center aligned
+      setZoom(1.7); // 170% zoom
+      // Top-center alignment: move view up slightly
+      setPanOffset({ x: 0, y: -50 });
+    } else if (active2DView === 'left' || active2DView === 'right') {
+      // Left/Right views - 250% zoom, centered
+      setZoom(2.5); // 250% zoom
+      setPanOffset({ x: 0, y: 0 });
+    }
+  }, [active2DView, roomDimensions, getWallHeight]);
+
   // Fit to screen - different logic for elevation views
   useEffect(() => {
     if (fitToScreenSignal > 0) {
       if (active2DView === 'plan') {
-        // Plan view - fit entire room
-        const roomWidth = roomDimensions.width;
-        const roomHeight = roomDimensions.height;
-        const scaleX = (CANVAS_WIDTH * 0.6) / roomWidth;
-        const scaleY = (CANVAS_HEIGHT * 0.6) / roomHeight;
-        setZoom(Math.min(scaleX, scaleY, MAX_ZOOM));
+        // Plan view - 150% zoom, centered
+        setZoom(1.5); // 150% zoom
         setPanOffset({ x: 0, y: 0 });
-      } else {
-        // Elevation views - fit wall width and height
-        const roomWidth = active2DView === 'front' || active2DView === 'back'
-          ? roomDimensions.width
-          : roomDimensions.height;
-        const wallHeight = getWallHeight();
-        const scaleX = (CANVAS_WIDTH * 0.8) / roomWidth;
-        const scaleY = (CANVAS_HEIGHT * 0.6) / wallHeight;
-        setZoom(Math.min(scaleX, scaleY, MAX_ZOOM));
+      } else if (active2DView === 'front' || active2DView === 'back') {
+        // Front/Back views - 170% zoom, top-center aligned
+        setZoom(1.7); // 170% zoom
+        setPanOffset({ x: 0, y: -50 });
+      } else if (active2DView === 'left' || active2DView === 'right') {
+        // Left/Right views - 250% zoom, centered
+        setZoom(2.5); // 250% zoom
         setPanOffset({ x: 0, y: 0 });
       }
     }
-  }, [fitToScreenSignal, roomDimensions, active2DView]);
+  }, [fitToScreenSignal, roomDimensions, active2DView, getWallHeight]);
 
   return (
     <div

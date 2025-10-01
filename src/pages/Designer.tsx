@@ -58,7 +58,7 @@ const Designer = () => {
   const [activeTool, setActiveTool] = useState<'select' | 'fit-screen' | 'pan' | 'tape-measure' | 'none'>('select');
   const [showGrid, setShowGrid] = useState(true);
   const [showRuler, setShowRuler] = useState(false);
-  const [showWireframe, setShowWireframe] = useState(false);
+  const [showWireframe, setShowWireframe] = useState(true);
   const [showColorDetail, setShowColorDetail] = useState(true);
   const [fitToScreenSignal, setFitToScreenSignal] = useState(0);
   const [showLeftPanel, setShowLeftPanel] = useState(true);
