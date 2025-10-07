@@ -20,7 +20,7 @@ import {
 } from 'lucide-react';
 import { eggerDataService, EnhancedEggerProduct } from '../services/EggerDataService';
 
-export default function ProductPageEnhanced() {
+export default function ProductPage() {
   const { decorId } = useParams<{ decorId: string }>();
   const [productData, setProductData] = useState<EnhancedEggerProduct | null>(null);
   const [loading, setLoading] = useState(true);
