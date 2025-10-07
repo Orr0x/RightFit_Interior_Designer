@@ -66,3 +66,4 @@ async function addImageColumns() {
 addImageColumns();
 
 
+
