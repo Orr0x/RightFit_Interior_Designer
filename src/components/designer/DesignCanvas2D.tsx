@@ -1214,7 +1214,7 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
   }, []);
 
   // Draw element with smart rendering
-  const drawElement = useCallback(async (ctx: CanvasRenderingContext2D, element: DesignElement) => {
+  const drawElement = useCallback((ctx: CanvasRenderingContext2D, element: DesignElement) => {
     const isSelected = selectedElement?.id === element.id;
     const isHovered = hoveredElement?.id === element.id;
     
@@ -1336,7 +1336,7 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
   };
 
   // Draw element in elevation view with detailed fronts
-  const drawElementElevation = async (ctx: CanvasRenderingContext2D, element: DesignElement, isSelected: boolean, isHovered: boolean, showWireframe: boolean) => {
+  const drawElementElevation = (ctx: CanvasRenderingContext2D, element: DesignElement, isSelected: boolean, isHovered: boolean, showWireframe: boolean) => {
     // Check if element should be visible in current elevation view
     const wall = getElementWall(element);
     const isCornerVisible = isCornerVisibleInView(element, active2DView);
@@ -1374,7 +1374,8 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
     // 🎯 Calculate horizontal position using PositionCalculation utility
     // Feature flag controls switching between legacy (asymmetric) and new (unified) coordinate systems
     // Legacy code preserved inside PositionCalculation for instant rollback capability
-    const { xPos, elementWidth } = await PositionCalculation.calculateElevationPosition(
+    // Now synchronous to avoid render race conditions
+    const { xPos, elementWidth } = PositionCalculation.calculateElevationPosition(
       element,
       roomDimensions,
       roomPosition,
@@ -2720,7 +2721,7 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
   }, [completedMeasurements, currentMeasureStart, tapeMeasurePreview, zoom]);
 
   // Main render function
-  const render = useCallback(async () => {
+  const render = useCallback(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
 
@@ -2757,17 +2758,17 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
     }
 
     // Use for...of loop to handle async drawElement calls
-    for (const element of elementsToRender) {
+    elementsToRender.forEach(element => {
       // Always draw all elements, but make dragged element semi-transparent
       if (isDragging && draggedElement?.id === element.id) {
         ctx.save();
         ctx.globalAlpha = 0.3; // Make original element very faint during drag
-        await drawElement(ctx, element);
+        drawElement(ctx, element);
         ctx.restore();
       } else {
-        await drawElement(ctx, element);
+        drawElement(ctx, element);
       }
-    }
+    });
 
     // Draw snap guides and drag preview on top
     if (active2DView === 'plan') {

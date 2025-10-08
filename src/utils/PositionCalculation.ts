@@ -50,37 +50,40 @@ export type ViewType = 'plan' | 'front' | 'back' | 'left' | 'right';
 
 export class PositionCalculation {
   private static readonly FEATURE_FLAG = 'use_new_positioning_system';
-  private static featureFlagCache: { enabled: boolean; timestamp: number } | null = null;
-  private static readonly CACHE_TTL = 5000; // 5 seconds cache for feature flag
+  private static featureFlagEnabled: boolean = false; // Default to legacy (false)
+  private static featureFlagInitialized: boolean = false;
 
   /**
-   * Check feature flag with short-term caching to avoid repeated DB calls per render
+   * Initialize feature flag once at startup
+   * Called automatically on first use
    */
-  private static async isFeatureEnabled(): Promise<boolean> {
-    const now = Date.now();
+  private static async initializeFeatureFlag(): Promise<void> {
+    if (this.featureFlagInitialized) return;
 
-    // Return cached value if still valid
-    if (this.featureFlagCache && (now - this.featureFlagCache.timestamp) < this.CACHE_TTL) {
-      return this.featureFlagCache.enabled;
+    try {
+      this.featureFlagEnabled = await FeatureFlagService.isEnabled(this.FEATURE_FLAG);
+      this.featureFlagInitialized = true;
+      console.log(`[PositionCalculation] Feature flag initialized: ${this.featureFlagEnabled}`);
+    } catch (error) {
+      console.warn('[PositionCalculation] Failed to initialize feature flag, using legacy:', error);
+      this.featureFlagEnabled = false;
+      this.featureFlagInitialized = true;
     }
+  }
 
-    // Fetch fresh value
-    const enabled = await FeatureFlagService.isEnabled(this.FEATURE_FLAG);
-
-    // Cache it
-    this.featureFlagCache = {
-      enabled,
-      timestamp: now
-    };
-
-    return enabled;
+  /**
+   * Get feature flag status synchronously (after initialization)
+   */
+  private static isFeatureEnabled(): boolean {
+    return this.featureFlagEnabled;
   }
 
   /**
    * Calculate element position in elevation views
    * Automatically switches between legacy and new implementations based on feature flag
+   * Now synchronous to avoid render race conditions
    */
-  static async calculateElevationPosition(
+  static calculateElevationPosition(
     element: DesignElement,
     roomDimensions: RoomDimensions,
     roomPosition: RoomPosition,
@@ -88,9 +91,14 @@ export class PositionCalculation {
     zoom: number,
     elevationWidth?: number,
     elevationDepth?: number
-  ): Promise<ElevationPosition> {
-    // Use cached feature flag check to avoid DB calls on every element
-    const useNew = await this.isFeatureEnabled();
+  ): ElevationPosition {
+    // Initialize feature flag on first call (async, but won't block first render)
+    if (!this.featureFlagInitialized) {
+      this.initializeFeatureFlag(); // Fire and forget - will use legacy until loaded
+    }
+
+    // Use synchronous flag check (no await, no DB call during render)
+    const useNew = this.isFeatureEnabled();
 
     if (useNew) {
       try {
