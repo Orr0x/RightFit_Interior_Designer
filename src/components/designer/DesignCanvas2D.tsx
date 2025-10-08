@@ -7,6 +7,7 @@ import { useIsMobile } from '@/hooks/use-mobile';
 import { getEnhancedComponentPlacement } from '@/utils/canvasCoordinateIntegration';
 import { initializeCoordinateEngine } from '@/services/CoordinateTransformEngine';
 import { PositionCalculation } from '@/utils/PositionCalculation';
+import { ConfigurationService } from '@/services/ConfigurationService';
 
 // Throttle function for performance optimization
 const throttle = <T extends (...args: any[]) => void>(func: T, delay: number): T => {
@@ -89,17 +90,20 @@ const getRoomConfig = async (roomType: string, roomDimensions: any) => {
   }
 };
 
-// Canvas constants
+// Canvas constants - Default fallbacks (database-driven via ConfigurationService)
 const CANVAS_WIDTH = 1600; // Larger workspace for better zoom
 const CANVAS_HEIGHT = 1200; // Larger workspace for better zoom
 const GRID_SIZE = 20; // Grid spacing in pixels
 const MIN_ZOOM = 0.5;
 const MAX_ZOOM = 4.0; // Increased to take advantage of larger canvas
 
-// Wall thickness constants to match 3D implementation
+// Wall thickness constants to match 3D implementation - Default fallbacks
 const WALL_THICKNESS = 10; // 10cm wall thickness (matches 3D: 0.1 meters)
 const WALL_CLEARANCE = 5; // 5cm clearance from walls for component placement
 const WALL_SNAP_THRESHOLD = 40; // Snap to wall if within 40cm
+
+// Configuration cache - loaded from database on component mount
+let configCache: Record<string, number> = {};
 
 // Helper function to calculate rotated bounding box for components
 const getRotatedBoundingBox = (element: DesignElement) => {
@@ -446,10 +450,46 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
   
   // Mobile detection
   const isMobile = useIsMobile();
-  
+
   // Touch events state
   const [touchZoomStart, setTouchZoomStart] = useState<number | null>(null);
-  
+
+  // Preload configuration values from database on component mount
+  useEffect(() => {
+    const loadConfiguration = async () => {
+      try {
+        await ConfigurationService.preload();
+
+        // Load all config values into cache for synchronous access
+        configCache = {
+          canvas_width: ConfigurationService.getSync('canvas_width', CANVAS_WIDTH),
+          canvas_height: ConfigurationService.getSync('canvas_height', CANVAS_HEIGHT),
+          grid_size: ConfigurationService.getSync('grid_size', GRID_SIZE),
+          min_zoom: ConfigurationService.getSync('min_zoom', MIN_ZOOM),
+          max_zoom: ConfigurationService.getSync('max_zoom', MAX_ZOOM),
+          wall_thickness: ConfigurationService.getSync('wall_thickness', WALL_THICKNESS),
+          wall_clearance: ConfigurationService.getSync('wall_clearance', WALL_CLEARANCE),
+          wall_snap_threshold: ConfigurationService.getSync('wall_snap_threshold', WALL_SNAP_THRESHOLD),
+          snap_tolerance_default: ConfigurationService.getSync('snap_tolerance_default', 15),
+          snap_tolerance_countertop: ConfigurationService.getSync('snap_tolerance_countertop', 25),
+          proximity_threshold: ConfigurationService.getSync('proximity_threshold', 100),
+          wall_snap_distance_default: ConfigurationService.getSync('wall_snap_distance_default', 35),
+          wall_snap_distance_countertop: ConfigurationService.getSync('wall_snap_distance_countertop', 50),
+          corner_tolerance: ConfigurationService.getSync('corner_tolerance', 30),
+          toe_kick_height: ConfigurationService.getSync('toe_kick_height', 8),
+          drag_threshold_mouse: ConfigurationService.getSync('drag_threshold_mouse', 5),
+          drag_threshold_touch: ConfigurationService.getSync('drag_threshold_touch', 10),
+        };
+
+        console.log('[DesignCanvas2D] Configuration loaded from database:', configCache);
+      } catch (error) {
+        console.warn('[DesignCanvas2D] Failed to load configuration, using hardcoded fallbacks:', error);
+      }
+    };
+
+    loadConfiguration();
+  }, []);
+
   // Helper function to get wall height (ceiling height) - prioritize room dimensions over cache
   const getWallHeight = useCallback(() => {
     return roomDimensions.ceilingHeight || roomConfigCache?.wall_height || DEFAULT_ROOM_FALLBACK.wallHeight;
@@ -577,9 +617,11 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
 
   // Smart snap detection for walls and components
   const getSnapPosition = useCallback((element: DesignElement, x: number, y: number) => {
-    // Use more generous snap tolerance for counter tops
+    // Use more generous snap tolerance for counter tops - database-driven
     const isCounterTop = element.type === 'counter-top';
-    const snapTolerance = isCounterTop ? 25 : 15; // cm - more generous for counter tops
+    const snapTolerance = isCounterTop
+      ? (configCache.snap_tolerance_countertop || 25)
+      : (configCache.snap_tolerance_default || 15);
     let snappedX = x;
     let snappedY = y;
     let rotation = element.rotation || 0;
@@ -620,8 +662,8 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
       guides.horizontal.push(roomDimensions.height);
     }
 
-    // Component-to-component snapping - only for nearby elements
-    const proximityThreshold = 100; // Only snap to elements within 100cm
+    // Component-to-component snapping - only for nearby elements (database-driven)
+    const proximityThreshold = configCache.proximity_threshold || 100;
     const otherElements = design.elements.filter(el => el.id !== element.id);
     
     for (const otherEl of otherElements) {
@@ -711,9 +753,11 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
     }
     
     if (componentData?.hasDirection) {
-      // Use more generous wall snap distance for counter tops
-      const wallSnapDistance = isCounterTop ? 50 : 35; // cm - more generous for counter tops
-      const cornerTolerance = 30; // cm tolerance for corner detection
+      // Use more generous wall snap distance for counter tops (database-driven)
+      const wallSnapDistance = isCounterTop
+        ? (configCache.wall_snap_distance_countertop || 50)
+        : (configCache.wall_snap_distance_default || 35);
+      const cornerTolerance = configCache.corner_tolerance || 30;
       
       // Check if this is a corner unit placement
       // ALL corner components use 90cm square dimensions for detection
@@ -1631,7 +1675,7 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
       
       // Corner units have different door configurations
       const doorCount = isCorner ? 1 : (effectiveWidth > 60 ? 2 : 1);
-      const toeKickHeight = 8 * zoom; // 8cm toe kick
+      const toeKickHeight = (configCache.toe_kick_height || 8) * zoom; // Database-driven toe kick
       
       // Draw toe kick (recessed area at bottom)
       const toeKickDepth = 3; // Visual depth in pixels
@@ -2937,8 +2981,8 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
       const deltaX = x - dragStart.x;
       const deltaY = y - dragStart.y;
       const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
-      const DRAG_THRESHOLD = 5; // pixels - must move at least 5px to start dragging
-      
+      const DRAG_THRESHOLD = configCache.drag_threshold_mouse || 5; // Database-driven drag threshold
+
       if (distance >= DRAG_THRESHOLD && !dragThreshold.exceeded) {
         // Start dragging now that threshold is exceeded
         setIsDragging(true);
@@ -3167,8 +3211,8 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
         const deltaX = x - dragStart.x;
         const deltaY = y - dragStart.y;
         const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
-        const DRAG_THRESHOLD = 10; // Increased threshold for touch (10px vs 5px for mouse)
-        
+        const DRAG_THRESHOLD = configCache.drag_threshold_touch || 10; // Database-driven touch drag threshold
+
         if (distance >= DRAG_THRESHOLD && !dragThreshold.exceeded) {
           // Start dragging now that threshold is exceeded
           setIsDragging(true);
