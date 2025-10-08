@@ -81,14 +81,14 @@ export const COMPONENT_ID_MAPPINGS: ComponentIDMapping[] = [
   // =====================================================================
 
   {
-    pattern: /^base-cabinet/i,
+    pattern: /base-cabinet/i,
     mapper: (elementId, width) => `base-cabinet-${width}`,
-    description: 'Standard base cabinets (40, 50, 60, 80, 100cm)',
+    description: 'Standard base cabinets (30, 40, 50, 60, 80, 100cm)',
     priority: 50,
   },
 
   {
-    pattern: /^wall-cabinet/i,
+    pattern: /wall-cabinet/i,
     mapper: (elementId, width) => `wall-cabinet-${width}`,
     description: 'Standard wall cabinets (30, 40, 50, 60, 80cm)',
     priority: 50,
@@ -117,7 +117,7 @@ export const COMPONENT_ID_MAPPINGS: ComponentIDMapping[] = [
   // =====================================================================
 
   {
-    pattern: /^oven/i,
+    pattern: /oven/i,
     mapper: (elementId, width) => `oven-${width}`,
     description: 'Ovens (60cm)',
     priority: 30,
