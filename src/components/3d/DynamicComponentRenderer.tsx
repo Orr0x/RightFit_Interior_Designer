@@ -141,6 +141,9 @@ export const DynamicComponentRenderer: React.FC<DynamicComponentRendererProps> =
           cornerDepth: isWallCabinet
             ? (model.corner_depth_wall || 0.4)
             : (model.corner_depth_base || 0.6),
+          plinthHeight: 15, // cm (default 15cm plinth)
+          cabinetHeight: element.height - 15, // cm (height minus plinth)
+          doorHeight: element.height - 17, // cm (height minus plinth and gap)
         };
 
         const group = builder.build(context);

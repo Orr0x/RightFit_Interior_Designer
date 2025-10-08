@@ -39,6 +39,11 @@ export interface BuildContext {
   legLength?: number; // in meters
   cornerDepth?: number; // in meters
 
+  // Height components
+  plinthHeight?: number; // in cm
+  cabinetHeight?: number; // in cm
+  doorHeight?: number; // in cm
+
   // Custom variable overrides
   customVariables?: Record<string, number>;
 }
@@ -292,6 +297,9 @@ export class GeometryBuilder {
       legLength: context.legLength,
       cornerDepth: context.cornerDepth,
       isWallCabinet: context.isWallCabinet,
+      plinthHeight: context.plinthHeight ? context.plinthHeight / 100 : undefined, // Convert cm to meters
+      cabinetHeight: context.cabinetHeight ? context.cabinetHeight / 100 : undefined, // Convert cm to meters
+      doorHeight: context.doorHeight ? context.doorHeight / 100 : undefined, // Convert cm to meters
     };
 
     const variables = createStandardVariables(element, options);
