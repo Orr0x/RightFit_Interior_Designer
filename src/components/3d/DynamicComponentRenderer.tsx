@@ -27,6 +27,7 @@ import { DesignElement } from '@/types/project';
 import * as THREE from 'three';
 import { Model3DLoaderService } from '@/services/Model3DLoaderService';
 import { GeometryBuilder } from '@/utils/GeometryBuilder';
+import { mapComponentIdToModelId } from '@/utils/ComponentIDMapper';
 
 interface DynamicComponentRendererProps {
   element: DesignElement;
@@ -60,38 +61,19 @@ export const DynamicComponentRenderer: React.FC<DynamicComponentRendererProps> =
   const [meshGroup, setMeshGroup] = useState<THREE.Group | null>(null);
   const [loadError, setLoadError] = useState<string | null>(null);
 
-  // Determine component ID from element
+  // Determine component ID from element using centralized mapper
   const componentId = useMemo(() => {
-    // Map element.id to component_id in database
-    const id = element.id;
-    const width = element.width;
+    // Use ComponentIDMapper for centralized mapping logic
+    const mappedId = mapComponentIdToModelId(
+      element.id,
+      element.width,
+      element.height,
+      element.depth
+    );
 
-    // Corner cabinets
-    if (id.includes('new-corner-wall-cabinet')) {
-      return `new-corner-wall-cabinet-${width}`;
-    }
-    if (id.includes('corner-wall-cabinet')) {
-      return `new-corner-wall-cabinet-${width}`;
-    }
-    // L-shaped test cabinet (production corner base cabinet)
-    if (id.includes('corner-cabinet') || id.includes('corner-base-cabinet') || id.includes('l-shaped-test-cabinet')) {
-      return `l-shaped-test-cabinet-${width}`;
-    }
-    if (id.includes('larder-corner-unit')) {
-      return `larder-corner-unit-${width}`;
-    }
-
-    // Standard cabinets
-    if (id.includes('base-cabinet')) {
-      return `base-cabinet-${width}`;
-    }
-    if (id.includes('wall-cabinet')) {
-      return `wall-cabinet-${width}`;
-    }
-
-    // Use element.id directly if no mapping found
-    return id;
-  }, [element.id, element.width]);
+    // If mapper returns null, no dynamic model exists - will fallback to hardcoded
+    return mappedId || element.id;
+  }, [element.id, element.width, element.height, element.depth]);
 
   // Determine cabinet type
   const isWallCabinet = useMemo(() => {
