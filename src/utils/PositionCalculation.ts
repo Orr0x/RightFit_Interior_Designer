@@ -50,6 +50,31 @@ export type ViewType = 'plan' | 'front' | 'back' | 'left' | 'right';
 
 export class PositionCalculation {
   private static readonly FEATURE_FLAG = 'use_new_positioning_system';
+  private static featureFlagCache: { enabled: boolean; timestamp: number } | null = null;
+  private static readonly CACHE_TTL = 5000; // 5 seconds cache for feature flag
+
+  /**
+   * Check feature flag with short-term caching to avoid repeated DB calls per render
+   */
+  private static async isFeatureEnabled(): Promise<boolean> {
+    const now = Date.now();
+
+    // Return cached value if still valid
+    if (this.featureFlagCache && (now - this.featureFlagCache.timestamp) < this.CACHE_TTL) {
+      return this.featureFlagCache.enabled;
+    }
+
+    // Fetch fresh value
+    const enabled = await FeatureFlagService.isEnabled(this.FEATURE_FLAG);
+
+    // Cache it
+    this.featureFlagCache = {
+      enabled,
+      timestamp: now
+    };
+
+    return enabled;
+  }
 
   /**
    * Calculate element position in elevation views
@@ -64,30 +89,42 @@ export class PositionCalculation {
     elevationWidth?: number,
     elevationDepth?: number
   ): Promise<ElevationPosition> {
-    return FeatureFlagService.useLegacyOr(
-      this.FEATURE_FLAG,
+    // Use cached feature flag check to avoid DB calls on every element
+    const useNew = await this.isFeatureEnabled();
 
-      // 🔒 LEGACY - Keep exact original logic from DesignCanvas2D.tsx lines 1377-1405
-      () => this.calculateElevationPositionLegacy(
-        element,
-        roomDimensions,
-        roomPosition,
-        view,
-        zoom,
-        elevationWidth,
-        elevationDepth
-      ),
+    if (useNew) {
+      try {
+        return this.calculateElevationPositionNew(
+          element,
+          roomDimensions,
+          roomPosition,
+          view,
+          zoom,
+          elevationWidth,
+          elevationDepth
+        );
+      } catch (error) {
+        console.error('[PositionCalculation] New implementation failed, using legacy:', error);
+        return this.calculateElevationPositionLegacy(
+          element,
+          roomDimensions,
+          roomPosition,
+          view,
+          zoom,
+          elevationWidth,
+          elevationDepth
+        );
+      }
+    }
 
-      // ✨ NEW - Unified coordinate system
-      () => this.calculateElevationPositionNew(
-        element,
-        roomDimensions,
-        roomPosition,
-        view,
-        zoom,
-        elevationWidth,
-        elevationDepth
-      )
+    return this.calculateElevationPositionLegacy(
+      element,
+      roomDimensions,
+      roomPosition,
+      view,
+      zoom,
+      elevationWidth,
+      elevationDepth
     );
   }
 
