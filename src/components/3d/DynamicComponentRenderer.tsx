@@ -73,8 +73,9 @@ export const DynamicComponentRenderer: React.FC<DynamicComponentRendererProps> =
     if (id.includes('corner-wall-cabinet')) {
       return `new-corner-wall-cabinet-${width}`;
     }
+    // L-shaped test cabinet (production corner base cabinet)
     if (id.includes('corner-cabinet') || id.includes('corner-base-cabinet') || id.includes('l-shaped-test-cabinet')) {
-      return `corner-base-cabinet-${width}`;
+      return `l-shaped-test-cabinet-${width}`;
     }
     if (id.includes('larder-corner-unit')) {
       return `larder-corner-unit-${width}`;
@@ -212,11 +213,11 @@ export const DynamicComponentRenderer: React.FC<DynamicComponentRendererProps> =
 export const preloadCommonComponents = async () => {
   const commonComponents = [
     // Corner cabinets (P0 - most critical)
-    'corner-base-cabinet-60',
-    'corner-base-cabinet-90',
+    'l-shaped-test-cabinet-60',
+    'l-shaped-test-cabinet-90',
     'new-corner-wall-cabinet-60',
     'new-corner-wall-cabinet-90',
-    // Standard cabinets
+    // Standard cabinets (P1 - not yet populated)
     'base-cabinet-60',
     'base-cabinet-80',
     'wall-cabinet-60',
