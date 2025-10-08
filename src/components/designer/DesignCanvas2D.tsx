@@ -1307,7 +1307,7 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
 
     } else {
       // Elevation view rendering
-      await drawElementElevation(ctx, element, isSelected, isHovered, showWireframe);
+      drawElementElevation(ctx, element, isSelected, isHovered, showWireframe);
     }
   }, [active2DView, roomToCanvas, selectedElement, hoveredElement, zoom, showWireframe, showColorDetail]);
 
