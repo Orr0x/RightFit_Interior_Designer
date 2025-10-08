@@ -73,7 +73,7 @@ export const DynamicComponentRenderer: React.FC<DynamicComponentRendererProps> =
     if (id.includes('corner-wall-cabinet')) {
       return `new-corner-wall-cabinet-${width}`;
     }
-    if (id.includes('corner-cabinet') || id.includes('corner-base-cabinet')) {
+    if (id.includes('corner-cabinet') || id.includes('corner-base-cabinet') || id.includes('l-shaped-test-cabinet')) {
       return `corner-base-cabinet-${width}`;
     }
     if (id.includes('larder-corner-unit')) {
@@ -101,6 +101,7 @@ export const DynamicComponentRenderer: React.FC<DynamicComponentRendererProps> =
 
   const isCornerCabinet = useMemo(() => {
     return element.id.includes('corner-cabinet') ||
+           element.id.includes('l-shaped-test-cabinet') ||
            element.style?.toLowerCase().includes('corner');
   }, [element.id, element.style]);
 
