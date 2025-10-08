@@ -6,6 +6,7 @@ import { useTouchEvents, TouchPoint } from '@/hooks/useTouchEvents';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { getEnhancedComponentPlacement } from '@/utils/canvasCoordinateIntegration';
 import { initializeCoordinateEngine } from '@/services/CoordinateTransformEngine';
+import { PositionCalculation } from '@/utils/PositionCalculation';
 
 // Throttle function for performance optimization
 const throttle = <T extends (...args: any[]) => void>(func: T, delay: number): T => {
@@ -1213,7 +1214,7 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
   }, []);
 
   // Draw element with smart rendering
-  const drawElement = useCallback((ctx: CanvasRenderingContext2D, element: DesignElement) => {
+  const drawElement = useCallback(async (ctx: CanvasRenderingContext2D, element: DesignElement) => {
     const isSelected = selectedElement?.id === element.id;
     const isHovered = hoveredElement?.id === element.id;
     
@@ -1306,7 +1307,7 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
 
     } else {
       // Elevation view rendering
-      drawElementElevation(ctx, element, isSelected, isHovered, showWireframe);
+      await drawElementElevation(ctx, element, isSelected, isHovered, showWireframe);
     }
   }, [active2DView, roomToCanvas, selectedElement, hoveredElement, zoom, showWireframe, showColorDetail]);
 
@@ -1335,7 +1336,7 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
   };
 
   // Draw element in elevation view with detailed fronts
-  const drawElementElevation = (ctx: CanvasRenderingContext2D, element: DesignElement, isSelected: boolean, isHovered: boolean, showWireframe: boolean) => {
+  const drawElementElevation = async (ctx: CanvasRenderingContext2D, element: DesignElement, isSelected: boolean, isHovered: boolean, showWireframe: boolean) => {
     // Check if element should be visible in current elevation view
     const wall = getElementWall(element);
     const isCornerVisible = isCornerVisibleInView(element, active2DView);
@@ -1370,39 +1371,18 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
       effectiveDepth = element.depth;
     }
 
-    // Calculate horizontal position - use innerX as baseline for all elevation views
-    let xPos: number;
-    let elementWidth: number;
-    
-    if (active2DView === 'front' || active2DView === 'back') {
-      // Front/back walls: use X coordinate from plan view
-      xPos = roomPosition.innerX + (element.x / roomDimensions.width) * elevationWidth;
-      elementWidth = (effectiveWidth / roomDimensions.width) * elevationWidth;
-    } else if (active2DView === 'left') {
-      // Left wall view - flip horizontally (mirror Y coordinate)
-      // When looking at left wall from inside room, far end of room appears on left side of view
-      const flippedY = roomDimensions.height - element.y - effectiveDepth;
-      xPos = roomPosition.innerX + (flippedY / roomDimensions.height) * elevationDepth;
-      
-      // For worktops/counter-tops, use depth as width (length along wall)
-      // For cabinets and other components, use effective width (length along wall)
-      if (element.type === 'counter-top') {
-        elementWidth = (element.depth / roomDimensions.height) * elevationDepth;
-      } else {
-        elementWidth = (effectiveWidth / roomDimensions.height) * elevationDepth; // Use rotation-aware width
-      }
-    } else { // right wall
-      // Right wall view: use Y coordinate from plan view  
-      xPos = roomPosition.innerX + (element.y / roomDimensions.height) * elevationDepth;
-      
-      // For worktops/counter-tops, use depth as width (length along wall)
-      // For cabinets and other components, use effective width (length along wall)
-      if (element.type === 'counter-top') {
-        elementWidth = (element.depth / roomDimensions.height) * elevationDepth;
-      } else {
-        elementWidth = (effectiveWidth / roomDimensions.height) * elevationDepth; // Use rotation-aware width
-      }
-    }
+    // 🎯 Calculate horizontal position using PositionCalculation utility
+    // Feature flag controls switching between legacy (asymmetric) and new (unified) coordinate systems
+    // Legacy code preserved inside PositionCalculation for instant rollback capability
+    const { xPos, elementWidth } = await PositionCalculation.calculateElevationPosition(
+      element,
+      roomDimensions,
+      roomPosition,
+      active2DView,
+      zoom,
+      elevationWidth,
+      elevationDepth
+    );
     
     // Tall corner unit dimensions are now correct (90x90cm) after database migration
     
@@ -2740,7 +2720,7 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
   }, [completedMeasurements, currentMeasureStart, tapeMeasurePreview, zoom]);
 
   // Main render function
-  const render = useCallback(() => {
+  const render = useCallback(async () => {
     const canvas = canvasRef.current;
     if (!canvas) return;
 
@@ -2776,17 +2756,18 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
       console.log(`🎯 [Rendering] Elements in order:`, elementsToRender.map(el => `${el.id} (${el.type}) -> zIndex: ${el.zIndex}`));
     }
 
-    elementsToRender.forEach(element => {
+    // Use for...of loop to handle async drawElement calls
+    for (const element of elementsToRender) {
       // Always draw all elements, but make dragged element semi-transparent
       if (isDragging && draggedElement?.id === element.id) {
         ctx.save();
         ctx.globalAlpha = 0.3; // Make original element very faint during drag
-        drawElement(ctx, element);
+        await drawElement(ctx, element);
         ctx.restore();
       } else {
-        drawElement(ctx, element);
+        await drawElement(ctx, element);
       }
-    });
+    }
 
     // Draw snap guides and drag preview on top
     if (active2DView === 'plan') {
