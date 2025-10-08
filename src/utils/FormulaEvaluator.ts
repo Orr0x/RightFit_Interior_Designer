@@ -71,6 +71,7 @@ export class FormulaEvaluator {
   /**
    * Tokenize a formula string into tokens
    * Example: 'width/2 + 0.01' => ['width', '/', '2', '+', '0.01']
+   * Handles unary minus: '-height' => ['0', '-', 'height']
    */
   private tokenize(formula: string): string[] {
     const tokens: string[] = [];
@@ -96,6 +97,13 @@ export class FormulaEvaluator {
           tokens.push(current);
           current = '';
         }
+
+        // Handle unary minus: if '-' is at start or after an operator/opening paren
+        // Convert to '0 - value' (e.g., '-height' => ['0', '-', 'height'])
+        if (char === '-' && (tokens.length === 0 || ['+', '-', '*', '/', '('].includes(tokens[tokens.length - 1]))) {
+          tokens.push('0');
+        }
+
         tokens.push(char);
         i++;
         continue;
