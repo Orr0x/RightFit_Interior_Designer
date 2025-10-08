@@ -1,7 +1,9 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { DesignElement } from '@/types/project';
 import * as THREE from 'three';
 import { Sofa, RectangleHorizontal } from 'lucide-react';
+import { FeatureFlagService } from '@/services/FeatureFlagService';
+import { DynamicComponentRenderer } from '@/components/3d/DynamicComponentRenderer';
 
 // ComponentDefinition interface removed - using DatabaseComponent from useComponents hook
 
@@ -104,19 +106,54 @@ const validateElementDimensions = (element: DesignElement) => {
 
 /**
  * EnhancedCabinet3D - Detailed 3D cabinet model
- * 
+ *
  * Features:
  * - Realistic cabinet structure with frame, doors, and hardware
  * - Material textures for wood grain, metal, etc.
  * - Proper scale and proportions
  * - Specialized rendering for different cabinet types
+ * - Feature flag: use_dynamic_3d_models for database-driven rendering
  */
-export const EnhancedCabinet3D: React.FC<Enhanced3DModelProps> = ({ 
-  element, 
-  roomDimensions, 
-  isSelected, 
-  onClick 
+export const EnhancedCabinet3D: React.FC<Enhanced3DModelProps> = ({
+  element,
+  roomDimensions,
+  isSelected,
+  onClick
 }) => {
+  const [useDynamicModels, setUseDynamicModels] = useState(false);
+
+  // Check feature flag on mount
+  useEffect(() => {
+    const checkFlag = async () => {
+      try {
+        const enabled = await FeatureFlagService.isEnabled('use_dynamic_3d_models');
+        setUseDynamicModels(enabled);
+        console.log(`[EnhancedCabinet3D] Dynamic 3D models ${enabled ? 'ENABLED' : 'disabled'}`);
+      } catch (error) {
+        console.warn('[EnhancedCabinet3D] Feature flag check failed, using hardcoded models:', error);
+        setUseDynamicModels(false);
+      }
+    };
+
+    checkFlag();
+  }, []);
+
+  // If feature flag is enabled, use dynamic renderer
+  if (useDynamicModels) {
+    console.log(`[EnhancedCabinet3D] Rendering ${element.id} with DynamicComponentRenderer`);
+    return (
+      <DynamicComponentRenderer
+        element={element}
+        roomDimensions={roomDimensions}
+        isSelected={isSelected}
+        onClick={onClick}
+      />
+    );
+  }
+
+  // Otherwise, use hardcoded legacy rendering below
+  // ==========================================
+
   // Validate element dimensions to prevent NaN values
   const validElement = validateElementDimensions(element);
   

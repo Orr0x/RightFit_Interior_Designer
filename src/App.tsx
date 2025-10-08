@@ -1,4 +1,4 @@
-
+import { useEffect } from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -29,10 +29,17 @@ import ColorProductPage from "./pages/ColorProductPage";
 import DevToolsButton from "./components/DevToolsButton";
 import { AuthProvider } from "./contexts/AuthContext";
 import { ProjectProvider } from "./contexts/ProjectContext";
+import { preloadCommonComponents } from "./components/3d/DynamicComponentRenderer";
 
 const queryClient = new QueryClient();
 
-const App = () => (
+const App = () => {
+  // Preload common 3D models on app startup
+  useEffect(() => {
+    preloadCommonComponents();
+  }, []);
+
+  return (
   <QueryClientProvider client={queryClient}>
     <AuthProvider>
       <ProjectProvider>
@@ -74,6 +81,7 @@ const App = () => (
       </ProjectProvider>
     </AuthProvider>
   </QueryClientProvider>
-);
+  );
+};
 
 export default App;
