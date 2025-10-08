@@ -1,0 +1,207 @@
+/**
+ * Dynamic Component Renderer
+ *
+ * Purpose: Render 3D components dynamically from database definitions
+ * Feature Flag: use_dynamic_3d_models
+ *
+ * Responsibilities:
+ * - Load component model from database
+ * - Build Three.js geometry using GeometryBuilder
+ * - Apply transformations (position, rotation)
+ * - Handle auto-rotate logic
+ * - Cache loaded models for performance
+ *
+ * Usage:
+ * ```tsx
+ * <DynamicComponentRenderer
+ *   element={element}
+ *   roomDimensions={roomDimensions}
+ *   isSelected={isSelected}
+ *   onClick={onClick}
+ * />
+ * ```
+ */
+
+import React, { useEffect, useState, useMemo } from 'react';
+import { DesignElement } from '@/types/project';
+import * as THREE from 'three';
+import { Model3DLoaderService } from '@/services/Model3DLoaderService';
+import { GeometryBuilder } from '@/utils/GeometryBuilder';
+
+interface DynamicComponentRendererProps {
+  element: DesignElement;
+  roomDimensions: { width: number; height: number };
+  isSelected: boolean;
+  onClick: () => void;
+}
+
+/**
+ * Convert 2D coordinates to 3D world coordinates
+ */
+const convertTo3D = (x: number, y: number, roomWidth: number, roomHeight: number) => {
+  const roomWidthMeters = roomWidth / 100;
+  const roomHeightMeters = roomHeight / 100;
+
+  return {
+    x: (x / 100) - roomWidthMeters / 2,
+    z: (y / 100) - roomHeightMeters / 2
+  };
+};
+
+/**
+ * DynamicComponentRenderer - Renders 3D components from database
+ */
+export const DynamicComponentRenderer: React.FC<DynamicComponentRendererProps> = ({
+  element,
+  roomDimensions,
+  isSelected,
+  onClick
+}) => {
+  const [meshGroup, setMeshGroup] = useState<THREE.Group | null>(null);
+  const [loadError, setLoadError] = useState<string | null>(null);
+
+  // Determine component ID from element
+  const componentId = useMemo(() => {
+    // Map element.id to component_id in database
+    // Example: "corner-cabinet-60" -> "corner-base-cabinet-60"
+
+    if (element.id.includes('corner-cabinet')) {
+      const width = element.width;
+      return `corner-base-cabinet-${width}`;
+    }
+
+    // Add more mappings as needed
+    // For now, use element.id directly
+    return element.id;
+  }, [element.id, element.width]);
+
+  // Determine cabinet type
+  const isWallCabinet = useMemo(() => {
+    return element.style?.toLowerCase().includes('wall') ||
+           element.height <= 50 ||
+           element.id.includes('wall-cabinet');
+  }, [element.style, element.height, element.id]);
+
+  const isCornerCabinet = useMemo(() => {
+    return element.id.includes('corner-cabinet') ||
+           element.style?.toLowerCase().includes('corner');
+  }, [element.id, element.style]);
+
+  // Load and build geometry
+  useEffect(() => {
+    let isMounted = true;
+
+    const loadAndBuild = async () => {
+      try {
+        // Load model from database
+        const { model, geometry, materials } = await Model3DLoaderService.loadComplete(componentId);
+
+        if (!isMounted) return;
+
+        if (!model) {
+          console.warn(`[DynamicRenderer] Model not found: ${componentId}`);
+          setLoadError(`Model not found: ${componentId}`);
+          return;
+        }
+
+        if (geometry.length === 0) {
+          console.warn(`[DynamicRenderer] No geometry parts for model: ${componentId}`);
+          setLoadError(`No geometry parts found`);
+          return;
+        }
+
+        // Build Three.js geometry
+        const builder = new GeometryBuilder(geometry, materials);
+
+        // Prepare build context
+        const context = {
+          width: element.width, // cm
+          height: element.height, // cm
+          depth: element.depth || (isWallCabinet ? 40 : 60), // cm
+          isSelected,
+          isWallCabinet,
+          legLength: model.leg_length || undefined,
+          cornerDepth: isWallCabinet
+            ? (model.corner_depth_wall || 0.4)
+            : (model.corner_depth_base || 0.6),
+        };
+
+        const group = builder.build(context);
+
+        if (isMounted) {
+          setMeshGroup(group);
+          setLoadError(null);
+          console.log(`[DynamicRenderer] Built component: ${componentId} (${group.children.length} parts)`);
+        }
+      } catch (error) {
+        if (isMounted) {
+          console.error(`[DynamicRenderer] Error loading component ${componentId}:`, error);
+          setLoadError(error instanceof Error ? error.message : 'Unknown error');
+        }
+      }
+    };
+
+    loadAndBuild();
+
+    return () => {
+      isMounted = false;
+    };
+  }, [componentId, element.width, element.height, element.depth, isSelected, isWallCabinet]);
+
+  // Calculate position and rotation
+  const { x, z } = convertTo3D(element.x, element.y, roomDimensions.width, roomDimensions.height);
+
+  // Y position depends on cabinet type
+  const height = element.height / 100; // meters
+  const yPosition = isWallCabinet ? 2.0 - height / 2 : height / 2;
+
+  // Rotation center for corner cabinets
+  const centerOffset = useMemo(() => {
+    if (isCornerCabinet) {
+      const legLength = element.width / 100; // meters
+      return {
+        x: legLength / 2,
+        z: legLength / 2,
+      };
+    }
+    return { x: 0, z: 0 };
+  }, [isCornerCabinet, element.width]);
+
+  // If loading or error, show nothing (fallback to hardcoded will be used)
+  if (loadError || !meshGroup) {
+    return null;
+  }
+
+  // Render the loaded geometry
+  return (
+    <group
+      position={[x + centerOffset.x, yPosition, z + centerOffset.z]}
+      onClick={onClick}
+      rotation={[0, element.rotation * Math.PI / 180, 0]}
+    >
+      <primitive object={meshGroup} />
+    </group>
+  );
+};
+
+/**
+ * Preload common components on app startup
+ * Call this from main app component
+ */
+export const preloadCommonComponents = async () => {
+  const commonComponents = [
+    'corner-base-cabinet-60',
+    'corner-base-cabinet-90',
+    'base-cabinet-60',
+    'base-cabinet-80',
+    'wall-cabinet-60',
+    'wall-cabinet-80',
+  ];
+
+  try {
+    await Model3DLoaderService.preload(commonComponents);
+    console.log('[DynamicRenderer] Preloaded common components');
+  } catch (error) {
+    console.warn('[DynamicRenderer] Preload failed:', error);
+  }
+};
