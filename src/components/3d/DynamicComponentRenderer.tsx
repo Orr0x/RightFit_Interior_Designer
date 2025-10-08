@@ -63,16 +63,33 @@ export const DynamicComponentRenderer: React.FC<DynamicComponentRendererProps> =
   // Determine component ID from element
   const componentId = useMemo(() => {
     // Map element.id to component_id in database
-    // Example: "corner-cabinet-60" -> "corner-base-cabinet-60"
+    const id = element.id;
+    const width = element.width;
 
-    if (element.id.includes('corner-cabinet')) {
-      const width = element.width;
+    // Corner cabinets
+    if (id.includes('new-corner-wall-cabinet')) {
+      return `new-corner-wall-cabinet-${width}`;
+    }
+    if (id.includes('corner-wall-cabinet')) {
+      return `new-corner-wall-cabinet-${width}`;
+    }
+    if (id.includes('corner-cabinet') || id.includes('corner-base-cabinet')) {
       return `corner-base-cabinet-${width}`;
     }
+    if (id.includes('larder-corner-unit')) {
+      return `larder-corner-unit-${width}`;
+    }
 
-    // Add more mappings as needed
-    // For now, use element.id directly
-    return element.id;
+    // Standard cabinets
+    if (id.includes('base-cabinet')) {
+      return `base-cabinet-${width}`;
+    }
+    if (id.includes('wall-cabinet')) {
+      return `wall-cabinet-${width}`;
+    }
+
+    // Use element.id directly if no mapping found
+    return id;
   }, [element.id, element.width]);
 
   // Determine cabinet type
@@ -190,8 +207,12 @@ export const DynamicComponentRenderer: React.FC<DynamicComponentRendererProps> =
  */
 export const preloadCommonComponents = async () => {
   const commonComponents = [
+    // Corner cabinets (P0 - most critical)
     'corner-base-cabinet-60',
     'corner-base-cabinet-90',
+    'new-corner-wall-cabinet-60',
+    'new-corner-wall-cabinet-90',
+    // Standard cabinets
     'base-cabinet-60',
     'base-cabinet-80',
     'wall-cabinet-60',
