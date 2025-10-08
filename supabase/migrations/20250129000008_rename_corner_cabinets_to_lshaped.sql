@@ -10,24 +10,16 @@
 -- PART 1: Deprecate old corner cabinet components
 -- =====================================================================
 
--- Hide old corner-base-cabinet and corner-cabinet from component sidebar
+-- Deprecate old corner-base-cabinet and corner-cabinet components
 UPDATE components
 SET
-  active = false,
+  deprecated = true,
+  deprecation_reason = 'Replaced by L-Shaped Test Cabinet (now Corner Base Cabinet)',
+  replacement_component_id = 'l-shaped-test-cabinet',
   metadata = jsonb_set(
     COALESCE(metadata, '{}'::jsonb),
-    '{deprecated}',
+    '{hide_from_ui}',
     'true'::jsonb
-  ),
-  metadata = jsonb_set(
-    COALESCE(metadata, '{}'::jsonb),
-    '{deprecated_reason}',
-    '"Replaced by L-Shaped Test Cabinet (now Corner Base Cabinet)"'::jsonb
-  ),
-  metadata = jsonb_set(
-    COALESCE(metadata, '{}'::jsonb),
-    '{replacement_component_id}',
-    '"l-shaped-test-cabinet"'::jsonb
   )
 WHERE component_id IN ('corner-cabinet', 'corner-base-cabinet')
   AND component_id != 'l-shaped-test-cabinet';
@@ -83,7 +75,7 @@ DECLARE
 BEGIN
   SELECT COUNT(*) INTO deprecated_count
   FROM components
-  WHERE metadata->>'deprecated' = 'true';
+  WHERE deprecated = true;
 
   RAISE NOTICE 'Deprecated components count: %', deprecated_count;
 END $$;
@@ -117,16 +109,15 @@ END $$;
 -- =====================================================================
 
 -- View deprecated components
--- SELECT component_id, name, active, metadata->>'deprecated' as deprecated,
---        metadata->>'deprecated_reason' as reason
+-- SELECT component_id, name, deprecated, deprecation_reason, replacement_component_id
 -- FROM components
--- WHERE metadata->>'deprecated' = 'true';
+-- WHERE deprecated = true;
 
 -- View active corner cabinets
--- SELECT component_id, name, description, active
+-- SELECT component_id, name, description, deprecated
 -- FROM components
 -- WHERE (component_id LIKE '%corner%' OR name LIKE '%Corner%')
---   AND active = true
+--   AND deprecated = false
 -- ORDER BY component_id;
 
 -- View updated 3D models
