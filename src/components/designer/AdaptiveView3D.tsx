@@ -622,8 +622,35 @@ export const AdaptiveView3D: React.FC<AdaptiveView3DProps> = ({
                     onClick={() => handleElementClick(element)}
                   />
                 );
+              // Multi-room furniture types (bedroom, bathroom, living room, office, etc.)
+              case 'bed':
+              case 'seating':
+              case 'storage':
+              case 'desk':
+              case 'table':
+              case 'chair':
+                return (
+                  <EnhancedCabinet3D
+                    key={element.id}
+                    element={element}
+                    roomDimensions={roomDimensions}
+                    isSelected={isSelected}
+                    onClick={() => handleElementClick(element)}
+                  />
+                );
               default:
-                return null;
+                // For any unhandled types, try to render with EnhancedCabinet3D
+                // which will use DynamicComponentRenderer if feature flag is enabled
+                console.log(`[AdaptiveView3D] Rendering unhandled type "${element.type}" with EnhancedCabinet3D`);
+                return (
+                  <EnhancedCabinet3D
+                    key={element.id}
+                    element={element}
+                    roomDimensions={roomDimensions}
+                    isSelected={isSelected}
+                    onClick={() => handleElementClick(element)}
+                  />
+                );
             }
           })}
           

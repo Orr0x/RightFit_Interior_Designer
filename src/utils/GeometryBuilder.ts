@@ -170,12 +170,19 @@ export class GeometryBuilder {
         return new THREE.BoxGeometry(dimensions.x, dimensions.y, dimensions.z);
 
       case 'cylinder':
-        // For cylinder: width = radius, height = height, depth = segments
+        // For cylinder: width = radiusTop, height = height, depth = radiusBottom
+        // This matches our database schema where:
+        // - dimension_width = radiusTop
+        // - dimension_height = cylinder height
+        // - dimension_depth = radiusBottom (for tapered cylinders)
+        const radiusTop = dimensions.x;
+        const cylinderHeight = dimensions.y;
+        const radiusBottom = dimensions.z || dimensions.x; // Use radiusTop if radiusBottom not specified
         return new THREE.CylinderGeometry(
-          dimensions.x, // radiusTop
-          dimensions.x, // radiusBottom
-          dimensions.y, // height
-          Math.max(8, Math.floor(dimensions.z)) // radialSegments
+          radiusTop,
+          radiusBottom,
+          cylinderHeight,
+          32 // radialSegments for smooth appearance
         );
 
       case 'sphere':

@@ -124,6 +124,11 @@ export interface StandardCabinetData {
   toe_kick_height?: number; // Height in cm
   drawer_count?: number;   // Optional drawers
   drawer_heights?: number[]; // Heights in cm
+
+  // Corner cabinet configuration (Option C - Hybrid)
+  is_corner?: boolean;     // True for corner cabinets
+  corner_door_side?: 'left' | 'right' | 'auto'; // Door position (auto = use algorithm)
+  corner_panel_style?: 'standard' | 'glass' | 'open'; // Side panel appearance
 }
 
 export interface ApplianceData {
@@ -159,6 +164,13 @@ export interface DesignElement {
   rotation?: number;
   color?: string;
   metadata?: Record<string, any>;
+  cornerDoorSide?: 'left' | 'right' | 'auto'; // Manual override for corner door positioning
+}
+
+export interface RoomDimensions {
+  width: number;  // Room width in cm
+  height: number; // Room depth in cm (Y-axis)
+  ceilingHeight?: number; // Room ceiling height in cm (Z-axis)
 }
 
 // =====================================================
@@ -193,5 +205,7 @@ export type ElevationViewHandler = (
   y: number,
   width: number,
   height: number,
-  zoom: number
+  zoom: number,
+  roomDimensions?: RoomDimensions,
+  currentView?: string
 ) => void;

@@ -1088,181 +1088,9 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
     }
   }, [roomDimensions, roomPosition, zoom, active2DView]);
 
-  // Draw sink in plan view with realistic bowl representation
-  const drawSinkPlanView = useCallback((ctx: CanvasRenderingContext2D, element: DesignElement, width: number, depth: number, isSelected: boolean, isHovered: boolean) => {
-    const isButlerSink = element.id.includes('butler-sink') || element.id.includes('butler') || element.id.includes('base-unit-sink');
-    const isDoubleBowl = element.id.includes('double-bowl') || element.id.includes('double');
-    const isCornerSink = element.id.includes('corner-sink');
-    const hasDrainingBoard = element.id.includes('draining-board') || element.metadata?.has_draining_board;
-    const isFarmhouseSink = element.id.includes('farmhouse');
-    
-    // Sink colors
-    const sinkColor = isButlerSink ? '#FFFFFF' : '#C0C0C0'; // White ceramic for butler, stainless steel for kitchen
-    const rimColor = isButlerSink ? '#F8F8F8' : '#B0B0B0';
-    
-    // Draw sink rim (outer edge) with gradient effect
-    ctx.fillStyle = rimColor;
-    ctx.fillRect(0, 0, width, depth);
-
-    // Add subtle rim highlight
-    ctx.fillStyle = isButlerSink ? '#FFFFFF' : '#E0E0E0';
-    ctx.fillRect(0, 0, width, depth * 0.1); // Top edge highlight
-    ctx.fillRect(0, 0, width * 0.1, depth); // Left edge highlight
-
-    // Draw sink bowl(s) with improved shapes
-    ctx.fillStyle = sinkColor;
-    
-    if (isDoubleBowl) {
-      // Double bowl sink
-      const bowlWidth = width * 0.4;
-      const bowlDepth = depth * 0.8;
-      const leftBowlX = width * 0.1;
-      const rightBowlX = width * 0.5;
-      const bowlY = depth * 0.1;
-      
-      // Left bowl with more realistic shape
-      ctx.beginPath();
-      const leftBowlRadiusX = bowlWidth/2 * 0.9;
-      const leftBowlRadiusY = bowlDepth/2 * 0.95;
-      ctx.ellipse(leftBowlX + bowlWidth/2, bowlY + bowlDepth/2, leftBowlRadiusX, leftBowlRadiusY, 0, 0, 2 * Math.PI);
-      ctx.fill();
-
-      // Left bowl inner shadow/highlight
-      ctx.fillStyle = isButlerSink ? '#F0F0F0' : '#D0D0D0';
-      ctx.beginPath();
-      ctx.ellipse(leftBowlX + bowlWidth/2, bowlY + bowlDepth/2 - bowlDepth * 0.1, leftBowlRadiusX * 0.7, leftBowlRadiusY * 0.3, 0, 0, 2 * Math.PI);
-      ctx.fill();
-
-      // Right bowl with more realistic shape
-      ctx.fillStyle = sinkColor;
-      ctx.beginPath();
-      const rightBowlRadiusX = bowlWidth/2 * 0.9;
-      const rightBowlRadiusY = bowlDepth/2 * 0.95;
-      ctx.ellipse(rightBowlX + bowlWidth/2, bowlY + bowlDepth/2, rightBowlRadiusX, rightBowlRadiusY, 0, 0, 2 * Math.PI);
-      ctx.fill();
-
-      // Right bowl inner shadow/highlight
-      ctx.fillStyle = isButlerSink ? '#F0F0F0' : '#D0D0D0';
-      ctx.beginPath();
-      ctx.ellipse(rightBowlX + bowlWidth/2, bowlY + bowlDepth/2 - bowlDepth * 0.1, rightBowlRadiusX * 0.7, rightBowlRadiusY * 0.3, 0, 0, 2 * Math.PI);
-      ctx.fill();
-      
-      // Center divider
-      ctx.fillStyle = rimColor;
-      ctx.fillRect(width * 0.45, bowlY, width * 0.1, bowlDepth);
-      
-    } else if (isCornerSink) {
-      // Corner sink (L-shaped) with improved shape
-      const mainBowlWidth = width * 0.6;
-      const mainBowlDepth = depth * 0.6;
-      const mainBowlX = width * 0.2;
-      const mainBowlY = depth * 0.2;
-
-      // Main bowl with more realistic shape
-      ctx.beginPath();
-      const mainBowlRadiusX = mainBowlWidth/2 * 0.9;
-      const mainBowlRadiusY = mainBowlDepth/2 * 0.95;
-      ctx.ellipse(mainBowlX + mainBowlWidth/2, mainBowlY + mainBowlDepth/2, mainBowlRadiusX, mainBowlRadiusY, 0, 0, 2 * Math.PI);
-      ctx.fill();
-
-      // Main bowl inner shadow/highlight
-      ctx.fillStyle = isButlerSink ? '#F0F0F0' : '#D0D0D0';
-      ctx.beginPath();
-      ctx.ellipse(mainBowlX + mainBowlWidth/2, mainBowlY + mainBowlDepth/2 - mainBowlDepth * 0.1, mainBowlRadiusX * 0.7, mainBowlRadiusY * 0.3, 0, 0, 2 * Math.PI);
-      ctx.fill();
-      
-      // Corner extension with highlight
-      const cornerWidth = width * 0.3;
-      const cornerDepth = depth * 0.3;
-      ctx.fillStyle = sinkColor;
-      ctx.fillRect(mainBowlX + mainBowlWidth * 0.7, mainBowlY + mainBowlDepth * 0.7, cornerWidth, cornerDepth);
-
-      // Corner extension highlight
-      ctx.fillStyle = isButlerSink ? '#F0F0F0' : '#D0D0D0';
-      ctx.fillRect(mainBowlX + mainBowlWidth * 0.7, mainBowlY + mainBowlDepth * 0.7, cornerWidth * 0.8, cornerDepth * 0.8);
-      
-    } else {
-      // Single bowl sink with improved shape
-      const bowlWidth = width * 0.7;
-      const bowlDepth = depth * 0.8;
-      const bowlX = width * 0.15;
-      const bowlY = depth * 0.1;
-
-      // Main bowl
-      ctx.beginPath();
-      const bowlRadiusX = bowlWidth/2 * 0.9;
-      const bowlRadiusY = bowlDepth/2 * 0.95;
-      ctx.ellipse(bowlX + bowlWidth/2, bowlY + bowlDepth/2, bowlRadiusX, bowlRadiusY, 0, 0, 2 * Math.PI);
-      ctx.fill();
-
-      // Bowl inner shadow/highlight
-      ctx.fillStyle = isButlerSink ? '#F0F0F0' : '#D0D0D0';
-      ctx.beginPath();
-      ctx.ellipse(bowlX + bowlWidth/2, bowlY + bowlDepth/2 - bowlDepth * 0.1, bowlRadiusX * 0.7, bowlRadiusY * 0.3, 0, 0, 2 * Math.PI);
-      ctx.fill();
-    }
-    
-    // Draw drain
-    ctx.fillStyle = '#2F2F2F';
-    const drainSize = Math.min(width, depth) * 0.1;
-    const drainX = width/2 - drainSize/2;
-    const drainY = depth/2 - drainSize/2;
-    ctx.beginPath();
-    ctx.arc(drainX + drainSize/2, drainY + drainSize/2, drainSize/2, 0, 2 * Math.PI);
-    ctx.fill();
-    
-    // Draw faucet mounting holes
-    ctx.fillStyle = '#2F2F2F';
-    const holeSize = Math.min(width, depth) * 0.03;
-    const holeY = depth * 0.2;
-    
-    if (isDoubleBowl) {
-      // Two holes for double bowl
-      ctx.beginPath();
-      ctx.arc(width * 0.25, holeY, holeSize/2, 0, 2 * Math.PI);
-      ctx.fill();
-      ctx.beginPath();
-      ctx.arc(width * 0.75, holeY, holeSize/2, 0, 2 * Math.PI);
-      ctx.fill();
-    } else {
-      // Single hole for single bowl
-      ctx.beginPath();
-      ctx.arc(width * 0.5, holeY, holeSize/2, 0, 2 * Math.PI);
-      ctx.fill();
-    }
-    
-    // Draw draining board if present with improved appearance
-    if (hasDrainingBoard) {
-      // Main draining board surface
-      ctx.fillStyle = rimColor;
-      ctx.fillRect(width * 0.05, depth * 0.65, width * 0.9, depth * 0.3);
-
-      // Draining board highlight
-      ctx.fillStyle = isButlerSink ? '#FFFFFF' : '#E8E8E8';
-      ctx.fillRect(width * 0.05, depth * 0.65, width * 0.9, depth * 0.05);
-
-      // Draw draining board grooves with improved appearance
-      ctx.strokeStyle = isButlerSink ? '#E0E0E0' : '#D0D0D0';
-      ctx.lineWidth = 1;
-      for (let i = 0; i < 10; i++) {
-        const x = width * 0.05 + (i + 0.5) * (width * 0.9) / 10;
-        ctx.beginPath();
-        ctx.moveTo(x, depth * 0.65);
-        ctx.lineTo(x, depth * 0.95);
-        ctx.stroke();
-
-        // Add subtle shadow to grooves
-        ctx.strokeStyle = isButlerSink ? '#D0D0D0' : '#C0C0C0';
-        ctx.beginPath();
-        ctx.moveTo(x + 0.5, depth * 0.65);
-        ctx.lineTo(x + 0.5, depth * 0.95);
-        ctx.stroke();
-      }
-
-      // Reset stroke style
-      ctx.strokeStyle = '#000000';
-    }
-  }, []);
+  // LEGACY CODE REMOVED: drawSinkPlanView function (173 lines)
+  // Replaced by database-driven handlers in src/services/2d-renderers/plan-view-handlers.ts
+  // See archive: docs/session-2025-10-09-2d-database-migration/LEGACY-CODE-FULL-ARCHIVE.md
 
   // Draw element with smart rendering
   const drawElement = useCallback((ctx: CanvasRenderingContext2D, element: DesignElement) => {
@@ -1278,18 +1106,10 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
 
       ctx.save();
       
-      // Check if this is a corner component for proper rotation center
-      const isCornerCounterTop = element.type === 'counter-top' && element.id.includes('counter-top-corner');
-      const isCornerWallCabinet = element.type === 'cabinet' && (element.id.includes('corner-wall-cabinet') || element.id.includes('new-corner-wall-cabinet'));
-      const isCornerBaseCabinet = element.type === 'cabinet' && (element.id.includes('corner-base-cabinet') || element.id.includes('l-shaped-test-cabinet'));
-      const isCornerTallUnit = element.type === 'cabinet' && (
-        element.id.includes('corner-tall') || 
-        element.id.includes('corner-larder') ||
-        element.id.includes('larder-corner')
-      );
-      
-      const isCornerComponent = isCornerCounterTop || isCornerWallCabinet || isCornerBaseCabinet || isCornerTallUnit;
-      
+      // Check if this is a corner component (needed for wireframe/selection overlays)
+      // Note: Main rendering now uses database field plan_view_type: 'corner-square'
+      const isCornerComponent = element.id.includes('corner-');
+
       // Apply rotation - convert degrees to radians if needed
       ctx.translate(pos.x + width / 2, pos.y + depth / 2);
       ctx.rotate(rotation * Math.PI / 180);
@@ -1323,28 +1143,11 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
           }
         }
 
-        // Fallback to legacy rendering if database rendering not enabled or failed
+        // Minimal fallback if database rendering not enabled or failed
         if (!renderedByDatabase) {
-          // Element fill
-          if (isSelected) {
-            ctx.fillStyle = '#ff6b6b';
-          } else if (isHovered) {
-            ctx.fillStyle = '#b0b0b0';
-          } else {
-            ctx.fillStyle = element.color || '#8b4513';
-          }
-
-          if (element.type === 'sink') {
-            // Sink rendering - draw bowl shape
-            drawSinkPlanView(ctx, element, width, depth, isSelected, isHovered);
-          } else if (isCornerComponent) {
-            // Corner components: Draw as square
-            const squareSize = Math.min(element.width, element.depth) * zoom;
-            ctx.fillRect(0, 0, squareSize, squareSize);
-          } else {
-            // Standard components: Draw as rectangle
-            ctx.fillRect(0, 0, width, depth);
-          }
+          // Simple rectangle fallback
+          ctx.fillStyle = element.color || '#8b4513';
+          ctx.fillRect(0, 0, width, depth);
         }
       }
 
@@ -1550,6 +1353,8 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
       try {
         const renderDef = render2DService.getCached(element.component_id);
         if (renderDef) {
+          console.log('[DesignCanvas2D] Rendering elevation for:', element.component_id, 'with data:', renderDef.elevation_data);
+
           // Apply selection/hover colors
           if (isSelected) {
             ctx.fillStyle = '#ff6b6b';
@@ -1559,7 +1364,7 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
             ctx.fillStyle = renderDef.fill_color || element.color || '#8b4513';
           }
 
-          // Render using database-driven system
+          // Render using database-driven system (with roomDimensions for corner logic)
           renderElevationView(
             ctx,
             element,
@@ -1569,13 +1374,18 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
             yPos,
             elementWidth,
             elementHeight,
-            zoom
+            zoom,
+            roomDimensions // Pass room dimensions for corner cabinet positioning
           );
           renderedByDatabase = true;
+        } else {
+          console.warn('[DesignCanvas2D] No render definition found for:', element.component_id);
         }
       } catch (error) {
         console.warn('[DesignCanvas2D] Elevation database rendering failed, falling back to legacy:', error);
       }
+    } else {
+      console.warn('[DesignCanvas2D] Database rendering disabled by feature flag');
     }
 
     // Fallback to legacy rendering if database rendering not enabled or failed
@@ -1607,34 +1417,9 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
       ctx.strokeRect(xPos, yPos, elementWidth, elementHeight);
     }
 
-    // Draw detailed fronts based on component type (legacy - only if not rendered by database)
-    if (!renderedByDatabase) {
-      if (element.type.includes('cabinet')) {
-        drawCabinetElevationDetails(ctx, xPos, yPos, elementWidth, elementHeight, element);
-      } else if (element.type.includes('appliance')) {
-        drawApplianceElevationDetails(ctx, xPos, yPos, elementWidth, elementHeight, element);
-      } else if (element.type === 'counter-top') {
-        drawCounterTopElevationDetails(ctx, xPos, yPos, elementWidth, elementHeight, element);
-      } else if (element.type === 'end-panel') {
-        drawEndPanelElevationDetails(ctx, xPos, yPos, elementWidth, elementHeight, element);
-      } else if (element.type === 'window') {
-        drawWindowElevationDetails(ctx, xPos, yPos, elementWidth, elementHeight, element);
-      } else if (element.type === 'door') {
-        drawDoorElevationDetails(ctx, xPos, yPos, elementWidth, elementHeight, element);
-      } else if (element.type === 'flooring') {
-        drawFlooringElevationDetails(ctx, xPos, yPos, elementWidth, elementHeight, element);
-      } else if (element.type === 'toe-kick') {
-        drawToeKickElevationDetails(ctx, xPos, yPos, elementWidth, elementHeight, element);
-      } else if (element.type === 'cornice') {
-        drawCorniceElevationDetails(ctx, xPos, yPos, elementWidth, elementHeight, element);
-      } else if (element.type === 'pelmet') {
-        drawPelmetElevationDetails(ctx, xPos, yPos, elementWidth, elementHeight, element);
-      } else if (element.type === 'wall-unit-end-panel') {
-        drawWallUnitEndPanelElevationDetails(ctx, xPos, yPos, elementWidth, elementHeight, element);
-      } else if (element.type === 'sink') {
-        drawSinkElevationDetails(ctx, xPos, yPos, elementWidth, elementHeight, element);
-      }
-    }
+    // LEGACY CODE REMOVED: Elevation detail function calls (28 lines)
+    // All elevation detail rendering now handled by database-driven handlers
+    // See archive: docs/session-2025-10-09-2d-database-migration/LEGACY-CODE-FULL-ARCHIVE.md
 
     ctx.restore();
   };
@@ -3529,6 +3314,7 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
 
       const newElement: DesignElement = {
         id: `${componentData.id}-${Date.now()}`,
+        component_id: componentData.id, // Database lookup key for 2D/3D rendering
         type: componentData.type,
         // Use enhanced placement results with proper wall clearance and rotation
         x: placementResult.snappedToWall ? placementResult.x : snapToGrid(placementResult.x),
@@ -3539,7 +3325,9 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
         height: componentData.height, // Z-axis dimension (bottom-to-top)
         rotation: placementResult.rotation, // Use calculated rotation from enhanced placement
         color: componentData.color,
-        style: componentData.name
+        style: componentData.name,
+        zIndex: 0, // Required by DesignElement interface
+        isVisible: true // Required by DesignElement interface
       };
 
       // Apply smart snapping for new elements

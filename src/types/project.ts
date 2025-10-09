@@ -87,6 +87,7 @@ export interface Design {
 // DesignElement interface with proper 3D dimension mapping
 export interface DesignElement {
   id: string;
+  component_id: string; // Component ID for database lookup (2D/3D definitions)
   name?: string; // Component name for display and debugging
   type: 'wall' | 'cabinet' | 'appliance' | 'counter-top' | 'end-panel' | 'window' | 'door' | 'flooring' | 'toe-kick' | 'cornice' | 'pelmet' | 'wall-unit-end-panel' | 'sink';
   x: number; // X position in room

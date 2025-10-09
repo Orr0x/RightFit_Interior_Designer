@@ -223,6 +223,7 @@ const CompactComponentSidebar: React.FC<CompactComponentSidebarProps> = ({
     // Create a new design element positioned at canvas center
     const newElement: DesignElement = {
       id: `${component.component_id}-${Date.now()}`,
+      component_id: component.component_id, // Database lookup key
       type: component.type as any,
       x: 200, // Center-ish position (will be adjustable by dragging)
       y: 150, // Center-ish position
@@ -232,7 +233,9 @@ const CompactComponentSidebar: React.FC<CompactComponentSidebarProps> = ({
       depth: component.depth,
       rotation: 0,
       color: component.color || '#8B4513',
-      name: component.name
+      name: component.name,
+      zIndex: 0, // Required by DesignElement interface
+      isVisible: true // Required by DesignElement interface
     };
 
     // Add to canvas and update recently used

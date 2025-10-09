@@ -8,7 +8,8 @@ import type {
   DesignElement,
   Render2DDefinition,
   PlanViewType,
-  ElevationViewType
+  ElevationViewType,
+  RoomDimensions
 } from '@/types/render2d';
 
 import {
@@ -62,7 +63,9 @@ type ElevationViewHandlerFn = (
   y: number,
   width: number,
   height: number,
-  zoom: number
+  zoom: number,
+  roomDimensions?: RoomDimensions,
+  currentView?: string
 ) => void;
 
 const ELEVATION_VIEW_HANDLERS: Record<ElevationViewType, ElevationViewHandlerFn> = {
@@ -70,8 +73,8 @@ const ELEVATION_VIEW_HANDLERS: Record<ElevationViewType, ElevationViewHandlerFn>
   'appliance': renderAppliance,
   'sink': renderSinkElevation,
   'open-shelf': renderOpenShelf,
-  'custom-svg': (ctx, element, data, x, y, width, height, zoom) => {
-    renderCustomSVGElevation(ctx, element, data.svg_path || '', x, y, width, height, zoom);
+  'custom-svg': (ctx, element, data, x, y, width, height, zoom, roomDimensions, currentView) => {
+    renderCustomSVGElevation(ctx, element, data.svg_path || '', x, y, width, height, zoom, roomDimensions, currentView);
   }
 };
 
@@ -127,7 +130,8 @@ export function renderElevationView(
   y: number,
   width: number,
   height: number,
-  zoom: number
+  zoom: number,
+  roomDimensions?: RoomDimensions
 ): void {
   // Determine which elevation definition to use
   const isHorizontalView = view === 'front' || view === 'back';
@@ -145,19 +149,19 @@ export function renderElevationView(
       `[2D Renderer] Unknown elevation_type: "${elevationType}" for component "${element.component_id}"`
     );
     // Fallback to standard cabinet
-    renderStandardCabinet(ctx, element, {}, x, y, width, height, zoom);
+    renderStandardCabinet(ctx, element, {}, x, y, width, height, zoom, roomDimensions, view);
     return;
   }
 
   try {
-    handler(ctx, element, elevationData, x, y, width, height, zoom);
+    handler(ctx, element, elevationData, x, y, width, height, zoom, roomDimensions, view);
   } catch (error) {
     console.error(
       `[2D Renderer] Error rendering elevation view for "${element.component_id}":`,
       error
     );
     // Fallback to standard cabinet
-    renderStandardCabinet(ctx, element, {}, x, y, width, height, zoom);
+    renderStandardCabinet(ctx, element, {}, x, y, width, height, zoom, roomDimensions, view);
   }
 }
 
@@ -245,7 +249,8 @@ export function renderWithDebug(
   element: DesignElement,
   renderDef: Render2DDefinition,
   zoom: number,
-  view: 'plan' | 'front' | 'back' | 'left' | 'right' = 'plan'
+  view: 'plan' | 'front' | 'back' | 'left' | 'right' = 'plan',
+  roomDimensions?: RoomDimensions
 ): void {
   // Save context state
   ctx.save();
@@ -259,7 +264,7 @@ export function renderWithDebug(
     const y = element.y * zoom;
     const width = element.width * zoom;
     const height = element.height * zoom;
-    renderElevationView(ctx, element, renderDef, view, x, y, width, height, zoom);
+    renderElevationView(ctx, element, renderDef, view, x, y, width, height, zoom, roomDimensions);
   }
 
   // Draw debug overlay

@@ -36,16 +36,32 @@ CREATE INDEX IF NOT EXISTS idx_room_templates_settings ON public.room_type_templ
 ALTER TABLE public.room_type_templates ENABLE ROW LEVEL SECURITY;
 
 -- Allow all authenticated users to read room type templates
-CREATE POLICY "Room type templates are viewable by authenticated users"
-  ON public.room_type_templates FOR SELECT
-  TO authenticated
-  USING (true);
+DO $$ BEGIN
+  IF NOT EXISTS (
+    SELECT 1 FROM pg_policies
+    WHERE tablename = 'room_type_templates'
+    AND policyname = 'Room type templates are viewable by authenticated users'
+  ) THEN
+    CREATE POLICY "Room type templates are viewable by authenticated users"
+      ON public.room_type_templates FOR SELECT
+      TO authenticated
+      USING (true);
+  END IF;
+END $$;
 
 -- Only admins can modify room type templates (future feature)
-CREATE POLICY "Room type templates are editable by admins only"
-  ON public.room_type_templates FOR ALL
-  TO authenticated
-  USING (false); -- Will be updated when admin roles are implemented
+DO $$ BEGIN
+  IF NOT EXISTS (
+    SELECT 1 FROM pg_policies
+    WHERE tablename = 'room_type_templates'
+    AND policyname = 'Room type templates are editable by admins only'
+  ) THEN
+    CREATE POLICY "Room type templates are editable by admins only"
+      ON public.room_type_templates FOR ALL
+      TO authenticated
+      USING (false); -- Will be updated when admin roles are implemented
+  END IF;
+END $$;
 
 -- Insert room type templates with current hardcoded values
 INSERT INTO public.room_type_templates (

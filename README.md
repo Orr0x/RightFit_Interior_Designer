@@ -7,11 +7,9 @@ A professional-grade interior design application built with React, TypeScript, a
 - ✅ **Database-Driven Colors**: Complete migration from CSV to Supabase with 100% coverage
 - ✅ **Individual Color Pages**: Themed product pages with color-specific backgrounds
 - ✅ **Mobile/Touch Support**: Complete responsive design with touch gestures
-- ✅ **Clean Codebase**: All TypeScript linting errors resolved (32+ → 0)
 - ✅ **Performance Optimized**: Phase 4 complete with 47% smaller bundles
-- ✅ **Database-Driven**: 100% database-driven component system (154+ components)
-- ⚠️ **Architecture Issues**: Core positioning system needs overhaul (see DEVELOPMENT-BACKLOG.md)
-
+- ✅ **Database-Driven**:  database-driven component system 
+- ⚠️ **Architecture Issues**: Core positioning system needs overhaul 
 ## ✨ Features
 
 ### 🏗️ Multi-Room Project System
@@ -51,7 +49,7 @@ A professional-grade interior design application built with React, TypeScript, a
 ### 📱 **Mobile/Touch Support (v2.5)**
 - **Responsive Design**: Adaptive layout for mobile and desktop
 - **Touch Gestures**: Pinch-to-zoom, touch pan, long press selection
-- **Mobile-First UX**: Click-to-add components (no drag-and-drop on mobile)
+- **Mobile-First UX**: Click-to-add components (no drag-and-drop on mobile) - remove mobile layout but keep touch for tablet and touch screen monitors
 - **Touch-Optimized UI**: Sheet panels, larger touch targets, mobile toolbar
 - **Cross-Device Sync**: Seamless experience across devices
 
@@ -283,8 +281,7 @@ npm run preview
 
 ## ⚠️ Known Issues & Current State
 
-### 🔴 Critical Architecture Issues (See DEVELOPMENT-BACKLOG.md)
-- **Corner Logic System**: Only 2/4 corners work correctly for auto-rotation
+### ⚠️ Architecture Issues 
 - **Component Boundaries**: Rotation boundaries don't match visual components
 - **Wide Component Positioning**: Left/right wall snapping has 1cm offset
 - **3D Ceiling Height**: Room height control doesn't affect 3D view
@@ -299,7 +296,7 @@ npm run preview
 ### ✅ Recently Fixed (v2.5)
 - **All TypeScript Linting Errors**: Cleaned up 32+ warnings/errors to zero
 - **Mobile Support**: Complete responsive design with touch gestures
-- **effectiveWidth/effectiveDepth Bug**: Fixed wall snapping calculations
+
 
 ## 🐛 Troubleshooting
 
@@ -331,4 +328,3 @@ MIT License - see LICENSE file for details.
 
 ---
 
-*Built with ❤️ using modern web technologies*

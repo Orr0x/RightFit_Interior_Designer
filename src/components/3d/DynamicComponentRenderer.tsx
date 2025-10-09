@@ -159,17 +159,30 @@ export const DynamicComponentRenderer: React.FC<DynamicComponentRendererProps> =
   const height = element.height / 100; // meters
   const yPosition = isWallCabinet ? 2.0 - height / 2 : height / 2;
 
-  // Rotation center for corner cabinets
-  const centerOffset = useMemo(() => {
+  // Position offset for wall alignment
+  const positionOffset = useMemo(() => {
     if (isCornerCabinet) {
+      // Corner cabinets: offset to rotation center
       const legLength = element.width / 100; // meters
       return {
         x: legLength / 2,
         z: legLength / 2,
       };
     }
-    return { x: 0, z: 0 };
-  }, [isCornerCabinet, element.width]);
+
+    // Standard cabinets: offset so back edge aligns to wall
+    const depth = (element.depth || (isWallCabinet ? 40 : 60)) / 100; // meters
+    const halfDepth = depth / 2;
+
+    // Calculate offset based on rotation
+    // Rotation is in degrees, 0° = facing down (negative Z)
+    const rotationRad = (element.rotation * Math.PI) / 180;
+
+    return {
+      x: Math.sin(rotationRad) * halfDepth,
+      z: -Math.cos(rotationRad) * halfDepth,
+    };
+  }, [isCornerCabinet, element.width, element.depth, element.rotation, isWallCabinet]);
 
   // If loading or error, show nothing (fallback to hardcoded will be used)
   if (loadError || !meshGroup) {
@@ -179,7 +192,7 @@ export const DynamicComponentRenderer: React.FC<DynamicComponentRendererProps> =
   // Render the loaded geometry
   return (
     <group
-      position={[x + centerOffset.x, yPosition, z + centerOffset.z]}
+      position={[x + positionOffset.x, yPosition, z + positionOffset.z]}
       onClick={onClick}
       rotation={[0, element.rotation * Math.PI / 180, 0]}
     >
@@ -204,6 +217,19 @@ export const preloadCommonComponents = async () => {
     'base-cabinet-80',
     'wall-cabinet-60',
     'wall-cabinet-80',
+    // Multi-room furniture (Living/Bedroom)
+    'bed-single',
+    'sofa-3-seater',
+    'dining-chair',
+    'dining-table',
+    'tv-55-inch',
+    // Multi-room appliances (Utility)
+    'washing-machine',
+    'tumble-dryer',
+    // Multi-room fixtures (Bathroom)
+    'toilet-standard',
+    'shower-standard',
+    'bathtub-standard',
   ];
 
   try {
