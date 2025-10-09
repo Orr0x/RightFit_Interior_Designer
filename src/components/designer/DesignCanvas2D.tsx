@@ -1455,7 +1455,8 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
   // Full archive available at:
   // docs/session-2025-10-09-2d-database-migration/LEGACY-CODE-FULL-ARCHIVE.md
   //
-  // Git commit before removal: [will be filled after commit]
+  // Git commit before removal: 14b478d (feat: Implement view-specific corner cabinet door logic)
+  // Git commit with removal: d31b6e2 (Refactor: Remove 875 lines of legacy elevation rendering code)
   // =============================================================================
 
   // Zoom controls removed - now handled by React component in Designer.tsx
