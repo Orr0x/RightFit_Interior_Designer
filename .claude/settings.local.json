@@ -1,0 +1,29 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(npm test:*)",
+      "Bash(npm run:*)",
+      "Bash(git push:*)",
+      "Bash(npx supabase db dump:*)",
+      "Bash(npx supabase db reset:*)",
+      "Bash(npx supabase:*)",
+      "Bash(cat:*)",
+      "Bash(python:*)",
+      "Bash(psql:*)",
+      "Bash(node:*)",
+      "Bash(xargs:*)",
+      "Bash(ls:*)",
+      "Bash(awk:*)",
+      "Bash(mkdir:*)",
+      "Bash(python3:*)",
+      "Bash(npx tsc:*)",
+      "Bash(npx ts-node:*)",
+      "Bash(find:*)",
+      "Bash(npx tsx:*)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}

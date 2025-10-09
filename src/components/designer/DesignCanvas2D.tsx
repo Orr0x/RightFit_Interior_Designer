@@ -8,6 +8,9 @@ import { getEnhancedComponentPlacement } from '@/utils/canvasCoordinateIntegrati
 import { initializeCoordinateEngine } from '@/services/CoordinateTransformEngine';
 import { PositionCalculation } from '@/utils/PositionCalculation';
 import { ConfigurationService } from '@/services/ConfigurationService';
+import { render2DService } from '@/services/Render2DService';
+import { renderPlanView, renderElevationView } from '@/services/2d-renderers';
+import { FeatureFlagService } from '@/services/FeatureFlagService';
 
 // Throttle function for performance optimization
 const throttle = <T extends (...args: any[]) => void>(func: T, delay: number): T => {
@@ -482,6 +485,10 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
         };
 
         console.log('[DesignCanvas2D] Configuration loaded from database:', configCache);
+
+        // Preload 2D render definitions (Phase 3: Database-Driven 2D Rendering)
+        await render2DService.preloadAll();
+        console.log('[DesignCanvas2D] 2D render definitions preloaded');
       } catch (error) {
         console.warn('[DesignCanvas2D] Failed to load configuration, using hardcoded fallbacks:', error);
       }
@@ -1290,25 +1297,54 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
 
       // COLOR DETAIL RENDERING (if enabled)
       if (showColorDetail) {
-        // Element fill
-        if (isSelected) {
-          ctx.fillStyle = '#ff6b6b';
-        } else if (isHovered) {
-          ctx.fillStyle = '#b0b0b0';
-        } else {
-          ctx.fillStyle = element.color || '#8b4513';
+        // Try database-driven rendering first (Phase 3: Database-Driven 2D Rendering)
+        const useDatabaseRendering = FeatureFlagService.isEnabled('use_database_2d_rendering');
+        let renderedByDatabase = false;
+
+        if (useDatabaseRendering) {
+          try {
+            const renderDef = render2DService.getCached(element.component_id);
+            if (renderDef) {
+              // Apply selection/hover colors
+              if (isSelected) {
+                ctx.fillStyle = '#ff6b6b';
+              } else if (isHovered) {
+                ctx.fillStyle = '#b0b0b0';
+              } else {
+                ctx.fillStyle = renderDef.fill_color || element.color || '#8b4513';
+              }
+
+              // Render using database-driven system
+              renderPlanView(ctx, element, renderDef, zoom);
+              renderedByDatabase = true;
+            }
+          } catch (error) {
+            console.warn('[DesignCanvas2D] Database rendering failed, falling back to legacy:', error);
+          }
         }
-        
-        if (element.type === 'sink') {
-          // Sink rendering - draw bowl shape
-          drawSinkPlanView(ctx, element, width, depth, isSelected, isHovered);
-        } else if (isCornerComponent) {
-          // Corner components: Draw as square
-          const squareSize = Math.min(element.width, element.depth) * zoom;
-          ctx.fillRect(0, 0, squareSize, squareSize);
-        } else {
-          // Standard components: Draw as rectangle
-          ctx.fillRect(0, 0, width, depth);
+
+        // Fallback to legacy rendering if database rendering not enabled or failed
+        if (!renderedByDatabase) {
+          // Element fill
+          if (isSelected) {
+            ctx.fillStyle = '#ff6b6b';
+          } else if (isHovered) {
+            ctx.fillStyle = '#b0b0b0';
+          } else {
+            ctx.fillStyle = element.color || '#8b4513';
+          }
+
+          if (element.type === 'sink') {
+            // Sink rendering - draw bowl shape
+            drawSinkPlanView(ctx, element, width, depth, isSelected, isHovered);
+          } else if (isCornerComponent) {
+            // Corner components: Draw as square
+            const squareSize = Math.min(element.width, element.depth) * zoom;
+            ctx.fillRect(0, 0, squareSize, squareSize);
+          } else {
+            // Standard components: Draw as rectangle
+            ctx.fillRect(0, 0, width, depth);
+          }
         }
       }
 
@@ -1506,16 +1542,55 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
     // Draw detailed elevation view
     ctx.save();
 
-    // Main cabinet body
-    if (isSelected) {
-      ctx.fillStyle = '#ff6b6b';
-    } else if (isHovered) {
-      ctx.fillStyle = '#b0b0b0';
-    } else {
-      ctx.fillStyle = element.color || '#8b4513';
+    // Try database-driven rendering first (Phase 3: Database-Driven 2D Rendering)
+    const useDatabaseRendering = FeatureFlagService.isEnabled('use_database_2d_rendering');
+    let renderedByDatabase = false;
+
+    if (useDatabaseRendering) {
+      try {
+        const renderDef = render2DService.getCached(element.component_id);
+        if (renderDef) {
+          // Apply selection/hover colors
+          if (isSelected) {
+            ctx.fillStyle = '#ff6b6b';
+          } else if (isHovered) {
+            ctx.fillStyle = '#b0b0b0';
+          } else {
+            ctx.fillStyle = renderDef.fill_color || element.color || '#8b4513';
+          }
+
+          // Render using database-driven system
+          renderElevationView(
+            ctx,
+            element,
+            renderDef,
+            active2DView,
+            xPos,
+            yPos,
+            elementWidth,
+            elementHeight,
+            zoom
+          );
+          renderedByDatabase = true;
+        }
+      } catch (error) {
+        console.warn('[DesignCanvas2D] Elevation database rendering failed, falling back to legacy:', error);
+      }
     }
-    
-    ctx.fillRect(xPos, yPos, elementWidth, elementHeight);
+
+    // Fallback to legacy rendering if database rendering not enabled or failed
+    if (!renderedByDatabase) {
+      // Main cabinet body
+      if (isSelected) {
+        ctx.fillStyle = '#ff6b6b';
+      } else if (isHovered) {
+        ctx.fillStyle = '#b0b0b0';
+      } else {
+        ctx.fillStyle = element.color || '#8b4513';
+      }
+
+      ctx.fillRect(xPos, yPos, elementWidth, elementHeight);
+    }
 
     // Element border (only when selected)
     if (isSelected) {
@@ -1532,31 +1607,33 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
       ctx.strokeRect(xPos, yPos, elementWidth, elementHeight);
     }
 
-    // Draw detailed fronts based on component type
-    if (element.type.includes('cabinet')) {
-      drawCabinetElevationDetails(ctx, xPos, yPos, elementWidth, elementHeight, element);
-    } else if (element.type.includes('appliance')) {
-      drawApplianceElevationDetails(ctx, xPos, yPos, elementWidth, elementHeight, element);
-    } else if (element.type === 'counter-top') {
-      drawCounterTopElevationDetails(ctx, xPos, yPos, elementWidth, elementHeight, element);
-    } else if (element.type === 'end-panel') {
-      drawEndPanelElevationDetails(ctx, xPos, yPos, elementWidth, elementHeight, element);
-    } else if (element.type === 'window') {
-      drawWindowElevationDetails(ctx, xPos, yPos, elementWidth, elementHeight, element);
-    } else if (element.type === 'door') {
-      drawDoorElevationDetails(ctx, xPos, yPos, elementWidth, elementHeight, element);
-    } else if (element.type === 'flooring') {
-      drawFlooringElevationDetails(ctx, xPos, yPos, elementWidth, elementHeight, element);
-    } else if (element.type === 'toe-kick') {
-      drawToeKickElevationDetails(ctx, xPos, yPos, elementWidth, elementHeight, element);
-    } else if (element.type === 'cornice') {
-      drawCorniceElevationDetails(ctx, xPos, yPos, elementWidth, elementHeight, element);
-    } else if (element.type === 'pelmet') {
-      drawPelmetElevationDetails(ctx, xPos, yPos, elementWidth, elementHeight, element);
-    } else if (element.type === 'wall-unit-end-panel') {
-      drawWallUnitEndPanelElevationDetails(ctx, xPos, yPos, elementWidth, elementHeight, element);
-    } else if (element.type === 'sink') {
-      drawSinkElevationDetails(ctx, xPos, yPos, elementWidth, elementHeight, element);
+    // Draw detailed fronts based on component type (legacy - only if not rendered by database)
+    if (!renderedByDatabase) {
+      if (element.type.includes('cabinet')) {
+        drawCabinetElevationDetails(ctx, xPos, yPos, elementWidth, elementHeight, element);
+      } else if (element.type.includes('appliance')) {
+        drawApplianceElevationDetails(ctx, xPos, yPos, elementWidth, elementHeight, element);
+      } else if (element.type === 'counter-top') {
+        drawCounterTopElevationDetails(ctx, xPos, yPos, elementWidth, elementHeight, element);
+      } else if (element.type === 'end-panel') {
+        drawEndPanelElevationDetails(ctx, xPos, yPos, elementWidth, elementHeight, element);
+      } else if (element.type === 'window') {
+        drawWindowElevationDetails(ctx, xPos, yPos, elementWidth, elementHeight, element);
+      } else if (element.type === 'door') {
+        drawDoorElevationDetails(ctx, xPos, yPos, elementWidth, elementHeight, element);
+      } else if (element.type === 'flooring') {
+        drawFlooringElevationDetails(ctx, xPos, yPos, elementWidth, elementHeight, element);
+      } else if (element.type === 'toe-kick') {
+        drawToeKickElevationDetails(ctx, xPos, yPos, elementWidth, elementHeight, element);
+      } else if (element.type === 'cornice') {
+        drawCorniceElevationDetails(ctx, xPos, yPos, elementWidth, elementHeight, element);
+      } else if (element.type === 'pelmet') {
+        drawPelmetElevationDetails(ctx, xPos, yPos, elementWidth, elementHeight, element);
+      } else if (element.type === 'wall-unit-end-panel') {
+        drawWallUnitEndPanelElevationDetails(ctx, xPos, yPos, elementWidth, elementHeight, element);
+      } else if (element.type === 'sink') {
+        drawSinkElevationDetails(ctx, xPos, yPos, elementWidth, elementHeight, element);
+      }
     }
 
     ctx.restore();
