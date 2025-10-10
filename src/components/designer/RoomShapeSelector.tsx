@@ -161,7 +161,9 @@ export function RoomShapeSelector({
                       </p>
                       <div className="mt-2 flex gap-4 text-xs text-muted-foreground">
                         <span>Floor area: {areaM2}m²</span>
-                        <span>{template.geometry.walls.length} walls</span>
+                        {template.geometry?.walls?.length && (
+                          <span>{template.geometry.walls.length} walls</span>
+                        )}
                         {template.metadata?.suggested_uses && (
                           <span>Ideal for: {template.metadata.suggested_uses.join(', ')}</span>
                         )}
