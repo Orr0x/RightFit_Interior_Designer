@@ -76,7 +76,7 @@ interface ProjectContextType extends ProjectState {
   deleteProject: (projectId: string) => Promise<void>;
   
   // Room Management
-  createRoomDesign: (projectId: string, roomType: RoomType, name?: string) => Promise<RoomDesign | null>;
+  createRoomDesign: (projectId: string, roomType: RoomType, name?: string, templateId?: string | null) => Promise<RoomDesign | null>;
   switchToRoom: (roomId: string) => Promise<void>;
   updateCurrentRoomDesign: (updates: Partial<RoomDesign>, showLoading?: boolean) => Promise<void>;
   deleteRoomDesign: (roomId: string) => Promise<void>;
@@ -469,7 +469,8 @@ export function ProjectProvider({ children }: { children: React.ReactNode }) {
   const createRoomDesign = useCallback(async (
     projectId: string,
     roomType: RoomType,
-    name?: string
+    name?: string,
+    templateId?: string | null
   ): Promise<RoomDesign | null> => {
     try {
       dispatch({ type: 'SET_LOADING', payload: true });
@@ -525,6 +526,37 @@ export function ProjectProvider({ children }: { children: React.ReactNode }) {
         roomName = roomDisplayNames[roomType];
       }
 
+      // Fetch template geometry if templateId is provided
+      let roomGeometry = null;
+      let roomDimensions = { width: 600, height: 400 }; // Default
+
+      if (templateId) {
+        try {
+          const { data: templateData, error: templateError } = await supabase
+            .from('room_geometry_templates')
+            .select('*')
+            .eq('id', templateId)
+            .single();
+
+          if (templateError) {
+            console.warn('[ProjectContext] Failed to fetch template:', templateError);
+          } else if (templateData) {
+            roomGeometry = templateData.geometry;
+
+            // Extract room dimensions from template's bounding box
+            const bbox = templateData.geometry.bounding_box;
+            roomDimensions = {
+              width: bbox.max_x - bbox.min_x,
+              height: bbox.max_y - bbox.min_y
+            };
+
+            console.log(`✅ [ProjectContext] Using template "${templateData.name}" with geometry:`, templateData.shape_type);
+          }
+        } catch (err) {
+          console.error('[ProjectContext] Error fetching template:', err);
+        }
+      }
+
       const { data, error } = await supabase
         .from('room_designs')
         .insert({
@@ -540,10 +572,8 @@ export function ProjectProvider({ children }: { children: React.ReactNode }) {
               snap_to_grid: true
             }
           },
-          room_dimensions: {
-            width: 600,  // Updated to match the new default dimensions
-            height: 400
-          }
+          room_dimensions: roomDimensions,
+          room_geometry: roomGeometry  // Add template geometry
         })
         .select('*')
         .single();

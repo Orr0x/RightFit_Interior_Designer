@@ -6,6 +6,7 @@ import { Badge } from '../ui/badge';
 import { Input } from '../ui/input';
 import { useProject } from '../../contexts/ProjectContext';
 import { RoomType } from '../../types/project';
+import { RoomShapeSelector } from './RoomShapeSelector';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -91,6 +92,10 @@ export function RoomTabs({ className }: RoomTabsProps) {
   const [roomName, setRoomName] = useState('');
   const [colorPickerOpen, setColorPickerOpen] = useState(false);
   const [selectedRoomId, setSelectedRoomId] = useState<string | null>(null);
+
+  // Room shape selector state
+  const [shapeSelectorOpen, setShapeSelectorOpen] = useState(false);
+  const [pendingRoomType, setPendingRoomType] = useState<RoomType | null>(null);
   
   // Scroll state
   const [canScrollLeft, setCanScrollLeft] = useState(false);
@@ -129,8 +134,17 @@ export function RoomTabs({ className }: RoomTabsProps) {
 
   const handleCreateRoom = async (roomType: RoomType) => {
     if (!currentProject) return;
-    
-    await createRoomDesign(currentProject.id, roomType);
+
+    // Open shape selector dialog
+    setPendingRoomType(roomType);
+    setShapeSelectorOpen(true);
+  };
+
+  const handleShapeSelected = async (templateId: string | null, dimensions?: { width: number; height: number }) => {
+    if (!currentProject || !pendingRoomType) return;
+
+    await createRoomDesign(currentProject.id, pendingRoomType, undefined, templateId);
+    setPendingRoomType(null);
   };
 
   const handleDeleteRoom = async (roomId: string, event: React.MouseEvent) => {
@@ -495,6 +509,14 @@ export function RoomTabs({ className }: RoomTabsProps) {
           </div>
         </DialogContent>
       </Dialog>
+
+      {/* Room Shape Selector Dialog */}
+      <RoomShapeSelector
+        open={shapeSelectorOpen}
+        onOpenChange={setShapeSelectorOpen}
+        onSelectShape={handleShapeSelected}
+        roomType={pendingRoomType ? roomDisplayNames[pendingRoomType] : undefined}
+      />
     </>
   );
 }
