@@ -286,6 +286,265 @@ export class RoomService {
     templateCache.clear();
     console.log('🧹 [RoomService] Cache cleared');
   }
+
+  // =========================================================================
+  // PHASE 2: Room Geometry Methods (Complex Room Shapes)
+  // =========================================================================
+
+  /**
+   * Load all room geometry templates
+   * @param activeOnly - Only return active templates (default: true)
+   */
+  static async getRoomGeometryTemplates(activeOnly = true) {
+    try {
+      let query = supabase
+        .from('room_geometry_templates')
+        .select('*')
+        .order('sort_order', { ascending: true });
+
+      if (activeOnly) {
+        query = query.eq('is_active', true);
+      }
+
+      const { data, error } = await query;
+
+      if (error) {
+        console.error('❌ [RoomService] Error loading room geometry templates:', error);
+        throw error;
+      }
+
+      console.log(`✅ [RoomService] Loaded ${data?.length || 0} geometry templates`);
+      return data || [];
+    } catch (error) {
+      console.error('❌ [RoomService] Failed to load room geometry templates:', error);
+      return [];
+    }
+  }
+
+  /**
+   * Load a specific geometry template by name
+   * @param templateName - Template identifier (e.g., 'l-shape-standard')
+   */
+  static async getGeometryTemplate(templateName: string) {
+    try {
+      const { data, error } = await supabase
+        .from('room_geometry_templates')
+        .select('*')
+        .eq('template_name', templateName)
+        .single();
+
+      if (error) {
+        console.error(`❌ [RoomService] Error loading template "${templateName}":`, error);
+        throw error;
+      }
+
+      console.log(`✅ [RoomService] Loaded geometry template: ${templateName}`);
+      return data;
+    } catch (error) {
+      console.error(`❌ [RoomService] Failed to load template "${templateName}":`, error);
+      return null;
+    }
+  }
+
+  /**
+   * Get templates by category
+   * @param category - Template category ('standard', 'l-shape', 'u-shape', etc.)
+   */
+  static async getTemplatesByCategory(category: string) {
+    try {
+      const { data, error } = await supabase
+        .from('room_geometry_templates')
+        .select('*')
+        .eq('category', category)
+        .eq('is_active', true)
+        .order('sort_order');
+
+      if (error) throw error;
+
+      console.log(`✅ [RoomService] Loaded ${data?.length || 0} templates for category: ${category}`);
+      return data || [];
+    } catch (error) {
+      console.error(`❌ [RoomService] Failed to load templates for category "${category}":`, error);
+      return [];
+    }
+  }
+
+  /**
+   * Apply geometry template to a room with optional custom parameters
+   * @param roomId - Room design ID
+   * @param templateName - Template identifier
+   * @param parameters - Optional parameter overrides (e.g., { width: 800, depth: 500 })
+   */
+  static async applyGeometryTemplate(
+    roomId: string,
+    templateName: string,
+    parameters?: Record<string, number>
+  ): Promise<{ success: boolean; error?: string }> {
+    try {
+      // 1. Load template
+      const template = await this.getGeometryTemplate(templateName);
+      if (!template) {
+        return { success: false, error: `Template "${templateName}" not found` };
+      }
+
+      // 2. Get geometry (with or without parameter application)
+      let geometry = template.geometry_definition;
+
+      // 3. Apply parameters if provided
+      if (parameters && template.parameter_config) {
+        // TODO: Implement parameter application (Phase 2 advanced task)
+        // For now, just use default geometry
+        console.warn('⚠️ [RoomService] Parameter application not yet implemented');
+      }
+
+      // 4. Update room
+      const { error } = await supabase
+        .from('room_designs')
+        .update({ room_geometry: geometry })
+        .eq('id', roomId);
+
+      if (error) throw error;
+
+      console.log(`✅ [RoomService] Applied geometry template "${templateName}" to room ${roomId}`);
+      return { success: true };
+    } catch (error: any) {
+      console.error('❌ [RoomService] Failed to apply geometry template:', error);
+      return { success: false, error: error.message };
+    }
+  }
+
+  /**
+   * Get room geometry (returns complex geometry or generates simple rectangle)
+   * @param roomId - Room design ID
+   */
+  static async getRoomGeometry(roomId: string) {
+    try {
+      const { data, error } = await supabase
+        .from('room_designs')
+        .select('room_geometry, room_dimensions')
+        .eq('id', roomId)
+        .single();
+
+      if (error) throw error;
+
+      // Return complex geometry if available
+      if (data.room_geometry) {
+        console.log(`✅ [RoomService] Loaded complex geometry for room ${roomId}`);
+        return data.room_geometry;
+      }
+
+      // Fallback: Generate simple rectangle from room_dimensions
+      if (data.room_dimensions) {
+        console.log(`📐 [RoomService] Generating simple rectangle for room ${roomId}`);
+        return this.generateSimpleRectangleGeometry(data.room_dimensions);
+      }
+
+      console.warn(`⚠️ [RoomService] No geometry or dimensions found for room ${roomId}`);
+      return null;
+    } catch (error) {
+      console.error(`❌ [RoomService] Failed to load room geometry for ${roomId}:`, error);
+      return null;
+    }
+  }
+
+  /**
+   * Generate simple rectangle geometry from room_dimensions (backward compatibility)
+   * @private
+   */
+  private static generateSimpleRectangleGeometry(dimensions: any) {
+    const width = dimensions.width || 600;
+    const height = dimensions.height || 400;
+    const ceilingHeight = dimensions.ceilingHeight || 250;
+
+    return {
+      shape_type: 'rectangle',
+      bounding_box: {
+        min_x: 0,
+        min_y: 0,
+        max_x: width,
+        max_y: height
+      },
+      floor: {
+        type: 'polygon',
+        vertices: [
+          [0, 0],
+          [width, 0],
+          [width, height],
+          [0, height]
+        ],
+        elevation: 0
+      },
+      walls: [
+        {
+          id: 'wall_north',
+          start: [0, 0],
+          end: [width, 0],
+          height: ceilingHeight,
+          type: 'solid'
+        },
+        {
+          id: 'wall_east',
+          start: [width, 0],
+          end: [width, height],
+          height: ceilingHeight,
+          type: 'solid'
+        },
+        {
+          id: 'wall_south',
+          start: [width, height],
+          end: [0, height],
+          height: ceilingHeight,
+          type: 'solid'
+        },
+        {
+          id: 'wall_west',
+          start: [0, height],
+          end: [0, 0],
+          height: ceilingHeight,
+          type: 'solid'
+        }
+      ],
+      ceiling: {
+        type: 'flat',
+        zones: [
+          {
+            vertices: [
+              [0, 0],
+              [width, 0],
+              [width, height],
+              [0, height]
+            ],
+            height: ceilingHeight,
+            style: 'flat'
+          }
+        ]
+      },
+      metadata: {
+        total_floor_area: width * height
+      }
+    };
+  }
+
+  /**
+   * Clear room geometry (revert to simple rectangle)
+   * @param roomId - Room design ID
+   */
+  static async clearRoomGeometry(roomId: string): Promise<boolean> {
+    try {
+      const { error } = await supabase
+        .from('room_designs')
+        .update({ room_geometry: null })
+        .eq('id', roomId);
+
+      if (error) throw error;
+
+      console.log(`✅ [RoomService] Cleared geometry for room ${roomId}`);
+      return true;
+    } catch (error) {
+      console.error(`❌ [RoomService] Failed to clear room geometry for ${roomId}:`, error);
+      return false;
+    }
+  }
 }
 
 export default RoomService;
