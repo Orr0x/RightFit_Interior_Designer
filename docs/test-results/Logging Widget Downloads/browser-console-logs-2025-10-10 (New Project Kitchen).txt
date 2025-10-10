@@ -1,0 +1,163 @@
+
+================================================================================
+BROWSER CONSOLE LOGS
+================================================================================
+Captured: 64 log entries
+Session Start: 2025-10-10T12:57:35.878Z
+Session End: 2025-10-10T12:57:46.137Z
+================================================================================
+
+[2025-10-10T12:57:35.878Z] 📝 [LOG] 💾 [ProjectContext] Auto-saving design...
+[2025-10-10T12:57:35.879Z] 📝 [LOG] 💾 [ProjectContext] Saving current design... {
+  "roomId": "af65f3f3-d44d-4af1-8010-3996ff4df617",
+  "showNotification": false
+}
+[2025-10-10T12:57:38.839Z] 📝 [LOG] 📂 [CompactComponentSidebar] Grouping 0 filtered components by category
+[2025-10-10T12:57:38.839Z] 📝 [LOG] 📂 [CompactComponentSidebar] Final categories with components: []
+[2025-10-10T12:57:38.839Z] ❌ [ERROR] ❌ [CompactComponentSidebar] WALL UNITS CATEGORY MISSING FROM FINAL GROUPS!
+[2025-10-10T12:57:38.839Z] 📝 [LOG] 📂 [CompactComponentSidebar] Available categories: []
+[2025-10-10T12:57:38.839Z] 📝 [LOG] ⏳ [CompactComponentSidebar] Component sidebar in loading state
+[2025-10-10T12:57:38.845Z] 📝 [LOG] 🎯 [PerformanceMonitor] Performance monitor hidden
+[2025-10-10T12:57:38.852Z] 📝 [LOG] ⚡ [useOptimizedComponents] Loaded components from cache
+[2025-10-10T12:57:38.853Z] 📝 [LOG] 🚀 [Designer] Preloading common component behaviors for performance
+[2025-10-10T12:57:38.853Z] 📝 [LOG] 🔥 [ComponentService] Preloading common component behaviors
+[2025-10-10T12:57:38.853Z] 📝 [LOG] 🔄 [ComponentService] Batch loading behaviors for 10 component types
+[2025-10-10T12:57:38.853Z] 📝 [LOG] ⚡ [ComponentService] All 10 behaviors found in cache
+[2025-10-10T12:57:38.859Z] 📝 [LOG] [ConfigService] Feature disabled, skipping preload
+[2025-10-10T12:57:38.859Z] 📝 [LOG] 🏗️ [CoordinateEngine] Initialized with inner room dimensions: {
+  "innerWidth": 600,
+  "innerHeight": 400,
+  "ceilingHeight": 240,
+  "wallThickness": 10
+}
+[2025-10-10T12:57:38.859Z] 📝 [LOG] 🏗️ [DesignCanvas2D] Coordinate engine initialized for room: {
+  "width": 600,
+  "height": 400
+}
+[2025-10-10T12:57:38.859Z] 📝 [LOG] [DesignCanvas2D] Configuration loaded from database: {
+  "canvas_width": 1600,
+  "canvas_height": 1200,
+  "grid_size": 20,
+  "min_zoom": 0.5,
+  "max_zoom": 4,
+  "wall_thickness": 10,
+  "wall_clearance": 5,
+  "wall_snap_threshold": 40,
+  "snap_tolerance_default": 15,
+  "snap_tolerance_countertop": 25,
+  "proximity_threshold": 100,
+  "wall_snap_distance_default": 35,
+  "wall_snap_distance_countertop": 50,
+  "corner_tolerance": 30,
+  "toe_kick_height": 8,
+  "drag_threshold_mouse": 5,
+  "drag_threshold_touch": 10
+}
+[2025-10-10T12:57:38.860Z] 📝 [LOG] ✅ [Designer] Preloading complete
+[2025-10-10T12:57:38.860Z] 📝 [LOG] 🚀 [DesignCanvas2D] Preloaded component behaviors and room config
+[2025-10-10T12:57:38.860Z] 📝 [LOG] [DesignCanvas2D] 2D render definitions preloaded
+[2025-10-10T12:57:38.956Z] 📝 [LOG] 🔧 [ProjectContext] Auto-save initialization check {
+  "autoSaveEnabled": true,
+  "hasInterval": true,
+  "hasCurrentRoom": false
+}
+[2025-10-10T12:57:42.138Z] 📝 [LOG] 📂 [CompactComponentSidebar] Grouping 0 filtered components by category
+[2025-10-10T12:57:42.138Z] 📝 [LOG] 📂 [CompactComponentSidebar] Final categories with components: []
+[2025-10-10T12:57:42.138Z] ❌ [ERROR] ❌ [CompactComponentSidebar] WALL UNITS CATEGORY MISSING FROM FINAL GROUPS!
+[2025-10-10T12:57:42.138Z] 📝 [LOG] 📂 [CompactComponentSidebar] Available categories: []
+[2025-10-10T12:57:42.138Z] 📝 [LOG] ⏳ [CompactComponentSidebar] Component sidebar in loading state
+[2025-10-10T12:57:42.142Z] 📝 [LOG] 🎯 [PerformanceMonitor] Performance monitor hidden
+[2025-10-10T12:57:42.143Z] 📝 [LOG] 🧹 [ProjectContext] Cleaning up auto-save interval on room change
+[2025-10-10T12:57:42.147Z] 📝 [LOG] ⚡ [useOptimizedComponents] Loaded components from cache
+[2025-10-10T12:57:42.149Z] 📝 [LOG] 🔧 [ProjectContext] Auto-save initialization check {
+  "autoSaveEnabled": true,
+  "hasInterval": true,
+  "hasCurrentRoom": true,
+  "roomId": "a8eee993-1a60-4acd-a5d6-3a70615a3c12"
+}
+[2025-10-10T12:57:42.153Z] 📝 [LOG] [ConfigService] Feature disabled, skipping preload
+[2025-10-10T12:57:42.153Z] 📝 [LOG] 🏗️ [CoordinateEngine] Initialized with inner room dimensions: {
+  "innerWidth": 600,
+  "innerHeight": 400,
+  "ceilingHeight": 240,
+  "wallThickness": 10
+}
+[2025-10-10T12:57:42.153Z] 📝 [LOG] 🏗️ [DesignCanvas2D] Coordinate engine initialized for room: {
+  "width": 600,
+  "height": 400
+}
+[2025-10-10T12:57:42.154Z] 📝 [LOG] [DesignCanvas2D] Configuration loaded from database: {
+  "canvas_width": 1600,
+  "canvas_height": 1200,
+  "grid_size": 20,
+  "min_zoom": 0.5,
+  "max_zoom": 4,
+  "wall_thickness": 10,
+  "wall_clearance": 5,
+  "wall_snap_threshold": 40,
+  "snap_tolerance_default": 15,
+  "snap_tolerance_countertop": 25,
+  "proximity_threshold": 100,
+  "wall_snap_distance_default": 35,
+  "wall_snap_distance_countertop": 50,
+  "corner_tolerance": 30,
+  "toe_kick_height": 8,
+  "drag_threshold_mouse": 5,
+  "drag_threshold_touch": 10
+}
+[2025-10-10T12:57:42.154Z] 📝 [LOG] 🚀 [DesignCanvas2D] Preloaded component behaviors and room config
+[2025-10-10T12:57:42.154Z] 📝 [LOG] [DesignCanvas2D] 2D render definitions preloaded
+[2025-10-10T12:57:42.157Z] 📝 [LOG] 🔍 [CompactComponentSidebar] Filtering components for room type: kitchen
+[2025-10-10T12:57:42.157Z] 📝 [LOG] 🔍 [CompactComponentSidebar] Total components loaded: 194
+[2025-10-10T12:57:42.157Z] 📝 [LOG] 🔍 [CompactComponentSidebar] Components available for kitchen: 94
+[2025-10-10T12:57:42.157Z] 📝 [LOG] 🏠 [CompactComponentSidebar] Wall units available for kitchen: 0 (lowercase: 0, title: 0)
+[2025-10-10T12:57:42.158Z] ⚠️ [WARN] ⚠️ [CompactComponentSidebar] NO WALL UNITS AVAILABLE for room type: kitchen
+[2025-10-10T12:57:42.158Z] 📝 [LOG] 📂 [CompactComponentSidebar] Grouping 94 filtered components by category
+[2025-10-10T12:57:42.158Z] 📝 [LOG] 📂 [CompactComponentSidebar] Final categories with components: [
+  "appliances",
+  "base-cabinets",
+  "counter-tops",
+  "doors-external",
+  "doors-internal",
+  "finishing",
+  "kitchen-larder",
+  "sinks",
+  "wall-cabinets",
+  "windows"
+]
+[2025-10-10T12:57:42.158Z] 📝 [LOG] 📂 [CompactComponentSidebar] appliances: 11 components
+[2025-10-10T12:57:42.158Z] 📝 [LOG] 📂 [CompactComponentSidebar] base-cabinets: 15 components
+[2025-10-10T12:57:42.158Z] 📝 [LOG] 📂 [CompactComponentSidebar] counter-tops: 6 components
+[2025-10-10T12:57:42.159Z] 📝 [LOG] 📂 [CompactComponentSidebar] doors-external: 4 components
+[2025-10-10T12:57:42.159Z] 📝 [LOG] 📂 [CompactComponentSidebar] doors-internal: 8 components
+[2025-10-10T12:57:42.159Z] 📝 [LOG] 📂 [CompactComponentSidebar] finishing: 11 components
+[2025-10-10T12:57:42.159Z] 📝 [LOG] 📂 [CompactComponentSidebar] kitchen-larder: 5 components
+[2025-10-10T12:57:42.159Z] 📝 [LOG] 📂 [CompactComponentSidebar] sinks: 20 components
+[2025-10-10T12:57:42.159Z] 📝 [LOG] 📂 [CompactComponentSidebar] wall-cabinets: 7 components
+[2025-10-10T12:57:42.159Z] 📝 [LOG] 📂 [CompactComponentSidebar] windows: 7 components
+[2025-10-10T12:57:42.160Z] ❌ [ERROR] ❌ [CompactComponentSidebar] WALL UNITS CATEGORY MISSING FROM FINAL GROUPS!
+[2025-10-10T12:57:42.160Z] 📝 [LOG] 📂 [CompactComponentSidebar] Available categories: [
+  "appliances",
+  "base-cabinets",
+  "counter-tops",
+  "doors-external",
+  "doors-internal",
+  "finishing",
+  "kitchen-larder",
+  "sinks",
+  "wall-cabinets",
+  "windows"
+]
+[2025-10-10T12:57:42.160Z] 📝 [LOG] ✅ [CompactComponentSidebar] Component sidebar rendered successfully
+[2025-10-10T12:57:42.160Z] 📝 [LOG] ✅ [CompactComponentSidebar] Summary: 194 total, 94 for kitchen, 10 categories
+[2025-10-10T12:57:42.170Z] 📝 [LOG] 🎯 [PerformanceMonitor] Performance monitor hidden
+[2025-10-10T12:57:42.190Z] 📝 [LOG] ✅ [CompactComponentSidebar] Component sidebar rendered successfully
+[2025-10-10T12:57:42.191Z] 📝 [LOG] ✅ [CompactComponentSidebar] Summary: 194 total, 94 for kitchen, 10 categories
+[2025-10-10T12:57:42.196Z] 📝 [LOG] 🎯 [PerformanceMonitor] Performance monitor hidden
+[2025-10-10T12:57:46.132Z] 📝 [LOG] ✅ [CompactComponentSidebar] Component sidebar rendered successfully
+[2025-10-10T12:57:46.132Z] 📝 [LOG] ✅ [CompactComponentSidebar] Summary: 194 total, 94 for kitchen, 10 categories
+[2025-10-10T12:57:46.137Z] 📝 [LOG] 🎯 [PerformanceMonitor] Performance monitor hidden
+
+================================================================================
+END OF LOGS (64 entries)
+================================================================================
