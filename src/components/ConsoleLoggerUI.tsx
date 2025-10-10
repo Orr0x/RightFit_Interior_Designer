@@ -45,6 +45,11 @@ export const ConsoleLoggerUI: React.FC = () => {
     }
   };
 
+  // Only show in development mode
+  if (!import.meta.env.DEV) {
+    return null;
+  }
+
   if (!consoleLogger.isActive()) {
     return null;
   }

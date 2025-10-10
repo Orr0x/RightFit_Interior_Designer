@@ -41,8 +41,11 @@ const App = () => {
   useEffect(() => {
     preloadCommonComponents();
 
-    // Start console log capture
-    setupConsoleLogger();
+    // Start console log capture (development mode only)
+    if (import.meta.env.DEV) {
+      setupConsoleLogger();
+      console.info('🔧 [App] Console logger enabled (development mode)');
+    }
   }, []);
 
   return (
