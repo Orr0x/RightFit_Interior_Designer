@@ -61,12 +61,16 @@ interface DesignCanvas2DProps {
   onZoomOut?: () => void;
 }
 
-// Default room fallbacks (will be replaced by database values)
-const DEFAULT_ROOM_FALLBACK = {
-  width: 600, // cm
-  height: 400, // cm
-  wallHeight: 240 // cm - fallback only, should use roomDimensions.ceilingHeight
-};
+// =============================================================================
+// REMOVED: DEFAULT_ROOM_FALLBACK (deleted on 2025-10-10)
+// =============================================================================
+// Hardcoded room fallback removed. Room dimensions must come from:
+// 1. design.roomDimensions (primary source)
+// 2. room_type_templates database table (via RoomService)
+//
+// If design.roomDimensions is missing, this is a data integrity error
+// and should be logged/reported rather than silently falling back.
+// =============================================================================
 
 // Room configuration cache
 let roomConfigCache: any = null;
@@ -448,8 +452,13 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
     snapPoint: { x: number; y: number } | null;
   }>({ vertical: [], horizontal: [], snapPoint: null });
 
-  // Use design dimensions or default
-  const roomDimensions = design.roomDimensions || DEFAULT_ROOM_FALLBACK;
+  // Use design dimensions (required)
+  // If roomDimensions is missing, this indicates a data integrity error
+  if (!design.roomDimensions) {
+    console.error('[DesignCanvas2D] Missing room dimensions in design object:', design);
+    throw new Error('Room dimensions are required. This is a data integrity error.');
+  }
+  const roomDimensions = design.roomDimensions;
   
   // Mobile detection
   const isMobile = useIsMobile();
@@ -499,7 +508,8 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
 
   // Helper function to get wall height (ceiling height) - prioritize room dimensions over cache
   const getWallHeight = useCallback(() => {
-    return roomDimensions.ceilingHeight || roomConfigCache?.wall_height || DEFAULT_ROOM_FALLBACK.wallHeight;
+    // Priority: roomDimensions.ceilingHeight > roomConfigCache > hardcoded 250cm default
+    return roomDimensions.ceilingHeight || roomConfigCache?.wall_height || 250;
   }, [roomDimensions.ceilingHeight]);
   
   // Calculate room bounds with wall thickness
