@@ -58,6 +58,8 @@ export function RoomShapeSelector({
   }, [open]);
 
   const handleConfirm = () => {
+    console.log('[RoomShapeSelector] Confirming selection with templateId:', selectedTemplateId);
+    console.log('[RoomShapeSelector] Selected template:', templates.find(t => t.id === selectedTemplateId)?.display_name);
     onSelectShape(selectedTemplateId, selectedTemplateId ? undefined : customDimensions);
     onOpenChange(false);
   };
@@ -127,8 +129,8 @@ export function RoomShapeSelector({
 
             {/* Template Options */}
             {templates.map((template) => {
-              const Icon = shapeIcons[template.shape_type as keyof typeof shapeIcons] || Shapes;
-              const totalArea = template.metadata?.total_floor_area || 0;
+              const Icon = shapeIcons[template.category as keyof typeof shapeIcons] || Shapes;
+              const totalArea = template.geometry_definition?.metadata?.total_floor_area || 0;
               const areaM2 = (totalArea / 10000).toFixed(1); // cm² to m²
 
               return (
@@ -148,11 +150,11 @@ export function RoomShapeSelector({
                     </div>
                     <div className="flex-1">
                       <div className="flex items-center gap-2">
-                        <h3 className="font-semibold">{template.name}</h3>
-                        {template.shape_type === 'l-shape' && (
+                        <h3 className="font-semibold">{template.display_name}</h3>
+                        {template.category === 'l-shape' && (
                           <Badge>L-Shape</Badge>
                         )}
-                        {template.shape_type === 'u-shape' && (
+                        {template.category === 'u-shape' && (
                           <Badge>U-Shape</Badge>
                         )}
                       </div>
@@ -161,11 +163,11 @@ export function RoomShapeSelector({
                       </p>
                       <div className="mt-2 flex gap-4 text-xs text-muted-foreground">
                         <span>Floor area: {areaM2}m²</span>
-                        {template.geometry?.walls?.length && (
-                          <span>{template.geometry.walls.length} walls</span>
+                        {template.geometry_definition?.walls?.length && (
+                          <span>{template.geometry_definition.walls.length} walls</span>
                         )}
-                        {template.metadata?.suggested_uses && (
-                          <span>Ideal for: {template.metadata.suggested_uses.join(', ')}</span>
+                        {template.geometry_definition?.metadata?.suggested_uses && (
+                          <span>Ideal for: {template.geometry_definition.metadata.suggested_uses.join(', ')}</span>
                         )}
                       </div>
                     </div>
@@ -181,7 +183,7 @@ export function RoomShapeSelector({
             Cancel
           </Button>
           <Button onClick={handleConfirm}>
-            Create {selectedTemplate ? selectedTemplate.name : 'Rectangle'} Room
+            Create {selectedTemplate ? selectedTemplate.display_name : 'Rectangle'} Room
           </Button>
         </DialogFooter>
       </DialogContent>

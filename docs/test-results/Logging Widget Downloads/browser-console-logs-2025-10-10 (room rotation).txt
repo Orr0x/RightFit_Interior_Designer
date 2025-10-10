@@ -1,0 +1,1387 @@
+
+================================================================================
+BROWSER CONSOLE LOGS
+================================================================================
+Captured: 282 log entries
+Session Start: 2025-10-10T21:29:28.790Z
+Session End: 2025-10-10T21:29:56.167Z
+================================================================================
+
+[2025-10-10T21:29:28.790Z] ℹ️ [INFO] 🔧 [App] Console logger enabled (development mode)
+[2025-10-10T21:29:29.067Z] 📝 [LOG] [Model3DLoader] Preloading 18 models...
+[2025-10-10T21:29:29.464Z] 📝 [LOG] [Model3DLoader] Loaded model from database: base-cabinet-60
+[2025-10-10T21:29:29.466Z] 📝 [LOG] [Model3DLoader] Loaded model from database: new-corner-wall-cabinet-90
+[2025-10-10T21:29:29.475Z] 📝 [LOG] [Model3DLoader] Loaded model from database: toilet-standard
+[2025-10-10T21:29:29.476Z] 📝 [LOG] [Model3DLoader] Loaded model from database: dining-table
+[2025-10-10T21:29:29.477Z] 📝 [LOG] [Model3DLoader] Loaded model from database: wall-cabinet-60
+[2025-10-10T21:29:29.479Z] 📝 [LOG] [Model3DLoader] Loaded model from database: sofa-3-seater
+[2025-10-10T21:29:29.480Z] 📝 [LOG] [Model3DLoader] Loaded model from database: wall-cabinet-80
+[2025-10-10T21:29:29.484Z] 📝 [LOG] [Model3DLoader] Loaded model from database: shower-standard
+[2025-10-10T21:29:29.488Z] 📝 [LOG] [Model3DLoader] Loaded model from database: washing-machine
+[2025-10-10T21:29:29.489Z] 📝 [LOG] [Model3DLoader] Loaded model from database: l-shaped-test-cabinet-90
+[2025-10-10T21:29:29.490Z] 📝 [LOG] [Model3DLoader] Loaded model from database: tumble-dryer
+[2025-10-10T21:29:29.490Z] 📝 [LOG] [Model3DLoader] Loaded model from database: base-cabinet-80
+[2025-10-10T21:29:29.490Z] 📝 [LOG] [Model3DLoader] Loaded model from database: bathtub-standard
+[2025-10-10T21:29:29.493Z] 📝 [LOG] [Model3DLoader] Loaded model from database: dining-chair
+[2025-10-10T21:29:29.494Z] 📝 [LOG] [Model3DLoader] Loaded model from database: tv-55-inch
+[2025-10-10T21:29:29.494Z] 📝 [LOG] [Model3DLoader] Loaded model from database: bed-single
+[2025-10-10T21:29:29.503Z] 📝 [LOG] [Model3DLoader] Loaded model from database: l-shaped-test-cabinet-60
+[2025-10-10T21:29:29.506Z] 📝 [LOG] [Model3DLoader] Loaded model from database: new-corner-wall-cabinet-60
+[2025-10-10T21:29:29.513Z] 📝 [LOG] 🔐 [ProjectContext] Auth ready, loading user projects...
+[2025-10-10T21:29:29.564Z] 📝 [LOG] 🔐 [ProjectContext] Auth ready, loading user projects...
+[2025-10-10T21:29:29.597Z] 📝 [LOG] [Model3DLoader] Loaded 5 geometry parts for model: 68fcf22e-52dc-4cd2-9bc4-47d888fb8752
+[2025-10-10T21:29:29.598Z] 📝 [LOG] [Model3DLoader] Loaded 6 geometry parts for model: 43b45e50-439e-4647-b320-7b0d2d51d311
+[2025-10-10T21:29:29.601Z] 📝 [LOG] [Model3DLoader] Loaded 6 geometry parts for model: a8b66209-ccef-4e44-a761-df5f37ac640b
+[2025-10-10T21:29:29.602Z] 📝 [LOG] [Model3DLoader] Loaded 4 geometry parts for model: 60f2345b-4c36-4f2f-95d0-493b16b7374a
+[2025-10-10T21:29:29.607Z] 📝 [LOG] [Model3DLoader] Loaded 4 geometry parts for model: 8fef412a-8649-4895-8cd5-fd53d0677ac1
+[2025-10-10T21:29:29.611Z] 📝 [LOG] [Model3DLoader] Loaded 8 geometry parts for model: 6a45d0f6-5116-409a-8ab9-aacebd466a31
+[2025-10-10T21:29:29.612Z] 📝 [LOG] [Model3DLoader] Loaded 8 geometry parts for model: 701c19a3-0083-41d2-aec8-96c540a1833d
+[2025-10-10T21:29:29.615Z] 📝 [LOG] [Model3DLoader] Loaded 6 geometry parts for model: c509bed1-9882-44d5-8e44-be6c625cf0b6
+[2025-10-10T21:29:29.616Z] 📝 [LOG] [Model3DLoader] Loaded 3 geometry parts for model: 84b234b5-f96f-4080-9b71-b9e66cf41dfb
+[2025-10-10T21:29:29.617Z] 📝 [LOG] [Model3DLoader] Loaded 6 geometry parts for model: dee1b997-eb19-4228-b69f-7dff6204ae01
+[2025-10-10T21:29:29.620Z] 📝 [LOG] [Model3DLoader] Loaded 10 geometry parts for model: 138cf90c-ba72-450e-a50e-f39da21ca44d
+[2025-10-10T21:29:29.621Z] 📝 [LOG] [Model3DLoader] Loaded 5 geometry parts for model: 9b93fa5d-fde1-4330-8f1d-84ecb01e0607
+[2025-10-10T21:29:29.623Z] 📝 [LOG] [Model3DLoader] Loaded 3 geometry parts for model: 540faede-366d-4fa2-b169-97fec6766db4
+[2025-10-10T21:29:29.623Z] 📝 [LOG] [Model3DLoader] Loaded 11 geometry parts for model: 7e845283-165b-4a1e-95e6-565adc87fc60
+[2025-10-10T21:29:29.623Z] 📝 [LOG] [Model3DLoader] Loaded 5 geometry parts for model: 6942fc4e-5bf6-480e-81ea-16c79a782954
+[2025-10-10T21:29:29.623Z] 📝 [LOG] [Model3DLoader] Loaded 4 geometry parts for model: f8ac534e-6911-477b-bbf3-5c66afa03ed8
+[2025-10-10T21:29:29.625Z] 📝 [LOG] 🔐 [ProjectContext] Auth ready, loading user projects...
+[2025-10-10T21:29:29.626Z] 📝 [LOG] [Model3DLoader] Loaded 5 geometry parts for model: d91a5c3a-2af9-4c8f-8cb3-a62f84cef732
+[2025-10-10T21:29:29.627Z] 📝 [LOG] [Model3DLoader] Loaded 5 geometry parts for model: 932bc10c-f028-4375-8593-8d2f9bb30fbb
+[2025-10-10T21:29:29.672Z] 📝 [LOG] 🔐 [ProjectContext] Auth ready, loading user projects...
+[2025-10-10T21:29:29.711Z] 📝 [LOG] [Model3DLoader] Loaded 17 materials
+[2025-10-10T21:29:29.711Z] 📝 [LOG] [Model3DLoader] Preloaded 18 models with geometry and materials
+[2025-10-10T21:29:29.711Z] 📝 [LOG] [DynamicRenderer] Preloaded common components
+[2025-10-10T21:29:29.716Z] 📝 [LOG] 🔐 [ProjectContext] Auth ready, loading user projects...
+[2025-10-10T21:29:35.378Z] 📝 [LOG] 🚀 [Designer] Preloading common component behaviors for performance
+[2025-10-10T21:29:35.378Z] 📝 [LOG] 🔥 [ComponentService] Preloading common component behaviors
+[2025-10-10T21:29:35.378Z] 📝 [LOG] 🔄 [ComponentService] Batch loading behaviors for 10 component types
+[2025-10-10T21:29:35.378Z] 📝 [LOG] 🔍 [ComponentService] Loading 10 uncached behaviors from database
+[2025-10-10T21:29:35.456Z] 📝 [LOG] ✅ [ComponentService] Batch loaded 10 component behaviors
+[2025-10-10T21:29:35.456Z] 📝 [LOG] ✅ [Designer] Preloading complete
+[2025-10-10T21:29:35.535Z] 📝 [LOG] ✅ [RoomService] Loaded 6 geometry templates
+[2025-10-10T21:29:41.196Z] 📝 [LOG] [RoomShapeSelector] Confirming selection with templateId: 2af972d9-9014-4601-b41d-7c26d629dcf3
+[2025-10-10T21:29:41.196Z] 📝 [LOG] [RoomShapeSelector] Selected template: L-Shaped Kitchen
+[2025-10-10T21:29:41.197Z] 📝 [LOG] [RoomTabs] handleShapeSelected called with templateId: 2af972d9-9014-4601-b41d-7c26d629dcf3
+[2025-10-10T21:29:41.197Z] 📝 [LOG] [RoomTabs] Creating room with type: kitchen
+[2025-10-10T21:29:41.197Z] 📝 [LOG] [ProjectContext] createRoomDesign called with templateId: 2af972d9-9014-4601-b41d-7c26d629dcf3
+[2025-10-10T21:29:41.197Z] 📝 [LOG] [ProjectContext] Fetching template geometry for templateId: 2af972d9-9014-4601-b41d-7c26d629dcf3
+[2025-10-10T21:29:41.278Z] 📝 [LOG] ✅ [ProjectContext] Using template "L-Shaped Kitchen" with geometry: l-shape
+[2025-10-10T21:29:41.278Z] 📝 [LOG] [ProjectContext] Room dimensions from template: {
+  "width": 600,
+  "height": 400
+}
+[2025-10-10T21:29:41.278Z] 📝 [LOG] [ProjectContext] Room geometry: {
+  "floor": {
+    "type": "polygon",
+    "vertices": [
+      [
+        0,
+        0
+      ],
+      [
+        600,
+        0
+      ],
+      [
+        600,
+        300
+      ],
+      [
+        300,
+        300
+      ],
+      [
+        300,
+        400
+      ],
+      [
+        0,
+        400
+      ]
+    ],
+    "elevation": 0
+  },
+  "walls": [
+    {
+      "id": "wall-1",
+      "end": [
+        600,
+        0
+      ],
+      "start": [
+        0,
+        0
+      ],
+      "height": 240,
+      "has_door": false,
+      "material": "default",
+      "thickness": 15,
+      "has_window": false
+    },
+    {
+      "id": "wall-2",
+      "end": [
+        600,
+        300
+      ],
+      "start": [
+        600,
+        0
+      ],
+      "height": 240,
+      "has_door": false,
+      "material": "default",
+      "thickness": 15,
+      "has_window": false
+    },
+    {
+      "id": "wall-3",
+      "end": [
+        300,
+        300
+      ],
+      "start": [
+        600,
+        300
+      ],
+      "height": 240,
+      "has_door": false,
+      "material": "default",
+      "thickness": 15,
+      "has_window": false
+    },
+    {
+      "id": "wall-4",
+      "end": [
+        300,
+        400
+      ],
+      "start": [
+        300,
+        300
+      ],
+      "height": 240,
+      "has_door": false,
+      "material": "default",
+      "thickness": 15,
+      "has_window": false
+    },
+    {
+      "id": "wall-5",
+      "end": [
+        0,
+        400
+      ],
+      "start": [
+        300,
+        400
+      ],
+      "height": 240,
+      "has_door": false,
+      "material": "default",
+      "thickness": 15,
+      "has_window": false
+    },
+    {
+      "id": "wall-6",
+      "end": [
+        0,
+        0
+      ],
+      "start": [
+        0,
+        400
+      ],
+      "height": 240,
+      "has_door": false,
+      "material": "default",
+      "thickness": 15,
+      "has_window": false
+    }
+  ],
+  "ceiling": {
+    "type": "polygon",
+    "height": 240,
+    "vertices": [
+      [
+        0,
+        0
+      ],
+      [
+        600,
+        0
+      ],
+      [
+        600,
+        300
+      ],
+      [
+        300,
+        300
+      ],
+      [
+        300,
+        400
+      ],
+      [
+        0,
+        400
+      ]
+    ],
+    "elevation": 240
+  },
+  "metadata": {
+    "complexity": "moderate",
+    "suggested_uses": [
+      "kitchen",
+      "living-room"
+    ],
+    "total_floor_area": 210000,
+    "total_wall_length": 2200
+  },
+  "shape_type": "l-shape",
+  "bounding_box": {
+    "max_x": 600,
+    "max_y": 400,
+    "min_x": 0,
+    "min_y": 0
+  }
+}
+[2025-10-10T21:29:41.353Z] 📝 [LOG] 📂 [CompactComponentSidebar] Grouping 0 filtered components by category
+[2025-10-10T21:29:41.353Z] 📝 [LOG] 📂 [CompactComponentSidebar] Final categories with components: []
+[2025-10-10T21:29:41.354Z] ❌ [ERROR] ❌ [CompactComponentSidebar] WALL UNITS CATEGORY MISSING FROM FINAL GROUPS!
+[2025-10-10T21:29:41.354Z] 📝 [LOG] 📂 [CompactComponentSidebar] Available categories: []
+[2025-10-10T21:29:41.354Z] 📝 [LOG] ⏳ [CompactComponentSidebar] Component sidebar in loading state
+[2025-10-10T21:29:41.363Z] 📝 [LOG] 🎯 [PerformanceMonitor] Performance monitor hidden
+[2025-10-10T21:29:41.369Z] 📝 [LOG] 🔄 [useOptimizedComponents] Fetching components from database...
+[2025-10-10T21:29:41.370Z] 📝 [LOG] 🏠 [RoomService] Loading template for room type: kitchen
+[2025-10-10T21:29:41.371Z] 📝 [LOG] 🔧 [ProjectContext] Auto-save initialization check {
+  "autoSaveEnabled": true,
+  "hasInterval": false,
+  "hasCurrentRoom": true,
+  "roomId": "9a51fad3-f741-4836-b72c-85415ce6ef1b"
+}
+[2025-10-10T21:29:41.371Z] 📝 [LOG] 🚀 [ProjectContext] Initializing auto-save for room: 9a51fad3-f741-4836-b72c-85415ce6ef1b
+[2025-10-10T21:29:41.380Z] 📝 [LOG] ⏳ [CompactComponentSidebar] Component sidebar in loading state
+[2025-10-10T21:29:41.384Z] 📝 [LOG] 🎯 [PerformanceMonitor] Performance monitor hidden
+[2025-10-10T21:29:41.392Z] 📝 [LOG] ⏳ [CompactComponentSidebar] Component sidebar in loading state
+[2025-10-10T21:29:41.396Z] 📝 [LOG] 🎯 [PerformanceMonitor] Performance monitor hidden
+[2025-10-10T21:29:41.436Z] 📝 [LOG] ✅ [RoomService] Loaded 6 geometry templates
+[2025-10-10T21:29:41.475Z] 📝 [LOG] [ConfigService] Feature disabled, skipping preload
+[2025-10-10T21:29:41.475Z] 📝 [LOG] [DesignCanvas2D] Configuration loaded from database: {
+  "canvas_width": 1600,
+  "canvas_height": 1200,
+  "grid_size": 20,
+  "min_zoom": 0.5,
+  "max_zoom": 4,
+  "wall_thickness": 10,
+  "wall_clearance": 5,
+  "wall_snap_threshold": 40,
+  "snap_tolerance_default": 15,
+  "snap_tolerance_countertop": 25,
+  "proximity_threshold": 100,
+  "wall_snap_distance_default": 35,
+  "wall_snap_distance_countertop": 50,
+  "corner_tolerance": 30,
+  "toe_kick_height": 8,
+  "drag_threshold_mouse": 5,
+  "drag_threshold_touch": 10
+}
+[2025-10-10T21:29:41.475Z] 📝 [LOG] [Render2DService] Preloading 2D render definitions...
+[2025-10-10T21:29:41.477Z] 📝 [LOG] ✅ [RoomService] Loaded template for kitchen: {
+  "id": "3a7ba612-e98c-49ff-9d25-43b7efde253f",
+  "room_type": "kitchen",
+  "name": "Kitchen",
+  "icon_name": "ChefHat",
+  "description": "Kitchen design with cabinets and appliances",
+  "default_width": 600,
+  "default_height": 400,
+  "default_wall_height": 240,
+  "default_ceiling_height": 250,
+  "default_settings": {
+    "view_preferences": {
+      "grid_enabled": true,
+      "snap_to_grid": true,
+      "default_2d_mode": "plan",
+      "default_2d_view": "2d"
+    },
+    "default_wall_height": 250
+  }
+}
+[2025-10-10T21:29:41.477Z] 📝 [LOG] 🏗️ [CoordinateEngine] Initialized with inner room dimensions: {
+  "innerWidth": 600,
+  "innerHeight": 400,
+  "ceilingHeight": 240,
+  "wallThickness": 10
+}
+[2025-10-10T21:29:41.477Z] 📝 [LOG] 🏗️ [DesignCanvas2D] Coordinate engine initialized for room: {
+  "width": 600,
+  "height": 400
+}
+[2025-10-10T21:29:41.477Z] 📝 [LOG] ⚡ [ComponentService] Cache hit for component type: cabinet
+[2025-10-10T21:29:41.478Z] 📝 [LOG] ⚡ [ComponentService] Cache hit for component type: appliance
+[2025-10-10T21:29:41.478Z] 📝 [LOG] ⚡ [ComponentService] Cache hit for component type: counter-top
+[2025-10-10T21:29:41.478Z] 📝 [LOG] ⚡ [ComponentService] Cache hit for component type: end-panel
+[2025-10-10T21:29:41.478Z] 📝 [LOG] ⚡ [ComponentService] Cache hit for component type: window
+[2025-10-10T21:29:41.478Z] 📝 [LOG] ⚡ [ComponentService] Cache hit for component type: door
+[2025-10-10T21:29:41.478Z] 📝 [LOG] ⚡ [ComponentService] Cache hit for component type: flooring
+[2025-10-10T21:29:41.479Z] 📝 [LOG] ⚡ [ComponentService] Cache hit for component type: toe-kick
+[2025-10-10T21:29:41.479Z] 📝 [LOG] ⚡ [ComponentService] Cache hit for component type: cornice
+[2025-10-10T21:29:41.479Z] 📝 [LOG] ⚡ [ComponentService] Cache hit for component type: pelmet
+[2025-10-10T21:29:41.479Z] 📝 [LOG] ⚡ [ComponentService] Cache hit for component type: cabinet
+[2025-10-10T21:29:41.479Z] 📝 [LOG] ⚡ [ComponentService] Cache hit for component type: appliance
+[2025-10-10T21:29:41.479Z] 📝 [LOG] ⚡ [ComponentService] Cache hit for component type: counter-top
+[2025-10-10T21:29:41.480Z] 📝 [LOG] ⚡ [ComponentService] Cache hit for component type: end-panel
+[2025-10-10T21:29:41.480Z] 📝 [LOG] ⚡ [ComponentService] Cache hit for component type: window
+[2025-10-10T21:29:41.480Z] 📝 [LOG] ⚡ [ComponentService] Cache hit for component type: door
+[2025-10-10T21:29:41.480Z] 📝 [LOG] ⚡ [ComponentService] Cache hit for component type: flooring
+[2025-10-10T21:29:41.480Z] 📝 [LOG] ⚡ [ComponentService] Cache hit for component type: toe-kick
+[2025-10-10T21:29:41.480Z] 📝 [LOG] ⚡ [ComponentService] Cache hit for component type: cornice
+[2025-10-10T21:29:41.481Z] 📝 [LOG] ⚡ [ComponentService] Cache hit for component type: pelmet
+[2025-10-10T21:29:41.481Z] 📝 [LOG] 🚀 [DesignCanvas2D] Preloaded component behaviors and room config
+[2025-10-10T21:29:41.483Z] 📝 [LOG] ✅ [RoomService] Loaded complex geometry for room 9a51fad3-f741-4836-b72c-85415ce6ef1b
+[2025-10-10T21:29:41.483Z] 📝 [LOG] ✅ [DesignCanvas2D] Loaded complex room geometry for room 9a51fad3-f741-4836-b72c-85415ce6ef1b: l-shape
+[2025-10-10T21:29:41.492Z] 📝 [LOG] ⏱️ [useOptimizedComponents] Database query completed in 123ms
+[2025-10-10T21:29:41.492Z] 📝 [LOG] ✅ [useOptimizedComponents] Loaded 194 database components
+[2025-10-10T21:29:41.492Z] 📝 [LOG] 🔥 [useOptimizedComponents] Pre-warming category and room type caches
+[2025-10-10T21:29:41.493Z] 📝 [LOG] 🔥 [useOptimizedComponents] Pre-warmed 26 categories and 12 room types
+[2025-10-10T21:29:41.493Z] 📝 [LOG] 🏠 [useOptimizedComponents] Wall units: 0 (lowercase: 0, title: 0)
+[2025-10-10T21:29:41.493Z] ⚠️ [WARN] ⚠️ [useOptimizedComponents] NO WALL UNITS FOUND!
+[2025-10-10T21:29:41.494Z] 📝 [LOG] 📂 [useOptimizedComponents] Available categories: [
+  "appliances",
+  "base-cabinets",
+  "bathroom-fixtures",
+  "bathroom-storage",
+  "bathroom-vanities",
+  "bedroom-furniture",
+  "bedroom-storage",
+  "counter-tops",
+  "dining-room-furniture",
+  "dining-room-storage",
+  "doors-external",
+  "doors-internal",
+  "dressing-room-furniture",
+  "dressing-room-storage",
+  "finishing",
+  "kitchen-larder",
+  "living-room-furniture",
+  "living-room-storage",
+  "office-furniture",
+  "office-storage",
+  "sinks",
+  "utility-appliances",
+  "utility-fixtures",
+  "utility-storage",
+  "wall-cabinets",
+  "windows"
+]
+[2025-10-10T21:29:41.494Z] 📝 [LOG] 🍳 [useOptimizedComponents] Kitchen components: 94
+[2025-10-10T21:29:41.494Z] 📝 [LOG] 🔍 [CompactComponentSidebar] Filtering components for room type: kitchen
+[2025-10-10T21:29:41.494Z] 📝 [LOG] 🔍 [CompactComponentSidebar] Total components loaded: 194
+[2025-10-10T21:29:41.495Z] 📝 [LOG] 🔍 [CompactComponentSidebar] Components available for kitchen: 94
+[2025-10-10T21:29:41.495Z] 📝 [LOG] 🏠 [CompactComponentSidebar] Wall units available for kitchen: 0 (lowercase: 0, title: 0)
+[2025-10-10T21:29:41.495Z] ⚠️ [WARN] ⚠️ [CompactComponentSidebar] NO WALL UNITS AVAILABLE for room type: kitchen
+[2025-10-10T21:29:41.495Z] 📝 [LOG] 📂 [CompactComponentSidebar] Grouping 94 filtered components by category
+[2025-10-10T21:29:41.496Z] 📝 [LOG] 📂 [CompactComponentSidebar] Final categories with components: [
+  "appliances",
+  "base-cabinets",
+  "counter-tops",
+  "doors-external",
+  "doors-internal",
+  "finishing",
+  "kitchen-larder",
+  "sinks",
+  "wall-cabinets",
+  "windows"
+]
+[2025-10-10T21:29:41.496Z] 📝 [LOG] 📂 [CompactComponentSidebar] appliances: 11 components
+[2025-10-10T21:29:41.496Z] 📝 [LOG] 📂 [CompactComponentSidebar] base-cabinets: 15 components
+[2025-10-10T21:29:41.497Z] 📝 [LOG] 📂 [CompactComponentSidebar] counter-tops: 6 components
+[2025-10-10T21:29:41.497Z] 📝 [LOG] 📂 [CompactComponentSidebar] doors-external: 4 components
+[2025-10-10T21:29:41.497Z] 📝 [LOG] 📂 [CompactComponentSidebar] doors-internal: 8 components
+[2025-10-10T21:29:41.497Z] 📝 [LOG] 📂 [CompactComponentSidebar] finishing: 11 components
+[2025-10-10T21:29:41.497Z] 📝 [LOG] 📂 [CompactComponentSidebar] kitchen-larder: 5 components
+[2025-10-10T21:29:41.498Z] 📝 [LOG] 📂 [CompactComponentSidebar] sinks: 20 components
+[2025-10-10T21:29:41.498Z] 📝 [LOG] 📂 [CompactComponentSidebar] wall-cabinets: 7 components
+[2025-10-10T21:29:41.498Z] 📝 [LOG] 📂 [CompactComponentSidebar] windows: 7 components
+[2025-10-10T21:29:41.498Z] ❌ [ERROR] ❌ [CompactComponentSidebar] WALL UNITS CATEGORY MISSING FROM FINAL GROUPS!
+[2025-10-10T21:29:41.499Z] 📝 [LOG] 📂 [CompactComponentSidebar] Available categories: [
+  "appliances",
+  "base-cabinets",
+  "counter-tops",
+  "doors-external",
+  "doors-internal",
+  "finishing",
+  "kitchen-larder",
+  "sinks",
+  "wall-cabinets",
+  "windows"
+]
+[2025-10-10T21:29:41.499Z] 📝 [LOG] ✅ [CompactComponentSidebar] Component sidebar rendered successfully
+[2025-10-10T21:29:41.499Z] 📝 [LOG] ✅ [CompactComponentSidebar] Summary: 194 total, 94 for kitchen, 10 categories
+[2025-10-10T21:29:41.550Z] 📝 [LOG] [Render2DService] ✅ Preloaded 194 definitions in 75ms
+[2025-10-10T21:29:41.551Z] 📝 [LOG] [DesignCanvas2D] 2D render definitions preloaded
+[2025-10-10T21:29:42.808Z] 📝 [LOG] ✅ [CompactComponentSidebar] Component sidebar rendered successfully
+[2025-10-10T21:29:42.808Z] 📝 [LOG] ✅ [CompactComponentSidebar] Summary: 194 total, 94 for kitchen, 10 categories
+[2025-10-10T21:29:42.816Z] 📝 [LOG] 🎯 [PerformanceMonitor] Performance monitor hidden
+[2025-10-10T21:29:43.053Z] 📝 [LOG] 🔍 [PerformanceDetector] Analyzing device capabilities...
+[2025-10-10T21:29:43.060Z] 📝 [LOG] ✅ [PerformanceDetector] Device analysis complete: {
+  "gpuTier": "high",
+  "memoryGB": 4,
+  "webglVersion": 2,
+  "maxTextureSize": 16384,
+  "supportsWebGL2": true,
+  "isMobile": false,
+  "recommendedQuality": {
+    "level": "low",
+    "shadows": false,
+    "shadowMapSize": 512,
+    "antialias": false,
+    "environmentLighting": false,
+    "textureQuality": "low",
+    "modelDetail": "low",
+    "maxElements": 25
+  }
+}
+[2025-10-10T21:29:43.061Z] 📝 [LOG] 👁️ [MemoryManager] Memory monitoring started
+[2025-10-10T21:29:43.061Z] 📝 [LOG] 🔧 [MemoryManager] Automatic cleanup listeners registered
+[2025-10-10T21:29:43.062Z] 📝 [LOG] 🎮 [AdaptiveView3D] Performance detection complete: {
+  "gpu": "high",
+  "recommended": "low",
+  "defaultUsing": "medium",
+  "autoMode": false
+}
+[2025-10-10T21:29:43.111Z] 📝 [LOG] ✅ [RoomService] Loaded complex geometry for room 9a51fad3-f741-4836-b72c-85415ce6ef1b
+[2025-10-10T21:29:43.111Z] 📝 [LOG] ✅ [AdaptiveView3D] Loaded complex room geometry for room 9a51fad3-f741-4836-b72c-85415ce6ef1b: l-shape
+[2025-10-10T21:29:43.162Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(5.00, 4.00, 5.00)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(2.00, 3.00)",
+  "angle": "33.7",
+  "normalized": "33.7"
+}
+[2025-10-10T21:29:43.295Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(5.00, 4.00, 5.00)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(2.00, 3.00)",
+  "angle": "33.7",
+  "normalized": "33.7"
+}
+[2025-10-10T21:29:43.357Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(5.00, 4.00, 5.00)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(2.00, 3.00)",
+  "angle": "33.7",
+  "normalized": "33.7"
+}
+[2025-10-10T21:29:43.417Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(5.00, 4.00, 5.00)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(2.00, 3.00)",
+  "angle": "33.7",
+  "normalized": "33.7"
+}
+[2025-10-10T21:29:43.465Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(7.20, 5.76, 7.20)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(4.20, 5.20)",
+  "angle": "38.9",
+  "normalized": "38.9"
+}
+[2025-10-10T21:29:43.563Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(7.20, 5.76, 7.20)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(4.20, 5.20)",
+  "angle": "38.9",
+  "normalized": "38.9"
+}
+[2025-10-10T21:29:43.669Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(7.20, 5.76, 7.20)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(4.20, 5.20)",
+  "angle": "38.9",
+  "normalized": "38.9"
+}
+[2025-10-10T21:29:43.768Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(7.20, 5.76, 7.20)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(4.20, 5.20)",
+  "angle": "38.9",
+  "normalized": "38.9"
+}
+[2025-10-10T21:29:43.866Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(7.20, 5.76, 7.20)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(4.20, 5.20)",
+  "angle": "38.9",
+  "normalized": "38.9"
+}
+[2025-10-10T21:29:43.969Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(7.20, 5.76, 7.20)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(4.20, 5.20)",
+  "angle": "38.9",
+  "normalized": "38.9"
+}
+[2025-10-10T21:29:44.068Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(7.20, 5.76, 7.20)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(4.20, 5.20)",
+  "angle": "38.9",
+  "normalized": "38.9"
+}
+[2025-10-10T21:29:44.168Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(7.20, 5.76, 7.20)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(4.20, 5.20)",
+  "angle": "38.9",
+  "normalized": "38.9"
+}
+[2025-10-10T21:29:44.267Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(7.20, 5.76, 7.20)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(4.20, 5.20)",
+  "angle": "38.9",
+  "normalized": "38.9"
+}
+[2025-10-10T21:29:44.369Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(7.20, 5.76, 7.20)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(4.20, 5.20)",
+  "angle": "38.9",
+  "normalized": "38.9"
+}
+[2025-10-10T21:29:44.468Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(7.20, 5.76, 7.20)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(4.20, 5.20)",
+  "angle": "38.9",
+  "normalized": "38.9"
+}
+[2025-10-10T21:29:44.565Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(7.18, 5.76, 7.22)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(4.18, 5.22)",
+  "angle": "38.7",
+  "normalized": "38.7"
+}
+[2025-10-10T21:29:44.668Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(5.96, 5.78, 8.24)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(2.96, 6.24)",
+  "angle": "25.4",
+  "normalized": "25.4"
+}
+[2025-10-10T21:29:44.768Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(4.04, 5.84, 9.30)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(1.04, 7.30)",
+  "angle": "8.1",
+  "normalized": "8.1"
+}
+[2025-10-10T21:29:44.867Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(2.82, 5.86, 9.72)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-0.18, 7.72)",
+  "angle": "-1.3",
+  "normalized": "358.7"
+}
+[2025-10-10T21:29:44.968Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(2.51, 5.87, 9.81)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-0.49, 7.81)",
+  "angle": "-3.6",
+  "normalized": "356.4"
+}
+[2025-10-10T21:29:45.068Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(2.02, 5.87, 9.92)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-0.98, 7.92)",
+  "angle": "-7.1",
+  "normalized": "352.9"
+}
+[2025-10-10T21:29:45.168Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(1.82, 5.86, 9.96)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-1.18, 7.96)",
+  "angle": "-8.4",
+  "normalized": "351.6"
+}
+[2025-10-10T21:29:45.268Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(1.68, 5.85, 9.99)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-1.32, 7.99)",
+  "angle": "-9.4",
+  "normalized": "350.6"
+}
+[2025-10-10T21:29:45.368Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(1.58, 5.85, 10.01)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-1.42, 8.01)",
+  "angle": "-10.1",
+  "normalized": "349.9"
+}
+[2025-10-10T21:29:45.468Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(1.50, 5.85, 10.02)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-1.50, 8.02)",
+  "angle": "-10.6",
+  "normalized": "349.4"
+}
+[2025-10-10T21:29:45.568Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(1.44, 5.85, 10.03)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-1.56, 8.03)",
+  "angle": "-11.0",
+  "normalized": "349.0"
+}
+[2025-10-10T21:29:45.665Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(1.40, 5.84, 10.04)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-1.60, 8.04)",
+  "angle": "-11.3",
+  "normalized": "348.7"
+}
+[2025-10-10T21:29:45.765Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(1.37, 5.84, 10.04)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-1.63, 8.04)",
+  "angle": "-11.5",
+  "normalized": "348.5"
+}
+[2025-10-10T21:29:45.868Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(1.35, 5.84, 10.05)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-1.65, 8.05)",
+  "angle": "-11.6",
+  "normalized": "348.4"
+}
+[2025-10-10T21:29:45.968Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(1.33, 5.84, 10.05)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-1.67, 8.05)",
+  "angle": "-11.7",
+  "normalized": "348.3"
+}
+[2025-10-10T21:29:46.068Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(1.32, 5.84, 10.05)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-1.68, 8.05)",
+  "angle": "-11.8",
+  "normalized": "348.2"
+}
+[2025-10-10T21:29:46.168Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(1.31, 5.84, 10.05)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-1.69, 8.05)",
+  "angle": "-11.9",
+  "normalized": "348.1"
+}
+[2025-10-10T21:29:46.269Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(1.30, 5.84, 10.05)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-1.70, 8.05)",
+  "angle": "-11.9",
+  "normalized": "348.1"
+}
+[2025-10-10T21:29:46.370Z] 📝 [LOG] ✅ [CompactComponentSidebar] Component sidebar rendered successfully
+[2025-10-10T21:29:46.370Z] 📝 [LOG] ✅ [CompactComponentSidebar] Summary: 194 total, 94 for kitchen, 10 categories
+[2025-10-10T21:29:46.377Z] 📝 [LOG] 🎯 [PerformanceMonitor] Performance monitor hidden
+[2025-10-10T21:29:46.382Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(1.30, 5.84, 10.05)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-1.70, 8.05)",
+  "angle": "-11.9",
+  "normalized": "348.1"
+}
+[2025-10-10T21:29:46.468Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(0.70, 5.84, 10.11)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-2.30, 8.11)",
+  "angle": "-15.9",
+  "normalized": "344.1"
+}
+[2025-10-10T21:29:46.563Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(-0.78, 5.91, 10.07)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-3.78, 8.07)",
+  "angle": "-25.1",
+  "normalized": "334.9"
+}
+[2025-10-10T21:29:46.666Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(-2.07, 6.00, 9.83)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-5.07, 7.83)",
+  "angle": "-33.0",
+  "normalized": "327.0"
+}
+[2025-10-10T21:29:46.767Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(-2.43, 6.02, 9.73)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-5.43, 7.73)",
+  "angle": "-35.1",
+  "normalized": "324.9"
+}
+[2025-10-10T21:29:46.866Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(-2.95, 6.06, 9.56)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-5.95, 7.56)",
+  "angle": "-38.2",
+  "normalized": "321.8"
+}
+[2025-10-10T21:29:46.967Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(-3.17, 6.08, 9.48)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-6.17, 7.48)",
+  "angle": "-39.5",
+  "normalized": "320.5"
+}
+[2025-10-10T21:29:47.068Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(-3.30, 6.09, 9.43)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-6.30, 7.43)",
+  "angle": "-40.3",
+  "normalized": "319.7"
+}
+[2025-10-10T21:29:47.168Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(-3.41, 6.10, 9.38)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-6.41, 7.38)",
+  "angle": "-41.0",
+  "normalized": "319.0"
+}
+[2025-10-10T21:29:47.269Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(-3.47, 6.10, 9.36)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-6.47, 7.36)",
+  "angle": "-41.3",
+  "normalized": "318.7"
+}
+[2025-10-10T21:29:47.369Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(-3.53, 6.11, 9.33)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-6.53, 7.33)",
+  "angle": "-41.7",
+  "normalized": "318.3"
+}
+[2025-10-10T21:29:47.463Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(-3.56, 6.11, 9.32)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-6.56, 7.32)",
+  "angle": "-41.9",
+  "normalized": "318.1"
+}
+[2025-10-10T21:29:47.566Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(-3.59, 6.11, 9.31)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-6.59, 7.31)",
+  "angle": "-42.1",
+  "normalized": "317.9"
+}
+[2025-10-10T21:29:47.668Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(-3.61, 6.12, 9.29)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-6.61, 7.29)",
+  "angle": "-42.2",
+  "normalized": "317.8"
+}
+[2025-10-10T21:29:47.763Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(-3.63, 6.12, 9.29)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-6.63, 7.29)",
+  "angle": "-42.3",
+  "normalized": "317.7"
+}
+[2025-10-10T21:29:47.868Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(-3.64, 6.12, 9.28)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-6.64, 7.28)",
+  "angle": "-42.4",
+  "normalized": "317.6"
+}
+[2025-10-10T21:29:47.968Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(-3.65, 6.12, 9.28)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-6.65, 7.28)",
+  "angle": "-42.4",
+  "normalized": "317.6"
+}
+[2025-10-10T21:29:48.068Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(-3.65, 6.12, 9.28)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-6.65, 7.28)",
+  "angle": "-42.4",
+  "normalized": "317.6"
+}
+[2025-10-10T21:29:48.168Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(-3.66, 6.12, 9.28)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-6.66, 7.28)",
+  "angle": "-42.5",
+  "normalized": "317.5"
+}
+[2025-10-10T21:29:48.268Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(-3.66, 6.12, 9.27)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-6.66, 7.27)",
+  "angle": "-42.5",
+  "normalized": "317.5"
+}
+[2025-10-10T21:29:48.363Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(-4.38, 6.12, 8.96)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-7.38, 6.96)",
+  "angle": "-46.7",
+  "normalized": "313.3"
+}
+[2025-10-10T21:29:48.463Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(-5.58, 6.12, 8.26)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-8.58, 6.26)",
+  "angle": "-53.9",
+  "normalized": "306.1"
+}
+[2025-10-10T21:29:48.565Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(-6.65, 6.12, 7.43)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-9.65, 5.43)",
+  "angle": "-60.7",
+  "normalized": "299.3"
+}
+[2025-10-10T21:29:48.668Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(-7.06, 6.12, 7.04)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-10.06, 5.04)",
+  "angle": "-63.4",
+  "normalized": "296.6"
+}
+[2025-10-10T21:29:48.765Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(-7.66, 6.08, 6.42)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-10.66, 4.42)",
+  "angle": "-67.5",
+  "normalized": "292.5"
+}
+[2025-10-10T21:29:48.863Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(-8.40, 5.94, 5.57)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-11.40, 3.57)",
+  "angle": "-72.6",
+  "normalized": "287.4"
+}
+[2025-10-10T21:29:48.965Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(-9.07, 5.75, 4.64)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-12.07, 2.64)",
+  "angle": "-77.7",
+  "normalized": "282.3"
+}
+[2025-10-10T21:29:49.065Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(-9.60, 5.62, 3.60)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-12.60, 1.60)",
+  "angle": "-82.7",
+  "normalized": "277.3"
+}
+[2025-10-10T21:29:49.168Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(-9.83, 5.57, 3.04)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-12.83, 1.04)",
+  "angle": "-85.4",
+  "normalized": "274.6"
+}
+[2025-10-10T21:29:49.265Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(-9.91, 5.55, 2.80)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-12.91, 0.80)",
+  "angle": "-86.5",
+  "normalized": "273.5"
+}
+[2025-10-10T21:29:49.368Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(-9.97, 5.53, 2.62)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-12.97, 0.62)",
+  "angle": "-87.3",
+  "normalized": "272.7"
+}
+[2025-10-10T21:29:49.468Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(-10.01, 5.51, 2.49)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-13.01, 0.49)",
+  "angle": "-87.9",
+  "normalized": "272.1"
+}
+[2025-10-10T21:29:49.563Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(-10.04, 5.50, 2.39)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-13.04, 0.39)",
+  "angle": "-88.3",
+  "normalized": "271.7"
+}
+[2025-10-10T21:29:49.668Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(-10.06, 5.50, 2.32)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-13.06, 0.32)",
+  "angle": "-88.6",
+  "normalized": "271.4"
+}
+[2025-10-10T21:29:49.767Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(-10.08, 5.49, 2.26)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-13.08, 0.26)",
+  "angle": "-88.8",
+  "normalized": "271.2"
+}
+[2025-10-10T21:29:49.867Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(-10.09, 5.49, 2.23)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-13.09, 0.23)",
+  "angle": "-89.0",
+  "normalized": "271.0"
+}
+[2025-10-10T21:29:49.968Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(-10.10, 5.48, 2.20)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-13.10, 0.20)",
+  "angle": "-89.1",
+  "normalized": "270.9"
+}
+[2025-10-10T21:29:50.063Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(-10.12, 5.47, 2.14)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-13.12, 0.14)",
+  "angle": "-89.4",
+  "normalized": "270.6"
+}
+[2025-10-10T21:29:50.167Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(-10.25, 5.45, 1.44)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-13.25, -0.56)",
+  "angle": "-92.4",
+  "normalized": "267.6"
+}
+[2025-10-10T21:29:50.265Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(-10.29, 5.57, -0.03)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-13.29, -2.03)",
+  "angle": "-98.7",
+  "normalized": "261.3"
+}
+[2025-10-10T21:29:50.365Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(-10.05, 5.79, -1.53)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-13.05, -3.53)",
+  "angle": "-105.1",
+  "normalized": "254.9"
+}
+[2025-10-10T21:29:50.463Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(-9.62, 5.99, -2.90)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-12.62, -4.90)",
+  "angle": "-111.2",
+  "normalized": "248.8"
+}
+[2025-10-10T21:29:50.563Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(-9.07, 6.15, -4.08)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-12.07, -6.08)",
+  "angle": "-116.7",
+  "normalized": "243.3"
+}
+[2025-10-10T21:29:50.668Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(-8.56, 6.25, -4.95)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-11.56, -6.95)",
+  "angle": "-121.0",
+  "normalized": "239.0"
+}
+[2025-10-10T21:29:50.765Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(-7.94, 6.29, -5.85)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-10.94, -7.85)",
+  "angle": "-125.7",
+  "normalized": "234.3"
+}
+[2025-10-10T21:29:50.868Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(-7.68, 6.30, -6.17)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-10.68, -8.17)",
+  "angle": "-127.4",
+  "normalized": "232.6"
+}
+[2025-10-10T21:29:50.967Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(-7.56, 6.31, -6.32)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-10.56, -8.32)",
+  "angle": "-128.2",
+  "normalized": "231.8"
+}
+[2025-10-10T21:29:51.069Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(-7.47, 6.31, -6.42)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-10.47, -8.42)",
+  "angle": "-128.8",
+  "normalized": "231.2"
+}
+[2025-10-10T21:29:51.163Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(-7.40, 6.31, -6.50)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-10.40, -8.50)",
+  "angle": "-129.3",
+  "normalized": "230.7"
+}
+[2025-10-10T21:29:51.268Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(-7.35, 6.31, -6.56)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-10.35, -8.56)",
+  "angle": "-129.6",
+  "normalized": "230.4"
+}
+[2025-10-10T21:29:51.368Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(-7.31, 6.31, -6.60)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-10.31, -8.60)",
+  "angle": "-129.8",
+  "normalized": "230.2"
+}
+[2025-10-10T21:29:51.468Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(-7.28, 6.31, -6.63)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-10.28, -8.63)",
+  "angle": "-130.0",
+  "normalized": "230.0"
+}
+[2025-10-10T21:29:51.567Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(-7.25, 6.31, -6.66)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-10.25, -8.66)",
+  "angle": "-130.2",
+  "normalized": "229.8"
+}
+[2025-10-10T21:29:51.663Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(-6.97, 6.29, -6.98)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-9.97, -8.98)",
+  "angle": "-132.0",
+  "normalized": "228.0"
+}
+[2025-10-10T21:29:51.768Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(-6.46, 6.28, -7.46)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-9.46, -9.46)",
+  "angle": "-135.0",
+  "normalized": "225.0"
+}
+[2025-10-10T21:29:51.868Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(-5.80, 6.29, -7.98)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-8.80, -9.98)",
+  "angle": "-138.6",
+  "normalized": "221.4"
+}
+[2025-10-10T21:29:51.967Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(-4.99, 6.33, -8.48)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-7.99, -10.48)",
+  "angle": "-142.7",
+  "normalized": "217.3"
+}
+[2025-10-10T21:29:52.065Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(-4.21, 6.34, -8.88)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-7.21, -10.88)",
+  "angle": "-146.5",
+  "normalized": "213.5"
+}
+[2025-10-10T21:29:52.168Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(-3.51, 6.35, -9.17)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-6.51, -11.17)",
+  "angle": "-149.8",
+  "normalized": "210.2"
+}
+[2025-10-10T21:29:52.267Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(-2.96, 6.35, -9.37)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-5.96, -11.37)",
+  "angle": "-152.3",
+  "normalized": "207.7"
+}
+[2025-10-10T21:29:52.365Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(-2.76, 6.35, -9.43)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-5.76, -11.43)",
+  "angle": "-153.2",
+  "normalized": "206.8"
+}
+[2025-10-10T21:29:52.467Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(-2.61, 6.35, -9.47)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-5.61, -11.47)",
+  "angle": "-153.9",
+  "normalized": "206.1"
+}
+[2025-10-10T21:29:52.567Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(-2.51, 6.35, -9.50)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-5.51, -11.50)",
+  "angle": "-154.4",
+  "normalized": "205.6"
+}
+[2025-10-10T21:29:52.666Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(-2.42, 6.35, -9.52)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-5.42, -11.52)",
+  "angle": "-154.8",
+  "normalized": "205.2"
+}
+[2025-10-10T21:29:52.767Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(-2.37, 6.35, -9.53)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-5.37, -11.53)",
+  "angle": "-155.0",
+  "normalized": "205.0"
+}
+[2025-10-10T21:29:52.867Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(-2.32, 6.35, -9.54)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-5.32, -11.54)",
+  "angle": "-155.2",
+  "normalized": "204.8"
+}
+[2025-10-10T21:29:52.963Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(-2.29, 6.36, -9.55)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-5.29, -11.55)",
+  "angle": "-155.4",
+  "normalized": "204.6"
+}
+[2025-10-10T21:29:53.065Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(-2.27, 6.36, -9.56)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-5.27, -11.56)",
+  "angle": "-155.5",
+  "normalized": "204.5"
+}
+[2025-10-10T21:29:53.163Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(-2.25, 6.36, -9.56)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-5.25, -11.56)",
+  "angle": "-155.6",
+  "normalized": "204.4"
+}
+[2025-10-10T21:29:53.268Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(-2.24, 6.36, -9.56)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-5.24, -11.56)",
+  "angle": "-155.6",
+  "normalized": "204.4"
+}
+[2025-10-10T21:29:53.368Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(-2.23, 6.36, -9.57)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-5.23, -11.57)",
+  "angle": "-155.7",
+  "normalized": "204.3"
+}
+[2025-10-10T21:29:53.468Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(-2.22, 6.36, -9.57)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-5.22, -11.57)",
+  "angle": "-155.7",
+  "normalized": "204.3"
+}
+[2025-10-10T21:29:53.567Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(-2.22, 6.36, -9.57)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-5.22, -11.57)",
+  "angle": "-155.7",
+  "normalized": "204.3"
+}
+[2025-10-10T21:29:53.665Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(-2.21, 6.36, -9.57)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-5.21, -11.57)",
+  "angle": "-155.7",
+  "normalized": "204.3"
+}
+[2025-10-10T21:29:53.768Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(-2.21, 6.36, -9.57)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-5.21, -11.57)",
+  "angle": "-155.8",
+  "normalized": "204.2"
+}
+[2025-10-10T21:29:53.868Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(-2.21, 6.36, -9.57)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-5.21, -11.57)",
+  "angle": "-155.8",
+  "normalized": "204.2"
+}
+[2025-10-10T21:29:53.967Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(-2.21, 6.36, -9.57)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-5.21, -11.57)",
+  "angle": "-155.8",
+  "normalized": "204.2"
+}
+[2025-10-10T21:29:54.063Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(-2.20, 6.36, -9.57)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-5.20, -11.57)",
+  "angle": "-155.8",
+  "normalized": "204.2"
+}
+[2025-10-10T21:29:54.167Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(-2.20, 6.36, -9.57)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-5.20, -11.57)",
+  "angle": "-155.8",
+  "normalized": "204.2"
+}
+[2025-10-10T21:29:54.267Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(-2.20, 6.36, -9.57)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-5.20, -11.57)",
+  "angle": "-155.8",
+  "normalized": "204.2"
+}
+[2025-10-10T21:29:54.367Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(-2.20, 6.36, -9.57)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-5.20, -11.57)",
+  "angle": "-155.8",
+  "normalized": "204.2"
+}
+[2025-10-10T21:29:54.467Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(-2.20, 6.36, -9.57)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-5.20, -11.57)",
+  "angle": "-155.8",
+  "normalized": "204.2"
+}
+[2025-10-10T21:29:54.566Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(-2.20, 6.36, -9.57)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-5.20, -11.57)",
+  "angle": "-155.8",
+  "normalized": "204.2"
+}
+[2025-10-10T21:29:54.666Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(-2.20, 6.36, -9.57)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-5.20, -11.57)",
+  "angle": "-155.8",
+  "normalized": "204.2"
+}
+[2025-10-10T21:29:54.767Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(-2.20, 6.36, -9.57)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-5.20, -11.57)",
+  "angle": "-155.8",
+  "normalized": "204.2"
+}
+[2025-10-10T21:29:54.867Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(-2.20, 6.36, -9.57)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-5.20, -11.57)",
+  "angle": "-155.8",
+  "normalized": "204.2"
+}
+[2025-10-10T21:29:54.967Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(-2.20, 6.36, -9.57)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-5.20, -11.57)",
+  "angle": "-155.8",
+  "normalized": "204.2"
+}
+[2025-10-10T21:29:55.068Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(-2.20, 6.36, -9.57)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-5.20, -11.57)",
+  "angle": "-155.8",
+  "normalized": "204.2"
+}
+[2025-10-10T21:29:55.168Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(-2.20, 6.36, -9.57)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-5.20, -11.57)",
+  "angle": "-155.8",
+  "normalized": "204.2"
+}
+[2025-10-10T21:29:55.268Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(-2.20, 6.36, -9.57)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-5.20, -11.57)",
+  "angle": "-155.8",
+  "normalized": "204.2"
+}
+[2025-10-10T21:29:55.368Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(-2.20, 6.36, -9.57)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-5.20, -11.57)",
+  "angle": "-155.8",
+  "normalized": "204.2"
+}
+[2025-10-10T21:29:55.467Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(-2.20, 6.36, -9.57)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-5.20, -11.57)",
+  "angle": "-155.8",
+  "normalized": "204.2"
+}
+[2025-10-10T21:29:55.567Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(-2.20, 6.36, -9.57)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-5.20, -11.57)",
+  "angle": "-155.8",
+  "normalized": "204.2"
+}
+[2025-10-10T21:29:55.667Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(-2.20, 6.36, -9.57)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-5.20, -11.57)",
+  "angle": "-155.8",
+  "normalized": "204.2"
+}
+[2025-10-10T21:29:55.768Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(-2.20, 6.36, -9.57)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-5.20, -11.57)",
+  "angle": "-155.8",
+  "normalized": "204.2"
+}
+[2025-10-10T21:29:55.864Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(-2.20, 6.36, -9.57)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-5.20, -11.57)",
+  "angle": "-155.8",
+  "normalized": "204.2"
+}
+[2025-10-10T21:29:55.968Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(-2.20, 6.36, -9.57)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-5.20, -11.57)",
+  "angle": "-155.8",
+  "normalized": "204.2"
+}
+[2025-10-10T21:29:56.068Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(-2.20, 6.36, -9.57)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-5.20, -11.57)",
+  "angle": "-155.8",
+  "normalized": "204.2"
+}
+[2025-10-10T21:29:56.167Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(-2.20, 6.36, -9.57)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-5.20, -11.57)",
+  "angle": "-155.8",
+  "normalized": "204.2"
+}
+
+================================================================================
+END OF LOGS (282 entries)
+================================================================================

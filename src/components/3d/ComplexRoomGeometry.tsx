@@ -14,6 +14,9 @@ interface ComplexRoomGeometryProps {
   geometry: RoomGeometry;
   quality: RenderQuality;
   roomColors?: RoomColors | null;
+  hiddenWalls?: string[]; // Manual array of wall directions to hide: ['north', 'south', 'east', 'west']
+  hideInterior?: boolean; // Manual toggle for interior/return walls
+  showCeiling?: boolean; // Manual ceiling toggle
 }
 
 /**
@@ -24,19 +27,16 @@ const PolygonFloor: React.FC<{
   elevation: number;
   color: string;
   quality: RenderQuality;
-}> = ({ vertices, elevation, color, quality }) => {
-  // Create Three.js Shape from vertices
+  centerOffset: { x: number; z: number };
+}> = ({ vertices, elevation, color, quality, centerOffset }) => {
+  // Create Three.js Shape from vertices (NOT centered - we'll position the mesh instead)
   const floorShape = useMemo(() => {
-    // Calculate center of vertices to center the shape at origin
-    const centerX = vertices.reduce((sum, v) => sum + v[0], 0) / vertices.length / 100;
-    const centerY = vertices.reduce((sum, v) => sum + v[1], 0) / vertices.length / 100;
-
     const shape = new THREE.Shape();
 
-    // Convert vertices from cm to meters and create shape centered at origin
+    // Convert vertices from cm to meters (no centering in shape)
     vertices.forEach((vertex, index) => {
-      const x = vertex[0] / 100 - centerX; // cm to meters, centered
-      const y = vertex[1] / 100 - centerY; // cm to meters, centered
+      const x = vertex[0] / 100;
+      const y = vertex[1] / 100;
 
       if (index === 0) {
         shape.moveTo(x, y);
@@ -54,19 +54,6 @@ const PolygonFloor: React.FC<{
     return new THREE.ShapeGeometry(floorShape);
   }, [floorShape]);
 
-  // Center the floor at origin
-  const centerOffset = useMemo(() => {
-    // Calculate bounding box to center the floor
-    const box = new THREE.Box3().setFromPoints(
-      vertices.map(v => new THREE.Vector3(v[0] / 100, 0, v[1] / 100))
-    );
-
-    const center = new THREE.Vector3();
-    box.getCenter(center);
-
-    return { x: -center.x, z: -center.z };
-  }, [vertices]);
-
   // Use simpler material for low quality
   const material = quality.level === 'low'
     ? <meshBasicMaterial color={color} side={THREE.DoubleSide} />
@@ -75,8 +62,8 @@ const PolygonFloor: React.FC<{
   return (
     <mesh
       geometry={floorGeometry}
-      position={[0, -0.001, 0]}
-      rotation={[-Math.PI / 2, 0, 0]}
+      position={[centerOffset.x, -0.001, centerOffset.z]}
+      rotation={[Math.PI / 2, 0, 0]}
       receiveShadow={quality.shadows}
     >
       {material}
@@ -148,19 +135,16 @@ const FlatCeiling: React.FC<{
   ceilingHeight: number;
   color: string;
   quality: RenderQuality;
-}> = ({ vertices, ceilingHeight, color, quality }) => {
-  // Create Three.js Shape from vertices
+  centerOffset: { x: number; z: number };
+}> = ({ vertices, ceilingHeight, color, quality, centerOffset }) => {
+  // Create Three.js Shape from vertices (NOT centered - we'll position the mesh instead)
   const ceilingShape = useMemo(() => {
-    // Calculate center of vertices to center the shape at origin
-    const centerX = vertices.reduce((sum, v) => sum + v[0], 0) / vertices.length / 100;
-    const centerY = vertices.reduce((sum, v) => sum + v[1], 0) / vertices.length / 100;
-
     const shape = new THREE.Shape();
 
-    // Convert vertices from cm to meters and create shape centered at origin
+    // Convert vertices from cm to meters (no centering in shape)
     vertices.forEach((vertex, index) => {
-      const x = vertex[0] / 100 - centerX; // cm to meters, centered
-      const y = vertex[1] / 100 - centerY; // cm to meters, centered
+      const x = vertex[0] / 100;
+      const y = vertex[1] / 100;
 
       if (index === 0) {
         shape.moveTo(x, y);
@@ -178,28 +162,15 @@ const FlatCeiling: React.FC<{
     return new THREE.ShapeGeometry(ceilingShape);
   }, [ceilingShape]);
 
-  // Center the ceiling at origin
-  const centerOffset = useMemo(() => {
-    // Calculate bounding box to center the ceiling
-    const box = new THREE.Box3().setFromPoints(
-      vertices.map(v => new THREE.Vector3(v[0] / 100, 0, v[1] / 100))
-    );
-
-    const center = new THREE.Vector3();
-    box.getCenter(center);
-
-    return { x: -center.x, z: -center.z };
-  }, [vertices]);
-
   // Use simpler material for low quality
   const material = quality.level === 'low'
-    ? <meshBasicMaterial color={color} side={THREE.FrontSide} />
-    : <meshLambertMaterial color={color} side={THREE.FrontSide} />;
+    ? <meshBasicMaterial color={color} side={THREE.DoubleSide} />
+    : <meshLambertMaterial color={color} side={THREE.DoubleSide} />;
 
   return (
     <mesh
       geometry={ceilingGeometry}
-      position={[0, ceilingHeight - 0.001, 0]}
+      position={[centerOffset.x, ceilingHeight - 0.001, centerOffset.z]}
       rotation={[Math.PI / 2, 0, 0]}
       receiveShadow={quality.shadows}
     >
@@ -214,7 +185,10 @@ const FlatCeiling: React.FC<{
 export const ComplexRoomGeometry: React.FC<ComplexRoomGeometryProps> = ({
   geometry,
   quality,
-  roomColors
+  roomColors,
+  hiddenWalls = [], // Default: show all walls
+  hideInterior = false, // Default: show interior walls
+  showCeiling = false // Default: hide ceiling
 }) => {
   // Room colors from database or fallback to defaults
   const floorColor = roomColors?.floor || "#f5f5f5";
@@ -232,6 +206,49 @@ export const ComplexRoomGeometry: React.FC<ComplexRoomGeometryProps> = ({
 
     return { x: -center.x, z: -center.z };
   }, [geometry.floor.vertices]);
+
+  // Filter walls based on manual hiddenWalls array and hideInterior toggle
+  const visibleWalls = useMemo(() => {
+    const bbox = geometry.bounding_box;
+    const tolerance = 5; // 5cm tolerance for edge detection
+
+    return geometry.walls.filter(wall => {
+      // Check if wall is on the perimeter (bounding box edge) or interior
+      const isOnNorthEdge = Math.abs(wall.start[1] - bbox.min_y) < tolerance && Math.abs(wall.end[1] - bbox.min_y) < tolerance;
+      const isOnSouthEdge = Math.abs(wall.start[1] - bbox.max_y) < tolerance && Math.abs(wall.end[1] - bbox.max_y) < tolerance;
+      const isOnWestEdge = Math.abs(wall.start[0] - bbox.min_x) < tolerance && Math.abs(wall.end[0] - bbox.min_x) < tolerance;
+      const isOnEastEdge = Math.abs(wall.start[0] - bbox.max_x) < tolerance && Math.abs(wall.end[0] - bbox.max_x) < tolerance;
+
+      const isPerimeterWall = isOnNorthEdge || isOnSouthEdge || isOnWestEdge || isOnEastEdge;
+
+      // Hide interior walls if hideInterior is true
+      if (!isPerimeterWall && hideInterior) {
+        return false;
+      }
+
+      // For perimeter walls, check hiddenWalls array
+      if (isPerimeterWall && hiddenWalls.length > 0) {
+        const dx = wall.end[0] - wall.start[0];
+        const dy = wall.end[1] - wall.start[1];
+        const centerX = (wall.start[0] + wall.end[0]) / 2;
+        const centerY = (wall.start[1] + wall.end[1]) / 2;
+        const roomCenterX = (bbox.max_x + bbox.min_x) / 2;
+        const roomCenterY = (bbox.max_y + bbox.min_y) / 2;
+
+        // Wall is more horizontal (runs east-west)
+        if (Math.abs(dx) > Math.abs(dy)) {
+          const direction = centerY < roomCenterY ? 'north' : 'south';
+          return !hiddenWalls.includes(direction);
+        } else {
+          // Wall is more vertical (runs north-south)
+          const direction = centerX > roomCenterX ? 'east' : 'west';
+          return !hiddenWalls.includes(direction);
+        }
+      }
+
+      return true; // Show wall by default
+    });
+  }, [geometry.walls, hiddenWalls, hideInterior, geometry.bounding_box]);
 
   // Calculate room dimensions for display text
   const roomDimensions = useMemo(() => {
@@ -251,10 +268,11 @@ export const ComplexRoomGeometry: React.FC<ComplexRoomGeometryProps> = ({
         elevation={geometry.floor.elevation}
         color={floorColor}
         quality={quality}
+        centerOffset={centerOffset}
       />
 
       {/* Walls */}
-      {geometry.walls.map((wall, index) => (
+      {visibleWalls.map((wall, index) => (
         <WallSegment
           key={wall.id || `wall-${index}`}
           start={wall.start}
@@ -267,15 +285,23 @@ export const ComplexRoomGeometry: React.FC<ComplexRoomGeometryProps> = ({
         />
       ))}
 
-      {/* Ceiling */}
-      {geometry.ceiling && (
-        <FlatCeiling
-          vertices={geometry.floor.vertices}
-          ceilingHeight={geometry.ceiling.elevation / 100}
-          color={ceilingColor}
-          quality={quality}
-        />
-      )}
+      {/* Ceiling - controlled by showCeiling prop */}
+      {showCeiling && geometry.ceiling && (() => {
+        // Use wall height for ceiling position (walls define the room height)
+        // This ensures ceiling sits at the top of the walls, not floating above
+        const wallHeight = geometry.walls[0]?.height || 240; // Get first wall height or default to 240cm
+        const ceilingHeight = wallHeight / 100; // Convert to meters
+
+        return (
+          <FlatCeiling
+            vertices={geometry.floor.vertices}
+            ceilingHeight={ceilingHeight}
+            color={ceilingColor}
+            quality={quality}
+            centerOffset={centerOffset}
+          />
+        );
+      })()}
 
       {/* Room dimensions text - only show in medium/high quality */}
       {quality.level !== 'low' && (

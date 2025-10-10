@@ -13,7 +13,7 @@ import { useIsMobile } from '@/hooks/use-mobile';
 import { RoomService, RoomColors } from '@/services/RoomService';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Settings, Zap, Gauge } from 'lucide-react';
+import { Settings, Zap, Gauge, Eye, EyeOff } from 'lucide-react';
 import type { RoomGeometry } from '@/types/RoomGeometry';
 import { ComplexRoomGeometry } from '@/components/3d/ComplexRoomGeometry';
 import {
@@ -315,14 +315,107 @@ const QualitySettings: React.FC<{
   );
 };
 
+// First Person Controls (Walk Mode)
+const FirstPersonControls: React.FC<{
+  enabled: boolean;
+}> = ({ enabled }) => {
+  const { camera } = useThree();
+  const moveSpeed = 0.05; // Movement speed
+  const lookSpeed = 0.002; // Mouse look speed
+
+  useEffect(() => {
+    if (!enabled) return;
+
+    // Set camera to center of room at eye level (170cm / 1.7m)
+    camera.position.set(0, 1.7, 0);
+
+    const keys: { [key: string]: boolean } = {};
+    let mouseX = 0;
+    let mouseY = 0;
+    let yaw = 0;
+    let pitch = 0;
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      keys[e.key.toLowerCase()] = true;
+    };
+
+    const handleKeyUp = (e: KeyboardEvent) => {
+      keys[e.key.toLowerCase()] = false;
+    };
+
+    const handleMouseMove = (e: MouseEvent) => {
+      if (document.pointerLockElement) {
+        mouseX = e.movementX;
+        mouseY = e.movementY;
+      }
+    };
+
+    const handleClick = () => {
+      if (enabled) {
+        document.body.requestPointerLock();
+      }
+    };
+
+    // Movement loop
+    const moveInterval = setInterval(() => {
+      if (!enabled) return;
+
+      // Update camera rotation from mouse
+      yaw -= mouseX * lookSpeed;
+      pitch -= mouseY * lookSpeed;
+      pitch = Math.max(-Math.PI / 2, Math.min(Math.PI / 2, pitch)); // Clamp pitch
+
+      mouseX = 0;
+      mouseY = 0;
+
+      // Calculate forward/right vectors
+      const forward = new THREE.Vector3(
+        -Math.sin(yaw),
+        0,
+        -Math.cos(yaw)
+      );
+      const right = new THREE.Vector3(
+        Math.cos(yaw),
+        0,
+        -Math.sin(yaw)
+      );
+
+      // WASD movement
+      if (keys['w']) camera.position.add(forward.clone().multiplyScalar(moveSpeed));
+      if (keys['s']) camera.position.add(forward.clone().multiplyScalar(-moveSpeed));
+      if (keys['a']) camera.position.add(right.clone().multiplyScalar(-moveSpeed));
+      if (keys['d']) camera.position.add(right.clone().multiplyScalar(moveSpeed));
+
+      // Update camera rotation
+      camera.rotation.set(pitch, yaw, 0, 'YXZ');
+    }, 16); // ~60fps
+
+    document.addEventListener('keydown', handleKeyDown);
+    document.addEventListener('keyup', handleKeyUp);
+    document.addEventListener('mousemove', handleMouseMove);
+    document.body.addEventListener('click', handleClick);
+
+    return () => {
+      clearInterval(moveInterval);
+      document.removeEventListener('keydown', handleKeyDown);
+      document.removeEventListener('keyup', handleKeyUp);
+      document.removeEventListener('mousemove', handleMouseMove);
+      document.body.removeEventListener('click', handleClick);
+      document.exitPointerLock();
+    };
+  }, [enabled, camera]);
+
+  return null;
+};
+
 // Fit to Screen Controller
-const FitToScreenController: React.FC<{ 
-  roomDimensions: { width: number; height: number }; 
-  signal: number; 
-  controlsRef: React.RefObject<any>; 
+const FitToScreenController: React.FC<{
+  roomDimensions: { width: number; height: number };
+  signal: number;
+  controlsRef: React.RefObject<any>;
 }> = ({ roomDimensions, signal, controlsRef }) => {
   const { camera } = useThree();
-  
+
   useEffect(() => {
     if (!signal) return;
     const maxDim = Math.max(roomDimensions.width, roomDimensions.height) / 100;
@@ -334,7 +427,7 @@ const FitToScreenController: React.FC<{
       controlsRef.current.update();
     }
   }, [signal, roomDimensions.width, roomDimensions.height, camera, controlsRef]);
-  
+
   return null;
 };
 
@@ -353,6 +446,10 @@ export const AdaptiveView3D: React.FC<AdaptiveView3DProps> = ({
   const [roomColors, setRoomColors] = useState<RoomColors | null>(null);
   const [roomGeometry, setRoomGeometry] = useState<RoomGeometry | null>(null);
   const [loadingGeometry, setLoadingGeometry] = useState(false);
+  const [hiddenWalls, setHiddenWalls] = useState<string[]>([]); // Manual control: array of wall directions to hide
+  const [hideInterior, setHideInterior] = useState(false); // Manual toggle for interior/return walls
+  const [showCeiling, setShowCeiling] = useState(false); // Manual ceiling toggle
+  const [walkMode, setWalkMode] = useState(false); // First-person walk mode
   const controlsRef = useRef<any>(null);
   const isMobile = useIsMobile();
 
@@ -525,6 +622,98 @@ export const AdaptiveView3D: React.FC<AdaptiveView3DProps> = ({
         />
       )}
 
+      {/* Wall & Ceiling Visibility Controls - only show for complex room geometry */}
+      {roomGeometry && (
+        <div className="absolute top-4 left-1/2 transform -translate-x-1/2 z-50 flex gap-2 bg-white/90 backdrop-blur-sm p-2 rounded-lg shadow-lg">
+          <div className="flex items-center gap-1">
+            <span className="text-xs font-medium mr-2">Walls:</span>
+            <Button
+              variant={hiddenWalls.includes('north') ? "outline" : "default"}
+              size="sm"
+              className="h-7 px-2 text-xs"
+              onClick={() => setHiddenWalls(prev =>
+                prev.includes('north') ? prev.filter(w => w !== 'north') : [...prev, 'north']
+              )}
+            >
+              N
+            </Button>
+            <Button
+              variant={hiddenWalls.includes('south') ? "outline" : "default"}
+              size="sm"
+              className="h-7 px-2 text-xs"
+              onClick={() => setHiddenWalls(prev =>
+                prev.includes('south') ? prev.filter(w => w !== 'south') : [...prev, 'south']
+              )}
+            >
+              S
+            </Button>
+            <Button
+              variant={hiddenWalls.includes('east') ? "outline" : "default"}
+              size="sm"
+              className="h-7 px-2 text-xs"
+              onClick={() => setHiddenWalls(prev =>
+                prev.includes('east') ? prev.filter(w => w !== 'east') : [...prev, 'east']
+              )}
+            >
+              E
+            </Button>
+            <Button
+              variant={hiddenWalls.includes('west') ? "outline" : "default"}
+              size="sm"
+              className="h-7 px-2 text-xs"
+              onClick={() => setHiddenWalls(prev =>
+                prev.includes('west') ? prev.filter(w => w !== 'west') : [...prev, 'west']
+              )}
+            >
+              W
+            </Button>
+            <div className="w-px h-6 bg-gray-300 mx-1"></div>
+            <Button
+              variant={hiddenWalls.length === 0 ? "default" : "outline"}
+              size="sm"
+              className="h-7 px-3 text-xs"
+              onClick={() => setHiddenWalls([])}
+            >
+              All
+            </Button>
+            <Button
+              variant={hiddenWalls.length === 4 ? "default" : "outline"}
+              size="sm"
+              className="h-7 px-3 text-xs"
+              onClick={() => setHiddenWalls(['north', 'south', 'east', 'west'])}
+            >
+              None
+            </Button>
+            <div className="w-px h-6 bg-gray-300 mx-1"></div>
+            <Button
+              variant={hideInterior ? "outline" : "default"}
+              size="sm"
+              className="h-7 px-3 text-xs"
+              onClick={() => setHideInterior(!hideInterior)}
+            >
+              Interior
+            </Button>
+            <Button
+              variant={showCeiling ? "default" : "outline"}
+              size="sm"
+              className="h-7 px-3 text-xs"
+              onClick={() => setShowCeiling(!showCeiling)}
+            >
+              Ceiling
+            </Button>
+            <div className="w-px h-6 bg-gray-300 mx-1"></div>
+            <Button
+              variant={walkMode ? "default" : "outline"}
+              size="sm"
+              className="h-7 px-3 text-xs"
+              onClick={() => setWalkMode(!walkMode)}
+            >
+              Walk Mode
+            </Button>
+          </div>
+        </div>
+      )}
+
       <Canvas
         camera={{
           position: [5, 4, 5],
@@ -554,6 +743,9 @@ export const AdaptiveView3D: React.FC<AdaptiveView3DProps> = ({
               geometry={roomGeometry}
               quality={currentQuality}
               roomColors={roomColors}
+              hiddenWalls={hiddenWalls}
+              hideInterior={hideInterior}
+              showCeiling={showCeiling}
             />
           ) : (
             // Legacy: Simple rectangular room (backward compatible)
@@ -738,7 +930,8 @@ export const AdaptiveView3D: React.FC<AdaptiveView3DProps> = ({
             ref={controlsRef}
             enablePan={true} // Always enable panning for right-click support
             enableZoom={true}
-            enableRotate={activeTool === 'select' || activeTool === 'pan'}
+            enableRotate={!walkMode && (activeTool === 'select' || activeTool === 'pan')}
+            enabled={!walkMode}
             target={[0, 0, 0]}
             // Mobile-optimized touch settings
             enableDamping={true}
@@ -767,6 +960,9 @@ export const AdaptiveView3D: React.FC<AdaptiveView3DProps> = ({
             }}
           />
           
+          {/* First-Person Walk Mode Controls */}
+          <FirstPersonControls enabled={walkMode} />
+
           {/* Fit to Screen Controller */}
           <FitToScreenController
             roomDimensions={roomDimensions}
@@ -775,6 +971,21 @@ export const AdaptiveView3D: React.FC<AdaptiveView3DProps> = ({
           />
         </Suspense>
       </Canvas>
+
+      {/* Walk Mode Instructions */}
+      {walkMode && (
+        <div className="absolute top-20 left-1/2 transform -translate-x-1/2 z-50 bg-black/75 text-white px-4 py-2 rounded-lg text-sm">
+          <div className="flex items-center gap-2">
+            <span>🚶 Walk Mode:</span>
+            <span className="font-mono">WASD</span>
+            <span>to move</span>
+            <span>•</span>
+            <span>🖱️ Mouse to look</span>
+            <span>•</span>
+            <span>Click to capture pointer</span>
+          </div>
+        </div>
+      )}
       
       {/* Element count indicator for performance monitoring */}
       {visibleElements.length < (design.elements?.length || 0) && (

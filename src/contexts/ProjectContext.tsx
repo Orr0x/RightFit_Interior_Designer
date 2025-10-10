@@ -530,7 +530,10 @@ export function ProjectProvider({ children }: { children: React.ReactNode }) {
       let roomGeometry = null;
       let roomDimensions = { width: 600, height: 400 }; // Default
 
+      console.log('[ProjectContext] createRoomDesign called with templateId:', templateId);
+
       if (templateId) {
+        console.log('[ProjectContext] Fetching template geometry for templateId:', templateId);
         try {
           const { data: templateData, error: templateError } = await supabase
             .from('room_geometry_templates')
@@ -541,20 +544,26 @@ export function ProjectProvider({ children }: { children: React.ReactNode }) {
           if (templateError) {
             console.warn('[ProjectContext] Failed to fetch template:', templateError);
           } else if (templateData) {
-            roomGeometry = templateData.geometry;
+            roomGeometry = templateData.geometry_definition;
 
             // Extract room dimensions from template's bounding box
-            const bbox = templateData.geometry.bounding_box;
+            const bbox = templateData.geometry_definition.bounding_box;
             roomDimensions = {
               width: bbox.max_x - bbox.min_x,
               height: bbox.max_y - bbox.min_y
             };
 
-            console.log(`✅ [ProjectContext] Using template "${templateData.name}" with geometry:`, templateData.shape_type);
+            console.log(`✅ [ProjectContext] Using template "${templateData.display_name}" with geometry:`, templateData.category);
+            console.log('[ProjectContext] Room dimensions from template:', roomDimensions);
+            console.log('[ProjectContext] Room geometry:', roomGeometry);
+          } else {
+            console.warn('[ProjectContext] Template data is null');
           }
         } catch (err) {
           console.error('[ProjectContext] Error fetching template:', err);
         }
+      } else {
+        console.log('[ProjectContext] No templateId provided, using default rectangle');
       }
 
       const { data, error } = await supabase
