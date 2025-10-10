@@ -161,6 +161,13 @@ When you send me the downloaded file, I'll search for these key messages:
 
 ## 🛠️ Features
 
+### Development Mode Only
+Logger automatically enables/disables based on environment:
+- ✅ **Development** (`npm run dev`): Logger active
+- ❌ **Production** (`npm run build`): Logger disabled
+- Zero configuration needed
+- Safe by default
+
 ### Auto-Save Backup
 Logs are automatically saved to localStorage every second as backup. If browser crashes, logs are preserved.
 
@@ -215,8 +222,9 @@ window.consoleLogger.clearLogs()
 ## 🐛 Troubleshooting
 
 ### Badge Not Appearing?
-- Check browser console for errors
-- Verify ConsoleLoggerUI component loaded
+- **Check environment:** Badge only shows in development mode (`npm run dev`)
+- Check browser console for: `🔧 [App] Console logger enabled (development mode)`
+- If in production build: Logger is disabled (expected behavior)
 - Try refreshing page
 
 ### Download Not Working?
