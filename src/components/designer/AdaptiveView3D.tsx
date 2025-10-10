@@ -86,13 +86,13 @@ const convertTo3D = (x: number, y: number, roomWidth: number, roomHeight: number
 };
 
 // Adaptive Room component with quality-based features
-const AdaptiveRoom3D: React.FC<{ 
-  roomDimensions: { width: number; height: number }; 
+const AdaptiveRoom3D: React.FC<{
+  roomDimensions: { width: number; height: number; ceilingHeight?: number };
   quality: RenderQuality;
 }> = ({ roomDimensions, quality }) => {
   const roomWidth = roomDimensions.width / 100;
   const roomDepth = roomDimensions.height / 100;
-  const wallHeight = 2.5;
+  const wallHeight = (roomDimensions.ceilingHeight || 250) / 100;
 
   // Use simpler materials for low quality
   const floorMaterial = quality.level === 'low' 
