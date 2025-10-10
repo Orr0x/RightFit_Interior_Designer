@@ -28,9 +28,11 @@ import EggerBoards from "./pages/EggerBoards";
 import ProductPage from "./pages/ProductPage";
 import ColorProductPage from "./pages/ColorProductPage";
 import DevToolsButton from "./components/DevToolsButton";
+import ConsoleLoggerUI from "./components/ConsoleLoggerUI";
 import { AuthProvider } from "./contexts/AuthContext";
 import { ProjectProvider } from "./contexts/ProjectContext";
 import { preloadCommonComponents } from "./components/3d/DynamicComponentRenderer";
+import { setupConsoleLogger } from "./utils/ConsoleLogger";
 
 const queryClient = new QueryClient();
 
@@ -38,6 +40,9 @@ const App = () => {
   // Preload common 3D models on app startup
   useEffect(() => {
     preloadCommonComponents();
+
+    // Start console log capture
+    setupConsoleLogger();
   }, []);
 
   return (
@@ -78,6 +83,7 @@ const App = () => {
               <Route path="*" element={<NotFound />} />
             </Routes>
             <DevToolsButton />
+            <ConsoleLoggerUI />
           </BrowserRouter>
         </TooltipProvider>
       </ProjectProvider>
