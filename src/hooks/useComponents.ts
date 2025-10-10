@@ -19,6 +19,8 @@ export interface DatabaseComponent {
   deprecated: boolean;
   metadata: any;
   tags: string[];
+  default_z_position?: number; // Height off ground in cm
+  plinth_height?: number; // Plinth/toe-kick height in cm
 }
 
 // Map icon names back to React components

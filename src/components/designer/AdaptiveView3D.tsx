@@ -10,6 +10,7 @@ import { DesignElement, Design } from '@/types/project';
 import { performanceDetector, RenderQuality, DeviceCapabilities } from '@/services/PerformanceDetector';
 import { memoryManager } from '@/services/MemoryManager';
 import { useIsMobile } from '@/hooks/use-mobile';
+import { RoomService, RoomColors } from '@/services/RoomService';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Settings, Zap, Gauge } from 'lucide-react';
@@ -89,17 +90,15 @@ const convertTo3D = (x: number, y: number, roomWidth: number, roomHeight: number
 const AdaptiveRoom3D: React.FC<{
   roomDimensions: { width: number; height: number; ceilingHeight?: number };
   quality: RenderQuality;
-}> = ({ roomDimensions, quality }) => {
+  roomColors?: RoomColors | null;
+}> = ({ roomDimensions, quality, roomColors }) => {
   const roomWidth = roomDimensions.width / 100;
   const roomDepth = roomDimensions.height / 100;
   const wallHeight = (roomDimensions.ceilingHeight || 250) / 100;
 
-  // Room colors - TODO: Load from roomTemplate.default_colors (database)
-  // Database: room_type_templates.default_colors JSONB {floor, walls, ceiling, text}
-  // Service: RoomService.getRoomTypeTemplate() includes default_colors
-  // Migration: 20250131000030_add_default_colors_to_room_templates.sql
-  const floorColor = "#f5f5f5"; // DB default: light grey
-  const wallColor = "#ffffff";  // DB default: white
+  // Room colors from database or fallback to defaults
+  const floorColor = roomColors?.floor || "#f5f5f5";
+  const wallColor = roomColors?.walls || "#ffffff";
 
   // Use simpler materials for low quality
   const floorMaterial = quality.level === 'low'
@@ -343,6 +342,7 @@ export const AdaptiveView3D: React.FC<AdaptiveView3DProps> = ({
   const [currentQuality, setCurrentQuality] = useState<RenderQuality | null>(null);
   const [isAutoMode, setIsAutoMode] = useState(false); // Default to manual mode
   const [isInitializing, setIsInitializing] = useState(true);
+  const [roomColors, setRoomColors] = useState<RoomColors | null>(null);
   const controlsRef = useRef<any>(null);
   const isMobile = useIsMobile();
 
@@ -352,6 +352,25 @@ export const AdaptiveView3D: React.FC<AdaptiveView3DProps> = ({
     height: design?.roomDimensions?.height || 400,
     ceilingHeight: design?.roomDimensions?.ceilingHeight
   };
+
+  // Load room colors from database
+  useEffect(() => {
+    const loadRoomColors = async () => {
+      if (design?.roomType) {
+        try {
+          const template = await RoomService.getRoomTypeTemplate(design.roomType);
+          if (template.default_colors) {
+            setRoomColors(template.default_colors);
+            console.log(`✅ [AdaptiveView3D] Loaded room colors from database for ${design.roomType}:`, template.default_colors);
+          }
+        } catch (error) {
+          console.warn(`⚠️ [AdaptiveView3D] Failed to load room colors for ${design.roomType}:`, error);
+        }
+      }
+    };
+
+    loadRoomColors();
+  }, [design?.roomType]);
 
   // Filter elements based on quality settings (always call this hook)
   const visibleElements = useMemo(() => {
@@ -487,7 +506,7 @@ export const AdaptiveView3D: React.FC<AdaptiveView3DProps> = ({
           )}
           
           {/* Adaptive Room */}
-          <AdaptiveRoom3D roomDimensions={roomDimensions} quality={currentQuality} />
+          <AdaptiveRoom3D roomDimensions={roomDimensions} quality={currentQuality} roomColors={roomColors} />
           
           {/* Grid - simplified for low quality */}
           {showGrid && (

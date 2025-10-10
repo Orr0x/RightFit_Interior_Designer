@@ -4,6 +4,7 @@ import * as THREE from 'three';
 import { Sofa, RectangleHorizontal } from 'lucide-react';
 import { FeatureFlagService } from '@/services/FeatureFlagService';
 import { DynamicComponentRenderer } from '@/components/3d/DynamicComponentRenderer';
+import { ComponentTypeService } from '@/services/ComponentTypeService';
 
 // ComponentDefinition interface removed - using DatabaseComponent from useComponents hook
 
@@ -737,22 +738,22 @@ export const EnhancedCabinet3D: React.FC<Enhanced3DModelProps> = ({
  * - Proper scale and proportions
  * - Specialized rendering for different appliance types
  */
-export const EnhancedAppliance3D: React.FC<Enhanced3DModelProps> = ({ 
-  element, 
-  roomDimensions, 
-  isSelected, 
-  onClick 
+export const EnhancedAppliance3D: React.FC<Enhanced3DModelProps> = ({
+  element,
+  roomDimensions,
+  isSelected,
+  onClick
 }) => {
   // Validate element dimensions to prevent NaN values
   const validElement = validateElementDimensions(element);
-  
+
   const { x, z } = convertTo3D(validElement.x, validElement.y, roomDimensions.width, roomDimensions.height);
   const width = validElement.width / 100;  // Convert cm to meters (X-axis)
   const depth = validElement.depth / 100;  // Convert cm to meters (Y-axis)
   const height = validElement.height / 100; // Convert cm to meters (Z-axis)
-  
+
   const selectedColor = '#ff6b6b';
-  
+
   // Determine appliance type
   const applianceType = element.id.includes('refrigerator') ? 'refrigerator' :
                       element.id.includes('dishwasher') ? 'dishwasher' :
@@ -767,7 +768,29 @@ export const EnhancedAppliance3D: React.FC<Enhanced3DModelProps> = ({
                       element.id.includes('chair') ? 'chair' :
                       element.id.includes('table') ? 'table' :
                       element.id.includes('tv') ? 'tv' : 'generic';
-  
+
+  // Load color from database using ComponentTypeService
+  const [dbColor, setDbColor] = useState<string | null>(null);
+
+  useEffect(() => {
+    const loadColor = async () => {
+      // Try appliance types first
+      let color = await ComponentTypeService.getApplianceColor(applianceType);
+
+      // If not found, try furniture types
+      if (!color) {
+        color = await ComponentTypeService.getFurnitureColor(applianceType);
+      }
+
+      if (color) {
+        setDbColor(color);
+        console.log(`✅ [EnhancedAppliance3D] Loaded color from database: ${color} for ${applianceType}`);
+      }
+    };
+
+    loadColor();
+  }, [applianceType]);
+
   // Use Z position if set, otherwise use default (floor level)
   let baseHeight: number;
   if (validElement.z > 0) {
@@ -780,22 +803,16 @@ export const EnhancedAppliance3D: React.FC<Enhanced3DModelProps> = ({
     console.log(`🔧 [EnhancedAppliance3D] Using default Z position: 0cm for ${element.id} (floor level)`);
   }
   const yPosition = baseHeight + height / 2;
-  
-  // Base color based on appliance type
-  const applianceColor = getApplianceColor(applianceType, element);
-  
-  
-  // Helper function to get appliance-specific color
-  // TODO: Query appliance_types and furniture_types tables (database) instead of hardcoded
-  // Database: appliance_types.default_color, furniture_types.default_color
-  // Service: ComponentTypeService.getApplianceColor() / getFurnitureColor()
-  // Migration: 20250131000031_create_appliance_types_table.sql
-  //           20250131000032_create_furniture_types_table.sql
-  function getApplianceColor(type: string, element: DesignElement): string {
-    // Always use element.color if explicitly set
-    if (element.color) return element.color;
 
-    // Fallback to hardcoded defaults (should be replaced with database query)
+  // Base color: priority is element.color > dbColor > hardcoded fallback
+  const applianceColor = element.color || dbColor || getApplianceColorFallback(applianceType);
+  
+  
+  // Helper function: Fallback colors when database query fails
+  // Database queries are handled by ComponentTypeService in useEffect above
+  // This function provides defensive fallbacks only
+  function getApplianceColorFallback(type: string): string {
+    // Hardcoded fallback defaults (used only if database query fails)
     switch(type) {
       // Appliances (from appliance_types table)
       case 'refrigerator': return '#f0f0f0'; // DB: fridge
