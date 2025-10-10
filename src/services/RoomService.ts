@@ -6,6 +6,13 @@
 import { supabase } from '@/integrations/supabase/client';
 import { RoomType, RoomDimensions } from '@/types/project';
 
+export interface RoomColors {
+  floor: string;
+  walls: string;
+  ceiling: string;
+  text: string;
+}
+
 export interface RoomTypeTemplate {
   id: string;
   room_type: RoomType;
@@ -17,6 +24,7 @@ export interface RoomTypeTemplate {
   default_wall_height: number;
   default_ceiling_height: number;
   default_settings: any;
+  default_colors?: RoomColors;
 }
 
 export interface RoomConfiguration {

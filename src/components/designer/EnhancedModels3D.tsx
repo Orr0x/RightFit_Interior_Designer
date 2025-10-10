@@ -75,19 +75,28 @@ const validateElementDimensions = (element: DesignElement) => {
     safeZ = element.z; // ALWAYS preserve user/system set Z values
     console.log(`✅ [validateElementDimensions] Using existing Z value: ${safeZ}cm`);
   } else {
-    // Only apply type-based defaults for completely missing Z values (legacy elements)
+    // Apply type-based defaults for completely missing Z values (legacy elements)
+    // TODO: Load from component.default_z_position (database) instead of hardcoded
+    // Database: components.default_z_position column (added 2025-10-10)
+    // Migration: 20250131000029_add_default_z_position_to_components.sql
     if (element.type === 'cornice') {
-      safeZ = 200; // 200cm height for cornice (top of wall units)
+      safeZ = 200; // DB default: 200cm (top of wall units)
     } else if (element.type === 'pelmet') {
-      safeZ = 140; // 140cm height for pelmet (FIXED: bottom of wall cabinets)
+      safeZ = 140; // DB default: 140cm (bottom of wall cabinets)
     } else if (element.type === 'counter-top') {
-      safeZ = 90; // 90cm height for counter tops
+      safeZ = 90; // DB default: 90cm (work surface)
+    } else if (element.type === 'sink') {
+      safeZ = 90; // DB default: 90cm (mounted in countertop)
     } else if (element.type === 'wall-cabinet' || element.id?.includes('wall-cabinet')) {
-      safeZ = 140; // 140cm height for wall cabinets
+      safeZ = 140; // DB default: 140cm (above countertop)
     } else if (element.type === 'wall-unit-end-panel') {
-      safeZ = 200; // 200cm height for wall unit end panels
+      safeZ = 140; // DB default: 140cm (matches wall cabinets)
     } else if (element.type === 'window') {
-      safeZ = 90; // 90cm height for windows
+      safeZ = 90; // DB default: 90cm (standard window height)
+    } else if (element.type === 'toe-kick') {
+      safeZ = 0; // DB default: 0cm (floor level)
+    } else {
+      safeZ = 0; // Default: floor level for base cabinets, appliances, etc.
     }
     console.log(`🔧 [validateElementDimensions] Applied default Z value: ${safeZ}cm for type: ${element.type}`);
   }
@@ -777,24 +786,37 @@ export const EnhancedAppliance3D: React.FC<Enhanced3DModelProps> = ({
   
   
   // Helper function to get appliance-specific color
+  // TODO: Query appliance_types and furniture_types tables (database) instead of hardcoded
+  // Database: appliance_types.default_color, furniture_types.default_color
+  // Service: ComponentTypeService.getApplianceColor() / getFurnitureColor()
+  // Migration: 20250131000031_create_appliance_types_table.sql
+  //           20250131000032_create_furniture_types_table.sql
   function getApplianceColor(type: string, element: DesignElement): string {
+    // Always use element.color if explicitly set
     if (element.color) return element.color;
-    
+
+    // Fallback to hardcoded defaults (should be replaced with database query)
     switch(type) {
-      case 'refrigerator': return '#f8f8f8';
-      case 'dishwasher': return '#e0e0e0';
-      case 'washing-machine': return '#f0f0f0';
-      case 'tumble-dryer': return '#e8e8e8';
-      case 'oven': return '#2c2c2c';
+      // Appliances (from appliance_types table)
+      case 'refrigerator': return '#f0f0f0'; // DB: fridge
+      case 'dishwasher': return '#e0e0e0'; // DB: dishwasher
+      case 'washing-machine': return '#e8e8e8'; // DB: washing-machine
+      case 'tumble-dryer': return '#e8e8e8'; // DB: tumble-dryer
+      case 'oven': return '#2c2c2c'; // DB: oven
+
+      // Bathroom fixtures (not in appliance_types yet)
       case 'toilet': return '#FFFFFF';
       case 'shower': return '#E6E6FA';
       case 'bathtub': return '#FFFFFF';
-      case 'bed': return '#8B4513';
-      case 'sofa': return '#3A6EA5';
-      case 'chair': return '#6B8E23';
-      case 'table': return '#8B4513';
+
+      // Furniture (from furniture_types table)
+      case 'bed': return '#8B7355'; // DB: single-bed/double-bed/king-bed (wood)
+      case 'sofa': return '#808080'; // DB: sofa-2seater/sofa-3seater (fabric)
+      case 'chair': return '#8B7355'; // DB: dining-chair/office-chair
+      case 'table': return '#8B7355'; // DB: coffee-table/dining-table (wood)
       case 'tv': return '#2F4F4F';
-      default: return '#c0c0c0';
+
+      default: return '#cccccc'; // Neutral grey fallback
     }
   }
   

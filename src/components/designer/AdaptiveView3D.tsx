@@ -94,14 +94,21 @@ const AdaptiveRoom3D: React.FC<{
   const roomDepth = roomDimensions.height / 100;
   const wallHeight = (roomDimensions.ceilingHeight || 250) / 100;
 
+  // Room colors - TODO: Load from roomTemplate.default_colors (database)
+  // Database: room_type_templates.default_colors JSONB {floor, walls, ceiling, text}
+  // Service: RoomService.getRoomTypeTemplate() includes default_colors
+  // Migration: 20250131000030_add_default_colors_to_room_templates.sql
+  const floorColor = "#f5f5f5"; // DB default: light grey
+  const wallColor = "#ffffff";  // DB default: white
+
   // Use simpler materials for low quality
-  const floorMaterial = quality.level === 'low' 
-    ? <meshBasicMaterial color="#f5f5f5" />
-    : <meshLambertMaterial color="#f5f5f5" />;
+  const floorMaterial = quality.level === 'low'
+    ? <meshBasicMaterial color={floorColor} />
+    : <meshLambertMaterial color={floorColor} />;
 
   const wallMaterial = quality.level === 'low'
-    ? <meshBasicMaterial color="#ffffff" />
-    : <meshLambertMaterial color="#ffffff" />;
+    ? <meshBasicMaterial color={wallColor} />
+    : <meshLambertMaterial color={wallColor} />;
 
   return (
     <group>
