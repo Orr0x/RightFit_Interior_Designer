@@ -11,6 +11,8 @@ import { ConfigurationService } from '@/services/ConfigurationService';
 import { render2DService } from '@/services/Render2DService';
 import { renderPlanView, renderElevationView } from '@/services/2d-renderers';
 import { FeatureFlagService } from '@/services/FeatureFlagService';
+import type { RoomGeometry } from '@/types/RoomGeometry';
+import * as GeometryUtils from '@/utils/GeometryUtils';
 
 // Throttle function for performance optimization
 const throttle = <T extends (...args: any[]) => void>(func: T, delay: number): T => {
@@ -416,6 +418,8 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
   // State management
   const [zoom, setZoom] = useState(1.0);
   const [panOffset, setPanOffset] = useState({ x: 0, y: 0 });
+  const [roomGeometry, setRoomGeometry] = useState<RoomGeometry | null>(null);
+  const [loadingGeometry, setLoadingGeometry] = useState(false);
   
   // Notify parent of zoom changes
   useEffect(() => {
@@ -505,6 +509,38 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
 
     loadConfiguration();
   }, []);
+
+  // Load room geometry from database (Phase 4: Complex Room Shapes)
+  useEffect(() => {
+    const loadRoomGeometry = async () => {
+      // Only try to load if we have a design ID
+      if (design?.id) {
+        setLoadingGeometry(true);
+        try {
+          const geometry = await RoomService.getRoomGeometry(design.id);
+          if (geometry) {
+            setRoomGeometry(geometry as RoomGeometry);
+            console.log(`✅ [DesignCanvas2D] Loaded complex room geometry for room ${design.id}:`, geometry.shape_type);
+          } else {
+            // No complex geometry - will use simple rectangular fallback
+            setRoomGeometry(null);
+            console.log(`ℹ️ [DesignCanvas2D] No complex geometry found for room ${design.id}, using simple rectangular room`);
+          }
+        } catch (error) {
+          console.warn(`⚠️ [DesignCanvas2D] Failed to load room geometry for ${design.id}:`, error);
+          setRoomGeometry(null);
+        } finally {
+          setLoadingGeometry(false);
+        }
+      } else {
+        // No design ID - use simple rectangular room
+        setRoomGeometry(null);
+        setLoadingGeometry(false);
+      }
+    };
+
+    loadRoomGeometry();
+  }, [design?.id]);
 
   // Helper function to get wall height (ceiling height) - prioritize room dimensions over cache
   const getWallHeight = useCallback(() => {
@@ -941,26 +977,85 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
 
     if (active2DView === 'plan') {
       // Plan view - draw walls with proper thickness
-      
-      // Draw outer walls (wall structure)
-      ctx.fillStyle = '#e5e5e5';
-      ctx.fillRect(roomPosition.outerX, roomPosition.outerY, outerWidth, outerHeight);
-      
-      // Draw inner room (usable space)
-      ctx.fillStyle = '#f9f9f9';
-      ctx.fillRect(roomPosition.innerX, roomPosition.innerY, innerWidth, innerHeight);
 
-      // Draw wall outlines
-      ctx.strokeStyle = '#333';
-      ctx.lineWidth = 2;
-      ctx.setLineDash([]);
-      
-      // Outer wall boundary
-      ctx.strokeRect(roomPosition.outerX, roomPosition.outerY, outerWidth, outerHeight);
-      // Inner room boundary (where components can be placed)
-      ctx.strokeStyle = '#666';
-      ctx.lineWidth = 1;
-      ctx.strokeRect(roomPosition.innerX, roomPosition.innerY, innerWidth, innerHeight);
+      if (roomGeometry) {
+        // Complex room geometry (L-shape, U-shape, custom polygons)
+        const vertices = roomGeometry.floor.vertices;
+
+        // Convert vertices to canvas coordinates
+        const canvasVertices = vertices.map(v => [
+          roomPosition.innerX + v[0] * zoom,
+          roomPosition.innerY + v[1] * zoom
+        ]);
+
+        // Draw floor (usable space)
+        ctx.fillStyle = '#f9f9f9';
+        ctx.beginPath();
+        ctx.moveTo(canvasVertices[0][0], canvasVertices[0][1]);
+        for (let i = 1; i < canvasVertices.length; i++) {
+          ctx.lineTo(canvasVertices[i][0], canvasVertices[i][1]);
+        }
+        ctx.closePath();
+        ctx.fill();
+
+        // Draw floor outline (inner boundary)
+        ctx.strokeStyle = '#666';
+        ctx.lineWidth = 1;
+        ctx.setLineDash([]);
+        ctx.stroke();
+
+        // Draw wall segments
+        roomGeometry.walls.forEach(wall => {
+          const startX = roomPosition.innerX + wall.start[0] * zoom;
+          const startY = roomPosition.innerY + wall.start[1] * zoom;
+          const endX = roomPosition.innerX + wall.end[0] * zoom;
+          const endY = roomPosition.innerY + wall.end[1] * zoom;
+          const thickness = (wall.thickness || WALL_THICKNESS) * zoom;
+
+          // Calculate wall perpendicular vector (for thickness)
+          const dx = endX - startX;
+          const dy = endY - startY;
+          const len = Math.sqrt(dx * dx + dy * dy);
+          const perpX = (-dy / len) * thickness / 2;
+          const perpY = (dx / len) * thickness / 2;
+
+          // Draw wall as thick line
+          ctx.fillStyle = '#e5e5e5';
+          ctx.beginPath();
+          ctx.moveTo(startX + perpX, startY + perpY);
+          ctx.lineTo(endX + perpX, endY + perpY);
+          ctx.lineTo(endX - perpX, endY - perpY);
+          ctx.lineTo(startX - perpX, startY - perpY);
+          ctx.closePath();
+          ctx.fill();
+
+          // Draw wall outline
+          ctx.strokeStyle = '#333';
+          ctx.lineWidth = 1;
+          ctx.stroke();
+        });
+      } else {
+        // Simple rectangular room (legacy)
+        // Draw outer walls (wall structure)
+        ctx.fillStyle = '#e5e5e5';
+        ctx.fillRect(roomPosition.outerX, roomPosition.outerY, outerWidth, outerHeight);
+
+        // Draw inner room (usable space)
+        ctx.fillStyle = '#f9f9f9';
+        ctx.fillRect(roomPosition.innerX, roomPosition.innerY, innerWidth, innerHeight);
+
+        // Draw wall outlines
+        ctx.strokeStyle = '#333';
+        ctx.lineWidth = 2;
+        ctx.setLineDash([]);
+
+        // Outer wall boundary
+        ctx.strokeRect(roomPosition.outerX, roomPosition.outerY, outerWidth, outerHeight);
+        // Inner room boundary (where components can be placed)
+        ctx.strokeStyle = '#666';
+        ctx.lineWidth = 1;
+        ctx.strokeRect(roomPosition.innerX, roomPosition.innerY, innerWidth, innerHeight);
+      }
 
       // Room dimensions labels
       ctx.fillStyle = '#666';
@@ -1096,7 +1191,7 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
       ctx.lineTo(indicatorX + 3, floorY - 8);
       ctx.stroke();
     }
-  }, [roomDimensions, roomPosition, zoom, active2DView]);
+  }, [roomDimensions, roomPosition, zoom, active2DView, roomGeometry, getWallHeight]);
 
   // LEGACY CODE REMOVED: drawSinkPlanView function (173 lines)
   // Replaced by database-driven handlers in src/services/2d-renderers/plan-view-handlers.ts
