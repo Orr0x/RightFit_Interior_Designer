@@ -269,10 +269,10 @@ export function ProjectProvider({ children }: { children: React.ReactNode }) {
   };
 
   // Project Management Functions
-  const createProject = async (name: string, description?: string): Promise<Project | null> => {
+  const createProject = useCallback(async (name: string, description?: string): Promise<Project | null> => {
     try {
       dispatch({ type: 'SET_LOADING', payload: true });
-      
+
       const user = await getCurrentUser();
       if (!user) {
         throw new Error('User not authenticated');
@@ -294,7 +294,7 @@ export function ProjectProvider({ children }: { children: React.ReactNode }) {
         if (errorObj.message?.includes('relation "projects" does not exist') ||
             errorObj.message?.includes('table "projects" does not exist') ||
             errorObj.code === 'PGRST116' || errorObj.code === '42P01') {
-          
+
           toast({
             title: "Database Setup Required",
             description: "Please deploy Phase 1 migrations to create projects.",
@@ -313,7 +313,7 @@ export function ProjectProvider({ children }: { children: React.ReactNode }) {
       const newProject: Project = transformProject(data);
 
       dispatch({ type: 'ADD_PROJECT', payload: newProject });
-      
+
       toast({
         title: "Project Created",
         description: `Project "${name}" has been created successfully.`,
@@ -323,18 +323,18 @@ export function ProjectProvider({ children }: { children: React.ReactNode }) {
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'Failed to create project';
       dispatch({ type: 'SET_ERROR', payload: errorMessage });
-      
+
       toast({
         title: "Error",
         description: errorMessage,
         variant: "destructive",
       });
-      
+
       return null;
     }
-  };
+  }, [dispatch, toast, getCurrentUser]);
 
-  const loadProject = async (projectId: string): Promise<void> => {
+  const loadProject = useCallback(async (projectId: string): Promise<void> => {
     try {
       dispatch({ type: 'SET_LOADING', payload: true });
 
@@ -353,7 +353,7 @@ export function ProjectProvider({ children }: { children: React.ReactNode }) {
         if (errorObj.message?.includes('relation "projects" does not exist') ||
             errorObj.message?.includes('table "projects" does not exist') ||
             errorObj.code === 'PGRST116' || errorObj.code === '42P01') {
-          
+
           toast({
             title: "Database Setup Required",
             description: "Please deploy Phase 1 migrations to load projects.",
@@ -385,16 +385,16 @@ export function ProjectProvider({ children }: { children: React.ReactNode }) {
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'Failed to load project';
       dispatch({ type: 'SET_ERROR', payload: errorMessage });
-      
+
       toast({
         title: "Error",
         description: errorMessage,
         variant: "destructive",
       });
     }
-  };
+  }, [dispatch, toast]);
 
-  const updateProject = async (projectId: string, updates: Partial<Project>): Promise<void> => {
+  const updateProject = useCallback(async (projectId: string, updates: Partial<Project>): Promise<void> => {
     try {
       dispatch({ type: 'SET_LOADING', payload: true });
 
@@ -426,16 +426,16 @@ export function ProjectProvider({ children }: { children: React.ReactNode }) {
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'Failed to update project';
       dispatch({ type: 'SET_ERROR', payload: errorMessage });
-      
+
       toast({
         title: "Error",
         description: errorMessage,
         variant: "destructive",
       });
     }
-  };
+  }, [dispatch, toast, state.currentProject?.room_designs]);
 
-  const deleteProject = async (projectId: string): Promise<void> => {
+  const deleteProject = useCallback(async (projectId: string): Promise<void> => {
     try {
       dispatch({ type: 'SET_LOADING', payload: true });
 
@@ -456,17 +456,17 @@ export function ProjectProvider({ children }: { children: React.ReactNode }) {
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'Failed to delete project';
       dispatch({ type: 'SET_ERROR', payload: errorMessage });
-      
+
       toast({
         title: "Error",
         description: errorMessage,
         variant: "destructive",
       });
     }
-  };
+  }, [dispatch, toast]);
 
   // Room Management Functions
-  const createRoomDesign = async (
+  const createRoomDesign = useCallback(async (
     projectId: string,
     roomType: RoomType,
     name?: string
@@ -476,10 +476,10 @@ export function ProjectProvider({ children }: { children: React.ReactNode }) {
 
       // Check if room type already exists in the current project
       const existingRoomsOfType = (state.currentProject?.room_designs || []).filter(rd => rd.room_type === roomType);
-      
+
       if (existingRoomsOfType.length > 0) {
         dispatch({ type: 'SET_LOADING', payload: false });
-        
+
         const roomDisplayNames: Record<RoomType, string> = {
           kitchen: 'Kitchen',
           bedroom: 'Bedroom',
@@ -494,13 +494,13 @@ export function ProjectProvider({ children }: { children: React.ReactNode }) {
           utility: 'Utility Room',
           'under-stairs': 'Under Stairs',
         };
-        
+
         toast({
           title: "Room Already Exists",
           description: `A ${roomDisplayNames[roomType]} already exists in this project. Only one room of each type is allowed.`,
           variant: "destructive",
         });
-        
+
         return null;
       }
 
@@ -568,18 +568,18 @@ export function ProjectProvider({ children }: { children: React.ReactNode }) {
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'Failed to create room design';
       dispatch({ type: 'SET_ERROR', payload: errorMessage });
-      
+
       toast({
         title: "Error",
         description: errorMessage,
         variant: "destructive",
       });
-      
+
       return null;
     }
-  };
+  }, [dispatch, toast, state.currentProject?.room_designs]);
 
-  const switchToRoom = async (roomId: string): Promise<void> => {
+  const switchToRoom = useCallback(async (roomId: string): Promise<void> => {
     try {
       if (!state.currentProject) {
         throw new Error('No project loaded');
@@ -590,24 +590,24 @@ export function ProjectProvider({ children }: { children: React.ReactNode }) {
         throw new Error('Room design not found');
       }
 
-      dispatch({ 
-        type: 'SET_CURRENT_ROOM', 
+      dispatch({
+        type: 'SET_CURRENT_ROOM',
         payload: { roomId, roomDesign }
       });
 
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'Failed to switch room';
       dispatch({ type: 'SET_ERROR', payload: errorMessage });
-      
+
       toast({
         title: "Error",
         description: errorMessage,
         variant: "destructive",
       });
     }
-  };
+  }, [state.currentProject, dispatch, toast]);
 
-  const updateCurrentRoomDesign = async (updates: Partial<RoomDesign>, showLoading: boolean = false): Promise<void> => {
+  const updateCurrentRoomDesign = useCallback(async (updates: Partial<RoomDesign>, showLoading: boolean = false): Promise<void> => {
     try {
       if (!state.currentRoomDesign) {
         throw new Error('No room design selected');
@@ -646,16 +646,16 @@ export function ProjectProvider({ children }: { children: React.ReactNode }) {
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'Failed to update room design';
       dispatch({ type: 'SET_ERROR', payload: errorMessage });
-      
+
       toast({
         title: "Error",
         description: errorMessage,
         variant: "destructive",
       });
     }
-  };
+  }, [state.currentRoomDesign, dispatch, toast]);
 
-  const deleteRoomDesign = async (roomId: string): Promise<void> => {
+  const deleteRoomDesign = useCallback(async (roomId: string): Promise<void> => {
     try {
       dispatch({ type: 'SET_LOADING', payload: true });
 
@@ -668,14 +668,14 @@ export function ProjectProvider({ children }: { children: React.ReactNode }) {
 
       // Check if we're deleting the currently selected room
       const wasCurrentRoom = state.currentRoomId === roomId;
-      
+
       // Remove the room from state
       dispatch({ type: 'DELETE_ROOM_DESIGN', payload: roomId });
 
       // If we deleted the current room, auto-select another room
       if (wasCurrentRoom && state.currentProject) {
         const remainingRooms = (state.currentProject.room_designs || []).filter(rd => rd.id !== roomId);
-        
+
         if (remainingRooms.length > 0) {
           // Select the first remaining room
           const nextRoom = remainingRooms[0];
@@ -700,17 +700,17 @@ export function ProjectProvider({ children }: { children: React.ReactNode }) {
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'Failed to delete room design';
       dispatch({ type: 'SET_ERROR', payload: errorMessage });
-      
+
       toast({
         title: "Error",
         description: errorMessage,
         variant: "destructive",
       });
     }
-  };
+  }, [state.currentRoomId, state.currentProject, dispatch, toast]);
 
   // Data Management Functions
-  const loadUserProjects = async (): Promise<void> => {
+  const loadUserProjects = useCallback(async (): Promise<void> => {
     try {
       dispatch({ type: 'SET_LOADING', payload: true });
 
@@ -735,11 +735,11 @@ export function ProjectProvider({ children }: { children: React.ReactNode }) {
         if (errorObj.message?.includes('relation "projects" does not exist') ||
             errorObj.message?.includes('table "projects" does not exist') ||
             errorObj.code === 'PGRST116' || errorObj.code === '42P01') {
-          
+
           // Projects table does not exist - migrations need to be deployed
           dispatch({ type: 'SET_PROJECTS', payload: [] });
           dispatch({ type: 'SET_ERROR', payload: 'Database migrations pending. Please deploy Phase 1 migrations to use multi-room projects.' });
-          
+
           toast({
             title: "Database Setup Required",
             description: "Phase 1 database migrations need to be deployed. Using legacy mode for now.",
@@ -762,14 +762,14 @@ export function ProjectProvider({ children }: { children: React.ReactNode }) {
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'Failed to load projects';
       dispatch({ type: 'SET_ERROR', payload: errorMessage });
-      
+
       toast({
         title: "Error",
         description: errorMessage,
         variant: "destructive",
       });
     }
-  };
+  }, [dispatch, toast, getCurrentUser]);
 
   const saveCurrentDesign = useCallback(async (showNotification: boolean = true): Promise<void> => {
     try {

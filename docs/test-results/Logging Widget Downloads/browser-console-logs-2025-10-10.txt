@@ -1,0 +1,483 @@
+
+================================================================================
+BROWSER CONSOLE LOGS
+================================================================================
+Captured: 102 log entries
+Session Start: 2025-10-10T12:40:18.246Z
+Session End: 2025-10-10T12:43:33.153Z
+================================================================================
+
+[2025-10-10T12:40:18.246Z] ℹ️ [INFO] 🔧 [App] Console logger enabled (development mode)
+[2025-10-10T12:40:18.531Z] 📝 [LOG] [Model3DLoader] Preloading 18 models...
+[2025-10-10T12:40:18.534Z] 📝 [LOG] 🔐 [ProjectContext] Auth ready, loading user projects...
+[2025-10-10T12:40:18.580Z] 📝 [LOG] 🔐 [ProjectContext] Auth ready, loading user projects...
+[2025-10-10T12:40:18.595Z] 📝 [LOG] [Model3DLoader] Loaded model from database: base-cabinet-60
+[2025-10-10T12:40:18.600Z] 📝 [LOG] [Model3DLoader] Loaded model from database: l-shaped-test-cabinet-60
+[2025-10-10T12:40:18.600Z] 📝 [LOG] [Model3DLoader] Loaded model from database: new-corner-wall-cabinet-90
+[2025-10-10T12:40:18.606Z] 📝 [LOG] [Model3DLoader] Loaded model from database: base-cabinet-80
+[2025-10-10T12:40:18.607Z] 📝 [LOG] [Model3DLoader] Loaded model from database: bed-single
+[2025-10-10T12:40:18.609Z] 📝 [LOG] [Model3DLoader] Loaded model from database: dining-table
+[2025-10-10T12:40:18.610Z] 📝 [LOG] [Model3DLoader] Loaded model from database: dining-chair
+[2025-10-10T12:40:18.611Z] 📝 [LOG] [Model3DLoader] Loaded model from database: l-shaped-test-cabinet-90
+[2025-10-10T12:40:18.618Z] 📝 [LOG] [Model3DLoader] Loaded model from database: new-corner-wall-cabinet-60
+[2025-10-10T12:40:18.619Z] 📝 [LOG] [Model3DLoader] Loaded model from database: wall-cabinet-80
+[2025-10-10T12:40:18.621Z] 📝 [LOG] [Model3DLoader] Loaded model from database: sofa-3-seater
+[2025-10-10T12:40:18.624Z] 📝 [LOG] [Model3DLoader] Loaded model from database: tv-55-inch
+[2025-10-10T12:40:18.625Z] 📝 [LOG] [Model3DLoader] Loaded model from database: shower-standard
+[2025-10-10T12:40:18.626Z] 📝 [LOG] [Model3DLoader] Loaded model from database: bathtub-standard
+[2025-10-10T12:40:18.626Z] 📝 [LOG] [Model3DLoader] Loaded model from database: tumble-dryer
+[2025-10-10T12:40:18.628Z] 📝 [LOG] 🔐 [ProjectContext] Auth ready, loading user projects...
+[2025-10-10T12:40:18.629Z] 📝 [LOG] [Model3DLoader] Loaded model from database: washing-machine
+[2025-10-10T12:40:18.630Z] 📝 [LOG] [Model3DLoader] Loaded model from database: wall-cabinet-60
+[2025-10-10T12:40:18.632Z] 📝 [LOG] [Model3DLoader] Loaded model from database: toilet-standard
+[2025-10-10T12:40:18.664Z] 📝 [LOG] 🔐 [ProjectContext] Auth ready, loading user projects...
+[2025-10-10T12:40:18.688Z] 📝 [LOG] [Model3DLoader] Loaded 4 geometry parts for model: 60f2345b-4c36-4f2f-95d0-493b16b7374a
+[2025-10-10T12:40:18.717Z] 📝 [LOG] [Model3DLoader] Loaded 5 geometry parts for model: 68fcf22e-52dc-4cd2-9bc4-47d888fb8752
+[2025-10-10T12:40:18.717Z] 📝 [LOG] [Model3DLoader] Loaded 3 geometry parts for model: 540faede-366d-4fa2-b169-97fec6766db4
+[2025-10-10T12:40:18.718Z] 📝 [LOG] [Model3DLoader] Loaded 11 geometry parts for model: 7e845283-165b-4a1e-95e6-565adc87fc60
+[2025-10-10T12:40:18.718Z] 📝 [LOG] [Model3DLoader] Loaded 6 geometry parts for model: 43b45e50-439e-4647-b320-7b0d2d51d311
+[2025-10-10T12:40:18.718Z] 📝 [LOG] [Model3DLoader] Loaded 3 geometry parts for model: 84b234b5-f96f-4080-9b71-b9e66cf41dfb
+[2025-10-10T12:40:18.718Z] 📝 [LOG] [Model3DLoader] Loaded 5 geometry parts for model: 932bc10c-f028-4375-8593-8d2f9bb30fbb
+[2025-10-10T12:40:18.718Z] 📝 [LOG] [Model3DLoader] Loaded 5 geometry parts for model: d91a5c3a-2af9-4c8f-8cb3-a62f84cef732
+[2025-10-10T12:40:18.718Z] 📝 [LOG] [Model3DLoader] Loaded 6 geometry parts for model: a8b66209-ccef-4e44-a761-df5f37ac640b
+[2025-10-10T12:40:18.718Z] 📝 [LOG] [Model3DLoader] Loaded 5 geometry parts for model: 6942fc4e-5bf6-480e-81ea-16c79a782954
+[2025-10-10T12:40:18.719Z] 📝 [LOG] [Model3DLoader] Loaded 8 geometry parts for model: 6a45d0f6-5116-409a-8ab9-aacebd466a31
+[2025-10-10T12:40:18.719Z] 📝 [LOG] 🔐 [ProjectContext] Auth ready, loading user projects...
+[2025-10-10T12:40:18.763Z] 📝 [LOG] [Model3DLoader] Loaded 10 geometry parts for model: 138cf90c-ba72-450e-a50e-f39da21ca44d
+[2025-10-10T12:40:18.763Z] 📝 [LOG] [Model3DLoader] Loaded 4 geometry parts for model: f8ac534e-6911-477b-bbf3-5c66afa03ed8
+[2025-10-10T12:40:18.763Z] 📝 [LOG] [Model3DLoader] Loaded 8 geometry parts for model: 701c19a3-0083-41d2-aec8-96c540a1833d
+[2025-10-10T12:40:18.763Z] 📝 [LOG] [Model3DLoader] Loaded 6 geometry parts for model: dee1b997-eb19-4228-b69f-7dff6204ae01
+[2025-10-10T12:40:18.763Z] 📝 [LOG] [Model3DLoader] Loaded 6 geometry parts for model: c509bed1-9882-44d5-8e44-be6c625cf0b6
+[2025-10-10T12:40:18.764Z] 📝 [LOG] [Model3DLoader] Loaded 4 geometry parts for model: 8fef412a-8649-4895-8cd5-fd53d0677ac1
+[2025-10-10T12:40:18.764Z] 📝 [LOG] [Model3DLoader] Loaded 5 geometry parts for model: 9b93fa5d-fde1-4330-8f1d-84ecb01e0607
+[2025-10-10T12:40:18.826Z] 📝 [LOG] [Model3DLoader] Loaded 17 materials
+[2025-10-10T12:40:18.826Z] 📝 [LOG] [Model3DLoader] Preloaded 18 models with geometry and materials
+[2025-10-10T12:40:18.826Z] 📝 [LOG] [DynamicRenderer] Preloaded common components
+[2025-10-10T12:42:51.994Z] 📝 [LOG] 🚀 [Designer] Preloading common component behaviors for performance
+[2025-10-10T12:42:51.994Z] 📝 [LOG] 🔥 [ComponentService] Preloading common component behaviors
+[2025-10-10T12:42:51.994Z] 📝 [LOG] 🔄 [ComponentService] Batch loading behaviors for 10 component types
+[2025-10-10T12:42:51.994Z] 📝 [LOG] 🔍 [ComponentService] Loading 10 uncached behaviors from database
+[2025-10-10T12:42:52.011Z] ❌ [ERROR] Warning: Maximum update depth exceeded. This can happen when a component calls setState inside useEffect, but useEffect either doesn't have a dependency array, or one of the dependencies changes on every render.%s 
+    at Designer (http://localhost:5173/src/pages/Designer.tsx:45:22)
+    at RenderedRoute (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=abacf85d:4069:5)
+    at Routes (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=abacf85d:4508:5)
+    at Router (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=abacf85d:4451:15)
+    at BrowserRouter (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=abacf85d:5196:5)
+    at Provider (http://localhost:5173/node_modules/.vite/deps/chunk-G6G4LDJ2.js?v=abacf85d:48:15)
+    at TooltipProvider (http://localhost:5173/node_modules/.vite/deps/@radix-ui_react-tooltip.js?v=abacf85d:59:5)
+    at ProjectProvider (http://localhost:5173/src/contexts/ProjectContext.tsx:182:35)
+    at AuthProvider (http://localhost:5173/src/contexts/AuthContext.tsx:23:32)
+    at QueryClientProvider (http://localhost:5173/node_modules/.vite/deps/@tanstack_react-query.js?v=abacf85d:2794:3)
+    at App (http://localhost:5173/src/App.tsx:50:5)
+[2025-10-10T12:42:52.024Z] ❌ [ERROR] Warning: Maximum update depth exceeded. This can happen when a component calls setState inside useEffect, but useEffect either doesn't have a dependency array, or one of the dependencies changes on every render.%s 
+    at Designer (http://localhost:5173/src/pages/Designer.tsx:45:22)
+    at RenderedRoute (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=abacf85d:4069:5)
+    at Routes (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=abacf85d:4508:5)
+    at Router (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=abacf85d:4451:15)
+    at BrowserRouter (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=abacf85d:5196:5)
+    at Provider (http://localhost:5173/node_modules/.vite/deps/chunk-G6G4LDJ2.js?v=abacf85d:48:15)
+    at TooltipProvider (http://localhost:5173/node_modules/.vite/deps/@radix-ui_react-tooltip.js?v=abacf85d:59:5)
+    at ProjectProvider (http://localhost:5173/src/contexts/ProjectContext.tsx:182:35)
+    at AuthProvider (http://localhost:5173/src/contexts/AuthContext.tsx:23:32)
+    at QueryClientProvider (http://localhost:5173/node_modules/.vite/deps/@tanstack_react-query.js?v=abacf85d:2794:3)
+    at App (http://localhost:5173/src/App.tsx:50:5)
+[2025-10-10T12:42:52.033Z] ❌ [ERROR] Warning: Maximum update depth exceeded. This can happen when a component calls setState inside useEffect, but useEffect either doesn't have a dependency array, or one of the dependencies changes on every render.%s 
+    at Designer (http://localhost:5173/src/pages/Designer.tsx:45:22)
+    at RenderedRoute (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=abacf85d:4069:5)
+    at Routes (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=abacf85d:4508:5)
+    at Router (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=abacf85d:4451:15)
+    at BrowserRouter (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=abacf85d:5196:5)
+    at Provider (http://localhost:5173/node_modules/.vite/deps/chunk-G6G4LDJ2.js?v=abacf85d:48:15)
+    at TooltipProvider (http://localhost:5173/node_modules/.vite/deps/@radix-ui_react-tooltip.js?v=abacf85d:59:5)
+    at ProjectProvider (http://localhost:5173/src/contexts/ProjectContext.tsx:182:35)
+    at AuthProvider (http://localhost:5173/src/contexts/AuthContext.tsx:23:32)
+    at QueryClientProvider (http://localhost:5173/node_modules/.vite/deps/@tanstack_react-query.js?v=abacf85d:2794:3)
+    at App (http://localhost:5173/src/App.tsx:50:5)
+[2025-10-10T12:42:52.046Z] ❌ [ERROR] Warning: Maximum update depth exceeded. This can happen when a component calls setState inside useEffect, but useEffect either doesn't have a dependency array, or one of the dependencies changes on every render.%s 
+    at Designer (http://localhost:5173/src/pages/Designer.tsx:45:22)
+    at RenderedRoute (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=abacf85d:4069:5)
+    at Routes (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=abacf85d:4508:5)
+    at Router (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=abacf85d:4451:15)
+    at BrowserRouter (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=abacf85d:5196:5)
+    at Provider (http://localhost:5173/node_modules/.vite/deps/chunk-G6G4LDJ2.js?v=abacf85d:48:15)
+    at TooltipProvider (http://localhost:5173/node_modules/.vite/deps/@radix-ui_react-tooltip.js?v=abacf85d:59:5)
+    at ProjectProvider (http://localhost:5173/src/contexts/ProjectContext.tsx:182:35)
+    at AuthProvider (http://localhost:5173/src/contexts/AuthContext.tsx:23:32)
+    at QueryClientProvider (http://localhost:5173/node_modules/.vite/deps/@tanstack_react-query.js?v=abacf85d:2794:3)
+    at App (http://localhost:5173/src/App.tsx:50:5)
+[2025-10-10T12:42:52.061Z] ❌ [ERROR] Warning: Maximum update depth exceeded. This can happen when a component calls setState inside useEffect, but useEffect either doesn't have a dependency array, or one of the dependencies changes on every render.%s 
+    at Designer (http://localhost:5173/src/pages/Designer.tsx:45:22)
+    at RenderedRoute (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=abacf85d:4069:5)
+    at Routes (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=abacf85d:4508:5)
+    at Router (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=abacf85d:4451:15)
+    at BrowserRouter (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=abacf85d:5196:5)
+    at Provider (http://localhost:5173/node_modules/.vite/deps/chunk-G6G4LDJ2.js?v=abacf85d:48:15)
+    at TooltipProvider (http://localhost:5173/node_modules/.vite/deps/@radix-ui_react-tooltip.js?v=abacf85d:59:5)
+    at ProjectProvider (http://localhost:5173/src/contexts/ProjectContext.tsx:182:35)
+    at AuthProvider (http://localhost:5173/src/contexts/AuthContext.tsx:23:32)
+    at QueryClientProvider (http://localhost:5173/node_modules/.vite/deps/@tanstack_react-query.js?v=abacf85d:2794:3)
+    at App (http://localhost:5173/src/App.tsx:50:5)
+[2025-10-10T12:42:52.070Z] ❌ [ERROR] Warning: Maximum update depth exceeded. This can happen when a component calls setState inside useEffect, but useEffect either doesn't have a dependency array, or one of the dependencies changes on every render.%s 
+    at Designer (http://localhost:5173/src/pages/Designer.tsx:45:22)
+    at RenderedRoute (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=abacf85d:4069:5)
+    at Routes (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=abacf85d:4508:5)
+    at Router (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=abacf85d:4451:15)
+    at BrowserRouter (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=abacf85d:5196:5)
+    at Provider (http://localhost:5173/node_modules/.vite/deps/chunk-G6G4LDJ2.js?v=abacf85d:48:15)
+    at TooltipProvider (http://localhost:5173/node_modules/.vite/deps/@radix-ui_react-tooltip.js?v=abacf85d:59:5)
+    at ProjectProvider (http://localhost:5173/src/contexts/ProjectContext.tsx:182:35)
+    at AuthProvider (http://localhost:5173/src/contexts/AuthContext.tsx:23:32)
+    at QueryClientProvider (http://localhost:5173/node_modules/.vite/deps/@tanstack_react-query.js?v=abacf85d:2794:3)
+    at App (http://localhost:5173/src/App.tsx:50:5)
+[2025-10-10T12:42:52.078Z] ❌ [ERROR] Warning: Maximum update depth exceeded. This can happen when a component calls setState inside useEffect, but useEffect either doesn't have a dependency array, or one of the dependencies changes on every render.%s 
+    at Designer (http://localhost:5173/src/pages/Designer.tsx:45:22)
+    at RenderedRoute (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=abacf85d:4069:5)
+    at Routes (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=abacf85d:4508:5)
+    at Router (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=abacf85d:4451:15)
+    at BrowserRouter (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=abacf85d:5196:5)
+    at Provider (http://localhost:5173/node_modules/.vite/deps/chunk-G6G4LDJ2.js?v=abacf85d:48:15)
+    at TooltipProvider (http://localhost:5173/node_modules/.vite/deps/@radix-ui_react-tooltip.js?v=abacf85d:59:5)
+    at ProjectProvider (http://localhost:5173/src/contexts/ProjectContext.tsx:182:35)
+    at AuthProvider (http://localhost:5173/src/contexts/AuthContext.tsx:23:32)
+    at QueryClientProvider (http://localhost:5173/node_modules/.vite/deps/@tanstack_react-query.js?v=abacf85d:2794:3)
+    at App (http://localhost:5173/src/App.tsx:50:5)
+[2025-10-10T12:42:52.090Z] ❌ [ERROR] Warning: Maximum update depth exceeded. This can happen when a component calls setState inside useEffect, but useEffect either doesn't have a dependency array, or one of the dependencies changes on every render.%s 
+    at Designer (http://localhost:5173/src/pages/Designer.tsx:45:22)
+    at RenderedRoute (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=abacf85d:4069:5)
+    at Routes (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=abacf85d:4508:5)
+    at Router (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=abacf85d:4451:15)
+    at BrowserRouter (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=abacf85d:5196:5)
+    at Provider (http://localhost:5173/node_modules/.vite/deps/chunk-G6G4LDJ2.js?v=abacf85d:48:15)
+    at TooltipProvider (http://localhost:5173/node_modules/.vite/deps/@radix-ui_react-tooltip.js?v=abacf85d:59:5)
+    at ProjectProvider (http://localhost:5173/src/contexts/ProjectContext.tsx:182:35)
+    at AuthProvider (http://localhost:5173/src/contexts/AuthContext.tsx:23:32)
+    at QueryClientProvider (http://localhost:5173/node_modules/.vite/deps/@tanstack_react-query.js?v=abacf85d:2794:3)
+    at App (http://localhost:5173/src/App.tsx:50:5)
+[2025-10-10T12:42:52.099Z] ❌ [ERROR] Warning: Maximum update depth exceeded. This can happen when a component calls setState inside useEffect, but useEffect either doesn't have a dependency array, or one of the dependencies changes on every render.%s 
+    at Designer (http://localhost:5173/src/pages/Designer.tsx:45:22)
+    at RenderedRoute (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=abacf85d:4069:5)
+    at Routes (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=abacf85d:4508:5)
+    at Router (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=abacf85d:4451:15)
+    at BrowserRouter (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=abacf85d:5196:5)
+    at Provider (http://localhost:5173/node_modules/.vite/deps/chunk-G6G4LDJ2.js?v=abacf85d:48:15)
+    at TooltipProvider (http://localhost:5173/node_modules/.vite/deps/@radix-ui_react-tooltip.js?v=abacf85d:59:5)
+    at ProjectProvider (http://localhost:5173/src/contexts/ProjectContext.tsx:182:35)
+    at AuthProvider (http://localhost:5173/src/contexts/AuthContext.tsx:23:32)
+    at QueryClientProvider (http://localhost:5173/node_modules/.vite/deps/@tanstack_react-query.js?v=abacf85d:2794:3)
+    at App (http://localhost:5173/src/App.tsx:50:5)
+[2025-10-10T12:42:52.112Z] ❌ [ERROR] Warning: Maximum update depth exceeded. This can happen when a component calls setState inside useEffect, but useEffect either doesn't have a dependency array, or one of the dependencies changes on every render.%s 
+    at Designer (http://localhost:5173/src/pages/Designer.tsx:45:22)
+    at RenderedRoute (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=abacf85d:4069:5)
+    at Routes (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=abacf85d:4508:5)
+    at Router (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=abacf85d:4451:15)
+    at BrowserRouter (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=abacf85d:5196:5)
+    at Provider (http://localhost:5173/node_modules/.vite/deps/chunk-G6G4LDJ2.js?v=abacf85d:48:15)
+    at TooltipProvider (http://localhost:5173/node_modules/.vite/deps/@radix-ui_react-tooltip.js?v=abacf85d:59:5)
+    at ProjectProvider (http://localhost:5173/src/contexts/ProjectContext.tsx:182:35)
+    at AuthProvider (http://localhost:5173/src/contexts/AuthContext.tsx:23:32)
+    at QueryClientProvider (http://localhost:5173/node_modules/.vite/deps/@tanstack_react-query.js?v=abacf85d:2794:3)
+    at App (http://localhost:5173/src/App.tsx:50:5)
+[2025-10-10T12:42:52.119Z] ❌ [ERROR] Warning: Maximum update depth exceeded. This can happen when a component calls setState inside useEffect, but useEffect either doesn't have a dependency array, or one of the dependencies changes on every render.%s 
+    at Designer (http://localhost:5173/src/pages/Designer.tsx:45:22)
+    at RenderedRoute (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=abacf85d:4069:5)
+    at Routes (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=abacf85d:4508:5)
+    at Router (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=abacf85d:4451:15)
+    at BrowserRouter (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=abacf85d:5196:5)
+    at Provider (http://localhost:5173/node_modules/.vite/deps/chunk-G6G4LDJ2.js?v=abacf85d:48:15)
+    at TooltipProvider (http://localhost:5173/node_modules/.vite/deps/@radix-ui_react-tooltip.js?v=abacf85d:59:5)
+    at ProjectProvider (http://localhost:5173/src/contexts/ProjectContext.tsx:182:35)
+    at AuthProvider (http://localhost:5173/src/contexts/AuthContext.tsx:23:32)
+    at QueryClientProvider (http://localhost:5173/node_modules/.vite/deps/@tanstack_react-query.js?v=abacf85d:2794:3)
+    at App (http://localhost:5173/src/App.tsx:50:5)
+[2025-10-10T12:42:52.128Z] ❌ [ERROR] Warning: Maximum update depth exceeded. This can happen when a component calls setState inside useEffect, but useEffect either doesn't have a dependency array, or one of the dependencies changes on every render.%s 
+    at Designer (http://localhost:5173/src/pages/Designer.tsx:45:22)
+    at RenderedRoute (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=abacf85d:4069:5)
+    at Routes (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=abacf85d:4508:5)
+    at Router (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=abacf85d:4451:15)
+    at BrowserRouter (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=abacf85d:5196:5)
+    at Provider (http://localhost:5173/node_modules/.vite/deps/chunk-G6G4LDJ2.js?v=abacf85d:48:15)
+    at TooltipProvider (http://localhost:5173/node_modules/.vite/deps/@radix-ui_react-tooltip.js?v=abacf85d:59:5)
+    at ProjectProvider (http://localhost:5173/src/contexts/ProjectContext.tsx:182:35)
+    at AuthProvider (http://localhost:5173/src/contexts/AuthContext.tsx:23:32)
+    at QueryClientProvider (http://localhost:5173/node_modules/.vite/deps/@tanstack_react-query.js?v=abacf85d:2794:3)
+    at App (http://localhost:5173/src/App.tsx:50:5)
+[2025-10-10T12:42:52.137Z] ❌ [ERROR] Warning: Maximum update depth exceeded. This can happen when a component calls setState inside useEffect, but useEffect either doesn't have a dependency array, or one of the dependencies changes on every render.%s 
+    at Designer (http://localhost:5173/src/pages/Designer.tsx:45:22)
+    at RenderedRoute (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=abacf85d:4069:5)
+    at Routes (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=abacf85d:4508:5)
+    at Router (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=abacf85d:4451:15)
+    at BrowserRouter (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=abacf85d:5196:5)
+    at Provider (http://localhost:5173/node_modules/.vite/deps/chunk-G6G4LDJ2.js?v=abacf85d:48:15)
+    at TooltipProvider (http://localhost:5173/node_modules/.vite/deps/@radix-ui_react-tooltip.js?v=abacf85d:59:5)
+    at ProjectProvider (http://localhost:5173/src/contexts/ProjectContext.tsx:182:35)
+    at AuthProvider (http://localhost:5173/src/contexts/AuthContext.tsx:23:32)
+    at QueryClientProvider (http://localhost:5173/node_modules/.vite/deps/@tanstack_react-query.js?v=abacf85d:2794:3)
+    at App (http://localhost:5173/src/App.tsx:50:5)
+[2025-10-10T12:42:52.146Z] ❌ [ERROR] Warning: Maximum update depth exceeded. This can happen when a component calls setState inside useEffect, but useEffect either doesn't have a dependency array, or one of the dependencies changes on every render.%s 
+    at Designer (http://localhost:5173/src/pages/Designer.tsx:45:22)
+    at RenderedRoute (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=abacf85d:4069:5)
+    at Routes (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=abacf85d:4508:5)
+    at Router (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=abacf85d:4451:15)
+    at BrowserRouter (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=abacf85d:5196:5)
+    at Provider (http://localhost:5173/node_modules/.vite/deps/chunk-G6G4LDJ2.js?v=abacf85d:48:15)
+    at TooltipProvider (http://localhost:5173/node_modules/.vite/deps/@radix-ui_react-tooltip.js?v=abacf85d:59:5)
+    at ProjectProvider (http://localhost:5173/src/contexts/ProjectContext.tsx:182:35)
+    at AuthProvider (http://localhost:5173/src/contexts/AuthContext.tsx:23:32)
+    at QueryClientProvider (http://localhost:5173/node_modules/.vite/deps/@tanstack_react-query.js?v=abacf85d:2794:3)
+    at App (http://localhost:5173/src/App.tsx:50:5)
+[2025-10-10T12:42:52.159Z] ❌ [ERROR] Warning: Maximum update depth exceeded. This can happen when a component calls setState inside useEffect, but useEffect either doesn't have a dependency array, or one of the dependencies changes on every render.%s 
+    at Designer (http://localhost:5173/src/pages/Designer.tsx:45:22)
+    at RenderedRoute (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=abacf85d:4069:5)
+    at Routes (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=abacf85d:4508:5)
+    at Router (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=abacf85d:4451:15)
+    at BrowserRouter (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=abacf85d:5196:5)
+    at Provider (http://localhost:5173/node_modules/.vite/deps/chunk-G6G4LDJ2.js?v=abacf85d:48:15)
+    at TooltipProvider (http://localhost:5173/node_modules/.vite/deps/@radix-ui_react-tooltip.js?v=abacf85d:59:5)
+    at ProjectProvider (http://localhost:5173/src/contexts/ProjectContext.tsx:182:35)
+    at AuthProvider (http://localhost:5173/src/contexts/AuthContext.tsx:23:32)
+    at QueryClientProvider (http://localhost:5173/node_modules/.vite/deps/@tanstack_react-query.js?v=abacf85d:2794:3)
+    at App (http://localhost:5173/src/App.tsx:50:5)
+[2025-10-10T12:42:52.169Z] ❌ [ERROR] Warning: Maximum update depth exceeded. This can happen when a component calls setState inside useEffect, but useEffect either doesn't have a dependency array, or one of the dependencies changes on every render.%s 
+    at Designer (http://localhost:5173/src/pages/Designer.tsx:45:22)
+    at RenderedRoute (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=abacf85d:4069:5)
+    at Routes (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=abacf85d:4508:5)
+    at Router (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=abacf85d:4451:15)
+    at BrowserRouter (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=abacf85d:5196:5)
+    at Provider (http://localhost:5173/node_modules/.vite/deps/chunk-G6G4LDJ2.js?v=abacf85d:48:15)
+    at TooltipProvider (http://localhost:5173/node_modules/.vite/deps/@radix-ui_react-tooltip.js?v=abacf85d:59:5)
+    at ProjectProvider (http://localhost:5173/src/contexts/ProjectContext.tsx:182:35)
+    at AuthProvider (http://localhost:5173/src/contexts/AuthContext.tsx:23:32)
+    at QueryClientProvider (http://localhost:5173/node_modules/.vite/deps/@tanstack_react-query.js?v=abacf85d:2794:3)
+    at App (http://localhost:5173/src/App.tsx:50:5)
+[2025-10-10T12:42:52.180Z] ❌ [ERROR] Warning: Maximum update depth exceeded. This can happen when a component calls setState inside useEffect, but useEffect either doesn't have a dependency array, or one of the dependencies changes on every render.%s 
+    at Designer (http://localhost:5173/src/pages/Designer.tsx:45:22)
+    at RenderedRoute (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=abacf85d:4069:5)
+    at Routes (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=abacf85d:4508:5)
+    at Router (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=abacf85d:4451:15)
+    at BrowserRouter (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=abacf85d:5196:5)
+    at Provider (http://localhost:5173/node_modules/.vite/deps/chunk-G6G4LDJ2.js?v=abacf85d:48:15)
+    at TooltipProvider (http://localhost:5173/node_modules/.vite/deps/@radix-ui_react-tooltip.js?v=abacf85d:59:5)
+    at ProjectProvider (http://localhost:5173/src/contexts/ProjectContext.tsx:182:35)
+    at AuthProvider (http://localhost:5173/src/contexts/AuthContext.tsx:23:32)
+    at QueryClientProvider (http://localhost:5173/node_modules/.vite/deps/@tanstack_react-query.js?v=abacf85d:2794:3)
+    at App (http://localhost:5173/src/App.tsx:50:5)
+[2025-10-10T12:42:52.188Z] ❌ [ERROR] Warning: Maximum update depth exceeded. This can happen when a component calls setState inside useEffect, but useEffect either doesn't have a dependency array, or one of the dependencies changes on every render.%s 
+    at Designer (http://localhost:5173/src/pages/Designer.tsx:45:22)
+    at RenderedRoute (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=abacf85d:4069:5)
+    at Routes (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=abacf85d:4508:5)
+    at Router (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=abacf85d:4451:15)
+    at BrowserRouter (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=abacf85d:5196:5)
+    at Provider (http://localhost:5173/node_modules/.vite/deps/chunk-G6G4LDJ2.js?v=abacf85d:48:15)
+    at TooltipProvider (http://localhost:5173/node_modules/.vite/deps/@radix-ui_react-tooltip.js?v=abacf85d:59:5)
+    at ProjectProvider (http://localhost:5173/src/contexts/ProjectContext.tsx:182:35)
+    at AuthProvider (http://localhost:5173/src/contexts/AuthContext.tsx:23:32)
+    at QueryClientProvider (http://localhost:5173/node_modules/.vite/deps/@tanstack_react-query.js?v=abacf85d:2794:3)
+    at App (http://localhost:5173/src/App.tsx:50:5)
+[2025-10-10T12:42:52.196Z] ❌ [ERROR] Warning: Maximum update depth exceeded. This can happen when a component calls setState inside useEffect, but useEffect either doesn't have a dependency array, or one of the dependencies changes on every render.%s 
+    at Designer (http://localhost:5173/src/pages/Designer.tsx:45:22)
+    at RenderedRoute (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=abacf85d:4069:5)
+    at Routes (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=abacf85d:4508:5)
+    at Router (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=abacf85d:4451:15)
+    at BrowserRouter (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=abacf85d:5196:5)
+    at Provider (http://localhost:5173/node_modules/.vite/deps/chunk-G6G4LDJ2.js?v=abacf85d:48:15)
+    at TooltipProvider (http://localhost:5173/node_modules/.vite/deps/@radix-ui_react-tooltip.js?v=abacf85d:59:5)
+    at ProjectProvider (http://localhost:5173/src/contexts/ProjectContext.tsx:182:35)
+    at AuthProvider (http://localhost:5173/src/contexts/AuthContext.tsx:23:32)
+    at QueryClientProvider (http://localhost:5173/node_modules/.vite/deps/@tanstack_react-query.js?v=abacf85d:2794:3)
+    at App (http://localhost:5173/src/App.tsx:50:5)
+[2025-10-10T12:42:52.206Z] ❌ [ERROR] Warning: Maximum update depth exceeded. This can happen when a component calls setState inside useEffect, but useEffect either doesn't have a dependency array, or one of the dependencies changes on every render.%s 
+    at Designer (http://localhost:5173/src/pages/Designer.tsx:45:22)
+    at RenderedRoute (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=abacf85d:4069:5)
+    at Routes (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=abacf85d:4508:5)
+    at Router (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=abacf85d:4451:15)
+    at BrowserRouter (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=abacf85d:5196:5)
+    at Provider (http://localhost:5173/node_modules/.vite/deps/chunk-G6G4LDJ2.js?v=abacf85d:48:15)
+    at TooltipProvider (http://localhost:5173/node_modules/.vite/deps/@radix-ui_react-tooltip.js?v=abacf85d:59:5)
+    at ProjectProvider (http://localhost:5173/src/contexts/ProjectContext.tsx:182:35)
+    at AuthProvider (http://localhost:5173/src/contexts/AuthContext.tsx:23:32)
+    at QueryClientProvider (http://localhost:5173/node_modules/.vite/deps/@tanstack_react-query.js?v=abacf85d:2794:3)
+    at App (http://localhost:5173/src/App.tsx:50:5)
+[2025-10-10T12:42:52.214Z] ❌ [ERROR] Warning: Maximum update depth exceeded. This can happen when a component calls setState inside useEffect, but useEffect either doesn't have a dependency array, or one of the dependencies changes on every render.%s 
+    at Designer (http://localhost:5173/src/pages/Designer.tsx:45:22)
+    at RenderedRoute (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=abacf85d:4069:5)
+    at Routes (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=abacf85d:4508:5)
+    at Router (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=abacf85d:4451:15)
+    at BrowserRouter (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=abacf85d:5196:5)
+    at Provider (http://localhost:5173/node_modules/.vite/deps/chunk-G6G4LDJ2.js?v=abacf85d:48:15)
+    at TooltipProvider (http://localhost:5173/node_modules/.vite/deps/@radix-ui_react-tooltip.js?v=abacf85d:59:5)
+    at ProjectProvider (http://localhost:5173/src/contexts/ProjectContext.tsx:182:35)
+    at AuthProvider (http://localhost:5173/src/contexts/AuthContext.tsx:23:32)
+    at QueryClientProvider (http://localhost:5173/node_modules/.vite/deps/@tanstack_react-query.js?v=abacf85d:2794:3)
+    at App (http://localhost:5173/src/App.tsx:50:5)
+[2025-10-10T12:42:52.224Z] ❌ [ERROR] Warning: Maximum update depth exceeded. This can happen when a component calls setState inside useEffect, but useEffect either doesn't have a dependency array, or one of the dependencies changes on every render.%s 
+    at Designer (http://localhost:5173/src/pages/Designer.tsx:45:22)
+    at RenderedRoute (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=abacf85d:4069:5)
+    at Routes (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=abacf85d:4508:5)
+    at Router (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=abacf85d:4451:15)
+    at BrowserRouter (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=abacf85d:5196:5)
+    at Provider (http://localhost:5173/node_modules/.vite/deps/chunk-G6G4LDJ2.js?v=abacf85d:48:15)
+    at TooltipProvider (http://localhost:5173/node_modules/.vite/deps/@radix-ui_react-tooltip.js?v=abacf85d:59:5)
+    at ProjectProvider (http://localhost:5173/src/contexts/ProjectContext.tsx:182:35)
+    at AuthProvider (http://localhost:5173/src/contexts/AuthContext.tsx:23:32)
+    at QueryClientProvider (http://localhost:5173/node_modules/.vite/deps/@tanstack_react-query.js?v=abacf85d:2794:3)
+    at App (http://localhost:5173/src/App.tsx:50:5)
+[2025-10-10T12:42:52.232Z] ❌ [ERROR] Warning: Maximum update depth exceeded. This can happen when a component calls setState inside useEffect, but useEffect either doesn't have a dependency array, or one of the dependencies changes on every render.%s 
+    at Designer (http://localhost:5173/src/pages/Designer.tsx:45:22)
+    at RenderedRoute (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=abacf85d:4069:5)
+    at Routes (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=abacf85d:4508:5)
+    at Router (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=abacf85d:4451:15)
+    at BrowserRouter (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=abacf85d:5196:5)
+    at Provider (http://localhost:5173/node_modules/.vite/deps/chunk-G6G4LDJ2.js?v=abacf85d:48:15)
+    at TooltipProvider (http://localhost:5173/node_modules/.vite/deps/@radix-ui_react-tooltip.js?v=abacf85d:59:5)
+    at ProjectProvider (http://localhost:5173/src/contexts/ProjectContext.tsx:182:35)
+    at AuthProvider (http://localhost:5173/src/contexts/AuthContext.tsx:23:32)
+    at QueryClientProvider (http://localhost:5173/node_modules/.vite/deps/@tanstack_react-query.js?v=abacf85d:2794:3)
+    at App (http://localhost:5173/src/App.tsx:50:5)
+[2025-10-10T12:42:52.243Z] ❌ [ERROR] Warning: Maximum update depth exceeded. This can happen when a component calls setState inside useEffect, but useEffect either doesn't have a dependency array, or one of the dependencies changes on every render.%s 
+    at Designer (http://localhost:5173/src/pages/Designer.tsx:45:22)
+    at RenderedRoute (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=abacf85d:4069:5)
+    at Routes (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=abacf85d:4508:5)
+    at Router (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=abacf85d:4451:15)
+    at BrowserRouter (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=abacf85d:5196:5)
+    at Provider (http://localhost:5173/node_modules/.vite/deps/chunk-G6G4LDJ2.js?v=abacf85d:48:15)
+    at TooltipProvider (http://localhost:5173/node_modules/.vite/deps/@radix-ui_react-tooltip.js?v=abacf85d:59:5)
+    at ProjectProvider (http://localhost:5173/src/contexts/ProjectContext.tsx:182:35)
+    at AuthProvider (http://localhost:5173/src/contexts/AuthContext.tsx:23:32)
+    at QueryClientProvider (http://localhost:5173/node_modules/.vite/deps/@tanstack_react-query.js?v=abacf85d:2794:3)
+    at App (http://localhost:5173/src/App.tsx:50:5)
+[2025-10-10T12:42:52.251Z] ❌ [ERROR] Warning: Maximum update depth exceeded. This can happen when a component calls setState inside useEffect, but useEffect either doesn't have a dependency array, or one of the dependencies changes on every render.%s 
+    at Designer (http://localhost:5173/src/pages/Designer.tsx:45:22)
+    at RenderedRoute (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=abacf85d:4069:5)
+    at Routes (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=abacf85d:4508:5)
+    at Router (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=abacf85d:4451:15)
+    at BrowserRouter (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=abacf85d:5196:5)
+    at Provider (http://localhost:5173/node_modules/.vite/deps/chunk-G6G4LDJ2.js?v=abacf85d:48:15)
+    at TooltipProvider (http://localhost:5173/node_modules/.vite/deps/@radix-ui_react-tooltip.js?v=abacf85d:59:5)
+    at ProjectProvider (http://localhost:5173/src/contexts/ProjectContext.tsx:182:35)
+    at AuthProvider (http://localhost:5173/src/contexts/AuthContext.tsx:23:32)
+    at QueryClientProvider (http://localhost:5173/node_modules/.vite/deps/@tanstack_react-query.js?v=abacf85d:2794:3)
+    at App (http://localhost:5173/src/App.tsx:50:5)
+[2025-10-10T12:42:52.260Z] ❌ [ERROR] Warning: Maximum update depth exceeded. This can happen when a component calls setState inside useEffect, but useEffect either doesn't have a dependency array, or one of the dependencies changes on every render.%s 
+    at Designer (http://localhost:5173/src/pages/Designer.tsx:45:22)
+    at RenderedRoute (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=abacf85d:4069:5)
+    at Routes (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=abacf85d:4508:5)
+    at Router (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=abacf85d:4451:15)
+    at BrowserRouter (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=abacf85d:5196:5)
+    at Provider (http://localhost:5173/node_modules/.vite/deps/chunk-G6G4LDJ2.js?v=abacf85d:48:15)
+    at TooltipProvider (http://localhost:5173/node_modules/.vite/deps/@radix-ui_react-tooltip.js?v=abacf85d:59:5)
+    at ProjectProvider (http://localhost:5173/src/contexts/ProjectContext.tsx:182:35)
+    at AuthProvider (http://localhost:5173/src/contexts/AuthContext.tsx:23:32)
+    at QueryClientProvider (http://localhost:5173/node_modules/.vite/deps/@tanstack_react-query.js?v=abacf85d:2794:3)
+    at App (http://localhost:5173/src/App.tsx:50:5)
+[2025-10-10T12:42:52.270Z] ❌ [ERROR] Warning: Maximum update depth exceeded. This can happen when a component calls setState inside useEffect, but useEffect either doesn't have a dependency array, or one of the dependencies changes on every render.%s 
+    at Designer (http://localhost:5173/src/pages/Designer.tsx:45:22)
+    at RenderedRoute (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=abacf85d:4069:5)
+    at Routes (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=abacf85d:4508:5)
+    at Router (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=abacf85d:4451:15)
+    at BrowserRouter (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=abacf85d:5196:5)
+    at Provider (http://localhost:5173/node_modules/.vite/deps/chunk-G6G4LDJ2.js?v=abacf85d:48:15)
+    at TooltipProvider (http://localhost:5173/node_modules/.vite/deps/@radix-ui_react-tooltip.js?v=abacf85d:59:5)
+    at ProjectProvider (http://localhost:5173/src/contexts/ProjectContext.tsx:182:35)
+    at AuthProvider (http://localhost:5173/src/contexts/AuthContext.tsx:23:32)
+    at QueryClientProvider (http://localhost:5173/node_modules/.vite/deps/@tanstack_react-query.js?v=abacf85d:2794:3)
+    at App (http://localhost:5173/src/App.tsx:50:5)
+[2025-10-10T12:42:52.280Z] ❌ [ERROR] Warning: Maximum update depth exceeded. This can happen when a component calls setState inside useEffect, but useEffect either doesn't have a dependency array, or one of the dependencies changes on every render.%s 
+    at Designer (http://localhost:5173/src/pages/Designer.tsx:45:22)
+    at RenderedRoute (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=abacf85d:4069:5)
+    at Routes (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=abacf85d:4508:5)
+    at Router (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=abacf85d:4451:15)
+    at BrowserRouter (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=abacf85d:5196:5)
+    at Provider (http://localhost:5173/node_modules/.vite/deps/chunk-G6G4LDJ2.js?v=abacf85d:48:15)
+    at TooltipProvider (http://localhost:5173/node_modules/.vite/deps/@radix-ui_react-tooltip.js?v=abacf85d:59:5)
+    at ProjectProvider (http://localhost:5173/src/contexts/ProjectContext.tsx:182:35)
+    at AuthProvider (http://localhost:5173/src/contexts/AuthContext.tsx:23:32)
+    at QueryClientProvider (http://localhost:5173/node_modules/.vite/deps/@tanstack_react-query.js?v=abacf85d:2794:3)
+    at App (http://localhost:5173/src/App.tsx:50:5)
+[2025-10-10T12:42:52.289Z] ❌ [ERROR] Warning: Maximum update depth exceeded. This can happen when a component calls setState inside useEffect, but useEffect either doesn't have a dependency array, or one of the dependencies changes on every render.%s 
+    at Designer (http://localhost:5173/src/pages/Designer.tsx:45:22)
+    at RenderedRoute (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=abacf85d:4069:5)
+    at Routes (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=abacf85d:4508:5)
+    at Router (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=abacf85d:4451:15)
+    at BrowserRouter (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=abacf85d:5196:5)
+    at Provider (http://localhost:5173/node_modules/.vite/deps/chunk-G6G4LDJ2.js?v=abacf85d:48:15)
+    at TooltipProvider (http://localhost:5173/node_modules/.vite/deps/@radix-ui_react-tooltip.js?v=abacf85d:59:5)
+    at ProjectProvider (http://localhost:5173/src/contexts/ProjectContext.tsx:182:35)
+    at AuthProvider (http://localhost:5173/src/contexts/AuthContext.tsx:23:32)
+    at QueryClientProvider (http://localhost:5173/node_modules/.vite/deps/@tanstack_react-query.js?v=abacf85d:2794:3)
+    at App (http://localhost:5173/src/App.tsx:50:5)
+[2025-10-10T12:42:52.298Z] ❌ [ERROR] Warning: Maximum update depth exceeded. This can happen when a component calls setState inside useEffect, but useEffect either doesn't have a dependency array, or one of the dependencies changes on every render.%s 
+    at Designer (http://localhost:5173/src/pages/Designer.tsx:45:22)
+    at RenderedRoute (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=abacf85d:4069:5)
+    at Routes (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=abacf85d:4508:5)
+    at Router (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=abacf85d:4451:15)
+    at BrowserRouter (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=abacf85d:5196:5)
+    at Provider (http://localhost:5173/node_modules/.vite/deps/chunk-G6G4LDJ2.js?v=abacf85d:48:15)
+    at TooltipProvider (http://localhost:5173/node_modules/.vite/deps/@radix-ui_react-tooltip.js?v=abacf85d:59:5)
+    at ProjectProvider (http://localhost:5173/src/contexts/ProjectContext.tsx:182:35)
+    at AuthProvider (http://localhost:5173/src/contexts/AuthContext.tsx:23:32)
+    at QueryClientProvider (http://localhost:5173/node_modules/.vite/deps/@tanstack_react-query.js?v=abacf85d:2794:3)
+    at App (http://localhost:5173/src/App.tsx:50:5)
+[2025-10-10T12:42:52.307Z] ❌ [ERROR] Warning: Maximum update depth exceeded. This can happen when a component calls setState inside useEffect, but useEffect either doesn't have a dependency array, or one of the dependencies changes on every render.%s 
+    at Designer (http://localhost:5173/src/pages/Designer.tsx:45:22)
+    at RenderedRoute (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=abacf85d:4069:5)
+    at Routes (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=abacf85d:4508:5)
+    at Router (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=abacf85d:4451:15)
+    at BrowserRouter (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=abacf85d:5196:5)
+    at Provider (http://localhost:5173/node_modules/.vite/deps/chunk-G6G4LDJ2.js?v=abacf85d:48:15)
+    at TooltipProvider (http://localhost:5173/node_modules/.vite/deps/@radix-ui_react-tooltip.js?v=abacf85d:59:5)
+    at ProjectProvider (http://localhost:5173/src/contexts/ProjectContext.tsx:182:35)
+    at AuthProvider (http://localhost:5173/src/contexts/AuthContext.tsx:23:32)
+    at QueryClientProvider (http://localhost:5173/node_modules/.vite/deps/@tanstack_react-query.js?v=abacf85d:2794:3)
+    at App (http://localhost:5173/src/App.tsx:50:5)
+[2025-10-10T12:42:52.318Z] ❌ [ERROR] Warning: Maximum update depth exceeded. This can happen when a component calls setState inside useEffect, but useEffect either doesn't have a dependency array, or one of the dependencies changes on every render.%s 
+    at Designer (http://localhost:5173/src/pages/Designer.tsx:45:22)
+    at RenderedRoute (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=abacf85d:4069:5)
+    at Routes (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=abacf85d:4508:5)
+    at Router (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=abacf85d:4451:15)
+    at BrowserRouter (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=abacf85d:5196:5)
+    at Provider (http://localhost:5173/node_modules/.vite/deps/chunk-G6G4LDJ2.js?v=abacf85d:48:15)
+    at TooltipProvider (http://localhost:5173/node_modules/.vite/deps/@radix-ui_react-tooltip.js?v=abacf85d:59:5)
+    at ProjectProvider (http://localhost:5173/src/contexts/ProjectContext.tsx:182:35)
+    at AuthProvider (http://localhost:5173/src/contexts/AuthContext.tsx:23:32)
+    at QueryClientProvider (http://localhost:5173/node_modules/.vite/deps/@tanstack_react-query.js?v=abacf85d:2794:3)
+    at App (http://localhost:5173/src/App.tsx:50:5)
+[2025-10-10T12:42:52.328Z] ❌ [ERROR] Warning: Maximum update depth exceeded. This can happen when a component calls setState inside useEffect, but useEffect either doesn't have a dependency array, or one of the dependencies changes on every render.%s 
+    at Designer (http://localhost:5173/src/pages/Designer.tsx:45:22)
+    at RenderedRoute (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=abacf85d:4069:5)
+    at Routes (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=abacf85d:4508:5)
+    at Router (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=abacf85d:4451:15)
+    at BrowserRouter (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=abacf85d:5196:5)
+    at Provider (http://localhost:5173/node_modules/.vite/deps/chunk-G6G4LDJ2.js?v=abacf85d:48:15)
+    at TooltipProvider (http://localhost:5173/node_modules/.vite/deps/@radix-ui_react-tooltip.js?v=abacf85d:59:5)
+    at ProjectProvider (http://localhost:5173/src/contexts/ProjectContext.tsx:182:35)
+    at AuthProvider (http://localhost:5173/src/contexts/AuthContext.tsx:23:32)
+    at QueryClientProvider (http://localhost:5173/node_modules/.vite/deps/@tanstack_react-query.js?v=abacf85d:2794:3)
+    at App (http://localhost:5173/src/App.tsx:50:5)
+[2025-10-10T12:42:52.412Z] 📝 [LOG] ✅ [ComponentService] Batch loaded 10 component behaviors
+[2025-10-10T12:42:52.412Z] 📝 [LOG] ✅ [Designer] Preloading complete
+[2025-10-10T12:43:14.994Z] 📝 [LOG] 🚀 [Designer] Preloading common component behaviors for performance
+[2025-10-10T12:43:14.995Z] 📝 [LOG] 🔥 [ComponentService] Preloading common component behaviors
+[2025-10-10T12:43:14.996Z] 📝 [LOG] 🔄 [ComponentService] Batch loading behaviors for 10 component types
+[2025-10-10T12:43:14.997Z] 📝 [LOG] ⚡ [ComponentService] All 10 behaviors found in cache
+[2025-10-10T12:43:14.997Z] 📝 [LOG] ✅ [Designer] Preloading complete
+[2025-10-10T12:43:28.920Z] 📝 [LOG] 🚀 [Designer] Preloading common component behaviors for performance
+[2025-10-10T12:43:28.921Z] 📝 [LOG] 🔥 [ComponentService] Preloading common component behaviors
+[2025-10-10T12:43:28.922Z] 📝 [LOG] 🔄 [ComponentService] Batch loading behaviors for 10 component types
+[2025-10-10T12:43:28.923Z] 📝 [LOG] ⚡ [ComponentService] All 10 behaviors found in cache
+[2025-10-10T12:43:28.924Z] 📝 [LOG] ✅ [Designer] Preloading complete
+[2025-10-10T12:43:33.149Z] 📝 [LOG] 🚀 [Designer] Preloading common component behaviors for performance
+[2025-10-10T12:43:33.149Z] 📝 [LOG] 🔥 [ComponentService] Preloading common component behaviors
+[2025-10-10T12:43:33.150Z] 📝 [LOG] 🔄 [ComponentService] Batch loading behaviors for 10 component types
+[2025-10-10T12:43:33.150Z] 📝 [LOG] ⚡ [ComponentService] All 10 behaviors found in cache
+[2025-10-10T12:43:33.151Z] 📝 [LOG] 🔧 [ProjectContext] Auto-save initialization check {
+  "autoSaveEnabled": true,
+  "hasInterval": false,
+  "hasCurrentRoom": true,
+  "roomId": "55c29969-af57-4cd5-9897-cb42c2977baf"
+}
+[2025-10-10T12:43:33.152Z] 📝 [LOG] 🚀 [ProjectContext] Initializing auto-save for room: 55c29969-af57-4cd5-9897-cb42c2977baf
+[2025-10-10T12:43:33.153Z] 📝 [LOG] ✅ [Designer] Preloading complete
+
+================================================================================
+END OF LOGS (102 entries)
+================================================================================
