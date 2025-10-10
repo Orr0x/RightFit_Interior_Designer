@@ -342,7 +342,8 @@ export const AdaptiveView3D: React.FC<AdaptiveView3DProps> = ({
   // Always define roomDimensions (before any early returns)
   const roomDimensions = {
     width: design?.roomDimensions?.width || 600,
-    height: design?.roomDimensions?.height || 400
+    height: design?.roomDimensions?.height || 400,
+    ceilingHeight: design?.roomDimensions?.ceilingHeight
   };
 
   // Filter elements based on quality settings (always call this hook)
