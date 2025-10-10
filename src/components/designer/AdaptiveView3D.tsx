@@ -14,6 +14,8 @@ import { RoomService, RoomColors } from '@/services/RoomService';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Settings, Zap, Gauge } from 'lucide-react';
+import type { RoomGeometry } from '@/types/RoomGeometry';
+import { ComplexRoomGeometry } from '@/components/3d/ComplexRoomGeometry';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -102,8 +104,8 @@ const AdaptiveRoom3D: React.FC<{
 
   // Use simpler materials for low quality
   const floorMaterial = quality.level === 'low'
-    ? <meshBasicMaterial color={floorColor} />
-    : <meshLambertMaterial color={floorColor} />;
+    ? <meshBasicMaterial color={floorColor} side={THREE.DoubleSide} />
+    : <meshLambertMaterial color={floorColor} side={THREE.DoubleSide} />;
 
   const wallMaterial = quality.level === 'low'
     ? <meshBasicMaterial color={wallColor} />
@@ -112,11 +114,17 @@ const AdaptiveRoom3D: React.FC<{
   return (
     <group>
       {/* Floor */}
-      <mesh position={[0, -0.01, 0]} receiveShadow={quality.shadows}>
-        <boxGeometry args={[roomWidth, 0.02, roomDepth]} />
+      <mesh position={[0, -0.001, 0]} rotation={[-Math.PI / 2, 0, 0]} receiveShadow={quality.shadows}>
+        <planeGeometry args={[roomWidth, roomDepth]} />
         {floorMaterial}
       </mesh>
-      
+
+      {/* Ceiling */}
+      <mesh position={[0, wallHeight - 0.001, 0]} rotation={[Math.PI / 2, 0, 0]} receiveShadow={quality.shadows}>
+        <planeGeometry args={[roomWidth, roomDepth]} />
+        <meshLambertMaterial color={roomColors?.ceiling || "#ffffff"} side={THREE.FrontSide} />
+      </mesh>
+
       {/* Back Wall */}
       <mesh position={[0, wallHeight / 2, -roomDepth / 2]} receiveShadow={quality.shadows}>
         <boxGeometry args={[roomWidth, wallHeight, 0.1]} />
@@ -343,6 +351,8 @@ export const AdaptiveView3D: React.FC<AdaptiveView3DProps> = ({
   const [isAutoMode, setIsAutoMode] = useState(false); // Default to manual mode
   const [isInitializing, setIsInitializing] = useState(true);
   const [roomColors, setRoomColors] = useState<RoomColors | null>(null);
+  const [roomGeometry, setRoomGeometry] = useState<RoomGeometry | null>(null);
+  const [loadingGeometry, setLoadingGeometry] = useState(false);
   const controlsRef = useRef<any>(null);
   const isMobile = useIsMobile();
 
@@ -371,6 +381,38 @@ export const AdaptiveView3D: React.FC<AdaptiveView3DProps> = ({
 
     loadRoomColors();
   }, [design?.roomType]);
+
+  // Load room geometry from database (Phase 3: Complex Room Shapes)
+  useEffect(() => {
+    const loadRoomGeometry = async () => {
+      // Only try to load if we have a room/design ID
+      if (design?.id) {
+        setLoadingGeometry(true);
+        try {
+          const geometry = await RoomService.getRoomGeometry(design.id);
+          if (geometry) {
+            setRoomGeometry(geometry as RoomGeometry);
+            console.log(`✅ [AdaptiveView3D] Loaded complex room geometry for room ${design.id}:`, geometry.shape_type);
+          } else {
+            // No complex geometry - will use simple rectangular fallback
+            setRoomGeometry(null);
+            console.log(`ℹ️ [AdaptiveView3D] No complex geometry found for room ${design.id}, using simple rectangular room`);
+          }
+        } catch (error) {
+          console.warn(`⚠️ [AdaptiveView3D] Failed to load room geometry for ${design.id}:`, error);
+          setRoomGeometry(null);
+        } finally {
+          setLoadingGeometry(false);
+        }
+      } else {
+        // No room ID - use simple rectangular room
+        setRoomGeometry(null);
+        setLoadingGeometry(false);
+      }
+    };
+
+    loadRoomGeometry();
+  }, [design?.id]);
 
   // Filter elements based on quality settings (always call this hook)
   const visibleElements = useMemo(() => {
@@ -504,9 +546,19 @@ export const AdaptiveView3D: React.FC<AdaptiveView3DProps> = ({
           {currentQuality.environmentLighting && (
             <Environment preset="apartment" />
           )}
-          
-          {/* Adaptive Room */}
-          <AdaptiveRoom3D roomDimensions={roomDimensions} quality={currentQuality} roomColors={roomColors} />
+
+          {/* Render complex or simple room geometry */}
+          {roomGeometry ? (
+            // Phase 3: Complex room geometry (L-shape, U-shape, custom polygons)
+            <ComplexRoomGeometry
+              geometry={roomGeometry}
+              quality={currentQuality}
+              roomColors={roomColors}
+            />
+          ) : (
+            // Legacy: Simple rectangular room (backward compatible)
+            <AdaptiveRoom3D roomDimensions={roomDimensions} quality={currentQuality} roomColors={roomColors} />
+          )}
           
           {/* Grid - simplified for low quality */}
           {showGrid && (
