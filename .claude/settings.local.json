@@ -23,7 +23,8 @@
       "Bash(find:*)",
       "Bash(npx tsx:*)",
       "Bash(git log:*)",
-      "Bash(git checkout:*)"
+      "Bash(git checkout:*)",
+      "Bash(timeout 60 npx tsc --noEmit)"
     ],
     "deny": [],
     "ask": []
