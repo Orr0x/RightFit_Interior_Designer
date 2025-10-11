@@ -36,6 +36,7 @@ export interface RoomDesign {
   room_dimensions: RoomDimensions;
   design_elements: DesignElement[];
   design_settings: RoomDesignSettings;
+  room_geometry?: any; // JSONB - Complex room geometry (walls, floor, ceiling)
   created_at: string;
   updated_at: string;
 }
