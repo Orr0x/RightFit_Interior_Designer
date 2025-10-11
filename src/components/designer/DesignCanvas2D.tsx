@@ -10,6 +10,7 @@ import { PositionCalculation } from '@/utils/PositionCalculation';
 import { ConfigurationService } from '@/services/ConfigurationService';
 import { render2DService } from '@/services/Render2DService';
 import { renderPlanView, renderElevationView } from '@/services/2d-renderers';
+import { getElementsForWall, calculateWallLength, isWallOnPerimeter } from '@/services/2d-renderers/elevation-helpers';
 import { FeatureFlagService } from '@/services/FeatureFlagService';
 import type { RoomGeometry } from '@/types/RoomGeometry';
 import * as GeometryUtils from '@/utils/GeometryUtils';
@@ -420,6 +421,9 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
   const [panOffset, setPanOffset] = useState({ x: 0, y: 0 });
   const [roomGeometry, setRoomGeometry] = useState<RoomGeometry | null>(null);
   const [loadingGeometry, setLoadingGeometry] = useState(false);
+
+  // Wall-count elevation system: Selected wall for complex rooms
+  const [selectedWallId, setSelectedWallId] = useState<string | null>(null);
   
   // Notify parent of zoom changes
   useEffect(() => {
@@ -541,6 +545,14 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
 
     loadRoomGeometry();
   }, [design?.id]);
+
+  // Auto-select first wall when complex room geometry loads
+  useEffect(() => {
+    if (roomGeometry && roomGeometry.walls && roomGeometry.walls.length > 0 && !selectedWallId) {
+      setSelectedWallId(roomGeometry.walls[0].id);
+      console.log(`[DesignCanvas2D] Auto-selected first wall: ${roomGeometry.walls[0].id}`);
+    }
+  }, [roomGeometry, selectedWallId]);
 
   // Helper function to get wall height (ceiling height) - prioritize room dimensions over cache
   const getWallHeight = useCallback(() => {
@@ -1986,13 +1998,24 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
     drawRoom(ctx);
 
     // Draw elements with proper layering and visibility
-    let elementsToRender = active2DView === 'plan'
-      ? design.elements
-      : design.elements.filter(el => {
-          const wall = getElementWall(el);
-          const isCornerVisible = isCornerVisibleInView(el, active2DView);
-          return wall === active2DView || wall === 'center' || isCornerVisible;
-        });
+    let elementsToRender: DesignElement[];
+
+    if (active2DView === 'plan') {
+      // Plan view: Show all elements
+      elementsToRender = design.elements;
+    } else if (roomGeometry && roomGeometry.walls && roomGeometry.walls.length > 4 && selectedWallId) {
+      // Complex room (L/U-shaped): Use wall-based filtering
+      console.log(`[DesignCanvas2D] Filtering elements for wall: ${selectedWallId}`);
+      elementsToRender = getElementsForWall(selectedWallId, design.elements, roomGeometry, 20);
+      console.log(`[DesignCanvas2D] Found ${elementsToRender.length} elements near wall`);
+    } else {
+      // Simple room (rectangular): Use existing cardinal direction filtering
+      elementsToRender = design.elements.filter(el => {
+        const wall = getElementWall(el);
+        const isCornerVisible = isCornerVisibleInView(el, active2DView);
+        return wall === active2DView || wall === 'center' || isCornerVisible;
+      });
+    }
 
     // Filter out invisible elements
     elementsToRender = elementsToRender.filter(element => element.isVisible !== false);
@@ -2072,13 +2095,21 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
     const roomPos = canvasToRoom(x, y);
     
     // Filter and sort elements the same way as rendering (but in reverse order for selection)
-    let elementsToCheck = active2DView === 'plan'
-      ? design.elements
-      : design.elements.filter(el => {
-          const wall = getElementWall(el);
-          const isCornerVisible = isCornerVisibleInView(el, active2DView);
-          return wall === active2DView || wall === 'center' || isCornerVisible;
-        });
+    let elementsToCheck: DesignElement[];
+
+    if (active2DView === 'plan') {
+      elementsToCheck = design.elements;
+    } else if (roomGeometry && roomGeometry.walls && roomGeometry.walls.length > 4 && selectedWallId) {
+      // Complex room: Use wall-based filtering
+      elementsToCheck = getElementsForWall(selectedWallId, design.elements, roomGeometry, 20);
+    } else {
+      // Simple room: Use cardinal direction filtering
+      elementsToCheck = design.elements.filter(el => {
+        const wall = getElementWall(el);
+        const isCornerVisible = isCornerVisibleInView(el, active2DView);
+        return wall === active2DView || wall === 'center' || isCornerVisible;
+      });
+    }
 
     // Filter out invisible elements
     elementsToCheck = elementsToCheck.filter(element => element.isVisible !== false);
@@ -2147,13 +2178,21 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
       const roomPos = canvasToRoom(x, y);
       
       // Use same filtering and ordering as selection for hover detection
-      let elementsToCheck = active2DView === 'plan'
-        ? design.elements
-        : design.elements.filter(el => {
-            const wall = getElementWall(el);
-            const isCornerVisible = isCornerVisibleInView(el, active2DView);
-            return wall === active2DView || wall === 'center' || isCornerVisible;
-          });
+      let elementsToCheck: DesignElement[];
+
+      if (active2DView === 'plan') {
+        elementsToCheck = design.elements;
+      } else if (roomGeometry && roomGeometry.walls && roomGeometry.walls.length > 4 && selectedWallId) {
+        // Complex room: Use wall-based filtering
+        elementsToCheck = getElementsForWall(selectedWallId, design.elements, roomGeometry, 20);
+      } else {
+        // Simple room: Use cardinal direction filtering
+        elementsToCheck = design.elements.filter(el => {
+          const wall = getElementWall(el);
+          const isCornerVisible = isCornerVisibleInView(el, active2DView);
+          return wall === active2DView || wall === 'center' || isCornerVisible;
+        });
+      }
 
       // Filter out invisible elements
       elementsToCheck = elementsToCheck.filter(element => element.isVisible !== false);
@@ -2383,13 +2422,21 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
         const roomPos = canvasToRoom(x, y);
         
         // Use same filtering and ordering as selection for hover detection
-        let elementsToCheck = active2DView === 'plan'
-          ? design.elements
-          : design.elements.filter(el => {
-              const wall = getElementWall(el);
-              const isCornerVisible = isCornerVisibleInView(el, active2DView);
-              return wall === active2DView || wall === 'center' || isCornerVisible;
-            });
+        let elementsToCheck: DesignElement[];
+
+        if (active2DView === 'plan') {
+          elementsToCheck = design.elements;
+        } else if (roomGeometry && roomGeometry.walls && roomGeometry.walls.length > 4 && selectedWallId) {
+          // Complex room: Use wall-based filtering
+          elementsToCheck = getElementsForWall(selectedWallId, design.elements, roomGeometry, 20);
+        } else {
+          // Simple room: Use cardinal direction filtering
+          elementsToCheck = design.elements.filter(el => {
+            const wall = getElementWall(el);
+            const isCornerVisible = isCornerVisibleInView(el, active2DView);
+            return wall === active2DView || wall === 'center' || isCornerVisible;
+          });
+        }
 
         // Filter out invisible elements
         elementsToCheck = elementsToCheck.filter(element => element.isVisible !== false);

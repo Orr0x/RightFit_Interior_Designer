@@ -24,7 +24,8 @@
       "Bash(npx tsx:*)",
       "Bash(git log:*)",
       "Bash(git checkout:*)",
-      "Bash(timeout 60 npx tsc --noEmit)"
+      "Bash(timeout 60 npx tsc --noEmit)",
+      "Bash(test -f \"src/components/ui/select.tsx\")"
     ],
     "deny": [],
     "ask": []
