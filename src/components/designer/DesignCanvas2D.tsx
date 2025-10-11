@@ -2040,7 +2040,7 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
     } else if (roomGeometry && roomGeometry.walls && selectedWallId) {
       // PRIORITY 1: Manual wall selection (user selected specific wall from dropdown)
       console.log(`[DesignCanvas2D] Manual selection: wall ${selectedWallId}`);
-      elementsToRender = getElementsForWall(selectedWallId, design.elements, roomGeometry, 20);
+      elementsToRender = getElementsForWall(selectedWallId, design.elements, roomGeometry, 100); // TESTING: Increased tolerance
     } else if (roomGeometry && roomGeometry.walls) {
       // PRIORITY 2: Database-driven elevation filtering (for cardinal views like 'front')
       const wallsForView = getWallsForElevationView(active2DView, roomGeometry);
@@ -2050,7 +2050,7 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
         console.log(`[DesignCanvas2D] Database-driven: ${wallsForView.length} walls for ${active2DView} view`);
         const allElements: DesignElement[] = [];
         wallsForView.forEach(wall => {
-          const elements = getElementsForWall(wall.id, design.elements, roomGeometry, 20);
+          const elements = getElementsForWall(wall.id, design.elements, roomGeometry, 100);
           allElements.push(...elements);
         });
         elementsToRender = Array.from(new Set(allElements)); // Deduplicate
@@ -2155,7 +2155,7 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
       elementsToCheck = design.elements;
     } else if (roomGeometry && roomGeometry.walls && selectedWallId) {
       // PRIORITY 1: Manual wall selection (user selected specific wall from dropdown)
-      elementsToCheck = getElementsForWall(selectedWallId, design.elements, roomGeometry, 20);
+      elementsToCheck = getElementsForWall(selectedWallId, design.elements, roomGeometry, 100);
     } else if (roomGeometry && roomGeometry.walls) {
       // PRIORITY 2: Database-driven elevation filtering (for cardinal views like 'front')
       const wallsForView = getWallsForElevationView(active2DView, roomGeometry);
@@ -2164,7 +2164,7 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
         // Template has elevation_view assignments
         const allElements: DesignElement[] = [];
         wallsForView.forEach(wall => {
-          const elements = getElementsForWall(wall.id, design.elements, roomGeometry, 20);
+          const elements = getElementsForWall(wall.id, design.elements, roomGeometry, 100);
           allElements.push(...elements);
         });
         elementsToCheck = Array.from(new Set(allElements));
@@ -2258,14 +2258,14 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
         elementsToCheck = design.elements;
       } else if (roomGeometry && roomGeometry.walls && selectedWallId) {
         // PRIORITY 1: Manual wall selection (user selected specific wall from dropdown)
-        elementsToCheck = getElementsForWall(selectedWallId, design.elements, roomGeometry, 20);
+        elementsToCheck = getElementsForWall(selectedWallId, design.elements, roomGeometry, 100);
       } else if (roomGeometry && roomGeometry.walls) {
         // PRIORITY 2: Database-driven elevation filtering
         const wallsForView = getWallsForElevationView(active2DView, roomGeometry);
         if (wallsForView.length > 0) {
           const allElements: DesignElement[] = [];
           wallsForView.forEach(wall => {
-            const elements = getElementsForWall(wall.id, design.elements, roomGeometry, 20);
+            const elements = getElementsForWall(wall.id, design.elements, roomGeometry, 100);
             allElements.push(...elements);
           });
           elementsToCheck = Array.from(new Set(allElements));
@@ -2520,14 +2520,14 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
           elementsToCheck = design.elements;
         } else if (roomGeometry && roomGeometry.walls && selectedWallId) {
           // PRIORITY 1: Manual wall selection (user selected specific wall from dropdown)
-          elementsToCheck = getElementsForWall(selectedWallId, design.elements, roomGeometry, 20);
+          elementsToCheck = getElementsForWall(selectedWallId, design.elements, roomGeometry, 100);
         } else if (roomGeometry && roomGeometry.walls) {
           // PRIORITY 2: Database-driven elevation filtering
           const wallsForView = getWallsForElevationView(active2DView, roomGeometry);
           if (wallsForView.length > 0) {
             const allElements: DesignElement[] = [];
             wallsForView.forEach(wall => {
-              const elements = getElementsForWall(wall.id, design.elements, roomGeometry, 20);
+              const elements = getElementsForWall(wall.id, design.elements, roomGeometry, 100);
               allElements.push(...elements);
             });
             elementsToCheck = Array.from(new Set(allElements));

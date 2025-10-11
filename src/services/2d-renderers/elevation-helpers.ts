@@ -45,8 +45,14 @@ export function getElementsForWall(
     return [];
   }
 
+  console.log(`[getElementsForWall] Checking ${elements.length} elements against wall ${wallId}:`, {
+    wallStart: wall.start,
+    wallEnd: wall.end,
+    tolerance
+  });
+
   // Filter elements by perpendicular distance to wall line segment
-  return elements.filter(el => {
+  const matchedElements = elements.filter(el => {
     // Calculate perpendicular distance from element center to wall
     const distance = GeometryUtils.pointToLineSegmentDistance(
       [el.x, el.y],
@@ -54,10 +60,19 @@ export function getElementsForWall(
       wall.end
     );
 
+    const isMatch = distance <= tolerance;
+
+    if (isMatch) {
+      console.log(`  ✓ Element ${el.id} (${el.component_id}) at (${el.x}, ${el.y}) - distance: ${distance.toFixed(1)}cm`);
+    }
+
     // Include element if within tolerance ("near" the wall)
-    // Tolerance allows for user error and elements slightly away from wall
-    return distance <= tolerance;
+    return isMatch;
   });
+
+  console.log(`[getElementsForWall] Found ${matchedElements.length} elements for wall ${wallId}`);
+
+  return matchedElements;
 }
 
 /**
