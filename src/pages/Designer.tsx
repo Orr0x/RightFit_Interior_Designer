@@ -113,8 +113,9 @@ const Designer = () => {
 
   // Load room geometry for ViewSelector
   useEffect(() => {
-    console.log('🔍 [Designer] Checking room geometry:', {
+    console.log(`🔍 [Designer] Checking room geometry at ${new Date().toISOString()}:`, {
       hasRoomDesign: !!currentRoomDesign,
+      roomId: currentRoomDesign?.id,
       hasRoomGeometry: !!currentRoomDesign?.room_geometry,
       wallCount: currentRoomDesign?.room_geometry?.walls?.length,
       roomType: currentRoomDesign?.room_type
@@ -122,16 +123,16 @@ const Designer = () => {
 
     // Use room_geometry if available (stored directly on room)
     if (currentRoomDesign?.room_geometry) {
-      console.log('✅ [Designer] Using room geometry from room_designs table:', {
+      console.log('✅ [Designer] Setting roomGeometry state:', {
         walls: currentRoomDesign.room_geometry.walls?.length,
         shapeType: currentRoomDesign.room_geometry.shape_type
       });
       setRoomGeometry(currentRoomDesign.room_geometry as RoomGeometry);
     } else {
-      console.log('⚠️ [Designer] No room_geometry found, ViewSelector will show simple layout');
+      console.log('⚠️ [Designer] No room_geometry found, setting roomGeometry to null');
       setRoomGeometry(null);
     }
-  }, [currentRoomDesign?.room_geometry]);
+  }, [currentRoomDesign]);
 
   // Determine what to show based on URL and project state
   useEffect(() => {

@@ -31,12 +31,13 @@ export const ViewSelector: React.FC<ViewSelectorProps> = ({
   selectedWallId,
   onWallChange
 }) => {
-  // Debug logging
-  console.log('🎛️ [ViewSelector] Rendering with:', {
+  // Debug logging with timestamp
+  console.log(`🎛️ [ViewSelector] Rendering at ${new Date().toISOString()}:`, {
     hasRoomGeometry: !!roomGeometry,
     wallCount: roomGeometry?.walls?.length,
     selectedWallId,
-    hasOnWallChange: !!onWallChange
+    hasOnWallChange: !!onWallChange,
+    roomGeometryValue: roomGeometry ? 'EXISTS' : 'NULL'
   });
 
   const views = [
@@ -50,7 +51,7 @@ export const ViewSelector: React.FC<ViewSelectorProps> = ({
   // Detect complex room: has room geometry with more than 4 walls
   const isComplexRoom = roomGeometry && roomGeometry.walls && roomGeometry.walls.length > 4;
 
-  console.log('🎛️ [ViewSelector] isComplexRoom:', isComplexRoom);
+  console.log(`🎛️ [ViewSelector] isComplexRoom: ${isComplexRoom} (wallCount: ${roomGeometry?.walls?.length || 'N/A'})`);
 
   // Simple room: Show original 5-button layout
   if (!isComplexRoom) {
