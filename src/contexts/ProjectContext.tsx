@@ -34,6 +34,7 @@ function transformRoomDesign(dbRoomDesign: Record<string, unknown>): RoomDesign 
       : [],
     design_settings: (dbRoomDesign.design_settings as Record<string, unknown>) || {},
     room_dimensions: (dbRoomDesign.room_dimensions as { width: number; height: number }) || { width: 800, height: 600 },
+    room_geometry: dbRoomDesign.room_geometry, // Include room geometry for complex rooms
     created_at: dbRoomDesign.created_at as string,
     updated_at: dbRoomDesign.updated_at as string,
   };
