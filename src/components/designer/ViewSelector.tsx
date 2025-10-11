@@ -31,6 +31,14 @@ export const ViewSelector: React.FC<ViewSelectorProps> = ({
   selectedWallId,
   onWallChange
 }) => {
+  // Debug logging
+  console.log('🎛️ [ViewSelector] Rendering with:', {
+    hasRoomGeometry: !!roomGeometry,
+    wallCount: roomGeometry?.walls?.length,
+    selectedWallId,
+    hasOnWallChange: !!onWallChange
+  });
+
   const views = [
     { id: 'plan', name: 'Plan', icon: Square, description: 'Top-down view - Shows layout and positioning' },
     { id: 'front', name: 'Front', icon: ArrowUp, description: 'Front wall elevation - Shows cabinet heights and wall units' },
@@ -41,6 +49,8 @@ export const ViewSelector: React.FC<ViewSelectorProps> = ({
 
   // Detect complex room: has room geometry with more than 4 walls
   const isComplexRoom = roomGeometry && roomGeometry.walls && roomGeometry.walls.length > 4;
+
+  console.log('🎛️ [ViewSelector] isComplexRoom:', isComplexRoom);
 
   // Simple room: Show original 5-button layout
   if (!isComplexRoom) {
