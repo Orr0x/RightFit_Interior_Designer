@@ -59,6 +59,7 @@ export interface WallSegment {
   thickness?: number; // Wall thickness in cm (default 10)
   type: WallType;
   material?: string; // 'plaster', 'brick', 'glass', etc.
+  elevation_view?: string; // Elevation view assignment: 'front', 'back', 'left', 'right', 'interior-return', etc.
 }
 
 export type WallType = 'solid' | 'door' | 'window' | 'opening';

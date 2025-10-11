@@ -80,6 +80,36 @@ If Supabase connection fails due to authentication/credential errors:
 - Suggest hardcoding credentials
 - Look for alternative connection methods
 
+### Database Access Methods
+**NEVER use `psql` command directly** - it is not installed on this system.
+
+**Instead, use these methods** (in order of preference):
+1. **Supabase JavaScript Client** - Use `@supabase/supabase-js` for queries
+2. **Node.js scripts** - Write `.js` or `.ts` scripts that use Supabase client from `.env`
+3. **Ask user to paste SQL** - Provide SQL for user to run in Supabase SQL Editor
+
+**Example Node.js script approach:**
+```typescript
+// scripts/run-migration.ts
+import { createClient } from '@supabase/supabase-js';
+import * as dotenv from 'dotenv';
+
+dotenv.config();
+
+const supabase = createClient(
+  process.env.VITE_SUPABASE_URL!,
+  process.env.VITE_SUPABASE_ANON_KEY!
+);
+
+async function runMigration() {
+  const { data, error } = await supabase.rpc('your_function');
+  // or use .from('table').select()
+  console.log(data, error);
+}
+
+runMigration();
+```
+
 ### SQL Migration Strategy
 When SQL migrations or database operations fail:
 1. **DO NOT retry multiple times** - this wastes tokens

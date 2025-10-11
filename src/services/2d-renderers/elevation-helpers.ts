@@ -141,3 +141,68 @@ export function getWallLabel(
   const type = isWallOnPerimeter(wall, boundingBox) ? 'Perimeter' : 'Interior';
   return `Wall ${index + 1} (${length}cm) - ${type}`;
 }
+
+/**
+ * Get all walls assigned to a specific elevation view (database-driven)
+ *
+ * This function enables template-defined elevation views where wall assignments
+ * are stored in the database rather than hardcoded in the application.
+ *
+ * @param elevationView - View identifier ('front', 'interior-return', etc.)
+ * @param roomGeometry - Room geometry with wall definitions
+ * @returns Array of walls assigned to this elevation view
+ *
+ * @example
+ * // Get walls for front elevation view
+ * const frontWalls = getWallsForElevationView('front', roomGeometry);
+ * // Returns: [wall_1, wall_6] for L-shape room
+ *
+ * @example
+ * // Get interior return wall in L-shaped room
+ * const interiorWalls = getWallsForElevationView('interior-return', roomGeometry);
+ * // Returns: [wall_4_internal]
+ */
+export function getWallsForElevationView(
+  elevationView: string,
+  roomGeometry: RoomGeometry
+): WallSegment[] {
+  if (!roomGeometry.walls) return [];
+
+  // Filter walls that match this elevation view assignment
+  return roomGeometry.walls.filter(wall =>
+    wall.elevation_view === elevationView
+  );
+}
+
+/**
+ * Get all unique elevation views defined in room geometry (database-driven)
+ *
+ * Dynamically discovers available elevation views from wall assignments.
+ * Enables UI to adapt to template-defined views without hardcoding.
+ *
+ * @param roomGeometry - Room geometry with wall definitions
+ * @returns Array of unique elevation view identifiers
+ *
+ * @example
+ * // Rectangle room
+ * getAvailableElevationViews(rectangleGeometry);
+ * // Returns: ['front', 'right', 'back', 'left']
+ *
+ * @example
+ * // L-shaped room
+ * getAvailableElevationViews(lShapeGeometry);
+ * // Returns: ['front', 'right', 'back', 'left', 'interior-return']
+ */
+export function getAvailableElevationViews(
+  roomGeometry: RoomGeometry
+): string[] {
+  if (!roomGeometry.walls) return [];
+
+  // Extract elevation_view from all walls, filter out undefined
+  const views = roomGeometry.walls
+    .map(wall => wall.elevation_view)
+    .filter((view): view is string => view !== undefined);
+
+  // Return unique views
+  return Array.from(new Set(views));
+}
