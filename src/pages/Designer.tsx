@@ -113,25 +113,25 @@ const Designer = () => {
 
   // Load room geometry for ViewSelector
   useEffect(() => {
-    const loadGeometry = async () => {
-      if (!currentRoomDesign?.room_geometry_template_id) {
-        setRoomGeometry(null);
-        return;
-      }
+    console.log('🔍 [Designer] Checking room geometry:', {
+      hasRoomDesign: !!currentRoomDesign,
+      hasRoomGeometry: !!currentRoomDesign?.room_geometry,
+      wallCount: currentRoomDesign?.room_geometry?.walls?.length,
+      roomType: currentRoomDesign?.room_type
+    });
 
-      try {
-        console.log('🏗️ [Designer] Loading room geometry for ViewSelector...');
-        const geometry = await RoomService.getRoomGeometry(currentRoomDesign.room_geometry_template_id);
-        setRoomGeometry(geometry);
-        console.log('✅ [Designer] Room geometry loaded:', geometry);
-      } catch (err) {
-        console.warn('⚠️ [Designer] Failed to load room geometry:', err);
-        setRoomGeometry(null);
-      }
-    };
-
-    loadGeometry();
-  }, [currentRoomDesign?.room_geometry_template_id]);
+    // Use room_geometry if available (stored directly on room)
+    if (currentRoomDesign?.room_geometry) {
+      console.log('✅ [Designer] Using room geometry from room_designs table:', {
+        walls: currentRoomDesign.room_geometry.walls?.length,
+        shapeType: currentRoomDesign.room_geometry.shape_type
+      });
+      setRoomGeometry(currentRoomDesign.room_geometry as RoomGeometry);
+    } else {
+      console.log('⚠️ [Designer] No room_geometry found, ViewSelector will show simple layout');
+      setRoomGeometry(null);
+    }
+  }, [currentRoomDesign?.room_geometry]);
 
   // Determine what to show based on URL and project state
   useEffect(() => {
