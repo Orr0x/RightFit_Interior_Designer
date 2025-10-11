@@ -85,7 +85,7 @@ export const ViewSelector: React.FC<ViewSelectorProps> = ({
     );
   }
 
-  // Complex room: Show Plan button + Wall dropdown
+  // Complex room: Show Plan button + Elevation button + Wall dropdown
   const bboxgeometry = roomGeometry.bounding_box;
 
   return (
@@ -113,7 +113,29 @@ export const ViewSelector: React.FC<ViewSelectorProps> = ({
           </TooltipContent>
         </Tooltip>
 
-        {/* Wall Selector Dropdown */}
+        {/* Elevation View Button - switch to elevation mode */}
+        <Tooltip delayDuration={300}>
+          <TooltipTrigger asChild>
+            <Button
+              size="sm"
+              variant="ghost"
+              onClick={() => onViewChange('front')}
+              className={`w-10 h-10 p-0 transition-all duration-200 hover-scale ${
+                activeView !== 'plan'
+                  ? 'bg-blue-600 text-white hover:bg-blue-700 shadow-lg scale-105'
+                  : 'hover:bg-gray-100 text-gray-600 hover:text-gray-900'
+              }`}
+            >
+              <ArrowUp className="h-4 w-4" />
+            </Button>
+          </TooltipTrigger>
+          <TooltipContent side="right" className="bg-gray-900 text-white text-xs max-w-xs">
+            <p className="font-medium">Elevation View</p>
+            <p className="text-gray-300">Wall elevation - Select specific wall below</p>
+          </TooltipContent>
+        </Tooltip>
+
+        {/* Wall Selector Dropdown - shows when in elevation mode */}
         {activeView !== 'plan' && onWallChange && (
           <div className="w-48">
             <Select value={selectedWallId || undefined} onValueChange={onWallChange}>
