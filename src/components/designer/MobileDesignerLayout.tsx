@@ -15,6 +15,7 @@ import {
 } from 'lucide-react';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { DesignElement, RoomType, RoomDimensions } from '@/types/project';
+import type { RoomGeometry } from '@/types/RoomGeometry';
 import { DesignCanvas2D } from './DesignCanvas2D';
 import { Lazy3DView } from './Lazy3DView';
 import CompactComponentSidebar from './CompactComponentSidebar';
@@ -67,6 +68,11 @@ interface MobileDesignerLayoutProps {
   onTapeMeasureClick?: (x: number, y: number) => void;
   onTapeMeasureMouseMove?: (x: number, y: number) => void;
   onClearTapeMeasure?: () => void;
+
+  // Complex room support
+  roomGeometry?: RoomGeometry | null;
+  selectedWallId?: string;
+  onWallChange?: (wallId: string) => void;
 }
 
 export const MobileDesignerLayout: React.FC<MobileDesignerLayoutProps> = ({
@@ -96,7 +102,10 @@ export const MobileDesignerLayout: React.FC<MobileDesignerLayoutProps> = ({
   tapeMeasurePreview = null,
   onTapeMeasureClick,
   onTapeMeasureMouseMove,
-  onClearTapeMeasure
+  onClearTapeMeasure,
+  roomGeometry,
+  selectedWallId,
+  onWallChange
 }) => {
   const isMobile = useIsMobile();
   const [showComponentPanel, setShowComponentPanel] = useState(false);
@@ -240,6 +249,9 @@ export const MobileDesignerLayout: React.FC<MobileDesignerLayoutProps> = ({
             <ViewSelector
               activeView={active2DView}
               onViewChange={onActive2DViewChange}
+              roomGeometry={roomGeometry}
+              selectedWallId={selectedWallId}
+              onWallChange={onWallChange}
             />
           </div>
         )}
@@ -276,6 +288,7 @@ export const MobileDesignerLayout: React.FC<MobileDesignerLayoutProps> = ({
                 activeTool={activeTool}
                 fitToScreenSignal={fitToScreenSignal}
                 active2DView={active2DView}
+                selectedWallId={selectedWallId}
                 completedMeasurements={completedMeasurements}
                 currentMeasureStart={currentMeasureStart}
                 tapeMeasurePreview={tapeMeasurePreview}

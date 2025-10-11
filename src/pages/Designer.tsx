@@ -803,6 +803,9 @@ const Designer = () => {
             onTapeMeasureClick={handleTapeMeasureClick}
             onTapeMeasureMouseMove={handleTapeMeasureMouseMove}
             onClearTapeMeasure={handleClearTapeMeasure}
+            roomGeometry={roomGeometry}
+            selectedWallId={selectedWallId}
+            onWallChange={setSelectedWallId}
           />
         ) : (
           <div className="flex-1 flex">
