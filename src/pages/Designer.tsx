@@ -27,6 +27,8 @@ import { useDesignValidation } from '@/hooks/useDesignValidation';
 import { RoomDesign, DesignElement, getDefaultZIndex } from '@/types/project';
 import { migrateElements } from '@/utils/migrateElements';
 import { ComponentService } from '@/services/ComponentService';
+import { RoomService } from '@/services/RoomService';
+import type { RoomGeometry } from '@/types/RoomGeometry';
 import rightfitLogo from '@/assets/logo.png';
 import '@/utils/godMode'; // Load God mode utilities in development
 import { testCurrentCoordinateSystem } from '@/utils/coordinateSystemDemo';
@@ -54,6 +56,7 @@ const Designer = () => {
   const [activeView, setActiveView] = useState<'2d' | '3d'>('2d');
   const [active2DView, setActive2DView] = useState<'plan' | 'front' | 'back' | 'left' | 'right'>('plan');
   const [selectedElement, setSelectedElement] = useState<DesignElement | null>(null);
+  const [selectedWallId, setSelectedWallId] = useState<string | undefined>(undefined);
   const [isEditingProjectName, setIsEditingProjectName] = useState(false);
   const [editingProjectName, setEditingProjectName] = useState('');
   const [activeTool, setActiveTool] = useState<'select' | 'fit-screen' | 'pan' | 'tape-measure' | 'none'>('select');
@@ -67,6 +70,7 @@ const Designer = () => {
   const [lastValidatedDesign, setLastValidatedDesign] = useState<string | null>(null);
   const [showPerformanceMonitor, setShowPerformanceMonitor] = useState(false);
   const [canvasZoom, setCanvasZoom] = useState(1.0);
+  const [roomGeometry, setRoomGeometry] = useState<RoomGeometry | null>(null);
 
   // Zoom control functions
   const handleZoomIn = useCallback(() => {
@@ -106,6 +110,28 @@ const Designer = () => {
 
     preloadData();
   }, []);
+
+  // Load room geometry for ViewSelector
+  useEffect(() => {
+    const loadGeometry = async () => {
+      if (!currentRoomDesign?.room_geometry_template_id) {
+        setRoomGeometry(null);
+        return;
+      }
+
+      try {
+        console.log('🏗️ [Designer] Loading room geometry for ViewSelector...');
+        const geometry = await RoomService.getRoomGeometry(currentRoomDesign.room_geometry_template_id);
+        setRoomGeometry(geometry);
+        console.log('✅ [Designer] Room geometry loaded:', geometry);
+      } catch (err) {
+        console.warn('⚠️ [Designer] Failed to load room geometry:', err);
+        setRoomGeometry(null);
+      }
+    };
+
+    loadGeometry();
+  }, [currentRoomDesign?.room_geometry_template_id]);
 
   // Determine what to show based on URL and project state
   useEffect(() => {
@@ -862,6 +888,7 @@ const Designer = () => {
                         activeTool={activeTool}
                         fitToScreenSignal={fitToScreenSignal}
                         active2DView={active2DView}
+                        selectedWallId={selectedWallId}
                         completedMeasurements={completedMeasurements}
                         currentMeasureStart={currentMeasureStart}
                         tapeMeasurePreview={tapeMeasurePreview}
@@ -878,6 +905,9 @@ const Designer = () => {
                         <ViewSelector
                           activeView={active2DView}
                           onViewChange={setActive2DView}
+                          roomGeometry={roomGeometry}
+                          selectedWallId={selectedWallId}
+                          onWallChange={setSelectedWallId}
                         />
                         <ZoomController
                           zoom={canvasZoom}

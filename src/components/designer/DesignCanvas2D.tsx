@@ -51,6 +51,8 @@ interface DesignCanvas2DProps {
   activeTool?: 'select' | 'fit-screen' | 'pan' | 'tape-measure' | 'none';
   fitToScreenSignal?: number;
   active2DView: 'plan' | 'front' | 'back' | 'left' | 'right';
+  // Wall selection for complex rooms
+  selectedWallId?: string;
   // Tape measure props - multi-measurement support
   completedMeasurements?: { start: { x: number; y: number }, end: { x: number; y: number } }[];
   currentMeasureStart?: { x: number; y: number } | null;
@@ -401,6 +403,7 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
   activeTool = 'select',
   fitToScreenSignal = 0,
   active2DView = 'plan',
+  selectedWallId: selectedWallIdProp,
   // Tape measure props - multi-measurement support
   completedMeasurements = [],
   currentMeasureStart = null,
@@ -422,8 +425,9 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
   const [roomGeometry, setRoomGeometry] = useState<RoomGeometry | null>(null);
   const [loadingGeometry, setLoadingGeometry] = useState(false);
 
-  // Wall-count elevation system: Selected wall for complex rooms
-  const [selectedWallId, setSelectedWallId] = useState<string | null>(null);
+  // Wall-count elevation system: Use prop if provided, otherwise use internal state
+  const [internalSelectedWallId, setInternalSelectedWallId] = useState<string | null>(null);
+  const selectedWallId = selectedWallIdProp || internalSelectedWallId;
   
   // Notify parent of zoom changes
   useEffect(() => {
@@ -546,13 +550,13 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
     loadRoomGeometry();
   }, [design?.id]);
 
-  // Auto-select first wall when complex room geometry loads
+  // Auto-select first wall when complex room geometry loads (only if not controlled by parent)
   useEffect(() => {
-    if (roomGeometry && roomGeometry.walls && roomGeometry.walls.length > 0 && !selectedWallId) {
-      setSelectedWallId(roomGeometry.walls[0].id);
+    if (!selectedWallIdProp && roomGeometry && roomGeometry.walls && roomGeometry.walls.length > 0 && !internalSelectedWallId) {
+      setInternalSelectedWallId(roomGeometry.walls[0].id);
       console.log(`[DesignCanvas2D] Auto-selected first wall: ${roomGeometry.walls[0].id}`);
     }
-  }, [roomGeometry, selectedWallId]);
+  }, [roomGeometry, internalSelectedWallId, selectedWallIdProp]);
 
   // Helper function to get wall height (ceiling height) - prioritize room dimensions over cache
   const getWallHeight = useCallback(() => {
