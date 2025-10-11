@@ -1117,15 +1117,40 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
       const floorY = roomPosition.innerY + (CANVAS_HEIGHT * 0.4); // Fixed floor position (adjusted for top-center alignment)
       const topY = floorY - wallHeight; // Ceiling moves up/down based on wall height
 
-      // CRITICAL FIX: Use appropriate dimension for each elevation view
+      // Determine wall width and label based on selection mode
       let elevationRoomWidth: number;
-      if (active2DView === 'front' || active2DView === 'back') {
-        elevationRoomWidth = roomDimensions.width * zoom; // Use room width for front/back views
+      let wallLabel: string;
+
+      if (roomGeometry && roomGeometry.walls && selectedWallId) {
+        // MANUAL WALL SELECTION: Use specific wall's length
+        const selectedWall = roomGeometry.walls.find(w => w.id === selectedWallId);
+        if (selectedWall) {
+          elevationRoomWidth = calculateWallLength(selectedWall) * zoom;
+          const wallIndex = roomGeometry.walls.findIndex(w => w.id === selectedWallId);
+          const wallType = isWallOnPerimeter(selectedWall, roomGeometry.bounding_box) ? 'Perimeter' : 'Interior';
+          wallLabel = `Wall ${wallIndex + 1} (${Math.round(calculateWallLength(selectedWall))}cm - ${wallType})`;
+        } else {
+          // Fallback if wall not found
+          elevationRoomWidth = roomDimensions.width * zoom;
+          wallLabel = 'Unknown Wall';
+        }
       } else {
-        elevationRoomWidth = roomDimensions.height * zoom; // Use room depth for left/right views
+        // CARDINAL DIRECTION VIEW: Use room dimensions
+        if (active2DView === 'front' || active2DView === 'back') {
+          elevationRoomWidth = roomDimensions.width * zoom; // Use room width for front/back views
+        } else {
+          elevationRoomWidth = roomDimensions.height * zoom; // Use room depth for left/right views
+        }
+        const wallLabels = {
+          front: 'Front Wall',
+          back: 'Back Wall',
+          left: 'Left Wall',
+          right: 'Right Wall'
+        };
+        wallLabel = wallLabels[active2DView] || '';
       }
 
-      // Draw wall boundaries 
+      // Draw wall boundaries
       ctx.fillStyle = '#f9f9f9';
       ctx.fillRect(roomPosition.innerX, topY, elevationRoomWidth, wallHeight);
 
@@ -1145,14 +1170,8 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
       ctx.fillStyle = '#333';
       ctx.font = '14px Arial';
       ctx.textAlign = 'center';
-      const wallLabels = {
-        front: 'Front Wall',
-        back: 'Back Wall', 
-        left: 'Left Wall',
-        right: 'Right Wall'
-      };
       ctx.fillText(
-        wallLabels[active2DView] || '',
+        wallLabel,
         roomPosition.innerX + elevationRoomWidth / 2,
         roomPosition.innerY - 20
       );
@@ -1160,13 +1179,24 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
       // Dimension labels
       ctx.fillStyle = '#666';
       ctx.font = '12px Arial';
-      
-      // Width dimension (bottom) - use inner room dimensions
+
+      // Width dimension (bottom) - show actual wall length
       let widthText = '';
-      if (active2DView === 'front' || active2DView === 'back') {
-        widthText = `${roomDimensions.width}cm (inner)`;
+      if (roomGeometry && roomGeometry.walls && selectedWallId) {
+        // MANUAL WALL SELECTION: Show specific wall length
+        const selectedWall = roomGeometry.walls.find(w => w.id === selectedWallId);
+        if (selectedWall) {
+          widthText = `${Math.round(calculateWallLength(selectedWall))}cm`;
+        } else {
+          widthText = 'Unknown';
+        }
       } else {
-        widthText = `${roomDimensions.height}cm (inner)`;
+        // CARDINAL DIRECTION VIEW: Show room dimensions
+        if (active2DView === 'front' || active2DView === 'back') {
+          widthText = `${roomDimensions.width}cm (inner)`;
+        } else {
+          widthText = `${roomDimensions.height}cm (inner)`;
+        }
       }
       ctx.textAlign = 'center';
       ctx.fillText(widthText, roomPosition.innerX + elevationRoomWidth / 2, floorY + 20);
