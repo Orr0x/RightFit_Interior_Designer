@@ -2007,8 +2007,12 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
     if (active2DView === 'plan') {
       // Plan view: Show all elements
       elementsToRender = design.elements;
+    } else if (roomGeometry && roomGeometry.walls && selectedWallId) {
+      // PRIORITY 1: Manual wall selection (user selected specific wall from dropdown)
+      console.log(`[DesignCanvas2D] Manual selection: wall ${selectedWallId}`);
+      elementsToRender = getElementsForWall(selectedWallId, design.elements, roomGeometry, 20);
     } else if (roomGeometry && roomGeometry.walls) {
-      // Database-driven elevation filtering
+      // PRIORITY 2: Database-driven elevation filtering (for cardinal views like 'front')
       const wallsForView = getWallsForElevationView(active2DView, roomGeometry);
 
       if (wallsForView.length > 0) {
@@ -2020,10 +2024,6 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
           allElements.push(...elements);
         });
         elementsToRender = Array.from(new Set(allElements)); // Deduplicate
-      } else if (selectedWallId) {
-        // Fallback: Manual wall selection (existing logic for templates without elevation_view)
-        console.log(`[DesignCanvas2D] Manual selection: wall ${selectedWallId}`);
-        elementsToRender = getElementsForWall(selectedWallId, design.elements, roomGeometry, 20);
       } else {
         // Fallback: Simple room cardinal filtering (rectangular rooms without geometry)
         elementsToRender = design.elements.filter(el => {
@@ -2123,8 +2123,11 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
 
     if (active2DView === 'plan') {
       elementsToCheck = design.elements;
+    } else if (roomGeometry && roomGeometry.walls && selectedWallId) {
+      // PRIORITY 1: Manual wall selection (user selected specific wall from dropdown)
+      elementsToCheck = getElementsForWall(selectedWallId, design.elements, roomGeometry, 20);
     } else if (roomGeometry && roomGeometry.walls) {
-      // Database-driven elevation filtering
+      // PRIORITY 2: Database-driven elevation filtering (for cardinal views like 'front')
       const wallsForView = getWallsForElevationView(active2DView, roomGeometry);
 
       if (wallsForView.length > 0) {
@@ -2135,9 +2138,6 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
           allElements.push(...elements);
         });
         elementsToCheck = Array.from(new Set(allElements));
-      } else if (selectedWallId) {
-        // Fallback: Manual wall selection
-        elementsToCheck = getElementsForWall(selectedWallId, design.elements, roomGeometry, 20);
       } else {
         // Fallback: Cardinal filtering
         elementsToCheck = design.elements.filter(el => {
@@ -2226,11 +2226,29 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
 
       if (active2DView === 'plan') {
         elementsToCheck = design.elements;
-      } else if (roomGeometry && roomGeometry.walls && roomGeometry.walls.length > 4 && selectedWallId) {
-        // Complex room: Use wall-based filtering
+      } else if (roomGeometry && roomGeometry.walls && selectedWallId) {
+        // PRIORITY 1: Manual wall selection (user selected specific wall from dropdown)
         elementsToCheck = getElementsForWall(selectedWallId, design.elements, roomGeometry, 20);
+      } else if (roomGeometry && roomGeometry.walls) {
+        // PRIORITY 2: Database-driven elevation filtering
+        const wallsForView = getWallsForElevationView(active2DView, roomGeometry);
+        if (wallsForView.length > 0) {
+          const allElements: DesignElement[] = [];
+          wallsForView.forEach(wall => {
+            const elements = getElementsForWall(wall.id, design.elements, roomGeometry, 20);
+            allElements.push(...elements);
+          });
+          elementsToCheck = Array.from(new Set(allElements));
+        } else {
+          // Fallback: Cardinal direction filtering
+          elementsToCheck = design.elements.filter(el => {
+            const wall = getElementWall(el);
+            const isCornerVisible = isCornerVisibleInView(el, active2DView);
+            return wall === active2DView || wall === 'center' || isCornerVisible;
+          });
+        }
       } else {
-        // Simple room: Use cardinal direction filtering
+        // No room geometry: Cardinal direction filtering
         elementsToCheck = design.elements.filter(el => {
           const wall = getElementWall(el);
           const isCornerVisible = isCornerVisibleInView(el, active2DView);
@@ -2470,11 +2488,29 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
 
         if (active2DView === 'plan') {
           elementsToCheck = design.elements;
-        } else if (roomGeometry && roomGeometry.walls && roomGeometry.walls.length > 4 && selectedWallId) {
-          // Complex room: Use wall-based filtering
+        } else if (roomGeometry && roomGeometry.walls && selectedWallId) {
+          // PRIORITY 1: Manual wall selection (user selected specific wall from dropdown)
           elementsToCheck = getElementsForWall(selectedWallId, design.elements, roomGeometry, 20);
+        } else if (roomGeometry && roomGeometry.walls) {
+          // PRIORITY 2: Database-driven elevation filtering
+          const wallsForView = getWallsForElevationView(active2DView, roomGeometry);
+          if (wallsForView.length > 0) {
+            const allElements: DesignElement[] = [];
+            wallsForView.forEach(wall => {
+              const elements = getElementsForWall(wall.id, design.elements, roomGeometry, 20);
+              allElements.push(...elements);
+            });
+            elementsToCheck = Array.from(new Set(allElements));
+          } else {
+            // Fallback: Cardinal direction filtering
+            elementsToCheck = design.elements.filter(el => {
+              const wall = getElementWall(el);
+              const isCornerVisible = isCornerVisibleInView(el, active2DView);
+              return wall === active2DView || wall === 'center' || isCornerVisible;
+            });
+          }
         } else {
-          // Simple room: Use cardinal direction filtering
+          // No room geometry: Cardinal direction filtering
           elementsToCheck = design.elements.filter(el => {
             const wall = getElementWall(el);
             const isCornerVisible = isCornerVisibleInView(el, active2DView);
