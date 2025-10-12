@@ -29,6 +29,7 @@ interface DatabaseComponent {
   created_at: string;
   updated_at: string;
   color?: string; // Optional color property
+  default_z_position?: number | null; // Height off ground in cm (from database)
 }
 
 // Enhanced caching for components

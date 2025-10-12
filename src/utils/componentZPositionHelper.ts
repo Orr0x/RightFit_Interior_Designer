@@ -9,12 +9,15 @@
  * - CompactComponentSidebar.tsx (handleComponentSelect)
  * - DesignCanvas2D.tsx (handleDrop)
  *
- * Future: Will read from database default_z_position column with fallback to these rules
+ * Priority order:
+ * 1. Database default_z_position (if provided and non-zero)
+ * 2. Type-based rules (hardcoded fallback)
+ * 3. Default to 0 (floor-mounted)
  */
 
 export interface ZPositionCalculation {
   z: number;
-  source: 'type-rule' | 'database' | 'default';
+  source: 'database' | 'type-rule' | 'default';
   reason: string;
 }
 
@@ -23,12 +26,22 @@ export interface ZPositionCalculation {
  *
  * @param componentType - Component type (cabinet, cornice, pelmet, etc.)
  * @param componentId - Component ID for special case detection (wall-cabinet, etc.)
+ * @param databaseZPosition - Optional Z-position from database (takes priority if provided)
  * @returns Z-position calculation result
  */
 export function getDefaultZPosition(
   componentType: string,
-  componentId: string
+  componentId: string,
+  databaseZPosition?: number | null
 ): ZPositionCalculation {
+  // Priority 1: Use database value if available and non-zero
+  if (databaseZPosition !== undefined && databaseZPosition !== null && databaseZPosition !== 0) {
+    return {
+      z: databaseZPosition,
+      source: 'database',
+      reason: `Database value: ${databaseZPosition}cm`
+    };
+  }
   // Check component type with explicit rules
   if (componentType === 'cornice') {
     return {
@@ -89,7 +102,16 @@ export function getDefaultZPosition(
 
 /**
  * Simple version that just returns the Z value (for backward compatibility)
+ *
+ * @param componentType - Component type
+ * @param componentId - Component ID
+ * @param databaseZPosition - Optional Z-position from database
+ * @returns Z-position value in centimeters
  */
-export function getDefaultZ(componentType: string, componentId: string): number {
-  return getDefaultZPosition(componentType, componentId).z;
+export function getDefaultZ(
+  componentType: string,
+  componentId: string,
+  databaseZPosition?: number | null
+): number {
+  return getDefaultZPosition(componentType, componentId, databaseZPosition).z;
 }

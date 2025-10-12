@@ -32,6 +32,7 @@ interface DatabaseComponent {
   created_at: string;
   updated_at: string;
   color?: string; // Optional color property
+  default_z_position?: number | null; // Height off ground in cm (from database)
 }
 import { 
   Search, 
@@ -221,8 +222,8 @@ const CompactComponentSidebar: React.FC<CompactComponentSidebarProps> = ({
   const handleMobileClickToAdd = (component: DatabaseComponent) => {
     console.log('📱 [Mobile Click-to-Add] Adding component:', component.name);
 
-    // Calculate Z position using centralized helper
-    const defaultZ = getDefaultZ(component.type, component.component_id);
+    // Calculate Z position using centralized helper (with database value priority)
+    const defaultZ = getDefaultZ(component.type, component.component_id, component.default_z_position);
 
     // Create a new design element positioned at canvas center
     const newElement: DesignElement = {
@@ -267,7 +268,8 @@ const CompactComponentSidebar: React.FC<CompactComponentSidebarProps> = ({
       color: component.color,
       category: component.category,
       roomTypes: component.room_types,
-      description: component.description
+      description: component.description,
+      default_z_position: component.default_z_position // Include database Z-position
     };
     
     e.dataTransfer.setData('component', JSON.stringify(dragData));
@@ -371,8 +373,8 @@ const CompactComponentSidebar: React.FC<CompactComponentSidebarProps> = ({
       return [component.component_id, ...filtered].slice(0, 6);
     });
 
-    // Calculate Z position using centralized helper
-    const defaultZ = getDefaultZ(component.type, component.component_id);
+    // Calculate Z position using centralized helper (with database value priority)
+    const defaultZ = getDefaultZ(component.type, component.component_id, component.default_z_position);
 
     // Create design element with proper structure and default Z positioning
     const element: DesignElement = {

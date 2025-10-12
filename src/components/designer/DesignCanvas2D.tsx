@@ -2688,8 +2688,12 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
       const effectiveWidth = componentData.width;
       const effectiveDepth = componentData.depth;
 
-      // Set default Z position based on component type using centralized helper
-      const defaultZ = getDefaultZ(componentData.type, componentData.id || componentData.component_id || '');
+      // Set default Z position based on component type using centralized helper (with database value priority)
+      const defaultZ = getDefaultZ(
+        componentData.type,
+        componentData.id || componentData.component_id || '',
+        componentData.default_z_position
+      );
 
       // Apply Enhanced Component Placement using unified coordinate system
       const placementResult = getEnhancedComponentPlacement(
