@@ -10,7 +10,7 @@ import {
   X,
   Edit3
 } from 'lucide-react';
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import type { ElevationViewConfig } from '@/types/project';
 import { getDefaultElevationViews, canDuplicateView } from '@/utils/elevationViewHelpers';
 
@@ -34,6 +34,12 @@ const DIRECTION_ICONS = {
   right: ArrowRight
 } as const;
 
+interface ContextMenuState {
+  viewId: string;
+  x: number;
+  y: number;
+}
+
 export const ViewSelector: React.FC<ViewSelectorProps> = ({
   activeView,
   onViewChange,
@@ -44,6 +50,8 @@ export const ViewSelector: React.FC<ViewSelectorProps> = ({
 }) => {
   const [editingViewId, setEditingViewId] = useState<string | null>(null);
   const [editLabel, setEditLabel] = useState('');
+  const [contextMenu, setContextMenu] = useState<ContextMenuState | null>(null);
+  const contextMenuRef = useRef<HTMLDivElement>(null);
 
   // Use provided views or default to 4 cardinal directions
   const views = elevationViews || getDefaultElevationViews();
@@ -55,8 +63,36 @@ export const ViewSelector: React.FC<ViewSelectorProps> = ({
   const activeViewConfig = views.find(v => v.id === activeView);
   const activeDirection = activeViewConfig?.direction;
 
+  // Close context menu on click outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (contextMenuRef.current && !contextMenuRef.current.contains(event.target as Node)) {
+        setContextMenu(null);
+      }
+    };
+
+    if (contextMenu) {
+      document.addEventListener('mousedown', handleClickOutside);
+      return () => document.removeEventListener('mousedown', handleClickOutside);
+    }
+  }, [contextMenu]);
+
+  // Handle context menu
+  const handleContextMenu = (e: React.MouseEvent, viewId: string) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    // Get the position relative to the viewport
+    setContextMenu({
+      viewId,
+      x: e.clientX,
+      y: e.clientY
+    });
+  };
+
   // Handle rename
   const handleStartRename = (viewId: string, currentLabel: string) => {
+    setContextMenu(null); // Close context menu
     setEditingViewId(viewId);
     setEditLabel(currentLabel);
   };
@@ -72,6 +108,22 @@ export const ViewSelector: React.FC<ViewSelectorProps> = ({
   const handleCancelRename = () => {
     setEditingViewId(null);
     setEditLabel('');
+  };
+
+  // Handle duplicate
+  const handleDuplicate = (viewId: string) => {
+    setContextMenu(null);
+    if (onDuplicateView) {
+      onDuplicateView(viewId);
+    }
+  };
+
+  // Handle delete
+  const handleDelete = (viewId: string) => {
+    setContextMenu(null);
+    if (onDeleteView) {
+      onDeleteView(viewId);
+    }
   };
 
   return (
@@ -106,99 +158,35 @@ export const ViewSelector: React.FC<ViewSelectorProps> = ({
         {views.map((view) => {
           const Icon = DIRECTION_ICONS[view.direction];
           const isActive = activeView === view.id || (activeView === view.direction && view.is_default);
-          const canDuplicate = canDuplicateView(view.direction, views);
 
           return (
-            <div key={view.id} className="flex items-center gap-1 w-full">
-              {/* View Button */}
-              <Tooltip delayDuration={300}>
-                <TooltipTrigger asChild>
-                  <Button
-                    size="sm"
-                    variant="ghost"
-                    onClick={() => onViewChange(view.id)}
-                    className={`flex-shrink-0 w-10 h-10 p-0 transition-all duration-200 hover-scale ${
-                      isActive
-                        ? 'bg-blue-600 text-white hover:bg-blue-700 shadow-lg scale-105'
-                        : 'hover:bg-gray-100 text-gray-600 hover:text-gray-900'
-                    }`}
-                  >
-                    <Icon className="h-4 w-4" />
-                  </Button>
-                </TooltipTrigger>
-                <TooltipContent side="right" className="bg-gray-900 text-white text-xs max-w-xs">
-                  <p className="font-medium">{view.label}</p>
-                  <p className="text-gray-300">{view.direction.charAt(0).toUpperCase() + view.direction.slice(1)} wall elevation</p>
-                  {view.hidden_elements.length > 0 && (
-                    <p className="text-gray-400 text-xs mt-1">
-                      {view.hidden_elements.length} element(s) hidden
-                    </p>
-                  )}
-                </TooltipContent>
-              </Tooltip>
-
-              {/* Custom view controls (only show if we have custom views or handlers) */}
-              {(hasCustomViews || onDuplicateView) && (
-                <div className="flex items-center gap-0.5 ml-1">
-                  {/* Duplicate button - show on hover for all views */}
-                  {onDuplicateView && canDuplicate && (
-                    <Tooltip delayDuration={500}>
-                      <TooltipTrigger asChild>
-                        <Button
-                          size="sm"
-                          variant="ghost"
-                          onClick={() => onDuplicateView(view.id)}
-                          className="w-6 h-6 p-0 opacity-0 hover:opacity-100 transition-opacity"
-                        >
-                          <Copy className="h-3 w-3" />
-                        </Button>
-                      </TooltipTrigger>
-                      <TooltipContent side="right" className="text-xs">
-                        Duplicate view
-                      </TooltipContent>
-                    </Tooltip>
-                  )}
-
-                  {/* Rename button - only for custom views */}
-                  {!view.is_default && onRenameView && (
-                    <Tooltip delayDuration={500}>
-                      <TooltipTrigger asChild>
-                        <Button
-                          size="sm"
-                          variant="ghost"
-                          onClick={() => handleStartRename(view.id, view.label)}
-                          className="w-6 h-6 p-0 opacity-0 hover:opacity-100 transition-opacity"
-                        >
-                          <Edit3 className="h-3 w-3" />
-                        </Button>
-                      </TooltipTrigger>
-                      <TooltipContent side="right" className="text-xs">
-                        Rename view
-                      </TooltipContent>
-                    </Tooltip>
-                  )}
-
-                  {/* Delete button - only for custom views */}
-                  {!view.is_default && onDeleteView && (
-                    <Tooltip delayDuration={500}>
-                      <TooltipTrigger asChild>
-                        <Button
-                          size="sm"
-                          variant="ghost"
-                          onClick={() => onDeleteView(view.id)}
-                          className="w-6 h-6 p-0 opacity-0 hover:opacity-100 transition-opacity text-red-500 hover:text-red-700"
-                        >
-                          <X className="h-3 w-3" />
-                        </Button>
-                      </TooltipTrigger>
-                      <TooltipContent side="right" className="text-xs">
-                        Delete view
-                      </TooltipContent>
-                    </Tooltip>
-                  )}
-                </div>
-              )}
-            </div>
+            <Tooltip key={view.id} delayDuration={300}>
+              <TooltipTrigger asChild>
+                <Button
+                  size="sm"
+                  variant="ghost"
+                  onClick={() => onViewChange(view.id)}
+                  onContextMenu={(e) => handleContextMenu(e, view.id)}
+                  className={`w-10 h-10 p-0 transition-all duration-200 hover-scale ${
+                    isActive
+                      ? 'bg-blue-600 text-white hover:bg-blue-700 shadow-lg scale-105'
+                      : 'hover:bg-gray-100 text-gray-600 hover:text-gray-900'
+                  }`}
+                >
+                  <Icon className="h-4 w-4" />
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent side="right" className="bg-gray-900 text-white text-xs max-w-xs">
+                <p className="font-medium">{view.label}</p>
+                <p className="text-gray-300">{view.direction.charAt(0).toUpperCase() + view.direction.slice(1)} wall elevation</p>
+                {view.hidden_elements.length > 0 && (
+                  <p className="text-gray-400 text-xs mt-1">
+                    {view.hidden_elements.length} element(s) hidden
+                  </p>
+                )}
+                <p className="text-gray-400 text-xs mt-1 italic">Right-click for options</p>
+              </TooltipContent>
+            </Tooltip>
           );
         })}
 
@@ -237,6 +225,66 @@ export const ViewSelector: React.FC<ViewSelectorProps> = ({
           </div>
         )}
       </div>
+
+      {/* Context Menu */}
+      {contextMenu && (() => {
+        const view = views.find(v => v.id === contextMenu.viewId);
+        if (!view) return null;
+
+        const canDuplicate = canDuplicateView(view.direction, views);
+        const hasActions = (canDuplicate && onDuplicateView) || (!view.is_default && (onRenameView || onDeleteView));
+
+        if (!hasActions) return null;
+
+        return (
+          <div
+            ref={contextMenuRef}
+            className="fixed z-[9999] bg-white rounded-md shadow-lg border border-gray-200 py-1 min-w-[160px] animate-in fade-in-0 zoom-in-95"
+            style={{
+              left: `${contextMenu.x}px`,
+              top: `${contextMenu.y}px`,
+            }}
+          >
+            {/* Duplicate option */}
+            {canDuplicate && onDuplicateView && (
+              <button
+                className="w-full px-3 py-2 text-left text-sm hover:bg-gray-100 flex items-center gap-2 transition-colors"
+                onClick={() => handleDuplicate(contextMenu.viewId)}
+              >
+                <Copy className="h-4 w-4 text-gray-600" />
+                <span>Duplicate View</span>
+              </button>
+            )}
+
+            {/* Rename option - only for custom views */}
+            {!view.is_default && onRenameView && (
+              <button
+                className="w-full px-3 py-2 text-left text-sm hover:bg-gray-100 flex items-center gap-2 transition-colors"
+                onClick={() => handleStartRename(contextMenu.viewId, view.label)}
+              >
+                <Edit3 className="h-4 w-4 text-gray-600" />
+                <span>Rename View</span>
+              </button>
+            )}
+
+            {/* Separator if we have both duplicate and custom view actions */}
+            {canDuplicate && onDuplicateView && !view.is_default && (onRenameView || onDeleteView) && (
+              <div className="h-px bg-gray-200 my-1" />
+            )}
+
+            {/* Delete option - only for custom views */}
+            {!view.is_default && onDeleteView && (
+              <button
+                className="w-full px-3 py-2 text-left text-sm hover:bg-red-50 flex items-center gap-2 text-red-600 transition-colors"
+                onClick={() => handleDelete(contextMenu.viewId)}
+              >
+                <X className="h-4 w-4" />
+                <span>Delete View</span>
+              </button>
+            )}
+          </div>
+        );
+      })()}
     </TooltipProvider>
   );
 };
