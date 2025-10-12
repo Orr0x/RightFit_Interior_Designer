@@ -290,6 +290,7 @@ export const MobileDesignerLayout: React.FC<MobileDesignerLayoutProps> = ({
                 activeTool={activeTool}
                 fitToScreenSignal={fitToScreenSignal}
                 active2DView={active2DView}
+                elevationViews={elevationViews}
                 completedMeasurements={completedMeasurements}
                 currentMeasureStart={currentMeasureStart}
                 tapeMeasurePreview={tapeMeasurePreview}

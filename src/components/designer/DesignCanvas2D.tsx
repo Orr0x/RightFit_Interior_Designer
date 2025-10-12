@@ -1,6 +1,7 @@
 import React, { useRef, useEffect, useState, useCallback } from 'react';
-import { DesignElement, Design } from '../../types/project';
+import { DesignElement, Design, ElevationViewConfig } from '../../types/project';
 import { ComponentService } from '@/services/ComponentService';
+import { getElevationViews } from '@/utils/elevationViewHelpers';
 import { RoomService } from '@/services/RoomService';
 import { useTouchEvents, TouchPoint } from '@/hooks/useTouchEvents';
 import { useIsMobile } from '@/hooks/use-mobile';
@@ -49,7 +50,9 @@ interface DesignCanvas2DProps {
   showColorDetail?: boolean;
   activeTool?: 'select' | 'fit-screen' | 'pan' | 'tape-measure' | 'none';
   fitToScreenSignal?: number;
-  active2DView: 'plan' | 'front' | 'back' | 'left' | 'right';
+  active2DView: 'plan' | 'front' | 'back' | 'left' | 'right' | string; // Now accepts view IDs like "front-default", "front-dup1"
+  // Elevation view management (optional)
+  elevationViews?: ElevationViewConfig[];
   // Tape measure props - multi-measurement support
   completedMeasurements?: { start: { x: number; y: number }, end: { x: number; y: number } }[];
   currentMeasureStart?: { x: number; y: number } | null;
@@ -400,6 +403,8 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
   activeTool = 'select',
   fitToScreenSignal = 0,
   active2DView = 'plan',
+  // Elevation view management
+  elevationViews,
   // Tape measure props - multi-measurement support
   completedMeasurements = [],
   currentMeasureStart = null,
@@ -414,12 +419,41 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
 }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
-  
+
   // State management
   const [zoom, setZoom] = useState(1.0);
   const [panOffset, setPanOffset] = useState({ x: 0, y: 0 });
   const [roomGeometry, setRoomGeometry] = useState<RoomGeometry | null>(null);
   const [loadingGeometry, setLoadingGeometry] = useState(false);
+
+  // Extract current view direction and hidden elements from elevation views
+  const currentViewInfo = React.useMemo(() => {
+    // If plan view, return early
+    if (active2DView === 'plan') {
+      return { direction: 'plan', hiddenElements: [] };
+    }
+
+    // Get elevation views (default to 4 cardinal views if not provided)
+    const views = elevationViews || getElevationViews();
+
+    // Find the current view by ID
+    const currentView = views.find(v => v.id === active2DView);
+
+    if (currentView) {
+      return {
+        direction: currentView.direction,
+        hiddenElements: currentView.hidden_elements || []
+      };
+    }
+
+    // Fallback: if active2DView is a direction string (legacy behavior)
+    if (['front', 'back', 'left', 'right'].includes(active2DView)) {
+      return { direction: active2DView as 'front' | 'back' | 'left' | 'right', hiddenElements: [] };
+    }
+
+    // Default fallback
+    return { direction: 'front', hiddenElements: [] };
+  }, [active2DView, elevationViews]);
   
   // Notify parent of zoom changes
   useEffect(() => {
@@ -1327,9 +1361,13 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
   const drawElementElevation = (ctx: CanvasRenderingContext2D, element: DesignElement, isSelected: boolean, isHovered: boolean, showWireframe: boolean) => {
     // Check if element should be visible in current elevation view
     const wall = getElementWall(element);
-    const isCornerVisible = isCornerVisibleInView(element, active2DView);
-    
-    if (!isCornerVisible && wall !== active2DView && wall !== 'center') return;
+    const isCornerVisible = isCornerVisibleInView(element, currentViewInfo.direction);
+
+    // Check direction visibility
+    if (!isCornerVisible && wall !== currentViewInfo.direction && wall !== 'center') return;
+
+    // Check if element is hidden in this specific view
+    if (currentViewInfo.hiddenElements.includes(element.id)) return;
 
     // Async preload behavior if not cached
     if (!componentBehaviorCache.has(element.type)) {
@@ -1990,8 +2028,16 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
       ? design.elements
       : design.elements.filter(el => {
           const wall = getElementWall(el);
-          const isCornerVisible = isCornerVisibleInView(el, active2DView);
-          return wall === active2DView || wall === 'center' || isCornerVisible;
+          const isCornerVisible = isCornerVisibleInView(el, currentViewInfo.direction);
+
+          // Check direction visibility
+          const isDirectionVisible = wall === currentViewInfo.direction || wall === 'center' || isCornerVisible;
+          if (!isDirectionVisible) return false;
+
+          // Check if element is hidden in this specific view
+          if (currentViewInfo.hiddenElements.includes(el.id)) return false;
+
+          return true;
         });
 
     // Filter out invisible elements
@@ -2076,8 +2122,16 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
       ? design.elements
       : design.elements.filter(el => {
           const wall = getElementWall(el);
-          const isCornerVisible = isCornerVisibleInView(el, active2DView);
-          return wall === active2DView || wall === 'center' || isCornerVisible;
+          const isCornerVisible = isCornerVisibleInView(el, currentViewInfo.direction);
+
+          // Check direction visibility
+          const isDirectionVisible = wall === currentViewInfo.direction || wall === 'center' || isCornerVisible;
+          if (!isDirectionVisible) return false;
+
+          // Check if element is hidden in this specific view
+          if (currentViewInfo.hiddenElements.includes(el.id)) return false;
+
+          return true;
         });
 
     // Filter out invisible elements
@@ -2151,8 +2205,16 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
         ? design.elements
         : design.elements.filter(el => {
             const wall = getElementWall(el);
-            const isCornerVisible = isCornerVisibleInView(el, active2DView);
-            return wall === active2DView || wall === 'center' || isCornerVisible;
+            const isCornerVisible = isCornerVisibleInView(el, currentViewInfo.direction);
+
+            // Check direction visibility
+            const isDirectionVisible = wall === currentViewInfo.direction || wall === 'center' || isCornerVisible;
+            if (!isDirectionVisible) return false;
+
+            // Check if element is hidden in this specific view
+            if (currentViewInfo.hiddenElements.includes(el.id)) return false;
+
+            return true;
           });
 
       // Filter out invisible elements
@@ -2387,8 +2449,16 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
           ? design.elements
           : design.elements.filter(el => {
               const wall = getElementWall(el);
-              const isCornerVisible = isCornerVisibleInView(el, active2DView);
-              return wall === active2DView || wall === 'center' || isCornerVisible;
+              const isCornerVisible = isCornerVisibleInView(el, currentViewInfo.direction);
+
+              // Check direction visibility
+              const isDirectionVisible = wall === currentViewInfo.direction || wall === 'center' || isCornerVisible;
+              if (!isDirectionVisible) return false;
+
+              // Check if element is hidden in this specific view
+              if (currentViewInfo.hiddenElements.includes(el.id)) return false;
+
+              return true;
             });
 
         // Filter out invisible elements
