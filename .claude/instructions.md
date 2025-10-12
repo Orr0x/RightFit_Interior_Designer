@@ -82,7 +82,29 @@ main
 - Testing postponed until everything is in database
 - Follow existing patterns and database-first approach
 
+## 🔌 Supabase Connection Standard
+
+**ALWAYS use this method for database queries:**
+
+📄 **Reference:** `docs/SUPABASE_CONNECTION_METHOD.md`
+
+**Quick Method:**
+1. Create `.cjs` file (NOT `.js`)
+2. Use Node.js `https` module + REST API
+3. Copy template from `scripts/query-components-direct.cjs`
+4. Credentials in `.env` file
+
+**✅ Working Example:**
+```bash
+node scripts/query-components-direct.cjs
+```
+
+**❌ Don't Use:**
+- `supabase db dump` (requires Docker)
+- RPC functions (not set up)
+- `.js` files (ES module conflict)
+
 ---
 
 **Last Updated:** 2025-10-12
-**Session:** Coordinate System Setup
+**Session:** Coordinate System Setup & Component Data Flow Audit
