@@ -9,6 +9,7 @@ import { DesignElement, RoomType } from '@/types/project';
 import useOptimizedComponents from '@/hooks/useOptimizedComponents';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { LoadingSpinner } from '@/components/designer/LoadingSpinner';
+import { getDefaultZ } from '@/utils/componentZPositionHelper';
 // Define DatabaseComponent type locally since it may not be in generated types yet
 interface DatabaseComponent {
   id: string;
@@ -220,21 +221,8 @@ const CompactComponentSidebar: React.FC<CompactComponentSidebarProps> = ({
   const handleMobileClickToAdd = (component: DatabaseComponent) => {
     console.log('📱 [Mobile Click-to-Add] Adding component:', component.name);
 
-    // Calculate Z position based on component type
-    let defaultZ = 0; // Default for floor-mounted components
-    if (component.type === 'cornice') {
-      defaultZ = 200; // 200cm height for cornice (top of wall units)
-    } else if (component.type === 'pelmet') {
-      defaultZ = 140; // 140cm height for pelmet (bottom of wall units)
-    } else if (component.type === 'counter-top') {
-      defaultZ = 90; // 90cm height for counter tops
-    } else if (component.type === 'cabinet' && component.component_id.includes('wall-cabinet')) {
-      defaultZ = 140; // 140cm height for wall cabinets
-    } else if (component.type === 'wall-unit-end-panel') {
-      defaultZ = 200; // 200cm height for wall unit end panels
-    } else if (component.type === 'window') {
-      defaultZ = 90; // 90cm height for windows
-    }
+    // Calculate Z position using centralized helper
+    const defaultZ = getDefaultZ(component.type, component.component_id);
 
     // Create a new design element positioned at canvas center
     const newElement: DesignElement = {
@@ -383,21 +371,8 @@ const CompactComponentSidebar: React.FC<CompactComponentSidebarProps> = ({
       return [component.component_id, ...filtered].slice(0, 6);
     });
 
-    // Set default Z position based on component type
-    let defaultZ = 0; // Default for floor-mounted components
-    if (component.type === 'cornice') {
-      defaultZ = 200; // 200cm height for cornice (top of wall units)
-    } else if (component.type === 'pelmet') {
-      defaultZ = 140; // 140cm height for pelmet (bottom of wall units)
-    } else if (component.type === 'counter-top') {
-      defaultZ = 90; // 90cm height for counter tops
-    } else if (component.type === 'cabinet' && component.component_id.includes('wall-cabinet')) {
-      defaultZ = 140; // 140cm height for wall cabinets
-    } else if (component.type === 'wall-unit-end-panel') {
-      defaultZ = 200; // 200cm height for wall unit end panels
-    } else if (component.type === 'window') {
-      defaultZ = 90; // 90cm height for windows
-    }
+    // Calculate Z position using centralized helper
+    const defaultZ = getDefaultZ(component.type, component.component_id);
 
     // Create design element with proper structure and default Z positioning
     const element: DesignElement = {
