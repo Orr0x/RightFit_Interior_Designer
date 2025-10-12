@@ -24,7 +24,11 @@
       "Bash(npx tsx:*)",
       "Bash(git log:*)",
       "Bash(git checkout:*)",
-      "Bash(timeout 60 npx tsc --noEmit)"
+      "Bash(timeout 60 npx tsc --noEmit)",
+      "Bash(for port in {5170..5176})",
+      "Bash(do netstat:*)",
+      "Bash(findstr:*)",
+      "Bash(done)"
     ],
     "deny": [],
     "ask": []
