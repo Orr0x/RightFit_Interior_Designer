@@ -219,35 +219,51 @@ const CompactComponentSidebar: React.FC<CompactComponentSidebarProps> = ({
   // Handle mobile click-to-add - directly add component to canvas center
   const handleMobileClickToAdd = (component: DatabaseComponent) => {
     console.log('📱 [Mobile Click-to-Add] Adding component:', component.name);
-    
+
+    // Calculate Z position based on component type
+    let defaultZ = 0; // Default for floor-mounted components
+    if (component.type === 'cornice') {
+      defaultZ = 200; // 200cm height for cornice (top of wall units)
+    } else if (component.type === 'pelmet') {
+      defaultZ = 140; // 140cm height for pelmet (bottom of wall units)
+    } else if (component.type === 'counter-top') {
+      defaultZ = 90; // 90cm height for counter tops
+    } else if (component.type === 'cabinet' && component.component_id.includes('wall-cabinet')) {
+      defaultZ = 140; // 140cm height for wall cabinets
+    } else if (component.type === 'wall-unit-end-panel') {
+      defaultZ = 200; // 200cm height for wall unit end panels
+    } else if (component.type === 'window') {
+      defaultZ = 90; // 90cm height for windows
+    }
+
     // Create a new design element positioned at canvas center
     const newElement: DesignElement = {
       id: `${component.component_id}-${Date.now()}`,
       component_id: component.component_id, // Database lookup key
       type: component.type as any,
+      name: component.name,
       x: 200, // Center-ish position (will be adjustable by dragging)
       y: 150, // Center-ish position
-      z: 0, // Will be set by component behavior logic
-      width: component.width,
-      height: component.height,
-      depth: component.depth,
+      z: defaultZ, // ✅ FIXED: Calculate Z based on type
+      width: component.width,   // X-axis dimension
+      depth: component.depth,   // ✅ FIXED: Y-axis dimension (was swapped with height!)
+      height: component.height, // ✅ FIXED: Z-axis dimension (vertical)
       rotation: 0,
       color: component.color || '#8B4513',
-      name: component.name,
       zIndex: 0, // Required by DesignElement interface
       isVisible: true // Required by DesignElement interface
     };
 
     // Add to canvas and update recently used
     onAddElement(newElement);
-    
+
     // Update recently used components
     setRecentlyUsed(prev => {
       const updated = [component.component_id, ...prev.filter(id => id !== component.component_id)];
       return updated.slice(0, 5); // Keep only 5 most recent
     });
-    
-    console.log('✅ [Mobile Click-to-Add] Component added to canvas at (200, 150)');
+
+    console.log(`✅ [Mobile Click-to-Add] Component added: ${component.name} at (200, 150, ${defaultZ})`);
   };
 
   // Handle drag start - only serialize essential data (no React components)
@@ -372,7 +388,7 @@ const CompactComponentSidebar: React.FC<CompactComponentSidebarProps> = ({
     if (component.type === 'cornice') {
       defaultZ = 200; // 200cm height for cornice (top of wall units)
     } else if (component.type === 'pelmet') {
-      defaultZ = 140; // 140cm height for pelmet (FIXED: bottom of wall units)
+      defaultZ = 140; // 140cm height for pelmet (bottom of wall units)
     } else if (component.type === 'counter-top') {
       defaultZ = 90; // 90cm height for counter tops
     } else if (component.type === 'cabinet' && component.component_id.includes('wall-cabinet')) {
@@ -385,7 +401,8 @@ const CompactComponentSidebar: React.FC<CompactComponentSidebarProps> = ({
 
     // Create design element with proper structure and default Z positioning
     const element: DesignElement = {
-      id: `${component.id}-${Date.now()}`,
+      id: `${component.component_id}-${Date.now()}`, // ✅ FIXED: Use component_id not id (UUID)
+      component_id: component.component_id,           // ✅ FIXED: Add database lookup key
       name: component.name,
       type: component.type as any,
       x: 100,
@@ -395,7 +412,9 @@ const CompactComponentSidebar: React.FC<CompactComponentSidebarProps> = ({
       depth: component.depth,
       height: component.height,
       color: component.color,
-      rotation: 0
+      rotation: 0,
+      zIndex: 0,        // ✅ FIXED: Added missing required field
+      isVisible: true   // ✅ FIXED: Added missing required field
     };
 
     onAddElement(element);
