@@ -14,6 +14,7 @@ import { renderPlanView, renderElevationView } from '@/services/2d-renderers';
 import { FeatureFlagService } from '@/services/FeatureFlagService';
 import type { RoomGeometry } from '@/types/RoomGeometry';
 import * as GeometryUtils from '@/utils/GeometryUtils';
+import { getDefaultZ } from '@/utils/componentZPositionHelper';
 
 // Throttle function for performance optimization
 const throttle = <T extends (...args: any[]) => void>(func: T, delay: number): T => {
@@ -2687,21 +2688,8 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
       const effectiveWidth = componentData.width;
       const effectiveDepth = componentData.depth;
 
-      // Set default Z position based on component type
-      let defaultZ = 0; // Default for floor-mounted components
-      if (componentData.type === 'cornice') {
-        defaultZ = 200; // 200cm height for cornice (top of wall units)
-      } else if (componentData.type === 'pelmet') {
-        defaultZ = 140; // 140cm height for pelmet (FIXED: bottom of wall units)
-      } else if (componentData.type === 'counter-top') {
-        defaultZ = 90; // 90cm height for counter tops
-      } else if (componentData.type === 'wall-cabinet' || componentData.id?.includes('wall-cabinet')) {
-        defaultZ = 140; // 140cm height for wall cabinets
-      } else if (componentData.type === 'wall-unit-end-panel') {
-        defaultZ = 200; // 200cm height for wall unit end panels
-      } else if (componentData.type === 'window') {
-        defaultZ = 90; // 90cm height for windows
-      }
+      // Set default Z position based on component type using centralized helper
+      const defaultZ = getDefaultZ(componentData.type, componentData.id || componentData.component_id || '');
 
       // Apply Enhanced Component Placement using unified coordinate system
       const placementResult = getEnhancedComponentPlacement(
