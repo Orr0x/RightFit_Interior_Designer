@@ -53,6 +53,8 @@ export interface RoomDesignSettings {
   wall_color?: string;
   lighting_settings?: LightingSettings;
   view_preferences?: ViewPreferences;
+  // Elevation view configurations (for complex rooms with duplicates)
+  elevation_views?: ElevationViewConfig[];
   // Migration tracking
   migrated?: boolean;
   original_design_id?: string;
@@ -73,6 +75,18 @@ export interface ViewPreferences {
   grid_enabled?: boolean;
   ruler_enabled?: boolean;
   snap_to_grid?: boolean;
+}
+
+// Elevation view configuration for complex rooms
+// Allows up to 3 views per cardinal direction (original + 2 duplicates)
+// Supports H-shaped rooms with 3 walls per direction = 12 total views max
+export interface ElevationViewConfig {
+  id: string;                                          // Unique ID: "front-default", "front-dup1", etc.
+  direction: 'front' | 'back' | 'left' | 'right';     // Base cardinal direction
+  label: string;                                       // User-friendly name: "Front", "Front (Interior)", etc.
+  hidden_elements: string[];                           // Element IDs to hide in this view
+  is_default: boolean;                                 // True for original 4 cardinal views
+  sort_order: number;                                  // Display order in ViewSelector (1-12)
 }
 
 // Design interface for component compatibility

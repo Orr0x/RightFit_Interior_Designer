@@ -1,58 +1,241 @@
 import { Button } from '@/components/ui/button';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
-import { 
-  View, 
-  Square, 
-  ArrowUp, 
-  ArrowDown, 
-  ArrowLeft, 
-  ArrowRight 
+import {
+  Square,
+  ArrowUp,
+  ArrowDown,
+  ArrowLeft,
+  ArrowRight,
+  Copy,
+  X,
+  Edit3
 } from 'lucide-react';
+import { useState } from 'react';
+import type { ElevationViewConfig } from '@/types/project';
+import { getDefaultElevationViews, canDuplicateView } from '@/utils/elevationViewHelpers';
 
-export type View2DMode = 'plan' | 'front' | 'back' | 'left' | 'right';
+export type View2DMode = 'plan' | string; // 'plan' or elevation view ID
 
 interface ViewSelectorProps {
   activeView: View2DMode;
   onViewChange: (view: View2DMode) => void;
+  // Custom elevation views (optional - defaults to 4 cardinal directions)
+  elevationViews?: ElevationViewConfig[];
+  onDuplicateView?: (viewId: string) => void;
+  onDeleteView?: (viewId: string) => void;
+  onRenameView?: (viewId: string, newLabel: string) => void;
 }
 
-export const ViewSelector: React.FC<ViewSelectorProps> = ({ 
-  activeView, 
-  onViewChange 
+// Icon mapping for directions
+const DIRECTION_ICONS = {
+  front: ArrowUp,
+  back: ArrowDown,
+  left: ArrowLeft,
+  right: ArrowRight
+} as const;
+
+export const ViewSelector: React.FC<ViewSelectorProps> = ({
+  activeView,
+  onViewChange,
+  elevationViews,
+  onDuplicateView,
+  onDeleteView,
+  onRenameView
 }) => {
-  const views = [
-    { id: 'plan', name: 'Plan', icon: Square, description: 'Top-down view - Shows layout and positioning' },
-    { id: 'front', name: 'Front', icon: ArrowUp, description: 'Front wall elevation - Shows cabinet heights and wall units' },
-    { id: 'back', name: 'Back', icon: ArrowDown, description: 'Back wall elevation - Shows cabinet heights and wall units' },
-    { id: 'left', name: 'Left', icon: ArrowLeft, description: 'Left wall elevation - Shows cabinet heights and wall units' },
-    { id: 'right', name: 'Right', icon: ArrowRight, description: 'Right wall elevation - Shows cabinet heights and wall units' }
-  ] as const;
+  const [editingViewId, setEditingViewId] = useState<string | null>(null);
+  const [editLabel, setEditLabel] = useState('');
+
+  // Use provided views or default to 4 cardinal directions
+  const views = elevationViews || getDefaultElevationViews();
+
+  // Check if we have custom views (more than 4 default views)
+  const hasCustomViews = views.length > 4;
+
+  // Get active view config to determine which direction is active
+  const activeViewConfig = views.find(v => v.id === activeView);
+  const activeDirection = activeViewConfig?.direction;
+
+  // Handle rename
+  const handleStartRename = (viewId: string, currentLabel: string) => {
+    setEditingViewId(viewId);
+    setEditLabel(currentLabel);
+  };
+
+  const handleConfirmRename = (viewId: string) => {
+    if (onRenameView && editLabel.trim()) {
+      onRenameView(viewId, editLabel.trim());
+    }
+    setEditingViewId(null);
+    setEditLabel('');
+  };
+
+  const handleCancelRename = () => {
+    setEditingViewId(null);
+    setEditLabel('');
+  };
 
   return (
     <TooltipProvider>
-      <div className="flex flex-col items-center gap-1 p-2 bg-white/95 backdrop-blur-sm rounded-lg shadow-lg border border-gray-200 animate-fade-in">
-        {views.map(({ id, name, icon: Icon, description }) => (
-          <Tooltip key={id} delayDuration={300}>
-            <TooltipTrigger asChild>
+      <div className="flex flex-col items-start gap-1 p-2 bg-white/95 backdrop-blur-sm rounded-lg shadow-lg border border-gray-200 animate-fade-in">
+        {/* Plan View - Always first */}
+        <Tooltip delayDuration={300}>
+          <TooltipTrigger asChild>
+            <Button
+              size="sm"
+              variant="ghost"
+              onClick={() => onViewChange('plan')}
+              className={`w-10 h-10 p-0 transition-all duration-200 hover-scale ${
+                activeView === 'plan'
+                  ? 'bg-blue-600 text-white hover:bg-blue-700 shadow-lg scale-105'
+                  : 'hover:bg-gray-100 text-gray-600 hover:text-gray-900'
+              }`}
+            >
+              <Square className="h-4 w-4" />
+            </Button>
+          </TooltipTrigger>
+          <TooltipContent side="right" className="bg-gray-900 text-white text-xs max-w-xs">
+            <p className="font-medium">Plan</p>
+            <p className="text-gray-300">Top-down view - Shows layout and positioning</p>
+          </TooltipContent>
+        </Tooltip>
+
+        {/* Separator */}
+        <div className="w-full h-px bg-gray-300 my-1" />
+
+        {/* Elevation Views */}
+        {views.map((view) => {
+          const Icon = DIRECTION_ICONS[view.direction];
+          const isActive = activeView === view.id || (activeView === view.direction && view.is_default);
+          const canDuplicate = canDuplicateView(view.direction, views);
+
+          return (
+            <div key={view.id} className="flex items-center gap-1 w-full">
+              {/* View Button */}
+              <Tooltip delayDuration={300}>
+                <TooltipTrigger asChild>
+                  <Button
+                    size="sm"
+                    variant="ghost"
+                    onClick={() => onViewChange(view.id)}
+                    className={`flex-shrink-0 w-10 h-10 p-0 transition-all duration-200 hover-scale ${
+                      isActive
+                        ? 'bg-blue-600 text-white hover:bg-blue-700 shadow-lg scale-105'
+                        : 'hover:bg-gray-100 text-gray-600 hover:text-gray-900'
+                    }`}
+                  >
+                    <Icon className="h-4 w-4" />
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent side="right" className="bg-gray-900 text-white text-xs max-w-xs">
+                  <p className="font-medium">{view.label}</p>
+                  <p className="text-gray-300">{view.direction.charAt(0).toUpperCase() + view.direction.slice(1)} wall elevation</p>
+                  {view.hidden_elements.length > 0 && (
+                    <p className="text-gray-400 text-xs mt-1">
+                      {view.hidden_elements.length} element(s) hidden
+                    </p>
+                  )}
+                </TooltipContent>
+              </Tooltip>
+
+              {/* Custom view controls (only show if we have custom views or handlers) */}
+              {(hasCustomViews || onDuplicateView) && (
+                <div className="flex items-center gap-0.5 ml-1">
+                  {/* Duplicate button - show on hover for all views */}
+                  {onDuplicateView && canDuplicate && (
+                    <Tooltip delayDuration={500}>
+                      <TooltipTrigger asChild>
+                        <Button
+                          size="sm"
+                          variant="ghost"
+                          onClick={() => onDuplicateView(view.id)}
+                          className="w-6 h-6 p-0 opacity-0 hover:opacity-100 transition-opacity"
+                        >
+                          <Copy className="h-3 w-3" />
+                        </Button>
+                      </TooltipTrigger>
+                      <TooltipContent side="right" className="text-xs">
+                        Duplicate view
+                      </TooltipContent>
+                    </Tooltip>
+                  )}
+
+                  {/* Rename button - only for custom views */}
+                  {!view.is_default && onRenameView && (
+                    <Tooltip delayDuration={500}>
+                      <TooltipTrigger asChild>
+                        <Button
+                          size="sm"
+                          variant="ghost"
+                          onClick={() => handleStartRename(view.id, view.label)}
+                          className="w-6 h-6 p-0 opacity-0 hover:opacity-100 transition-opacity"
+                        >
+                          <Edit3 className="h-3 w-3" />
+                        </Button>
+                      </TooltipTrigger>
+                      <TooltipContent side="right" className="text-xs">
+                        Rename view
+                      </TooltipContent>
+                    </Tooltip>
+                  )}
+
+                  {/* Delete button - only for custom views */}
+                  {!view.is_default && onDeleteView && (
+                    <Tooltip delayDuration={500}>
+                      <TooltipTrigger asChild>
+                        <Button
+                          size="sm"
+                          variant="ghost"
+                          onClick={() => onDeleteView(view.id)}
+                          className="w-6 h-6 p-0 opacity-0 hover:opacity-100 transition-opacity text-red-500 hover:text-red-700"
+                        >
+                          <X className="h-3 w-3" />
+                        </Button>
+                      </TooltipTrigger>
+                      <TooltipContent side="right" className="text-xs">
+                        Delete view
+                      </TooltipContent>
+                    </Tooltip>
+                  )}
+                </div>
+              )}
+            </div>
+          );
+        })}
+
+        {/* Rename dialog - inline */}
+        {editingViewId && (
+          <div className="w-full p-2 bg-gray-100 rounded border border-gray-300 mt-1">
+            <input
+              type="text"
+              value={editLabel}
+              onChange={(e) => setEditLabel(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') handleConfirmRename(editingViewId);
+                if (e.key === 'Escape') handleCancelRename();
+              }}
+              className="w-full px-2 py-1 text-xs border border-gray-300 rounded"
+              placeholder="View name"
+              autoFocus
+            />
+            <div className="flex gap-1 mt-1">
               <Button
                 size="sm"
-                variant="ghost"
-                onClick={() => onViewChange(id as View2DMode)}
-                className={`w-10 h-10 p-0 transition-all duration-200 hover-scale ${
-                  activeView === id 
-                    ? 'bg-blue-600 text-white hover:bg-blue-700 shadow-lg scale-105' 
-                    : 'hover:bg-gray-100 text-gray-600 hover:text-gray-900'
-                }`}
+                onClick={() => handleConfirmRename(editingViewId)}
+                className="flex-1 h-6 text-xs"
               >
-                <Icon className="h-4 w-4" />
+                OK
               </Button>
-            </TooltipTrigger>
-            <TooltipContent side="right" className="bg-gray-900 text-white text-xs max-w-xs">
-              <p className="font-medium">{name}</p>
-              <p className="text-gray-300">{description}</p>
-            </TooltipContent>
-          </Tooltip>
-        ))}
+              <Button
+                size="sm"
+                variant="outline"
+                onClick={handleCancelRename}
+                className="flex-1 h-6 text-xs"
+              >
+                Cancel
+              </Button>
+            </div>
+          </div>
+        )}
       </div>
     </TooltipProvider>
   );
