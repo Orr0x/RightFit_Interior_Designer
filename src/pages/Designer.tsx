@@ -933,6 +933,7 @@ const Designer = () => {
                           onZoomChange={setCanvasZoom}
                           onAddElement={handleAddElement}
                           onSelectElement={setSelectedElement}
+                          onUpdateElement={(element) => handleUpdateElement(element.id, element)}
                         />
                       ) : (
                         <DesignCanvas2D

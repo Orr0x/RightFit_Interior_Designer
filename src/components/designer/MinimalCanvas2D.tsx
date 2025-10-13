@@ -19,6 +19,7 @@ interface MinimalCanvas2DProps {
   onZoomChange?: (zoom: number) => void;
   onAddElement?: (element: DesignElement) => void;
   onSelectElement?: (element: DesignElement | null) => void;
+  onUpdateElement?: (element: DesignElement) => void;
 }
 
 const CANVAS_WIDTH = 1600;
@@ -31,12 +32,18 @@ export const MinimalCanvas2D: React.FC<MinimalCanvas2DProps> = ({
   zoom: controlledZoom = 1.0,
   onZoomChange,
   onAddElement,
-  onSelectElement
+  onSelectElement,
+  onUpdateElement
 }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const coordinateSystemRef = useRef<CoordinateSystem>(createCoordinateSystem());
   const [panOffset, setPanOffset] = useState({ x: 0, y: 0 });
   const [selectedElementId, setSelectedElementId] = useState<string | null>(null);
+
+  // Drag-to-move state
+  const [isDraggingElement, setIsDraggingElement] = useState(false);
+  const [dragStartPos, setDragStartPos] = useState<{ x: number; y: number } | null>(null);
+  const [draggedElement, setDraggedElement] = useState<DesignElement | null>(null);
 
   // Get room dimensions
   const roomDimensions = design.roomDimensions;
@@ -94,12 +101,17 @@ export const MinimalCanvas2D: React.FC<MinimalCanvas2DProps> = ({
     // ============================================================================
     if (design.elements) {
       design.elements.forEach((element) => {
+        // 🎯 Use dragged element position if this is the element being dragged (local state only!)
+        const displayElement = (isDraggingElement && draggedElement && element.id === draggedElement.id)
+          ? draggedElement
+          : element;
+
         // Get position in canvas coordinates
-        const pos = coordSystem.worldToCanvas(element.x, element.y);
+        const pos = coordSystem.worldToCanvas(displayElement.x, displayElement.y);
 
         // Get size in canvas pixels
-        const width = coordSystem.cmToPixels(element.width);
-        const height = coordSystem.cmToPixels(element.depth || element.height);
+        const width = coordSystem.cmToPixels(displayElement.width);
+        const height = coordSystem.cmToPixels(displayElement.depth || displayElement.height);
 
         // Math confirmed: width = cmToPixels(element.width) = element.width × BASE(1.0) × zoom
 
@@ -168,7 +180,7 @@ export const MinimalCanvas2D: React.FC<MinimalCanvas2DProps> = ({
       10,
       CANVAS_HEIGHT - 20
     );
-  }, [controlledZoom, roomDimensions, design.elements, selectedElementId]);
+  }, [controlledZoom, roomDimensions, design.elements, selectedElementId, isDraggingElement, draggedElement]);
 
   // Setup canvas
   useEffect(() => {
@@ -263,6 +275,89 @@ export const MinimalCanvas2D: React.FC<MinimalCanvas2DProps> = ({
   }, [design.elements, onSelectElement]);
 
   // ============================================================================
+  // PHASE 6: Drag-to-Move Selected Components
+  // ============================================================================
+  const handleMouseDown = useCallback((e: React.MouseEvent<HTMLCanvasElement>) => {
+    if (!selectedElementId) return; // Only drag if something is selected
+
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+
+    const rect = canvas.getBoundingClientRect();
+    const coordSystem = coordinateSystemRef.current;
+    const worldPos = coordSystem.screenToWorld(e.clientX, e.clientY, rect);
+
+    // Check if mouse is over the selected element
+    const selectedElement = design.elements?.find(el => el.id === selectedElementId);
+    if (!selectedElement) return;
+
+    const inBounds =
+      worldPos.x >= selectedElement.x &&
+      worldPos.x <= selectedElement.x + selectedElement.width &&
+      worldPos.y >= selectedElement.y &&
+      worldPos.y <= selectedElement.y + (selectedElement.depth || selectedElement.height);
+
+    if (inBounds) {
+      // Start drag operation
+      setIsDraggingElement(true);
+      setDragStartPos(worldPos);
+      setDraggedElement({ ...selectedElement });
+
+      console.log('🎯 [DRAG START]', {
+        element: selectedElement.type,
+        startPos: worldPos
+      });
+    }
+  }, [selectedElementId, design.elements]);
+
+  const handleMouseMove = useCallback((e: React.MouseEvent<HTMLCanvasElement>) => {
+    if (!isDraggingElement || !dragStartPos || !draggedElement) return;
+
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+
+    const rect = canvas.getBoundingClientRect();
+    const coordSystem = coordinateSystemRef.current;
+    const worldPos = coordSystem.screenToWorld(e.clientX, e.clientY, rect);
+
+    // Calculate offset from drag start
+    const offsetX = worldPos.x - dragStartPos.x;
+    const offsetY = worldPos.y - dragStartPos.y;
+
+    // Update dragged element position
+    const updatedElement: DesignElement = {
+      ...draggedElement,
+      x: draggedElement.x + offsetX,
+      y: draggedElement.y + offsetY
+    };
+
+    setDraggedElement(updatedElement);
+    setDragStartPos(worldPos);
+
+    // NO database update during drag - only update local visual state for smooth dragging!
+    // Database update happens only on mouse up (see handleMouseUp)
+  }, [isDraggingElement, dragStartPos, draggedElement]);
+
+  const handleMouseUp = useCallback(() => {
+    if (isDraggingElement && draggedElement) {
+      console.log('🎯 [DRAG END]', {
+        element: draggedElement.type,
+        newPos: { x: draggedElement.x, y: draggedElement.y }
+      });
+
+      // Final update to parent
+      if (onUpdateElement) {
+        onUpdateElement(draggedElement);
+      }
+    }
+
+    // Reset drag state
+    setIsDraggingElement(false);
+    setDragStartPos(null);
+    setDraggedElement(null);
+  }, [isDraggingElement, draggedElement, onUpdateElement]);
+
+  // ============================================================================
   // PHASE 4: Drag & Drop Handlers
   // ============================================================================
   const handleDragOver = useCallback((e: React.DragEvent) => {
@@ -332,11 +427,16 @@ export const MinimalCanvas2D: React.FC<MinimalCanvas2DProps> = ({
           width: 'auto',
           height: 'auto',
           maxWidth: '100%',
-          maxHeight: '100%'
+          maxHeight: '100%',
+          cursor: isDraggingElement ? 'grabbing' : (selectedElementId ? 'grab' : 'default')
         }}
         onDragOver={handleDragOver}
         onDrop={handleDrop}
         onClick={handleCanvasClick}
+        onMouseDown={handleMouseDown}
+        onMouseMove={handleMouseMove}
+        onMouseUp={handleMouseUp}
+        onMouseLeave={handleMouseUp}
       />
 
       {/* Debug info - Center Top */}
