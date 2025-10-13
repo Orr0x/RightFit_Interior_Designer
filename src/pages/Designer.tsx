@@ -10,6 +10,7 @@ import { useProject } from '@/contexts/ProjectContext';
 import { useKeyboardShortcuts } from '@/hooks/useKeyboardShortcuts';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { DesignCanvas2D } from '@/components/designer/DesignCanvas2D';
+import { MinimalCanvas2D } from '@/components/designer/MinimalCanvas2D';
 import { Lazy3DView } from '@/components/designer/Lazy3DView';
 import CompactComponentSidebar from '@/components/designer/CompactComponentSidebar';
 import { CanvasElementCounter } from '@/components/designer/CanvasElementCounter';
@@ -32,6 +33,9 @@ import rightfitLogo from '@/assets/logo.png';
 import '@/utils/godMode'; // Load God mode utilities in development
 import { testCurrentCoordinateSystem } from '@/utils/coordinateSystemDemo';
 
+
+// 🧪 EXPERIMENTAL: Toggle to use minimal clean-slate canvas
+const USE_MINIMAL_CANVAS = true; // Set to false to use old canvas
 
 const Designer = () => {
   const navigate = useNavigate();
@@ -922,34 +926,43 @@ const Designer = () => {
                 <Card className="h-full design-canvas-card transition-all duration-300 ease-in-out shadow-lg hover:shadow-xl">
                   {activeView === '2d' && design ? (
                     <div className="h-full relative">
-                      <DesignCanvas2D
-                        key={`canvas-2d-${active2DView}-${currentRoomId}`}
-                        design={design}
-                        selectedElement={selectedElement}
-                        onSelectElement={setSelectedElement}
-                        onUpdateElement={handleUpdateElement}
-                        onDeleteElement={handleDeleteElement}
-                        onUpdateRoomDimensions={handleUpdateRoomDimensions}
-                        onAddElement={handleAddElement}
-                        showGrid={showGrid}
-                        showRuler={showRuler}
-                        showWireframe={showWireframe}
-                        showColorDetail={showColorDetail}
-                        activeTool={activeTool}
-                        fitToScreenSignal={fitToScreenSignal}
-                        active2DView={active2DView}
-                        elevationViews={elevationViews}
-                        completedMeasurements={completedMeasurements}
-                        currentMeasureStart={currentMeasureStart}
-                        tapeMeasurePreview={tapeMeasurePreview}
-                        onTapeMeasureClick={handleTapeMeasureClick}
-                        onTapeMeasureMouseMove={handleTapeMeasureMouseMove}
-                        onClearTapeMeasure={handleClearTapeMeasure}
-                        zoom={canvasZoom}
-                        onZoomChange={setCanvasZoom}
-                        onZoomIn={handleZoomIn}
-                        onZoomOut={handleZoomOut}
-                      />
+                      {USE_MINIMAL_CANVAS ? (
+                        <MinimalCanvas2D
+                          design={design}
+                          zoom={canvasZoom}
+                          onZoomChange={setCanvasZoom}
+                          onAddElement={handleAddElement}
+                        />
+                      ) : (
+                        <DesignCanvas2D
+                          key={`canvas-2d-${active2DView}-${currentRoomId}`}
+                          design={design}
+                          selectedElement={selectedElement}
+                          onSelectElement={setSelectedElement}
+                          onUpdateElement={handleUpdateElement}
+                          onDeleteElement={handleDeleteElement}
+                          onUpdateRoomDimensions={handleUpdateRoomDimensions}
+                          onAddElement={handleAddElement}
+                          showGrid={showGrid}
+                          showRuler={showRuler}
+                          showWireframe={showWireframe}
+                          showColorDetail={showColorDetail}
+                          activeTool={activeTool}
+                          fitToScreenSignal={fitToScreenSignal}
+                          active2DView={active2DView}
+                          elevationViews={elevationViews}
+                          completedMeasurements={completedMeasurements}
+                          currentMeasureStart={currentMeasureStart}
+                          tapeMeasurePreview={tapeMeasurePreview}
+                          onTapeMeasureClick={handleTapeMeasureClick}
+                          onTapeMeasureMouseMove={handleTapeMeasureMouseMove}
+                          onClearTapeMeasure={handleClearTapeMeasure}
+                          zoom={canvasZoom}
+                          onZoomChange={setCanvasZoom}
+                          onZoomIn={handleZoomIn}
+                          onZoomOut={handleZoomOut}
+                        />
+                      )}
                       
                       {/* View Selector and Zoom Controller - Top Left */}
                       <div className="absolute top-4 left-4 z-10 flex flex-col gap-4">

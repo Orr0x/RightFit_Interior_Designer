@@ -288,11 +288,10 @@ const CompactComponentSidebar: React.FC<CompactComponentSidebarProps> = ({
     // Show the actual footprint/shape of the component at TRUE 1:1 scale
     const dragPreview = document.createElement('div');
 
-    // ✅ FIXED: Drag preview must match canvas base scale (PIXELS_PER_CM = 1.5)
-    // Canvas now uses 1.5px per cm at 100% zoom for better readability
+    // ✅ CLEAN SLATE: Drag preview uses simple 1:1 scale (1cm = 1px)
+    // MinimalCanvas2D uses CoordinateSystem with BASE_PIXELS_PER_CM = 1.0
     // Drag preview should match this base scale to ensure WYSIWYG behavior
-    const PIXELS_PER_CM = 1.5; // Must match DesignCanvas2D.tsx base scale
-    const scaleFactor = PIXELS_PER_CM; // Match canvas base scale (1.5px per cm)
+    const scaleFactor = 1.0; // Simple 1:1 scale for clean slate canvas
     
     // Check if this is a corner component that uses square footprint
     // Check both component_id and name since we're using DatabaseComponent interface
