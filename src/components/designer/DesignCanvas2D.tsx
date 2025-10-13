@@ -15,6 +15,7 @@ import { FeatureFlagService } from '@/services/FeatureFlagService';
 import type { RoomGeometry } from '@/types/RoomGeometry';
 import * as GeometryUtils from '@/utils/GeometryUtils';
 import { getDefaultZ } from '@/utils/componentZPositionHelper';
+import { getPlinthHeightValue } from '@/utils/componentPlinthHelper';
 
 // Throttle function for performance optimization
 const throttle = <T extends (...args: any[]) => void>(func: T, delay: number): T => {
@@ -92,14 +93,8 @@ const getRoomConfig = async (roomType: string, roomDimensions: any) => {
     roomConfigCache = config;
     return config;
   } catch (err) {
-    console.warn('Failed to load room config, using fallback:', err);
-    const fallback = {
-      dimensions: roomDimensions || { width: 600, height: 400 },
-      wall_height: 240,
-      ceiling_height: 250
-    };
-    roomConfigCache = fallback;
-    return fallback;
+    console.error('❌ [DesignCanvas2D] Failed to load room config:', err);
+    throw new Error(`Failed to load room configuration for ${roomType}. Database error: ${err instanceof Error ? err.message : 'Unknown error'}`);
   }
 };
 
@@ -583,66 +578,46 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
     return roomDimensions.ceilingHeight || roomConfigCache?.wall_height || 250;
   }, [roomDimensions.ceilingHeight]);
   
-  // Calculate room bounds with wall thickness
-  // roomDimensions represents the INNER usable space (like 3D interior)
-  const innerRoomBounds = {
+  // Calculate room bounds (no wall thickness in 2D plan view)
+  // roomDimensions represents the usable space
+  // Wall thickness only matters in 3D view and elevation views
+  const roomBounds = {
     width: roomDimensions.width,
     height: roomDimensions.height
   };
   
-  // Outer bounds include wall thickness (for drawing walls)
-  const outerRoomBounds = {
-    width: roomDimensions.width + (WALL_THICKNESS * 2),
-    height: roomDimensions.height + (WALL_THICKNESS * 2)
-  };
-  
   // Room positioning - align rooms to top-center of the canvas for better space utilization
-  // For elevation views, use different centering logic
+  // Simple single position (no outer/inner split for plan view)
   const roomPosition = (() => {
+    const topMargin = 100; // Space from top of canvas
+
     if (currentViewInfo.direction === 'left' || currentViewInfo.direction === 'right') {
       // Left/Right elevation views: top-center based on room depth and wall height
-      const wallHeight = getWallHeight();
       const roomDepth = roomDimensions.height; // Use height as depth for side views
-      const topMargin = 100; // Space from top of canvas
-      return {
-        // Outer room position (for wall drawing)
-        outerX: (CANVAS_WIDTH / 2) - (roomDepth * zoom / 2) + panOffset.x,
-        outerY: topMargin + panOffset.y,
-        // Inner room position (for component placement)
-        innerX: (CANVAS_WIDTH / 2) - (roomDepth * zoom / 2) + panOffset.x,
-        innerY: topMargin + panOffset.y
-      };
+      const x = (CANVAS_WIDTH / 2) - (roomDepth * zoom / 2) + panOffset.x;
+      const y = topMargin + panOffset.y;
+      return { x, y };
     } else {
       // Plan, Front, Back views: top-center alignment
-      const topMargin = 100; // Space from top of canvas
-      // For plan view, center the inner room and add wall thickness around it
-      const innerX = (CANVAS_WIDTH / 2) - (innerRoomBounds.width * zoom / 2) + panOffset.x;
-      const innerY = topMargin + panOffset.y;
-      const wallThickness = WALL_THICKNESS * zoom;
-      return {
-        // Outer room position (for wall drawing) - centered around inner room
-        outerX: innerX - wallThickness,
-        outerY: innerY - wallThickness,
-        // Inner room position (for component placement)
-        innerX: innerX,
-        innerY: innerY
-      };
+      const x = (CANVAS_WIDTH / 2) - (roomBounds.width * zoom / 2) + panOffset.x;
+      const y = topMargin + panOffset.y;
+      return { x, y };
     }
   })();
 
-  // Convert room coordinates to canvas coordinates (uses inner room for component placement)
+  // Convert room coordinates to canvas coordinates
   const roomToCanvas = useCallback((roomX: number, roomY: number) => {
     return {
-      x: roomPosition.innerX + (roomX * zoom),
-      y: roomPosition.innerY + (roomY * zoom)
+      x: roomPosition.x + (roomX * zoom),
+      y: roomPosition.y + (roomY * zoom)
     };
   }, [roomPosition, zoom, active2DView]);
 
-  // Convert canvas coordinates to room coordinates (uses inner room for component placement)
+  // Convert canvas coordinates to room coordinates
   const canvasToRoom = useCallback((canvasX: number, canvasY: number) => {
     return {
-      x: (canvasX - roomPosition.innerX) / zoom,
-      y: (canvasY - roomPosition.innerY) / zoom
+      x: (canvasX - roomPosition.x) / zoom,
+      y: (canvasY - roomPosition.y) / zoom
     };
   }, [roomPosition, zoom, active2DView]);
 
@@ -1004,14 +979,11 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
 
   // Draw room within canvas
   const drawRoom = useCallback((ctx: CanvasRenderingContext2D) => {
-    const innerWidth = innerRoomBounds.width * zoom;
-    const innerHeight = innerRoomBounds.height * zoom;
-    const outerWidth = outerRoomBounds.width * zoom;
-    const outerHeight = outerRoomBounds.height * zoom;
-    const wallThickness = WALL_THICKNESS * zoom;
+    const roomWidth = roomBounds.width * zoom;
+    const roomHeight = roomBounds.height * zoom;
 
     if (active2DView === 'plan') {
-      // Plan view - draw walls with proper thickness
+      // Plan view - draw walls as simple lines (no thickness)
 
       if (roomGeometry) {
         // Complex room geometry (L-shape, U-shape, custom polygons)
@@ -1019,8 +991,8 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
 
         // Convert vertices to canvas coordinates
         const canvasVertices = vertices.map(v => [
-          roomPosition.innerX + v[0] * zoom,
-          roomPosition.innerY + v[1] * zoom
+          roomPosition.x + v[0] * zoom,
+          roomPosition.y + v[1] * zoom
         ]);
 
         // Draw floor (usable space)
@@ -1033,107 +1005,63 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
         ctx.closePath();
         ctx.fill();
 
-        // Draw floor outline (inner boundary)
-        ctx.strokeStyle = '#666';
-        ctx.lineWidth = 1;
-        ctx.setLineDash([]);
-        ctx.stroke();
-
-        // Draw wall segments
-        roomGeometry.walls.forEach(wall => {
-          const startX = roomPosition.innerX + wall.start[0] * zoom;
-          const startY = roomPosition.innerY + wall.start[1] * zoom;
-          const endX = roomPosition.innerX + wall.end[0] * zoom;
-          const endY = roomPosition.innerY + wall.end[1] * zoom;
-          const thickness = (wall.thickness || WALL_THICKNESS) * zoom;
-
-          // Calculate wall perpendicular vector (for thickness)
-          const dx = endX - startX;
-          const dy = endY - startY;
-          const len = Math.sqrt(dx * dx + dy * dy);
-          const perpX = (-dy / len) * thickness / 2;
-          const perpY = (dx / len) * thickness / 2;
-
-          // Draw wall as thick line
-          ctx.fillStyle = '#e5e5e5';
-          ctx.beginPath();
-          ctx.moveTo(startX + perpX, startY + perpY);
-          ctx.lineTo(endX + perpX, endY + perpY);
-          ctx.lineTo(endX - perpX, endY - perpY);
-          ctx.lineTo(startX - perpX, startY - perpY);
-          ctx.closePath();
-          ctx.fill();
-
-          // Draw wall outline
-          ctx.strokeStyle = '#333';
-          ctx.lineWidth = 1;
-          ctx.stroke();
-        });
-      } else {
-        // Simple rectangular room (legacy)
-        // Draw outer walls (wall structure)
-        ctx.fillStyle = '#e5e5e5';
-        ctx.fillRect(roomPosition.outerX, roomPosition.outerY, outerWidth, outerHeight);
-
-        // Draw inner room (usable space)
-        ctx.fillStyle = '#f9f9f9';
-        ctx.fillRect(roomPosition.innerX, roomPosition.innerY, innerWidth, innerHeight);
-
-        // Draw wall outlines
+        // Draw floor outline
         ctx.strokeStyle = '#333';
         ctx.lineWidth = 2;
         ctx.setLineDash([]);
+        ctx.stroke();
 
-        // Outer wall boundary
-        ctx.strokeRect(roomPosition.outerX, roomPosition.outerY, outerWidth, outerHeight);
-        // Inner room boundary (where components can be placed)
-        ctx.strokeStyle = '#666';
-        ctx.lineWidth = 1;
-        ctx.strokeRect(roomPosition.innerX, roomPosition.innerY, innerWidth, innerHeight);
+        // Draw wall segments as simple lines (no thickness)
+        roomGeometry.walls.forEach(wall => {
+          const startX = roomPosition.x + wall.start[0] * zoom;
+          const startY = roomPosition.y + wall.start[1] * zoom;
+          const endX = roomPosition.x + wall.end[0] * zoom;
+          const endY = roomPosition.y + wall.end[1] * zoom;
+
+          // Draw wall as simple line
+          ctx.strokeStyle = '#333';
+          ctx.lineWidth = 2;
+          ctx.beginPath();
+          ctx.moveTo(startX, startY);
+          ctx.lineTo(endX, endY);
+          ctx.stroke();
+        });
+      } else {
+        // Simple rectangular room
+        // Draw floor (usable space)
+        ctx.fillStyle = '#f9f9f9';
+        ctx.fillRect(roomPosition.x, roomPosition.y, roomWidth, roomHeight);
+
+        // Draw room boundary as simple lines
+        ctx.strokeStyle = '#333';
+        ctx.lineWidth = 2;
+        ctx.setLineDash([]);
+        ctx.strokeRect(roomPosition.x, roomPosition.y, roomWidth, roomHeight);
       }
 
-      // Room dimensions labels
+      // Room dimensions labels (clean and simple)
       ctx.fillStyle = '#666';
       ctx.font = '12px Arial';
       ctx.textAlign = 'center';
-      
-      // Width label (top) - show inner room dimensions
+
+      // Width label (top)
       ctx.fillText(
-        `${roomDimensions.width}cm (inner)`,
-        roomPosition.innerX + innerWidth / 2,
-        roomPosition.outerY - 10
+        `${roomDimensions.width}cm`,
+        roomPosition.x + roomWidth / 2,
+        roomPosition.y - 10
       );
 
-      // Height label (left) - show inner room dimensions
+      // Height label (left)
       ctx.save();
-      ctx.translate(roomPosition.outerX - 25, roomPosition.innerY + innerHeight / 2);
+      ctx.translate(roomPosition.x - 25, roomPosition.y + roomHeight / 2);
       ctx.rotate(-Math.PI / 2);
-      ctx.fillText(`${roomDimensions.height}cm (inner)`, 0, 0);
-      ctx.restore();
-      
-      // Wall thickness labels
-      ctx.fillStyle = '#999';
-      ctx.font = '10px Arial';
-      ctx.textAlign = 'center';
-      
-      // Top wall thickness
-      ctx.fillText(
-        `${WALL_THICKNESS}cm`,
-        roomPosition.innerX + innerWidth / 2,
-        roomPosition.outerY + wallThickness / 2 + 3
-      );
-      
-      // Left wall thickness
-      ctx.save();
-      ctx.translate(roomPosition.outerX + wallThickness / 2, roomPosition.innerY + innerHeight / 2);
-      ctx.rotate(-Math.PI / 2);
-      ctx.fillText(`${WALL_THICKNESS}cm`, 0, 3);
+      ctx.fillText(`${roomDimensions.height}cm`, 0, 0);
       ctx.restore();
 
     } else {
       // Elevation view - draw room as elevation (floor fixed, ceiling moves)
       const wallHeight = getWallHeight() * zoom;
-      const floorY = roomPosition.innerY + (CANVAS_HEIGHT * 0.4); // Fixed floor position (adjusted for top-center alignment)
+      const floorY = roomPosition.y + (CANVAS_HEIGHT * 0.4); // Fixed floor position (adjusted for top-center alignment)
       const topY = floorY - wallHeight; // Ceiling moves up/down based on wall height
 
       // CRITICAL FIX: Use appropriate dimension for each elevation view based on direction
@@ -1146,18 +1074,18 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
 
       // Draw wall boundaries
       ctx.fillStyle = '#f9f9f9';
-      ctx.fillRect(roomPosition.innerX, topY, elevationRoomWidth, wallHeight);
+      ctx.fillRect(roomPosition.x, topY, elevationRoomWidth, wallHeight);
 
       ctx.strokeStyle = '#333';
       ctx.lineWidth = 2;
-      ctx.strokeRect(roomPosition.innerX, topY, elevationRoomWidth, wallHeight);
+      ctx.strokeRect(roomPosition.x, topY, elevationRoomWidth, wallHeight);
 
       // Floor line
       ctx.strokeStyle = '#8B4513';
       ctx.lineWidth = 3;
       ctx.beginPath();
-      ctx.moveTo(roomPosition.innerX, floorY);
-      ctx.lineTo(roomPosition.innerX + elevationRoomWidth, floorY);
+      ctx.moveTo(roomPosition.x, floorY);
+      ctx.lineTo(roomPosition.x + elevationRoomWidth, floorY);
       ctx.stroke();
 
       // Wall label
@@ -1172,8 +1100,8 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
       };
       ctx.fillText(
         wallLabels[currentViewInfo.direction] || '',
-        roomPosition.innerX + elevationRoomWidth / 2,
-        roomPosition.innerY - 20
+        roomPosition.x + elevationRoomWidth / 2,
+        roomPosition.y - 20
       );
 
       // Dimension labels
@@ -1188,12 +1116,12 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
         widthText = `${roomDimensions.height}cm (inner)`;
       }
       ctx.textAlign = 'center';
-      ctx.fillText(widthText, roomPosition.innerX + elevationRoomWidth / 2, floorY + 20);
+      ctx.fillText(widthText, roomPosition.x + elevationRoomWidth / 2, floorY + 20);
       
       // Wall height dimension (left side)
       const heightText = `${getWallHeight()}cm`;
       ctx.save();
-      ctx.translate(roomPosition.innerX - 35, topY + wallHeight / 2);
+      ctx.translate(roomPosition.x - 35, topY + wallHeight / 2);
       ctx.rotate(-Math.PI / 2);
       ctx.textAlign = 'center';
       ctx.fillText(heightText, 0, 0);
@@ -1202,7 +1130,7 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
       // Height indicator line with arrows
       ctx.strokeStyle = '#999';
       ctx.lineWidth = 1;
-      const indicatorX = roomPosition.innerX - 25;
+      const indicatorX = roomPosition.x - 25;
       
       // Vertical line
       ctx.beginPath();
@@ -1378,7 +1306,7 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
     // Components are positioned within the inner room space, not including wall thickness
     const elevationWidth = roomDimensions.width * zoom; // Inner room width for front/back views
     const elevationDepth = roomDimensions.height * zoom; // Inner room depth for left/right views
-    const floorY = roomPosition.innerY + (CANVAS_HEIGHT * 0.4); // Fixed floor position (adjusted for top-center alignment)
+    const floorY = roomPosition.y + (CANVAS_HEIGHT * 0.4); // Fixed floor position (adjusted for top-center alignment)
     
     // Calculate rotation-aware dimensions
     const rotation = (element.rotation || 0) * Math.PI / 180;
@@ -1694,15 +1622,15 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
 
     if (active2DView === 'plan') {
       // Horizontal ruler (top)
-      const rulerY = roomPosition.innerY - 30;
+      const rulerY = roomPosition.y - 30;
       
       ctx.beginPath();
-      ctx.moveTo(roomPosition.innerX, rulerY);
-      ctx.lineTo(roomPosition.innerX + roomDimensions.width * zoom, rulerY);
+      ctx.moveTo(roomPosition.x, rulerY);
+      ctx.lineTo(roomPosition.x + roomDimensions.width * zoom, rulerY);
       ctx.stroke();
 
       for (let x = 0; x <= roomDimensions.width; x += 50) {
-        const xPos = roomPosition.innerX + x * zoom;
+        const xPos = roomPosition.x + x * zoom;
         ctx.beginPath();
         ctx.moveTo(xPos, rulerY - 5);
         ctx.lineTo(xPos, rulerY + 5);
@@ -1715,15 +1643,15 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
       }
 
       // Vertical ruler (left)
-      const rulerX = roomPosition.innerX - 30;
+      const rulerX = roomPosition.x - 30;
       
       ctx.beginPath();
-      ctx.moveTo(rulerX, roomPosition.innerY);
-      ctx.lineTo(rulerX, roomPosition.innerY + roomDimensions.height * zoom);
+      ctx.moveTo(rulerX, roomPosition.y);
+      ctx.lineTo(rulerX, roomPosition.y + roomDimensions.height * zoom);
       ctx.stroke();
 
       for (let y = 0; y <= roomDimensions.height; y += 50) {
-        const yPos = roomPosition.innerY + y * zoom;
+        const yPos = roomPosition.y + y * zoom;
         ctx.beginPath();
         ctx.moveTo(rulerX - 5, yPos);
         ctx.lineTo(rulerX + 5, yPos);
@@ -1746,17 +1674,17 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
       
       // Horizontal ruler (bottom)
       const wallHeight = getWallHeight() * zoom;
-      const floorY = roomPosition.innerY + (CANVAS_HEIGHT * 0.4); // Fixed floor position (adjusted for top-center alignment)
+      const floorY = roomPosition.y + (CANVAS_HEIGHT * 0.4); // Fixed floor position (adjusted for top-center alignment)
       const topY = floorY - wallHeight; // Ceiling moves up/down based on wall height
       const rulerY = floorY + 25;
       
       ctx.beginPath();
-      ctx.moveTo(roomPosition.innerX, rulerY);
-      ctx.lineTo(roomPosition.innerX + roomWidth * zoom, rulerY);
+      ctx.moveTo(roomPosition.x, rulerY);
+      ctx.lineTo(roomPosition.x + roomWidth * zoom, rulerY);
       ctx.stroke();
 
       for (let x = 0; x <= roomWidth; x += 50) {
-        const xPos = roomPosition.innerX + x * zoom;
+        const xPos = roomPosition.x + x * zoom;
         ctx.beginPath();
         ctx.moveTo(xPos, rulerY - 3);
         ctx.lineTo(xPos, rulerY + 3);
@@ -1769,7 +1697,7 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
       }
 
       // Vertical ruler (right side)
-      const rulerX = roomPosition.innerX + roomWidth * zoom + 25;
+      const rulerX = roomPosition.x + roomWidth * zoom + 25;
       
       ctx.beginPath();
       ctx.moveTo(rulerX, topY);
@@ -2695,6 +2623,14 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
         componentData.default_z_position
       );
 
+      // Calculate plinth height using centralized helper (with database value priority)
+      const plinthHeight = getPlinthHeightValue(
+        componentData.type,
+        componentData.id || componentData.component_id || '',
+        componentData.plinth_height,
+        defaultZ
+      );
+
       // Apply Enhanced Component Placement using unified coordinate system
       const placementResult = getEnhancedComponentPlacement(
         dropX,
@@ -2727,6 +2663,7 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
         width: componentData.width, // X-axis dimension
         depth: componentData.depth, // Y-axis dimension (front-to-back)
         height: componentData.height, // Z-axis dimension (bottom-to-top)
+        plinth_height: plinthHeight, // Plinth/toe-kick height from database or fallback
         rotation: placementResult.rotation, // Use calculated rotation from enhanced placement
         color: componentData.color,
         style: componentData.name,
