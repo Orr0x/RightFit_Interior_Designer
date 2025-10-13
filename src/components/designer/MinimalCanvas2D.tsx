@@ -98,6 +98,8 @@ export const MinimalCanvas2D: React.FC<MinimalCanvas2DProps> = ({
         const width = coordSystem.cmToPixels(element.width);
         const height = coordSystem.cmToPixels(element.depth || element.height);
 
+        // Math confirmed: width = cmToPixels(element.width) = element.width × BASE(1.0) × zoom
+
         // Draw component as colored rectangle
         ctx.fillStyle = '#87CEEB'; // Sky blue
         ctx.fillRect(pos.x, pos.y, width, height);

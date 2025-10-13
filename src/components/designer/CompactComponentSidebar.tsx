@@ -284,42 +284,22 @@ const CompactComponentSidebar: React.FC<CompactComponentSidebarProps> = ({
     e.dataTransfer.setData('component', JSON.stringify(dragData));
     e.dataTransfer.effectAllowed = 'copy';
     
-    // 🎯 CREATE A COMPONENT-SHAPED DRAG PREVIEW
-    // Show the actual footprint/shape of the component at TRUE 1:1 scale
+    // 🎯 CREATE DRAG PREVIEW - CLEAN SLATE SIMPLICITY
+    // Pure component dimensions, no bounding boxes, no special cases
     const dragPreview = document.createElement('div');
 
-    // ✅ CLEAN SLATE: Drag preview uses simple 1:1 scale (1cm = 1px)
-    // MinimalCanvas2D uses CoordinateSystem with BASE_PIXELS_PER_CM = 1.0
-    // Drag preview should match this base scale to ensure WYSIWYG behavior
-    const scaleFactor = 1.0; // Simple 1:1 scale for clean slate canvas
-    
-    // Check if this is a corner component that uses square footprint
-    // Check both component_id and name since we're using DatabaseComponent interface
-    const componentIdentifier = component.component_id || component.name || '';
-    const isCornerComponent = componentIdentifier.toLowerCase().includes('corner') ||
-                             componentIdentifier.toLowerCase().includes('larder corner');
-    
-    // Debug logging to see what's happening
-    console.log('🔍 [Drag Preview Debug]:', {
-      id: component.component_id,
-      name: component.name,
-      isCornerComponent,
-      dimensions: `${component.width}×${component.depth}×${component.height}cm`,
-      canvasZoom: `${(canvasZoom * 100).toFixed(0)}%`,
-      scaleFactor: scaleFactor,
-      previewSize: `${component.width * scaleFactor}×${component.depth * scaleFactor}px`,
-      previewType: isCornerComponent ? 'square footprint' : 'rectangular'
-    });
-    
-    // Tall corner unit dimensions are now correct (90x90cm) after database migration
-    
-    // Use actual component dimensions for ALL components (no more hardcoded 90x90)
+    // ✅ CLEAN SLATE: Apply canvas zoom to drag preview
+    const scaleFactor = canvasZoom;
+
+    // Pure dimensions - width and depth only
     const previewWidth = component.width * scaleFactor;
     const previewDepth = component.depth * scaleFactor;
 
-    // Style to look like the actual component footprint
+    // Math confirmed: previewWidth = component.width × canvasZoom
+
+    // Simple rectangle preview
     dragPreview.style.width = `${previewWidth}px`;
-    dragPreview.style.height = `${previewDepth}px`; // depth becomes height in 2D
+    dragPreview.style.height = `${previewDepth}px`;
     dragPreview.style.backgroundColor = component.color || '#8b5cf6';
     dragPreview.style.border = '2px solid #333';
     dragPreview.style.borderRadius = '3px';
@@ -328,47 +308,25 @@ const CompactComponentSidebar: React.FC<CompactComponentSidebarProps> = ({
     dragPreview.style.top = '-1000px';
     dragPreview.style.left = '-1000px';
     dragPreview.style.pointerEvents = 'none';
-
-    // For corner components, create simplified square preview
-    if (isCornerComponent) {
-      dragPreview.style.backgroundColor = 'transparent';
-      
-      // DYNAMIC: Create square preview for corner components (simplified)
-      const squareSize = Math.min(component.width, component.depth) * scaleFactor;
-      
-      // Single square preview (simplified approach)
-      const squarePreview = document.createElement('div');
-      squarePreview.style.width = `${squareSize}px`;
-      squarePreview.style.height = `${squareSize}px`;
-      squarePreview.style.backgroundColor = component.color || '#8b5cf6';
-      squarePreview.style.border = '1px solid #333';
-      squarePreview.style.position = 'absolute';
-      squarePreview.style.top = '0px';
-      squarePreview.style.left = '0px';
-      
-      dragPreview.appendChild(squarePreview);
-    }
     dragPreview.style.boxShadow = '0 4px 12px rgba(0,0,0,0.3)';
     dragPreview.style.display = 'flex';
     dragPreview.style.alignItems = 'center';
     dragPreview.style.justifyContent = 'center';
 
-    // Add dimensions label
+    // Simple dimensions label
     const label = document.createElement('div');
     label.textContent = `${component.width}×${component.depth}`;
     label.style.fontSize = '10px';
     label.style.fontWeight = 'bold';
     label.style.color = '#fff';
     label.style.textShadow = '1px 1px 2px rgba(0,0,0,0.8)';
-    label.style.whiteSpace = 'nowrap';
 
     dragPreview.appendChild(label);
     document.body.appendChild(dragPreview);
 
-    // Set the component-shaped preview as drag image
-    // DYNAMIC: Set the drag image with center point based on actual dimensions
-    const centerX = isCornerComponent ? Math.min(component.width, component.depth) * scaleFactor / 2 : previewWidth / 2;
-    const centerY = isCornerComponent ? Math.min(component.width, component.depth) * scaleFactor / 2 : previewDepth / 2;
+    // Simple center point - no min(), no special cases
+    const centerX = previewWidth / 2;
+    const centerY = previewDepth / 2;
     e.dataTransfer.setDragImage(dragPreview, centerX, centerY);
 
     // Clean up after drag
