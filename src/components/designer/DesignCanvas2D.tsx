@@ -5,7 +5,6 @@ import { getElevationViews } from '@/utils/elevationViewHelpers';
 import { RoomService } from '@/services/RoomService';
 import { useTouchEvents, TouchPoint } from '@/hooks/useTouchEvents';
 import { useIsMobile } from '@/hooks/use-mobile';
-import { getEnhancedComponentPlacement } from '@/utils/canvasCoordinateIntegration';
 import { initializeCoordinateEngine } from '@/services/CoordinateTransformEngine';
 import { PositionCalculation } from '@/utils/PositionCalculation';
 import { ConfigurationService } from '@/services/ConfigurationService';
@@ -2158,64 +2157,21 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
       // Use current mouse position for final placement
       const roomPos = canvasToRoom(currentMousePos.x, currentMousePos.y);
       
-      // Smart snap with walls and components
+      // Smart snap with walls and components (handles everything including corners)
       const snapped = getSnapPosition(draggedElement, roomPos.x, roomPos.y);
-      
-      // Apply light grid snapping only if not snapped to walls/components
-      let finalX = snapped.x;
-      let finalY = snapped.y;
-      
-      const isWallSnapped = snapped.guides.vertical.length > 0 || snapped.guides.horizontal.length > 0;
-      if (!isWallSnapped) {
-        finalX = snapToGrid(snapped.x);
-        finalY = snapToGrid(snapped.y);
-      }
-      
-      // Update element with final position - use effective footprint for plan view
-      let clampWidth = draggedElement.width;
-      let clampDepth = draggedElement.depth;
-      // DYNAMIC: Corner components use their actual square footprint
-      const isCorner = isAnyCornerComponent(draggedElement);
 
-      if (isCorner) {
-        // Use actual square dimensions for corner components
-        const squareSize = Math.min(draggedElement.width, draggedElement.depth);
-        clampWidth = squareSize;
-        clampDepth = squareSize;
-      }
+      // Apply grid snapping only if not wall-snapped
+      const finalX = snapped.snapped ? snapped.x : snapToGrid(snapped.x);
+      const finalY = snapped.snapped ? snapped.y : snapToGrid(snapped.y);
 
-      // Apply Smart Wall Snapping for dragged elements
-      const isCornerComponent = isCornerCounterTop || isCornerWallCabinet || isCornerBaseCabinet || isCornerTallUnit;
-      
-      const dragWallSnappedPos = getEnhancedComponentPlacement(
-        finalX,
-        finalY,
-        draggedElement.width,
-        draggedElement.depth || draggedElement.height,
-        draggedElement.id,
-        draggedElement.type || 'cabinet',
-        design.roomDimensions
-      );
-
-      // Use wall snapped position if snapped, otherwise clamp to boundaries
-      let finalClampedX, finalClampedY;
-      
-      if (dragWallSnappedPos.snappedToWall) {
-        finalClampedX = dragWallSnappedPos.x;
-        finalClampedY = dragWallSnappedPos.y;
-        
-        // Log drag snapping for debugging
-        console.log(`🎯 [Drag Snap] Element moved to ${dragWallSnappedPos.corner || 'wall'} at (${finalClampedX}, ${finalClampedY})`);
-      } else {
-        // Standard boundary clamping if not snapped to wall
-        finalClampedX = Math.max(0, Math.min(finalX, innerRoomBounds.width - clampWidth));
-        finalClampedY = Math.max(0, Math.min(finalY, innerRoomBounds.height - clampDepth));
+      // Log snap results for debugging
+      if (snapped.snapped) {
+        console.log(`🎯 [Snap] Element moved to (${finalX}, ${finalY}) with rotation ${snapped.rotation}°`);
       }
 
       onUpdateElement(draggedElement.id, {
-        // CRITICAL FIX: Don't apply grid snapping if component was snapped to wall
-        x: dragWallSnappedPos.snappedToWall ? finalClampedX : snapToGrid(finalClampedX),
-        y: dragWallSnappedPos.snappedToWall ? finalClampedY : snapToGrid(finalClampedY),
+        x: finalX,
+        y: finalY,
         rotation: snapped.rotation
       });
     }
@@ -2383,63 +2339,21 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
       if (isDragging && draggedElement) {
         const roomPos = canvasToRoom(currentMousePos.x, currentMousePos.y);
         
-        // Smart snap with walls and components
+        // Smart snap with walls and components (handles everything including corners)
         const snapped = getSnapPosition(draggedElement, roomPos.x, roomPos.y);
-        
-        // Apply light grid snapping only if not snapped to walls/components
-        let finalX = snapped.x;
-        let finalY = snapped.y;
-        
-        const isWallSnapped = snapped.guides.vertical.length > 0 || snapped.guides.horizontal.length > 0;
-        if (!isWallSnapped) {
-          finalX = snapToGrid(snapped.x);
-          finalY = snapToGrid(snapped.y);
-        }
-        
-        // Update element with final position
-        let clampWidth = draggedElement.width;
-        let clampDepth = draggedElement.depth;
-        
-        // Handle corner components
-        const isCorner = isAnyCornerComponent(draggedElement);
 
-        if (isCorner) {
-          // DYNAMIC: Use actual square dimensions for corner components
-          const squareSize = Math.min(draggedElement.width, draggedElement.depth);
-          clampWidth = squareSize;
-          clampDepth = squareSize;
-        }
+        // Apply grid snapping only if not wall-snapped
+        const finalX = snapped.snapped ? snapped.x : snapToGrid(snapped.x);
+        const finalY = snapped.snapped ? snapped.y : snapToGrid(snapped.y);
 
-        // Apply Smart Wall Snapping for dragged elements
-        const isCornerComponent = isCorner;
-        
-        const dragWallSnappedPos = getEnhancedComponentPlacement(
-          finalX,
-          finalY,
-          draggedElement.width,
-          draggedElement.depth || draggedElement.height,
-          draggedElement.id,
-          draggedElement.type || 'cabinet',
-          design.roomDimensions
-        );
-
-        // Use wall snapped position if snapped, otherwise clamp to boundaries
-        let finalClampedX, finalClampedY;
-        
-        if (dragWallSnappedPos.snappedToWall) {
-          finalClampedX = dragWallSnappedPos.x;
-          finalClampedY = dragWallSnappedPos.y;
-          
-          console.log(`🎯 [Touch Drag Snap] Element moved to ${dragWallSnappedPos.corner || 'wall'} at (${finalClampedX}, ${finalClampedY})`);
-        } else {
-          // Standard boundary clamping if not snapped to wall
-          finalClampedX = Math.max(0, Math.min(finalX, innerRoomBounds.width - clampWidth));
-          finalClampedY = Math.max(0, Math.min(finalY, innerRoomBounds.height - clampDepth));
+        // Log snap results for debugging
+        if (snapped.snapped) {
+          console.log(`🎯 [Touch Snap] Element moved to (${finalX}, ${finalY}) with rotation ${snapped.rotation}°`);
         }
 
         onUpdateElement(draggedElement.id, {
-          x: dragWallSnappedPos.snappedToWall ? finalClampedX : snapToGrid(finalClampedX),
-          y: dragWallSnappedPos.snappedToWall ? finalClampedY : snapToGrid(finalClampedY),
+          x: finalX,
+          y: finalY,
           rotation: snapped.rotation
         });
       }
@@ -2560,51 +2474,35 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
         defaultZ
       );
 
-      // Apply Enhanced Component Placement using unified coordinate system
-      const placementResult = getEnhancedComponentPlacement(
-        dropX,
-        dropY,
-        effectiveWidth,
-        effectiveDepth,
-        componentData.id,
-        componentData.type,
-        design.roomDimensions
-      );
-
-      // Log placement results for debugging
-      if (placementResult.snappedToWall) {
-        console.log(`🎯 [Enhanced Placement] Component snapped to ${placementResult.corner || 'wall'} at (${placementResult.x}, ${placementResult.y}) with rotation ${placementResult.rotation}°`);
-      }
-      
-      // Validate placement
-      if (!placementResult.withinBounds) {
-        console.warn('⚠️ [Enhanced Placement] Component placement outside room bounds, adjusting...');
-      }
-
+      // Create element at drop position
       const newElement: DesignElement = {
         id: `${componentData.id}-${Date.now()}`,
         component_id: componentData.id, // Database lookup key for 2D/3D rendering
         type: componentData.type,
-        // Use enhanced placement results with proper wall clearance and rotation
-        x: placementResult.snappedToWall ? placementResult.x : snapToGrid(placementResult.x),
-        y: placementResult.snappedToWall ? placementResult.y : snapToGrid(placementResult.y),
+        x: dropX,
+        y: dropY,
         z: defaultZ, // Set appropriate Z position
         width: componentData.width, // X-axis dimension
         depth: componentData.depth, // Y-axis dimension (front-to-back)
         height: componentData.height, // Z-axis dimension (bottom-to-top)
         plinth_height: plinthHeight, // Plinth/toe-kick height from database or fallback
-        rotation: placementResult.rotation, // Use calculated rotation from enhanced placement
+        rotation: 0, // Initial rotation, will be set by snap logic
         color: componentData.color,
         style: componentData.name,
         zIndex: 0, // Required by DesignElement interface
         isVisible: true // Required by DesignElement interface
       };
 
-      // Apply smart snapping for new elements
+      // Apply smart snapping for new elements (handles walls, components, corners, and rotation)
       const snapped = getSnapPosition(newElement, newElement.x, newElement.y);
       newElement.x = snapped.x;
       newElement.y = snapped.y;
       newElement.rotation = snapped.rotation;
+
+      // Log placement results for debugging
+      if (snapped.snapped) {
+        console.log(`🎯 [Snap] Component snapped at (${snapped.x}, ${snapped.y}) with rotation ${snapped.rotation}°`);
+      }
 
       onAddElement(newElement);
     } catch (error) {
