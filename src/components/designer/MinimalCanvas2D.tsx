@@ -97,10 +97,14 @@ export const MinimalCanvas2D: React.FC<MinimalCanvas2DProps> = ({
     ctx.strokeRect(topLeft.x, topLeft.y, roomWidthPx, roomHeightPx);
 
     // ============================================================================
-    // PHASE 3: Draw components as simple colored rectangles
+    // PHASE 3: Draw components with Z-order layering
     // ============================================================================
     if (design.elements) {
-      design.elements.forEach((element) => {
+      // Sort by Z-order ASCENDING (lowest Z drawn first, highest Z on top)
+      // Flooring (z=0) → Base units (z=10) → Wall units (z=150)
+      const sortedByZ = [...design.elements].sort((a, b) => (a.z || 0) - (b.z || 0));
+
+      sortedByZ.forEach((element) => {
         // 🎯 Use dragged element position if this is the element being dragged (local state only!)
         const displayElement = (isDraggingElement && draggedElement && element.id === draggedElement.id)
           ? draggedElement
@@ -275,11 +279,9 @@ export const MinimalCanvas2D: React.FC<MinimalCanvas2DProps> = ({
   }, [design.elements, onSelectElement]);
 
   // ============================================================================
-  // PHASE 6: Drag-to-Move Selected Components
+  // PHASE 6: Drag-to-Move - Single click to grab and drag
   // ============================================================================
   const handleMouseDown = useCallback((e: React.MouseEvent<HTMLCanvasElement>) => {
-    if (!selectedElementId) return; // Only drag if something is selected
-
     const canvas = canvasRef.current;
     if (!canvas) return;
 
@@ -287,28 +289,46 @@ export const MinimalCanvas2D: React.FC<MinimalCanvas2DProps> = ({
     const coordSystem = coordinateSystemRef.current;
     const worldPos = coordSystem.screenToWorld(e.clientX, e.clientY, rect);
 
-    // Check if mouse is over the selected element
-    const selectedElement = design.elements?.find(el => el.id === selectedElementId);
-    if (!selectedElement) return;
+    // Hit test: Find component at mouse position (Z-order aware)
+    if (design.elements) {
+      const sortedByZ = [...design.elements].sort((a, b) => (b.z || 0) - (a.z || 0));
 
-    const inBounds =
-      worldPos.x >= selectedElement.x &&
-      worldPos.x <= selectedElement.x + selectedElement.width &&
-      worldPos.y >= selectedElement.y &&
-      worldPos.y <= selectedElement.y + (selectedElement.depth || selectedElement.height);
+      for (let i = 0; i < sortedByZ.length; i++) {
+        const element = sortedByZ[i];
 
-    if (inBounds) {
-      // Start drag operation
-      setIsDraggingElement(true);
-      setDragStartPos(worldPos);
-      setDraggedElement({ ...selectedElement });
+        const inBounds =
+          worldPos.x >= element.x &&
+          worldPos.x <= element.x + element.width &&
+          worldPos.y >= element.y &&
+          worldPos.y <= element.y + (element.depth || element.height);
 
-      console.log('🎯 [DRAG START]', {
-        element: selectedElement.type,
-        startPos: worldPos
-      });
+        if (inBounds) {
+          // Found element under mouse - start drag immediately!
+          setSelectedElementId(element.id);
+          setIsDraggingElement(true);
+          setDragStartPos(worldPos);
+          setDraggedElement({ ...element });
+
+          // Notify parent of selection
+          if (onSelectElement) {
+            onSelectElement(element);
+          }
+
+          console.log('🎯 [GRAB & DRAG]', {
+            element: element.type,
+            startPos: worldPos
+          });
+          return;
+        }
+      }
+
+      // No element found - deselect
+      setSelectedElementId(null);
+      if (onSelectElement) {
+        onSelectElement(null);
+      }
     }
-  }, [selectedElementId, design.elements]);
+  }, [design.elements, onSelectElement]);
 
   const handleMouseMove = useCallback((e: React.MouseEvent<HTMLCanvasElement>) => {
     if (!isDraggingElement || !dragStartPos || !draggedElement) return;
@@ -324,11 +344,42 @@ export const MinimalCanvas2D: React.FC<MinimalCanvas2DProps> = ({
     const offsetX = worldPos.x - dragStartPos.x;
     const offsetY = worldPos.y - dragStartPos.y;
 
+    // Calculate new position
+    let newX = draggedElement.x + offsetX;
+    let newY = draggedElement.y + offsetY;
+
+    // ============================================================================
+    // SNAP TO WALLS - Components align to room edges when dragged near them
+    // ============================================================================
+    const SNAP_THRESHOLD = 5; // cm - snap when within 5cm of wall (reduced from 10cm - less sticky!)
+    const componentWidth = draggedElement.width;
+    const componentDepth = draggedElement.depth || draggedElement.height;
+
+    // Left wall snap (x = 0)
+    if (Math.abs(newX) < SNAP_THRESHOLD) {
+      newX = 0;
+    }
+
+    // Right wall snap (x + width = room width)
+    if (Math.abs((newX + componentWidth) - roomDimensions.width) < SNAP_THRESHOLD) {
+      newX = roomDimensions.width - componentWidth;
+    }
+
+    // Top wall snap (y = 0)
+    if (Math.abs(newY) < SNAP_THRESHOLD) {
+      newY = 0;
+    }
+
+    // Bottom wall snap (y + depth = room height)
+    if (Math.abs((newY + componentDepth) - roomDimensions.height) < SNAP_THRESHOLD) {
+      newY = roomDimensions.height - componentDepth;
+    }
+
     // Update dragged element position
     const updatedElement: DesignElement = {
       ...draggedElement,
-      x: draggedElement.x + offsetX,
-      y: draggedElement.y + offsetY
+      x: newX,
+      y: newY
     };
 
     setDraggedElement(updatedElement);
@@ -336,7 +387,7 @@ export const MinimalCanvas2D: React.FC<MinimalCanvas2DProps> = ({
 
     // NO database update during drag - only update local visual state for smooth dragging!
     // Database update happens only on mouse up (see handleMouseUp)
-  }, [isDraggingElement, dragStartPos, draggedElement]);
+  }, [isDraggingElement, dragStartPos, draggedElement, roomDimensions]);
 
   const handleMouseUp = useCallback(() => {
     if (isDraggingElement && draggedElement) {
@@ -432,7 +483,6 @@ export const MinimalCanvas2D: React.FC<MinimalCanvas2DProps> = ({
         }}
         onDragOver={handleDragOver}
         onDrop={handleDrop}
-        onClick={handleCanvasClick}
         onMouseDown={handleMouseDown}
         onMouseMove={handleMouseMove}
         onMouseUp={handleMouseUp}
