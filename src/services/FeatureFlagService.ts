@@ -91,11 +91,11 @@ export class FeatureFlagService {
       if (error || !data) {
         console.warn(`[FeatureFlag] Flag "${flagKey}" not found in database`);
 
-        // TEMPORARY: Enable new positioning system by default for development/testing
-        // TODO: Remove after database migration is applied
+        // TEMPORARY: Force disable new positioning system (has bugs in left-wall rendering)
+        // TODO: Fix bugs in PositionCalculation.calculateElevationPositionNew() then re-enable
         if (flagKey === 'use_new_positioning_system') {
-          console.log(`[FeatureFlag] 🚀 TEMPORARY OVERRIDE: Enabling "${flagKey}" for testing (Phase 1.5)`);
-          return true;
+          console.log(`[FeatureFlag] 🔧 TEMPORARY OVERRIDE: DISABLING "${flagKey}" - reverting to legacy due to rendering bugs`);
+          return false;
         }
 
         console.warn(`[FeatureFlag] Defaulting to FALSE (using legacy)`);
@@ -105,6 +105,12 @@ export class FeatureFlagService {
       // Cache the flag
       this.flagCache.set(flagKey, data as FeatureFlag);
       this.lastFetch = Date.now();
+
+      // TEMPORARY: Force disable new positioning system even if enabled in database
+      if (flagKey === 'use_new_positioning_system') {
+        console.log(`[FeatureFlag] 🔧 OVERRIDE: Force disabling "${flagKey}" from database (has bugs)`);
+        return false;
+      }
 
       const result = this.evaluateFlag(data as FeatureFlag, userId);
       if (this.debugMode) {
