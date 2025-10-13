@@ -40,11 +40,32 @@ export const PropertiesPanel: React.FC<PropertiesPanelProps> = ({
 
   const updateElementDimension = (dimension: 'width' | 'depth' | 'height', value: number) => {
     if (!selectedElement) return;
-    
+
     const updates: Partial<DesignElement> = {};
     updates[dimension] = value;
-    
+
     onUpdateElement(selectedElement.id, updates);
+  };
+
+  // Helper function to rotate element (canvas already handles center-point rotation)
+  const rotateElementAroundCenter = (rotationDelta: number) => {
+    if (!selectedElement) return;
+
+    const currentRotation = selectedElement.rotation || 0;
+    const newRotation = ((currentRotation + rotationDelta) + 360) % 360;
+
+    // Just update rotation - canvas rendering already rotates around center
+    // See DesignCanvas2D.tsx lines 1205-1207 for the center-rotation logic
+    onUpdateElement(selectedElement.id, {
+      rotation: newRotation
+    });
+
+    console.log(`🔄 [Rotation] Updated rotation:`, {
+      elementId: selectedElement.id,
+      oldRotation: currentRotation,
+      newRotation,
+      note: 'Canvas handles center-point rotation visually'
+    });
   };
 
   // Always show height control - it's a fundamental 3D property
@@ -361,9 +382,7 @@ export const PropertiesPanel: React.FC<PropertiesPanelProps> = ({
                       <Button
                         variant="outline"
                         size="sm"
-                        onClick={() => onUpdateElement(selectedElement.id, {
-                          rotation: ((selectedElement.rotation || 0) - 45 + 360) % 360
-                        })}
+                        onClick={() => rotateElementAroundCenter(-45)}
                         className="flex-1 text-xs"
                       >
                         <RotateCcw className="h-3 w-3 mr-1" />
@@ -372,9 +391,7 @@ export const PropertiesPanel: React.FC<PropertiesPanelProps> = ({
                       <Button
                         variant="outline"
                         size="sm"
-                        onClick={() => onUpdateElement(selectedElement.id, {
-                          rotation: ((selectedElement.rotation || 0) + 45) % 360
-                        })}
+                        onClick={() => rotateElementAroundCenter(45)}
                         className="flex-1 text-xs"
                       >
                         <RotateCw className="h-3 w-3 mr-1" />

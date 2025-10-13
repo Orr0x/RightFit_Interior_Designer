@@ -54,6 +54,7 @@ import {
 interface CompactComponentSidebarProps {
   onAddElement: (element: DesignElement) => void;
   roomType: RoomType;
+  canvasZoom?: number; // Canvas zoom level for matching drag preview size
 }
 
 
@@ -73,9 +74,10 @@ const getIconComponent = (iconName: string): React.ReactNode => {
   return iconMap[iconName] || <Square className="h-4 w-4" />;
 };
 
-const CompactComponentSidebar: React.FC<CompactComponentSidebarProps> = ({ 
-  onAddElement, 
-  roomType 
+const CompactComponentSidebar: React.FC<CompactComponentSidebarProps> = ({
+  onAddElement,
+  roomType,
+  canvasZoom = 1.0 // Default to 1.0 if not provided
 }) => {
   const isMobile = useIsMobile();
   const [searchTerm, setSearchTerm] = useState('');
@@ -282,12 +284,15 @@ const CompactComponentSidebar: React.FC<CompactComponentSidebarProps> = ({
     e.dataTransfer.setData('component', JSON.stringify(dragData));
     e.dataTransfer.effectAllowed = 'copy';
     
-    // 🎯 CREATE A COMPONENT-SHAPED DRAG PREVIEW (WORKING VERSION)
-    // Show the actual footprint/shape of the component with size adjustment
+    // 🎯 CREATE A COMPONENT-SHAPED DRAG PREVIEW
+    // Show the actual footprint/shape of the component at TRUE 1:1 scale
     const dragPreview = document.createElement('div');
 
-    // Calculate scale to make drag preview match canvas size better
-    const scaleFactor = 1.15; // Increase by 15% to better match canvas components
+    // ✅ FIXED: Drag preview must match canvas base scale (PIXELS_PER_CM = 1.5)
+    // Canvas now uses 1.5px per cm at 100% zoom for better readability
+    // Drag preview should match this base scale to ensure WYSIWYG behavior
+    const PIXELS_PER_CM = 1.5; // Must match DesignCanvas2D.tsx base scale
+    const scaleFactor = PIXELS_PER_CM; // Match canvas base scale (1.5px per cm)
     
     // Check if this is a corner component that uses square footprint
     // Check both component_id and name since we're using DatabaseComponent interface
@@ -300,8 +305,11 @@ const CompactComponentSidebar: React.FC<CompactComponentSidebarProps> = ({
       id: component.component_id,
       name: component.name,
       isCornerComponent,
-      originalDimensions: `${component.width}x${component.depth}x${component.height}`,
-      previewDimensions: isCornerComponent ? `${component.width}x${component.depth} (square)` : `${component.width}x${component.depth}`
+      dimensions: `${component.width}×${component.depth}×${component.height}cm`,
+      canvasZoom: `${(canvasZoom * 100).toFixed(0)}%`,
+      scaleFactor: scaleFactor,
+      previewSize: `${component.width * scaleFactor}×${component.depth * scaleFactor}px`,
+      previewType: isCornerComponent ? 'square footprint' : 'rectangular'
     });
     
     // Tall corner unit dimensions are now correct (90x90cm) after database migration

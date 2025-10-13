@@ -31,9 +31,15 @@
       "Bash(done)",
       "Bash(dir:*)",
       "Bash(move scriptsquery-components-schema.js scriptsquery-components-schema.cjs)",
-      "Bash(timeout:*)"
+      "Bash(timeout:*)",
+      "Bash(powershell:*)",
+      "Bash(netstat:*)",
+      "Bash(taskkill:*)",
+      "Bash(claude mcp:*)",
+      "Bash(echo:*)",
+      "mcp__chrome-devtools__*",
+      "mcp__playwright__*"
     ],
     "deny": [],
     "ask": []
-  }
-}
+  }}

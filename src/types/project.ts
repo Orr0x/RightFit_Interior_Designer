@@ -41,9 +41,9 @@ export interface RoomDesign {
 }
 
 export interface RoomDimensions {
-  width: number;        // in cm - room width (X-axis)
-  height: number;       // in cm - room depth (Y-axis, called "height" for legacy compatibility)
-  ceilingHeight?: number; // in cm - room ceiling height (Z-axis), optional for backward compatibility
+  width: number;   // Room width in cm (X-axis: left-to-right)
+  depth: number;   // Room depth in cm (Y-axis: front-to-back)
+  height: number;  // Room height in cm (Z-axis: floor-to-ceiling)
 }
 
 export interface RoomDesignSettings {

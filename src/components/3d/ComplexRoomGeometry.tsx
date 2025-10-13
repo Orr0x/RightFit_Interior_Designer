@@ -311,7 +311,7 @@ export const ComplexRoomGeometry: React.FC<ComplexRoomGeometryProps> = ({
           fontSize={0.2}
           color="#666"
         >
-          {geometry.shape_type} • {Math.round(roomDimensions.width / 10)}×{Math.round(roomDimensions.height / 10)}cm
+          {geometry.shape_type} • {Math.round(roomDimensions.width / 10)}×{Math.round(roomDimensions.depth / 10)}cm
           {roomDimensions.area > 0 && ` • ${(roomDimensions.area / 10000).toFixed(1)}m²`}
         </Text>
       )}

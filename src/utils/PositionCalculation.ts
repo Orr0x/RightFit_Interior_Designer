@@ -5,7 +5,7 @@
  *          both legacy (asymmetric) and new (unified) coordinate systems
  *
  * Critical Issue Fixed:
- * - Left wall uses flipped Y coordinate: `roomDimensions.height - element.y - effectiveDepth`
+ * - Left wall uses flipped Y coordinate: `roomDimensions.depth - element.y - effectiveDepth`
  * - Right wall uses direct Y coordinate: `element.y`
  * - This asymmetry causes position mismatches between left and right views
  *
@@ -31,7 +31,8 @@ import type { DesignElement } from '@/types/project';
 
 export interface RoomDimensions {
   width: number;
-  height: number;
+  depth: number;  // Y-axis dimension (was "height" in legacy code)
+  height: number; // Z-axis dimension (was "ceilingHeight" in legacy code)
 }
 
 export interface RoomPosition {
@@ -157,7 +158,7 @@ export class PositionCalculation {
 
     // Calculate elevation dimensions
     const calcElevationWidth = elevationWidth || roomDimensions.width * zoom;
-    const calcElevationDepth = elevationDepth || roomDimensions.height * zoom;
+    const calcElevationDepth = elevationDepth || roomDimensions.depth * zoom;
 
     let xPos: number;
     let elementWidth: number;
@@ -169,28 +170,51 @@ export class PositionCalculation {
     } else if (view === 'left') {
       // 🔒 LEGACY: Left wall view - flip horizontally (mirror Y coordinate)
       // When looking at left wall from inside room, far end of room appears on left side of view
-      const flippedY = roomDimensions.height - element.y - effectiveDepth;
-      xPos = roomPosition.innerX + (flippedY / roomDimensions.height) * calcElevationDepth;
+      const flippedY = roomDimensions.depth - element.y - effectiveDepth;
+      xPos = roomPosition.innerX + (flippedY / roomDimensions.depth) * calcElevationDepth;
 
-      // For worktops/counter-tops, use depth as width (length along wall)
-      // For cabinets and other components, use effective width (length along wall)
-      if (element.type === 'counter-top') {
-        elementWidth = (element.depth / roomDimensions.height) * calcElevationDepth;
-      } else {
-        elementWidth = (effectiveWidth / roomDimensions.height) * calcElevationDepth; // Use rotation-aware width
-      }
+      // Left/Right walls: element.depth is the dimension along the wall
+      // element.width is perpendicular to the wall (sticks into room)
+      elementWidth = (effectiveDepth / roomDimensions.depth) * calcElevationDepth;
     } else {
       // 🔒 LEGACY: Right wall view - use Y coordinate from plan view
-      xPos = roomPosition.innerX + (element.y / roomDimensions.height) * calcElevationDepth;
+      xPos = roomPosition.innerX + (element.y / roomDimensions.depth) * calcElevationDepth;
 
-      // For worktops/counter-tops, use depth as width (length along wall)
-      // For cabinets and other components, use effective width (length along wall)
-      if (element.type === 'counter-top') {
-        elementWidth = (element.depth / roomDimensions.height) * calcElevationDepth;
-      } else {
-        elementWidth = (effectiveWidth / roomDimensions.height) * calcElevationDepth; // Use rotation-aware width
-      }
+      // Left/Right walls: element.depth is the dimension along the wall
+      // element.width is perpendicular to the wall (sticks into room)
+      elementWidth = (effectiveDepth / roomDimensions.depth) * calcElevationDepth;
     }
+
+    // 🔍 DEBUG LOGGING - Track positioning calculations
+    console.log(`[PositionCalculation] LEGACY ${view} view:`, {
+      element: {
+        id: element.id,
+        component_id: element.component_id,
+        x: element.x,
+        y: element.y,
+        width: element.width,
+        depth: element.depth,
+        type: element.type
+      },
+      roomDimensions: {
+        width: roomDimensions.width,
+        depth: roomDimensions.depth,
+        height: roomDimensions.height
+      },
+      roomPosition: {
+        innerX: roomPosition.innerX,
+        innerY: roomPosition.innerY,
+        outerX: roomPosition.outerX,
+        outerY: roomPosition.outerY
+      },
+      calcElevationWidth,
+      calcElevationDepth,
+      zoom,
+      calculated: {
+        xPos: xPos.toFixed(2),
+        elementWidth: elementWidth.toFixed(2)
+      }
+    });
 
     return { xPos, elementWidth };
   }
@@ -216,7 +240,7 @@ export class PositionCalculation {
 
     // Calculate elevation dimensions
     const calcElevationWidth = elevationWidth || roomDimensions.width * zoom;
-    const calcElevationDepth = elevationDepth || roomDimensions.height * zoom;
+    const calcElevationDepth = elevationDepth || roomDimensions.depth * zoom;
 
     let xPos: number;
     let elementWidth: number;
@@ -230,15 +254,12 @@ export class PositionCalculation {
       // Both walls use the same Y coordinate mapping - no flipping
 
       // Calculate base position using direct Y coordinate (same for both walls)
-      const normalizedPosition = element.y / roomDimensions.height;
+      const normalizedPosition = element.y / roomDimensions.depth;
       xPos = roomPosition.innerX + normalizedPosition * calcElevationDepth;
 
-      // Calculate element width
-      if (element.type === 'counter-top') {
-        elementWidth = (element.depth / roomDimensions.height) * calcElevationDepth;
-      } else {
-        elementWidth = (effectiveWidth / roomDimensions.height) * calcElevationDepth;
-      }
+      // Left/Right walls: element.depth is the dimension along the wall
+      // element.width is perpendicular to the wall (sticks into room)
+      elementWidth = (effectiveDepth / roomDimensions.depth) * calcElevationDepth;
 
       // For left wall, mirror the rendering by inverting the X position
       // This is done at rendering time, not in coordinate calculation
@@ -250,6 +271,37 @@ export class PositionCalculation {
         xPos = elevationCenter - distanceFromCenter - elementWidth;
       }
     }
+
+    // 🔍 DEBUG LOGGING - Track positioning calculations
+    console.log(`[PositionCalculation] NEW ${view} view:`, {
+      element: {
+        id: element.id,
+        component_id: element.component_id,
+        x: element.x,
+        y: element.y,
+        width: element.width,
+        depth: element.depth,
+        type: element.type
+      },
+      roomDimensions: {
+        width: roomDimensions.width,
+        depth: roomDimensions.depth,
+        height: roomDimensions.height
+      },
+      roomPosition: {
+        innerX: roomPosition.innerX,
+        innerY: roomPosition.innerY,
+        outerX: roomPosition.outerX,
+        outerY: roomPosition.outerY
+      },
+      calcElevationWidth,
+      calcElevationDepth,
+      zoom,
+      calculated: {
+        xPos: xPos.toFixed(2),
+        elementWidth: elementWidth.toFixed(2)
+      }
+    });
 
     return { xPos, elementWidth };
   }
@@ -313,7 +365,7 @@ export class PositionCalculation {
     if (view === 'left' || view === 'right') {
       // Left/Right elevation views: top-center based on room depth and wall height
       const wallHeight = getWallHeight();
-      const roomDepth = roomDimensions.height; // Use height as depth for side views
+      const roomDepth = roomDimensions.depth; // Room Y-axis depth for side views
       const topMargin = 100; // Space from top of canvas
       return {
         // Outer room position (for wall drawing)
@@ -360,7 +412,7 @@ export class PositionCalculation {
     // Calculate inner room dimensions based on view
     let innerRoomWidth: number;
     if (view === 'left' || view === 'right') {
-      innerRoomWidth = roomDimensions.height; // Use depth for side views
+      innerRoomWidth = roomDimensions.depth; // Use depth for side views
     } else {
       innerRoomWidth = innerRoomBounds.width;
     }

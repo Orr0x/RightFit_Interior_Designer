@@ -31,7 +31,7 @@ import { mapComponentIdToModelId } from '@/utils/ComponentIDMapper';
 
 interface DynamicComponentRendererProps {
   element: DesignElement;
-  roomDimensions: { width: number; height: number };
+  roomDimensions: { width: number; depth: number };
   isSelected: boolean;
   onClick: () => void;
 }
@@ -39,13 +39,13 @@ interface DynamicComponentRendererProps {
 /**
  * Convert 2D coordinates to 3D world coordinates
  */
-const convertTo3D = (x: number, y: number, roomWidth: number, roomHeight: number) => {
+const convertTo3D = (x: number, y: number, roomWidth: number, roomDepth: number) => {
   const roomWidthMeters = roomWidth / 100;
-  const roomHeightMeters = roomHeight / 100;
+  const roomDepthMeters = roomDepth / 100;
 
   return {
     x: (x / 100) - roomWidthMeters / 2,
-    z: (y / 100) - roomHeightMeters / 2
+    z: (y / 100) - roomDepthMeters / 2
   };
 };
 
@@ -153,36 +153,24 @@ export const DynamicComponentRenderer: React.FC<DynamicComponentRendererProps> =
   }, [componentId, element.width, element.height, element.depth, isSelected, isWallCabinet]);
 
   // Calculate position and rotation
-  const { x, z } = convertTo3D(element.x, element.y, roomDimensions.width, roomDimensions.height);
+  const { x, z } = convertTo3D(element.x, element.y, roomDimensions.width, roomDimensions.depth);
 
   // Y position depends on cabinet type
   const height = element.height / 100; // meters
   const yPosition = isWallCabinet ? 2.0 - height / 2 : height / 2;
 
-  // Position offset for wall alignment
+  // Position offset to center the component
+  // ALL components rotate around their center (matching 2D behavior)
   const positionOffset = useMemo(() => {
-    if (isCornerCabinet) {
-      // Corner cabinets: offset to rotation center
-      const legLength = element.width / 100; // meters
-      return {
-        x: legLength / 2,
-        z: legLength / 2,
-      };
-    }
-
-    // Standard cabinets: offset so back edge aligns to wall
+    const width = element.width / 100; // meters
     const depth = (element.depth || (isWallCabinet ? 40 : 60)) / 100; // meters
-    const halfDepth = depth / 2;
 
-    // Calculate offset based on rotation
-    // Rotation is in degrees, 0° = facing down (negative Z)
-    const rotationRad = (element.rotation * Math.PI) / 180;
-
+    // Center the component - both corner and standard cabinets
     return {
-      x: Math.sin(rotationRad) * halfDepth,
-      z: -Math.cos(rotationRad) * halfDepth,
+      x: width / 2,
+      z: depth / 2,
     };
-  }, [isCornerCabinet, element.width, element.depth, element.rotation, isWallCabinet]);
+  }, [element.width, element.depth, isWallCabinet]);
 
   // If loading or error, show nothing (fallback to hardcoded will be used)
   if (loadError || !meshGroup) {

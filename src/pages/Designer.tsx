@@ -866,6 +866,7 @@ const Designer = () => {
                     <CompactComponentSidebar
                       onAddElement={handleAddElement}
                       roomType={currentRoomDesign.room_type}
+                      canvasZoom={canvasZoom}
                     />
                   </div>
                 </>
@@ -944,6 +945,7 @@ const Designer = () => {
                         onTapeMeasureClick={handleTapeMeasureClick}
                         onTapeMeasureMouseMove={handleTapeMeasureMouseMove}
                         onClearTapeMeasure={handleClearTapeMeasure}
+                        zoom={canvasZoom}
                         onZoomChange={setCanvasZoom}
                         onZoomIn={handleZoomIn}
                         onZoomOut={handleZoomOut}

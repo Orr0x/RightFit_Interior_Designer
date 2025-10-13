@@ -95,7 +95,7 @@ export function isAnyCornerComponent(element: DesignElement): boolean {
  */
 export function detectCornerPosition(
   element: DesignElement,
-  roomDimensions: { width: number; height: number },
+  roomDimensions: { width: number; depth: number },
   tolerance: number = 30
 ): CornerInfo {
   // Check each corner position
@@ -105,11 +105,11 @@ export function detectCornerPosition(
   if (element.x >= roomDimensions.width - element.width - tolerance && element.y <= tolerance) {
     return { isCorner: true, corner: 'front-right' };
   }
-  if (element.x <= tolerance && element.y >= roomDimensions.height - element.height - tolerance) {
+  if (element.x <= tolerance && element.y >= roomDimensions.depth - element.depth - tolerance) {
     return { isCorner: true, corner: 'back-left' };
   }
   if (element.x >= roomDimensions.width - element.width - tolerance &&
-      element.y >= roomDimensions.height - element.height - tolerance) {
+      element.y >= roomDimensions.depth - element.depth - tolerance) {
     return { isCorner: true, corner: 'back-right' };
   }
 
@@ -125,7 +125,7 @@ export function detectCornerPosition(
  */
 export function isCornerVisibleInView(
   element: DesignElement,
-  roomDimensions: { width: number; height: number },
+  roomDimensions: { width: number; depth: number },
   viewDirection: string
 ): boolean {
   const cornerInfo = detectCornerPosition(element, roomDimensions);
@@ -175,11 +175,11 @@ export function getCornerPrimaryWall(cornerPosition: CornerPosition): 'front' | 
 export function isCornerPosition(
   x: number,
   y: number,
-  roomDimensions: { width: number; height: number },
+  roomDimensions: { width: number; depth: number },
   tolerance: number = 30
 ): boolean {
   const nearFront = y <= tolerance;
-  const nearBack = y >= roomDimensions.height - tolerance;
+  const nearBack = y >= roomDimensions.depth - tolerance;
   const nearLeft = x <= tolerance;
   const nearRight = x >= roomDimensions.width - tolerance;
 
