@@ -89,7 +89,16 @@ export class FeatureFlagService {
         .single();
 
       if (error || !data) {
-        console.warn(`[FeatureFlag] Flag "${flagKey}" not found, defaulting to FALSE (using legacy)`);
+        console.warn(`[FeatureFlag] Flag "${flagKey}" not found in database`);
+
+        // TEMPORARY: Enable new positioning system by default for development/testing
+        // TODO: Remove after database migration is applied
+        if (flagKey === 'use_new_positioning_system') {
+          console.log(`[FeatureFlag] 🚀 TEMPORARY OVERRIDE: Enabling "${flagKey}" for testing (Phase 1.5)`);
+          return true;
+        }
+
+        console.warn(`[FeatureFlag] Defaulting to FALSE (using legacy)`);
         return false;
       }
 
