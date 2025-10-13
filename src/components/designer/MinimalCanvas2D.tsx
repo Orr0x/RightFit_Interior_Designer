@@ -107,11 +107,21 @@ export const MinimalCanvas2D: React.FC<MinimalCanvas2DProps> = ({
         ctx.fillStyle = '#87CEEB'; // Sky blue
         ctx.fillRect(pos.x, pos.y, width, height);
 
-        // Draw border (highlight if selected)
+        // Draw border INSIDE the rectangle boundary (not centered)
+        // This ensures the component dimension (e.g., 60cm) is the TRUE OUTSIDE MEASUREMENT
         const isSelected = element.id === selectedElementId;
+        const borderWidth = isSelected ? 4 : 2;
         ctx.strokeStyle = isSelected ? '#FF4500' : '#4682B4'; // Orange if selected, steel blue otherwise
-        ctx.lineWidth = isSelected ? 4 : 2;
-        ctx.strokeRect(pos.x, pos.y, width, height);
+        ctx.lineWidth = borderWidth;
+
+        // Inset the stroke by half the border width to keep it fully inside
+        const halfBorder = borderWidth / 2;
+        ctx.strokeRect(
+          pos.x + halfBorder,
+          pos.y + halfBorder,
+          width - borderWidth,
+          height - borderWidth
+        );
 
         // Draw component type label
         ctx.fillStyle = '#000000';

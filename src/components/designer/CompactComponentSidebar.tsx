@@ -294,50 +294,107 @@ const CompactComponentSidebar: React.FC<CompactComponentSidebarProps> = ({
     e.dataTransfer.setData('component', JSON.stringify(dragData));
     e.dataTransfer.effectAllowed = 'copy';
     
-    // 🎯 CREATE DRAG PREVIEW - CLEAN SLATE SIMPLICITY
-    // Pure component dimensions, no bounding boxes, no special cases
+    // 🎯 CREATE CANVAS-BASED DRAG PREVIEW - Perfect match with dropped component
+    // Uses exact same calculation as CoordinateSystem.cmToPixels()
+    // Formula: cm * BASE_PIXELS_PER_CM(1.0) * zoom = cm * zoom
+    //
+    // IMPORTANT: We need to account for canvas CSS scaling!
+    // The canvas element (1600×1200px) is visually scaled by CSS (max-w-full max-h-full)
+    // The drag preview needs to match the VISUAL size, not the internal canvas size
+
+    const BASE_PIXELS_PER_CM = 1.0;
+    const internalWidth = component.width * BASE_PIXELS_PER_CM * canvasZoom;
+    const internalDepth = component.depth * BASE_PIXELS_PER_CM * canvasZoom;
+
+    // Get canvas CSS scale ratio by finding the MinimalCanvas2D canvas element
+    // The canvas has internal size 1600×1200 but is displayed at a smaller CSS size
+    const canvasElement = document.querySelector('canvas');
+    let cssScaleRatio = 1.0;
+
+    if (canvasElement) {
+      const rect = canvasElement.getBoundingClientRect();
+      const canvasInternalWidth = canvasElement.width;
+      cssScaleRatio = rect.width / canvasInternalWidth;
+      console.log('🎨 [DRAG PREVIEW] CSS Scale:', {
+        canvasInternal: canvasInternalWidth,
+        canvasDisplay: rect.width,
+        ratio: cssScaleRatio
+      });
+    }
+
+    // Apply CSS scale ratio to match visual size
+    const previewWidth = Math.floor(internalWidth * cssScaleRatio);
+    const previewDepth = Math.floor(internalDepth * cssScaleRatio);
+
+    console.log('🎨 [DRAG PREVIEW] Dimensions:', {
+      component: `${component.width}×${component.depth}cm`,
+      zoom: canvasZoom,
+      internal: `${internalWidth}×${internalDepth}px`,
+      cssScale: cssScaleRatio,
+      final: `${previewWidth}×${previewDepth}px`
+    });
+
+    // Create offscreen canvas for rendering
+    const canvas = document.createElement('canvas');
+    canvas.width = previewWidth;
+    canvas.height = previewDepth;
+    const ctx = canvas.getContext('2d');
+
+    if (ctx) {
+      // Draw component fill (matches MinimalCanvas2D rendering)
+      ctx.fillStyle = component.color || '#87CEEB';
+      ctx.fillRect(0, 0, previewWidth, previewDepth);
+
+      // Draw border INSIDE the rectangle boundary (not centered)
+      // This ensures the component dimension (60cm) is the TRUE OUTSIDE MEASUREMENT
+      const borderWidth = 2;
+      ctx.strokeStyle = '#4682B4';
+      ctx.lineWidth = borderWidth;
+
+      // Inset the stroke by half the border width to keep it fully inside
+      const halfBorder = borderWidth / 2;
+      ctx.strokeRect(
+        halfBorder,
+        halfBorder,
+        previewWidth - borderWidth,
+        previewDepth - borderWidth
+      );
+
+      // Draw dimensions label
+      ctx.fillStyle = '#000000';
+      ctx.font = '10px Arial';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText(
+        `${component.width}×${component.depth}`,
+        previewWidth / 2,
+        previewDepth / 2
+      );
+    }
+
+    // Convert canvas to image for drag preview
+    const dragImage = new Image();
+    dragImage.src = canvas.toDataURL();
+
+    // Create wrapper div to hold image (browsers need DOM element for setDragImage)
     const dragPreview = document.createElement('div');
-
-    // ✅ CLEAN SLATE: Apply canvas zoom to drag preview
-    const scaleFactor = canvasZoom;
-
-    // Pure dimensions - width and depth only
-    const previewWidth = component.width * scaleFactor;
-    const previewDepth = component.depth * scaleFactor;
-
-    // Math confirmed: previewWidth = component.width × canvasZoom
-
-    // Simple rectangle preview
-    dragPreview.style.width = `${previewWidth}px`;
-    dragPreview.style.height = `${previewDepth}px`;
-    dragPreview.style.backgroundColor = component.color || '#8b5cf6';
-    dragPreview.style.border = '2px solid #333';
-    dragPreview.style.borderRadius = '3px';
-    dragPreview.style.opacity = '0.8';
     dragPreview.style.position = 'absolute';
-    dragPreview.style.top = '-1000px';
-    dragPreview.style.left = '-1000px';
-    dragPreview.style.pointerEvents = 'none';
-    dragPreview.style.boxShadow = '0 4px 12px rgba(0,0,0,0.3)';
-    dragPreview.style.display = 'flex';
-    dragPreview.style.alignItems = 'center';
-    dragPreview.style.justifyContent = 'center';
-
-    // Simple dimensions label
-    const label = document.createElement('div');
-    label.textContent = `${component.width}×${component.depth}`;
-    label.style.fontSize = '10px';
-    label.style.fontWeight = 'bold';
-    label.style.color = '#fff';
-    label.style.textShadow = '1px 1px 2px rgba(0,0,0,0.8)';
-
-    dragPreview.appendChild(label);
+    dragPreview.style.top = '-10000px';
+    dragPreview.style.left = '-10000px';
+    dragPreview.appendChild(dragImage);
     document.body.appendChild(dragPreview);
 
-    // Simple center point - no min(), no special cases
+    // Use image as drag preview (will match canvas rendering exactly)
     const centerX = previewWidth / 2;
     const centerY = previewDepth / 2;
-    e.dataTransfer.setDragImage(dragPreview, centerX, centerY);
+
+    // Set drag image after image loads
+    dragImage.onload = () => {
+      e.dataTransfer.setDragImage(dragImage, centerX, centerY);
+    };
+
+    // Fallback: set immediately if image loads synchronously
+    e.dataTransfer.setDragImage(dragImage, centerX, centerY);
 
     // Clean up after drag
     setTimeout(() => {

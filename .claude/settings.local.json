@@ -38,8 +38,12 @@
       "Bash(claude mcp:*)",
       "Bash(echo:*)",
       "mcp__chrome-devtools__*",
-      "mcp__playwright__*"
+      "mcp__playwright__*",
+      "Bash(printf \"Y\\n\")",
+      "Bash(git reset:*)",
+      "Bash(tasklist)"
     ],
     "deny": [],
     "ask": []
-  }}
+  }
+}
