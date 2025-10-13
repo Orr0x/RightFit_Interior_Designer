@@ -2444,10 +2444,9 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
       const dropY = roomPos.y;
 
 
-      // 🎯 BOUNDARY CHECK: Prevent drops outside inner room boundaries (usable space)
-      // Components should only be placed within the inner room, not in the wall thickness
-      if (dropX < -50 || dropY < -50 || dropX > innerRoomBounds.width + 50 || dropY > innerRoomBounds.height + 50) {
-        console.warn('⚠️ Drop cancelled: Component dropped outside inner room boundaries');
+      // 🎯 BOUNDARY CHECK: Prevent drops outside room boundaries (usable space)
+      if (dropX < -50 || dropY < -50 || dropX > roomDimensions.width + 50 || dropY > roomDimensions.height + 50) {
+        console.warn('⚠️ Drop cancelled: Component dropped outside room boundaries');
         return;
       }
 
