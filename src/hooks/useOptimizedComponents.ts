@@ -35,19 +35,19 @@ interface DatabaseComponent {
 
 // Enhanced caching for components
 const componentCache = cacheManager.getCache<DatabaseComponent[]>('components', {
-  ttl: 15 * 60 * 1000, // 15 minutes TTL for components
+  ttl: 0, // DISABLED for development - was 15 * 60 * 1000 (15 minutes)
   maxSize: 10,
   enableBatching: false
 });
 
 const categoryCache = cacheManager.getCache<DatabaseComponent[]>('components-by-category', {
-  ttl: 15 * 60 * 1000,
+  ttl: 0, // DISABLED for development - was 15 * 60 * 1000
   maxSize: 100,
   enableBatching: false
 });
 
 const roomTypeCache = cacheManager.getCache<DatabaseComponent[]>('components-by-room-type', {
-  ttl: 15 * 60 * 1000,
+  ttl: 0, // DISABLED for development - was 15 * 60 * 1000
   maxSize: 50,
   enableBatching: false
 });

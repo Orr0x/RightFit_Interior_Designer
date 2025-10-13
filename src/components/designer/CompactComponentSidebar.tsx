@@ -265,6 +265,16 @@ const CompactComponentSidebar: React.FC<CompactComponentSidebarProps> = ({
 
   // Handle drag start - only serialize essential data (no React components)
   const handleDragStart = (e: React.DragEvent, component: DatabaseComponent) => {
+    // Debug: Log component dimensions for corner wall units
+    if (component.name.toLowerCase().includes('corner') && component.category === 'wall-cabinets') {
+      console.log('🔍 [Drag Start] Corner Wall Unit Dimensions:', {
+        name: component.name,
+        width: component.width,
+        depth: component.depth,
+        expected: '60×60'
+      });
+    }
+
     // Create clean data object without React components for serialization
     const dragData = {
       id: component.component_id,
