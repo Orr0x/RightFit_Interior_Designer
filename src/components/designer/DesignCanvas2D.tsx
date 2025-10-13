@@ -590,12 +590,28 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
       const roomDepth = roomDimensions.height; // Use height as depth for side views
       const x = (CANVAS_WIDTH / 2) - (roomDepth * zoom / 2) + panOffset.x;
       const y = topMargin + panOffset.y;
-      return { x, y };
+      return {
+        x,
+        y,
+        // Backward compatibility with PositionCalculation (Phase 1.5)
+        innerX: x,
+        innerY: y,
+        outerX: x,
+        outerY: y
+      };
     } else {
       // Plan, Front, Back views: top-center alignment
       const x = (CANVAS_WIDTH / 2) - (roomBounds.width * zoom / 2) + panOffset.x;
       const y = topMargin + panOffset.y;
-      return { x, y };
+      return {
+        x,
+        y,
+        // Backward compatibility with PositionCalculation (Phase 1.5)
+        innerX: x,
+        innerY: y,
+        outerX: x,
+        outerY: y
+      };
     }
   })();
 
