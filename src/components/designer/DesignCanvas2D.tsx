@@ -16,6 +16,17 @@ import type { RoomGeometry } from '@/types/RoomGeometry';
 import * as GeometryUtils from '@/utils/GeometryUtils';
 import { getDefaultZ } from '@/utils/componentZPositionHelper';
 import { getPlinthHeightValue } from '@/utils/componentPlinthHelper';
+import {
+  isCornerComponent,
+  isCornerCounterTop,
+  isCornerWallCabinet,
+  isCornerBaseCabinet,
+  isCornerTallUnit,
+  isAnyCornerComponent,
+  detectCornerPosition,
+  isCornerVisibleInView as checkCornerVisibleInView,
+  isCornerPosition
+} from '@/utils/cornerDetection';
 
 // Throttle function for performance optimization
 const throttle = <T extends (...args: any[]) => void>(func: T, delay: number): T => {
@@ -118,18 +129,9 @@ const getRotatedBoundingBox = (element: DesignElement) => {
   const rotation = (element.rotation || 0) * Math.PI / 180; // Convert to radians
   
   // Determine if this is a corner component with L-shaped footprint
-  const isCornerCounterTop = element.type === 'counter-top' && element.id.includes('counter-top-corner');
-  const isCornerWallCabinet = element.type === 'cabinet' && (element.id.includes('corner-wall-cabinet') || element.id.includes('new-corner-wall-cabinet'));
-  const isCornerBaseCabinet = element.type === 'cabinet' && (element.id.includes('corner-base-cabinet') || element.id.includes('l-shaped-test-cabinet'));
-  const isCornerTallUnit = element.type === 'cabinet' && (
-    element.id.includes('corner-tall') || 
-    element.id.includes('corner-larder') ||
-    element.id.includes('larder-corner')
-  );
-  
-  const isCornerComponent = isCornerCounterTop || isCornerWallCabinet || isCornerBaseCabinet || isCornerTallUnit;
-  
-  if (isCornerComponent) {
+  const isCorner = isAnyCornerComponent(element);
+
+  if (isCorner) {
     // Corner components use their ACTUAL dimensions (no more hardcoded 90x90)
     const width = element.width;
     const height = element.depth || element.height;
@@ -212,16 +214,9 @@ const isPointInRotatedComponent = (pointX: number, pointY: number, element: Desi
   const rotation = (element.rotation || 0) * Math.PI / 180;
   
   // Determine if this is a corner component
-  const isCornerComponent = (element.type === 'counter-top' && element.id.includes('counter-top-corner')) ||
-                           (element.type === 'cabinet' && element.id.includes('corner-wall-cabinet')) ||
-                           (element.type === 'cabinet' && element.id.includes('corner-base-cabinet')) ||
-                           (element.type === 'cabinet' && (
-                             element.id.includes('corner-tall') || 
-                             element.id.includes('corner-larder') ||
-                             element.id.includes('larder-corner')
-                           ));
-  
-  if (isCornerComponent) {
+  const isCorner = isAnyCornerComponent(element);
+
+  if (isCorner) {
     // L-shaped components use their actual square footprint - dynamic check
     const squareSize = Math.min(element.width, element.depth); // Use smaller dimension for square
     return pointX >= element.x && pointX <= element.x + squareSize &&
@@ -695,8 +690,8 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
     let elementDepth = element.depth;
     
     // Corner counter top behaves as a 90x90 square footprint in plan view
-    const isCornerCounterTop = element.type === 'counter-top' && element.id.includes('counter-top-corner');
-    if (isCornerCounterTop) {
+    const isCorner = isCornerCounterTop(element);
+    if (isCorner) {
       elementWidth = 90;
       elementDepth = 90;
     }
@@ -824,34 +819,22 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
       
       // Check if this is a corner unit placement
       // ALL corner components use 90cm square dimensions for detection
-      const isCornerCounterTop = element.type === 'counter-top' && element.id.includes('counter-top-corner');
-      const isCornerWallCabinet = element.type === 'cabinet' && element.id.includes('corner-wall-cabinet');
-      const isCornerBaseCabinet = element.type === 'cabinet' && (element.id.includes('corner-base-cabinet') || element.id.includes('l-shaped-test-cabinet'));
-      const isCornerTallUnit = element.type === 'cabinet' && (
-        element.id.includes('corner-tall') || 
-        element.id.includes('corner-larder') ||
-        element.id.includes('larder-corner')
-      );
-      const isAnyCornerComponent = isCornerCounterTop || isCornerWallCabinet || isCornerBaseCabinet || isCornerTallUnit;
-      
-      const detectionWidth = isAnyCornerComponent ? 90 : elementWidth;
-      const detectionDepth = isAnyCornerComponent ? 90 : elementDepth;
-      
-      const isCornerPosition = 
-        (x <= cornerTolerance && y <= cornerTolerance) || // front-left corner
-        (x >= roomDimensions.width - detectionWidth - cornerTolerance && y <= cornerTolerance) || // front-right corner
-        (x <= cornerTolerance && y >= roomDimensions.height - detectionDepth - cornerTolerance) || // back-left corner
-        (x >= roomDimensions.width - detectionWidth - cornerTolerance && y >= roomDimensions.height - detectionDepth - cornerTolerance); // back-right corner
-      
-      if (isCornerPosition) {
+      const isCorner = isAnyCornerComponent(element);
+
+      const detectionWidth = isCorner ? 90 : elementWidth;
+      const detectionDepth = isCorner ? 90 : elementDepth;
+
+      const isCornerPos = isCornerPosition(x, y, roomDimensions, cornerTolerance);
+
+      if (isCornerPos) {
         // Special handling for corner units - they have specific orientations
         // ALL corner components use 90cm square dimensions for positioning
-        const cornerWidth = isAnyCornerComponent ? 90 : elementWidth;
-        const cornerDepth = isAnyCornerComponent ? 90 : elementDepth;
+        const cornerWidth = isCorner ? 90 : elementWidth;
+        const cornerDepth = isCorner ? 90 : elementDepth;
         
         if (x <= cornerTolerance && y <= cornerTolerance) {
           // Front-left corner (TOP-LEFT)
-          if (isAnyCornerComponent) {
+          if (isCorner) {
             rotation = 0; // L-shape faces down-right
           } else {
             rotation = 90; // door faces right (into room)
@@ -862,7 +845,7 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
           guides.horizontal.push(0);
         } else if (x >= roomDimensions.width - cornerWidth - cornerTolerance && y <= cornerTolerance) {
           // Front-right corner (TOP-RIGHT)
-          if (isAnyCornerComponent) {
+          if (isCorner) {
             rotation = 270; // L-shape faces down-left
           } else {
             rotation = 270; // door faces left (into room)
@@ -873,7 +856,7 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
           guides.horizontal.push(0);
         } else if (x <= cornerTolerance && y >= roomDimensions.height - cornerDepth - cornerTolerance) {
           // Back-left corner (BOTTOM-LEFT)
-          if (isAnyCornerComponent) {
+          if (isCorner) {
             rotation = 90; // L-shape faces up-right
           } else {
             rotation = 90; // door faces right (into room)
@@ -884,7 +867,7 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
           guides.horizontal.push(roomDimensions.height);
         } else if (x >= roomDimensions.width - cornerWidth - cornerTolerance && y >= roomDimensions.height - cornerDepth - cornerTolerance) {
           // Back-right corner (BOTTOM-RIGHT)
-          if (isAnyCornerComponent) {
+          if (isCorner) {
             rotation = 180; // L-shape faces up-left
           } else {
             rotation = 270; // door faces left (into room)
@@ -1538,26 +1521,9 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
   // for determining element visibility in elevation views, not just for rendering.
   // =============================================================================
 
-  // Check if element is a corner unit
-  const isCornerUnit = (element: DesignElement): { isCorner: boolean; corner?: 'front-left' | 'front-right' | 'back-left' | 'back-right' } => {
-    const tolerance = 30; // cm tolerance for corner detection
-
-    // Check each corner position
-    if (element.x <= tolerance && element.y <= tolerance) {
-      return { isCorner: true, corner: 'front-left' };
-    }
-    if (element.x >= roomDimensions.width - element.width - tolerance && element.y <= tolerance) {
-      return { isCorner: true, corner: 'front-right' };
-    }
-    if (element.x <= tolerance && element.y >= roomDimensions.height - element.height - tolerance) {
-      return { isCorner: true, corner: 'back-left' };
-    }
-    if (element.x >= roomDimensions.width - element.width - tolerance &&
-        element.y >= roomDimensions.height - element.height - tolerance) {
-      return { isCorner: true, corner: 'back-right' };
-    }
-
-    return { isCorner: false };
+  // Check if element is a corner unit (using centralized utility)
+  const isCornerUnit = (element: DesignElement) => {
+    return detectCornerPosition(element, roomDimensions, 30);
   };
 
   // Get element wall association (updated to handle corner units)
@@ -1586,23 +1552,9 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
     return 'center';
   };
 
-  // Check if corner unit is visible in current elevation view
+  // Check if corner unit is visible in current elevation view (using centralized utility)
   const isCornerVisibleInView = (element: DesignElement, view: string): boolean => {
-    const cornerInfo = isCornerUnit(element);
-    if (!cornerInfo.isCorner) return false;
-
-    switch (cornerInfo.corner) {
-      case 'front-left':
-        return view === 'front' || view === 'left';
-      case 'front-right':
-        return view === 'front' || view === 'right';
-      case 'back-left':
-        return view === 'back' || view === 'left';
-      case 'back-right':
-        return view === 'back' || view === 'right';
-      default:
-        return false;
-    }
+    return checkCornerVisibleInView(element, roomDimensions, view);
   };
 
   // =============================================================================
@@ -1765,16 +1717,7 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
     const pos = roomToCanvas(snapResult.x, snapResult.y);
     
     // Check if this is a corner component for L-shape preview
-    const isCornerCounterTop = draggedElement.type === 'counter-top' && draggedElement.id.includes('counter-top-corner');
-    const isCornerWallCabinet = draggedElement.type === 'cabinet' && (draggedElement.id.includes('corner-wall-cabinet') || draggedElement.id.includes('new-corner-wall-cabinet'));
-    const isCornerBaseCabinet = draggedElement.type === 'cabinet' && draggedElement.id.includes('corner-base-cabinet');
-    const isCornerTallUnit = draggedElement.type === 'cabinet' && (
-      draggedElement.id.includes('corner-tall') || 
-      draggedElement.id.includes('corner-larder') ||
-      draggedElement.id.includes('larder-corner')
-    );
-    
-    const isCornerComponent = isCornerCounterTop || isCornerWallCabinet || isCornerBaseCabinet || isCornerTallUnit;
+    const isCornerComponent = isAnyCornerComponent(draggedElement);
     
     // Draw preview at snap position (plan view only)
     ctx.save();
@@ -2071,9 +2014,9 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
     
     const clickedElement = elementsToCheck.find(element => {
       // Special handling for corner counter tops - use square bounding box
-      const isCornerCounterTop = element.type === 'counter-top' && element.id.includes('counter-top-corner');
-      
-      if (isCornerCounterTop) {
+      const isCorner = isCornerCounterTop(element);
+
+      if (isCorner) {
         // Use 90cm x 90cm square for corner counter tops
         return roomPos.x >= element.x && roomPos.x <= element.x + 90 &&
                roomPos.y >= element.y && roomPos.y <= element.y + 90;
@@ -2232,16 +2175,9 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
       let clampWidth = draggedElement.width;
       let clampDepth = draggedElement.depth;
       // DYNAMIC: Corner components use their actual square footprint
-      const isCornerCounterTop = draggedElement.type === 'counter-top' && draggedElement.id.includes('counter-top-corner');
-      const isCornerWallCabinet = draggedElement.type === 'cabinet' && draggedElement.id.includes('corner-wall-cabinet');
-      const isCornerBaseCabinet = draggedElement.type === 'cabinet' && draggedElement.id.includes('corner-base-cabinet');
-      const isCornerTallUnit = draggedElement.type === 'cabinet' && (
-        draggedElement.id.includes('corner-tall') || 
-        draggedElement.id.includes('corner-larder') ||
-        draggedElement.id.includes('larder-corner')
-      );
-      
-      if (isCornerCounterTop || isCornerWallCabinet || isCornerBaseCabinet || isCornerTallUnit) {
+      const isCorner = isAnyCornerComponent(draggedElement);
+
+      if (isCorner) {
         // Use actual square dimensions for corner components
         const squareSize = Math.min(draggedElement.width, draggedElement.depth);
         clampWidth = squareSize;
@@ -2330,9 +2266,9 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
       const roomPos = canvasToRoom(x, y);
       const touchedElement = design.elements.find(element => {
         // Special handling for corner counter tops - use square bounding box
-        const isCornerCounterTop = element.type === 'counter-top' && element.id.includes('counter-top-corner');
-        
-        if (isCornerCounterTop) {
+        const isCorner = isCornerCounterTop(element);
+
+        if (isCorner) {
           // DYNAMIC: Use actual square dimensions for corner counter tops
           const squareSize = Math.min(element.width, element.depth);
           return roomPos.x >= element.x && roomPos.x <= element.x + squareSize &&
@@ -2465,16 +2401,9 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
         let clampDepth = draggedElement.depth;
         
         // Handle corner components
-        const isCornerCounterTop = draggedElement.type === 'counter-top' && draggedElement.id.includes('counter-top-corner');
-        const isCornerWallCabinet = draggedElement.type === 'cabinet' && draggedElement.id.includes('corner-wall-cabinet');
-        const isCornerBaseCabinet = draggedElement.type === 'cabinet' && draggedElement.id.includes('corner-base-cabinet');
-        const isCornerTallUnit = draggedElement.type === 'cabinet' && (
-          draggedElement.id.includes('corner-tall') || 
-          draggedElement.id.includes('corner-larder') ||
-          draggedElement.id.includes('larder-corner')
-        );
-        
-        if (isCornerCounterTop || isCornerWallCabinet || isCornerBaseCabinet || isCornerTallUnit) {
+        const isCorner = isAnyCornerComponent(draggedElement);
+
+        if (isCorner) {
           // DYNAMIC: Use actual square dimensions for corner components
           const squareSize = Math.min(draggedElement.width, draggedElement.depth);
           clampWidth = squareSize;
@@ -2482,7 +2411,7 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
         }
 
         // Apply Smart Wall Snapping for dragged elements
-        const isCornerComponent = isCornerCounterTop || isCornerWallCabinet || isCornerBaseCabinet || isCornerTallUnit;
+        const isCornerComponent = isCorner;
         
         const dragWallSnappedPos = getEnhancedComponentPlacement(
           finalX,

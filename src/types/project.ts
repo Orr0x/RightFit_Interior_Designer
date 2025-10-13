@@ -110,6 +110,7 @@ export interface DesignElement {
   width: number; // X-axis dimension (left-to-right)
   depth: number; // Y-axis dimension (front-to-back)
   height: number; // Z-axis dimension (bottom-to-top)
+  plinth_height?: number; // Plinth/toe-kick height in cm (from database)
   // Legacy properties for backward compatibility
   verticalHeight?: number; // DEPRECATED: Use height instead
   rotation: number;

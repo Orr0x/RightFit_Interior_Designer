@@ -4,12 +4,13 @@
  * Fixes wall overlap and corner rotation issues
  */
 
-import { 
-  CoordinateTransformEngine, 
+import {
+  CoordinateTransformEngine,
   getCoordinateEngine,
-  PlanCoordinates 
+  PlanCoordinates
 } from '@/services/CoordinateTransformEngine';
 import { DesignElement } from '@/types/project';
+import { isCornerComponent as checkIsCornerComponent } from '@/utils/cornerDetection';
 
 export interface ComponentPlacementResult {
   x: number;
@@ -277,13 +278,10 @@ export class CanvasCoordinateIntegrator {
   }
   
   /**
-   * Check if component is a corner component
+   * Check if component is a corner component (using centralized utility)
    */
   private isCornerComponent(componentId: string): boolean {
-    const id = componentId.toLowerCase();
-    return id.includes('corner') || 
-           id.includes('larder-corner') || 
-           id.includes('corner-larder');
+    return checkIsCornerComponent(componentId);
   }
   
   /**

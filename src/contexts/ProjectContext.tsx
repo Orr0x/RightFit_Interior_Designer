@@ -4,6 +4,7 @@ import { supabase } from '../integrations/supabase/client';
 import { useToast } from '../hooks/use-toast';
 import { useAuth } from './AuthContext';
 import { Json } from '../integrations/supabase/types';
+import { RoomService } from '../services/RoomService';
 
 // Helper function to transform database project to TypeScript interface
 function transformProject(dbProject: Record<string, unknown>): Project {
@@ -526,14 +527,15 @@ export function ProjectProvider({ children }: { children: React.ReactNode }) {
         roomName = roomDisplayNames[roomType];
       }
 
-      // Fetch template geometry if templateId is provided
+      // Fetch dimensions - either from geometry template or room type template
       let roomGeometry = null;
-      let roomDimensions = { width: 600, height: 400 }; // Default
+      let roomDimensions = { width: 600, height: 400 }; // Fallback only (should not be used)
 
       console.log('[ProjectContext] createRoomDesign called with templateId:', templateId);
 
       if (templateId) {
-        console.log('[ProjectContext] Fetching template geometry for templateId:', templateId);
+        // Complex shape: Load geometry template
+        console.log('[ProjectContext] Fetching geometry template for templateId:', templateId);
         try {
           const { data: templateData, error: templateError } = await supabase
             .from('room_geometry_templates')
@@ -542,7 +544,7 @@ export function ProjectProvider({ children }: { children: React.ReactNode }) {
             .single();
 
           if (templateError) {
-            console.warn('[ProjectContext] Failed to fetch template:', templateError);
+            console.warn('[ProjectContext] Failed to fetch geometry template:', templateError);
           } else if (templateData) {
             roomGeometry = templateData.geometry_definition;
 
@@ -553,17 +555,30 @@ export function ProjectProvider({ children }: { children: React.ReactNode }) {
               height: bbox.max_y - bbox.min_y
             };
 
-            console.log(`✅ [ProjectContext] Using template "${templateData.display_name}" with geometry:`, templateData.category);
+            console.log(`✅ [ProjectContext] Using geometry template "${templateData.display_name}" (${templateData.category})`);
             console.log('[ProjectContext] Room dimensions from template:', roomDimensions);
             console.log('[ProjectContext] Room geometry:', roomGeometry);
           } else {
-            console.warn('[ProjectContext] Template data is null');
+            console.warn('[ProjectContext] Geometry template data is null');
           }
         } catch (err) {
-          console.error('[ProjectContext] Error fetching template:', err);
+          console.error('[ProjectContext] Error fetching geometry template:', err);
         }
       } else {
-        console.log('[ProjectContext] No templateId provided, using default rectangle');
+        // Simple rectangle: Load defaults from room_type_templates
+        console.log('[ProjectContext] No templateId provided, loading defaults from room_type_templates');
+        try {
+          const roomTypeTemplate = await RoomService.getRoomTypeTemplate(roomType);
+          roomDimensions = {
+            width: roomTypeTemplate.default_width,
+            height: roomTypeTemplate.default_height,
+            ceilingHeight: roomTypeTemplate.default_ceiling_height
+          };
+          console.log(`✅ [ProjectContext] Using room type template defaults for ${roomType}:`, roomDimensions);
+        } catch (err) {
+          console.error('[ProjectContext] Error loading room type template, using fallback:', err);
+          // Fallback already set above (600x400)
+        }
       }
 
       const { data, error } = await supabase

@@ -10,6 +10,7 @@ import useOptimizedComponents from '@/hooks/useOptimizedComponents';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { LoadingSpinner } from '@/components/designer/LoadingSpinner';
 import { getDefaultZ } from '@/utils/componentZPositionHelper';
+import { getPlinthHeightValue } from '@/utils/componentPlinthHelper';
 // Define DatabaseComponent type locally since it may not be in generated types yet
 interface DatabaseComponent {
   id: string;
@@ -33,6 +34,7 @@ interface DatabaseComponent {
   updated_at: string;
   color?: string; // Optional color property
   default_z_position?: number | null; // Height off ground in cm (from database)
+  plinth_height?: number | null; // Plinth/toe-kick height in cm (from database)
 }
 import { 
   Search, 
@@ -225,6 +227,9 @@ const CompactComponentSidebar: React.FC<CompactComponentSidebarProps> = ({
     // Calculate Z position using centralized helper (with database value priority)
     const defaultZ = getDefaultZ(component.type, component.component_id, component.default_z_position);
 
+    // Calculate plinth height using centralized helper (with database value priority)
+    const plinthHeight = getPlinthHeightValue(component.type, component.component_id, component.plinth_height, defaultZ);
+
     // Create a new design element positioned at canvas center
     const newElement: DesignElement = {
       id: `${component.component_id}-${Date.now()}`,
@@ -237,6 +242,7 @@ const CompactComponentSidebar: React.FC<CompactComponentSidebarProps> = ({
       width: component.width,   // X-axis dimension
       depth: component.depth,   // ✅ FIXED: Y-axis dimension (was swapped with height!)
       height: component.height, // ✅ FIXED: Z-axis dimension (vertical)
+      plinth_height: plinthHeight, // Plinth/toe-kick height from database or fallback
       rotation: 0,
       color: component.color || '#8B4513',
       zIndex: 0, // Required by DesignElement interface
@@ -269,7 +275,8 @@ const CompactComponentSidebar: React.FC<CompactComponentSidebarProps> = ({
       category: component.category,
       roomTypes: component.room_types,
       description: component.description,
-      default_z_position: component.default_z_position // Include database Z-position
+      default_z_position: component.default_z_position, // Include database Z-position
+      plinth_height: component.plinth_height // Include database plinth height
     };
     
     e.dataTransfer.setData('component', JSON.stringify(dragData));
@@ -376,6 +383,9 @@ const CompactComponentSidebar: React.FC<CompactComponentSidebarProps> = ({
     // Calculate Z position using centralized helper (with database value priority)
     const defaultZ = getDefaultZ(component.type, component.component_id, component.default_z_position);
 
+    // Calculate plinth height using centralized helper (with database value priority)
+    const plinthHeight = getPlinthHeightValue(component.type, component.component_id, component.plinth_height, defaultZ);
+
     // Create design element with proper structure and default Z positioning
     const element: DesignElement = {
       id: `${component.component_id}-${Date.now()}`, // ✅ FIXED: Use component_id not id (UUID)
@@ -388,6 +398,7 @@ const CompactComponentSidebar: React.FC<CompactComponentSidebarProps> = ({
       width: component.width,
       depth: component.depth,
       height: component.height,
+      plinth_height: plinthHeight, // Plinth/toe-kick height from database or fallback
       color: component.color,
       rotation: 0,
       zIndex: 0,        // ✅ FIXED: Added missing required field

@@ -30,6 +30,7 @@ interface DatabaseComponent {
   updated_at: string;
   color?: string; // Optional color property
   default_z_position?: number | null; // Height off ground in cm (from database)
+  plinth_height?: number | null; // Plinth/toe-kick height in cm (from database)
 }
 
 // Enhanced caching for components

@@ -30,7 +30,8 @@
       "Bash(findstr:*)",
       "Bash(done)",
       "Bash(dir:*)",
-      "Bash(move scriptsquery-components-schema.js scriptsquery-components-schema.cjs)"
+      "Bash(move scriptsquery-components-schema.js scriptsquery-components-schema.cjs)",
+      "Bash(timeout:*)"
     ],
     "deny": [],
     "ask": []

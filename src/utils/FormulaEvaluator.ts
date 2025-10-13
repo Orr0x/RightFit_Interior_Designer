@@ -315,9 +315,9 @@ export function createStandardVariables(
     depth: element.depth ? element.depth / 100 : 0.6,
 
     // Common calculated values
-    plinthHeight: options?.plinthHeight ?? 0.15, // 15cm default
-    cabinetHeight: options?.cabinetHeight ?? (element.height / 100 - 0.15),
-    doorHeight: options?.doorHeight ?? (element.height / 100 - 0.17),
+    plinthHeight: options?.plinthHeight ?? 0.10, // 10cm default (changed from 15cm for consistency)
+    cabinetHeight: options?.cabinetHeight ?? (element.height / 100 - 0.10),
+    doorHeight: options?.doorHeight ?? (element.height / 100 - 0.12),
 
     // Corner-specific
     legLength: options?.legLength ?? (element.width / 100),

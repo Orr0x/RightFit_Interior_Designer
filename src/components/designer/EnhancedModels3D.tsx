@@ -233,9 +233,10 @@ export const EnhancedCabinet3D: React.FC<Enhanced3DModelProps> = ({
   const doorColor = isSelected ? selectedColor : '#654321'; // Slightly darker than cabinet body
   const handleColor = '#c0c0c0';
   const plinthColor = '#2d2d2d';
-  
-  // Plinth dimensions
-  const plinthHeight = isWallCabinet ? 0 : 0.15; // 15cm plinth for base cabinets
+
+  // Plinth dimensions - use element.plinth_height from database with fallback
+  const plinthHeightCm = validElement.plinth_height ?? (isWallCabinet ? 0 : 10); // Default 10cm for base cabinets
+  const plinthHeight = plinthHeightCm / 100; // Convert cm to meters
   const cabinetHeight = isWallCabinet ? height : height - plinthHeight;
   const doorHeight = cabinetHeight - 0.05; // Door height with slight gap
   

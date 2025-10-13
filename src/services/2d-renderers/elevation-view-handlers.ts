@@ -38,7 +38,11 @@ export function renderStandardCabinet(
   const handleStyle = data.handle_style ?? 'bar';
   const handlePosition = data.handle_position ?? 'center';
   const hasToeKick = data.has_toe_kick ?? false;
-  const toeKickHeight = (data.toe_kick_height ?? 10) * zoom;
+
+  // Plinth height priority: element.plinth_height → data.toe_kick_height → 10cm default
+  const plinthHeightCm = element.plinth_height ?? data.toe_kick_height ?? 10;
+  const toeKickHeight = plinthHeightCm * zoom;
+
   const drawerCount = data.drawer_count ?? 0;
   const drawerHeights = data.drawer_heights ?? [];
 
@@ -344,8 +348,9 @@ export function renderSinkElevation(
     ctx.fillStyle = panelColor;
     ctx.fillRect(x, y, width, height);
 
-    // Toe kick
-    const toeKickHeight = 10 * zoom;
+    // Toe kick - use element plinth_height with fallback
+    const plinthHeightCm = element.plinth_height ?? 10;
+    const toeKickHeight = plinthHeightCm * zoom;
     ctx.fillStyle = '#1a1a1a';
     ctx.fillRect(x, y + height - toeKickHeight, width, toeKickHeight);
   }
