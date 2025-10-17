@@ -3,6 +3,27 @@
 **Status**: Deferred until after alignment/positioning/rotation fixes are complete
 **Created**: 2025-10-17
 
+## ✅ Confirmed Active Tables (2025-10-17 Update)
+
+### Room-Related Tables (ACTIVE - DO NOT DELETE):
+1. **`room_designs`** ✅ ACTIVE
+   - Stores actual room designs with elements
+   - Contains: `room_dimensions` (JSONB), `design_elements` (JSONB), room metadata
+   - Example: `{"width": 600, "height": 400}` - INNER room dimensions
+   - Critical: Used by Designer.tsx, DesignCanvas2D.tsx
+
+2. **`room_types`** ✅ ACTIVE (likely)
+   - Room type definitions (kitchen, bedroom, etc.)
+   - Referenced by room_type field in room_designs
+
+3. **`room_geometry_templates`** ⚠️ STATUS UNKNOWN
+   - May be for complex/L-shaped rooms
+   - Need to check if currently used
+
+4. **`room_type_templates`** ⚠️ STATUS UNKNOWN
+   - May be starter templates for room types
+   - Need to check if currently used
+
 ## Tables to Investigate for Cleanup
 
 These tables exist in the database but their current usage is unknown. They may be from previous implementation attempts or legacy systems.
