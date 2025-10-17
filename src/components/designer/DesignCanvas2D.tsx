@@ -1322,7 +1322,6 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
     let yPos: number;
 
     // Try to get metadata from database (Phase 1 collision detection)
-    console.log(`[Elevation] Looking up metadata for element: id=${element.id}, component_id=${element.component_id}, type=${element.type}`);
     const metadata = getComponentMetadata(element.component_id || element.id);
 
     if (metadata) {
@@ -1333,17 +1332,12 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
       elementHeight = componentHeight * zoom;
       yPos = floorY - (mountHeight * zoom) - elementHeight;
 
-      // Debug logging
-      console.log(`[Elevation] ${element.id}: metadata found - layer=${metadata.layer_type}, min=${metadata.min_height_cm}, max=${metadata.max_height_cm}, height=${componentHeight}, mountHeight=${mountHeight}`);
-
       // Override with explicit Z position if present
       if (element.z && element.z > 0) {
         const explicitMountHeight = element.z * zoom;
         yPos = floorY - explicitMountHeight - elementHeight;
-        console.log(`[Elevation] ${element.id}: using explicit Z=${element.z}, yPos adjusted`);
       }
     } else {
-      console.warn(`[Elevation] ${element.id}: NO METADATA FOUND - falling back to legacy logic`);
       // ⚠️ FALLBACK: Component not in database, use legacy hardcoded logic
       let elevationHeightCm: number;
 
