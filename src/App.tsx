@@ -33,12 +33,20 @@ import { AuthProvider } from "./contexts/AuthContext";
 import { ProjectProvider } from "./contexts/ProjectContext";
 import { preloadCommonComponents } from "./components/3d/DynamicComponentRenderer";
 import { setupConsoleLogger } from "./utils/ConsoleLogger";
+import { ConfigurationService } from "./services/ConfigurationService";
 
 const queryClient = new QueryClient();
 
 const App = () => {
-  // Preload common 3D models on app startup
+  // Preload common 3D models and configuration on app startup
   useEffect(() => {
+    // Preload app configuration from database
+    ConfigurationService.preload().then(() => {
+      console.info('✅ [App] Configuration preloaded from database');
+    }).catch((error) => {
+      console.error('❌ [App] Configuration preload failed:', error);
+    });
+
     preloadCommonComponents();
 
     // Start console log capture (development mode only)

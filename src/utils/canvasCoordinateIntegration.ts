@@ -4,12 +4,13 @@
  * Fixes wall overlap and corner rotation issues
  */
 
-import { 
-  CoordinateTransformEngine, 
+import {
+  CoordinateTransformEngine,
   getCoordinateEngine,
-  PlanCoordinates 
+  PlanCoordinates
 } from '@/services/CoordinateTransformEngine';
 import { DesignElement } from '@/types/project';
+import { ConfigurationService } from '@/services/ConfigurationService';
 
 export interface ComponentPlacementResult {
   x: number;
@@ -67,7 +68,7 @@ export class CanvasCoordinateIntegrator {
     });
     
     // CRITICAL FIX: Ensure component stays within inner room bounds with proper clearance
-    const wallClearance = 5; // 5cm clearance from inner wall faces
+    const wallClearance = ConfigurationService.getSync('wall_clearance', 5); // 5cm clearance from inner wall faces (fallback)
     
     // Calculate boundaries for component placement (accounting for component size)
     const placementBounds = {
@@ -128,7 +129,7 @@ export class CanvasCoordinateIntegrator {
     depth: number, 
     bounds: any
   ): ComponentPlacementResult | null {
-    const cornerThreshold = 60; // Increased threshold for better corner detection
+    const cornerThreshold = ConfigurationService.getSync('corner_snap_threshold', 60); // Threshold for corner detection (fallback)
     const roomBounds = this.coordinateEngine.getInnerRoomBounds();
     
     console.log('🔲 [CanvasIntegrator] Corner detection:', {
@@ -208,7 +209,7 @@ export class CanvasCoordinateIntegrator {
     let snappedY = dropY;
     let rotation = 0;
     let snappedToWall = false;
-    const snapThreshold = 40;
+    const snapThreshold = ConfigurationService.getSync('wall_snap_threshold', 40); // Wall snap distance (fallback)
     const roomBounds = this.coordinateEngine.getInnerRoomBounds();
     
     console.log('🎯 [CanvasIntegrator] Wall snapping check:', {
@@ -291,7 +292,7 @@ export class CanvasCoordinateIntegrator {
    */
   validatePlacement(element: DesignElement): boolean {
     const roomBounds = this.coordinateEngine.getInnerRoomBounds();
-    const wallClearance = 5;
+    const wallClearance = ConfigurationService.getSync('wall_clearance', 5); // 5cm clearance (fallback)
     
     // Check if component (including its dimensions) fits within bounds
     const fitsWidth = element.x >= wallClearance && 

@@ -866,6 +866,7 @@ const Designer = () => {
                     <CompactComponentSidebar
                       onAddElement={handleAddElement}
                       roomType={currentRoomDesign.room_type}
+                      canvasZoom={canvasZoom}
                     />
                   </div>
                 </>

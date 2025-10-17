@@ -45,9 +45,16 @@ export interface ConfigValue {
   description: string | null;
 }
 
+export interface ConfigJsonValue {
+  key: string;
+  value: any;
+  description: string | null;
+}
+
 export class ConfigurationService {
   private static readonly FEATURE_FLAG = 'use_database_configuration';
   private static configCache: Map<string, ConfigValue> = new Map();
+  private static jsonCache: Map<string, ConfigJsonValue> = new Map();
   private static cacheTimestamp: number = 0;
   private static readonly CACHE_TTL = 60000; // 1 minute cache
 
@@ -181,6 +188,70 @@ export class ConfigurationService {
   }
 
   /**
+   * Get JSON configuration value by key
+   * For configuration values stored as JSONB
+   *
+   * @param key - Configuration key (e.g., 'rotation_defaults')
+   * @param fallback - Fallback value if not found or flag disabled
+   * @returns Configuration JSON value
+   */
+  static async getJSON<T = any>(key: string, fallback: T): Promise<T> {
+    try {
+      // Check feature flag
+      const useDatabaseConfig = await FeatureFlagService.isEnabled(this.FEATURE_FLAG);
+
+      if (!useDatabaseConfig) {
+        return fallback;
+      }
+
+      // Check cache
+      if (this.isCacheValid()) {
+        const cached = this.jsonCache.get(key);
+        if (cached) {
+          return cached.value as T;
+        }
+      }
+
+      // Fetch from database
+      const { data, error } = await supabase
+        .from('app_configuration')
+        .select('*')
+        .eq('config_key', key)
+        .single();
+
+      if (error || !data || !data.value_json) {
+        console.warn(`[ConfigService] JSON config "${key}" not found, using fallback`);
+        return fallback;
+      }
+
+      // Cache the result
+      this.jsonCache.set(key, {
+        key,
+        value: data.value_json,
+        description: data.description,
+      });
+
+      return data.value_json as T;
+    } catch (error) {
+      console.error(`[ConfigService] Error loading JSON config "${key}":`, error);
+      return fallback;
+    }
+  }
+
+  /**
+   * Get JSON configuration value synchronously from cache
+   * Must call preload() first, or this will return fallback
+   *
+   * @param key - Configuration key
+   * @param fallback - Fallback value if not in cache
+   * @returns Configuration JSON value
+   */
+  static getJSONSync<T = any>(key: string, fallback: T): T {
+    const cached = this.jsonCache.get(key);
+    return cached ? (cached.value as T) : fallback;
+  }
+
+  /**
    * Preload all configuration values into cache
    * Call this during app initialization for better performance
    */
@@ -204,22 +275,35 @@ export class ConfigurationService {
 
       // Clear and rebuild cache
       this.configCache.clear();
+      this.jsonCache.clear();
 
       for (const config of data) {
-        const effectiveValue = this.getEffectiveValue(config);
-        const validatedValue = this.validateValue(effectiveValue, config);
+        // Cache numeric values
+        if (config.value_numeric !== null) {
+          const effectiveValue = this.getEffectiveValue(config);
+          const validatedValue = this.validateValue(effectiveValue, config);
 
-        this.configCache.set(config.config_key, {
-          key: config.config_key,
-          value: validatedValue,
-          unit: config.unit,
-          description: config.description,
-        });
+          this.configCache.set(config.config_key, {
+            key: config.config_key,
+            value: validatedValue,
+            unit: config.unit,
+            description: config.description,
+          });
+        }
+
+        // Cache JSON values
+        if (config.value_json !== null) {
+          this.jsonCache.set(config.config_key, {
+            key: config.config_key,
+            value: config.value_json,
+            description: config.description,
+          });
+        }
       }
 
       this.cacheTimestamp = Date.now();
 
-      console.log(`[ConfigService] Preloaded ${data.length} configuration values`);
+      console.log(`[ConfigService] Preloaded ${this.configCache.size} numeric and ${this.jsonCache.size} JSON configuration values`);
     } catch (error) {
       console.error('[ConfigService] Preload error:', error);
     }
@@ -231,6 +315,7 @@ export class ConfigurationService {
    */
   static clearCache(): void {
     this.configCache.clear();
+    this.jsonCache.clear();
     this.cacheTimestamp = 0;
     console.log('[ConfigService] Cache cleared');
   }

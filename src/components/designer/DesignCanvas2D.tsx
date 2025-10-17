@@ -1069,22 +1069,21 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
           ctx.stroke();
         });
       } else {
-        // Simple rectangular room (legacy)
-        // Draw outer walls (wall structure)
-        ctx.fillStyle = '#e5e5e5';
-        ctx.fillRect(roomPosition.outerX, roomPosition.outerY, outerWidth, outerHeight);
+        // Simple rectangular room (boundary-only rendering)
+        // ✅ FIXED: Use boundary lines instead of filled rectangles to prevent visual overlap
 
-        // Draw inner room (usable space)
-        ctx.fillStyle = '#f9f9f9';
+        // Optional: Very subtle inner room background (doesn't block components)
+        ctx.fillStyle = 'rgba(249, 249, 249, 0.3)'; // 70% transparent
         ctx.fillRect(roomPosition.innerX, roomPosition.innerY, innerWidth, innerHeight);
 
-        // Draw wall outlines
+        // Draw wall boundaries (stroke only - no fills)
         ctx.strokeStyle = '#333';
         ctx.lineWidth = 2;
         ctx.setLineDash([]);
 
         // Outer wall boundary
         ctx.strokeRect(roomPosition.outerX, roomPosition.outerY, outerWidth, outerHeight);
+
         // Inner room boundary (where components can be placed)
         ctx.strokeStyle = '#666';
         ctx.lineWidth = 1;
@@ -2674,7 +2673,8 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
 
       // 🎯 BOUNDARY CHECK: Prevent drops outside inner room boundaries (usable space)
       // Components should only be placed within the inner room, not in the wall thickness
-      if (dropX < -50 || dropY < -50 || dropX > innerRoomBounds.width + 50 || dropY > innerRoomBounds.height + 50) {
+      const dropBoundaryTolerance = ConfigurationService.getSync('drop_boundary_tolerance', 50); // 50cm tolerance (fallback)
+      if (dropX < -dropBoundaryTolerance || dropY < -dropBoundaryTolerance || dropX > innerRoomBounds.width + dropBoundaryTolerance || dropY > innerRoomBounds.height + dropBoundaryTolerance) {
         console.warn('⚠️ Drop cancelled: Component dropped outside inner room boundaries');
         return;
       }
@@ -2687,20 +2687,31 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
       const effectiveWidth = componentData.width;
       const effectiveDepth = componentData.depth;
 
-      // Set default Z position based on component type
+      // Set default Z position based on component type (from database configuration)
+      const zPositionDefaults = ConfigurationService.getJSONSync('z_position_defaults', {
+        floor_unit: 0,
+        base_unit: 10,
+        wall_unit: 150,
+        tall_unit: 0,
+        appliance: 0,
+        sink: 92,
+        worktop: 92
+      });
+
+      // Get Y-offset config for elevation-specific components
       let defaultZ = 0; // Default for floor-mounted components
       if (componentData.type === 'cornice') {
-        defaultZ = 200; // 200cm height for cornice (top of wall units)
+        defaultZ = ConfigurationService.getSync('cornice_y_offset', 200); // Top of wall units
       } else if (componentData.type === 'pelmet') {
-        defaultZ = 140; // 140cm height for pelmet (FIXED: bottom of wall units)
+        defaultZ = ConfigurationService.getSync('pelmet_y_offset', 140); // Bottom of wall units
       } else if (componentData.type === 'counter-top') {
-        defaultZ = 90; // 90cm height for counter tops
+        defaultZ = ConfigurationService.getSync('countertop_y_offset', 90); // Counter top height
       } else if (componentData.type === 'wall-cabinet' || componentData.id?.includes('wall-cabinet')) {
-        defaultZ = 140; // 140cm height for wall cabinets
+        defaultZ = ConfigurationService.getSync('wall_cabinet_y_offset', 140); // Wall cabinet height
       } else if (componentData.type === 'wall-unit-end-panel') {
-        defaultZ = 200; // 200cm height for wall unit end panels
+        defaultZ = ConfigurationService.getSync('cornice_y_offset', 200); // Top of wall units
       } else if (componentData.type === 'window') {
-        defaultZ = 90; // 90cm height for windows
+        defaultZ = ConfigurationService.getSync('countertop_y_offset', 90); // Window sill height
       }
 
       // Apply Enhanced Component Placement using unified coordinate system
@@ -2742,11 +2753,8 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
         isVisible: true // Required by DesignElement interface
       };
 
-      // Apply smart snapping for new elements
-      const snapped = getSnapPosition(newElement, newElement.x, newElement.y);
-      newElement.x = snapped.x;
-      newElement.y = snapped.y;
-      newElement.rotation = snapped.rotation;
+      // ✅ Enhanced placement already handled snapping - no need for duplicate getSnapPosition() call
+      // This was causing components to snap twice with potentially conflicting results
 
       onAddElement(newElement);
     } catch (error) {
