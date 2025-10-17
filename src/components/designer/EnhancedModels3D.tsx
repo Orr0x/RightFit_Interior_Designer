@@ -16,45 +16,36 @@ interface Enhanced3DModelProps {
   onClick: () => void;
 }
 
-// Helper function to convert 2D coordinates to 3D world coordinates accounting for wall thickness
-const convertTo3D = (x: number, y: number, roomWidth: number, roomHeight: number) => {
+// Helper function to convert 2D coordinates to 3D world coordinates
+// IMPORTANT: roomWidth/roomHeight parameters are INNER room dimensions (usable space)
+// 2D coordinates (x, y) are also in INNER room space (0 to roomWidth, 0 to roomHeight)
+const convertTo3D = (x: number, y: number, innerRoomWidth: number, innerRoomHeight: number) => {
   // Validate input parameters to prevent NaN values
   const safeX = isNaN(x) || x === undefined ? 0 : x;
   const safeY = isNaN(y) || y === undefined ? 0 : y;
-  const safeRoomWidth = isNaN(roomWidth) || roomWidth === undefined ? 600 : roomWidth;
-  const safeRoomHeight = isNaN(roomHeight) || roomHeight === undefined ? 400 : roomHeight;
-  
-  // CRITICAL FIX: Account for wall thickness in coordinate conversion
-  const WALL_THICKNESS_CM = 10; // 10cm wall thickness (matches DesignCanvas2D)
-  const WALL_THICKNESS_METERS = WALL_THICKNESS_CM / 100; // Convert to meters
-  
-  const roomWidthMeters = safeRoomWidth / 100;
-  const roomHeightMeters = safeRoomHeight / 100;
-  
-  // Convert 2D inner room coordinates to 3D world coordinates
-  // 2D coordinates represent positions within the inner usable space (after wall thickness)
-  // 3D needs to map these coordinates to the actual inner 3D space
-  
-  // Calculate the inner 3D room dimensions (subtracting wall thickness)
-  const inner3DWidth = roomWidthMeters - WALL_THICKNESS_METERS;
-  const inner3DHeight = roomHeightMeters - WALL_THICKNESS_METERS;
-  
-  // PRECISION FIX: Account for exact wall positioning
-  const halfWallThickness = WALL_THICKNESS_METERS / 2; // 5cm in meters
-  
-  // Calculate 3D inner boundaries (where wall inner faces are)
-  const innerLeftBoundary = -roomWidthMeters / 2 + halfWallThickness;
-  const innerRightBoundary = roomWidthMeters / 2 - halfWallThickness;
-  const innerBackBoundary = -roomHeightMeters / 2 + halfWallThickness;
-  const innerFrontBoundary = roomHeightMeters / 2 - halfWallThickness;
-  
-  // Map 2D coordinates directly to 3D inner space
-  const xRange = innerRightBoundary - innerLeftBoundary;
-  const zRange = innerFrontBoundary - innerBackBoundary;
-  
+  const safeInnerWidth = isNaN(innerRoomWidth) || innerRoomWidth === undefined ? 600 : innerRoomWidth;
+  const safeInnerHeight = isNaN(innerRoomHeight) || innerRoomHeight === undefined ? 400 : innerRoomHeight;
+
+  // Convert dimensions from centimeters to meters for Three.js
+  const innerWidthMeters = safeInnerWidth / 100;
+  const innerHeightMeters = safeInnerHeight / 100;
+
+  // ✅ FIXED: Input coordinates are ALREADY in inner room space
+  // Just convert cm → meters and center on Three.js origin (0, 0, 0)
+  // NO need to subtract wall thickness again - that's already done in 2D!
+
+  // Calculate 3D boundaries (inner room centered on origin)
+  const innerLeftBoundary = -innerWidthMeters / 2;
+  const innerRightBoundary = innerWidthMeters / 2;
+  const innerBackBoundary = -innerHeightMeters / 2;
+  const innerFrontBoundary = innerHeightMeters / 2;
+
+  // Direct mapping: 2D inner coordinates (cm) → 3D inner coordinates (m)
+  // x ranges from 0 to innerRoomWidth (2D) → -innerWidth/2 to +innerWidth/2 (3D)
+  // y ranges from 0 to innerRoomHeight (2D) → -innerHeight/2 to +innerHeight/2 (3D)
   return {
-    x: innerLeftBoundary + (safeX / safeRoomWidth) * xRange,
-    z: innerBackBoundary + (safeY / safeRoomHeight) * zRange
+    x: innerLeftBoundary + (safeX / safeInnerWidth) * innerWidthMeters,
+    z: innerBackBoundary + (safeY / safeInnerHeight) * innerHeightMeters
   };
 };
 
