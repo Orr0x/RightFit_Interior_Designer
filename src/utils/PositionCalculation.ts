@@ -201,9 +201,8 @@ export class PositionCalculation {
    * Fixes the left/right wall asymmetry by using consistent coordinate mapping
    * View mirroring is handled by rendering logic, not coordinate transformation
    *
-   * PHASE 2 FIX: Align with plan view's direct coordinate mapping
-   * - Plan view uses: position = innerX + (element.x * zoom)
-   * - Elevation now uses same formula for 1:1 alignment
+   * PHASE 1 FIX: Unified coordinate system (both walls use same Y mapping)
+   * PHASE 2 REVERTED: Keep normalized positioning (it was correct!)
    */
   private static calculateElevationPositionNew(
     element: DesignElement,
@@ -218,25 +217,31 @@ export class PositionCalculation {
     const effectiveWidth = element.width || 60;
     const effectiveDepth = element.depth || 60;
 
+    // Calculate elevation dimensions
+    const calcElevationWidth = elevationWidth || roomDimensions.width * zoom;
+    const calcElevationDepth = elevationDepth || roomDimensions.height * zoom;
+
     let xPos: number;
     let elementWidth: number;
 
     if (view === 'front' || view === 'back') {
-      // ✨ ALIGNED WITH PLAN VIEW: Direct coordinate mapping
-      // Plan view: x_canvas = innerX + (element.x * zoom)
-      // Elevation: Same formula for perfect 1:1 alignment
-      xPos = roomPosition.innerX + (element.x * zoom);
-      elementWidth = effectiveWidth * zoom;
+      // Front/back walls: use X coordinate from plan view
+      // Normalized: element at 40% of room width → 40% of elevation width
+      xPos = roomPosition.innerX + (element.x / roomDimensions.width) * calcElevationWidth;
+      elementWidth = (effectiveWidth / roomDimensions.width) * calcElevationWidth;
     } else {
-      // ✨ ALIGNED WITH PLAN VIEW: Direct Y coordinate mapping for side walls
-      // Plan view uses Y for vertical axis, elevation uses Y for horizontal axis
-      xPos = roomPosition.innerX + (element.y * zoom);
+      // ✨ NEW: Unified coordinate system for left AND right walls
+      // Both walls use the same Y coordinate mapping - no flipping at coordinate level
 
-      // Calculate element width based on type
+      // Calculate base position using direct Y coordinate (same for both walls)
+      const normalizedPosition = element.y / roomDimensions.height;
+      xPos = roomPosition.innerX + normalizedPosition * calcElevationDepth;
+
+      // Calculate element width
       if (element.type === 'counter-top') {
-        elementWidth = element.depth * zoom;
+        elementWidth = (element.depth / roomDimensions.height) * calcElevationDepth;
       } else {
-        elementWidth = effectiveWidth * zoom;
+        elementWidth = (effectiveWidth / roomDimensions.height) * calcElevationDepth;
       }
 
       // For left wall, mirror the rendering by inverting the X position
@@ -244,7 +249,6 @@ export class PositionCalculation {
       // This keeps the coordinate system consistent while achieving the visual effect
       if (view === 'left') {
         // Mirror position: reflect around center of elevation
-        const calcElevationDepth = elevationDepth || roomDimensions.height * zoom;
         const elevationCenter = roomPosition.innerX + calcElevationDepth / 2;
         const distanceFromCenter = xPos - elevationCenter;
         xPos = elevationCenter - distanceFromCenter - elementWidth;
