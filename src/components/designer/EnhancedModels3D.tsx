@@ -239,13 +239,17 @@ export const EnhancedCabinet3D: React.FC<Enhanced3DModelProps> = ({
     const cornerDepth = isWallCabinet ? 0.4 : 0.6;
     const centerX = legLength / 2;
     const centerZ = legLength / 2;
-    
+
     return (
-      <group 
-        position={[x + centerX, yPosition, z + centerZ]} 
-        onClick={onClick} 
-        rotation={[0, validElement.rotation * Math.PI / 180, 0]}
+      <group
+        position={[x, yPosition, z]}
+        onClick={onClick}
       >
+        {/* Inner group for center-based rotation pivot - maintains correct rotation behavior */}
+        <group
+          position={[centerX, 0, centerZ]}
+          rotation={[0, validElement.rotation * Math.PI / 180, 0]}
+        >
         {/* Plinths for base cabinets */}
         {!isWallCabinet && (
           <>
@@ -309,20 +313,24 @@ export const EnhancedCabinet3D: React.FC<Enhanced3DModelProps> = ({
           <boxGeometry args={[0.02, 0.15, 0.02]} />
           <meshStandardMaterial color={handleColor} metalness={0.8} roughness={0.2} />
         </mesh>
-
+        </group>
       </group>
     );
   } else if (isLarderCornerUnit) {
     // Larder corner unit - separate from regular corner cabinet
     const centerX = width / 2;
     const centerZ = depth / 2;
-    
+
     return (
-      <group 
-        position={[x + centerX, yPosition, z + centerZ]} 
-        onClick={onClick} 
-        rotation={[0, validElement.rotation * Math.PI / 180, 0]}
+      <group
+        position={[x, yPosition, z]}
+        onClick={onClick}
       >
+        {/* Inner group for center-based rotation pivot */}
+        <group
+          position={[centerX, 0, centerZ]}
+          rotation={[0, validElement.rotation * Math.PI / 180, 0]}
+        >
         {/* Plinth for larder corner unit */}
         {!isWallCabinet && (
           <mesh position={[0, -height/2 + plinthHeight/2, 0]}>
@@ -376,19 +384,23 @@ export const EnhancedCabinet3D: React.FC<Enhanced3DModelProps> = ({
           <boxGeometry args={[0.02, 0.15, 0.02]} />
           <meshStandardMaterial color={handleColor} metalness={0.8} roughness={0.2} />
         </mesh>
-
+        </group>
       </group>
     );
   } else if (isPanDrawer) {
     // Pan drawer unit with multiple drawers
     const cabinetYPosition = plinthHeight / 2; // Define cabinetYPosition for pan drawers
-    
+
     return (
       <group
-        position={[x + width / 2, yPosition, z + depth / 2]}
+        position={[x, yPosition, z]}
         onClick={onClick}
-        rotation={[0, validElement.rotation * Math.PI / 180, 0]}
       >
+        {/* Inner group for center-based rotation pivot */}
+        <group
+          position={[width / 2, 0, depth / 2]}
+          rotation={[0, validElement.rotation * Math.PI / 180, 0]}
+        >
         {/* Plinth */}
         <mesh position={[0, -height/2 + plinthHeight/2, -0.1]}>
           <boxGeometry args={[width, plinthHeight, depth - 0.2]} />
@@ -435,21 +447,25 @@ export const EnhancedCabinet3D: React.FC<Enhanced3DModelProps> = ({
           <boxGeometry args={[0.15, 0.02, 0.02]} />
           <meshStandardMaterial color={handleColor} metalness={0.8} roughness={0.2} />
         </mesh>
-
+        </group>
       </group>
     );
   } else if (isBedroom && element.id.includes('wardrobe')) {
     // Wardrobe with doors and detailed features
-    const doorCount = element.id.includes('3door') ? 3 : 
+    const doorCount = element.id.includes('3door') ? 3 :
                      element.id.includes('2door') ? 2 : 1;
     const doorWidth = (width - 0.05) / doorCount;
-    
+
     return (
-      <group 
-        position={[x + width / 2, yPosition, z + depth / 2]} 
-        onClick={onClick} 
-        rotation={[0, validElement.rotation * Math.PI / 180, 0]}
+      <group
+        position={[x, yPosition, z]}
+        onClick={onClick}
       >
+        {/* Inner group for center-based rotation pivot */}
+        <group
+          position={[width / 2, 0, depth / 2]}
+          rotation={[0, validElement.rotation * Math.PI / 180, 0]}
+        >
         {/* Wardrobe body */}
         <mesh position={[0, 0, 0]}>
           <boxGeometry args={[width, height, depth]} />
@@ -482,20 +498,24 @@ export const EnhancedCabinet3D: React.FC<Enhanced3DModelProps> = ({
             </React.Fragment>
           );
         })}
-
+        </group>
       </group>
     );
   } else if (isBedroom && element.id.includes('chest')) {
     // Chest of drawers with multiple drawers
     const drawerCount = 4; // Standard chest with 4 drawers
     const drawerHeight = (height - 0.05) / drawerCount;
-    
+
     return (
-      <group 
-        position={[x + width / 2, yPosition, z + depth / 2]} 
-        onClick={onClick} 
-        rotation={[0, validElement.rotation * Math.PI / 180, 0]}
+      <group
+        position={[x, yPosition, z]}
+        onClick={onClick}
       >
+        {/* Inner group for center-based rotation pivot */}
+        <group
+          position={[width / 2, 0, depth / 2]}
+          rotation={[0, validElement.rotation * Math.PI / 180, 0]}
+        >
         {/* Chest body */}
         <mesh position={[0, 0, 0]}>
           <boxGeometry args={[width, height, depth]} />
@@ -528,23 +548,27 @@ export const EnhancedCabinet3D: React.FC<Enhanced3DModelProps> = ({
             </React.Fragment>
           );
         })}
-
+        </group>
       </group>
     );
   } else {
     // Standard cabinet with door(s) - width-based door count
     const cabinetYPosition = isWallCabinet ? 0 : plinthHeight / 2;
-    
+
     // Door count logic: cabinets 60cm or less = single door, wider = double doors
     const doorCount = width > 0.6 ? 2 : 1; // 0.6m = 60cm threshold
     const doorWidth = (width - 0.05) / doorCount;
-    
+
     return (
-      <group 
-        position={[x + width / 2, yPosition, z + depth / 2]} 
-        onClick={onClick} 
-        rotation={[0, validElement.rotation * Math.PI / 180, 0]}
+      <group
+        position={[x, yPosition, z]}
+        onClick={onClick}
       >
+        {/* Inner group for center-based rotation pivot */}
+        <group
+          position={[width / 2, 0, depth / 2]}
+          rotation={[0, validElement.rotation * Math.PI / 180, 0]}
+        >
         {/* Plinth */}
         {!isWallCabinet && (
           <mesh position={[0, -height/2 + plinthHeight/2, -0.1]}>
@@ -714,7 +738,7 @@ export const EnhancedCabinet3D: React.FC<Enhanced3DModelProps> = ({
             </mesh>
           </>
         )}
-
+        </group>
       </group>
     );
   }
@@ -834,13 +858,17 @@ export const EnhancedAppliance3D: React.FC<Enhanced3DModelProps> = ({
     const frameHeight = 0.2;
     const mattressHeight = 0.3;
     const bedDepth = depth * 2; // Beds are deeper than standard appliances
-    
+
     return (
-      <group 
-        position={[x + width / 2, yPosition, z + bedDepth / 2]} 
-        onClick={onClick} 
-        rotation={[0, validElement.rotation * Math.PI / 180, 0]}
+      <group
+        position={[x, yPosition, z]}
+        onClick={onClick}
       >
+        {/* Inner group for center-based rotation pivot */}
+        <group
+          position={[width / 2, 0, bedDepth / 2]}
+          rotation={[0, validElement.rotation * Math.PI / 180, 0]}
+        >
         {/* Bed frame */}
         <mesh position={[0, -height/2 + frameHeight/2, 0]}>
           <boxGeometry args={[width, frameHeight, bedDepth]} />
@@ -876,20 +904,24 @@ export const EnhancedAppliance3D: React.FC<Enhanced3DModelProps> = ({
           <boxGeometry args={[width/3, 0.1, bedDepth/4]} />
           <meshStandardMaterial color="#F5F5F5" roughness={0.9} metalness={0} />
         </mesh>
-        
+        </group>
       </group>
     );
   } else if (applianceType === 'sofa') {
     // Sofa with base, cushions, and backrest
     const baseHeight = 0.3;
     const sofaDepth = depth * 1.5;
-    
+
     return (
-      <group 
-        position={[x + width / 2, yPosition, z + sofaDepth / 2]} 
-        onClick={onClick} 
-        rotation={[0, validElement.rotation * Math.PI / 180, 0]}
+      <group
+        position={[x, yPosition, z]}
+        onClick={onClick}
       >
+        {/* Inner group for center-based rotation pivot */}
+        <group
+          position={[width / 2, 0, sofaDepth / 2]}
+          rotation={[0, validElement.rotation * Math.PI / 180, 0]}
+        >
         {/* Sofa base */}
         <mesh position={[0, -height/2 + baseHeight/2, 0]}>
           <boxGeometry args={[width, baseHeight, sofaDepth]} />
@@ -941,25 +973,29 @@ export const EnhancedAppliance3D: React.FC<Enhanced3DModelProps> = ({
         {/* Back cushions */}
         <mesh position={[0, 0.1, -sofaDepth/3]}>
           <boxGeometry args={[width - 1, 0.4, 0.2]} />
-          <meshStandardMaterial 
-            color={isSelected ? selectedColor : (element.color ? element.color : "#4A6F8C")} 
-            roughness={0.9} 
+          <meshStandardMaterial
+            color={isSelected ? selectedColor : (element.color ? element.color : "#4A6F8C")}
+            roughness={0.9}
             metalness={0}
           />
         </mesh>
-        
+        </group>
       </group>
     );
   } else if (applianceType === 'chair') {
     // Chair with seat, back, and legs
     const chairDepth = depth;
-    
+
     return (
-      <group 
-        position={[x + width / 2, yPosition, z + chairDepth / 2]} 
-        onClick={onClick} 
-        rotation={[0, validElement.rotation * Math.PI / 180, 0]}
+      <group
+        position={[x, yPosition, z]}
+        onClick={onClick}
       >
+        {/* Inner group for center-based rotation pivot */}
+        <group
+          position={[width / 2, 0, chairDepth / 2]}
+          rotation={[0, validElement.rotation * Math.PI / 180, 0]}
+        >
         {/* Chair seat */}
         <mesh position={[0, 0, 0]}>
           <boxGeometry args={[width, 0.1, chairDepth]} />
@@ -997,19 +1033,23 @@ export const EnhancedAppliance3D: React.FC<Enhanced3DModelProps> = ({
           <boxGeometry args={[0.05, 0.8, 0.05]} />
           <meshStandardMaterial color="#2F4F4F" roughness={0.4} metalness={0.6} />
         </mesh>
-        
+        </group>
       </group>
     );
   } else if (applianceType === 'table') {
     // Table with top and legs
     const tableDepth = depth * 1.5;
-    
+
     return (
-      <group 
-        position={[x + width / 2, yPosition, z + tableDepth / 2]} 
-        onClick={onClick} 
-        rotation={[0, validElement.rotation * Math.PI / 180, 0]}
+      <group
+        position={[x, yPosition, z]}
+        onClick={onClick}
       >
+        {/* Inner group for center-based rotation pivot */}
+        <group
+          position={[width / 2, 0, tableDepth / 2]}
+          rotation={[0, validElement.rotation * Math.PI / 180, 0]}
+        >
         {/* Table top */}
         <mesh position={[0, 0, 0]}>
           <boxGeometry args={[width, 0.05, tableDepth]} />
@@ -1047,26 +1087,30 @@ export const EnhancedAppliance3D: React.FC<Enhanced3DModelProps> = ({
         </mesh>
         <mesh position={[width/2 - 0.05, -height/2 + 0.35, tableDepth/2 - 0.05]}>
           <boxGeometry args={[0.08, 0.7, 0.08]} />
-          <meshStandardMaterial 
-            color={isSelected ? selectedColor : applianceColor} 
-            roughness={0.6} 
+          <meshStandardMaterial
+            color={isSelected ? selectedColor : applianceColor}
+            roughness={0.6}
             metalness={0.2}
           />
         </mesh>
-        
+        </group>
       </group>
     );
   } else if (applianceType === 'tv') {
     // TV with stand
     const tvThickness = 0.05;
     const standHeight = 0.2;
-    
+
     return (
-      <group 
-        position={[x + width / 2, yPosition + height/2, z + depth / 2]} 
-        onClick={onClick} 
-        rotation={[0, validElement.rotation * Math.PI / 180, 0]}
+      <group
+        position={[x, yPosition + height/2, z]}
+        onClick={onClick}
       >
+        {/* Inner group for center-based rotation pivot */}
+        <group
+          position={[width / 2, 0, depth / 2]}
+          rotation={[0, validElement.rotation * Math.PI / 180, 0]}
+        >
         {/* TV screen */}
         <mesh position={[0, 0, 0]}>
           <boxGeometry args={[width, height, tvThickness]} />
@@ -1106,17 +1150,21 @@ export const EnhancedAppliance3D: React.FC<Enhanced3DModelProps> = ({
             metalness={0.8}
           />
         </mesh>
-        
+        </group>
       </group>
     );
   } else if (applianceType === 'refrigerator') {
     // Enhanced refrigerator with detailed features
     return (
-      <group 
-        position={[x + width / 2, yPosition, z + depth / 2]} 
-        onClick={onClick} 
-        rotation={[0, validElement.rotation * Math.PI / 180, 0]}
+      <group
+        position={[x, yPosition, z]}
+        onClick={onClick}
       >
+        {/* Inner group for center-based rotation pivot */}
+        <group
+          position={[width / 2, 0, depth / 2]}
+          rotation={[0, validElement.rotation * Math.PI / 180, 0]}
+        >
         {/* Main body */}
         <mesh>
           <boxGeometry args={[width, height, depth]} />

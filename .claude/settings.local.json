@@ -28,7 +28,8 @@
       "Bash(for port in {5170..5176})",
       "Bash(do netstat:*)",
       "Bash(findstr:*)",
-      "Bash(done)"
+      "Bash(done)",
+      "Bash(git pull:*)"
     ],
     "deny": [],
     "ask": []
