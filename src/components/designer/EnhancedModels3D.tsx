@@ -1214,17 +1214,21 @@ export const EnhancedAppliance3D: React.FC<Enhanced3DModelProps> = ({
           <boxGeometry args={[width * 0.2, 0.05, 0.001]} />
           <meshStandardMaterial color="#666666" />
         </mesh>
-        
+        </group>
       </group>
     );
   } else if (applianceType === 'dishwasher') {
     // Detailed dishwasher with controls and door features
     return (
       <group
-        position={[x + width / 2, yPosition, z + depth / 2]}
+        position={[x, yPosition, z]}
         onClick={onClick}
-        rotation={[0, validElement.rotation * Math.PI / 180, 0]}
       >
+        {/* Inner group for center-based rotation pivot */}
+        <group
+          position={[width / 2, 0, depth / 2]}
+          rotation={[0, validElement.rotation * Math.PI / 180, 0]}
+        >
         {/* Main appliance body */}
         <mesh>
           <boxGeometry args={[width, height, depth]} />
@@ -1276,17 +1280,21 @@ export const EnhancedAppliance3D: React.FC<Enhanced3DModelProps> = ({
           <boxGeometry args={[0.02, 0.02, 0.005]} />
           <meshStandardMaterial color="#5fe968" emissive="#5fe968" emissiveIntensity={0.5} />
         </mesh>
-        
+        </group>
       </group>
     );
   } else if (applianceType === 'oven') {
     // Detailed oven with controls, window and door
     return (
       <group
-        position={[x + width / 2, yPosition, z + depth / 2]}
+        position={[x, yPosition, z]}
         onClick={onClick}
-        rotation={[0, validElement.rotation * Math.PI / 180, 0]}
       >
+        {/* Inner group for center-based rotation pivot */}
+        <group
+          position={[width / 2, 0, depth / 2]}
+          rotation={[0, validElement.rotation * Math.PI / 180, 0]}
+        >
         {/* Main appliance body */}
         <mesh>
           <boxGeometry args={[width, height, depth]} />
@@ -1356,17 +1364,21 @@ export const EnhancedAppliance3D: React.FC<Enhanced3DModelProps> = ({
             distance={0.5}
           />
         )}
-        
+        </group>
       </group>
     );
   } else if (applianceType === 'washing-machine') {
     // Detailed washing machine with round door and controls
     return (
       <group
-        position={[x + width / 2, yPosition, z + depth / 2]}
+        position={[x, yPosition, z]}
         onClick={onClick}
-        rotation={[0, validElement.rotation * Math.PI / 180, 0]}
       >
+        {/* Inner group for center-based rotation pivot */}
+        <group
+          position={[width / 2, 0, depth / 2]}
+          rotation={[0, validElement.rotation * Math.PI / 180, 0]}
+        >
         {/* Main appliance body */}
         <mesh>
           <boxGeometry args={[width, height, depth]} />
@@ -1444,17 +1456,21 @@ export const EnhancedAppliance3D: React.FC<Enhanced3DModelProps> = ({
           <boxGeometry args={[0.12, 0.03, 0.001]} />
           <meshStandardMaterial color="#444" />
         </mesh>
-        
+        </group>
       </group>
     );
   } else if (applianceType === 'tumble-dryer') {
     // Detailed tumble dryer with round door and controls
     return (
       <group
-        position={[x + width / 2, yPosition, z + depth / 2]}
+        position={[x, yPosition, z]}
         onClick={onClick}
-        rotation={[0, validElement.rotation * Math.PI / 180, 0]}
       >
+        {/* Inner group for center-based rotation pivot */}
+        <group
+          position={[width / 2, 0, depth / 2]}
+          rotation={[0, validElement.rotation * Math.PI / 180, 0]}
+        >
         {/* Main appliance body */}
         <mesh>
           <boxGeometry args={[width, height, depth]} />
@@ -1544,17 +1560,21 @@ export const EnhancedAppliance3D: React.FC<Enhanced3DModelProps> = ({
           <boxGeometry args={[0.12, 0.03, 0.001]} />
           <meshStandardMaterial color="#444" />
         </mesh>
-        
+        </group>
       </group>
     );
   } else {
     // Generic appliance with better materials and details
     return (
       <group
-        position={[x + width / 2, yPosition, z + depth / 2]}
+        position={[x, yPosition, z]}
         onClick={onClick}
-        rotation={[0, validElement.rotation * Math.PI / 180, 0]}
       >
+        {/* Inner group for center-based rotation pivot */}
+        <group
+          position={[width / 2, 0, depth / 2]}
+          rotation={[0, validElement.rotation * Math.PI / 180, 0]}
+        >
         {/* Main body */}
         <mesh>
           <boxGeometry args={[width, height, depth]} />
@@ -1588,7 +1608,7 @@ export const EnhancedAppliance3D: React.FC<Enhanced3DModelProps> = ({
           <boxGeometry args={[width * 0.3, 0.02, 0.02]} />
           <meshStandardMaterial color="#c0c0c0" metalness={0.8} roughness={0.2} />
         </mesh>
-        
+        </group>
       </group>
     );
   }
@@ -1878,9 +1898,11 @@ export const EnhancedSink3D: React.FC<Enhanced3DModelProps> = ({ element, roomDi
   }
 
   const bowlDepth = sinkDepth - rimHeight; // Bowl depth
-  
+
   return (
-    <group position={[x + width / 2, yPosition, z + depth / 2]} onClick={onClick} rotation={[0, element.rotation * Math.PI / 180, 0]}>
+    <group position={[x, yPosition, z]} onClick={onClick}>
+      {/* Inner group for center-based rotation pivot */}
+      <group position={[width / 2, 0, depth / 2]} rotation={[0, element.rotation * Math.PI / 180, 0]}>
       {/* Main Sink Bowl(s) */}
       {isDoubleBowl ? (
         // Double Bowl Sink
@@ -2055,6 +2077,7 @@ export const EnhancedSink3D: React.FC<Enhanced3DModelProps> = ({ element, roomDi
           <meshLambertMaterial color="#00ff00" transparent opacity={0.5} />
         </mesh>
       )}
+      </group>
     </group>
   );
 };
