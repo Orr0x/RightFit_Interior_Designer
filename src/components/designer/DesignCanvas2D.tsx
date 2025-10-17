@@ -14,6 +14,8 @@ import { renderPlanView, renderElevationView } from '@/services/2d-renderers';
 import { FeatureFlagService } from '@/services/FeatureFlagService';
 import type { RoomGeometry } from '@/types/RoomGeometry';
 import * as GeometryUtils from '@/utils/GeometryUtils';
+import { useCollisionDetection } from '@/hooks/useCollisionDetection';
+import { useToast } from '@/hooks/use-toast';
 
 // Throttle function for performance optimization
 const throttle = <T extends (...args: any[]) => void>(func: T, delay: number): T => {
@@ -367,6 +369,7 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
   const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
   const [currentMousePos, setCurrentMousePos] = useState({ x: 0, y: 0 });
   const [draggedElement, setDraggedElement] = useState<DesignElement | null>(null);
+  const [draggedElementOriginalPos, setDraggedElementOriginalPos] = useState<{ x: number; y: number } | null>(null);
   const [hoveredElement, setHoveredElement] = useState<DesignElement | null>(null);
   const [dragThreshold, setDragThreshold] = useState<{ exceeded: boolean; startElement: DesignElement | null }>({ exceeded: false, startElement: null });
   const [snapGuides, setSnapGuides] = useState<{
@@ -374,6 +377,10 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
     horizontal: number[];
     snapPoint: { x: number; y: number } | null;
   }>({ vertical: [], horizontal: [], snapPoint: null });
+
+  // Collision detection with type-aware magnetic snapping
+  const { validatePlacement } = useCollisionDetection();
+  const { toast } = useToast();
 
   // Use design dimensions (required)
   // If roomDimensions is missing, this indicates a data integrity error
@@ -2152,6 +2159,11 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
         // Start dragging now that threshold is exceeded
         setIsDragging(true);
         setDraggedElement(dragThreshold.startElement);
+        // Store original position for collision detection fallback
+        setDraggedElementOriginalPos({
+          x: dragThreshold.startElement.x,
+          y: dragThreshold.startElement.y
+        });
         setDragThreshold({ exceeded: true, startElement: dragThreshold.startElement });
       }
     }
@@ -2248,12 +2260,55 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
         finalClampedY = Math.max(0, Math.min(finalY, innerRoomBounds.height - clampDepth));
       }
 
-      onUpdateElement(draggedElement.id, {
-        // CRITICAL FIX: Don't apply grid snapping if component was snapped to wall
+      // **COLLISION DETECTION** - Validate placement on drop
+      const proposedElement: DesignElement = {
+        ...draggedElement,
         x: dragWallSnappedPos.snappedToWall ? finalClampedX : snapToGrid(finalClampedX),
         y: dragWallSnappedPos.snappedToWall ? finalClampedY : snapToGrid(finalClampedY),
         rotation: snapped.rotation
-      });
+      };
+
+      const validationResult = validatePlacement(
+        proposedElement,
+        design.elements.filter(el => el.id !== draggedElement.id),
+        draggedElementOriginalPos || undefined
+      );
+
+      if (validationResult.isValid) {
+        // ✅ Valid placement - update position
+        onUpdateElement(draggedElement.id, {
+          x: proposedElement.x,
+          y: proposedElement.y,
+          rotation: proposedElement.rotation
+        });
+      } else if (validationResult.suggestedPosition) {
+        // ⚠️ Invalid placement - snap to suggested valid position
+        onUpdateElement(draggedElement.id, {
+          x: validationResult.suggestedPosition.x,
+          y: validationResult.suggestedPosition.y,
+          rotation: proposedElement.rotation
+        });
+        toast({
+          title: "Position Adjusted",
+          description: validationResult.reason || "Position adjusted to avoid collision",
+          variant: "default",
+        });
+        console.log(`🔄 [Collision] Adjusted position: ${validationResult.reason}`);
+      } else {
+        // ❌ No valid position found - return to original position
+        const fallbackPos = draggedElementOriginalPos || { x: draggedElement.x, y: draggedElement.y };
+        onUpdateElement(draggedElement.id, {
+          x: fallbackPos.x,
+          y: fallbackPos.y,
+          rotation: draggedElement.rotation  // Keep original rotation
+        });
+        toast({
+          title: "Invalid Placement",
+          description: validationResult.reason || "Cannot place component here",
+          variant: "destructive",
+        });
+        console.warn(`❌ [Collision] Returned to original: ${validationResult.reason}`);
+      }
     }
 
     // Handle tape measure clicks
@@ -2265,9 +2320,10 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
     // Clear drag state
     setIsDragging(false);
     setDraggedElement(null);
+    setDraggedElementOriginalPos(null);  // Clear original position
     setSnapGuides({ vertical: [], horizontal: [], snapPoint: null });
     setDragThreshold({ exceeded: false, startElement: null }); // 🎯 Clear drag threshold
-  }, [isDragging, draggedElement, canvasToRoom, currentMousePos, getSnapPosition, snapToGrid, onUpdateElement, roomDimensions, activeTool, onTapeMeasureClick]);
+  }, [isDragging, draggedElement, draggedElementOriginalPos, canvasToRoom, currentMousePos, getSnapPosition, snapToGrid, onUpdateElement, roomDimensions, activeTool, onTapeMeasureClick, validatePlacement, toast, design.elements]);
 
 
   // Touch event handlers
