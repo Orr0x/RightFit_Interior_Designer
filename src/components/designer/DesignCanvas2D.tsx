@@ -15,6 +15,7 @@ import { FeatureFlagService } from '@/services/FeatureFlagService';
 import type { RoomGeometry } from '@/types/RoomGeometry';
 import * as GeometryUtils from '@/utils/GeometryUtils';
 import { useCollisionDetection } from '@/hooks/useCollisionDetection';
+import { useComponentMetadata } from '@/hooks/useComponentMetadata';
 import { useToast } from '@/hooks/use-toast';
 
 // Throttle function for performance optimization
@@ -381,6 +382,9 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
   // Collision detection with type-aware magnetic snapping
   const { validatePlacement } = useCollisionDetection();
   const { toast } = useToast();
+
+  // Component metadata for layer-aware selection
+  const { getComponentMetadata } = useComponentMetadata();
 
   // Use design dimensions (required)
   // If roomDimensions is missing, this indicates a data integrity error
@@ -2036,8 +2040,23 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
     // Filter out invisible elements
     elementsToCheck = elementsToCheck.filter(element => element.isVisible !== false);
 
-    // Sort elements by zIndex in DESCENDING order (highest zIndex first) for selection
-    elementsToCheck.sort((a, b) => (b.zIndex || 0) - (a.zIndex || 0));
+    // Sort elements by layer height first (wall units over base units), then by zIndex
+    elementsToCheck.sort((a, b) => {
+      // Get layer metadata for height-based sorting
+      const metaA = getComponentMetadata(a.component_id || a.id);
+      const metaB = getComponentMetadata(b.component_id || b.id);
+
+      // Priority 1: Sort by max_height (higher components should be selected first when overlapping)
+      const heightA = metaA?.max_height_cm ?? 0;
+      const heightB = metaB?.max_height_cm ?? 0;
+
+      if (heightB !== heightA) {
+        return heightB - heightA;  // Higher height first (wall units before base units)
+      }
+
+      // Priority 2: If same height, sort by zIndex
+      return (b.zIndex || 0) - (a.zIndex || 0);
+    });
     
     const clickedElement = elementsToCheck.find(element => {
       // Rotation-aware hit detection
@@ -2073,7 +2092,7 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
     } else {
       onSelectElement(null);
     }
-  }, [activeTool, canvasToRoom, design.elements, onSelectElement, zoom]);
+  }, [activeTool, canvasToRoom, design.elements, onSelectElement, zoom, getComponentMetadata]);
 
   // Throttled snap guide update to improve performance
   const throttledSnapUpdate = useCallback(
@@ -2128,8 +2147,23 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
       // Filter out invisible elements
       elementsToCheck = elementsToCheck.filter(element => element.isVisible !== false);
 
-      // Sort elements by zIndex in DESCENDING order (highest zIndex first) for hover
-      elementsToCheck.sort((a, b) => (b.zIndex || 0) - (a.zIndex || 0));
+      // Sort elements by layer height first (wall units over base units), then by zIndex for hover
+      elementsToCheck.sort((a, b) => {
+        // Get layer metadata for height-based sorting
+        const metaA = getComponentMetadata(a.component_id || a.id);
+        const metaB = getComponentMetadata(b.component_id || b.id);
+
+        // Priority 1: Sort by max_height (higher components should be hovered first when overlapping)
+        const heightA = metaA?.max_height_cm ?? 0;
+        const heightB = metaB?.max_height_cm ?? 0;
+
+        if (heightB !== heightA) {
+          return heightB - heightA;  // Higher height first (wall units before base units)
+        }
+
+        // Priority 2: If same height, sort by zIndex
+        return (b.zIndex || 0) - (a.zIndex || 0);
+      });
       
       const hoveredEl = elementsToCheck.find(element => {
         // Use the new rotation-aware boundary detection
@@ -2187,7 +2221,7 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
       // Trigger re-render to show drag preview (also throttled by requestAnimationFrame)
       requestAnimationFrame(() => render());
     }
-  }, [isDragging, activeTool, dragStart, draggedElement, canvasToRoom, design.elements, active2DView, render, throttledSnapUpdate, snapGuides, onTapeMeasureMouseMove]);
+  }, [isDragging, activeTool, dragStart, draggedElement, canvasToRoom, design.elements, active2DView, render, throttledSnapUpdate, snapGuides, onTapeMeasureMouseMove, getComponentMetadata]);
 
   // Prevent context menu on right-click
   const handleContextMenu = useCallback((e: React.MouseEvent<HTMLCanvasElement>) => {
