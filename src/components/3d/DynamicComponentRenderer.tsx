@@ -159,44 +159,29 @@ export const DynamicComponentRenderer: React.FC<DynamicComponentRendererProps> =
   const height = element.height / 100; // meters
   const yPosition = isWallCabinet ? 2.0 - height / 2 : height / 2;
 
-  // Position offset for wall alignment
-  const positionOffset = useMemo(() => {
-    if (isCornerCabinet) {
-      // Corner cabinets: offset to rotation center
-      const legLength = element.width / 100; // meters
-      return {
-        x: legLength / 2,
-        z: legLength / 2,
-      };
-    }
-
-    // Standard cabinets: offset so back edge aligns to wall
-    const depth = (element.depth || (isWallCabinet ? 40 : 60)) / 100; // meters
-    const halfDepth = depth / 2;
-
-    // Calculate offset based on rotation
-    // Rotation is in degrees, 0° = facing down (negative Z)
-    const rotationRad = (element.rotation * Math.PI) / 180;
-
-    return {
-      x: Math.sin(rotationRad) * halfDepth,
-      z: -Math.cos(rotationRad) * halfDepth,
-    };
-  }, [isCornerCabinet, element.width, element.depth, element.rotation, isWallCabinet]);
+  // Calculate dimensions for rotation pivot
+  const width = element.width / 100; // meters
+  const depth = (element.depth || (isWallCabinet ? 40 : 60)) / 100; // meters
 
   // If loading or error, show nothing (fallback to hardcoded will be used)
   if (loadError || !meshGroup) {
     return null;
   }
 
-  // Render the loaded geometry
+  // Render the loaded geometry using TOP-LEFT positioning
+  // Matches the anchor point fix in EnhancedModels3D.tsx
   return (
     <group
-      position={[x + positionOffset.x, yPosition, z + positionOffset.z]}
+      position={[x, yPosition, z]}
       onClick={onClick}
-      rotation={[0, element.rotation * Math.PI / 180, 0]}
     >
-      <primitive object={meshGroup} />
+      {/* Inner group for center-based rotation pivot */}
+      <group
+        position={[width / 2, 0, depth / 2]}
+        rotation={[0, element.rotation * Math.PI / 180, 0]}
+      >
+        <primitive object={meshGroup} />
+      </group>
     </group>
   );
 };
