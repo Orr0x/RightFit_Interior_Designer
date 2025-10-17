@@ -117,144 +117,29 @@ const WALL_SNAP_THRESHOLD = 40; // Snap to wall if within 40cm
 // Configuration cache - loaded from database on component mount
 let configCache: Record<string, number> = {};
 
-// Helper function to calculate rotated bounding box for components
-const getRotatedBoundingBox = (element: DesignElement) => {
-  const rotation = (element.rotation || 0) * Math.PI / 180; // Convert to radians
-  
-  // Determine if this is a corner component with L-shaped footprint
-  const isCornerCounterTop = element.type === 'counter-top' && element.id.includes('counter-top-corner');
-  const isCornerWallCabinet = element.type === 'cabinet' && (element.id.includes('corner-wall-cabinet') || element.id.includes('new-corner-wall-cabinet'));
-  const isCornerBaseCabinet = element.type === 'cabinet' && (element.id.includes('corner-base-cabinet') || element.id.includes('l-shaped-test-cabinet'));
-  const isCornerTallUnit = element.type === 'cabinet' && (
-    element.id.includes('corner-tall') || 
-    element.id.includes('corner-larder') ||
-    element.id.includes('larder-corner')
-  );
-  
-  const isCornerComponent = isCornerCounterTop || isCornerWallCabinet || isCornerBaseCabinet || isCornerTallUnit;
-  
-  if (isCornerComponent) {
-    // Corner components use their ACTUAL dimensions (no more hardcoded 90x90)
-    const width = element.width;
-    const height = element.depth || element.height;
-    const centerX = element.x + width / 2;
-    const centerY = element.y + height / 2;
-    
-    // Use actual component dimensions for bounding box
-    return {
-      minX: element.x,
-      minY: element.y,
-      maxX: element.x + width,
-      maxY: element.y + height,
-      centerX,
-      centerY,
-      width: width,
-      height: height,
-      isCorner: true
-    };
-  } else {
-    // Standard rectangular component
-    const width = element.width;
-    const height = element.depth || element.height;
-    const centerX = element.x + width / 2;
-    const centerY = element.y + height / 2;
-    
-    if (rotation === 0) {
-      // No rotation - simple case
-      return {
-        minX: element.x,
-        minY: element.y,
-        maxX: element.x + width,
-        maxY: element.y + height,
-        centerX,
-        centerY,
-        width,
-        height,
-        isCorner: false
-      };
-    } else {
-      // Calculate rotated bounding box
-      const cos = Math.cos(rotation);
-      const sin = Math.sin(rotation);
-      
-      // Calculate the four corners of the rotated rectangle
-      const corners = [
-        { x: -width / 2, y: -height / 2 },
-        { x: width / 2, y: -height / 2 },
-        { x: width / 2, y: height / 2 },
-        { x: -width / 2, y: height / 2 }
-      ];
-      
-      // Rotate each corner and find the bounding box
-      const rotatedCorners = corners.map(corner => ({
-        x: centerX + corner.x * cos - corner.y * sin,
-        y: centerY + corner.x * sin + corner.y * cos
-      }));
-      
-      const minX = Math.min(...rotatedCorners.map(c => c.x));
-      const minY = Math.min(...rotatedCorners.map(c => c.y));
-      const maxX = Math.max(...rotatedCorners.map(c => c.x));
-      const maxY = Math.max(...rotatedCorners.map(c => c.y));
-      
-      return {
-        minX,
-        minY,
-        maxX,
-        maxY,
-        centerX,
-        centerY,
-        width: maxX - minX,
-        height: maxY - minY,
-        isCorner: false
-      };
-    }
-  }
-};
-
 // Helper function to check if a point is inside a rotated component
+// Uses inverse rotation transform to check point in component's local space
 const isPointInRotatedComponent = (pointX: number, pointY: number, element: DesignElement) => {
+  const width = element.width;
+  const height = element.depth || element.height;
   const rotation = (element.rotation || 0) * Math.PI / 180;
-  
-  // Determine if this is a corner component
-  const isCornerComponent = (element.type === 'counter-top' && element.id.includes('counter-top-corner')) ||
-                           (element.type === 'cabinet' && element.id.includes('corner-wall-cabinet')) ||
-                           (element.type === 'cabinet' && element.id.includes('corner-base-cabinet')) ||
-                           (element.type === 'cabinet' && (
-                             element.id.includes('corner-tall') || 
-                             element.id.includes('corner-larder') ||
-                             element.id.includes('larder-corner')
-                           ));
-  
-  if (isCornerComponent) {
-    // L-shaped components use their actual square footprint - dynamic check
-    const squareSize = Math.min(element.width, element.depth); // Use smaller dimension for square
-    return pointX >= element.x && pointX <= element.x + squareSize &&
-           pointY >= element.y && pointY <= element.y + squareSize;
-  } else {
-    // Standard rectangular component with rotation
-    const width = element.width;
-    const height = element.depth || element.height;
-    const centerX = element.x + width / 2;
-    const centerY = element.y + height / 2;
-    
-    if (rotation === 0) {
-      // No rotation - simple check
-      return pointX >= element.x && pointX <= element.x + width &&
-             pointY >= element.y && pointY <= element.y + height;
-    } else {
-      // Rotate the point relative to the component center
-      const cos = Math.cos(-rotation); // Negative rotation to transform point to component space
-      const sin = Math.sin(-rotation);
-      const dx = pointX - centerX;
-      const dy = pointY - centerY;
-      const rotatedX = dx * cos - dy * sin;
-      const rotatedY = dx * sin + dy * cos;
-      
-      // Check if the rotated point is within the original rectangle
-      return rotatedX >= -width / 2 && rotatedX <= width / 2 &&
-             rotatedY >= -height / 2 && rotatedY <= height / 2;
-    }
-  }
+
+  // Transform click point into component's local space
+  const centerX = element.x + width / 2;
+  const centerY = element.y + height / 2;
+
+  // Translate point to component center
+  const dx = pointX - centerX;
+  const dy = pointY - centerY;
+
+  // Rotate backwards (inverse rotation)
+  const cos = Math.cos(-rotation);
+  const sin = Math.sin(-rotation);
+  const localX = dx * cos - dy * sin;
+  const localY = dx * sin + dy * cos;
+
+  // Check if in un-rotated bounds
+  return Math.abs(localX) <= width / 2 && Math.abs(localY) <= height / 2;
 };
 
 // Smart Wall Snapping System with 5cm clearance
@@ -1333,27 +1218,35 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
   }, [active2DView, roomToCanvas, selectedElement, hoveredElement, zoom, showWireframe, showColorDetail]);
 
 
-  // Draw selection handles using rotated bounding box
+  // Draw selection handles using canvas rotation (matches component rendering)
   const drawSelectionHandles = (ctx: CanvasRenderingContext2D, element: DesignElement) => {
     const handleSize = 8;
+    const width = element.width * zoom;
+    const height = (element.depth || element.height) * zoom;
+    const rotation = (element.rotation || 0) * Math.PI / 180;
+
+    ctx.save();
+
+    // Apply same transform as component rendering
+    const pos = roomToCanvas(element.x, element.y);
+    ctx.translate(pos.x + width / 2, pos.y + height / 2);
+    ctx.rotate(rotation);
+
+    // Draw handles at corners of UN-rotated rectangle
     ctx.fillStyle = '#ff6b6b';
-    
-    // Get the rotated bounding box for the element
-    const bbox = getRotatedBoundingBox(element);
-    const canvasMin = roomToCanvas(bbox.minX, bbox.minY);
-    const canvasMax = roomToCanvas(bbox.maxX, bbox.maxY);
-    
-    // Draw handles at the corners of the bounding box
-    const handles = [
-      { x: canvasMin.x - handleSize/2, y: canvasMin.y - handleSize/2 },
-      { x: canvasMax.x - handleSize/2, y: canvasMin.y - handleSize/2 },
-      { x: canvasMin.x - handleSize/2, y: canvasMax.y - handleSize/2 },
-      { x: canvasMax.x - handleSize/2, y: canvasMax.y - handleSize/2 }
+
+    const corners = [
+      { x: -width / 2, y: -height / 2 },      // Top-left
+      { x: width / 2, y: -height / 2 },       // Top-right
+      { x: -width / 2, y: height / 2 },       // Bottom-left
+      { x: width / 2, y: height / 2 }         // Bottom-right
     ];
-    
-    handles.forEach(handle => {
-      ctx.fillRect(handle.x, handle.y, handleSize, handleSize);
+
+    corners.forEach(corner => {
+      ctx.fillRect(corner.x - handleSize / 2, corner.y - handleSize / 2, handleSize, handleSize);
     });
+
+    ctx.restore();
   };
 
   // Draw element in elevation view with detailed fronts
@@ -2140,18 +2033,27 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
     elementsToCheck.sort((a, b) => (b.zIndex || 0) - (a.zIndex || 0));
     
     const clickedElement = elementsToCheck.find(element => {
-      // Special handling for corner counter tops - use square bounding box
-      const isCornerCounterTop = element.type === 'counter-top' && element.id.includes('counter-top-corner');
-      
-      if (isCornerCounterTop) {
-        // Use 90cm x 90cm square for corner counter tops
-        return roomPos.x >= element.x && roomPos.x <= element.x + 90 &&
-               roomPos.y >= element.y && roomPos.y <= element.y + 90;
-      } else {
-        // Standard rectangular hit detection
-        return roomPos.x >= element.x && roomPos.x <= element.x + element.width &&
-               roomPos.y >= element.y && roomPos.y <= element.y + (element.depth || element.height);
-      }
+      // Rotation-aware hit detection
+      const width = element.width;
+      const height = element.depth || element.height;
+      const rotation = (element.rotation || 0) * Math.PI / 180;
+
+      // Transform click point into component's local space
+      const centerX = element.x + width / 2;
+      const centerY = element.y + height / 2;
+
+      // Translate click to component center
+      const dx = roomPos.x - centerX;
+      const dy = roomPos.y - centerY;
+
+      // Rotate backwards (inverse rotation)
+      const cos = Math.cos(-rotation);
+      const sin = Math.sin(-rotation);
+      const localX = dx * cos - dy * sin;
+      const localY = dx * sin + dy * cos;
+
+      // Check if in un-rotated bounds
+      return Math.abs(localX) <= width / 2 && Math.abs(localY) <= height / 2;
     });
 
     if (clickedElement) {
