@@ -53,6 +53,8 @@ export interface RoomDesignSettings {
   wall_color?: string;
   lighting_settings?: LightingSettings;
   view_preferences?: ViewPreferences;
+  // Elevation view configurations (for complex rooms with duplicates)
+  elevation_views?: ElevationViewConfig[];
   // Migration tracking
   migrated?: boolean;
   original_design_id?: string;
@@ -75,6 +77,19 @@ export interface ViewPreferences {
   snap_to_grid?: boolean;
 }
 
+// View configuration for all view types (plan, elevation, 3D)
+// Allows up to 3 views per cardinal direction (original + 2 duplicates)
+// Supports H-shaped rooms with 3 walls per direction = 12 total views max
+// Plus plan view and 3D view (each with independent visibility filtering)
+export interface ElevationViewConfig {
+  id: string;                                                       // Unique ID: "front-default", "plan", "3d", etc.
+  direction: 'front' | 'back' | 'left' | 'right' | 'plan' | '3d';  // View type/direction
+  label: string;                                                    // User-friendly name
+  hidden_elements: string[];                                        // Element IDs to hide in this view
+  is_default: boolean;                                              // True for standard views
+  sort_order: number;                                               // Display order in ViewSelector
+}
+
 // Design interface for component compatibility
 export interface Design {
   id: string;
@@ -87,6 +102,7 @@ export interface Design {
 // DesignElement interface with proper 3D dimension mapping
 export interface DesignElement {
   id: string;
+  component_id: string; // Component ID for database lookup (2D/3D definitions)
   name?: string; // Component name for display and debugging
   type: 'wall' | 'cabinet' | 'appliance' | 'counter-top' | 'end-panel' | 'window' | 'door' | 'flooring' | 'toe-kick' | 'cornice' | 'pelmet' | 'wall-unit-end-panel' | 'sink';
   x: number; // X position in room
@@ -103,7 +119,6 @@ export interface DesignElement {
   material?: string;
   // Layering and visibility properties
   zIndex: number; // Rendering layer order (lower = behind, higher = in front)
-  isVisible: boolean; // Whether the component is visible in the 2D plan view
   // Corner unit door positioning
   cornerDoorSide?: 'left' | 'right' | 'auto'; // Manual override for corner unit door side (auto = use centerline logic)
 }
@@ -241,7 +256,39 @@ export interface ProjectSummary extends Project {
   room_summaries: RoomDesignSummary[];
 }
 
-// Room type configuration
+// =============================================================================
+// REMOVED: ROOM_TYPE_CONFIGS (lines 254-435 deleted on 2025-10-10)
+// =============================================================================
+// The hardcoded ROOM_TYPE_CONFIGS object has been removed and replaced with
+// database-driven room templates.
+//
+// MIGRATION GUIDE:
+// ----------------
+// OLD CODE (deleted):
+//   const config = getRoomTypeConfig('kitchen');
+//   const width = config.defaultDimensions.width;
+//
+// NEW CODE (use RoomService or useRoomTemplate hook):
+//   import { RoomService } from '@/services/RoomService';
+//   const template = await RoomService.getRoomTypeTemplate('kitchen');
+//   const width = template.default_width;
+//
+// OR in React components:
+//   import { useRoomTemplate } from '@/hooks/useRoomTemplate';
+//   const { template } = useRoomTemplate('kitchen');
+//   const width = template?.defaultDimensions.width;
+//
+// BENEFITS:
+// - Single source of truth (database)
+// - Admin can update templates without code changes
+// - No duplicate data maintenance
+// - Easier testing
+//
+// DATABASE TABLE: room_type_templates
+// MIGRATION: supabase/migrations/20250915000002_phase1_create_room_templates.sql
+// =============================================================================
+
+// Room type configuration interface (kept for backward compatibility)
 export interface RoomTypeConfig {
   name: string;
   defaultDimensions: RoomDimensions;
@@ -250,200 +297,44 @@ export interface RoomTypeConfig {
   defaultSettings: RoomDesignSettings;
 }
 
-export const ROOM_TYPE_CONFIGS: Record<RoomType, RoomTypeConfig> = {
-  kitchen: {
-    name: 'Kitchen',
-    defaultDimensions: { width: 600, height: 400 },
-    icon: 'ChefHat',
-    description: 'Kitchen design with cabinets and appliances',
-    defaultSettings: {
-      default_wall_height: 250,
-      view_preferences: {
-        default_2d_view: '2d',
-        default_2d_mode: 'plan',
-        grid_enabled: true,
-        snap_to_grid: true
-      }
-    }
-  },
-  bedroom: {
-    name: 'Bedroom',
-    defaultDimensions: { width: 500, height: 400 },
-    icon: 'Bed',
-    description: 'Bedroom design with furniture and storage',
-    defaultSettings: {
-      default_wall_height: 250,
-      view_preferences: {
-        default_2d_view: '2d',
-        default_2d_mode: 'plan',
-        grid_enabled: true,
-        snap_to_grid: true
-      }
-    }
-  },
-  'master-bedroom': {
-    name: 'Master Bedroom',
-    defaultDimensions: { width: 600, height: 500 },
-    icon: 'Bed',
-    description: 'Master bedroom with en-suite and walk-in closet space',
-    defaultSettings: {
-      default_wall_height: 250,
-      view_preferences: {
-        default_2d_view: '2d',
-        default_2d_mode: 'plan',
-        grid_enabled: true,
-        snap_to_grid: true
-      }
-    }
-  },
-  'guest-bedroom': {
-    name: 'Guest Bedroom',
-    defaultDimensions: { width: 450, height: 400 },
-    icon: 'Bed',
-    description: 'Guest bedroom design with essential furniture',
-    defaultSettings: {
-      default_wall_height: 250,
-      view_preferences: {
-        default_2d_view: '2d',
-        default_2d_mode: 'plan',
-        grid_enabled: true,
-        snap_to_grid: true
-      }
-    }
-  },
-  bathroom: {
-    name: 'Bathroom',
-    defaultDimensions: { width: 300, height: 300 },
-    icon: 'Bath',
-    description: 'Bathroom design with fixtures and vanities',
-    defaultSettings: {
-      default_wall_height: 250,
-      view_preferences: {
-        default_2d_view: '2d',
-        default_2d_mode: 'plan',
-        grid_enabled: true,
-        snap_to_grid: true
-      }
-    }
-  },
-  ensuite: {
-    name: 'Ensuite',
-    defaultDimensions: { width: 250, height: 200 },
-    icon: 'Bath',
-    description: 'Ensuite bathroom connected to master bedroom',
-    defaultSettings: {
-      default_wall_height: 250,
-      view_preferences: {
-        default_2d_view: '2d',
-        default_2d_mode: 'plan',
-        grid_enabled: true,
-        snap_to_grid: true
-      }
-    }
-  },
-  'living-room': {
-    name: 'Living Room',
-    defaultDimensions: { width: 600, height: 500 },
-    icon: 'Sofa',
-    description: 'Living room design with seating and entertainment',
-    defaultSettings: {
-      default_wall_height: 250,
-      view_preferences: {
-        default_2d_view: '3d',
-        default_2d_mode: 'plan',
-        grid_enabled: true,
-        snap_to_grid: true
-      }
-    }
-  },
-  'dining-room': {
-    name: 'Dining Room',
-    defaultDimensions: { width: 500, height: 400 },
-    icon: 'UtensilsCrossed',
-    description: 'Dining room design with table and storage',
-    defaultSettings: {
-      default_wall_height: 250,
-      view_preferences: {
-        default_2d_view: '2d',
-        default_2d_mode: 'plan',
-        grid_enabled: true,
-        snap_to_grid: true
-      }
-    }
-  },
-  office: {
-    name: 'Office',
-    defaultDimensions: { width: 400, height: 350 },
-    icon: 'Monitor',
-    description: 'Home office design with desk and storage',
-    defaultSettings: {
-      default_wall_height: 250,
-      view_preferences: {
-        default_2d_view: '2d',
-        default_2d_mode: 'plan',
-        grid_enabled: true,
-        snap_to_grid: true
-      }
-    }
-  },
-  'dressing-room': {
-    name: 'Dressing Room',
-    defaultDimensions: { width: 300, height: 400 },
-    icon: 'Shirt',
-    description: 'Dressing room with wardrobe and storage solutions',
-    defaultSettings: {
-      default_wall_height: 250,
-      view_preferences: {
-        default_2d_view: '2d',
-        default_2d_mode: 'plan',
-        grid_enabled: true,
-        snap_to_grid: true
-      }
-    }
-  },
-  utility: {
-    name: 'Utility Room',
-    defaultDimensions: { width: 300, height: 250 },
-    icon: 'Wrench',
-    description: 'Utility room design with appliances and storage',
-    defaultSettings: {
-      default_wall_height: 250,
-      view_preferences: {
-        default_2d_view: '2d',
-        default_2d_mode: 'plan',
-        grid_enabled: true,
-        snap_to_grid: true
-      }
-    }
-  },
-  'under-stairs': {
-    name: 'Under Stairs',
-    defaultDimensions: { width: 200, height: 250 },
-    icon: 'Home',
-    description: 'Under stairs storage design',
-    defaultSettings: {
-      default_wall_height: 200, // Lower ceiling
-      view_preferences: {
-        default_2d_view: '2d',
-        default_2d_mode: 'front', // Side view more useful for under stairs
-        grid_enabled: true,
-        snap_to_grid: true
-      }
-    }
-  }
+// Helper functions - DEPRECATED: Use RoomService instead
+/**
+ * @deprecated Use RoomService.getRoomTypeTemplate() instead
+ * This function is kept for backward compatibility but will be removed in future versions
+ */
+export const getRoomTypeConfig = async (roomType: RoomType): Promise<RoomTypeConfig> => {
+  throw new Error(
+    `getRoomTypeConfig() is deprecated. Use RoomService.getRoomTypeTemplate('${roomType}') instead.`
+  );
 };
 
-// Helper functions
-export const getRoomTypeConfig = (roomType: RoomType): RoomTypeConfig => {
-  return ROOM_TYPE_CONFIGS[roomType];
-};
-
+/**
+ * @deprecated Use RoomService.getAllRoomTypes() instead
+ */
 export const getAllRoomTypes = (): RoomType[] => {
-  return Object.keys(ROOM_TYPE_CONFIGS) as RoomType[];
+  // Return hardcoded list of valid room types from the RoomType union
+  return [
+    'kitchen',
+    'bedroom',
+    'master-bedroom',
+    'guest-bedroom',
+    'bathroom',
+    'ensuite',
+    'living-room',
+    'dining-room',
+    'office',
+    'dressing-room',
+    'utility',
+    'under-stairs'
+  ];
 };
 
+/**
+ * Check if a string is a valid RoomType
+ * This function is NOT deprecated as it's a type guard
+ */
 export const isValidRoomType = (roomType: string): roomType is RoomType => {
-  return roomType in ROOM_TYPE_CONFIGS;
+  return getAllRoomTypes().includes(roomType as RoomType);
 };
 
 // Migration helpers - Updated for proper 3D dimension mapping
@@ -481,19 +372,18 @@ export const migrateDesignElement = (element: Record<string, string | number | b
   };
 };
 
+/**
+ * @deprecated Use RoomService.createRoomDesign() instead
+ * This synchronous function cannot query the database for templates.
+ * Use the async RoomService.createRoomDesign() for proper database-driven room creation.
+ */
 export const createDefaultRoomDesign = (
   projectId: string,
   roomType: RoomType,
   customName?: string
 ): Omit<RoomDesign, 'id' | 'created_at' | 'updated_at'> => {
-  const config = getRoomTypeConfig(roomType);
-  
-  return {
-    project_id: projectId,
-    room_type: roomType,
-    name: customName,
-    room_dimensions: config.defaultDimensions,
-    design_elements: [],
-    design_settings: config.defaultSettings
-  };
+  throw new Error(
+    `createDefaultRoomDesign() is deprecated and cannot access database templates. ` +
+    `Use RoomService.createRoomDesign('${projectId}', '${roomType}') instead.`
+  );
 };

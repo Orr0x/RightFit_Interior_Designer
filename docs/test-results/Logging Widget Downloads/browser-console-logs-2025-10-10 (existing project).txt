@@ -1,0 +1,4217 @@
+
+================================================================================
+BROWSER CONSOLE LOGS
+================================================================================
+Captured: 653 log entries
+Session Start: 2025-10-10T12:54:33.364Z
+Session End: 2025-10-10T12:54:48.595Z
+================================================================================
+
+[2025-10-10T12:54:33.364Z] 📝 [LOG] 📂 [CompactComponentSidebar] Grouping 0 filtered components by category
+[2025-10-10T12:54:33.365Z] 📝 [LOG] 📂 [CompactComponentSidebar] Final categories with components: []
+[2025-10-10T12:54:33.365Z] ❌ [ERROR] ❌ [CompactComponentSidebar] WALL UNITS CATEGORY MISSING FROM FINAL GROUPS!
+[2025-10-10T12:54:33.365Z] 📝 [LOG] 📂 [CompactComponentSidebar] Available categories: []
+[2025-10-10T12:54:33.365Z] 📝 [LOG] ⏳ [CompactComponentSidebar] Component sidebar in loading state
+[2025-10-10T12:54:33.371Z] 📝 [LOG] 🎯 [PerformanceMonitor] Performance monitor hidden
+[2025-10-10T12:54:33.372Z] 📝 [LOG] 🧹 [ProjectContext] Cleaning up auto-save interval on room change
+[2025-10-10T12:54:33.376Z] 📝 [LOG] ⚡ [useOptimizedComponents] Loaded components from cache
+[2025-10-10T12:54:33.377Z] 📝 [LOG] 🚀 [Designer] Preloading common component behaviors for performance
+[2025-10-10T12:54:33.377Z] 📝 [LOG] 🔥 [ComponentService] Preloading common component behaviors
+[2025-10-10T12:54:33.377Z] 📝 [LOG] 🔄 [ComponentService] Batch loading behaviors for 10 component types
+[2025-10-10T12:54:33.378Z] 📝 [LOG] ⚡ [ComponentService] All 10 behaviors found in cache
+[2025-10-10T12:54:33.378Z] 📝 [LOG] 🔧 [ProjectContext] Auto-save initialization check {
+  "autoSaveEnabled": true,
+  "hasInterval": true,
+  "hasCurrentRoom": true,
+  "roomId": "55c29969-af57-4cd5-9897-cb42c2977baf"
+}
+[2025-10-10T12:54:33.381Z] 📝 [LOG] [ConfigService] Feature disabled, skipping preload
+[2025-10-10T12:54:33.382Z] 📝 [LOG] 🏗️ [CoordinateEngine] Initialized with inner room dimensions: {
+  "innerWidth": 600,
+  "innerHeight": 400,
+  "ceilingHeight": 240,
+  "wallThickness": 10
+}
+[2025-10-10T12:54:33.382Z] 📝 [LOG] 🏗️ [DesignCanvas2D] Coordinate engine initialized for room: {
+  "width": 600,
+  "height": 400
+}
+[2025-10-10T12:54:33.382Z] 📝 [LOG] [DesignCanvas2D] Configuration loaded from database: {
+  "canvas_width": 1600,
+  "canvas_height": 1200,
+  "grid_size": 20,
+  "min_zoom": 0.5,
+  "max_zoom": 4,
+  "wall_thickness": 10,
+  "wall_clearance": 5,
+  "wall_snap_threshold": 40,
+  "snap_tolerance_default": 15,
+  "snap_tolerance_countertop": 25,
+  "proximity_threshold": 100,
+  "wall_snap_distance_default": 35,
+  "wall_snap_distance_countertop": 50,
+  "corner_tolerance": 30,
+  "toe_kick_height": 8,
+  "drag_threshold_mouse": 5,
+  "drag_threshold_touch": 10
+}
+[2025-10-10T12:54:33.382Z] 📝 [LOG] ✅ [Designer] Preloading complete
+[2025-10-10T12:54:33.382Z] 📝 [LOG] 🚀 [DesignCanvas2D] Preloaded component behaviors and room config
+[2025-10-10T12:54:33.382Z] 📝 [LOG] [DesignCanvas2D] 2D render definitions preloaded
+[2025-10-10T12:54:33.391Z] 📝 [LOG] 🔍 [CompactComponentSidebar] Filtering components for room type: kitchen
+[2025-10-10T12:54:33.391Z] 📝 [LOG] 🔍 [CompactComponentSidebar] Total components loaded: 194
+[2025-10-10T12:54:33.391Z] 📝 [LOG] 🔍 [CompactComponentSidebar] Components available for kitchen: 94
+[2025-10-10T12:54:33.391Z] 📝 [LOG] 🏠 [CompactComponentSidebar] Wall units available for kitchen: 0 (lowercase: 0, title: 0)
+[2025-10-10T12:54:33.392Z] ⚠️ [WARN] ⚠️ [CompactComponentSidebar] NO WALL UNITS AVAILABLE for room type: kitchen
+[2025-10-10T12:54:33.392Z] 📝 [LOG] 📂 [CompactComponentSidebar] Grouping 94 filtered components by category
+[2025-10-10T12:54:33.392Z] 📝 [LOG] 📂 [CompactComponentSidebar] Final categories with components: [
+  "appliances",
+  "base-cabinets",
+  "counter-tops",
+  "doors-external",
+  "doors-internal",
+  "finishing",
+  "kitchen-larder",
+  "sinks",
+  "wall-cabinets",
+  "windows"
+]
+[2025-10-10T12:54:33.392Z] 📝 [LOG] 📂 [CompactComponentSidebar] appliances: 11 components
+[2025-10-10T12:54:33.392Z] 📝 [LOG] 📂 [CompactComponentSidebar] base-cabinets: 15 components
+[2025-10-10T12:54:33.392Z] 📝 [LOG] 📂 [CompactComponentSidebar] counter-tops: 6 components
+[2025-10-10T12:54:33.392Z] 📝 [LOG] 📂 [CompactComponentSidebar] doors-external: 4 components
+[2025-10-10T12:54:33.392Z] 📝 [LOG] 📂 [CompactComponentSidebar] doors-internal: 8 components
+[2025-10-10T12:54:33.393Z] 📝 [LOG] 📂 [CompactComponentSidebar] finishing: 11 components
+[2025-10-10T12:54:33.393Z] 📝 [LOG] 📂 [CompactComponentSidebar] kitchen-larder: 5 components
+[2025-10-10T12:54:33.393Z] 📝 [LOG] 📂 [CompactComponentSidebar] sinks: 20 components
+[2025-10-10T12:54:33.393Z] 📝 [LOG] 📂 [CompactComponentSidebar] wall-cabinets: 7 components
+[2025-10-10T12:54:33.393Z] 📝 [LOG] 📂 [CompactComponentSidebar] windows: 7 components
+[2025-10-10T12:54:33.393Z] ❌ [ERROR] ❌ [CompactComponentSidebar] WALL UNITS CATEGORY MISSING FROM FINAL GROUPS!
+[2025-10-10T12:54:33.393Z] 📝 [LOG] 📂 [CompactComponentSidebar] Available categories: [
+  "appliances",
+  "base-cabinets",
+  "counter-tops",
+  "doors-external",
+  "doors-internal",
+  "finishing",
+  "kitchen-larder",
+  "sinks",
+  "wall-cabinets",
+  "windows"
+]
+[2025-10-10T12:54:33.394Z] 📝 [LOG] ✅ [CompactComponentSidebar] Component sidebar rendered successfully
+[2025-10-10T12:54:33.394Z] 📝 [LOG] ✅ [CompactComponentSidebar] Summary: 194 total, 94 for kitchen, 10 categories
+[2025-10-10T12:54:33.402Z] 📝 [LOG] 🎯 [PerformanceMonitor] Performance monitor hidden
+[2025-10-10T12:54:33.415Z] 📝 [LOG] ✅ [CompactComponentSidebar] Component sidebar rendered successfully
+[2025-10-10T12:54:33.415Z] 📝 [LOG] ✅ [CompactComponentSidebar] Summary: 194 total, 94 for kitchen, 10 categories
+[2025-10-10T12:54:33.420Z] 📝 [LOG] 🎯 [PerformanceMonitor] Performance monitor hidden
+[2025-10-10T12:54:39.269Z] 📝 [LOG] ✅ [CompactComponentSidebar] Component sidebar rendered successfully
+[2025-10-10T12:54:39.269Z] 📝 [LOG] ✅ [CompactComponentSidebar] Summary: 194 total, 94 for kitchen, 10 categories
+[2025-10-10T12:54:39.276Z] 📝 [LOG] 🎯 [PerformanceMonitor] Performance monitor hidden
+[2025-10-10T12:54:39.277Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: l-shaped-test-cabinet-90 with data: {
+  "is_corner": true,
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "handle_position": "center",
+  "toe_kick_height": 10,
+  "corner_door_side": "auto"
+}
+[2025-10-10T12:54:39.278Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: l-shaped-test-cabinet-90 with data: {
+  "is_corner": true,
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "handle_position": "center",
+  "toe_kick_height": 10,
+  "corner_door_side": "auto"
+}
+[2025-10-10T12:54:39.278Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: new-corner-wall-cabinet-60 with data: {
+  "is_corner": true,
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": false,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:39.278Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: new-corner-wall-cabinet-60 with data: {
+  "is_corner": true,
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": false,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:39.279Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: base-cabinet-60 with data: {
+  "door_count": 2,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:39.279Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: base-cabinet-50 with data: {
+  "door_count": 2,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:39.279Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: base-cabinet-40 with data: {
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:39.280Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: base-cabinet-30 with data: {
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:39.280Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: l-shaped-test-cabinet-90 with data: {
+  "is_corner": true,
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "handle_position": "center",
+  "toe_kick_height": 10,
+  "corner_door_side": "auto"
+}
+[2025-10-10T12:54:39.280Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: l-shaped-test-cabinet-90 with data: {
+  "is_corner": true,
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "handle_position": "center",
+  "toe_kick_height": 10,
+  "corner_door_side": "auto"
+}
+[2025-10-10T12:54:39.280Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: new-corner-wall-cabinet-60 with data: {
+  "is_corner": true,
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": false,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:39.281Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: new-corner-wall-cabinet-60 with data: {
+  "is_corner": true,
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": false,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:39.281Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: base-cabinet-60 with data: {
+  "door_count": 2,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:39.281Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: base-cabinet-50 with data: {
+  "door_count": 2,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:39.281Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: base-cabinet-40 with data: {
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:39.282Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: base-cabinet-30 with data: {
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:39.283Z] 📝 [LOG] [ConfigService] Feature disabled, skipping preload
+[2025-10-10T12:54:39.283Z] 📝 [LOG] 🏗️ [CoordinateEngine] Initialized with inner room dimensions: {
+  "innerWidth": 600,
+  "innerHeight": 400,
+  "ceilingHeight": 240,
+  "wallThickness": 10
+}
+[2025-10-10T12:54:39.283Z] 📝 [LOG] 🏗️ [DesignCanvas2D] Coordinate engine initialized for room: {
+  "width": 600,
+  "height": 400
+}
+[2025-10-10T12:54:39.284Z] 📝 [LOG] [DesignCanvas2D] Configuration loaded from database: {
+  "canvas_width": 1600,
+  "canvas_height": 1200,
+  "grid_size": 20,
+  "min_zoom": 0.5,
+  "max_zoom": 4,
+  "wall_thickness": 10,
+  "wall_clearance": 5,
+  "wall_snap_threshold": 40,
+  "snap_tolerance_default": 15,
+  "snap_tolerance_countertop": 25,
+  "proximity_threshold": 100,
+  "wall_snap_distance_default": 35,
+  "wall_snap_distance_countertop": 50,
+  "corner_tolerance": 30,
+  "toe_kick_height": 8,
+  "drag_threshold_mouse": 5,
+  "drag_threshold_touch": 10
+}
+[2025-10-10T12:54:39.284Z] 📝 [LOG] 🚀 [DesignCanvas2D] Preloaded component behaviors and room config
+[2025-10-10T12:54:39.284Z] 📝 [LOG] [DesignCanvas2D] 2D render definitions preloaded
+[2025-10-10T12:54:39.290Z] 📝 [LOG] ✅ [CompactComponentSidebar] Component sidebar rendered successfully
+[2025-10-10T12:54:39.290Z] 📝 [LOG] ✅ [CompactComponentSidebar] Summary: 194 total, 94 for kitchen, 10 categories
+[2025-10-10T12:54:39.300Z] 📝 [LOG] 🎯 [PerformanceMonitor] Performance monitor hidden
+[2025-10-10T12:54:39.301Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: l-shaped-test-cabinet-90 with data: {
+  "is_corner": true,
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "handle_position": "center",
+  "toe_kick_height": 10,
+  "corner_door_side": "auto"
+}
+[2025-10-10T12:54:39.302Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: l-shaped-test-cabinet-90 with data: {
+  "is_corner": true,
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "handle_position": "center",
+  "toe_kick_height": 10,
+  "corner_door_side": "auto"
+}
+[2025-10-10T12:54:39.302Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: new-corner-wall-cabinet-60 with data: {
+  "is_corner": true,
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": false,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:39.302Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: new-corner-wall-cabinet-60 with data: {
+  "is_corner": true,
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": false,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:39.302Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: base-cabinet-60 with data: {
+  "door_count": 2,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:39.303Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: base-cabinet-50 with data: {
+  "door_count": 2,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:39.303Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: base-cabinet-40 with data: {
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:39.303Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: base-cabinet-30 with data: {
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:39.304Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: l-shaped-test-cabinet-90 with data: {
+  "is_corner": true,
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "handle_position": "center",
+  "toe_kick_height": 10,
+  "corner_door_side": "auto"
+}
+[2025-10-10T12:54:39.304Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: l-shaped-test-cabinet-90 with data: {
+  "is_corner": true,
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "handle_position": "center",
+  "toe_kick_height": 10,
+  "corner_door_side": "auto"
+}
+[2025-10-10T12:54:39.304Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: new-corner-wall-cabinet-60 with data: {
+  "is_corner": true,
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": false,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:39.305Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: new-corner-wall-cabinet-60 with data: {
+  "is_corner": true,
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": false,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:39.305Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: base-cabinet-60 with data: {
+  "door_count": 2,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:39.305Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: base-cabinet-50 with data: {
+  "door_count": 2,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:39.306Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: base-cabinet-40 with data: {
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:39.306Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: base-cabinet-30 with data: {
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:39.317Z] 📝 [LOG] ✅ [CompactComponentSidebar] Component sidebar rendered successfully
+[2025-10-10T12:54:39.318Z] 📝 [LOG] ✅ [CompactComponentSidebar] Summary: 194 total, 94 for kitchen, 10 categories
+[2025-10-10T12:54:39.324Z] 📝 [LOG] 🎯 [PerformanceMonitor] Performance monitor hidden
+[2025-10-10T12:54:39.325Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: l-shaped-test-cabinet-90 with data: {
+  "is_corner": true,
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "handle_position": "center",
+  "toe_kick_height": 10,
+  "corner_door_side": "auto"
+}
+[2025-10-10T12:54:39.325Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: l-shaped-test-cabinet-90 with data: {
+  "is_corner": true,
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "handle_position": "center",
+  "toe_kick_height": 10,
+  "corner_door_side": "auto"
+}
+[2025-10-10T12:54:39.325Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: new-corner-wall-cabinet-60 with data: {
+  "is_corner": true,
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": false,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:39.326Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: new-corner-wall-cabinet-60 with data: {
+  "is_corner": true,
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": false,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:39.326Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: base-cabinet-60 with data: {
+  "door_count": 2,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:39.326Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: base-cabinet-50 with data: {
+  "door_count": 2,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:39.326Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: base-cabinet-40 with data: {
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:39.327Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: base-cabinet-30 with data: {
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:39.327Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: l-shaped-test-cabinet-90 with data: {
+  "is_corner": true,
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "handle_position": "center",
+  "toe_kick_height": 10,
+  "corner_door_side": "auto"
+}
+[2025-10-10T12:54:39.327Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: l-shaped-test-cabinet-90 with data: {
+  "is_corner": true,
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "handle_position": "center",
+  "toe_kick_height": 10,
+  "corner_door_side": "auto"
+}
+[2025-10-10T12:54:39.328Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: new-corner-wall-cabinet-60 with data: {
+  "is_corner": true,
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": false,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:39.328Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: new-corner-wall-cabinet-60 with data: {
+  "is_corner": true,
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": false,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:39.329Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: base-cabinet-60 with data: {
+  "door_count": 2,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:39.329Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: base-cabinet-50 with data: {
+  "door_count": 2,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:39.329Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: base-cabinet-40 with data: {
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:39.330Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: base-cabinet-30 with data: {
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:40.285Z] 📝 [LOG] ✅ [CompactComponentSidebar] Component sidebar rendered successfully
+[2025-10-10T12:54:40.286Z] 📝 [LOG] ✅ [CompactComponentSidebar] Summary: 194 total, 94 for kitchen, 10 categories
+[2025-10-10T12:54:40.292Z] 📝 [LOG] 🎯 [PerformanceMonitor] Performance monitor hidden
+[2025-10-10T12:54:40.294Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: l-shaped-test-cabinet-90 with data: {
+  "is_corner": true,
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "handle_position": "center",
+  "toe_kick_height": 10,
+  "corner_door_side": "auto"
+}
+[2025-10-10T12:54:40.295Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: l-shaped-test-cabinet-90 with data: {
+  "is_corner": true,
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "handle_position": "center",
+  "toe_kick_height": 10,
+  "corner_door_side": "auto"
+}
+[2025-10-10T12:54:40.295Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: new-corner-wall-cabinet-60 with data: {
+  "is_corner": true,
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": false,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:40.295Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: new-corner-wall-cabinet-60 with data: {
+  "is_corner": true,
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": false,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:40.296Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: base-cabinet-60 with data: {
+  "door_count": 2,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:40.296Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: base-cabinet-50 with data: {
+  "door_count": 2,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:40.297Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: base-cabinet-40 with data: {
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:40.297Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: base-cabinet-30 with data: {
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:40.297Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: l-shaped-test-cabinet-90 with data: {
+  "is_corner": true,
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "handle_position": "center",
+  "toe_kick_height": 10,
+  "corner_door_side": "auto"
+}
+[2025-10-10T12:54:40.298Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: l-shaped-test-cabinet-90 with data: {
+  "is_corner": true,
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "handle_position": "center",
+  "toe_kick_height": 10,
+  "corner_door_side": "auto"
+}
+[2025-10-10T12:54:40.298Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: new-corner-wall-cabinet-60 with data: {
+  "is_corner": true,
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": false,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:40.298Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: new-corner-wall-cabinet-60 with data: {
+  "is_corner": true,
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": false,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:40.299Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: base-cabinet-60 with data: {
+  "door_count": 2,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:40.299Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: base-cabinet-50 with data: {
+  "door_count": 2,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:40.300Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: base-cabinet-40 with data: {
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:40.300Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: base-cabinet-30 with data: {
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:40.301Z] 📝 [LOG] [ConfigService] Feature disabled, skipping preload
+[2025-10-10T12:54:40.302Z] 📝 [LOG] 🏗️ [CoordinateEngine] Initialized with inner room dimensions: {
+  "innerWidth": 600,
+  "innerHeight": 400,
+  "ceilingHeight": 240,
+  "wallThickness": 10
+}
+[2025-10-10T12:54:40.302Z] 📝 [LOG] 🏗️ [DesignCanvas2D] Coordinate engine initialized for room: {
+  "width": 600,
+  "height": 400
+}
+[2025-10-10T12:54:40.302Z] 📝 [LOG] [DesignCanvas2D] Configuration loaded from database: {
+  "canvas_width": 1600,
+  "canvas_height": 1200,
+  "grid_size": 20,
+  "min_zoom": 0.5,
+  "max_zoom": 4,
+  "wall_thickness": 10,
+  "wall_clearance": 5,
+  "wall_snap_threshold": 40,
+  "snap_tolerance_default": 15,
+  "snap_tolerance_countertop": 25,
+  "proximity_threshold": 100,
+  "wall_snap_distance_default": 35,
+  "wall_snap_distance_countertop": 50,
+  "corner_tolerance": 30,
+  "toe_kick_height": 8,
+  "drag_threshold_mouse": 5,
+  "drag_threshold_touch": 10
+}
+[2025-10-10T12:54:40.303Z] 📝 [LOG] 🚀 [DesignCanvas2D] Preloaded component behaviors and room config
+[2025-10-10T12:54:40.303Z] 📝 [LOG] [DesignCanvas2D] 2D render definitions preloaded
+[2025-10-10T12:54:40.309Z] 📝 [LOG] ✅ [CompactComponentSidebar] Component sidebar rendered successfully
+[2025-10-10T12:54:40.309Z] 📝 [LOG] ✅ [CompactComponentSidebar] Summary: 194 total, 94 for kitchen, 10 categories
+[2025-10-10T12:54:40.319Z] 📝 [LOG] 🎯 [PerformanceMonitor] Performance monitor hidden
+[2025-10-10T12:54:40.320Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: l-shaped-test-cabinet-90 with data: {
+  "is_corner": true,
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "handle_position": "center",
+  "toe_kick_height": 10,
+  "corner_door_side": "auto"
+}
+[2025-10-10T12:54:40.321Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: l-shaped-test-cabinet-90 with data: {
+  "is_corner": true,
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "handle_position": "center",
+  "toe_kick_height": 10,
+  "corner_door_side": "auto"
+}
+[2025-10-10T12:54:40.321Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: new-corner-wall-cabinet-60 with data: {
+  "is_corner": true,
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": false,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:40.321Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: new-corner-wall-cabinet-60 with data: {
+  "is_corner": true,
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": false,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:40.322Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: base-cabinet-60 with data: {
+  "door_count": 2,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:40.322Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: base-cabinet-50 with data: {
+  "door_count": 2,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:40.322Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: base-cabinet-40 with data: {
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:40.323Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: base-cabinet-30 with data: {
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:40.323Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: l-shaped-test-cabinet-90 with data: {
+  "is_corner": true,
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "handle_position": "center",
+  "toe_kick_height": 10,
+  "corner_door_side": "auto"
+}
+[2025-10-10T12:54:40.324Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: l-shaped-test-cabinet-90 with data: {
+  "is_corner": true,
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "handle_position": "center",
+  "toe_kick_height": 10,
+  "corner_door_side": "auto"
+}
+[2025-10-10T12:54:40.324Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: new-corner-wall-cabinet-60 with data: {
+  "is_corner": true,
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": false,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:40.325Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: new-corner-wall-cabinet-60 with data: {
+  "is_corner": true,
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": false,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:40.325Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: base-cabinet-60 with data: {
+  "door_count": 2,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:40.326Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: base-cabinet-50 with data: {
+  "door_count": 2,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:40.326Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: base-cabinet-40 with data: {
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:40.326Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: base-cabinet-30 with data: {
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:40.339Z] 📝 [LOG] ✅ [CompactComponentSidebar] Component sidebar rendered successfully
+[2025-10-10T12:54:40.340Z] 📝 [LOG] ✅ [CompactComponentSidebar] Summary: 194 total, 94 for kitchen, 10 categories
+[2025-10-10T12:54:40.346Z] 📝 [LOG] 🎯 [PerformanceMonitor] Performance monitor hidden
+[2025-10-10T12:54:40.347Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: l-shaped-test-cabinet-90 with data: {
+  "is_corner": true,
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "handle_position": "center",
+  "toe_kick_height": 10,
+  "corner_door_side": "auto"
+}
+[2025-10-10T12:54:40.347Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: l-shaped-test-cabinet-90 with data: {
+  "is_corner": true,
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "handle_position": "center",
+  "toe_kick_height": 10,
+  "corner_door_side": "auto"
+}
+[2025-10-10T12:54:40.348Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: new-corner-wall-cabinet-60 with data: {
+  "is_corner": true,
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": false,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:40.348Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: new-corner-wall-cabinet-60 with data: {
+  "is_corner": true,
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": false,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:40.349Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: base-cabinet-60 with data: {
+  "door_count": 2,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:40.349Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: base-cabinet-50 with data: {
+  "door_count": 2,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:40.350Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: base-cabinet-40 with data: {
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:40.350Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: base-cabinet-30 with data: {
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:40.350Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: l-shaped-test-cabinet-90 with data: {
+  "is_corner": true,
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "handle_position": "center",
+  "toe_kick_height": 10,
+  "corner_door_side": "auto"
+}
+[2025-10-10T12:54:40.351Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: l-shaped-test-cabinet-90 with data: {
+  "is_corner": true,
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "handle_position": "center",
+  "toe_kick_height": 10,
+  "corner_door_side": "auto"
+}
+[2025-10-10T12:54:40.351Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: new-corner-wall-cabinet-60 with data: {
+  "is_corner": true,
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": false,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:40.352Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: new-corner-wall-cabinet-60 with data: {
+  "is_corner": true,
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": false,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:40.352Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: base-cabinet-60 with data: {
+  "door_count": 2,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:40.353Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: base-cabinet-50 with data: {
+  "door_count": 2,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:40.353Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: base-cabinet-40 with data: {
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:40.354Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: base-cabinet-30 with data: {
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:41.361Z] 📝 [LOG] ✅ [CompactComponentSidebar] Component sidebar rendered successfully
+[2025-10-10T12:54:41.362Z] 📝 [LOG] ✅ [CompactComponentSidebar] Summary: 194 total, 94 for kitchen, 10 categories
+[2025-10-10T12:54:41.368Z] 📝 [LOG] 🎯 [PerformanceMonitor] Performance monitor hidden
+[2025-10-10T12:54:41.371Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: l-shaped-test-cabinet-90 with data: {
+  "is_corner": true,
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "handle_position": "center",
+  "toe_kick_height": 10,
+  "corner_door_side": "auto"
+}
+[2025-10-10T12:54:41.372Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: l-shaped-test-cabinet-90 with data: {
+  "is_corner": true,
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "handle_position": "center",
+  "toe_kick_height": 10,
+  "corner_door_side": "auto"
+}
+[2025-10-10T12:54:41.373Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: new-corner-wall-cabinet-60 with data: {
+  "is_corner": true,
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": false,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:41.373Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: new-corner-wall-cabinet-60 with data: {
+  "is_corner": true,
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": false,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:41.374Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: base-cabinet-60 with data: {
+  "door_count": 2,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:41.374Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: base-cabinet-50 with data: {
+  "door_count": 2,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:41.375Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: base-cabinet-40 with data: {
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:41.375Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: base-cabinet-30 with data: {
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:41.376Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: l-shaped-test-cabinet-90 with data: {
+  "is_corner": true,
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "handle_position": "center",
+  "toe_kick_height": 10,
+  "corner_door_side": "auto"
+}
+[2025-10-10T12:54:41.377Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: l-shaped-test-cabinet-90 with data: {
+  "is_corner": true,
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "handle_position": "center",
+  "toe_kick_height": 10,
+  "corner_door_side": "auto"
+}
+[2025-10-10T12:54:41.377Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: new-corner-wall-cabinet-60 with data: {
+  "is_corner": true,
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": false,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:41.378Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: new-corner-wall-cabinet-60 with data: {
+  "is_corner": true,
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": false,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:41.378Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: base-cabinet-60 with data: {
+  "door_count": 2,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:41.379Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: base-cabinet-50 with data: {
+  "door_count": 2,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:41.380Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: base-cabinet-40 with data: {
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:41.380Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: base-cabinet-30 with data: {
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:41.382Z] 📝 [LOG] [ConfigService] Feature disabled, skipping preload
+[2025-10-10T12:54:41.383Z] 📝 [LOG] 🏗️ [CoordinateEngine] Initialized with inner room dimensions: {
+  "innerWidth": 600,
+  "innerHeight": 400,
+  "ceilingHeight": 240,
+  "wallThickness": 10
+}
+[2025-10-10T12:54:41.383Z] 📝 [LOG] 🏗️ [DesignCanvas2D] Coordinate engine initialized for room: {
+  "width": 600,
+  "height": 400
+}
+[2025-10-10T12:54:41.384Z] 📝 [LOG] [DesignCanvas2D] Configuration loaded from database: {
+  "canvas_width": 1600,
+  "canvas_height": 1200,
+  "grid_size": 20,
+  "min_zoom": 0.5,
+  "max_zoom": 4,
+  "wall_thickness": 10,
+  "wall_clearance": 5,
+  "wall_snap_threshold": 40,
+  "snap_tolerance_default": 15,
+  "snap_tolerance_countertop": 25,
+  "proximity_threshold": 100,
+  "wall_snap_distance_default": 35,
+  "wall_snap_distance_countertop": 50,
+  "corner_tolerance": 30,
+  "toe_kick_height": 8,
+  "drag_threshold_mouse": 5,
+  "drag_threshold_touch": 10
+}
+[2025-10-10T12:54:41.385Z] 📝 [LOG] 🚀 [DesignCanvas2D] Preloaded component behaviors and room config
+[2025-10-10T12:54:41.385Z] 📝 [LOG] [DesignCanvas2D] 2D render definitions preloaded
+[2025-10-10T12:54:41.392Z] 📝 [LOG] ✅ [CompactComponentSidebar] Component sidebar rendered successfully
+[2025-10-10T12:54:41.393Z] 📝 [LOG] ✅ [CompactComponentSidebar] Summary: 194 total, 94 for kitchen, 10 categories
+[2025-10-10T12:54:41.403Z] 📝 [LOG] 🎯 [PerformanceMonitor] Performance monitor hidden
+[2025-10-10T12:54:41.405Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: l-shaped-test-cabinet-90 with data: {
+  "is_corner": true,
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "handle_position": "center",
+  "toe_kick_height": 10,
+  "corner_door_side": "auto"
+}
+[2025-10-10T12:54:41.406Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: l-shaped-test-cabinet-90 with data: {
+  "is_corner": true,
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "handle_position": "center",
+  "toe_kick_height": 10,
+  "corner_door_side": "auto"
+}
+[2025-10-10T12:54:41.406Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: new-corner-wall-cabinet-60 with data: {
+  "is_corner": true,
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": false,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:41.407Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: new-corner-wall-cabinet-60 with data: {
+  "is_corner": true,
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": false,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:41.408Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: base-cabinet-60 with data: {
+  "door_count": 2,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:41.408Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: base-cabinet-50 with data: {
+  "door_count": 2,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:41.409Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: base-cabinet-40 with data: {
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:41.410Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: base-cabinet-30 with data: {
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:41.410Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: l-shaped-test-cabinet-90 with data: {
+  "is_corner": true,
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "handle_position": "center",
+  "toe_kick_height": 10,
+  "corner_door_side": "auto"
+}
+[2025-10-10T12:54:41.411Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: l-shaped-test-cabinet-90 with data: {
+  "is_corner": true,
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "handle_position": "center",
+  "toe_kick_height": 10,
+  "corner_door_side": "auto"
+}
+[2025-10-10T12:54:41.411Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: new-corner-wall-cabinet-60 with data: {
+  "is_corner": true,
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": false,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:41.412Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: new-corner-wall-cabinet-60 with data: {
+  "is_corner": true,
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": false,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:41.413Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: base-cabinet-60 with data: {
+  "door_count": 2,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:41.413Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: base-cabinet-50 with data: {
+  "door_count": 2,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:41.414Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: base-cabinet-40 with data: {
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:41.414Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: base-cabinet-30 with data: {
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:41.431Z] 📝 [LOG] ✅ [CompactComponentSidebar] Component sidebar rendered successfully
+[2025-10-10T12:54:41.431Z] 📝 [LOG] ✅ [CompactComponentSidebar] Summary: 194 total, 94 for kitchen, 10 categories
+[2025-10-10T12:54:41.438Z] 📝 [LOG] 🎯 [PerformanceMonitor] Performance monitor hidden
+[2025-10-10T12:54:41.439Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: l-shaped-test-cabinet-90 with data: {
+  "is_corner": true,
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "handle_position": "center",
+  "toe_kick_height": 10,
+  "corner_door_side": "auto"
+}
+[2025-10-10T12:54:41.440Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: l-shaped-test-cabinet-90 with data: {
+  "is_corner": true,
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "handle_position": "center",
+  "toe_kick_height": 10,
+  "corner_door_side": "auto"
+}
+[2025-10-10T12:54:41.441Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: new-corner-wall-cabinet-60 with data: {
+  "is_corner": true,
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": false,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:41.441Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: new-corner-wall-cabinet-60 with data: {
+  "is_corner": true,
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": false,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:41.442Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: base-cabinet-60 with data: {
+  "door_count": 2,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:41.442Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: base-cabinet-50 with data: {
+  "door_count": 2,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:41.443Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: base-cabinet-40 with data: {
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:41.444Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: base-cabinet-30 with data: {
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:41.444Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: l-shaped-test-cabinet-90 with data: {
+  "is_corner": true,
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "handle_position": "center",
+  "toe_kick_height": 10,
+  "corner_door_side": "auto"
+}
+[2025-10-10T12:54:41.445Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: l-shaped-test-cabinet-90 with data: {
+  "is_corner": true,
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "handle_position": "center",
+  "toe_kick_height": 10,
+  "corner_door_side": "auto"
+}
+[2025-10-10T12:54:41.445Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: new-corner-wall-cabinet-60 with data: {
+  "is_corner": true,
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": false,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:41.446Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: new-corner-wall-cabinet-60 with data: {
+  "is_corner": true,
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": false,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:41.447Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: base-cabinet-60 with data: {
+  "door_count": 2,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:41.448Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: base-cabinet-50 with data: {
+  "door_count": 2,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:41.448Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: base-cabinet-40 with data: {
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:41.449Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: base-cabinet-30 with data: {
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:42.875Z] 📝 [LOG] ✅ [CompactComponentSidebar] Component sidebar rendered successfully
+[2025-10-10T12:54:42.876Z] 📝 [LOG] ✅ [CompactComponentSidebar] Summary: 194 total, 94 for kitchen, 10 categories
+[2025-10-10T12:54:42.883Z] 📝 [LOG] 🎯 [PerformanceMonitor] Performance monitor hidden
+[2025-10-10T12:54:42.886Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: l-shaped-test-cabinet-90 with data: {
+  "is_corner": true,
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "handle_position": "center",
+  "toe_kick_height": 10,
+  "corner_door_side": "auto"
+}
+[2025-10-10T12:54:42.887Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: l-shaped-test-cabinet-90 with data: {
+  "is_corner": true,
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "handle_position": "center",
+  "toe_kick_height": 10,
+  "corner_door_side": "auto"
+}
+[2025-10-10T12:54:42.888Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: new-corner-wall-cabinet-60 with data: {
+  "is_corner": true,
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": false,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:42.889Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: new-corner-wall-cabinet-60 with data: {
+  "is_corner": true,
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": false,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:42.889Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: base-cabinet-60 with data: {
+  "door_count": 2,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:42.890Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: base-cabinet-50 with data: {
+  "door_count": 2,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:42.891Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: base-cabinet-40 with data: {
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:42.892Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: base-cabinet-30 with data: {
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:42.893Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: l-shaped-test-cabinet-90 with data: {
+  "is_corner": true,
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "handle_position": "center",
+  "toe_kick_height": 10,
+  "corner_door_side": "auto"
+}
+[2025-10-10T12:54:42.893Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: l-shaped-test-cabinet-90 with data: {
+  "is_corner": true,
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "handle_position": "center",
+  "toe_kick_height": 10,
+  "corner_door_side": "auto"
+}
+[2025-10-10T12:54:42.894Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: new-corner-wall-cabinet-60 with data: {
+  "is_corner": true,
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": false,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:42.895Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: new-corner-wall-cabinet-60 with data: {
+  "is_corner": true,
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": false,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:42.896Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: base-cabinet-60 with data: {
+  "door_count": 2,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:42.896Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: base-cabinet-50 with data: {
+  "door_count": 2,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:42.897Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: base-cabinet-40 with data: {
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:42.898Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: base-cabinet-30 with data: {
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:42.900Z] 📝 [LOG] 🏗️ [CoordinateEngine] Initialized with inner room dimensions: {
+  "innerWidth": 600,
+  "innerHeight": 400,
+  "ceilingHeight": 240,
+  "wallThickness": 10
+}
+[2025-10-10T12:54:42.900Z] 📝 [LOG] 🏗️ [DesignCanvas2D] Coordinate engine initialized for room: {
+  "width": 600,
+  "height": 400
+}
+[2025-10-10T12:54:42.902Z] 📝 [LOG] 🚀 [DesignCanvas2D] Preloaded component behaviors and room config
+[2025-10-10T12:54:42.909Z] 📝 [LOG] ✅ [CompactComponentSidebar] Component sidebar rendered successfully
+[2025-10-10T12:54:42.909Z] 📝 [LOG] ✅ [CompactComponentSidebar] Summary: 194 total, 94 for kitchen, 10 categories
+[2025-10-10T12:54:42.918Z] 📝 [LOG] 🎯 [PerformanceMonitor] Performance monitor hidden
+[2025-10-10T12:54:42.920Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: l-shaped-test-cabinet-90 with data: {
+  "is_corner": true,
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "handle_position": "center",
+  "toe_kick_height": 10,
+  "corner_door_side": "auto"
+}
+[2025-10-10T12:54:42.921Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: l-shaped-test-cabinet-90 with data: {
+  "is_corner": true,
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "handle_position": "center",
+  "toe_kick_height": 10,
+  "corner_door_side": "auto"
+}
+[2025-10-10T12:54:42.922Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: new-corner-wall-cabinet-60 with data: {
+  "is_corner": true,
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": false,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:42.923Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: new-corner-wall-cabinet-60 with data: {
+  "is_corner": true,
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": false,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:42.924Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: base-cabinet-60 with data: {
+  "door_count": 2,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:42.925Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: base-cabinet-50 with data: {
+  "door_count": 2,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:42.925Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: base-cabinet-40 with data: {
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:42.926Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: base-cabinet-30 with data: {
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:42.927Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: l-shaped-test-cabinet-90 with data: {
+  "is_corner": true,
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "handle_position": "center",
+  "toe_kick_height": 10,
+  "corner_door_side": "auto"
+}
+[2025-10-10T12:54:42.928Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: l-shaped-test-cabinet-90 with data: {
+  "is_corner": true,
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "handle_position": "center",
+  "toe_kick_height": 10,
+  "corner_door_side": "auto"
+}
+[2025-10-10T12:54:42.928Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: new-corner-wall-cabinet-60 with data: {
+  "is_corner": true,
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": false,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:42.929Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: new-corner-wall-cabinet-60 with data: {
+  "is_corner": true,
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": false,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:42.930Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: base-cabinet-60 with data: {
+  "door_count": 2,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:42.931Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: base-cabinet-50 with data: {
+  "door_count": 2,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:42.931Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: base-cabinet-40 with data: {
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:42.932Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: base-cabinet-30 with data: {
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:42.951Z] 📝 [LOG] ✅ [CompactComponentSidebar] Component sidebar rendered successfully
+[2025-10-10T12:54:42.952Z] 📝 [LOG] ✅ [CompactComponentSidebar] Summary: 194 total, 94 for kitchen, 10 categories
+[2025-10-10T12:54:42.958Z] 📝 [LOG] 🎯 [PerformanceMonitor] Performance monitor hidden
+[2025-10-10T12:54:42.960Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: l-shaped-test-cabinet-90 with data: {
+  "is_corner": true,
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "handle_position": "center",
+  "toe_kick_height": 10,
+  "corner_door_side": "auto"
+}
+[2025-10-10T12:54:42.961Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: l-shaped-test-cabinet-90 with data: {
+  "is_corner": true,
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "handle_position": "center",
+  "toe_kick_height": 10,
+  "corner_door_side": "auto"
+}
+[2025-10-10T12:54:42.962Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: new-corner-wall-cabinet-60 with data: {
+  "is_corner": true,
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": false,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:42.963Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: new-corner-wall-cabinet-60 with data: {
+  "is_corner": true,
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": false,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:42.963Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: base-cabinet-60 with data: {
+  "door_count": 2,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:42.964Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: base-cabinet-50 with data: {
+  "door_count": 2,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:42.965Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: base-cabinet-40 with data: {
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:42.966Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: base-cabinet-30 with data: {
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:42.967Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: l-shaped-test-cabinet-90 with data: {
+  "is_corner": true,
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "handle_position": "center",
+  "toe_kick_height": 10,
+  "corner_door_side": "auto"
+}
+[2025-10-10T12:54:42.968Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: l-shaped-test-cabinet-90 with data: {
+  "is_corner": true,
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "handle_position": "center",
+  "toe_kick_height": 10,
+  "corner_door_side": "auto"
+}
+[2025-10-10T12:54:42.968Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: new-corner-wall-cabinet-60 with data: {
+  "is_corner": true,
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": false,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:42.969Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: new-corner-wall-cabinet-60 with data: {
+  "is_corner": true,
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": false,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:42.970Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: base-cabinet-60 with data: {
+  "door_count": 2,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:42.971Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: base-cabinet-50 with data: {
+  "door_count": 2,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:42.972Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: base-cabinet-40 with data: {
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:42.973Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: base-cabinet-30 with data: {
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:43.060Z] 📝 [LOG] [ConfigService] Feature disabled, skipping preload
+[2025-10-10T12:54:43.061Z] 📝 [LOG] [DesignCanvas2D] Configuration loaded from database: {
+  "canvas_width": 1600,
+  "canvas_height": 1200,
+  "grid_size": 20,
+  "min_zoom": 0.5,
+  "max_zoom": 4,
+  "wall_thickness": 10,
+  "wall_clearance": 5,
+  "wall_snap_threshold": 40,
+  "snap_tolerance_default": 15,
+  "snap_tolerance_countertop": 25,
+  "proximity_threshold": 100,
+  "wall_snap_distance_default": 35,
+  "wall_snap_distance_countertop": 50,
+  "corner_tolerance": 30,
+  "toe_kick_height": 8,
+  "drag_threshold_mouse": 5,
+  "drag_threshold_touch": 10
+}
+[2025-10-10T12:54:43.062Z] 📝 [LOG] [DesignCanvas2D] 2D render definitions preloaded
+[2025-10-10T12:54:45.543Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: l-shaped-test-cabinet-90 with data: {
+  "is_corner": true,
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "handle_position": "center",
+  "toe_kick_height": 10,
+  "corner_door_side": "auto"
+}
+[2025-10-10T12:54:45.544Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: l-shaped-test-cabinet-90 with data: {
+  "is_corner": true,
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "handle_position": "center",
+  "toe_kick_height": 10,
+  "corner_door_side": "auto"
+}
+[2025-10-10T12:54:45.546Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: new-corner-wall-cabinet-60 with data: {
+  "is_corner": true,
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": false,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:45.547Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: new-corner-wall-cabinet-60 with data: {
+  "is_corner": true,
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": false,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:45.547Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: base-cabinet-60 with data: {
+  "door_count": 2,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:45.548Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: base-cabinet-50 with data: {
+  "door_count": 2,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:45.549Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: base-cabinet-40 with data: {
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:45.550Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: base-cabinet-30 with data: {
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:45.551Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: l-shaped-test-cabinet-90 with data: {
+  "is_corner": true,
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "handle_position": "center",
+  "toe_kick_height": 10,
+  "corner_door_side": "auto"
+}
+[2025-10-10T12:54:45.552Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: l-shaped-test-cabinet-90 with data: {
+  "is_corner": true,
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "handle_position": "center",
+  "toe_kick_height": 10,
+  "corner_door_side": "auto"
+}
+[2025-10-10T12:54:45.553Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: new-corner-wall-cabinet-60 with data: {
+  "is_corner": true,
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": false,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:45.554Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: new-corner-wall-cabinet-60 with data: {
+  "is_corner": true,
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": false,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:45.555Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: base-cabinet-60 with data: {
+  "door_count": 2,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:45.556Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: base-cabinet-50 with data: {
+  "door_count": 2,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:45.557Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: base-cabinet-40 with data: {
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:45.558Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: base-cabinet-30 with data: {
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:45.562Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: l-shaped-test-cabinet-90 with data: {
+  "is_corner": true,
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "handle_position": "center",
+  "toe_kick_height": 10,
+  "corner_door_side": "auto"
+}
+[2025-10-10T12:54:45.563Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: l-shaped-test-cabinet-90 with data: {
+  "is_corner": true,
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "handle_position": "center",
+  "toe_kick_height": 10,
+  "corner_door_side": "auto"
+}
+[2025-10-10T12:54:45.564Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: new-corner-wall-cabinet-60 with data: {
+  "is_corner": true,
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": false,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:45.565Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: new-corner-wall-cabinet-60 with data: {
+  "is_corner": true,
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": false,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:45.566Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: base-cabinet-60 with data: {
+  "door_count": 2,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:45.567Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: base-cabinet-50 with data: {
+  "door_count": 2,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:45.568Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: base-cabinet-40 with data: {
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:45.569Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: base-cabinet-30 with data: {
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:45.570Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: l-shaped-test-cabinet-90 with data: {
+  "is_corner": true,
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "handle_position": "center",
+  "toe_kick_height": 10,
+  "corner_door_side": "auto"
+}
+[2025-10-10T12:54:45.571Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: l-shaped-test-cabinet-90 with data: {
+  "is_corner": true,
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "handle_position": "center",
+  "toe_kick_height": 10,
+  "corner_door_side": "auto"
+}
+[2025-10-10T12:54:45.574Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: new-corner-wall-cabinet-60 with data: {
+  "is_corner": true,
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": false,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:45.575Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: new-corner-wall-cabinet-60 with data: {
+  "is_corner": true,
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": false,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:45.576Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: base-cabinet-60 with data: {
+  "door_count": 2,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:45.577Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: base-cabinet-50 with data: {
+  "door_count": 2,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:45.577Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: base-cabinet-40 with data: {
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:45.578Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: base-cabinet-30 with data: {
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:45.587Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: l-shaped-test-cabinet-90 with data: {
+  "is_corner": true,
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "handle_position": "center",
+  "toe_kick_height": 10,
+  "corner_door_side": "auto"
+}
+[2025-10-10T12:54:45.588Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: l-shaped-test-cabinet-90 with data: {
+  "is_corner": true,
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "handle_position": "center",
+  "toe_kick_height": 10,
+  "corner_door_side": "auto"
+}
+[2025-10-10T12:54:45.590Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: new-corner-wall-cabinet-60 with data: {
+  "is_corner": true,
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": false,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:45.591Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: new-corner-wall-cabinet-60 with data: {
+  "is_corner": true,
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": false,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:45.592Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: base-cabinet-60 with data: {
+  "door_count": 2,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:45.593Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: base-cabinet-50 with data: {
+  "door_count": 2,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:45.594Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: base-cabinet-40 with data: {
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:45.595Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: base-cabinet-30 with data: {
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:45.596Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: l-shaped-test-cabinet-90 with data: {
+  "is_corner": true,
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "handle_position": "center",
+  "toe_kick_height": 10,
+  "corner_door_side": "auto"
+}
+[2025-10-10T12:54:45.597Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: l-shaped-test-cabinet-90 with data: {
+  "is_corner": true,
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "handle_position": "center",
+  "toe_kick_height": 10,
+  "corner_door_side": "auto"
+}
+[2025-10-10T12:54:45.598Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: new-corner-wall-cabinet-60 with data: {
+  "is_corner": true,
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": false,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:45.599Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: new-corner-wall-cabinet-60 with data: {
+  "is_corner": true,
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": false,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:45.600Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: base-cabinet-60 with data: {
+  "door_count": 2,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:45.601Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: base-cabinet-50 with data: {
+  "door_count": 2,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:45.602Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: base-cabinet-40 with data: {
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:45.603Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: base-cabinet-30 with data: {
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:45.617Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: l-shaped-test-cabinet-90 with data: {
+  "is_corner": true,
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "handle_position": "center",
+  "toe_kick_height": 10,
+  "corner_door_side": "auto"
+}
+[2025-10-10T12:54:45.618Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: l-shaped-test-cabinet-90 with data: {
+  "is_corner": true,
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "handle_position": "center",
+  "toe_kick_height": 10,
+  "corner_door_side": "auto"
+}
+[2025-10-10T12:54:45.620Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: new-corner-wall-cabinet-60 with data: {
+  "is_corner": true,
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": false,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:45.621Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: new-corner-wall-cabinet-60 with data: {
+  "is_corner": true,
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": false,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:45.622Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: base-cabinet-60 with data: {
+  "door_count": 2,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:45.623Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: base-cabinet-50 with data: {
+  "door_count": 2,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:45.624Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: base-cabinet-40 with data: {
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:45.625Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: base-cabinet-30 with data: {
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:45.626Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: l-shaped-test-cabinet-90 with data: {
+  "is_corner": true,
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "handle_position": "center",
+  "toe_kick_height": 10,
+  "corner_door_side": "auto"
+}
+[2025-10-10T12:54:45.627Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: l-shaped-test-cabinet-90 with data: {
+  "is_corner": true,
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "handle_position": "center",
+  "toe_kick_height": 10,
+  "corner_door_side": "auto"
+}
+[2025-10-10T12:54:45.628Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: new-corner-wall-cabinet-60 with data: {
+  "is_corner": true,
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": false,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:45.629Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: new-corner-wall-cabinet-60 with data: {
+  "is_corner": true,
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": false,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:45.630Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: base-cabinet-60 with data: {
+  "door_count": 2,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:45.631Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: base-cabinet-50 with data: {
+  "door_count": 2,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:45.632Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: base-cabinet-40 with data: {
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:45.633Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: base-cabinet-30 with data: {
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:45.648Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: l-shaped-test-cabinet-90 with data: {
+  "is_corner": true,
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "handle_position": "center",
+  "toe_kick_height": 10,
+  "corner_door_side": "auto"
+}
+[2025-10-10T12:54:45.650Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: l-shaped-test-cabinet-90 with data: {
+  "is_corner": true,
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "handle_position": "center",
+  "toe_kick_height": 10,
+  "corner_door_side": "auto"
+}
+[2025-10-10T12:54:45.653Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: new-corner-wall-cabinet-60 with data: {
+  "is_corner": true,
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": false,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:45.654Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: new-corner-wall-cabinet-60 with data: {
+  "is_corner": true,
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": false,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:45.655Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: base-cabinet-60 with data: {
+  "door_count": 2,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:45.656Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: base-cabinet-50 with data: {
+  "door_count": 2,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:45.658Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: base-cabinet-40 with data: {
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:45.659Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: base-cabinet-30 with data: {
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:45.660Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: l-shaped-test-cabinet-90 with data: {
+  "is_corner": true,
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "handle_position": "center",
+  "toe_kick_height": 10,
+  "corner_door_side": "auto"
+}
+[2025-10-10T12:54:45.661Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: l-shaped-test-cabinet-90 with data: {
+  "is_corner": true,
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "handle_position": "center",
+  "toe_kick_height": 10,
+  "corner_door_side": "auto"
+}
+[2025-10-10T12:54:45.662Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: new-corner-wall-cabinet-60 with data: {
+  "is_corner": true,
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": false,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:45.663Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: new-corner-wall-cabinet-60 with data: {
+  "is_corner": true,
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": false,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:45.664Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: base-cabinet-60 with data: {
+  "door_count": 2,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:45.666Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: base-cabinet-50 with data: {
+  "door_count": 2,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:45.667Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: base-cabinet-40 with data: {
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:45.668Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: base-cabinet-30 with data: {
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:45.684Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: l-shaped-test-cabinet-90 with data: {
+  "is_corner": true,
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "handle_position": "center",
+  "toe_kick_height": 10,
+  "corner_door_side": "auto"
+}
+[2025-10-10T12:54:45.687Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: l-shaped-test-cabinet-90 with data: {
+  "is_corner": true,
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "handle_position": "center",
+  "toe_kick_height": 10,
+  "corner_door_side": "auto"
+}
+[2025-10-10T12:54:45.689Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: new-corner-wall-cabinet-60 with data: {
+  "is_corner": true,
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": false,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:45.690Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: new-corner-wall-cabinet-60 with data: {
+  "is_corner": true,
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": false,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:45.692Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: base-cabinet-60 with data: {
+  "door_count": 2,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:45.693Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: base-cabinet-50 with data: {
+  "door_count": 2,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:45.694Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: base-cabinet-40 with data: {
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:45.695Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: base-cabinet-30 with data: {
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:45.696Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: l-shaped-test-cabinet-90 with data: {
+  "is_corner": true,
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "handle_position": "center",
+  "toe_kick_height": 10,
+  "corner_door_side": "auto"
+}
+[2025-10-10T12:54:45.697Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: l-shaped-test-cabinet-90 with data: {
+  "is_corner": true,
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "handle_position": "center",
+  "toe_kick_height": 10,
+  "corner_door_side": "auto"
+}
+[2025-10-10T12:54:45.698Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: new-corner-wall-cabinet-60 with data: {
+  "is_corner": true,
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": false,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:45.699Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: new-corner-wall-cabinet-60 with data: {
+  "is_corner": true,
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": false,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:45.701Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: base-cabinet-60 with data: {
+  "door_count": 2,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:45.702Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: base-cabinet-50 with data: {
+  "door_count": 2,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:45.703Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: base-cabinet-40 with data: {
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:45.704Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: base-cabinet-30 with data: {
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:45.722Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: l-shaped-test-cabinet-90 with data: {
+  "is_corner": true,
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "handle_position": "center",
+  "toe_kick_height": 10,
+  "corner_door_side": "auto"
+}
+[2025-10-10T12:54:45.724Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: l-shaped-test-cabinet-90 with data: {
+  "is_corner": true,
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "handle_position": "center",
+  "toe_kick_height": 10,
+  "corner_door_side": "auto"
+}
+[2025-10-10T12:54:45.725Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: new-corner-wall-cabinet-60 with data: {
+  "is_corner": true,
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": false,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:45.727Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: new-corner-wall-cabinet-60 with data: {
+  "is_corner": true,
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": false,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:45.728Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: base-cabinet-60 with data: {
+  "door_count": 2,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:45.730Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: base-cabinet-50 with data: {
+  "door_count": 2,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:45.731Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: base-cabinet-40 with data: {
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:45.732Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: base-cabinet-30 with data: {
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:45.734Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: l-shaped-test-cabinet-90 with data: {
+  "is_corner": true,
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "handle_position": "center",
+  "toe_kick_height": 10,
+  "corner_door_side": "auto"
+}
+[2025-10-10T12:54:45.735Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: l-shaped-test-cabinet-90 with data: {
+  "is_corner": true,
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "handle_position": "center",
+  "toe_kick_height": 10,
+  "corner_door_side": "auto"
+}
+[2025-10-10T12:54:45.736Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: new-corner-wall-cabinet-60 with data: {
+  "is_corner": true,
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": false,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:45.737Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: new-corner-wall-cabinet-60 with data: {
+  "is_corner": true,
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": false,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:45.739Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: base-cabinet-60 with data: {
+  "door_count": 2,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:45.740Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: base-cabinet-50 with data: {
+  "door_count": 2,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:45.741Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: base-cabinet-40 with data: {
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:45.742Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: base-cabinet-30 with data: {
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:45.762Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: l-shaped-test-cabinet-90 with data: {
+  "is_corner": true,
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "handle_position": "center",
+  "toe_kick_height": 10,
+  "corner_door_side": "auto"
+}
+[2025-10-10T12:54:45.764Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: l-shaped-test-cabinet-90 with data: {
+  "is_corner": true,
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "handle_position": "center",
+  "toe_kick_height": 10,
+  "corner_door_side": "auto"
+}
+[2025-10-10T12:54:45.766Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: new-corner-wall-cabinet-60 with data: {
+  "is_corner": true,
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": false,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:45.767Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: new-corner-wall-cabinet-60 with data: {
+  "is_corner": true,
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": false,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:45.768Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: base-cabinet-60 with data: {
+  "door_count": 2,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:45.769Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: base-cabinet-50 with data: {
+  "door_count": 2,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:45.771Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: base-cabinet-40 with data: {
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:45.772Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: base-cabinet-30 with data: {
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:45.773Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: l-shaped-test-cabinet-90 with data: {
+  "is_corner": true,
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "handle_position": "center",
+  "toe_kick_height": 10,
+  "corner_door_side": "auto"
+}
+[2025-10-10T12:54:45.775Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: l-shaped-test-cabinet-90 with data: {
+  "is_corner": true,
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "handle_position": "center",
+  "toe_kick_height": 10,
+  "corner_door_side": "auto"
+}
+[2025-10-10T12:54:45.777Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: new-corner-wall-cabinet-60 with data: {
+  "is_corner": true,
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": false,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:45.778Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: new-corner-wall-cabinet-60 with data: {
+  "is_corner": true,
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": false,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:45.779Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: base-cabinet-60 with data: {
+  "door_count": 2,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:45.780Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: base-cabinet-50 with data: {
+  "door_count": 2,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:45.782Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: base-cabinet-40 with data: {
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:45.783Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: base-cabinet-30 with data: {
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:45.806Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: l-shaped-test-cabinet-90 with data: {
+  "is_corner": true,
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "handle_position": "center",
+  "toe_kick_height": 10,
+  "corner_door_side": "auto"
+}
+[2025-10-10T12:54:45.809Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: l-shaped-test-cabinet-90 with data: {
+  "is_corner": true,
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "handle_position": "center",
+  "toe_kick_height": 10,
+  "corner_door_side": "auto"
+}
+[2025-10-10T12:54:45.810Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: new-corner-wall-cabinet-60 with data: {
+  "is_corner": true,
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": false,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:45.812Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: new-corner-wall-cabinet-60 with data: {
+  "is_corner": true,
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": false,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:45.813Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: base-cabinet-60 with data: {
+  "door_count": 2,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:45.814Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: base-cabinet-50 with data: {
+  "door_count": 2,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:45.815Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: base-cabinet-40 with data: {
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:45.817Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: base-cabinet-30 with data: {
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:45.818Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: l-shaped-test-cabinet-90 with data: {
+  "is_corner": true,
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "handle_position": "center",
+  "toe_kick_height": 10,
+  "corner_door_side": "auto"
+}
+[2025-10-10T12:54:45.819Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: l-shaped-test-cabinet-90 with data: {
+  "is_corner": true,
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "handle_position": "center",
+  "toe_kick_height": 10,
+  "corner_door_side": "auto"
+}
+[2025-10-10T12:54:45.820Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: new-corner-wall-cabinet-60 with data: {
+  "is_corner": true,
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": false,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:45.822Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: new-corner-wall-cabinet-60 with data: {
+  "is_corner": true,
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": false,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:45.824Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: base-cabinet-60 with data: {
+  "door_count": 2,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:45.826Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: base-cabinet-50 with data: {
+  "door_count": 2,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:45.827Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: base-cabinet-40 with data: {
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:45.829Z] 📝 [LOG] [DesignCanvas2D] Rendering elevation for: base-cabinet-30 with data: {
+  "door_count": 1,
+  "door_style": "flat",
+  "drawer_count": 0,
+  "handle_style": "bar",
+  "has_toe_kick": true,
+  "drawer_heights": [],
+  "handle_position": "center",
+  "toe_kick_height": 10
+}
+[2025-10-10T12:54:47.083Z] 📝 [LOG] ✅ [CompactComponentSidebar] Component sidebar rendered successfully
+[2025-10-10T12:54:47.085Z] 📝 [LOG] ✅ [CompactComponentSidebar] Summary: 194 total, 94 for kitchen, 10 categories
+[2025-10-10T12:54:47.093Z] 📝 [LOG] 🎯 [PerformanceMonitor] Performance monitor hidden
+[2025-10-10T12:54:47.328Z] 📝 [LOG] 🔍 [PerformanceDetector] Analyzing device capabilities...
+[2025-10-10T12:54:47.336Z] 📝 [LOG] ✅ [PerformanceDetector] Device analysis complete: {
+  "gpuTier": "high",
+  "memoryGB": 4,
+  "webglVersion": 2,
+  "maxTextureSize": 16384,
+  "supportsWebGL2": true,
+  "isMobile": false,
+  "recommendedQuality": {
+    "level": "low",
+    "shadows": false,
+    "shadowMapSize": 512,
+    "antialias": false,
+    "environmentLighting": false,
+    "textureQuality": "low",
+    "modelDetail": "low",
+    "maxElements": 25
+  }
+}
+[2025-10-10T12:54:47.338Z] 📝 [LOG] 👁️ [MemoryManager] Memory monitoring started
+[2025-10-10T12:54:47.340Z] 📝 [LOG] 🔧 [MemoryManager] Automatic cleanup listeners registered
+[2025-10-10T12:54:47.341Z] 📝 [LOG] 🎮 [AdaptiveView3D] Performance detection complete: {
+  "gpu": "high",
+  "recommended": "low",
+  "defaultUsing": "medium",
+  "autoMode": false
+}
+[2025-10-10T12:54:47.455Z] 📝 [LOG] 🔍 [validateElementDimensions] Processing element l-shaped-test-cabinet-90-1760060052317: {
+  "elementZ": 0,
+  "isUndefined": false,
+  "isNaN": false,
+  "elementType": "cabinet"
+}
+[2025-10-10T12:54:47.456Z] 📝 [LOG] ✅ [validateElementDimensions] Using existing Z value: 0cm
+[2025-10-10T12:54:47.457Z] 📝 [LOG] 🔧 [EnhancedCabinet3D] Using default Z position: 0cm for l-shaped-test-cabinet-90-1760060052317 (base cabinet)
+[2025-10-10T12:54:47.460Z] 📝 [LOG] 🔍 [validateElementDimensions] Processing element l-shaped-test-cabinet-90-1760060054215: {
+  "elementZ": 0,
+  "isUndefined": false,
+  "isNaN": false,
+  "elementType": "cabinet"
+}
+[2025-10-10T12:54:47.461Z] 📝 [LOG] ✅ [validateElementDimensions] Using existing Z value: 0cm
+[2025-10-10T12:54:47.462Z] 📝 [LOG] 🔧 [EnhancedCabinet3D] Using default Z position: 0cm for l-shaped-test-cabinet-90-1760060054215 (base cabinet)
+[2025-10-10T12:54:47.465Z] 📝 [LOG] 🔍 [validateElementDimensions] Processing element l-shaped-test-cabinet-90-1760060056684: {
+  "elementZ": 0,
+  "isUndefined": false,
+  "isNaN": false,
+  "elementType": "cabinet"
+}
+[2025-10-10T12:54:47.468Z] 📝 [LOG] ✅ [validateElementDimensions] Using existing Z value: 0cm
+[2025-10-10T12:54:47.470Z] 📝 [LOG] 🔧 [EnhancedCabinet3D] Using default Z position: 0cm for l-shaped-test-cabinet-90-1760060056684 (base cabinet)
+[2025-10-10T12:54:47.474Z] 📝 [LOG] 🔍 [validateElementDimensions] Processing element l-shaped-test-cabinet-90-1760060059584: {
+  "elementZ": 0,
+  "isUndefined": false,
+  "isNaN": false,
+  "elementType": "cabinet"
+}
+[2025-10-10T12:54:47.477Z] 📝 [LOG] ✅ [validateElementDimensions] Using existing Z value: 0cm
+[2025-10-10T12:54:47.480Z] 📝 [LOG] 🔧 [EnhancedCabinet3D] Using default Z position: 0cm for l-shaped-test-cabinet-90-1760060059584 (base cabinet)
+[2025-10-10T12:54:47.484Z] 📝 [LOG] 🔍 [validateElementDimensions] Processing element new-corner-wall-cabinet-60-1760060072300: {
+  "elementZ": 140,
+  "isUndefined": false,
+  "isNaN": false,
+  "elementType": "cabinet"
+}
+[2025-10-10T12:54:47.487Z] 📝 [LOG] ✅ [validateElementDimensions] Using existing Z value: 140cm
+[2025-10-10T12:54:47.489Z] 📝 [LOG] ✅ [EnhancedCabinet3D] Using custom Z position: 140cm for new-corner-wall-cabinet-60-1760060072300
+[2025-10-10T12:54:47.491Z] 📝 [LOG] 🔍 [validateElementDimensions] Processing element new-corner-wall-cabinet-60-1760060075298: {
+  "elementZ": 140,
+  "isUndefined": false,
+  "isNaN": false,
+  "elementType": "cabinet"
+}
+[2025-10-10T12:54:47.493Z] 📝 [LOG] ✅ [validateElementDimensions] Using existing Z value: 140cm
+[2025-10-10T12:54:47.495Z] 📝 [LOG] ✅ [EnhancedCabinet3D] Using custom Z position: 140cm for new-corner-wall-cabinet-60-1760060075298
+[2025-10-10T12:54:47.497Z] 📝 [LOG] 🔍 [validateElementDimensions] Processing element new-corner-wall-cabinet-60-1760060078632: {
+  "elementZ": 140,
+  "isUndefined": false,
+  "isNaN": false,
+  "elementType": "cabinet"
+}
+[2025-10-10T12:54:47.498Z] 📝 [LOG] ✅ [validateElementDimensions] Using existing Z value: 140cm
+[2025-10-10T12:54:47.500Z] 📝 [LOG] ✅ [EnhancedCabinet3D] Using custom Z position: 140cm for new-corner-wall-cabinet-60-1760060078632
+[2025-10-10T12:54:47.506Z] 📝 [LOG] 🔍 [validateElementDimensions] Processing element new-corner-wall-cabinet-60-1760060081492: {
+  "elementZ": 140,
+  "isUndefined": false,
+  "isNaN": false,
+  "elementType": "cabinet"
+}
+[2025-10-10T12:54:47.509Z] 📝 [LOG] ✅ [validateElementDimensions] Using existing Z value: 140cm
+[2025-10-10T12:54:47.511Z] 📝 [LOG] ✅ [EnhancedCabinet3D] Using custom Z position: 140cm for new-corner-wall-cabinet-60-1760060081492
+[2025-10-10T12:54:47.514Z] 📝 [LOG] 🔍 [validateElementDimensions] Processing element base-cabinet-60-1760060133740: {
+  "elementZ": 0,
+  "isUndefined": false,
+  "isNaN": false,
+  "elementType": "cabinet"
+}
+[2025-10-10T12:54:47.516Z] 📝 [LOG] ✅ [validateElementDimensions] Using existing Z value: 0cm
+[2025-10-10T12:54:47.517Z] 📝 [LOG] 🔧 [EnhancedCabinet3D] Using default Z position: 0cm for base-cabinet-60-1760060133740 (base cabinet)
+[2025-10-10T12:54:47.520Z] 📝 [LOG] 🔍 [validateElementDimensions] Processing element base-cabinet-50-1760060137883: {
+  "elementZ": 0,
+  "isUndefined": false,
+  "isNaN": false,
+  "elementType": "cabinet"
+}
+[2025-10-10T12:54:47.522Z] 📝 [LOG] ✅ [validateElementDimensions] Using existing Z value: 0cm
+[2025-10-10T12:54:47.524Z] 📝 [LOG] 🔧 [EnhancedCabinet3D] Using default Z position: 0cm for base-cabinet-50-1760060137883 (base cabinet)
+[2025-10-10T12:54:47.526Z] 📝 [LOG] 🔍 [validateElementDimensions] Processing element base-cabinet-40-1760060142025: {
+  "elementZ": 0,
+  "isUndefined": false,
+  "isNaN": false,
+  "elementType": "cabinet"
+}
+[2025-10-10T12:54:47.528Z] 📝 [LOG] ✅ [validateElementDimensions] Using existing Z value: 0cm
+[2025-10-10T12:54:47.530Z] 📝 [LOG] 🔧 [EnhancedCabinet3D] Using default Z position: 0cm for base-cabinet-40-1760060142025 (base cabinet)
+[2025-10-10T12:54:47.532Z] 📝 [LOG] 🔍 [validateElementDimensions] Processing element base-cabinet-30-1760060145209: {
+  "elementZ": 0,
+  "isUndefined": false,
+  "isNaN": false,
+  "elementType": "cabinet"
+}
+[2025-10-10T12:54:47.533Z] 📝 [LOG] ✅ [validateElementDimensions] Using existing Z value: 0cm
+[2025-10-10T12:54:47.535Z] 📝 [LOG] 🔧 [EnhancedCabinet3D] Using default Z position: 0cm for base-cabinet-30-1760060145209 (base cabinet)
+[2025-10-10T12:54:47.713Z] 📝 [LOG] 🔍 [validateElementDimensions] Processing element l-shaped-test-cabinet-90-1760060052317: {
+  "elementZ": 0,
+  "isUndefined": false,
+  "isNaN": false,
+  "elementType": "cabinet"
+}
+[2025-10-10T12:54:47.714Z] 📝 [LOG] ✅ [validateElementDimensions] Using existing Z value: 0cm
+[2025-10-10T12:54:47.716Z] 📝 [LOG] 🔧 [EnhancedCabinet3D] Using default Z position: 0cm for l-shaped-test-cabinet-90-1760060052317 (base cabinet)
+[2025-10-10T12:54:47.722Z] 📝 [LOG] 🔍 [validateElementDimensions] Processing element l-shaped-test-cabinet-90-1760060054215: {
+  "elementZ": 0,
+  "isUndefined": false,
+  "isNaN": false,
+  "elementType": "cabinet"
+}
+[2025-10-10T12:54:47.723Z] 📝 [LOG] ✅ [validateElementDimensions] Using existing Z value: 0cm
+[2025-10-10T12:54:47.725Z] 📝 [LOG] 🔧 [EnhancedCabinet3D] Using default Z position: 0cm for l-shaped-test-cabinet-90-1760060054215 (base cabinet)
+[2025-10-10T12:54:47.729Z] 📝 [LOG] 🔍 [validateElementDimensions] Processing element l-shaped-test-cabinet-90-1760060056684: {
+  "elementZ": 0,
+  "isUndefined": false,
+  "isNaN": false,
+  "elementType": "cabinet"
+}
+[2025-10-10T12:54:47.731Z] 📝 [LOG] ✅ [validateElementDimensions] Using existing Z value: 0cm
+[2025-10-10T12:54:47.732Z] 📝 [LOG] 🔧 [EnhancedCabinet3D] Using default Z position: 0cm for l-shaped-test-cabinet-90-1760060056684 (base cabinet)
+[2025-10-10T12:54:47.737Z] 📝 [LOG] 🔍 [validateElementDimensions] Processing element l-shaped-test-cabinet-90-1760060059584: {
+  "elementZ": 0,
+  "isUndefined": false,
+  "isNaN": false,
+  "elementType": "cabinet"
+}
+[2025-10-10T12:54:47.739Z] 📝 [LOG] ✅ [validateElementDimensions] Using existing Z value: 0cm
+[2025-10-10T12:54:47.741Z] 📝 [LOG] 🔧 [EnhancedCabinet3D] Using default Z position: 0cm for l-shaped-test-cabinet-90-1760060059584 (base cabinet)
+[2025-10-10T12:54:47.748Z] 📝 [LOG] 🔍 [validateElementDimensions] Processing element new-corner-wall-cabinet-60-1760060072300: {
+  "elementZ": 140,
+  "isUndefined": false,
+  "isNaN": false,
+  "elementType": "cabinet"
+}
+[2025-10-10T12:54:47.750Z] 📝 [LOG] ✅ [validateElementDimensions] Using existing Z value: 140cm
+[2025-10-10T12:54:47.751Z] 📝 [LOG] ✅ [EnhancedCabinet3D] Using custom Z position: 140cm for new-corner-wall-cabinet-60-1760060072300
+[2025-10-10T12:54:47.760Z] 📝 [LOG] 🔍 [validateElementDimensions] Processing element new-corner-wall-cabinet-60-1760060075298: {
+  "elementZ": 140,
+  "isUndefined": false,
+  "isNaN": false,
+  "elementType": "cabinet"
+}
+[2025-10-10T12:54:47.762Z] 📝 [LOG] ✅ [validateElementDimensions] Using existing Z value: 140cm
+[2025-10-10T12:54:47.764Z] 📝 [LOG] ✅ [EnhancedCabinet3D] Using custom Z position: 140cm for new-corner-wall-cabinet-60-1760060075298
+[2025-10-10T12:54:47.772Z] 📝 [LOG] 🔍 [validateElementDimensions] Processing element new-corner-wall-cabinet-60-1760060078632: {
+  "elementZ": 140,
+  "isUndefined": false,
+  "isNaN": false,
+  "elementType": "cabinet"
+}
+[2025-10-10T12:54:47.774Z] 📝 [LOG] ✅ [validateElementDimensions] Using existing Z value: 140cm
+[2025-10-10T12:54:47.776Z] 📝 [LOG] ✅ [EnhancedCabinet3D] Using custom Z position: 140cm for new-corner-wall-cabinet-60-1760060078632
+[2025-10-10T12:54:47.784Z] 📝 [LOG] 🔍 [validateElementDimensions] Processing element new-corner-wall-cabinet-60-1760060081492: {
+  "elementZ": 140,
+  "isUndefined": false,
+  "isNaN": false,
+  "elementType": "cabinet"
+}
+[2025-10-10T12:54:47.786Z] 📝 [LOG] ✅ [validateElementDimensions] Using existing Z value: 140cm
+[2025-10-10T12:54:47.788Z] 📝 [LOG] ✅ [EnhancedCabinet3D] Using custom Z position: 140cm for new-corner-wall-cabinet-60-1760060081492
+[2025-10-10T12:54:47.795Z] 📝 [LOG] 🔍 [validateElementDimensions] Processing element base-cabinet-60-1760060133740: {
+  "elementZ": 0,
+  "isUndefined": false,
+  "isNaN": false,
+  "elementType": "cabinet"
+}
+[2025-10-10T12:54:47.798Z] 📝 [LOG] ✅ [validateElementDimensions] Using existing Z value: 0cm
+[2025-10-10T12:54:47.800Z] 📝 [LOG] 🔧 [EnhancedCabinet3D] Using default Z position: 0cm for base-cabinet-60-1760060133740 (base cabinet)
+[2025-10-10T12:54:47.807Z] 📝 [LOG] 🔍 [validateElementDimensions] Processing element base-cabinet-50-1760060137883: {
+  "elementZ": 0,
+  "isUndefined": false,
+  "isNaN": false,
+  "elementType": "cabinet"
+}
+[2025-10-10T12:54:47.809Z] 📝 [LOG] ✅ [validateElementDimensions] Using existing Z value: 0cm
+[2025-10-10T12:54:47.811Z] 📝 [LOG] 🔧 [EnhancedCabinet3D] Using default Z position: 0cm for base-cabinet-50-1760060137883 (base cabinet)
+[2025-10-10T12:54:47.818Z] 📝 [LOG] 🔍 [validateElementDimensions] Processing element base-cabinet-40-1760060142025: {
+  "elementZ": 0,
+  "isUndefined": false,
+  "isNaN": false,
+  "elementType": "cabinet"
+}
+[2025-10-10T12:54:47.820Z] 📝 [LOG] ✅ [validateElementDimensions] Using existing Z value: 0cm
+[2025-10-10T12:54:47.821Z] 📝 [LOG] 🔧 [EnhancedCabinet3D] Using default Z position: 0cm for base-cabinet-40-1760060142025 (base cabinet)
+[2025-10-10T12:54:47.829Z] 📝 [LOG] 🔍 [validateElementDimensions] Processing element base-cabinet-30-1760060145209: {
+  "elementZ": 0,
+  "isUndefined": false,
+  "isNaN": false,
+  "elementType": "cabinet"
+}
+[2025-10-10T12:54:47.831Z] 📝 [LOG] ✅ [validateElementDimensions] Using existing Z value: 0cm
+[2025-10-10T12:54:47.832Z] 📝 [LOG] 🔧 [EnhancedCabinet3D] Using default Z position: 0cm for base-cabinet-30-1760060145209 (base cabinet)
+[2025-10-10T12:54:47.845Z] 📝 [LOG] 🔍 [validateElementDimensions] Processing element l-shaped-test-cabinet-90-1760060052317: {
+  "elementZ": 0,
+  "isUndefined": false,
+  "isNaN": false,
+  "elementType": "cabinet"
+}
+[2025-10-10T12:54:47.847Z] 📝 [LOG] ✅ [validateElementDimensions] Using existing Z value: 0cm
+[2025-10-10T12:54:47.849Z] 📝 [LOG] 🔧 [EnhancedCabinet3D] Using default Z position: 0cm for l-shaped-test-cabinet-90-1760060052317 (base cabinet)
+[2025-10-10T12:54:47.855Z] 📝 [LOG] 🔍 [validateElementDimensions] Processing element l-shaped-test-cabinet-90-1760060054215: {
+  "elementZ": 0,
+  "isUndefined": false,
+  "isNaN": false,
+  "elementType": "cabinet"
+}
+[2025-10-10T12:54:47.857Z] 📝 [LOG] ✅ [validateElementDimensions] Using existing Z value: 0cm
+[2025-10-10T12:54:47.858Z] 📝 [LOG] 🔧 [EnhancedCabinet3D] Using default Z position: 0cm for l-shaped-test-cabinet-90-1760060054215 (base cabinet)
+[2025-10-10T12:54:47.864Z] 📝 [LOG] 🔍 [validateElementDimensions] Processing element l-shaped-test-cabinet-90-1760060056684: {
+  "elementZ": 0,
+  "isUndefined": false,
+  "isNaN": false,
+  "elementType": "cabinet"
+}
+[2025-10-10T12:54:47.866Z] 📝 [LOG] ✅ [validateElementDimensions] Using existing Z value: 0cm
+[2025-10-10T12:54:47.868Z] 📝 [LOG] 🔧 [EnhancedCabinet3D] Using default Z position: 0cm for l-shaped-test-cabinet-90-1760060056684 (base cabinet)
+[2025-10-10T12:54:47.874Z] 📝 [LOG] 🔍 [validateElementDimensions] Processing element l-shaped-test-cabinet-90-1760060059584: {
+  "elementZ": 0,
+  "isUndefined": false,
+  "isNaN": false,
+  "elementType": "cabinet"
+}
+[2025-10-10T12:54:47.876Z] 📝 [LOG] ✅ [validateElementDimensions] Using existing Z value: 0cm
+[2025-10-10T12:54:47.877Z] 📝 [LOG] 🔧 [EnhancedCabinet3D] Using default Z position: 0cm for l-shaped-test-cabinet-90-1760060059584 (base cabinet)
+[2025-10-10T12:54:47.885Z] 📝 [LOG] 🔍 [validateElementDimensions] Processing element new-corner-wall-cabinet-60-1760060072300: {
+  "elementZ": 140,
+  "isUndefined": false,
+  "isNaN": false,
+  "elementType": "cabinet"
+}
+[2025-10-10T12:54:47.886Z] 📝 [LOG] ✅ [validateElementDimensions] Using existing Z value: 140cm
+[2025-10-10T12:54:47.888Z] 📝 [LOG] ✅ [EnhancedCabinet3D] Using custom Z position: 140cm for new-corner-wall-cabinet-60-1760060072300
+[2025-10-10T12:54:47.896Z] 📝 [LOG] 🔍 [validateElementDimensions] Processing element new-corner-wall-cabinet-60-1760060075298: {
+  "elementZ": 140,
+  "isUndefined": false,
+  "isNaN": false,
+  "elementType": "cabinet"
+}
+[2025-10-10T12:54:47.898Z] 📝 [LOG] ✅ [validateElementDimensions] Using existing Z value: 140cm
+[2025-10-10T12:54:47.900Z] 📝 [LOG] ✅ [EnhancedCabinet3D] Using custom Z position: 140cm for new-corner-wall-cabinet-60-1760060075298
+[2025-10-10T12:54:47.906Z] 📝 [LOG] 🔍 [validateElementDimensions] Processing element new-corner-wall-cabinet-60-1760060078632: {
+  "elementZ": 140,
+  "isUndefined": false,
+  "isNaN": false,
+  "elementType": "cabinet"
+}
+[2025-10-10T12:54:47.908Z] 📝 [LOG] ✅ [validateElementDimensions] Using existing Z value: 140cm
+[2025-10-10T12:54:47.910Z] 📝 [LOG] ✅ [EnhancedCabinet3D] Using custom Z position: 140cm for new-corner-wall-cabinet-60-1760060078632
+[2025-10-10T12:54:47.918Z] 📝 [LOG] 🔍 [validateElementDimensions] Processing element new-corner-wall-cabinet-60-1760060081492: {
+  "elementZ": 140,
+  "isUndefined": false,
+  "isNaN": false,
+  "elementType": "cabinet"
+}
+[2025-10-10T12:54:47.920Z] 📝 [LOG] ✅ [validateElementDimensions] Using existing Z value: 140cm
+[2025-10-10T12:54:47.922Z] 📝 [LOG] ✅ [EnhancedCabinet3D] Using custom Z position: 140cm for new-corner-wall-cabinet-60-1760060081492
+[2025-10-10T12:54:47.929Z] 📝 [LOG] 🔍 [validateElementDimensions] Processing element base-cabinet-60-1760060133740: {
+  "elementZ": 0,
+  "isUndefined": false,
+  "isNaN": false,
+  "elementType": "cabinet"
+}
+[2025-10-10T12:54:47.932Z] 📝 [LOG] ✅ [validateElementDimensions] Using existing Z value: 0cm
+[2025-10-10T12:54:47.934Z] 📝 [LOG] 🔧 [EnhancedCabinet3D] Using default Z position: 0cm for base-cabinet-60-1760060133740 (base cabinet)
+[2025-10-10T12:54:47.941Z] 📝 [LOG] 🔍 [validateElementDimensions] Processing element base-cabinet-50-1760060137883: {
+  "elementZ": 0,
+  "isUndefined": false,
+  "isNaN": false,
+  "elementType": "cabinet"
+}
+[2025-10-10T12:54:47.943Z] 📝 [LOG] ✅ [validateElementDimensions] Using existing Z value: 0cm
+[2025-10-10T12:54:47.945Z] 📝 [LOG] 🔧 [EnhancedCabinet3D] Using default Z position: 0cm for base-cabinet-50-1760060137883 (base cabinet)
+[2025-10-10T12:54:47.953Z] 📝 [LOG] 🔍 [validateElementDimensions] Processing element base-cabinet-40-1760060142025: {
+  "elementZ": 0,
+  "isUndefined": false,
+  "isNaN": false,
+  "elementType": "cabinet"
+}
+[2025-10-10T12:54:47.955Z] 📝 [LOG] ✅ [validateElementDimensions] Using existing Z value: 0cm
+[2025-10-10T12:54:47.957Z] 📝 [LOG] 🔧 [EnhancedCabinet3D] Using default Z position: 0cm for base-cabinet-40-1760060142025 (base cabinet)
+[2025-10-10T12:54:47.963Z] 📝 [LOG] 🔍 [validateElementDimensions] Processing element base-cabinet-30-1760060145209: {
+  "elementZ": 0,
+  "isUndefined": false,
+  "isNaN": false,
+  "elementType": "cabinet"
+}
+[2025-10-10T12:54:47.967Z] 📝 [LOG] ✅ [validateElementDimensions] Using existing Z value: 0cm
+[2025-10-10T12:54:47.968Z] 📝 [LOG] 🔧 [EnhancedCabinet3D] Using default Z position: 0cm for base-cabinet-30-1760060145209 (base cabinet)
+[2025-10-10T12:54:47.978Z] 📝 [LOG] [EnhancedCabinet3D] Dynamic 3D models ENABLED
+[2025-10-10T12:54:47.980Z] 📝 [LOG] [EnhancedCabinet3D] Dynamic 3D models ENABLED
+[2025-10-10T12:54:47.982Z] 📝 [LOG] [EnhancedCabinet3D] Dynamic 3D models ENABLED
+[2025-10-10T12:54:47.984Z] 📝 [LOG] [EnhancedCabinet3D] Dynamic 3D models ENABLED
+[2025-10-10T12:54:47.986Z] 📝 [LOG] [EnhancedCabinet3D] Dynamic 3D models ENABLED
+[2025-10-10T12:54:47.988Z] 📝 [LOG] [EnhancedCabinet3D] Dynamic 3D models ENABLED
+[2025-10-10T12:54:47.990Z] 📝 [LOG] [EnhancedCabinet3D] Dynamic 3D models ENABLED
+[2025-10-10T12:54:47.992Z] 📝 [LOG] [EnhancedCabinet3D] Dynamic 3D models ENABLED
+[2025-10-10T12:54:47.994Z] 📝 [LOG] [EnhancedCabinet3D] Dynamic 3D models ENABLED
+[2025-10-10T12:54:47.996Z] 📝 [LOG] [EnhancedCabinet3D] Dynamic 3D models ENABLED
+[2025-10-10T12:54:47.998Z] 📝 [LOG] [EnhancedCabinet3D] Dynamic 3D models ENABLED
+[2025-10-10T12:54:48.000Z] 📝 [LOG] [EnhancedCabinet3D] Dynamic 3D models ENABLED
+[2025-10-10T12:54:48.108Z] 📝 [LOG] [EnhancedCabinet3D] Rendering l-shaped-test-cabinet-90-1760060052317 with DynamicComponentRenderer
+[2025-10-10T12:54:48.111Z] 📝 [LOG] [ComponentIDMapper] Mapped 'l-shaped-test-cabinet-90-1760060052317' (90cm) -> 'l-shaped-test-cabinet-90' using: Corner base cabinets / L-shaped test cabinet (60cm, 90cm)
+[2025-10-10T12:54:48.113Z] 📝 [LOG] [EnhancedCabinet3D] Rendering l-shaped-test-cabinet-90-1760060054215 with DynamicComponentRenderer
+[2025-10-10T12:54:48.114Z] 📝 [LOG] [ComponentIDMapper] Mapped 'l-shaped-test-cabinet-90-1760060054215' (90cm) -> 'l-shaped-test-cabinet-90' using: Corner base cabinets / L-shaped test cabinet (60cm, 90cm)
+[2025-10-10T12:54:48.116Z] 📝 [LOG] [EnhancedCabinet3D] Rendering l-shaped-test-cabinet-90-1760060056684 with DynamicComponentRenderer
+[2025-10-10T12:54:48.118Z] 📝 [LOG] [ComponentIDMapper] Mapped 'l-shaped-test-cabinet-90-1760060056684' (90cm) -> 'l-shaped-test-cabinet-90' using: Corner base cabinets / L-shaped test cabinet (60cm, 90cm)
+[2025-10-10T12:54:48.120Z] 📝 [LOG] [EnhancedCabinet3D] Rendering l-shaped-test-cabinet-90-1760060059584 with DynamicComponentRenderer
+[2025-10-10T12:54:48.122Z] 📝 [LOG] [ComponentIDMapper] Mapped 'l-shaped-test-cabinet-90-1760060059584' (90cm) -> 'l-shaped-test-cabinet-90' using: Corner base cabinets / L-shaped test cabinet (60cm, 90cm)
+[2025-10-10T12:54:48.126Z] 📝 [LOG] [EnhancedCabinet3D] Rendering new-corner-wall-cabinet-60-1760060072300 with DynamicComponentRenderer
+[2025-10-10T12:54:48.128Z] 📝 [LOG] [ComponentIDMapper] Mapped 'new-corner-wall-cabinet-60-1760060072300' (60cm) -> 'new-corner-wall-cabinet-60' using: Corner wall cabinets (60cm, 90cm)
+[2025-10-10T12:54:48.130Z] 📝 [LOG] [EnhancedCabinet3D] Rendering new-corner-wall-cabinet-60-1760060075298 with DynamicComponentRenderer
+[2025-10-10T12:54:48.132Z] 📝 [LOG] [ComponentIDMapper] Mapped 'new-corner-wall-cabinet-60-1760060075298' (60cm) -> 'new-corner-wall-cabinet-60' using: Corner wall cabinets (60cm, 90cm)
+[2025-10-10T12:54:48.134Z] 📝 [LOG] [EnhancedCabinet3D] Rendering new-corner-wall-cabinet-60-1760060078632 with DynamicComponentRenderer
+[2025-10-10T12:54:48.136Z] 📝 [LOG] [ComponentIDMapper] Mapped 'new-corner-wall-cabinet-60-1760060078632' (60cm) -> 'new-corner-wall-cabinet-60' using: Corner wall cabinets (60cm, 90cm)
+[2025-10-10T12:54:48.138Z] 📝 [LOG] [EnhancedCabinet3D] Rendering new-corner-wall-cabinet-60-1760060081492 with DynamicComponentRenderer
+[2025-10-10T12:54:48.140Z] 📝 [LOG] [ComponentIDMapper] Mapped 'new-corner-wall-cabinet-60-1760060081492' (60cm) -> 'new-corner-wall-cabinet-60' using: Corner wall cabinets (60cm, 90cm)
+[2025-10-10T12:54:48.142Z] 📝 [LOG] [EnhancedCabinet3D] Rendering base-cabinet-60-1760060133740 with DynamicComponentRenderer
+[2025-10-10T12:54:48.145Z] 📝 [LOG] [ComponentIDMapper] Mapped 'base-cabinet-60-1760060133740' (60cm) -> 'base-cabinet-60' using: Standard base cabinets (30, 40, 50, 60, 80, 100cm)
+[2025-10-10T12:54:48.146Z] 📝 [LOG] [EnhancedCabinet3D] Rendering base-cabinet-50-1760060137883 with DynamicComponentRenderer
+[2025-10-10T12:54:48.149Z] 📝 [LOG] [ComponentIDMapper] Mapped 'base-cabinet-50-1760060137883' (50cm) -> 'base-cabinet-50' using: Standard base cabinets (30, 40, 50, 60, 80, 100cm)
+[2025-10-10T12:54:48.150Z] 📝 [LOG] [EnhancedCabinet3D] Rendering base-cabinet-40-1760060142025 with DynamicComponentRenderer
+[2025-10-10T12:54:48.152Z] 📝 [LOG] [ComponentIDMapper] Mapped 'base-cabinet-40-1760060142025' (40cm) -> 'base-cabinet-40' using: Standard base cabinets (30, 40, 50, 60, 80, 100cm)
+[2025-10-10T12:54:48.154Z] 📝 [LOG] [EnhancedCabinet3D] Rendering base-cabinet-30-1760060145209 with DynamicComponentRenderer
+[2025-10-10T12:54:48.156Z] 📝 [LOG] [ComponentIDMapper] Mapped 'base-cabinet-30-1760060145209' (30cm) -> 'base-cabinet-30' using: Standard base cabinets (30, 40, 50, 60, 80, 100cm)
+[2025-10-10T12:54:48.198Z] 📝 [LOG] [Model3DLoader] Cache hit for model: l-shaped-test-cabinet-90
+[2025-10-10T12:54:48.200Z] 📝 [LOG] [Model3DLoader] Cache hit for model: l-shaped-test-cabinet-90
+[2025-10-10T12:54:48.202Z] 📝 [LOG] [Model3DLoader] Cache hit for model: l-shaped-test-cabinet-90
+[2025-10-10T12:54:48.203Z] 📝 [LOG] [Model3DLoader] Cache hit for model: l-shaped-test-cabinet-90
+[2025-10-10T12:54:48.205Z] 📝 [LOG] [Model3DLoader] Cache hit for model: new-corner-wall-cabinet-60
+[2025-10-10T12:54:48.209Z] 📝 [LOG] [Model3DLoader] Cache hit for model: new-corner-wall-cabinet-60
+[2025-10-10T12:54:48.211Z] 📝 [LOG] [Model3DLoader] Cache hit for model: new-corner-wall-cabinet-60
+[2025-10-10T12:54:48.213Z] 📝 [LOG] [Model3DLoader] Cache hit for model: new-corner-wall-cabinet-60
+[2025-10-10T12:54:48.215Z] 📝 [LOG] [Model3DLoader] Cache hit for model: base-cabinet-60
+[2025-10-10T12:54:48.217Z] 📝 [LOG] [Model3DLoader] Cache hit for geometry: 6a45d0f6-5116-409a-8ab9-aacebd466a31
+[2025-10-10T12:54:48.219Z] 📝 [LOG] [Model3DLoader] Cache hit for materials
+[2025-10-10T12:54:48.220Z] 📝 [LOG] [Model3DLoader] Cache hit for geometry: 6a45d0f6-5116-409a-8ab9-aacebd466a31
+[2025-10-10T12:54:48.222Z] 📝 [LOG] [Model3DLoader] Cache hit for materials
+[2025-10-10T12:54:48.224Z] 📝 [LOG] [Model3DLoader] Cache hit for geometry: 6a45d0f6-5116-409a-8ab9-aacebd466a31
+[2025-10-10T12:54:48.226Z] 📝 [LOG] [Model3DLoader] Cache hit for materials
+[2025-10-10T12:54:48.228Z] 📝 [LOG] [Model3DLoader] Cache hit for geometry: 6a45d0f6-5116-409a-8ab9-aacebd466a31
+[2025-10-10T12:54:48.230Z] 📝 [LOG] [Model3DLoader] Cache hit for materials
+[2025-10-10T12:54:48.231Z] 📝 [LOG] [Model3DLoader] Cache hit for geometry: dee1b997-eb19-4228-b69f-7dff6204ae01
+[2025-10-10T12:54:48.233Z] 📝 [LOG] [Model3DLoader] Cache hit for materials
+[2025-10-10T12:54:48.235Z] 📝 [LOG] [Model3DLoader] Cache hit for geometry: dee1b997-eb19-4228-b69f-7dff6204ae01
+[2025-10-10T12:54:48.237Z] 📝 [LOG] [Model3DLoader] Cache hit for materials
+[2025-10-10T12:54:48.239Z] 📝 [LOG] [Model3DLoader] Cache hit for geometry: dee1b997-eb19-4228-b69f-7dff6204ae01
+[2025-10-10T12:54:48.240Z] 📝 [LOG] [Model3DLoader] Cache hit for materials
+[2025-10-10T12:54:48.242Z] 📝 [LOG] [Model3DLoader] Cache hit for geometry: dee1b997-eb19-4228-b69f-7dff6204ae01
+[2025-10-10T12:54:48.244Z] 📝 [LOG] [Model3DLoader] Cache hit for materials
+[2025-10-10T12:54:48.246Z] 📝 [LOG] [Model3DLoader] Cache hit for geometry: f8ac534e-6911-477b-bbf3-5c66afa03ed8
+[2025-10-10T12:54:48.249Z] 📝 [LOG] [Model3DLoader] Cache hit for materials
+[2025-10-10T12:54:48.253Z] 📝 [LOG] [GeometryBuilder] Built 8 geometry parts
+[2025-10-10T12:54:48.255Z] 📝 [LOG] [DynamicRenderer] Built component: l-shaped-test-cabinet-90 (8 parts)
+[2025-10-10T12:54:48.258Z] 📝 [LOG] [GeometryBuilder] Built 8 geometry parts
+[2025-10-10T12:54:48.260Z] 📝 [LOG] [DynamicRenderer] Built component: l-shaped-test-cabinet-90 (8 parts)
+[2025-10-10T12:54:48.262Z] 📝 [LOG] [GeometryBuilder] Built 8 geometry parts
+[2025-10-10T12:54:48.265Z] 📝 [LOG] [DynamicRenderer] Built component: l-shaped-test-cabinet-90 (8 parts)
+[2025-10-10T12:54:48.268Z] 📝 [LOG] [GeometryBuilder] Built 8 geometry parts
+[2025-10-10T12:54:48.270Z] 📝 [LOG] [DynamicRenderer] Built component: l-shaped-test-cabinet-90 (8 parts)
+[2025-10-10T12:54:48.272Z] 📝 [LOG] [GeometryBuilder] Built 6 geometry parts
+[2025-10-10T12:54:48.274Z] 📝 [LOG] [DynamicRenderer] Built component: new-corner-wall-cabinet-60 (6 parts)
+[2025-10-10T12:54:48.277Z] 📝 [LOG] [GeometryBuilder] Built 6 geometry parts
+[2025-10-10T12:54:48.279Z] 📝 [LOG] [DynamicRenderer] Built component: new-corner-wall-cabinet-60 (6 parts)
+[2025-10-10T12:54:48.282Z] 📝 [LOG] [GeometryBuilder] Built 6 geometry parts
+[2025-10-10T12:54:48.284Z] 📝 [LOG] [DynamicRenderer] Built component: new-corner-wall-cabinet-60 (6 parts)
+[2025-10-10T12:54:48.287Z] 📝 [LOG] [GeometryBuilder] Built 6 geometry parts
+[2025-10-10T12:54:48.289Z] 📝 [LOG] [DynamicRenderer] Built component: new-corner-wall-cabinet-60 (6 parts)
+[2025-10-10T12:54:48.291Z] 📝 [LOG] [GeometryBuilder] Built 4 geometry parts
+[2025-10-10T12:54:48.294Z] 📝 [LOG] [DynamicRenderer] Built component: base-cabinet-60 (4 parts)
+[2025-10-10T12:54:48.478Z] 📝 [LOG] [Model3DLoader] Loaded model from database: base-cabinet-50
+[2025-10-10T12:54:48.483Z] 📝 [LOG] [Model3DLoader] Cache hit for materials
+[2025-10-10T12:54:48.495Z] 📝 [LOG] [Model3DLoader] Loaded model from database: base-cabinet-40
+[2025-10-10T12:54:48.499Z] 📝 [LOG] [Model3DLoader] Cache hit for materials
+[2025-10-10T12:54:48.512Z] 📝 [LOG] [Model3DLoader] Loaded model from database: base-cabinet-30
+[2025-10-10T12:54:48.514Z] 📝 [LOG] [Model3DLoader] Cache hit for materials
+[2025-10-10T12:54:48.575Z] 📝 [LOG] [Model3DLoader] Loaded 4 geometry parts for model: 520dc8d6-d9a7-4009-b755-761634410954
+[2025-10-10T12:54:48.577Z] 📝 [LOG] [GeometryBuilder] Built 4 geometry parts
+[2025-10-10T12:54:48.579Z] 📝 [LOG] [DynamicRenderer] Built component: base-cabinet-50 (4 parts)
+[2025-10-10T12:54:48.584Z] 📝 [LOG] [Model3DLoader] Loaded 4 geometry parts for model: ba0d987f-fddd-4e7f-906e-696e4608fb80
+[2025-10-10T12:54:48.587Z] 📝 [LOG] [GeometryBuilder] Built 4 geometry parts
+[2025-10-10T12:54:48.589Z] 📝 [LOG] [DynamicRenderer] Built component: base-cabinet-40 (4 parts)
+[2025-10-10T12:54:48.591Z] 📝 [LOG] [Model3DLoader] Loaded 4 geometry parts for model: a8c47a62-5286-4dad-8773-494724766939
+[2025-10-10T12:54:48.594Z] 📝 [LOG] [GeometryBuilder] Built 4 geometry parts
+[2025-10-10T12:54:48.595Z] 📝 [LOG] [DynamicRenderer] Built component: base-cabinet-30 (4 parts)
+
+================================================================================
+END OF LOGS (653 entries)
+================================================================================

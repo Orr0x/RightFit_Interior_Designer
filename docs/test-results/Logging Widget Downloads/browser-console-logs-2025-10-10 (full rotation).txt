@@ -1,0 +1,1301 @@
+
+================================================================================
+BROWSER CONSOLE LOGS
+================================================================================
+Captured: 193 log entries
+Session Start: 2025-10-10T21:34:01.984Z
+Session End: 2025-10-10T21:34:20.041Z
+================================================================================
+
+[2025-10-10T21:34:01.984Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(-10.66, 4.81, 0.21)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-13.66, -1.79)",
+  "angle": "-97.5",
+  "normalized": "262.5"
+}
+[2025-10-10T21:34:02.042Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(-10.66, 4.81, 0.21)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-13.66, -1.79)",
+  "angle": "-97.5",
+  "normalized": "262.5"
+}
+[2025-10-10T21:34:02.139Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(-10.66, 4.81, 0.21)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-13.66, -1.79)",
+  "angle": "-97.5",
+  "normalized": "262.5"
+}
+[2025-10-10T21:34:02.235Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(-10.66, 4.81, 0.21)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-13.66, -1.79)",
+  "angle": "-97.5",
+  "normalized": "262.5"
+}
+[2025-10-10T21:34:02.335Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(-10.66, 4.81, 0.21)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-13.66, -1.79)",
+  "angle": "-97.5",
+  "normalized": "262.5"
+}
+[2025-10-10T21:34:02.437Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(-10.66, 4.81, 0.21)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-13.66, -1.79)",
+  "angle": "-97.5",
+  "normalized": "262.5"
+}
+[2025-10-10T21:34:02.533Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(-10.66, 4.81, 0.21)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-13.66, -1.79)",
+  "angle": "-97.5",
+  "normalized": "262.5"
+}
+[2025-10-10T21:34:02.641Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(-10.66, 4.81, 0.21)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-13.66, -1.79)",
+  "angle": "-97.5",
+  "normalized": "262.5"
+}
+[2025-10-10T21:34:02.739Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(-10.66, 4.81, 0.21)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-13.66, -1.79)",
+  "angle": "-97.5",
+  "normalized": "262.5"
+}
+[2025-10-10T21:34:02.835Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(-10.66, 4.81, 0.21)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-13.66, -1.79)",
+  "angle": "-97.5",
+  "normalized": "262.5"
+}
+[2025-10-10T21:34:02.941Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(-10.66, 4.81, 0.21)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-13.66, -1.79)",
+  "angle": "-97.5",
+  "normalized": "262.5"
+}
+[2025-10-10T21:34:03.041Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(-10.66, 4.81, 0.21)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-13.66, -1.79)",
+  "angle": "-97.5",
+  "normalized": "262.5"
+}
+[2025-10-10T21:34:03.141Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(-10.66, 4.81, 0.21)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-13.66, -1.79)",
+  "angle": "-97.5",
+  "normalized": "262.5"
+}
+[2025-10-10T21:34:03.241Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(-10.66, 4.81, 0.21)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-13.66, -1.79)",
+  "angle": "-97.5",
+  "normalized": "262.5"
+}
+[2025-10-10T21:34:03.341Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(-10.66, 4.81, 0.21)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-13.66, -1.79)",
+  "angle": "-97.5",
+  "normalized": "262.5"
+}
+[2025-10-10T21:34:03.441Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(-10.66, 4.81, 0.21)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-13.66, -1.79)",
+  "angle": "-97.5",
+  "normalized": "262.5"
+}
+[2025-10-10T21:34:03.539Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(-10.66, 4.81, 0.21)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-13.66, -1.79)",
+  "angle": "-97.5",
+  "normalized": "262.5"
+}
+[2025-10-10T21:34:03.632Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(-10.66, 4.81, 0.21)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-13.66, -1.79)",
+  "angle": "-97.5",
+  "normalized": "262.5"
+}
+[2025-10-10T21:34:03.741Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(-10.66, 4.81, 0.21)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-13.66, -1.79)",
+  "angle": "-97.5",
+  "normalized": "262.5"
+}
+[2025-10-10T21:34:03.841Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(-10.66, 4.81, 0.21)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-13.66, -1.79)",
+  "angle": "-97.5",
+  "normalized": "262.5"
+}
+[2025-10-10T21:34:03.942Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(-10.66, 4.81, 0.21)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-13.66, -1.79)",
+  "angle": "-97.5",
+  "normalized": "262.5"
+}
+[2025-10-10T21:34:04.035Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(-10.66, 4.81, 0.23)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-13.66, -1.77)",
+  "angle": "-97.4",
+  "normalized": "262.6"
+}
+[2025-10-10T21:34:04.141Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(-10.63, 4.81, 0.86)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-13.63, -1.14)",
+  "angle": "-94.8",
+  "normalized": "265.2"
+}
+[2025-10-10T21:34:04.237Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(-10.53, 4.84, 1.58)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-13.53, -0.42)",
+  "angle": "-91.8",
+  "normalized": "268.2"
+}
+[2025-10-10T21:34:04.333Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(-10.33, 4.92, 2.43)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-13.33, 0.43)",
+  "angle": "-88.2",
+  "normalized": "271.8"
+}
+[2025-10-10T21:34:04.439Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(-9.97, 4.98, 3.55)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-12.97, 1.55)",
+  "angle": "-83.2",
+  "normalized": "276.8"
+}
+[2025-10-10T21:34:04.535Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(-9.59, 5.00, 4.46)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-12.59, 2.46)",
+  "angle": "-78.9",
+  "normalized": "281.1"
+}
+[2025-10-10T21:34:04.641Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(-9.16, 5.01, 5.27)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-12.16, 3.27)",
+  "angle": "-74.9",
+  "normalized": "285.1"
+}
+[2025-10-10T21:34:04.737Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(-8.67, 5.02, 6.04)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-11.67, 4.04)",
+  "angle": "-70.9",
+  "normalized": "289.1"
+}
+[2025-10-10T21:34:04.841Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(-8.11, 5.02, 6.78)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-11.11, 4.78)",
+  "angle": "-66.7",
+  "normalized": "293.3"
+}
+[2025-10-10T21:34:04.936Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(-7.72, 5.02, 7.22)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-10.72, 5.22)",
+  "angle": "-64.1",
+  "normalized": "295.9"
+}
+[2025-10-10T21:34:05.033Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(-7.40, 5.02, 7.54)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-10.40, 5.54)",
+  "angle": "-61.9",
+  "normalized": "298.1"
+}
+[2025-10-10T21:34:05.141Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(-7.04, 5.02, 7.88)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-10.04, 5.88)",
+  "angle": "-59.6",
+  "normalized": "300.4"
+}
+[2025-10-10T21:34:05.234Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(-6.69, 5.02, 8.18)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-9.69, 6.18)",
+  "angle": "-57.5",
+  "normalized": "302.5"
+}
+[2025-10-10T21:34:05.334Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(-6.29, 5.02, 8.49)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-9.29, 6.49)",
+  "angle": "-55.1",
+  "normalized": "304.9"
+}
+[2025-10-10T21:34:05.436Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(-5.83, 5.02, 8.81)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-8.83, 6.81)",
+  "angle": "-52.4",
+  "normalized": "307.6"
+}
+[2025-10-10T21:34:05.537Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(-5.37, 5.01, 9.11)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-8.37, 7.11)",
+  "angle": "-49.7",
+  "normalized": "310.3"
+}
+[2025-10-10T21:34:05.632Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(-4.91, 4.99, 9.37)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-7.91, 7.37)",
+  "angle": "-47.0",
+  "normalized": "313.0"
+}
+[2025-10-10T21:34:05.739Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(-4.36, 4.95, 9.66)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-7.36, 7.66)",
+  "angle": "-43.9",
+  "normalized": "316.1"
+}
+[2025-10-10T21:34:05.835Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(-3.86, 4.90, 9.90)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-6.86, 7.90)",
+  "angle": "-41.0",
+  "normalized": "319.0"
+}
+[2025-10-10T21:34:05.937Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(-3.27, 4.87, 10.12)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-6.27, 8.12)",
+  "angle": "-37.7",
+  "normalized": "322.3"
+}
+[2025-10-10T21:34:06.041Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(-3.04, 4.86, 10.20)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-6.04, 8.20)",
+  "angle": "-36.4",
+  "normalized": "323.6"
+}
+[2025-10-10T21:34:06.141Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(-2.91, 4.86, 10.24)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-5.91, 8.24)",
+  "angle": "-35.7",
+  "normalized": "324.3"
+}
+[2025-10-10T21:34:06.241Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(-2.81, 4.86, 10.26)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-5.81, 8.26)",
+  "angle": "-35.1",
+  "normalized": "324.9"
+}
+[2025-10-10T21:34:06.335Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(-2.74, 4.86, 10.28)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-5.74, 8.28)",
+  "angle": "-34.7",
+  "normalized": "325.3"
+}
+[2025-10-10T21:34:06.441Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(-2.69, 4.85, 10.30)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-5.69, 8.30)",
+  "angle": "-34.5",
+  "normalized": "325.5"
+}
+[2025-10-10T21:34:06.535Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(-2.66, 4.85, 10.31)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-5.66, 8.31)",
+  "angle": "-34.2",
+  "normalized": "325.8"
+}
+[2025-10-10T21:34:06.641Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(-2.63, 4.85, 10.32)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-5.63, 8.32)",
+  "angle": "-34.1",
+  "normalized": "325.9"
+}
+[2025-10-10T21:34:06.737Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(-2.61, 4.85, 10.32)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-5.61, 8.32)",
+  "angle": "-34.0",
+  "normalized": "326.0"
+}
+[2025-10-10T21:34:06.841Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(-2.59, 4.85, 10.32)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-5.59, 8.32)",
+  "angle": "-33.9",
+  "normalized": "326.1"
+}
+[2025-10-10T21:34:06.941Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(-2.58, 4.85, 10.33)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-5.58, 8.33)",
+  "angle": "-33.8",
+  "normalized": "326.2"
+}
+[2025-10-10T21:34:07.035Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(-2.22, 4.90, 10.39)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-5.22, 8.39)",
+  "angle": "-31.9",
+  "normalized": "328.1"
+}
+[2025-10-10T21:34:07.141Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(-1.31, 5.03, 10.48)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-4.31, 8.48)",
+  "angle": "-26.9",
+  "normalized": "333.1"
+}
+[2025-10-10T21:34:07.233Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(-0.38, 5.13, 10.51)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-3.38, 8.51)",
+  "angle": "-21.7",
+  "normalized": "338.3"
+}
+[2025-10-10T21:34:07.336Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(0.75, 5.21, 10.45)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-2.25, 8.45)",
+  "angle": "-14.9",
+  "normalized": "345.1"
+}
+[2025-10-10T21:34:07.433Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(1.85, 5.27, 10.28)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-1.15, 8.28)",
+  "angle": "-7.9",
+  "normalized": "352.1"
+}
+[2025-10-10T21:34:07.535Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(2.88, 5.30, 10.03)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-0.12, 8.03)",
+  "angle": "-0.9",
+  "normalized": "359.1"
+}
+[2025-10-10T21:34:07.635Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(3.68, 5.30, 9.76)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(0.68, 7.76)",
+  "angle": "5.0",
+  "normalized": "5.0"
+}
+[2025-10-10T21:34:07.736Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(4.50, 5.31, 9.40)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(1.50, 7.40)",
+  "angle": "11.5",
+  "normalized": "11.5"
+}
+[2025-10-10T21:34:07.837Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(5.25, 5.31, 9.01)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(2.25, 7.01)",
+  "angle": "17.8",
+  "normalized": "17.8"
+}
+[2025-10-10T21:34:07.933Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(5.99, 5.31, 8.53)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(2.99, 6.53)",
+  "angle": "24.6",
+  "normalized": "24.6"
+}
+[2025-10-10T21:34:08.041Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(6.37, 5.31, 8.25)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(3.37, 6.25)",
+  "angle": "28.3",
+  "normalized": "28.3"
+}
+[2025-10-10T21:34:08.142Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(6.53, 5.31, 8.13)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(3.53, 6.13)",
+  "angle": "30.0",
+  "normalized": "30.0"
+}
+[2025-10-10T21:34:08.241Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(6.61, 5.31, 8.06)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(3.61, 6.06)",
+  "angle": "30.8",
+  "normalized": "30.8"
+}
+[2025-10-10T21:34:08.337Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(6.69, 5.31, 8.00)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(3.69, 6.00)",
+  "angle": "31.6",
+  "normalized": "31.6"
+}
+[2025-10-10T21:34:08.433Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(6.74, 5.31, 7.95)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(3.74, 5.95)",
+  "angle": "32.1",
+  "normalized": "32.1"
+}
+[2025-10-10T21:34:08.539Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(6.78, 5.31, 7.92)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(3.78, 5.92)",
+  "angle": "32.6",
+  "normalized": "32.6"
+}
+[2025-10-10T21:34:08.635Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(6.81, 5.31, 7.89)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(3.81, 5.89)",
+  "angle": "32.9",
+  "normalized": "32.9"
+}
+[2025-10-10T21:34:08.741Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(6.83, 5.31, 7.87)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(3.83, 5.87)",
+  "angle": "33.1",
+  "normalized": "33.1"
+}
+[2025-10-10T21:34:08.841Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(6.85, 5.31, 7.86)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(3.85, 5.86)",
+  "angle": "33.3",
+  "normalized": "33.3"
+}
+[2025-10-10T21:34:08.941Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(6.86, 5.31, 7.85)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(3.86, 5.85)",
+  "angle": "33.4",
+  "normalized": "33.4"
+}
+[2025-10-10T21:34:09.036Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(6.88, 5.31, 7.83)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(3.88, 5.83)",
+  "angle": "33.6",
+  "normalized": "33.6"
+}
+[2025-10-10T21:34:09.133Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(7.16, 5.37, 7.54)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(4.16, 5.54)",
+  "angle": "36.9",
+  "normalized": "36.9"
+}
+[2025-10-10T21:34:09.190Z] 📝 [LOG] 💾 [ProjectContext] Auto-saving design...
+[2025-10-10T21:34:09.191Z] 📝 [LOG] 💾 [ProjectContext] Saving current design... {
+  "roomId": "9a51fad3-f741-4836-b72c-85415ce6ef1b",
+  "showNotification": false
+}
+[2025-10-10T21:34:09.238Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(7.68, 5.52, 6.88)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(4.68, 4.88)",
+  "angle": "43.8",
+  "normalized": "43.8"
+}
+[2025-10-10T21:34:09.335Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(8.22, 5.67, 6.10)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(5.22, 4.10)",
+  "angle": "51.8",
+  "normalized": "51.8"
+}
+[2025-10-10T21:34:09.441Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(8.80, 5.83, 5.05)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(5.80, 3.05)",
+  "angle": "62.2",
+  "normalized": "62.2"
+}
+[2025-10-10T21:34:09.536Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(9.25, 5.93, 4.01)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(6.25, 2.01)",
+  "angle": "72.2",
+  "normalized": "72.2"
+}
+[2025-10-10T21:34:09.608Z] 📝 [LOG] ✅ [CompactComponentSidebar] Component sidebar rendered successfully
+[2025-10-10T21:34:09.609Z] 📝 [LOG] ✅ [CompactComponentSidebar] Summary: 194 total, 94 for kitchen, 10 categories
+[2025-10-10T21:34:09.615Z] 📝 [LOG] 🎯 [PerformanceMonitor] Performance monitor hidden
+[2025-10-10T21:34:09.621Z] 📝 [LOG] ✅ [CompactComponentSidebar] Component sidebar rendered successfully
+[2025-10-10T21:34:09.621Z] 📝 [LOG] ✅ [CompactComponentSidebar] Summary: 194 total, 94 for kitchen, 10 categories
+[2025-10-10T21:34:09.627Z] 📝 [LOG] 🎯 [PerformanceMonitor] Performance monitor hidden
+[2025-10-10T21:34:09.633Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(9.67, 5.97, 2.76)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(6.67, 0.76)",
+  "angle": "83.5",
+  "normalized": "83.5"
+}
+[2025-10-10T21:34:09.738Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(9.94, 5.99, 1.46)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(6.94, -0.54)",
+  "angle": "94.5",
+  "normalized": "94.5"
+}
+[2025-10-10T21:34:09.835Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(10.03, 6.00, 0.51)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(7.03, -1.49)",
+  "angle": "101.9",
+  "normalized": "101.9"
+}
+[2025-10-10T21:34:09.941Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(10.03, 6.00, -0.50)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(7.03, -2.50)",
+  "angle": "109.5",
+  "normalized": "109.5"
+}
+[2025-10-10T21:34:10.038Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(9.98, 6.00, -1.11)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(6.98, -3.11)",
+  "angle": "114.0",
+  "normalized": "114.0"
+}
+[2025-10-10T21:34:10.141Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(9.96, 6.00, -1.32)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(6.96, -3.32)",
+  "angle": "115.5",
+  "normalized": "115.5"
+}
+[2025-10-10T21:34:10.241Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(9.93, 6.00, -1.47)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(6.93, -3.47)",
+  "angle": "116.6",
+  "normalized": "116.6"
+}
+[2025-10-10T21:34:10.334Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(9.92, 6.00, -1.59)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(6.92, -3.59)",
+  "angle": "117.4",
+  "normalized": "117.4"
+}
+[2025-10-10T21:34:10.434Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(9.90, 6.00, -1.67)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(6.90, -3.67)",
+  "angle": "118.0",
+  "normalized": "118.0"
+}
+[2025-10-10T21:34:10.534Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(9.89, 6.00, -1.73)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(6.89, -3.73)",
+  "angle": "118.4",
+  "normalized": "118.4"
+}
+[2025-10-10T21:34:10.637Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(9.88, 6.00, -1.78)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(6.88, -3.78)",
+  "angle": "118.7",
+  "normalized": "118.7"
+}
+[2025-10-10T21:34:10.705Z] ⚠️ [WARN] ⚠️ [MemoryManager] High memory usage detected: 312MB
+[2025-10-10T21:34:10.706Z] 📝 [LOG] 🧹 [MemoryManager] Clearing component caches...
+[2025-10-10T21:34:10.706Z] 📝 [LOG] 🗑️ [MemoryManager] Cleared 0 cache entries
+[2025-10-10T21:34:10.733Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(9.88, 6.00, -1.81)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(6.88, -3.81)",
+  "angle": "119.0",
+  "normalized": "119.0"
+}
+[2025-10-10T21:34:10.840Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(9.87, 6.00, -1.83)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(6.87, -3.83)",
+  "angle": "119.1",
+  "normalized": "119.1"
+}
+[2025-10-10T21:34:10.941Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(9.87, 6.00, -1.85)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(6.87, -3.85)",
+  "angle": "119.3",
+  "normalized": "119.3"
+}
+[2025-10-10T21:34:11.041Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(9.87, 6.00, -1.86)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(6.87, -3.86)",
+  "angle": "119.4",
+  "normalized": "119.4"
+}
+[2025-10-10T21:34:11.137Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(9.84, 6.02, -1.92)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(6.84, -3.92)",
+  "angle": "119.8",
+  "normalized": "119.8"
+}
+[2025-10-10T21:34:11.232Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(9.59, 6.23, -2.47)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(6.59, -4.47)",
+  "angle": "124.2",
+  "normalized": "124.2"
+}
+[2025-10-10T21:34:11.338Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(9.20, 6.42, -3.32)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(6.20, -5.32)",
+  "angle": "130.7",
+  "normalized": "130.7"
+}
+[2025-10-10T21:34:11.434Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(8.82, 6.53, -4.04)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(5.82, -6.04)",
+  "angle": "136.1",
+  "normalized": "136.1"
+}
+[2025-10-10T21:34:11.541Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(8.38, 6.59, -4.82)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(5.38, -6.82)",
+  "angle": "141.7",
+  "normalized": "141.7"
+}
+[2025-10-10T21:34:11.636Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(7.74, 6.61, -5.77)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(4.74, -7.77)",
+  "angle": "148.6",
+  "normalized": "148.6"
+}
+[2025-10-10T21:34:11.741Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(6.99, 6.58, -6.69)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(3.99, -8.69)",
+  "angle": "155.4",
+  "normalized": "155.4"
+}
+[2025-10-10T21:34:11.837Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(6.37, 6.54, -7.32)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(3.37, -9.32)",
+  "angle": "160.1",
+  "normalized": "160.1"
+}
+[2025-10-10T21:34:11.932Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(5.72, 6.52, -7.85)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(2.72, -9.85)",
+  "angle": "164.6",
+  "normalized": "164.6"
+}
+[2025-10-10T21:34:12.038Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(5.00, 6.51, -8.33)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(2.00, -10.33)",
+  "angle": "169.0",
+  "normalized": "169.0"
+}
+[2025-10-10T21:34:12.141Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(4.69, 6.51, -8.51)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(1.69, -10.51)",
+  "angle": "170.8",
+  "normalized": "170.8"
+}
+[2025-10-10T21:34:12.242Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(4.52, 6.51, -8.60)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(1.52, -10.60)",
+  "angle": "171.8",
+  "normalized": "171.8"
+}
+[2025-10-10T21:34:12.337Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(4.43, 6.51, -8.65)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(1.43, -10.65)",
+  "angle": "172.4",
+  "normalized": "172.4"
+}
+[2025-10-10T21:34:12.432Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(4.34, 6.51, -8.69)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(1.34, -10.69)",
+  "angle": "172.8",
+  "normalized": "172.8"
+}
+[2025-10-10T21:34:12.538Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(4.28, 6.51, -8.73)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(1.28, -10.73)",
+  "angle": "173.2",
+  "normalized": "173.2"
+}
+[2025-10-10T21:34:12.635Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(4.24, 6.51, -8.75)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(1.24, -10.75)",
+  "angle": "173.4",
+  "normalized": "173.4"
+}
+[2025-10-10T21:34:12.741Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(4.20, 6.51, -8.76)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(1.20, -10.76)",
+  "angle": "173.6",
+  "normalized": "173.6"
+}
+[2025-10-10T21:34:12.841Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(4.18, 6.51, -8.78)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(1.18, -10.78)",
+  "angle": "173.8",
+  "normalized": "173.8"
+}
+[2025-10-10T21:34:12.932Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(4.15, 6.52, -8.78)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(1.15, -10.78)",
+  "angle": "173.9",
+  "normalized": "173.9"
+}
+[2025-10-10T21:34:13.032Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(3.28, 7.02, -8.76)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(0.28, -10.76)",
+  "angle": "178.5",
+  "normalized": "178.5"
+}
+[2025-10-10T21:34:13.132Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(1.27, 7.71, -8.71)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-1.73, -10.71)",
+  "angle": "-170.8",
+  "normalized": "189.2"
+}
+[2025-10-10T21:34:13.234Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(-0.47, 7.98, -8.54)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-3.47, -10.54)",
+  "angle": "-161.8",
+  "normalized": "198.2"
+}
+[2025-10-10T21:34:13.336Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(-2.34, 8.02, -8.19)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-5.34, -10.19)",
+  "angle": "-152.3",
+  "normalized": "207.7"
+}
+[2025-10-10T21:34:13.436Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(-3.76, 7.91, -7.76)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-6.76, -9.76)",
+  "angle": "-145.3",
+  "normalized": "214.7"
+}
+[2025-10-10T21:34:13.532Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(-4.86, 7.71, -7.33)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-7.86, -9.33)",
+  "angle": "-139.9",
+  "normalized": "220.1"
+}
+[2025-10-10T21:34:13.642Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(-5.63, 7.54, -6.96)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-8.63, -8.96)",
+  "angle": "-136.1",
+  "normalized": "223.9"
+}
+[2025-10-10T21:34:13.741Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(-5.86, 7.48, -6.82)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-8.86, -8.82)",
+  "angle": "-134.9",
+  "normalized": "225.1"
+}
+[2025-10-10T21:34:13.841Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(-6.04, 7.44, -6.71)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-9.04, -8.71)",
+  "angle": "-133.9",
+  "normalized": "226.1"
+}
+[2025-10-10T21:34:13.937Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(-6.14, 7.41, -6.65)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-9.14, -8.65)",
+  "angle": "-133.4",
+  "normalized": "226.6"
+}
+[2025-10-10T21:34:14.033Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(-6.23, 7.39, -6.59)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-9.23, -8.59)",
+  "angle": "-132.9",
+  "normalized": "227.1"
+}
+[2025-10-10T21:34:14.138Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(-6.29, 7.38, -6.54)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-9.29, -8.54)",
+  "angle": "-132.6",
+  "normalized": "227.4"
+}
+[2025-10-10T21:34:14.234Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(-6.34, 7.36, -6.51)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-9.34, -8.51)",
+  "angle": "-132.3",
+  "normalized": "227.7"
+}
+[2025-10-10T21:34:14.338Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(-6.38, 7.36, -6.49)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-9.38, -8.49)",
+  "angle": "-132.2",
+  "normalized": "227.8"
+}
+[2025-10-10T21:34:14.441Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(-6.40, 7.35, -6.47)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-9.40, -8.47)",
+  "angle": "-132.0",
+  "normalized": "228.0"
+}
+[2025-10-10T21:34:14.541Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(-6.42, 7.35, -6.46)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-9.42, -8.46)",
+  "angle": "-131.9",
+  "normalized": "228.1"
+}
+[2025-10-10T21:34:14.634Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(-6.44, 7.45, -6.31)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-9.44, -8.31)",
+  "angle": "-131.4",
+  "normalized": "228.6"
+}
+[2025-10-10T21:34:14.732Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(-6.63, 7.98, -5.41)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-9.63, -7.41)",
+  "angle": "-127.6",
+  "normalized": "232.4"
+}
+[2025-10-10T21:34:14.832Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(-6.96, 8.39, -4.23)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-9.96, -6.23)",
+  "angle": "-122.0",
+  "normalized": "238.0"
+}
+[2025-10-10T21:34:14.938Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(-7.43, 8.54, -2.95)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-10.43, -4.95)",
+  "angle": "-115.4",
+  "normalized": "244.6"
+}
+[2025-10-10T21:34:15.041Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(-8.14, 8.29, -1.36)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-11.14, -3.36)",
+  "angle": "-106.8",
+  "normalized": "253.2"
+}
+[2025-10-10T21:34:15.136Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(-8.54, 7.99, 0.08)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-11.54, -1.92)",
+  "angle": "-99.5",
+  "normalized": "260.5"
+}
+[2025-10-10T21:34:15.232Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(-8.67, 7.75, 1.23)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-11.67, -0.77)",
+  "angle": "-93.8",
+  "normalized": "266.2"
+}
+[2025-10-10T21:34:15.341Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(-8.69, 7.68, 1.56)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-11.69, -0.44)",
+  "angle": "-92.2",
+  "normalized": "267.8"
+}
+[2025-10-10T21:34:15.441Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(-8.69, 7.64, 1.76)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-11.69, -0.24)",
+  "angle": "-91.2",
+  "normalized": "268.8"
+}
+[2025-10-10T21:34:15.540Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(-8.68, 7.60, 1.91)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-11.68, -0.09)",
+  "angle": "-90.5",
+  "normalized": "269.5"
+}
+[2025-10-10T21:34:15.641Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(-8.68, 7.58, 2.02)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-11.68, 0.02)",
+  "angle": "-89.9",
+  "normalized": "270.1"
+}
+[2025-10-10T21:34:15.741Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(-8.68, 7.56, 2.10)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-11.68, 0.10)",
+  "angle": "-89.5",
+  "normalized": "270.5"
+}
+[2025-10-10T21:34:15.841Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(-8.67, 7.55, 2.16)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-11.67, 0.16)",
+  "angle": "-89.2",
+  "normalized": "270.8"
+}
+[2025-10-10T21:34:15.939Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(-8.67, 7.54, 2.20)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-11.67, 0.20)",
+  "angle": "-89.0",
+  "normalized": "271.0"
+}
+[2025-10-10T21:34:16.041Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(-8.67, 7.53, 2.23)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-11.67, 0.23)",
+  "angle": "-88.9",
+  "normalized": "271.1"
+}
+[2025-10-10T21:34:16.141Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(-8.67, 7.53, 2.26)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-11.67, 0.26)",
+  "angle": "-88.7",
+  "normalized": "271.3"
+}
+[2025-10-10T21:34:16.234Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(-8.67, 7.52, 2.27)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-11.67, 0.27)",
+  "angle": "-88.7",
+  "normalized": "271.3"
+}
+[2025-10-10T21:34:16.336Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(-8.67, 7.52, 2.29)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-11.67, 0.29)",
+  "angle": "-88.6",
+  "normalized": "271.4"
+}
+[2025-10-10T21:34:16.436Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(-8.66, 7.52, 2.30)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-11.66, 0.30)",
+  "angle": "-88.6",
+  "normalized": "271.4"
+}
+[2025-10-10T21:34:16.535Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(-8.66, 7.52, 2.30)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-11.66, 0.30)",
+  "angle": "-88.5",
+  "normalized": "271.5"
+}
+[2025-10-10T21:34:16.636Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(-8.66, 7.52, 2.31)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-11.66, 0.31)",
+  "angle": "-88.5",
+  "normalized": "271.5"
+}
+[2025-10-10T21:34:16.734Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(-8.66, 7.51, 2.31)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-11.66, 0.31)",
+  "angle": "-88.5",
+  "normalized": "271.5"
+}
+[2025-10-10T21:34:16.841Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(-8.66, 7.51, 2.31)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-11.66, 0.31)",
+  "angle": "-88.5",
+  "normalized": "271.5"
+}
+[2025-10-10T21:34:16.936Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(-8.66, 7.51, 2.32)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-11.66, 0.32)",
+  "angle": "-88.5",
+  "normalized": "271.5"
+}
+[2025-10-10T21:34:17.032Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(-8.66, 7.51, 2.32)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-11.66, 0.32)",
+  "angle": "-88.4",
+  "normalized": "271.6"
+}
+[2025-10-10T21:34:17.132Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(-8.66, 7.51, 2.32)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-11.66, 0.32)",
+  "angle": "-88.4",
+  "normalized": "271.6"
+}
+[2025-10-10T21:34:17.234Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(-8.66, 7.51, 2.32)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-11.66, 0.32)",
+  "angle": "-88.4",
+  "normalized": "271.6"
+}
+[2025-10-10T21:34:17.341Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(-8.66, 7.51, 2.32)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-11.66, 0.32)",
+  "angle": "-88.4",
+  "normalized": "271.6"
+}
+[2025-10-10T21:34:17.436Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(-8.66, 7.51, 2.32)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-11.66, 0.32)",
+  "angle": "-88.4",
+  "normalized": "271.6"
+}
+[2025-10-10T21:34:17.532Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(-8.66, 7.51, 2.32)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-11.66, 0.32)",
+  "angle": "-88.4",
+  "normalized": "271.6"
+}
+[2025-10-10T21:34:17.633Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(-8.66, 7.51, 2.32)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-11.66, 0.32)",
+  "angle": "-88.4",
+  "normalized": "271.6"
+}
+[2025-10-10T21:34:17.734Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(-8.66, 7.51, 2.32)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-11.66, 0.32)",
+  "angle": "-88.4",
+  "normalized": "271.6"
+}
+[2025-10-10T21:34:17.842Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(-8.66, 7.51, 2.32)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-11.66, 0.32)",
+  "angle": "-88.4",
+  "normalized": "271.6"
+}
+[2025-10-10T21:34:17.940Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(-8.66, 7.51, 2.32)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-11.66, 0.32)",
+  "angle": "-88.4",
+  "normalized": "271.6"
+}
+[2025-10-10T21:34:18.043Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(-8.66, 7.51, 2.32)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-11.66, 0.32)",
+  "angle": "-88.4",
+  "normalized": "271.6"
+}
+[2025-10-10T21:34:18.141Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(-8.66, 7.51, 2.32)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-11.66, 0.32)",
+  "angle": "-88.4",
+  "normalized": "271.6"
+}
+[2025-10-10T21:34:18.240Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(-8.66, 7.51, 2.32)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-11.66, 0.32)",
+  "angle": "-88.4",
+  "normalized": "271.6"
+}
+[2025-10-10T21:34:18.340Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(-8.66, 7.51, 2.32)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-11.66, 0.32)",
+  "angle": "-88.4",
+  "normalized": "271.6"
+}
+[2025-10-10T21:34:18.434Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(-8.66, 7.51, 2.32)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-11.66, 0.32)",
+  "angle": "-88.4",
+  "normalized": "271.6"
+}
+[2025-10-10T21:34:18.534Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(-8.66, 7.51, 2.32)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-11.66, 0.32)",
+  "angle": "-88.4",
+  "normalized": "271.6"
+}
+[2025-10-10T21:34:18.636Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(-8.66, 7.51, 2.32)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-11.66, 0.32)",
+  "angle": "-88.4",
+  "normalized": "271.6"
+}
+[2025-10-10T21:34:18.736Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(-8.66, 7.51, 2.32)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-11.66, 0.32)",
+  "angle": "-88.4",
+  "normalized": "271.6"
+}
+[2025-10-10T21:34:18.832Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(-8.66, 7.51, 2.32)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-11.66, 0.32)",
+  "angle": "-88.4",
+  "normalized": "271.6"
+}
+[2025-10-10T21:34:18.938Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(-8.66, 7.51, 2.32)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-11.66, 0.32)",
+  "angle": "-88.4",
+  "normalized": "271.6"
+}
+[2025-10-10T21:34:19.034Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(-8.66, 7.51, 2.32)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-11.66, 0.32)",
+  "angle": "-88.4",
+  "normalized": "271.6"
+}
+[2025-10-10T21:34:19.141Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(-8.66, 7.51, 2.32)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-11.66, 0.32)",
+  "angle": "-88.4",
+  "normalized": "271.6"
+}
+[2025-10-10T21:34:19.237Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(-8.66, 7.51, 2.32)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-11.66, 0.32)",
+  "angle": "-88.4",
+  "normalized": "271.6"
+}
+[2025-10-10T21:34:19.341Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(-8.66, 7.51, 2.32)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-11.66, 0.32)",
+  "angle": "-88.4",
+  "normalized": "271.6"
+}
+[2025-10-10T21:34:19.438Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(-8.66, 7.51, 2.32)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-11.66, 0.32)",
+  "angle": "-88.4",
+  "normalized": "271.6"
+}
+[2025-10-10T21:34:19.534Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(-8.66, 7.51, 2.32)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-11.66, 0.32)",
+  "angle": "-88.4",
+  "normalized": "271.6"
+}
+[2025-10-10T21:34:19.642Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(-8.66, 7.51, 2.32)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-11.66, 0.32)",
+  "angle": "-88.4",
+  "normalized": "271.6"
+}
+[2025-10-10T21:34:19.741Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(-8.66, 7.51, 2.32)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-11.66, 0.32)",
+  "angle": "-88.4",
+  "normalized": "271.6"
+}
+[2025-10-10T21:34:19.841Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(-8.66, 7.51, 2.32)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-11.66, 0.32)",
+  "angle": "-88.4",
+  "normalized": "271.6"
+}
+[2025-10-10T21:34:19.940Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(-8.66, 7.51, 2.32)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-11.66, 0.32)",
+  "angle": "-88.4",
+  "normalized": "271.6"
+}
+[2025-10-10T21:34:20.041Z] 📝 [LOG] [ComplexRoomGeometry] Camera analysis: {
+  "cameraPos": "(-8.66, 7.51, 2.32)",
+  "roomCenter": "(3.00, 2.00)",
+  "relative": "(-11.66, 0.32)",
+  "angle": "-88.4",
+  "normalized": "271.6"
+}
+
+================================================================================
+END OF LOGS (193 entries)
+================================================================================

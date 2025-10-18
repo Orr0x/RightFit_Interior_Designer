@@ -1,4 +1,4 @@
-
+import { useEffect } from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -21,18 +21,42 @@ import MediaManager from "./pages/MediaManager";
 import BlogManager from "./pages/BlogManager";
 import GalleryManager from "./pages/GalleryManager";
 import ComponentManagerPage from "./pages/ComponentManagerPage";
+import TypeManagerPage from "./pages/TypeManagerPage";
 import Blog from "./pages/Blog";
 import BlogPost from "./pages/BlogPost";
 import EggerBoards from "./pages/EggerBoards";
 import ProductPage from "./pages/ProductPage";
 import ColorProductPage from "./pages/ColorProductPage";
 import DevToolsButton from "./components/DevToolsButton";
+import ConsoleLoggerUI from "./components/ConsoleLoggerUI";
 import { AuthProvider } from "./contexts/AuthContext";
 import { ProjectProvider } from "./contexts/ProjectContext";
+import { preloadCommonComponents } from "./components/3d/DynamicComponentRenderer";
+import { setupConsoleLogger } from "./utils/ConsoleLogger";
+import { ConfigurationService } from "./services/ConfigurationService";
 
 const queryClient = new QueryClient();
 
-const App = () => (
+const App = () => {
+  // Preload common 3D models and configuration on app startup
+  useEffect(() => {
+    // Preload app configuration from database
+    ConfigurationService.preload().then(() => {
+      console.info('✅ [App] Configuration preloaded from database');
+    }).catch((error) => {
+      console.error('❌ [App] Configuration preload failed:', error);
+    });
+
+    preloadCommonComponents();
+
+    // Start console log capture (development mode only)
+    if (import.meta.env.DEV) {
+      setupConsoleLogger();
+      console.info('🔧 [App] Console logger enabled (development mode)');
+    }
+  }, []);
+
+  return (
   <QueryClientProvider client={queryClient}>
     <AuthProvider>
       <ProjectProvider>
@@ -61,6 +85,7 @@ const App = () => (
               <Route path="/dev/blog" element={<BlogManager />} />
               <Route path="/dev/gallery" element={<GalleryManager />} />
               <Route path="/dev/components" element={<ComponentManagerPage />} />
+              <Route path="/dev/types" element={<TypeManagerPage />} />
               <Route path="/blog" element={<Blog />} />
               <Route path="/blog/:slug" element={<BlogPost />} />
               <Route path="/egger-boards" element={<EggerBoards />} />
@@ -69,11 +94,13 @@ const App = () => (
               <Route path="*" element={<NotFound />} />
             </Routes>
             <DevToolsButton />
+            <ConsoleLoggerUI />
           </BrowserRouter>
         </TooltipProvider>
       </ProjectProvider>
     </AuthProvider>
   </QueryClientProvider>
-);
+  );
+};
 
 export default App;

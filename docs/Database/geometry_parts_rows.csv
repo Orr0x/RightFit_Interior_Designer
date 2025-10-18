@@ -1,0 +1,592 @@
+id,model_id,part_name,part_type,render_order,position_x,position_y,position_z,dimension_width,dimension_height,dimension_depth,material_name,color_override,metalness,roughness,opacity,render_condition,created_at
+00552c34-a89e-4703-8440-b7324f14d33d,6a45d0f6-5116-409a-8ab9-aacebd466a31,Plinth Z-leg,box,3,cornerDepth / 2 - legLength / 2 - 0.1,-height / 2 + plinthHeight / 2,0,cornerDepth - 0.2,plinthHeight,legLength,plinth,plinthColor,,,1.00,!isWallCabinet,2025-10-08 11:23:36.663103+00
+0077931c-99c8-4534-9837-b75e5499a87a,9e134812-df5a-4e10-9c04-70f35f30f798,Left Drawer,box,2,-width/3,0,depth/2 + 0.01,width/3 - 0.05,height * 0.6,0.02,door,doorColor,,,1.00,,2025-10-08 16:52:17.357255+00
+00ceb071-84a9-4ab0-8695-7d518efde4fa,43b45e50-439e-4647-b320-7b0d2d51d311,Back,box,2,0,height / 3,-depth / 2 + 0.05,width,height * 0.8,0.1,fabric,cabinetMaterial,,,1.00,,2025-10-08 20:13:16.422946+00
+00de436f-7d58-4c12-9465-64da2e5330f9,40a9b4a4-3446-45e2-a064-20563fd65872,Tap,box,3,-width/4,height + 0.10,-depth/4,0.03,0.15,0.03,handle,#808080,,,1.00,,2025-10-08 17:10:09.489775+00
+0133ce86-54a5-4fd1-a442-406f87cabb76,0f4e7a93-13e8-4c11-9c86-0cc9043649a6,Drawer 1,box,3,0,-0.15,depth / 2 + 0.01,width - 0.02,0.20,0.02,door,doorColor,,,1.00,,2025-10-08 16:21:41.621901+00
+020314ec-f863-4d77-941f-4be7d69f55a6,a8b66209-ccef-4e44-a761-df5f37ac640b,Cabinet X-leg,box,1,0,0,cornerDepth / 2 - legLength / 2,legLength,height,cornerDepth,cabinet,cabinetMaterial,,,1.00,,2025-10-08 11:23:36.663103+00
+02519065-2a5c-4e5b-a932-f818dc846f60,ded98e7f-d2c7-42e7-b47f-87bc4a9cfa87,Back,box,2,0,height * 0.25,-depth * 0.2,width,height * 0.6,depth * 0.2,cabinet_body,#000000,,,1.00,,2025-10-08 16:52:06.676597+00
+02ba6d9d-50b7-4617-bba1-a5f410f81d50,9e134812-df5a-4e10-9c04-70f35f30f798,Right Drawer,box,3,width/3,0,depth/2 + 0.01,width/3 - 0.05,height * 0.6,0.02,door,doorColor,,,1.00,,2025-10-08 16:52:17.357255+00
+02ca9ed1-2ee9-4fcf-9a3e-501168711923,f8ac534e-6911-477b-bbf3-5c66afa03ed8,Plinth,box,1,0,-height / 2 + plinthHeight / 2,0,width,plinthHeight,depth - 0.05,plinth,plinthColor,,,1.00,!isWallCabinet,2025-10-08 15:51:04.652333+00
+03bc8fd8-7c7f-4217-b4b0-404f4a3e3888,b1ac7b87-a11a-4b84-b26f-61eca93692c6,Main Top,box,1,0,height/2 - 0.02,0,width,0.04,0.70,cabinet_body,#8B4513,,,1.00,,2025-10-08 16:52:06.676597+00
+03c8eb73-3d42-47ed-8bff-fd1b0063645a,ca8750ee-44bd-463f-b2e1-cd1ae406fdab,Lower Cabinet,box,1,0,-height * 0.3,0,width,height * 0.4,depth,cabinet_body,#8B4513,,,1.00,,2025-10-08 16:52:38.215415+00
+0499b4d6-883b-4c98-9b5e-da58c5c089ea,ded98e7f-d2c7-42e7-b47f-87bc4a9cfa87,Seat,box,1,0,-height * 0.15,0,width,height * 0.15,depth,cabinet_body,#000000,,,1.00,,2025-10-08 16:52:06.676597+00
+06dd7f6f-b9a0-4dfb-83ca-d99f56f4b4d8,b1d275f7-078c-4c24-b657-1d8093504ce3,Basin,box,1,0,0,0,width - 0.10,height,depth - 0.10,handle,#FFFFFF,,,1.00,,2025-10-08 17:10:09.489775+00
+072fe3b8-1942-472d-8728-13219485a1dd,9b93fa5d-fde1-4330-8f1d-84ecb01e0607,Faucet,cylinder,4,-width / 3,height / 2 - 0.15,-depth / 2 + 0.1,0.05,0.15,0.05,chrome,#c0c0c0,,,1.00,,2025-10-08 20:21:21.129584+00
+076b9619-56eb-49a6-8a2b-5e7cedad1cae,233fc002-1ea4-4d6b-bc98-08491905c3bd,Door 2,box,3,-width / 8,0,depth / 2 + 0.01,width / 4 - 0.02,height - 0.02,0.02,door,doorColor,,,1.00,,2025-10-08 16:50:15.91125+00
+076c798d-770f-462e-b00f-87fe63e1b1f6,5c56e7f0-6fdc-461b-bf2d-cb4df3c1cca4,Drawer 2,box,4,0,0.10,depth / 2 + 0.01,width - 0.02,0.20,0.02,door,doorColor,,,1.00,,2025-10-08 16:21:41.621901+00
+07acc2ae-f810-4d1b-bcda-b5d2bc15d8ee,678d0eca-8539-42b0-82c9-a41ea45b92db,Drawer 2,box,3,0,height * 0.3,depth/2 + 0.01,width/3 - 0.02,height * 0.2,0.02,door,doorColor,,,1.00,,2025-10-08 16:52:17.357255+00
+07ffe3c1-1592-4917-9f1d-28de1473a259,932bc10c-f028-4375-8593-8d2f9bb30fbb,Table Top,box,1,0,0,0,width,0.05,depth * 1.5,wood,cabinetMaterial,,,1.00,,2025-10-08 20:13:16.422946+00
+08fd47ba-4623-413f-83d4-e330461fbfc4,ecf82b10-3677-4226-9abb-4e9d4644668f,Door Left,box,2,-width/4,0,depth/2 + 0.01,width/2 - 0.02,height - 0.02,0.02,door,doorColor,,,1.00,,2025-10-08 16:52:53.546878+00
+09a62fc9-ac13-4b19-babe-a148e315cb3d,0d0bc972-4fbb-465d-8189-5671631d717c,Counter,box,2,0,height * 0.32,0,width,height * 0.05,depth,counter,counterColor,,,1.00,,2025-10-08 16:52:53.546878+00
+09c0a108-0d7b-4f7e-93f5-0c40ad73d444,3fc2f0c1-75a5-4ea3-bb9f-e9f64b5ea443,Left Bowl,box,1,-width / 4,-0.05,0,width / 2 - 0.10,height,depth - 0.10,handle,#c0c0c0,,,1.00,,2025-10-08 16:17:02.441798+00
+09dd21bd-1ff8-49b0-a756-fb7248e807dd,6e958c7e-fffd-48b1-b68b-b41ad95eee7b,Back,box,2,0,height * 0.15,-depth * 0.25,width,height * 0.6,depth * 0.2,cabinet_body,#3A6EA5,,,1.00,,2025-10-08 16:51:41.19204+00
+0a95b154-c45e-4a17-9c01-3c06bf579f63,ffbcf071-8b29-48ac-b770-106d34f019bb,Door Left,box,2,-width/4,0,depth/2 + 0.01,width/2 - 0.02,height - 0.02,0.02,door,doorColor,,,1.00,,2025-10-08 16:52:17.357255+00
+0aaeac48-2a10-468f-bff1-052a75203db0,d7ccdbc2-01dd-4d96-911b-d0620f1f5dfb,Door Right,box,3,width/4,0,depth/2 + 0.01,width/2 - 0.02,height - 0.02,0.02,door,doorColor,,,1.00,,2025-10-08 16:52:38.215415+00
+0ac59043-8711-4622-8fd8-a275cdb48bcc,aabf5b36-17e8-494a-b660-302c25f389a9,Worktop,box,1,0,0,0,width,height,depth,cabinet_body,worktopColor,,,1.00,,2025-10-08 16:17:02.441798+00
+0acaa630-19c8-4af9-8b19-8834d3451da2,f8ac534e-6911-477b-bbf3-5c66afa03ed8,Door,box,3,0,plinthHeight / 2,depth / 2 + 0.01,width - 0.02,doorHeight,0.02,door,doorMaterial,,,1.00,,2025-10-08 15:51:04.652333+00
+0badbd3a-a938-4aca-8603-62869aadf368,a7eaee97-ddd8-4bf6-92b2-a7444b87fb10,Right Door,box,4,width / 3,0,depth / 2 + 0.01,width / 3 - 0.02,height - 0.02,0.02,door,doorColor,,,1.00,,2025-10-08 16:50:15.91125+00
+0c4516ec-755f-411c-a4bb-d2e908128879,5c56e7f0-6fdc-461b-bf2d-cb4df3c1cca4,Plinth,box,1,0,-height / 2 + 0.075,0,width,0.15,depth - 0.05,plinth,plinthColor,,,1.00,,2025-10-08 16:21:41.621901+00
+0c9e661e-4622-493b-b1dd-553b40706902,03846780-e5ea-4d9e-8b30-c9400090f7d0,Left Door,box,2,-width / 4,0,depth / 2 + 0.01,width / 2 + 0.05,height - 0.02,0.02,door,doorColor,,,1.00,,2025-10-08 16:50:15.91125+00
+0d3288b0-c000-4886-802d-d22f43d0ada6,4e51050f-bcc9-40d9-9d76-8bd927f038d9,Center Glass,box,2,0,0,depth * 0.15,width * 0.5 - 0.10,height - 0.10,0.06,handle,#E6E6FA,,,1.00,,2025-10-08 16:53:07.709429+00
+0deb45b5-dc0e-489f-9e31-fb28ac3f54f7,3ff7c696-6065-470b-9911-08f56f31e8a6,Body,box,1,0,0,0,width,height,depth,cabinet_body,cabinetColor,,,1.00,,2025-10-08 16:50:15.91125+00
+0e6ff9b6-17ad-4b4e-bad5-ed32b33e7dee,60f2345b-4c36-4f2f-95d0-493b16b7374a,Stand Base,box,3,0,-height / 2 - 0.1,depth / 3,width / 3,0.2,depth / 2,handle,#2F4F4F,,,1.00,,2025-10-08 20:13:16.422946+00
+0f526496-f014-4f28-b086-ce2c02898472,233fc002-1ea4-4d6b-bc98-08491905c3bd,Door 4,box,5,width * 3/8,0,depth / 2 + 0.01,width / 4 - 0.02,height - 0.02,0.02,door,doorColor,,,1.00,,2025-10-08 16:50:15.91125+00
+0fb8659f-5985-49a6-b57e-08080ecf17bb,d2960747-e61c-4df5-b56d-4a06f513d9c1,Cabinet Body,box,1,0,0,0,width,height,depth,cabinet_body,cabinetColor,,,1.00,,2025-10-08 16:07:57.673274+00
+10176824-2090-4f15-ae46-f083d777c158,b1d275f7-078c-4c24-b657-1d8093504ce3,Tap,box,2,0,height + 0.10,-depth/4,0.03,0.15,0.03,handle,#808080,,,1.00,,2025-10-08 17:10:09.489775+00
+109953c6-af37-413b-b1ba-74a630b01418,cef957ae-dd2c-4af6-b5bf-1b912b9d168a,Handle,box,4,width / 2 - 0.18,plinthHeight / 2 + cabinetHeight / 2 - 0.1,depth / 2 + 0.03,0.18,0.02,0.03,handle,handleMaterial,,,1.00,,2025-10-08 15:51:04.652333+00
+10b4fce9-160d-4f54-b4f0-80a957aada85,e923b001-1a72-4ed9-8cd9-d22b501c0182,Frame,box,1,0,0,0,width,height,depth,door,#FFFFFF,,,1.00,,2025-10-08 16:53:07.709429+00
+127a12fd-2e3e-4692-9a82-83a373ee1ee4,bc7a55a4-be39-4b75-b604-1a86951e191b,Leg 2,box,3,width/2 - 0.05,-height * 0.25,-depth/2 + 0.05,0.08,height * 0.5,0.08,cabinet_body,#8B4513,,,1.00,,2025-10-08 16:52:38.215415+00
+1290dfec-715c-4c11-98ea-d1d30da53695,de555033-f7e3-4be5-a10b-0b9033098fca,Lower Door,box,7,0,-height * 0.35,depth/2 + 0.01,width - 0.02,height * 0.2,0.02,door,doorColor,,,1.00,,2025-10-08 17:10:22.990597+00
+129ba8b1-fec0-41f0-82bd-23d261751d5f,861c0c03-ac3a-4acf-9d01-d6068c77c71b,Cabinet,box,1,0,0,0,width,height,depth,cabinet_body,cabinetColor,,,1.00,,2025-10-08 16:52:53.546878+00
+1327ccab-142e-4aad-852c-487df1d793c1,7e845283-165b-4a1e-95e6-565adc87fc60,Lint Filter,box,11,0,height * 0.15,depth / 2 + 0.012,0.12,0.04,0.002,door,#ff6b3d,,,0.90,,2025-10-08 20:13:51.848363+00
+137429e9-5bf6-459b-b32e-ccd17fdf2103,6404a530-2cdc-406e-b957-46de153409c3,Drawer 4,box,5,0,height/2 - 0.50,depth/2 + 0.01,width - 0.02,0.18,0.02,door,doorColor,,,1.00,,2025-10-08 16:50:15.91125+00
+140b0eb0-89d3-429d-a196-fa9f9204bd0c,b131724a-219a-4011-8a42-02ba2d18fbc2,Drawer 3,box,4,0,height/2 - 0.37,depth/2 + 0.01,width - 0.02,0.22,0.02,door,doorColor,,,1.00,,2025-10-08 16:50:15.91125+00
+142659e5-716a-46af-86ba-bc2fc30a163b,80c00752-26fa-43a7-8cea-d15766482a0b,Door,box,2,0,0,depth/2 + 0.01,width * 0.7,height * 0.7,0.02,handle,#E0E0E0,,,1.00,,2025-10-08 16:52:53.546878+00
+145570dd-0670-4120-bacb-6f891f4a0107,a42ba33e-850e-4f3a-8919-b6a568953a14,Drawer 1,box,3,0,-0.15,depth / 2 + 0.01,width - 0.02,0.20,0.02,door,doorColor,,,1.00,,2025-10-08 16:21:41.621901+00
+151d458e-ed50-4110-a08e-2f3a04787aa3,a6bf00b1-c863-45ed-8031-6674b836812a,Cabinet,box,1,0,0,0,width,height,depth,cabinet_body,#2F4F4F,,,1.00,,2025-10-08 16:51:41.19204+00
+159a6a43-7a13-4b05-87ce-b3818a6c0940,15e34016-91ff-4c63-9adb-de938fbf7361,Right Panel,box,2,width/4,0,0,width/2 - 0.01,height,depth,door,doorColor,,,1.00,,2025-10-08 16:53:07.709429+00
+15e940d5-f868-40e8-8807-987d0dec43c5,61b345fb-f418-469d-ad5b-96826f1b9609,Handle,box,2,width/2 - 0.05,0,depth/2 + 0.03,0.03,0.15,0.05,handle,#C0C0C0,,,1.00,,2025-10-08 16:53:07.709429+00
+165c1add-dba7-42c5-bdad-83fcb87f5d3c,c8d89312-c0b3-41e1-a4c0-7d18f770ca92,Back,box,2,0,height * 0.2,-depth * 0.2,width,height * 0.5,depth * 0.2,cabinet_body,#000000,,,1.00,,2025-10-08 16:52:06.676597+00
+16afc248-f5cd-402f-9bb3-719d53038685,6a45d0f6-5116-409a-8ab9-aacebd466a31,Side handle,box,8,cornerDepth - legLength / 2 + 0.03,plinthHeight / 2,-0.25,0.02,0.15,0.02,handle,handleColor,0.80,0.20,1.00,,2025-10-08 11:23:36.663103+00
+16cd17f7-f9ff-46e3-96df-c6b261fbfe50,80c00752-26fa-43a7-8cea-d15766482a0b,Body,box,1,0,0,0,width,height,depth,cabinet_body,#FFFFFF,,,1.00,,2025-10-08 16:52:53.546878+00
+17bb5dc6-c4ef-4bf4-8fd3-328f72c5fe5b,cd750faf-3986-4305-87fb-26d30dbb0b35,Door 1,box,2,-width/3,0,depth/2 + 0.01,width/3 - 0.02,height - 0.02,0.02,door,doorColor,,,1.00,,2025-10-08 16:51:41.19204+00
+1947e2bc-5d9e-426b-ae02-9fab04f2716b,c509bed1-9882-44d5-8e44-be6c625cf0b6,Left Arm,box,3,-width / 2 + 0.2,0,0,0.4,height,depth * 1.5 - 0.2,fabric,cabinetMaterial,,,1.00,,2025-10-08 20:13:16.422946+00
+197aac90-2510-4d48-ac2e-9921974def16,dee1b997-eb19-4228-b69f-7dff6204ae01,Cabinet X-leg,box,1,0,0,cornerDepth / 2 - legLength / 2,legLength,height,cornerDepth,cabinet,cabinetMaterial,,,1.00,,2025-10-08 11:23:36.663103+00
+19fae840-cdb6-4655-aa2f-cac291d8db80,38bcc725-42f6-40d4-a7c9-26e508488524,Cabinet,box,1,0,0,0,width,height,depth,cabinet_body,#F5F5DC,,,1.00,,2025-10-08 16:51:11.543287+00
+1a37ebb3-d7ac-4bd9-9b3b-9744cf1c82d5,964e5f6b-ad77-4fa1-97ae-e8b749432420,Back,box,2,0,height * 0.15,-depth * 0.25,width,height * 0.6,depth * 0.2,cabinet_body,#3A6EA5,,,1.00,,2025-10-08 16:51:41.19204+00
+1bdcf2a9-49a3-4a65-bf6c-c4de4ff7f49b,c509bed1-9882-44d5-8e44-be6c625cf0b6,Sofa Back,box,2,0,0,-depth * 1.5 / 2 + 0.2,width,height,0.4,fabric,cabinetMaterial,,,1.00,,2025-10-08 20:13:16.422946+00
+1c70f273-551a-4f02-82d4-8c94791b228d,34555b19-d1de-4afc-8cc0-b4763a45adad,Headboard,box,3,0,height * 0.5,-depth/2 + 0.05,width,height,0.10,door,#8B4513,,,1.00,,2025-10-08 16:50:52.815401+00
+1d74abe1-f0c2-4ec2-bbf4-a860cd32b380,701c19a3-0083-41d2-aec8-96c540a1833d,handle_side,box,8,cornerDepth - legLength/2 + 0.03,plinthHeight/2,-0.25,0.02,0.15,0.02,handle,,,,1.00,,2025-10-08 10:51:01.108456+00
+1e696ed4-895a-4b18-9cb6-1a7019010c34,8ce55eaa-03fa-4005-821d-d69ff2e920b8,Body,box,1,0,0,0,width,height,depth,cabinet_body,#FFFFFF,,,1.00,,2025-10-08 16:52:53.546878+00
+1e8e21d7-aecb-4629-b974-b205f6600c4e,f8ac534e-6911-477b-bbf3-5c66afa03ed8,Cabinet Body,box,2,0,plinthHeight / 2,0,width,cabinetHeight,depth,cabinet_body,cabinetMaterial,,,1.00,,2025-10-08 15:51:04.652333+00
+1ea1a152-1a51-4988-91ec-487da24289fa,a6959e02-3fe1-4726-8539-f25526d5ac4b,Left Door,box,2,-width / 4,0,depth / 2 + 0.01,width / 2 - 0.02,height - 0.02,0.02,door,#c0c0c0,,,1.00,,2025-10-08 16:16:19.97502+00
+1eb29203-bc0e-40ce-b914-d485d815dfa0,7e771285-9a2d-4de8-a432-8b221345c781,Base,box,1,0,-height/2,0,width,height * 0.3,depth,cabinet_body,#8B4513,,,1.00,,2025-10-08 16:50:52.815401+00
+1f721ab1-2cf2-4794-9963-4ad9924051cb,d91a5c3a-2af9-4c8f-8cb3-a62f84cef732,Left Wall,box,2,-width / 2 + 0.02,0,0,0.01,height - 0.2,depth - 0.1,shower_glass,#E6F7FF,,,0.30,,2025-10-08 20:21:21.129584+00
+1f8e6040-a64f-4f2b-acb9-f55f8b273aa3,31aad16f-6742-437c-a580-3622b62b16fd,Door 2,box,3,width/4,0,depth/2 + 0.01,width/2 - 0.02,height - 0.02,0.02,door,doorColor,,,1.00,,2025-10-08 16:52:38.215415+00
+1f9c0219-d27a-4c7d-a9dd-4ecaa34d8d44,6404a530-2cdc-406e-b957-46de153409c3,Drawer 6,box,7,0,height/2 - 0.10,depth/2 + 0.01,width - 0.02,0.18,0.02,door,doorColor,,,1.00,,2025-10-08 16:50:15.91125+00
+20db5c08-7b76-44d1-a4ba-9962e402cb72,229fe763-0333-4310-a832-134e72d17095,Top,box,1,0,height/2 - 0.02,0,width,0.04,depth,cabinet_body,#8B4513,,,1.00,,2025-10-08 16:52:06.676597+00
+20f95e10-86cc-4f6d-a40c-0ec2cbb54264,e32d074e-30b5-4e20-828a-022b6c85812b,Door Left,box,2,-width/4,0,depth/2 + 0.01,width/2 - 0.02,height - 0.02,0.02,door,doorColor,,,1.00,,2025-10-08 16:52:06.676597+00
+21178008-2a39-45d0-af83-6fbc6d974f25,7e845283-165b-4a1e-95e6-565adc87fc60,Main Body,box,1,0,0,0,width,height,depth,appliance_panel,#e8e8e8,,,1.00,,2025-10-08 20:13:51.848363+00
+2199dabf-cb45-48b1-8fae-abdf69472153,3ff7c696-6065-470b-9911-08f56f31e8a6,Drawer,box,2,0,0,depth/2 + 0.01,width - 0.02,height/2,0.02,door,doorColor,,,1.00,,2025-10-08 16:50:15.91125+00
+2472173c-2ac1-4ff7-8134-cf5d935179e8,bcc9bbc8-72b4-4c2a-bb58-5fd2516e1aa2,Cabinet,box,1,0,0,0,width,height,depth,cabinet_body,#DEB887,,,1.00,,2025-10-08 16:52:17.357255+00
+248c6333-5d51-492d-af61-1cc41c631b6e,a8b66209-ccef-4e44-a761-df5f37ac640b,Front door,box,3,0,0,cornerDepth - legLength / 2 + 0.01,legLength - 0.05,height - 0.05,0.02,door,doorColor,,,1.00,,2025-10-08 11:23:36.663103+00
+249897e2-9b7c-4b7b-8372-451fc48ac174,a8c47a62-5286-4dad-8773-494724766939,Door,box,3,0,plinthHeight / 2,depth / 2 + 0.01,width - 0.02,doorHeight,0.02,door,doorMaterial,,,1.00,,2025-10-08 15:51:04.652333+00
+24a688c3-a7a6-480a-bba9-80f9850628c5,8a5b0df6-7d08-439e-b7a9-4251057e300b,Left Drawer,box,2,-width/3,0,depth/2 + 0.01,width/3 - 0.05,height * 0.6,0.02,door,doorColor,,,1.00,,2025-10-08 16:52:17.357255+00
+24e8cca0-e708-4d02-a861-e9df75a9ca14,d7ccdbc2-01dd-4d96-911b-d0620f1f5dfb,Cabinet,box,1,0,0,0,width,height,depth,cabinet_body,#2F4F4F,,,1.00,,2025-10-08 16:52:38.215415+00
+254b66bb-4c5f-42a0-8ed0-2f32baa765e6,e32d074e-30b5-4e20-828a-022b6c85812b,Cabinet,box,1,0,0,0,width,height,depth,cabinet_body,cabinetColor,,,1.00,,2025-10-08 16:52:06.676597+00
+25bab2ec-9e4a-43e9-ac4e-c675c157e343,138cf90c-ba72-450e-a50e-f39da21ca44d,Button 2,box,10,0,height * 0.22,depth / 2 + 0.015,0.06,0.02,0.005,handle,#444444,,,1.00,,2025-10-08 20:13:51.848363+00
+25e58f46-f58c-4c75-828a-021d33252678,0d0bc972-4fbb-465d-8189-5671631d717c,Cabinet,box,1,0,-height * 0.2,0,width,height * 0.6,depth,cabinet_body,cabinetColor,,,1.00,,2025-10-08 16:52:53.546878+00
+262c0af5-e7d3-408d-b536-a9b1fbe80596,b3ad958f-cfc8-4067-a25a-aa78e43c7088,Left Panel,box,1,-width/4,0,0,width/2 - 0.01,height,depth,door,doorColor,,,1.00,,2025-10-08 16:53:07.709429+00
+274b98ae-2d69-4076-b409-3e7b7cb4fa51,db3232db-8bc4-4f1a-bee6-19b52573b0ca,Leg 1,box,2,-width/2 + 0.05,-height * 0.25,-depth/2 + 0.05,0.08,height * 0.5,0.08,cabinet_body,#8B4513,,,1.00,,2025-10-08 16:52:38.215415+00
+276c0c93-57b7-4729-8362-df30fe683757,701c19a3-0083-41d2-aec8-96c540a1833d,door_side,box,6,cornerDepth - legLength/2 + 0.01,plinthHeight/2,0,0.02,doorHeight,legLength - 0.05,door,,,,1.00,,2025-10-08 10:51:01.108456+00
+27b130ae-b227-40b9-b826-98c22c1b3e7d,b0d7edac-6808-4ff4-8d08-3c7db61bae29,Door Bottom,box,3,0,-height * 0.25,depth/2 + 0.01,width - 0.02,height * 0.45,0.02,door,doorColor,,,1.00,,2025-10-08 16:52:17.357255+00
+27f95d6d-d54d-49a3-b5f5-7c2e4c1246dc,a8b66209-ccef-4e44-a761-df5f37ac640b,Cabinet Z-leg,box,2,cornerDepth / 2 - legLength / 2,0,0,cornerDepth,height,legLength,cabinet,cabinetMaterial,,,1.00,,2025-10-08 11:23:36.663103+00
+293f03ce-731d-4045-bdcc-15aef52a3b2d,df17e13e-bd01-4b18-9e9e-f804d49c9db4,Panel,box,1,0,0,0,width,height,depth,door,cabinetColor,,,1.00,,2025-10-08 16:21:59.376939+00
+296e0420-a33b-444a-a881-d8009bf48224,d889fc8d-f31d-440a-8c20-8a2d1d071bdc,Leg 3,box,4,-width/2 + 0.05,-height * 0.25,depth/2 - 0.05,0.08,height * 0.5,0.08,cabinet_body,#8B4513,,,1.00,,2025-10-08 16:52:38.215415+00
+2b2bb421-f7b3-4d70-9769-40b5b54fc79a,e7c2ceda-dd2b-44ee-b187-4e14baf4ff31,Plinth Leg 2,box,2,0.05,-height / 2 + plinthHeight / 2,legLength/2,depth - 0.10,plinthHeight,legLength,plinth,plinthColor,,,1.00,!isWallCabinet,2025-10-08 17:08:02.404343+00
+2b466b23-75a9-41dd-aab3-a7ace3490956,7e845283-165b-4a1e-95e6-565adc87fc60,Display Screen,box,7,width * 0.2,height * 0.3,depth / 2 + 0.015,0.15,0.08,0.001,screen,#001400,0.90,0.10,1.00,,2025-10-08 20:13:51.848363+00
+2d03d8df-a5ba-492d-949a-be2d0bb9a83f,14c10086-d77a-4bc6-93d3-c270e882af37,Left Panel,box,1,-width/4,0,0,width/2 - 0.01,height,depth,door,doorColor,,,1.00,,2025-10-08 16:53:07.709429+00
+2d31cc93-e362-4052-b053-32f1a99748c1,d7d0dc73-dc02-4e5a-aee3-eac7a9198680,Oven Body,box,1,0,0,0,width,height,depth,cabinet_body,applianceColor,,,1.00,,2025-10-08 16:16:19.97502+00
+2d3c5047-5c1d-46f3-bc50-6309a36740ee,de0b3647-27c0-412d-8fed-d1c60fecd422,Cabinet,box,1,0,0,0,width,height,depth,cabinet_body,#2F4F4F,,,1.00,,2025-10-08 16:51:41.19204+00
+2d5c786f-ef47-432a-86ad-14e829ec2cf1,7ec9e418-9785-4b5a-a081-0a51e18b173c,Door 3,box,4,width/3,0,depth/2 + 0.01,width/3 - 0.02,height - 0.02,0.02,door,doorColor,,,1.00,,2025-10-08 16:52:38.215415+00
+2e0a3c2a-5a7f-4570-af20-872496d33e7f,db3232db-8bc4-4f1a-bee6-19b52573b0ca,Leg 3,box,4,-width/2 + 0.05,-height * 0.25,depth/2 - 0.05,0.08,height * 0.5,0.08,cabinet_body,#8B4513,,,1.00,,2025-10-08 16:52:38.215415+00
+2e108266-b361-4b8b-874e-3e7ebd6efe23,48071a77-2b2c-4f6a-944f-728720ac1bc6,Cabinet Body,box,2,0,0.075,0,width,height - 0.15,depth,cabinet_body,cabinetColor,,,1.00,,2025-10-08 16:16:19.97502+00
+2f63a02b-a77c-4d35-a1c2-3f237a5d394f,a731b6a2-d8e5-4606-b949-d823467b0b9a,Body,box,1,0,0,0,width,height,depth,cabinet_body,#8B4513,,,1.00,,2025-10-08 16:51:41.19204+00
+2fe46952-a6ee-40ca-8fb2-d25f13465602,41a54846-e1a6-461c-8cb5-ad65c06c7b33,Basin,box,1,0,0,0,width - 0.10,height,depth - 0.10,handle,#F8F8F8,,,1.00,,2025-10-08 17:10:09.489775+00
+303dfa9c-97f0-4ca4-b4b4-475ac5bce8a2,6633542b-1c9b-4ce6-8d44-e9923ca32628,Plinth,box,1,0,-height / 2 + 0.075,0,width,0.15,depth - 0.05,plinth,plinthColor,,,1.00,,2025-10-08 16:52:53.546878+00
+3065d561-8953-47f0-9f09-d44ce56a2e8b,00eae6e3-db91-499a-be77-5e486cd3ceac,Door,box,3,0,0.075,depth / 2 + 0.01,width - 0.02,height - 0.17,0.02,door,doorColor,,,1.00,,2025-10-08 16:16:19.97502+00
+31134589-0b91-4c47-846a-f37ea4d12456,9b93fa5d-fde1-4330-8f1d-84ecb01e0607,Drain,cylinder,5,width / 3,-height / 2 + 0.25,depth / 4,0.05,0.02,0.05,chrome,#808080,,,1.00,,2025-10-08 20:21:21.129584+00
+3167c46a-17b6-4229-9e72-e3c10c6df768,14c10086-d77a-4bc6-93d3-c270e882af37,Right Panel,box,2,width/4,0,0,width/2 - 0.01,height,depth,door,doorColor,,,1.00,,2025-10-08 16:53:07.709429+00
+31c213be-7e46-41e5-8125-8bb25b487ee2,7e771285-9a2d-4de8-a432-8b221345c781,Headboard,box,3,0,height * 0.5,-depth/2 + 0.05,width,height,0.10,door,#8B4513,,,1.00,,2025-10-08 16:50:52.815401+00
+321a6e4d-f710-4545-a4d4-80eacedfbe5f,68fcf22e-52dc-4cd2-9bc4-47d888fb8752,Mattress,box,2,0,-height / 2 + 0.2 + 0.15,0,width - 0.1,0.3,depth * 2 - 0.1,mattress,#FFFFFF,,,1.00,,2025-10-08 20:13:16.422946+00
+332ec446-13d8-4d4b-89a0-a75d6a18910e,7e845283-165b-4a1e-95e6-565adc87fc60,Drum,cylinder,5,0,-height * 0.1,depth / 2 - 0.1,0.18,0.2,0.18,drum_metal,#888888,,,1.00,isSelected,2025-10-08 20:13:51.848363+00
+336463c5-e21d-4d2f-bb4d-838377b36560,138cf90c-ba72-450e-a50e-f39da21ca44d,Front Panel,box,2,0,0,depth / 2 + 0.005,width - 0.02,height - 0.02,0.01,appliance_panel,#f0f0f0,,,1.00,,2025-10-08 20:13:51.848363+00
+337a1205-7803-4d2b-a06c-fb3bbe068877,ffbe3019-09c4-4a44-b159-67ba6a395b63,Frame,box,1,0,0,0,width,height,depth,door,#FFFFFF,,,1.00,,2025-10-08 16:53:07.709429+00
+343c2cad-8979-4c2d-ac09-141546db8adf,678d0eca-8539-42b0-82c9-a41ea45b92db,Drawer 3,box,4,width/3,height * 0.3,depth/2 + 0.01,width/3 - 0.02,height * 0.2,0.02,door,doorColor,,,1.00,,2025-10-08 16:52:17.357255+00
+3441a5e0-d2af-45c9-9c9d-ed68b7e8376c,751ae6aa-e99d-4ace-a49d-c9ff90dc5215,Drawer,box,2,0,0,depth/2 + 0.01,width - 0.02,height/2,0.02,door,doorColor,,,1.00,,2025-10-08 16:50:15.91125+00
+3448eebd-7104-44fc-8b31-6ceeed315fb3,dd4c0106-bff1-43d5-bda9-fbfe1ca54c18,Right Panel,box,2,width/4,0,0,width/2 - 0.01,height,depth,door,doorColor,,,1.00,,2025-10-08 16:53:07.709429+00
+34b7e669-0a06-465e-b457-ff1332bdab55,2b1b4fc5-b124-4a34-96b4-677451e5076e,Basin,box,1,0,0,0,width - 0.10,height,depth - 0.10,handle,#2F4F4F,,,1.00,,2025-10-08 17:10:09.489775+00
+35132b8c-9714-4d2f-8706-61808e5a55d8,a8b66209-ccef-4e44-a761-df5f37ac640b,Front handle,box,5,legLength / 2 - 0.05,0,cornerDepth - legLength / 2 + 0.03,0.02,0.15,0.02,handle,handleColor,0.80,0.20,1.00,,2025-10-08 11:23:36.663103+00
+35306fb0-07e6-45e2-b462-4467fd3acead,ffbe3019-09c4-4a44-b159-67ba6a395b63,Left Glass,box,2,-width/4,0,0,width/2 - 0.10,height - 0.10,depth * 0.5,handle,#E6E6FA,,,1.00,,2025-10-08 16:53:07.709429+00
+35473873-5671-4374-9eaa-ecedec8286a4,99f5c123-079d-4b16-ab5c-3f2a5545263e,Handle,box,4,width/2 - 0.05,0,depth/2 + 0.03,0.10,0.03,0.05,handle,#C0C0C0,,,1.00,,2025-10-08 17:10:22.990597+00
+364330b0-cb94-48cf-ac25-b1705a29eb39,3fc2f0c1-75a5-4ea3-bb9f-e9f64b5ea443,Tap,box,3,0,0.15,-depth / 4,0.05,0.20,0.05,handle,#808080,,,1.00,,2025-10-08 16:17:02.441798+00
+37911a89-2247-4cd5-ae6a-a3815677eee0,0f4e7a93-13e8-4c11-9c86-0cc9043649a6,Plinth,box,1,0,-height / 2 + 0.075,0,width,0.15,depth - 0.05,plinth,plinthColor,,,1.00,,2025-10-08 16:21:41.621901+00
+37d1dfc4-27c7-4962-85e5-9b3c01d3d012,2da88d6d-cd70-40a0-8c06-4c11fa99fda8,Basin Leg 1,box,1,legLength/2,0,0,legLength - 0.10,height,depth - 0.10,handle,#c0c0c0,,,1.00,,2025-10-08 17:10:09.489775+00
+39c8cf14-1b2b-4f9f-b19b-2a9edffecc94,fcadef1d-afb9-455a-9a0d-10dc63bac1c6,Basin,box,1,0,-height * 0.2,0,width - 0.10,height,depth - 0.10,handle,#c0c0c0,,,1.00,,2025-10-08 17:10:09.489775+00
+3a88999c-7445-498f-af85-ae30bb779dfd,174f8a6b-fae8-413e-a055-87109620249c,Cornice,box,1,0,0,0,width,height,depth,door,#ffffff,,,1.00,,2025-10-08 16:21:59.376939+00
+3ad77f48-1b56-4295-9394-96b2df2c5c81,5c56e7f0-6fdc-461b-bf2d-cb4df3c1cca4,Drawer 1,box,3,0,-0.15,depth / 2 + 0.01,width - 0.02,0.20,0.02,door,doorColor,,,1.00,,2025-10-08 16:21:41.621901+00
+3ae6361b-2cc4-4878-98cd-32f1a44b8161,7e845283-165b-4a1e-95e6-565adc87fc60,Front Panel,box,2,0,0,depth / 2 + 0.005,width - 0.02,height - 0.02,0.01,appliance_panel,#f0f0f0,,,1.00,,2025-10-08 20:13:51.848363+00
+3b06c97c-5460-4f25-9e8b-695ebb46e03e,4b99b13e-ac15-4f0c-a515-4b57cfc28fd7,Cushion,box,1,0,0,0,width,height,depth,cabinet_body,#8B7355,,,1.00,,2025-10-08 16:52:17.357255+00
+3b473171-fadd-42b9-8426-4b06557ab199,a8c47a62-5286-4dad-8773-494724766939,Plinth,box,1,0,-height / 2 + plinthHeight / 2,0,width,plinthHeight,depth - 0.05,plinth,plinthColor,,,1.00,!isWallCabinet,2025-10-08 15:51:04.652333+00
+3b731901-0ca9-489a-9b1c-2cf24d8eaf46,0f4e7a93-13e8-4c11-9c86-0cc9043649a6,Cabinet Body,box,2,0,0.075,0,width,height - 0.15,depth,cabinet_body,cabinetColor,,,1.00,,2025-10-08 16:21:41.621901+00
+3b7fe5b4-3efb-43df-89f6-69087e1adff9,a50a1e0c-5be6-4196-8a5e-86ba3c15a3fe,Top Drawer,box,2,0,height * 0.3,depth/2 + 0.01,width - 0.02,height * 0.2,0.02,door,doorColor,,,1.00,,2025-10-08 16:52:17.357255+00
+3c33cb2a-817e-4326-b42c-e3c43f8888f1,077ab6ff-f62b-4a7d-83bf-87abfd36ab49,Cushion,box,1,0,0,0,width,height,depth,cabinet_body,#6B8E23,,,1.00,,2025-10-08 16:50:52.815401+00
+3c53df3c-d5d8-428d-b90c-e25a58f786c0,97fb076c-eb05-4772-a6ea-f3727ddc5c8e,Handle,box,2,width/2 - 0.05,0,depth/2 + 0.03,0.03,0.15,0.05,handle,#C0C0C0,,,1.00,,2025-10-08 16:53:07.709429+00
+3c8937e8-e377-4065-ae44-e6ea81ae7cc9,8b8a45d9-9b8f-470b-931b-b3b22102901d,Headboard,box,3,0,height * 0.5,-depth/2 + 0.05,width,height,0.10,door,#8B4513,,,1.00,,2025-10-08 16:50:52.815401+00
+3cddc41c-13c9-473e-8812-b7332f875db6,8e855643-889f-4175-bd24-49bc687c9b68,Handle,box,3,width / 2 - 0.06,height / 2 - 0.10,depth / 2 + 0.03,0.08,0.03,0.04,handle,handleColor,,,1.00,,2025-10-08 16:07:57.673274+00
+3d0d00ef-a494-49cc-98cb-b1a1f5103f55,6e29b7b4-f7e3-4616-a36d-1390cdd3ac60,Door,box,2,0,0,depth/2 + 0.01,width * 0.7,height * 0.7,0.02,handle,#E0E0E0,,,1.00,,2025-10-08 16:52:53.546878+00
+3d3e43b1-5e05-40b9-a6c6-b150de75f7bb,6ef29df6-b6b3-4f6c-a528-b1d575e2e59a,Basin,box,1,0,-height * 0.2,0,width - 0.10,height,depth - 0.10,handle,#c0c0c0,,,1.00,,2025-10-08 17:10:09.489775+00
+3d722632-f810-4c33-9fff-e0fc32693b59,4d6a40bc-b781-414b-9aad-ac5cc3077cbb,Drawer 3,box,5,0,0.35,depth / 2 + 0.01,width - 0.02,0.20,0.02,door,doorColor,,,1.00,,2025-10-08 16:21:41.621901+00
+3dd220da-a1fd-4f7f-8740-177091d55f05,6404a530-2cdc-406e-b957-46de153409c3,Body,box,1,0,0,0,width,height,depth,cabinet_body,cabinetColor,,,1.00,,2025-10-08 16:50:15.91125+00
+3e02d36f-f1ed-4c62-9de2-2cefee51a2c3,ba0d987f-fddd-4e7f-906e-696e4608fb80,Door,box,3,0,plinthHeight / 2,depth / 2 + 0.01,width - 0.02,doorHeight,0.02,door,doorMaterial,,,1.00,,2025-10-08 15:51:04.652333+00
+3e4795c3-1267-4bf0-bb69-2c61f51a268f,6d832a0d-b907-43fd-b2e7-ac5f567f9f66,Drawer 1,box,2,0,-height/2 + 0.12,depth/2 + 0.01,width - 0.02,0.22,0.02,door,doorColor,,,1.00,,2025-10-08 16:50:15.91125+00
+3ee197a7-2488-496e-a413-593480ed74d1,6d832a0d-b907-43fd-b2e7-ac5f567f9f66,Body,box,1,0,0,0,width,height,depth,cabinet_body,cabinetColor,,,1.00,,2025-10-08 16:50:15.91125+00
+3f7b2f78-8f61-4d3d-8f92-d365ec9469eb,eef2b984-523a-44a2-9894-970657aec4dc,Cabinet,box,1,0,0,0,width,height,depth,cabinet_body,cabinetColor,,,1.00,,2025-10-08 16:52:53.546878+00
+3fc430cb-ca3d-452b-aca3-300895e87384,11117939-d277-492b-90b3-2288dd55f7ec,Pelmet,box,1,0,0,0,width,height,depth,door,#ffffff,,,1.00,,2025-10-08 16:21:59.376939+00
+404be336-4856-4934-8218-379e2888b3eb,a3b62405-00f6-4c07-95b4-4b3e13119238,Frame,box,1,0,0,0,width,height,depth,door,#FFFFFF,,,1.00,,2025-10-08 16:53:07.709429+00
+4050acd0-ec41-4689-a4f8-52d213cd2cac,41a54846-e1a6-461c-8cb5-ad65c06c7b33,Tap,box,2,0,height + 0.10,-depth/4,0.03,0.15,0.03,handle,#808080,,,1.00,,2025-10-08 17:10:09.489775+00
+4065eb02-d441-4546-a9ea-6fc76a4df8fa,60f2345b-4c36-4f2f-95d0-493b16b7374a,Frame,box,2,0,0,-0.005,width * 1.05,height * 1.05,0.05,handle,#333333,,,1.00,,2025-10-08 20:13:16.422946+00
+40dd2824-4571-4fe4-b68b-cf0c814bc44e,88cbdc7f-4633-487c-b134-8993de9beb37,Tap,box,3,-width/4,height + 0.10,-depth/4,0.03,0.15,0.03,handle,#808080,,,1.00,,2025-10-08 17:10:09.489775+00
+414800eb-8627-4d40-bc77-17568165efc9,0733d7f4-78d1-46a2-a638-92ed940bd0f7,Door,box,2,0,0,depth / 2 + 0.01,width - 0.02,height - 0.02,0.02,door,doorColor,,,1.00,,2025-10-08 16:07:57.673274+00
+42033279-e692-4971-b331-8c8e23d66e01,c2bd963a-3b33-496c-9c13-d427aebebab0,Plinth Leg 1,box,1,legLength/2,-height / 2 + plinthHeight / 2,0.05,legLength,plinthHeight,depth - 0.10,plinth,plinthColor,,,1.00,!isWallCabinet,2025-10-08 17:08:02.404343+00
+4224afa5-2807-4ef6-9c1c-c28eb5d41720,b0d7edac-6808-4ff4-8d08-3c7db61bae29,Door Top,box,2,0,height * 0.25,depth/2 + 0.01,width - 0.02,height * 0.45,0.02,door,doorColor,,,1.00,,2025-10-08 16:52:17.357255+00
+4266c017-9dca-4080-9a20-c426d953d73a,520dc8d6-d9a7-4009-b755-761634410954,Plinth,box,1,0,-height / 2 + plinthHeight / 2,0,width,plinthHeight,depth - 0.05,plinth,plinthColor,,,1.00,!isWallCabinet,2025-10-08 15:51:04.652333+00
+42908fee-b60d-419b-89a6-ae284784c208,ecf82b10-3677-4226-9abb-4e9d4644668f,Door Right,box,3,width/4,0,depth/2 + 0.01,width/2 - 0.02,height - 0.02,0.02,door,doorColor,,,1.00,,2025-10-08 16:52:53.546878+00
+42c33860-ed13-43d6-91ce-24931ef55208,5c56e7f0-6fdc-461b-bf2d-cb4df3c1cca4,Cabinet Body,box,2,0,0.075,0,width,height - 0.15,depth,cabinet_body,cabinetColor,,,1.00,,2025-10-08 16:21:41.621901+00
+43024697-4f85-4a99-aafd-bcfae22062c7,d889fc8d-f31d-440a-8c20-8a2d1d071bdc,Leg 2,box,3,width/2 - 0.05,-height * 0.25,-depth/2 + 0.05,0.08,height * 0.5,0.08,cabinet_body,#8B4513,,,1.00,,2025-10-08 16:52:38.215415+00
+43d978cc-7d3f-48e0-848d-23876e993b02,bcf1a350-6a68-42a9-a552-297f16e2e697,Body,box,1,0,0,0,width,height,depth,cabinet_body,cabinetColor,,,1.00,,2025-10-08 16:52:53.546878+00
+443a207a-d205-44d1-9eef-f64598d2dfb1,bf9f977c-6f8e-4e79-bcbf-9160ce86e6da,Seat,box,1,0,-height * 0.2,0,width,height * 0.15,depth,cabinet_body,#4B4B4B,,,1.00,,2025-10-08 16:52:06.676597+00
+44a588bd-219a-437d-a278-266f77ad5648,520dc8d6-d9a7-4009-b755-761634410954,Door,box,3,0,plinthHeight / 2,depth / 2 + 0.01,width - 0.02,doorHeight,0.02,door,doorMaterial,,,1.00,,2025-10-08 15:51:04.652333+00
+44b46a4d-9eac-4c0f-bc0b-979b38a7bdb9,a03f0ab7-1a22-40b5-b424-1deff2e1b4fa,Seat,box,1,0,0,0,width,height,depth,cabinet_body,#8B4513,,,1.00,,2025-10-08 16:52:38.215415+00
+45330141-d573-40ad-88f2-afd609ef49ce,4d6a40bc-b781-414b-9aad-ac5cc3077cbb,Drawer 1,box,3,0,-0.15,depth / 2 + 0.01,width - 0.02,0.20,0.02,door,doorColor,,,1.00,,2025-10-08 16:21:41.621901+00
+45593336-e2a1-4c9f-ab85-72d90cd024d1,701c19a3-0083-41d2-aec8-96c540a1833d,plinth_x_leg,box,1,0,-height/2 + plinthHeight/2,cornerDepth/2 - legLength/2 - 0.1,legLength,plinthHeight,cornerDepth - 0.2,plinth,,,,1.00,!isWallCabinet,2025-10-08 10:51:01.108456+00
+456c4ed1-60d9-4a13-a555-5eff08e2897e,e7c2ceda-dd2b-44ee-b187-4e14baf4ff31,Cabinet Body Leg 2,box,4,0,plinthHeight / 2,legLength/2,depth,height - plinthHeight,legLength,cabinet_body,cabinetColor,,,1.00,,2025-10-08 17:08:02.404343+00
+45aded62-e032-4d7d-960e-28e6ea83ca9e,861c0c03-ac3a-4acf-9d01-d6068c77c71b,Door,box,2,0,0,depth/2 + 0.01,width - 0.02,height - 0.02,0.02,door,doorColor,,,1.00,,2025-10-08 16:52:53.546878+00
+45e71f78-2f7d-4f89-ae92-941838d78dd8,2da88d6d-cd70-40a0-8c06-4c11fa99fda8,Tap,box,3,legLength * 0.4,height + 0.10,0,0.03,0.15,0.03,handle,#808080,,,1.00,,2025-10-08 17:10:09.489775+00
+46e555c6-12f8-4b53-b342-e828b8da0466,c509bed1-9882-44d5-8e44-be6c625cf0b6,Seat Cushions,box,5,0,-height / 4,depth * 1.5 / 6,width - 1,0.15,depth * 1.5 - 0.6,cushion,#4A6F8C,,,1.00,,2025-10-08 20:13:16.422946+00
+46f0d382-ab31-4f7f-b72e-6e7089da02cc,7d2173f0-346d-4a0d-a9c8-b3602fafe1d3,Cabinet,box,1,0,0,0,width,height,depth,cabinet_body,#F5F5DC,,,1.00,,2025-10-08 16:51:11.543287+00
+472aeecb-e520-4397-bc78-40f7bf8d4bb4,900687f1-600b-4b6a-a5ec-38d994a4e30c,Right Door,box,3,width / 4,0,depth / 2 + 0.01,width / 2 - 0.02,height - 0.02,0.02,door,doorColor,,,1.00,,2025-10-08 16:50:15.91125+00
+480a85da-96cc-46d7-9f90-1f302a4f1a68,751ae6aa-e99d-4ace-a49d-c9ff90dc5215,Body,box,1,0,0,0,width,height,depth,cabinet_body,cabinetColor,,,1.00,,2025-10-08 16:50:15.91125+00
+48c2ae33-df28-4470-b6e7-5ec0ef946bcd,68fcf22e-52dc-4cd2-9bc4-47d888fb8752,Headboard,box,3,0,0,-depth + 0.05,width,height,0.1,wood,cabinetMaterial,,,1.00,,2025-10-08 20:13:16.422946+00
+48fa78cb-e44f-4e0f-85a6-c93825c9874d,e89494e7-18ed-4c7d-ae60-3ab9ef557530,Door,box,2,0,0,depth/2 + 0.01,width * 0.7,height * 0.7,0.02,handle,#E0E0E0,,,1.00,,2025-10-08 16:52:53.546878+00
+4900ad86-a047-42f1-af85-0a1b63a1fbf3,ec259a23-2f20-43c4-b668-03ad5b1f9572,Leg 1,box,2,-width/2 + 0.05,-height * 0.25,-depth/2 + 0.05,0.08,height * 0.5,0.08,cabinet_body,#8B4513,,,1.00,,2025-10-08 16:52:38.215415+00
+499ee8f6-d0b0-43a8-a1d8-89fb26634a6c,18580343-4f31-47a1-af98-234c64f46926,Body,box,1,0,0,0,width,height,depth,cabinet_body,#8B4513,,,1.00,,2025-10-08 16:51:41.19204+00
+49b89363-8e8c-414b-90c2-fbe7c918eb52,dee1b997-eb19-4228-b69f-7dff6204ae01,Front door,box,3,0,0,cornerDepth - legLength / 2 + 0.01,legLength - 0.05,height - 0.05,0.02,door,doorColor,,,1.00,,2025-10-08 11:23:36.663103+00
+4aca4845-6a88-4d34-96b5-3eca685a6a4f,d09931e3-46fb-457c-9a3e-83e17467e407,Counter,box,2,0,height * 0.32,0,width,height * 0.05,depth,counter,counterColor,,,1.00,,2025-10-08 16:52:53.546878+00
+4b1de2ca-c0ac-4d47-9930-a5f3f53f758d,0aa75ba7-6a09-4774-9972-37c80ebde638,Frame,box,1,0,0,0,width,height,depth,door,#FFFFFF,,,1.00,,2025-10-08 16:53:07.709429+00
+4b2f5e7b-1b06-40f0-806a-1e90e73dc9a3,ac6ed98d-1c69-4736-8463-d478a30712dc,Mirror,box,2,0,0,0.01,width - 0.10,height - 0.10,0.01,handle,#E8E8E8,,,1.00,,2025-10-08 16:52:17.357255+00
+4b79b193-a090-433b-b2a5-95160f6b074a,cbcb38fc-44e4-48f0-ac36-eccc7c176b26,Upper Cabinet,box,2,0,height * 0.3,0,width,height * 0.4,depth,cabinet_body,cabinetColor,,,1.00,,2025-10-08 17:10:22.990597+00
+4b81df02-dd5e-4f8e-975e-0d23f19bbad5,8f2a88ca-8b2f-40ef-a4c1-db1908f36420,Right Glass,box,3,width/4,0,depth/2 + 0.01,width/2 - 0.10,height - 0.10,0.01,handle,#E6E6FA,,,1.00,,2025-10-08 16:53:07.709429+00
+4bce1d60-8adc-4c89-a766-96e23ea30c4e,3f45d4d6-efe9-43ab-b114-ca3c39f2f1ae,Worktop,box,1,0,0,0,width,height,depth,cabinet_body,worktopColor,,,1.00,,2025-10-08 16:17:02.441798+00
+4bdf761c-42fe-4d32-a68e-812d39078ca4,22848d1e-3468-46fe-95e4-fe129380a07d,Body,box,1,0,0,0,width,height,depth,cabinet_body,cabinetColor,,,1.00,,2025-10-08 16:52:06.676597+00
+4becff12-6af1-467a-b5ef-049bed6b8b31,05ed4077-1175-4680-b6b4-5899e967f400,Cushion,box,2,0,height * 0.4,0,width,height * 0.2,depth,cabinet_body,#6B8E23,,,1.00,,2025-10-08 16:50:52.815401+00
+4c348588-256e-419a-9424-0fbda585edbd,ec259a23-2f20-43c4-b668-03ad5b1f9572,Leg 4,box,5,width/2 - 0.05,-height * 0.25,depth/2 - 0.05,0.08,height * 0.5,0.08,cabinet_body,#8B4513,,,1.00,,2025-10-08 16:52:38.215415+00
+4ccc4f7c-ee1d-4afc-befa-c977842d776c,a7eaee97-ddd8-4bf6-92b2-a7444b87fb10,Center Door,box,3,0,0,depth / 2 + 0.01,width / 3 - 0.02,height - 0.02,0.02,door,doorColor,,,1.00,,2025-10-08 16:50:15.91125+00
+4d177e79-977d-48d9-9cfe-3e149ea4d086,a6959e02-3fe1-4726-8539-f25526d5ac4b,Right Door,box,3,width / 4,0,depth / 2 + 0.01,width / 2 - 0.02,height - 0.02,0.02,door,#c0c0c0,,,1.00,,2025-10-08 16:16:19.97502+00
+4d2d95ea-40a8-4222-a710-b61260102b57,a8c47a62-5286-4dad-8773-494724766939,Cabinet Body,box,2,0,plinthHeight / 2,0,width,cabinetHeight,depth,cabinet_body,cabinetMaterial,,,1.00,,2025-10-08 15:51:04.652333+00
+4d4a620f-ce4b-4a24-aa61-9b013e8741cb,28d22c1a-93ce-4fe4-9352-c99fb1a3d735,Seat,box,1,0,-height * 0.2,0.05,width,height * 0.3,depth * 0.7,cabinet_body,#3A6EA5,,,1.00,,2025-10-08 16:51:41.19204+00
+4d77f55c-3e52-48cc-8403-a3589f17b195,dd4c0106-bff1-43d5-bda9-fbfe1ca54c18,Left Panel,box,1,-width/4,0,0,width/2 - 0.01,height,depth,door,doorColor,,,1.00,,2025-10-08 16:53:07.709429+00
+4d86865e-b286-44c5-9e55-a8664fe12af8,8b8a45d9-9b8f-470b-931b-b3b22102901d,Base,box,1,0,-height/2,0,width,height * 0.3,depth,cabinet_body,#8B4513,,,1.00,,2025-10-08 16:50:52.815401+00
+4dc782ea-de8c-4e91-80e3-94aa03d77f59,bc7a55a4-be39-4b75-b604-1a86951e191b,Leg 1,box,2,-width/2 + 0.05,-height * 0.25,-depth/2 + 0.05,0.08,height * 0.5,0.08,cabinet_body,#8B4513,,,1.00,,2025-10-08 16:52:38.215415+00
+4e1dc6bd-533d-4d0f-a813-9b9c094b318a,540faede-366d-4fa2-b169-97fec6766db4,Door,box,2,0,0,depth / 2 + 0.01,width - 0.02,height - 0.02,0.02,door,doorColor,,,1.00,,2025-10-08 16:07:57.673274+00
+4f1007ec-9400-4f36-8ae3-525c80be0961,cbcb38fc-44e4-48f0-ac36-eccc7c176b26,Lower Oven Door,box,6,0,-height * 0.25,depth/2 + 0.01,width - 0.02,height * 0.25,0.02,door,#000000,,,1.00,,2025-10-08 17:10:22.990597+00
+4f22caea-6341-4eeb-a94e-cbe603f00b02,6db647e9-ed2f-493d-9361-e101b30bb5f2,Door Right,box,3,width/4,0,depth/2 + 0.01,width/2 - 0.02,height - 0.02,0.02,door,doorColor,,,1.00,,2025-10-08 16:51:41.19204+00
+4f7198bd-d1ba-4826-8f58-f0bd6007204c,bc7a55a4-be39-4b75-b604-1a86951e191b,Top,box,1,0,height/2 - 0.02,0,width,0.04,depth,cabinet_body,#8B4513,,,1.00,,2025-10-08 16:52:38.215415+00
+503e3586-db6b-4b8e-94fd-abd43c16f15a,a5e461d3-c78a-422d-a656-fa375ea5dc9b,Handle,box,2,width/2 - 0.05,0,depth/2 + 0.03,0.03,0.15,0.05,handle,#DAA520,,,1.00,,2025-10-08 16:53:07.709429+00
+511b1afe-ae4c-4193-a412-722fbdeafeb2,2fb93674-6a19-487e-afcb-cef752835f49,Seat,box,1,0,-height * 0.2,0,width,height * 0.15,depth * 0.8,cabinet_body,#4B4B4B,,,1.00,,2025-10-08 16:52:38.215415+00
+52038120-acde-439c-86be-c93dc65cd209,cd750faf-3986-4305-87fb-26d30dbb0b35,Door 3,box,4,width/3,0,depth/2 + 0.01,width/3 - 0.02,height - 0.02,0.02,door,doorColor,,,1.00,,2025-10-08 16:51:41.19204+00
+522ccb8f-7cf5-425f-910f-c3084b5da3a8,de0b3647-27c0-412d-8fed-d1c60fecd422,Door Left,box,2,-width/4,0,depth/2 + 0.01,width/2 - 0.02,height - 0.02,0.02,door,doorColor,,,1.00,,2025-10-08 16:51:41.19204+00
+52d9a4b4-360c-4b19-9123-5f828574aadd,dd4c0106-bff1-43d5-bda9-fbfe1ca54c18,Right Glass,box,4,width/4,0,depth/2 + 0.01,width/2 - 0.10,height - 0.40,0.01,handle,#E6E6FA,,,1.00,,2025-10-08 16:53:07.709429+00
+546d59f2-b30c-457b-9c9e-d123c96cf576,138cf90c-ba72-450e-a50e-f39da21ca44d,Drum,cylinder,5,0,-height * 0.1,depth / 2 - 0.05,0.18,0.2,0.18,drum_metal,#888888,,,1.00,isSelected,2025-10-08 20:13:51.848363+00
+547ef665-9a8f-4483-8575-2efb38c8a2e3,9ea16340-4e6c-40b3-8d8a-492ed6546e8a,Cabinet,box,1,0,-height * 0.2,0,width,height * 0.6,depth,cabinet_body,cabinetColor,,,1.00,,2025-10-08 16:52:53.546878+00
+54c29d3c-b4f6-4c31-92d5-d5653d076167,507c86e2-b641-420b-baf5-a11afd594b69,Base,box,1,0,-height/2,0,width,height * 0.3,depth,cabinet_body,#8B4513,,,1.00,,2025-10-08 16:50:52.815401+00
+55b8a0fa-189e-4920-8feb-8ef8346d5356,1eb6b402-b4f9-4220-9157-6708810efa67,Cushion,box,1,0,0,0,width,height,depth,cabinet_body,#6B8E23,,,1.00,,2025-10-08 16:50:52.815401+00
+55c508ee-4221-49f5-b3cf-43c93150092e,2b1b4fc5-b124-4a34-96b4-677451e5076e,Tap,box,2,0,height + 0.10,-depth/4,0.03,0.15,0.03,handle,#808080,,,1.00,,2025-10-08 17:10:09.489775+00
+55f26de0-dcc4-4018-b7e0-9f34a749c030,2e1ccd04-2c84-42fa-a4a7-e8decbae2963,Tap,box,2,0,height + 0.10,-depth/4,0.03,0.15,0.03,handle,#808080,,,1.00,,2025-10-08 17:10:09.489775+00
+5629683e-65a0-4623-8fd1-a5094a6d6c0b,43b45e50-439e-4647-b320-7b0d2d51d311,Leg Front Right,box,4,width / 2 - 0.05,-height / 2 + 0.4,-depth / 2 + 0.05,0.05,0.8,0.05,metal_leg,#2F4F4F,,,1.00,,2025-10-08 20:13:16.422946+00
+56413ca8-37e0-43bb-a166-e9c977b8fed7,6404a530-2cdc-406e-b957-46de153409c3,Drawer 5,box,6,0,height/2 - 0.30,depth/2 + 0.01,width - 0.02,0.18,0.02,door,doorColor,,,1.00,,2025-10-08 16:50:15.91125+00
+56e80868-39a5-431d-b238-2a99dd19c6ba,97526f7d-f422-49db-bfc9-ce8e8d54454b,Panel,box,1,0,0,0,width,height,depth,door,cabinetColor,,,1.00,,2025-10-08 16:21:59.376939+00
+576d8792-d03a-435f-92e7-f49c1cd8dc0a,b03dbad7-52a0-4edf-ac46-31c7c353818e,Basin,box,1,0,0,0,width - 0.10,height,depth - 0.10,handle,#FFFFFF,,,1.00,,2025-10-08 17:10:09.489775+00
+5843db62-4c5f-462b-831a-6f6679ed6327,ae84c78f-02f7-4be9-8e48-66f3724e7a88,Center Panel,box,1,0,0,0,width * 0.4,height,depth,handle,#E8E8E8,,,1.00,,2025-10-08 16:52:17.357255+00
+588f1c10-52ef-4850-beed-aa9c118fa89b,2341fffb-f12b-483e-b879-ad828907853a,Seat,box,1,0,0,0,width,height,depth,cabinet_body,#8B4513,,,1.00,,2025-10-08 16:52:38.215415+00
+59c3c6b4-d582-4dfd-a371-48aa980f8182,a42ba33e-850e-4f3a-8919-b6a568953a14,Drawer 3,box,5,0,0.35,depth / 2 + 0.01,width - 0.02,0.20,0.02,door,doorColor,,,1.00,,2025-10-08 16:21:41.621901+00
+5ac439d5-f61a-422a-ab3b-019af56c033b,cbcb38fc-44e4-48f0-ac36-eccc7c176b26,Upper Oven Door,box,5,0,height * 0.05,depth/2 + 0.01,width - 0.02,height * 0.25,0.02,door,#000000,,,1.00,,2025-10-08 17:10:22.990597+00
+5ad22aee-c655-4a56-a3a9-fe5bfdc76d16,138cf90c-ba72-450e-a50e-f39da21ca44d,LCD Display,box,7,width * 0.2,height * 0.3,depth / 2 + 0.015,0.15,0.08,0.001,screen,#001b2e,0.90,0.10,1.00,,2025-10-08 20:13:51.848363+00
+5b1c92c6-79ec-47a3-8494-17845ab0d774,7e845283-165b-4a1e-95e6-565adc87fc60,Button 2,box,10,0,height * 0.22,depth / 2 + 0.015,0.06,0.02,0.005,handle,#444444,,,1.00,,2025-10-08 20:13:51.848363+00
+5b36402b-fb4f-4940-836c-b406eca28273,c2bd963a-3b33-496c-9c13-d427aebebab0,Handle Leg 1,box,7,legLength * 0.75,0,depth/2 + 0.03,0.02,0.15,0.03,handle,handleColor,,,1.00,,2025-10-08 17:08:02.404343+00
+5ba4ec75-a35c-44ff-88d7-ba1753d3b5f7,68a29542-98e7-4355-846f-4d57d0a3d341,Cabinet,box,1,0,-height * 0.2,0,width,height * 0.6,depth,cabinet_body,cabinetColor,,,1.00,,2025-10-08 16:52:53.546878+00
+5bd5a405-9b8c-4b0e-94d1-18deff44c7b3,85148b77-0e57-40c1-995f-1858ad0a9793,Back,box,2,0,height * 0.15,-depth * 0.25,width,height * 0.6,depth * 0.2,cabinet_body,#8B4513,,,1.00,,2025-10-08 16:50:52.815401+00
+5cfae687-4eee-498a-9f16-7e0aa04ee066,233fc002-1ea4-4d6b-bc98-08491905c3bd,Cabinet Body,box,1,0,0,0,width,height,depth,cabinet_body,cabinetColor,,,1.00,,2025-10-08 16:50:15.91125+00
+5cfde946-082b-4768-865b-0af77a5c1edd,68fcf22e-52dc-4cd2-9bc4-47d888fb8752,Bed Frame,box,1,0,-height / 2 + 0.1,0,width,0.2,depth * 2,wood,cabinetMaterial,,,1.00,,2025-10-08 20:13:16.422946+00
+5dbf8e30-c841-47c4-beef-ff323d60e63f,92c43fb4-5598-4f65-a554-2cb54185360d,Top,box,1,0,height/2 - 0.02,0,width,0.04,depth,cabinet_body,#8B4513,,,1.00,,2025-10-08 16:52:06.676597+00
+5dc17a14-9f8e-4b75-b4f5-1d7aaac1913d,c2bd963a-3b33-496c-9c13-d427aebebab0,Cabinet Body Leg 2,box,4,0,plinthHeight / 2,legLength/2,depth,height - plinthHeight,legLength,cabinet_body,cabinetColor,,,1.00,,2025-10-08 17:08:02.404343+00
+5e059b13-e068-4828-beb4-363d0ac09ac7,6db647e9-ed2f-493d-9361-e101b30bb5f2,Door Left,box,2,-width/4,0,depth/2 + 0.01,width/2 - 0.02,height - 0.02,0.02,door,doorColor,,,1.00,,2025-10-08 16:51:41.19204+00
+5eb81c80-07a2-4141-ad05-abf3f8e38d0e,a6959e02-3fe1-4726-8539-f25526d5ac4b,Right Handle,box,5,width / 4 - width / 4 + 0.02,0,depth / 2 + 0.03,0.03,height - 0.10,0.03,handle,#808080,,,1.00,,2025-10-08 16:16:19.97502+00
+5ef77a0b-30af-4d49-be63-11ab211b3d51,6942fc4e-5bf6-480e-81ea-16c79a782954,Flush Handle,box,5,-width / 2 + 0.05,height * 0.15,-depth / 2 + 0.15,0.08,0.04,0.02,chrome,#c0c0c0,,,1.00,,2025-10-08 20:21:21.129584+00
+5f6f6977-06a0-4b63-8990-9ef5426e8037,644be568-a053-4218-b2e9-b6c8e66d37a0,Pelmet,box,1,0,0,0,width,height,depth,door,#ffffff,,,1.00,,2025-10-08 16:21:59.376939+00
+6005b1ce-9377-4b8d-88c9-c56081bb0c9a,a8c47a62-5286-4dad-8773-494724766939,Handle,box,4,width / 2 - 0.08,plinthHeight / 2 + cabinetHeight / 2 - 0.1,depth / 2 + 0.03,0.08,0.02,0.03,handle,handleMaterial,,,1.00,,2025-10-08 15:51:04.652333+00
+64144624-c9d4-4838-9fb6-5e8ef1320922,9b93fa5d-fde1-4330-8f1d-84ecb01e0607,Tub Body,box,1,0,-height / 2 + 0.25,0,width - 0.1,0.5,depth - 0.1,ceramic,#FFFFFF,,,1.00,,2025-10-08 20:21:21.129584+00
+64383aa0-ad32-4667-85b6-c2afb5adc0c2,de0b3647-27c0-412d-8fed-d1c60fecd422,Door Right,box,3,width/4,0,depth/2 + 0.01,width/2 - 0.02,height - 0.02,0.02,door,doorColor,,,1.00,,2025-10-08 16:51:41.19204+00
+645884eb-c74b-4fe2-ad93-d653c8f678d4,4d6a40bc-b781-414b-9aad-ac5cc3077cbb,Drawer 2,box,4,0,0.10,depth / 2 + 0.01,width - 0.02,0.20,0.02,door,doorColor,,,1.00,,2025-10-08 16:21:41.621901+00
+647fdcfb-89d6-4986-86c3-42a3463229af,e7c2ceda-dd2b-44ee-b187-4e14baf4ff31,Door Leg 2,box,6,depth/2 + 0.01,plinthHeight / 2,legLength/2,0.02,height - plinthHeight - 0.02,legLength - 0.02,door,doorColor,,,1.00,,2025-10-08 17:08:02.404343+00
+6493fa51-b394-43f3-83b9-70336527ab91,7ec9e418-9785-4b5a-a081-0a51e18b173c,Door 1,box,2,-width/3,0,depth/2 + 0.01,width/3 - 0.02,height - 0.02,0.02,door,doorColor,,,1.00,,2025-10-08 16:52:38.215415+00
+64d3941c-d60d-4ed5-a167-44d5fb7960e3,c8d89312-c0b3-41e1-a4c0-7d18f770ca92,Seat,box,1,0,-height * 0.15,0,width,height * 0.15,depth,cabinet_body,#000000,,,1.00,,2025-10-08 16:52:06.676597+00
+6544a898-d22f-4003-818f-b7be023ba08d,6404a530-2cdc-406e-b957-46de153409c3,Drawer 3,box,4,0,-height/2 + 0.50,depth/2 + 0.01,width - 0.02,0.18,0.02,door,doorColor,,,1.00,,2025-10-08 16:50:15.91125+00
+65dfafe3-9ef7-4573-95b3-105289e0cb32,d09931e3-46fb-457c-9a3e-83e17467e407,Cabinet,box,1,0,-height * 0.2,0,width,height * 0.6,depth,cabinet_body,cabinetColor,,,1.00,,2025-10-08 16:52:53.546878+00
+6614de3c-c716-4385-85f9-b733e658c5be,4ae82ee6-9f21-4b0d-a266-ffbf712213a7,Microwave Housing,box,3,0,height * 0.05,0,width,height * 0.22,depth,cabinet_body,#2c2c2c,,,1.00,,2025-10-08 17:10:22.990597+00
+66707e08-fd28-4a84-892b-99546640f107,b131724a-219a-4011-8a42-02ba2d18fbc2,Drawer 1,box,2,0,-height/2 + 0.12,depth/2 + 0.01,width - 0.02,0.22,0.02,door,doorColor,,,1.00,,2025-10-08 16:50:15.91125+00
+670b31d0-534d-4699-b341-8724e057e3b1,f4672c92-cb10-46bd-aaa9-ad034a993177,Plinth,box,1,0,-height / 2 + 0.075,0,width,0.15,depth - 0.05,plinth,plinthColor,,,1.00,,2025-10-08 16:16:19.97502+00
+67b567b7-e3f5-464c-b41b-2750c20d10ac,c2bd963a-3b33-496c-9c13-d427aebebab0,Plinth Leg 2,box,2,0.05,-height / 2 + plinthHeight / 2,legLength/2,depth - 0.10,plinthHeight,legLength,plinth,plinthColor,,,1.00,!isWallCabinet,2025-10-08 17:08:02.404343+00
+682afc6d-f2c8-45a1-96c1-0ad2d098bdaa,e7c2ceda-dd2b-44ee-b187-4e14baf4ff31,Handle Leg 2,box,8,depth/2 + 0.03,0,legLength * 0.75,0.03,0.15,0.02,handle,handleColor,,,1.00,,2025-10-08 17:08:02.404343+00
+69f57c07-8637-438d-94e0-300874e6f0d4,ffbe3019-09c4-4a44-b159-67ba6a395b63,Right Glass,box,3,width/4,0,0,width/2 - 0.10,height - 0.10,depth * 0.5,handle,#E6E6FA,,,1.00,,2025-10-08 16:53:07.709429+00
+6a9531af-2033-4817-91cd-3e014f5f7abe,18247c33-96d5-4d20-98f0-2aa1c16652b9,Right Drawer,box,3,width/3,0,depth/2 + 0.01,width/3 - 0.02,height/2,0.02,door,doorColor,,,1.00,,2025-10-08 16:50:15.91125+00
+6ad8c3d7-2b30-47ea-aac4-e26c6bb06f43,6a45d0f6-5116-409a-8ab9-aacebd466a31,Side door,box,6,cornerDepth - legLength / 2 + 0.01,plinthHeight / 2,0,0.02,doorHeight,legLength - 0.05,door,doorColor,,,1.00,,2025-10-08 11:23:36.663103+00
+6b5e244a-2602-4e2c-91ac-74ad6922cfab,9ea16340-4e6c-40b3-8d8a-492ed6546e8a,Counter,box,2,0,height * 0.32,0,width,height * 0.05,depth,counter,counterColor,,,1.00,,2025-10-08 16:52:53.546878+00
+6be8147d-98bc-4955-ab22-344a91cd10af,9e134812-df5a-4e10-9c04-70f35f30f798,Top,box,1,0,height/2 - 0.02,0,width,0.04,depth,cabinet_body,#F5F5DC,,,1.00,,2025-10-08 16:52:17.357255+00
+6c13e5a9-1943-4c56-9a9c-1ccbffd6757a,d91a5c3a-2af9-4c8f-8cb3-a62f84cef732,Shower Head,cylinder,5,-width / 3,height / 2 - 0.3,-depth / 2 + 0.15,0.1,0.02,0.1,chrome,#c0c0c0,,,1.00,,2025-10-08 20:21:21.129584+00
+6c299bc8-23c1-422c-b2f1-42859fdacd21,dee1b997-eb19-4228-b69f-7dff6204ae01,Cabinet Z-leg,box,2,cornerDepth / 2 - legLength / 2,0,0,cornerDepth,height,legLength,cabinet,cabinetMaterial,,,1.00,,2025-10-08 11:23:36.663103+00
+6c674188-ffb9-400f-89b5-07e5751d6638,138cf90c-ba72-450e-a50e-f39da21ca44d,Main Body,box,1,0,0,0,width,height,depth,appliance_panel,#f0f0f0,,,1.00,,2025-10-08 20:13:51.848363+00
+6c7d7ef8-07af-47f6-93ef-2edef209cb35,a000225c-807b-41ef-942f-768c8bc3308a,Drawer 3,box,4,0,-height * 0.3,depth/2 + 0.01,width - 0.02,height * 0.3,0.02,door,#A9A9A9,,,1.00,,2025-10-08 16:52:06.676597+00
+6d43f4ae-c4fb-456e-8a88-c28e3f27c8be,dee1b997-eb19-4228-b69f-7dff6204ae01,Front handle,box,5,legLength / 2 - 0.05,0,cornerDepth - legLength / 2 + 0.03,0.02,0.15,0.02,handle,handleColor,0.80,0.20,1.00,,2025-10-08 11:23:36.663103+00
+6d44b106-1de4-4fe8-b366-4d3d649fe651,28b5b220-dc59-4aa6-83e6-736b14a39923,Right Leg,box,3,width/2 - 0.05,-height * 0.25,-depth/2 + 0.05,0.10,height * 0.5,0.10,cabinet_body,#8B4513,,,1.00,,2025-10-08 16:52:06.676597+00
+6d6cc9c0-cf21-4766-a347-fc911477bf7d,e7c2ceda-dd2b-44ee-b187-4e14baf4ff31,Handle Leg 1,box,7,legLength * 0.75,0,depth/2 + 0.03,0.02,0.15,0.03,handle,handleColor,,,1.00,,2025-10-08 17:08:02.404343+00
+6d902f0b-f71a-4069-9228-42c27d74298d,6d832a0d-b907-43fd-b2e7-ac5f567f9f66,Drawer 4,box,5,0,height/2 - 0.12,depth/2 + 0.01,width - 0.02,0.22,0.02,door,doorColor,,,1.00,,2025-10-08 16:50:15.91125+00
+6db51dd9-2482-4dea-a9e3-f8a4c21d1ad3,8c7ef8e7-5915-4f01-ace3-55252d0dcd2c,Door Panel,box,1,0,0,0,width,height,depth,door,doorColor,,,1.00,,2025-10-08 16:53:07.709429+00
+6dd4dbe1-0fa4-4ee0-baba-cd88053f88d0,3bbaffbe-61c9-4100-ab07-141857341a66,Cabinet,box,1,0,0,0,width,height,depth,cabinet_body,#F5F5DC,,,1.00,,2025-10-08 16:51:11.543287+00
+6e0a2477-23e9-4914-bb1b-42969058e51a,68fcf22e-52dc-4cd2-9bc4-47d888fb8752,Pillow Left,box,4,-width / 4,-height / 2 + 0.2 + 0.3 + 0.05,-depth * 2 / 3,width / 3,0.1,depth / 2,mattress,#F5F5F5,,,1.00,,2025-10-08 20:13:16.422946+00
+6e4d709c-65a6-4ab8-8550-bd61962d54e8,ffbcf071-8b29-48ac-b770-106d34f019bb,Cabinet,box,1,0,0,0,width,height,depth,cabinet_body,cabinetColor,,,1.00,,2025-10-08 16:52:17.357255+00
+6f6ca3f6-2bdf-40d0-8f63-ecb06fdc380a,8e855643-889f-4175-bd24-49bc687c9b68,Door,box,2,0,0,depth / 2 + 0.01,width - 0.02,height - 0.02,0.02,door,doorColor,,,1.00,,2025-10-08 16:07:57.673274+00
+6fb96299-dbfd-4ede-af8d-fea0f0be2def,eef2b984-523a-44a2-9894-970657aec4dc,Door,box,2,0,0,depth/2 + 0.01,width - 0.02,height - 0.02,0.02,door,doorColor,,,1.00,,2025-10-08 16:52:53.546878+00
+6fe10e3a-c4b1-4918-a770-9dbcf1b9166d,28d22c1a-93ce-4fe4-9352-c99fb1a3d735,Back,box,2,0,height * 0.15,-depth * 0.25,width,height * 0.6,depth * 0.2,cabinet_body,#3A6EA5,,,1.00,,2025-10-08 16:51:41.19204+00
+6fe717ec-0539-4011-b58b-401f3269a8ae,d7d0dc73-dc02-4e5a-aee3-eac7a9198680,Window,box,3,0,0.05,depth / 2 + 0.02,width - 0.10,height - 0.15,0.01,handle,#1a1a1a,,,1.00,,2025-10-08 16:16:19.97502+00
+707eedc2-151e-45c9-9290-62f38d98c6af,c509bed1-9882-44d5-8e44-be6c625cf0b6,Right Arm,box,4,width / 2 - 0.2,0,0,0.4,height,depth * 1.5 - 0.2,fabric,cabinetMaterial,,,1.00,,2025-10-08 20:13:16.422946+00
+70e922e1-c124-49c3-9307-8b1cb313a40e,43b45e50-439e-4647-b320-7b0d2d51d311,Leg Front Left,box,3,-width / 2 + 0.05,-height / 2 + 0.4,-depth / 2 + 0.05,0.05,0.8,0.05,metal_leg,#2F4F4F,,,1.00,,2025-10-08 20:13:16.422946+00
+70edea18-8741-42dc-9485-6af8cdc2fc25,97fb076c-eb05-4772-a6ea-f3727ddc5c8e,Door Panel,box,1,0,0,0,width,height,depth,door,doorColor,,,1.00,,2025-10-08 16:53:07.709429+00
+7116de18-d859-4e84-be2c-663339db8aac,b131724a-219a-4011-8a42-02ba2d18fbc2,Body,box,1,0,0,0,width,height,depth,cabinet_body,cabinetColor,,,1.00,,2025-10-08 16:50:15.91125+00
+71644610-a92a-40d8-8c53-326a1442d9eb,48071a77-2b2c-4f6a-944f-728720ac1bc6,Handle,box,4,width / 2 - 0.11,height / 2 - 0.15,depth / 2 + 0.03,0.18,0.03,0.04,handle,handleColor,,,1.00,,2025-10-08 16:16:19.97502+00
+723555c7-72e6-42c0-9167-6519c5b191be,db3232db-8bc4-4f1a-bee6-19b52573b0ca,Top,box,1,0,height/2 - 0.02,0,width,0.04,depth,cabinet_body,#8B4513,,,1.00,,2025-10-08 16:52:38.215415+00
+72497b7a-f8db-4f59-be80-e3e5f03b33a8,4ae82ee6-9f21-4b0d-a266-ffbf712213a7,Plinth,box,1,0,-height / 2 + plinthHeight / 2,0,width,plinthHeight,depth - 0.05,plinth,plinthColor,,,1.00,,2025-10-08 17:10:22.990597+00
+72910fc4-8e36-4bdf-bc66-19541f534bf7,22848d1e-3468-46fe-95e4-fe129380a07d,Drawer 3,box,4,0,-height * 0.25,depth/2 + 0.01,width - 0.02,height * 0.25,0.02,door,doorColor,,,1.00,,2025-10-08 16:52:06.676597+00
+72c67eaf-4d78-4507-be88-f67772bb0899,fe6cb130-b8d1-4f98-9a52-f17240b4aea3,Right Panel,box,2,width/4,0,0,width/2 - 0.01,height,depth,door,doorColor,,,1.00,,2025-10-08 16:53:07.709429+00
+72cb9921-d5a6-46ec-9e0b-2859f48537f7,2b2a4523-6cda-4b4e-85f2-1173d0d2f7d2,Body,box,1,0,0,0,width,height,depth,cabinet_body,cabinetColor,,,1.00,,2025-10-08 16:52:17.357255+00
+7323bea5-f5fa-4388-9067-d94bb7b29fc6,b6124e51-9536-476b-abaa-01c6559a2813,Panel,box,1,0,0,0,width,height,depth,door,cabinetColor,,,1.00,,2025-10-08 16:21:59.376939+00
+7388834d-1624-4230-90d2-bf0c7062ef9f,66f29bed-c9fa-4683-803f-ccf746ae8173,Frame,box,1,0,0,0,width,height,depth,door,doorColor,,,1.00,,2025-10-08 16:53:07.709429+00
+739e035c-ca9e-43b2-a48c-a46a3f803e34,ac6ed98d-1c69-4736-8463-d478a30712dc,Frame,box,1,0,0,0,width,height,depth,door,#8B7355,,,1.00,,2025-10-08 16:52:17.357255+00
+741e5c6b-a663-406c-9641-66497aef7233,dee1b997-eb19-4228-b69f-7dff6204ae01,Side handle,box,6,cornerDepth - legLength / 2 + 0.03,0,-0.25,0.02,0.15,0.02,handle,handleColor,0.80,0.20,1.00,,2025-10-08 11:23:36.663103+00
+74de993a-cd0b-400c-a736-71fb238c0d4a,8a5b0df6-7d08-439e-b7a9-4251057e300b,Top,box,1,0,height/2 - 0.02,0,width,0.04,depth,cabinet_body,#F5F5DC,,,1.00,,2025-10-08 16:52:17.357255+00
+75a9e0b0-0163-4420-b757-b879577c1612,8fef412a-8649-4895-8cd5-fd53d0677ac1,Handle,box,4,width / 2 - 0.15,plinthHeight / 2 + cabinetHeight / 2 - 0.1,depth / 2 + 0.03,0.15,0.02,0.03,handle,handleMaterial,,,1.00,,2025-10-08 15:51:04.652333+00
+75e1a22b-b455-4abd-a4ca-aef74b6c521e,9b93fa5d-fde1-4330-8f1d-84ecb01e0607,Base,box,3,0,-height / 2 + 0.05,0,width,0.1,depth,ceramic,#FFFFFF,,,1.00,,2025-10-08 20:21:21.129584+00
+763ea998-cca0-43b4-9cd7-a4564b043cec,6ef29df6-b6b3-4f6c-a528-b1d575e2e59a,Tap,box,2,0,height + 0.05,-depth/4,0.03,0.15,0.03,handle,#808080,,,1.00,,2025-10-08 17:10:09.489775+00
+7648d847-fc89-4632-8c46-93c64db15634,bd4702ed-43dd-4723-a0b9-f82077e18d0c,Seat,box,1,0,-height * 0.25,0,width,height * 0.2,depth,cabinet_body,#8B7355,,,1.00,,2025-10-08 16:52:17.357255+00
+76fcd519-d650-4780-9fc8-f1d7c1334764,2c975132-b4a1-4294-a2f1-c71b1c939066,Track,box,2,0,height/2 + 0.05,0,width,0.03,depth + 0.05,handle,#808080,,,1.00,,2025-10-08 16:53:07.709429+00
+779860e6-0dd1-48aa-ba5e-ae2497019cbf,7e845283-165b-4a1e-95e6-565adc87fc60,Control Panel,box,6,0,height * 0.3,depth / 2 + 0.01,width * 0.7,0.15,0.005,control_panel,#222222,,,1.00,,2025-10-08 20:13:51.848363+00
+77b47acb-852f-4f53-99d6-892677c8d11d,af38ef2c-9765-4cea-abc0-43aeb3b58050,Tap,box,3,-width * 0.2,height * 0.4,-depth * 0.15,0.03,height * 0.15,0.03,handle,#C0C0C0,,,1.00,,2025-10-08 16:52:53.546878+00
+7810b701-4b90-4beb-a3ad-e8aa09d7ad54,a6959e02-3fe1-4726-8539-f25526d5ac4b,Left Handle,box,4,-width / 4 + width / 4 - 0.02,0,depth / 2 + 0.03,0.03,height - 0.10,0.03,handle,#808080,,,1.00,,2025-10-08 16:16:19.97502+00
+7868e31b-6f3c-40b7-8576-84f9c73f09fa,a8b66209-ccef-4e44-a761-df5f37ac640b,Side handle,box,6,cornerDepth - legLength / 2 + 0.03,0,-0.25,0.02,0.15,0.02,handle,handleColor,0.80,0.20,1.00,,2025-10-08 11:23:36.663103+00
+7ad2e712-4e12-4af4-ba72-0b40225942fe,b1ac7b87-a11a-4b84-b26f-61eca93692c6,Return Top,box,2,-width/2 + 0.35,height/2 - 0.02,depth/2 - 0.35,0.70,0.04,depth - 0.70,cabinet_body,#8B4513,,,1.00,,2025-10-08 16:52:06.676597+00
+7b4dd760-d72c-4750-905c-da196ad39c7e,00eae6e3-db91-499a-be77-5e486cd3ceac,Appliance Body,box,2,0,0.075,0,width,height - 0.15,depth,cabinet_body,applianceColor,,,1.00,,2025-10-08 16:16:19.97502+00
+7cf2d6bf-2860-424f-846b-7295782b2121,22848d1e-3468-46fe-95e4-fe129380a07d,Drawer 2,box,3,0,0,depth/2 + 0.01,width - 0.02,height * 0.25,0.02,door,doorColor,,,1.00,,2025-10-08 16:52:06.676597+00
+7e28f862-0a14-4961-9df3-7988e0440072,6633542b-1c9b-4ce6-8d44-e9923ca32628,Body,box,2,0,height * 0.08,0,width,height * 0.75,depth,cabinet_body,cabinetColor,,,1.00,,2025-10-08 16:52:53.546878+00
+7e5b91cc-b977-4d81-bd88-1ce3a87b556c,233fc002-1ea4-4d6b-bc98-08491905c3bd,Door 1,box,2,-width * 3/8,0,depth / 2 + 0.01,width / 4 - 0.02,height - 0.02,0.02,door,doorColor,,,1.00,,2025-10-08 16:50:15.91125+00
+7efa6673-ab74-472a-ba59-29a8db93574d,ae84c78f-02f7-4be9-8e48-66f3724e7a88,Right Panel,box,3,width * 0.3,0,-0.02,width * 0.3,height,depth,handle,#E8E8E8,,,1.00,,2025-10-08 16:52:17.357255+00
+7f892ba3-1d8b-4762-8b86-98f0f8e7c331,7e771285-9a2d-4de8-a432-8b221345c781,Mattress,box,2,0,height * 0.15,0,width,height * 0.4,depth,cabinet_body,#F5F5DC,,,1.00,,2025-10-08 16:50:52.815401+00
+7fbab821-8e33-4d1c-8a6f-7d32c74eda04,7e845283-165b-4a1e-95e6-565adc87fc60,Program Selector,cylinder,8,-width * 0.2,height * 0.3,depth / 2 + 0.02,0.05,0.03,0.05,handle,#dddddd,,,1.00,,2025-10-08 20:13:51.848363+00
+7fdf4c26-a23e-4528-8487-91f06fdb755a,99f5c123-079d-4b16-ab5c-3f2a5545263e,Fridge Door,box,3,0,plinthHeight / 2,depth/2 + 0.01,width - 0.02,height - plinthHeight - 0.02,0.02,door,#E0E0E0,,,1.00,,2025-10-08 17:10:22.990597+00
+8034b6b8-8772-4ffd-ac65-8a11e3851e35,99f5c123-079d-4b16-ab5c-3f2a5545263e,Cabinet Body,box,2,0,plinthHeight / 2,0,width,height - plinthHeight,depth,cabinet_body,cabinetColor,,,1.00,,2025-10-08 17:10:22.990597+00
+808fc6b3-3fb1-44e7-836e-182b0841a72e,8a5b0df6-7d08-439e-b7a9-4251057e300b,Right Drawer,box,3,width/3,0,depth/2 + 0.01,width/3 - 0.05,height * 0.6,0.02,door,doorColor,,,1.00,,2025-10-08 16:52:17.357255+00
+80e6c279-df06-4950-bbd7-eae517d1754e,de555033-f7e3-4be5-a10b-0b9033098fca,Lower Cabinet,box,4,0,-height * 0.35,0,width,height * 0.25,depth,cabinet_body,cabinetColor,,,1.00,,2025-10-08 17:10:22.990597+00
+8147ac2e-bca2-4a84-ab67-106a1d80478c,138cf90c-ba72-450e-a50e-f39da21ca44d,Door Window,cylinder,4,0,-height * 0.1,depth / 2 + 0.015,0.2,0.01,0.2,appliance_glass,#1a3b57,0.90,0.10,0.70,,2025-10-08 20:13:51.848363+00
+81926053-3090-44f1-bf0c-2824ad9527c3,540faede-366d-4fa2-b169-97fec6766db4,Handle,box,3,width / 2 - 0.11,height / 2 - 0.10,depth / 2 + 0.03,0.18,0.03,0.04,handle,handleColor,,,1.00,,2025-10-08 16:07:57.673274+00
+81fc5096-a536-4fa7-9049-a8bb44b4f005,678d0eca-8539-42b0-82c9-a41ea45b92db,Drawer 1,box,2,-width/3,height * 0.3,depth/2 + 0.01,width/3 - 0.02,height * 0.2,0.02,door,doorColor,,,1.00,,2025-10-08 16:52:17.357255+00
+82adf82a-529c-4de5-8a90-34159c59ad63,932bc10c-f028-4375-8593-8d2f9bb30fbb,Leg Back Right,box,5,width / 2 - 0.05,-height / 2 + 0.35,depth * 1.5 / 2 - 0.05,0.08,0.7,0.08,wood,cabinetMaterial,,,1.00,,2025-10-08 20:13:16.422946+00
+82c6ac64-c0c9-4399-ad8c-5e028bc7421e,58008eb6-1f8e-4b96-a083-68a9221ed984,Right Basin,box,3,width/4,height/2 + 0.05,0,width/2 - 0.10,0.10,depth - 0.10,handle,#FFFFFF,,,1.00,,2025-10-08 16:51:11.543287+00
+83905dbe-214f-410b-95b2-97387006da59,c04436d2-a13a-4c22-99ba-d1966909d67e,Tap,box,2,0,height + 0.10,-depth/4,0.03,0.15,0.03,handle,#B87333,,,1.00,,2025-10-08 17:10:09.489775+00
+842294a0-1436-4e8d-9dc6-3682edd1c006,6404a530-2cdc-406e-b957-46de153409c3,Drawer 1,box,2,0,-height/2 + 0.10,depth/2 + 0.01,width - 0.02,0.18,0.02,door,doorColor,,,1.00,,2025-10-08 16:50:15.91125+00
+84374ca0-add6-42ed-8047-dc792ee6e9c3,8fef412a-8649-4895-8cd5-fd53d0677ac1,Plinth,box,1,0,-height / 2 + plinthHeight / 2,0,width,plinthHeight,depth - 0.05,plinth,plinthColor,,,1.00,!isWallCabinet,2025-10-08 15:51:04.652333+00
+847ea701-8075-438e-b4d5-e9e71b0af97a,126b9469-5bf8-43fc-9974-cf49f27f3323,Glass,box,2,0,0,0,width - 0.10,height - 0.10,depth * 0.5,handle,#E6E6FA,,,1.00,,2025-10-08 16:53:07.709429+00
+84b31999-db24-4b3e-a20c-d2a0aa8f9285,e6f8ec86-e4f5-46e5-b17f-52f925d5430b,Drawer 2,box,3,0,-height * 0.2,depth/2 + 0.01,width - 0.02,height * 0.4,0.02,door,#A9A9A9,,,1.00,,2025-10-08 16:52:06.676597+00
+85168bd0-8fe4-453f-9318-85abce9f4edc,34555b19-d1de-4afc-8cc0-b4763a45adad,Mattress,box,2,0,height * 0.15,0,width,height * 0.4,depth,cabinet_body,#F5F5DC,,,1.00,,2025-10-08 16:50:52.815401+00
+8524342e-f7c7-425c-a88d-116f0793a7b3,229fe763-0333-4310-a832-134e72d17095,Right Leg,box,3,width/2 - 0.05,-height * 0.25,-depth/2 + 0.05,0.10,height * 0.5,0.10,cabinet_body,#8B4513,,,1.00,,2025-10-08 16:52:06.676597+00
+85795e17-742a-4110-8e3d-75e57b6ba558,69ee4b5a-4b1b-4bd7-a2c1-e6485f8585e2,Fridge Body,box,1,0,0,0,width,height,depth,cabinet_body,#e0e0e0,,,1.00,,2025-10-08 16:16:19.97502+00
+8583c8cb-ead2-4791-b507-d2a4448bdb87,2fb93674-6a19-487e-afcb-cef752835f49,Back,box,2,0,height * 0.2,-depth * 0.3,width,height * 0.6,depth * 0.15,cabinet_body,#4B4B4B,,,1.00,,2025-10-08 16:52:38.215415+00
+86919fe9-1bc9-4f2e-b991-7c75083c36ae,03eb0f79-0551-419a-9f91-9d384636cabc,Top,box,1,0,height/2 - 0.02,0,width,0.04,depth,cabinet_body,#8B4513,,,1.00,,2025-10-08 16:52:38.215415+00
+86d7461c-37f6-4b8e-a1de-d54cc37d67e6,2572fce1-aec7-4381-a448-8bb739e45557,Glass Door Right,box,3,width/4,height * 0.1,depth/2 + 0.01,width/2 - 0.02,height * 0.8,0.01,handle,#E6E6FA,,,1.00,,2025-10-08 16:52:38.215415+00
+8703c859-82fc-4610-a6e3-52f2580ea597,ecf82b10-3677-4226-9abb-4e9d4644668f,Cabinet,box,1,0,0,0,width,height,depth,cabinet_body,cabinetColor,,,1.00,,2025-10-08 16:52:53.546878+00
+88373e0e-aad9-4752-afca-a5f03d5a4e74,e923b001-1a72-4ed9-8cd9-d22b501c0182,Left Glass,box,2,-width/4,0,0,width/2 - 0.10,height - 0.10,depth * 0.5,handle,#E6E6FA,,,1.00,,2025-10-08 16:53:07.709429+00
+884da217-d551-4435-b8e3-aef415f6b543,92c43fb4-5598-4f65-a554-2cb54185360d,Right Leg,box,3,width/2 - 0.05,-height * 0.25,-depth/2 + 0.05,0.10,height * 0.5,0.10,cabinet_body,#8B4513,,,1.00,,2025-10-08 16:52:06.676597+00
+88571b3a-63bb-4a73-bd0b-2331f62c7bc8,3e1e02bc-f1dc-4099-8563-127df6cd50f3,Body,box,1,0,0,0,width,height,depth,cabinet_body,cabinetColor,,,1.00,,2025-10-08 16:52:53.546878+00
+891ef7c5-a198-459b-984e-aa9cf25cad9b,2da88d6d-cd70-40a0-8c06-4c11fa99fda8,Basin Leg 2,box,2,0,0,legLength/2,depth - 0.10,height,legLength - 0.10,handle,#c0c0c0,,,1.00,,2025-10-08 17:10:09.489775+00
+8a416554-c685-44fa-bfdd-08ae099097e0,dee1b997-eb19-4228-b69f-7dff6204ae01,Side door,box,4,cornerDepth - legLength / 2 + 0.01,0,0,0.02,height - 0.05,legLength - 0.05,door,doorColor,,,1.00,,2025-10-08 11:23:36.663103+00
+8b5a1448-3bb2-4add-9921-3133971ca22a,507c86e2-b641-420b-baf5-a11afd594b69,Mattress,box,2,0,height * 0.15,0,width,height * 0.4,depth,cabinet_body,#F5F5DC,,,1.00,,2025-10-08 16:50:52.815401+00
+8cd76795-fe7a-4a40-9874-8c5ec4387c39,88cbdc7f-4633-487c-b134-8993de9beb37,Draining Board,box,2,width/4,-height * 0.3,0,width * 0.4,height * 0.5,depth - 0.10,counter,#c0c0c0,,,1.00,,2025-10-08 17:10:09.489775+00
+8d402614-1aec-4d28-93bb-d902bae5729c,72054361-c04a-4452-8cbc-8dd7a55a698a,Cornice,box,1,0,0,0,width,height,depth,door,#ffffff,,,1.00,,2025-10-08 16:21:59.376939+00
+8d9448e3-7966-430e-8839-b5c869b4fc66,520dc8d6-d9a7-4009-b755-761634410954,Handle,box,4,width / 2 - 0.12,plinthHeight / 2 + cabinetHeight / 2 - 0.1,depth / 2 + 0.03,0.12,0.02,0.03,handle,handleMaterial,,,1.00,,2025-10-08 15:51:04.652333+00
+8dcfc88d-5c9a-4d3d-bcbd-9eefa760f08e,8f2a88ca-8b2f-40ef-a4c1-db1908f36420,Frame,box,1,0,0,0,width,height,depth,door,doorColor,,,1.00,,2025-10-08 16:53:07.709429+00
+8de00c7e-b2fd-4a45-abbb-64a402ad9de0,ba0d987f-fddd-4e7f-906e-696e4608fb80,Handle,box,4,width / 2 - 0.10,plinthHeight / 2 + cabinetHeight / 2 - 0.1,depth / 2 + 0.03,0.10,0.02,0.03,handle,handleMaterial,,,1.00,,2025-10-08 15:51:04.652333+00
+8e955bfb-45e2-40b1-9321-1e96739c2ebe,d7ccdbc2-01dd-4d96-911b-d0620f1f5dfb,Door Left,box,2,-width/4,0,depth/2 + 0.01,width/2 - 0.02,height - 0.02,0.02,door,doorColor,,,1.00,,2025-10-08 16:52:38.215415+00
+8ec76d76-b31d-419e-9ac8-7b7ca1e0a252,8b8a45d9-9b8f-470b-931b-b3b22102901d,Mattress,box,2,0,height * 0.15,0,width,height * 0.4,depth,cabinet_body,#F5F5DC,,,1.00,,2025-10-08 16:50:52.815401+00
+8f60c590-f06d-4ef7-a041-21cb42d877cb,f8181512-886d-4cfa-873c-8ac43eced305,Seat,box,1,0,-height * 0.2,0.05,width,height * 0.3,depth * 0.7,cabinet_body,#3A6EA5,,,1.00,,2025-10-08 16:51:41.19204+00
+8fe9de07-4793-4ca1-a593-ca1cdbb47ce7,84b234b5-f96f-4080-9b71-b9e66cf41dfb,Handle,box,3,width / 2 - 0.09,height / 2 - 0.10,depth / 2 + 0.03,0.14,0.03,0.04,handle,handleColor,,,1.00,,2025-10-08 16:07:57.673274+00
+8feb27d3-9ac5-42ca-8b91-d22be3ce691a,7ec9e418-9785-4b5a-a081-0a51e18b173c,Door 2,box,3,0,0,depth/2 + 0.01,width/3 - 0.02,height - 0.02,0.02,door,doorColor,,,1.00,,2025-10-08 16:52:38.215415+00
+90f1fba1-202a-40c4-89a2-82c8ba0c82c1,7ec9e418-9785-4b5a-a081-0a51e18b173c,Cabinet,box,1,0,0,0,width,height,depth,cabinet_body,#8B4513,,,1.00,,2025-10-08 16:52:38.215415+00
+9257fb44-e8ad-410b-b95a-43e5d595475e,6a45d0f6-5116-409a-8ab9-aacebd466a31,Front handle,box,7,legLength / 2 - 0.05,plinthHeight / 2,cornerDepth - legLength / 2 + 0.03,0.02,0.15,0.02,handle,handleColor,0.80,0.20,1.00,,2025-10-08 11:23:36.663103+00
+926a6e6a-e732-4ca9-8c65-0e72e41f3d4d,2b2a4523-6cda-4b4e-85f2-1173d0d2f7d2,Drawer 2,box,3,width/4,height * 0.3,depth/2 + 0.01,width/2 - 0.02,height * 0.2,0.02,door,doorColor,,,1.00,,2025-10-08 16:52:17.357255+00
+92e4b6c2-1226-4c26-9de9-70a0e27ca45e,ec259a23-2f20-43c4-b668-03ad5b1f9572,Leg 2,box,3,width/2 - 0.05,-height * 0.25,-depth/2 + 0.05,0.08,height * 0.5,0.08,cabinet_body,#8B4513,,,1.00,,2025-10-08 16:52:38.215415+00
+92e6ae23-2ae8-4072-857c-303dd4359958,00eae6e3-db91-499a-be77-5e486cd3ceac,Plinth,box,1,0,-height / 2 + 0.075,0,width,0.15,depth - 0.05,plinth,plinthColor,,,1.00,,2025-10-08 16:16:19.97502+00
+933280c3-3b7d-4b29-8bae-51f3c524d37b,68a29542-98e7-4355-846f-4d57d0a3d341,Right Basin,box,3,width * 0.25,height * 0.25,0,width * 0.4,height * 0.15,depth * 0.7,handle,#D3D3D3,,,1.00,,2025-10-08 16:52:53.546878+00
+9345ce35-fa2b-455a-8828-3a0a34f0d210,6a45d0f6-5116-409a-8ab9-aacebd466a31,Cabinet X-leg,box,2,0,plinthHeight / 2,cornerDepth / 2 - legLength / 2,legLength,cabinetHeight,cornerDepth,cabinet,cabinetMaterial,,,1.00,,2025-10-08 11:23:36.663103+00
+93836ba4-f4d4-4767-b898-e5848c7a4a6e,011f5272-69b3-4e8a-8990-aea9ddc922c7,Drawer 2,box,4,0,0.10,depth / 2 + 0.01,width - 0.02,0.20,0.02,door,doorColor,,,1.00,,2025-10-08 16:21:41.621901+00
+93eb01db-8585-4c3e-8da1-72dfaf831ab6,b131724a-219a-4011-8a42-02ba2d18fbc2,Drawer 4,box,5,0,height/2 - 0.12,depth/2 + 0.01,width - 0.02,0.22,0.02,door,doorColor,,,1.00,,2025-10-08 16:50:15.91125+00
+942c5c21-87c4-45d0-ae5c-74531c77f2b8,a6959e02-3fe1-4726-8539-f25526d5ac4b,Fridge Body,box,1,0,0,0,width,height,depth,cabinet_body,#e0e0e0,,,1.00,,2025-10-08 16:16:19.97502+00
+946eb806-ee0c-4150-804f-f4c6c08f146a,de555033-f7e3-4be5-a10b-0b9033098fca,Plinth,box,1,0,-height / 2 + plinthHeight / 2,0,width,plinthHeight,depth - 0.05,plinth,plinthColor,,,1.00,,2025-10-08 17:10:22.990597+00
+952511d5-5660-448f-a0b1-b45d6629348c,de555033-f7e3-4be5-a10b-0b9033098fca,Coffee Machine Front,box,5,0,-height * 0.05,depth/2 + 0.01,width - 0.02,height * 0.2,0.02,door,#2c2c2c,,,1.00,,2025-10-08 17:10:22.990597+00
+9557cfb7-187d-4eec-aa0a-e08cd6e8eeed,bc8eb1f9-e05b-4098-aa78-78f4a23253ac,Tap,box,3,legLength * 0.4,height + 0.10,0,0.03,0.15,0.03,handle,#808080,,,1.00,,2025-10-08 17:10:09.489775+00
+95e73866-25a6-4abb-835d-8f375b4fb4ca,18278cf6-34b4-4a8a-aced-b5d959fcdc71,Door Right,box,4,width/4,height * 0.08,depth/2 + 0.01,width/2 - 0.02,height * 0.75,0.02,door,doorColor,,,1.00,,2025-10-08 16:52:53.546878+00
+95f144d6-60e0-4c53-b014-2f1316d6349a,fe6cb130-b8d1-4f98-9a52-f17240b4aea3,Left Panel,box,1,-width/4,0,0,width/2 - 0.01,height,depth,door,doorColor,,,1.00,,2025-10-08 16:53:07.709429+00
+968b74c8-c749-4244-91ad-6c53700f7212,de555033-f7e3-4be5-a10b-0b9033098fca,Upper Cabinet,box,2,0,height * 0.25,0,width,height * 0.5,depth,cabinet_body,cabinetColor,,,1.00,,2025-10-08 17:10:22.990597+00
+96c76369-2df6-4076-bbb3-b6e40104a2f9,f8ac534e-6911-477b-bbf3-5c66afa03ed8,Handle,box,4,width / 2 - 0.15,plinthHeight / 2 + cabinetHeight / 2 - 0.1,depth / 2 + 0.03,0.12,0.02,0.03,handle,handleMaterial,,,1.00,,2025-10-08 15:51:04.652333+00
+97696e71-e96a-4810-8fba-4883e487f7aa,d0a1fdac-6331-4173-be46-bdbeb403f825,Basin,box,1,0,0,0,width - 0.10,height * 0.8,depth - 0.10,handle,#FFFFFF,,,1.00,,2025-10-08 17:10:09.489775+00
+97d13b85-0976-4c6f-ab62-dd3cb2d6acdd,15e34016-91ff-4c63-9adb-de938fbf7361,Left Panel,box,1,-width/4,0,0,width/2 - 0.01,height,depth,door,doorColor,,,1.00,,2025-10-08 16:53:07.709429+00
+98ff0729-7b34-44b5-acee-23cc24f19d0b,4ae82ee6-9f21-4b0d-a266-ffbf712213a7,Oven Housing,box,4,0,-height * 0.25,0,width,height * 0.3,depth,cabinet_body,#2c2c2c,,,1.00,,2025-10-08 17:10:22.990597+00
+9919edf2-ea1f-4e68-ad96-4067fc54e872,ba0d987f-fddd-4e7f-906e-696e4608fb80,Plinth,box,1,0,-height / 2 + plinthHeight / 2,0,width,plinthHeight,depth - 0.05,plinth,plinthColor,,,1.00,!isWallCabinet,2025-10-08 15:51:04.652333+00
+9967622b-45cb-4a43-b03c-60c5aafa6d9d,ffbcf071-8b29-48ac-b770-106d34f019bb,Door Right,box,3,width/4,0,depth/2 + 0.01,width/2 - 0.02,height - 0.02,0.02,door,doorColor,,,1.00,,2025-10-08 16:52:17.357255+00
+99e0ffb9-e062-498a-ad07-a56cae42fb86,d91a5c3a-2af9-4c8f-8cb3-a62f84cef732,Back Wall,box,4,0,0,-depth / 2 + 0.02,width - 0.1,height - 0.2,0.01,shower_glass,#E6F7FF,,,0.30,,2025-10-08 20:21:21.129584+00
+9a0b17df-b0f2-4ea1-9991-e3fd3f819a90,c509bed1-9882-44d5-8e44-be6c625cf0b6,Sofa Base,box,1,0,-height / 2 + 0.15,0,width,0.3,depth * 1.5,fabric,cabinetMaterial,,,1.00,,2025-10-08 20:13:16.422946+00
+9a1eaafe-f9ac-4fa1-904d-e17059aabda0,8f84abca-d2c2-40ab-9cea-6452094a5fb5,Drawer 3,box,5,0,0.35,depth / 2 + 0.01,width - 0.02,0.20,0.02,door,doorColor,,,1.00,,2025-10-08 16:21:41.621901+00
+9aaa9156-b5e2-46e6-8fe1-fd17f3e98ef1,66f29bed-c9fa-4683-803f-ccf746ae8173,Glass,box,2,0,0,depth/2 + 0.01,width - 0.10,height - 0.10,0.01,handle,#E6E6FA,,,1.00,,2025-10-08 16:53:07.709429+00
+9ae13d27-6c59-4665-ab4a-0faafb0234d5,701c19a3-0083-41d2-aec8-96c540a1833d,plinth_z_leg,box,2,cornerDepth/2 - legLength/2 - 0.1,-height/2 + plinthHeight/2,0,cornerDepth - 0.2,plinthHeight,legLength,plinth,,,,1.00,!isWallCabinet,2025-10-08 10:51:01.108456+00
+9ae4e681-d0a4-43d4-a24b-a165ef7eeb0f,18247c33-96d5-4d20-98f0-2aa1c16652b9,Left Drawer,box,2,-width/3,0,depth/2 + 0.01,width/3 - 0.02,height/2,0.02,door,doorColor,,,1.00,,2025-10-08 16:50:15.91125+00
+9b9a982d-669b-47c0-ab1a-86888b200827,67ffa17c-64bd-4d74-b065-4365078dbb47,Cabinet,box,1,0,0,0,width,height,depth,cabinet_body,#F5F5DC,,,1.00,,2025-10-08 16:51:11.543287+00
+9bcdecb6-bd71-4c72-9fd4-26cef6073f1f,58008eb6-1f8e-4b96-a083-68a9221ed984,Left Basin,box,2,-width/4,height/2 + 0.05,0,width/2 - 0.10,0.10,depth - 0.10,handle,#FFFFFF,,,1.00,,2025-10-08 16:51:11.543287+00
+9c4ca658-59cd-479b-8d2e-dcb5089861f2,aa1bf66a-1be0-47cd-b94d-7c7303f26f2b,Body,box,1,0,0,0,width,height,depth,cabinet_body,#8B4513,,,1.00,,2025-10-08 16:52:06.676597+00
+9c9d855e-b3a7-4cc7-814f-fddafda528f9,74a5dc8b-f168-4f9b-9af6-8a94af323573,Door,box,3,0,0.075,depth / 2 + 0.01,width - 0.02,height - 0.17,0.02,door,doorColor,,,1.00,,2025-10-08 16:16:19.97502+00
+9d276d02-d789-4c20-8fd8-0c70f343aa36,a000225c-807b-41ef-942f-768c8bc3308a,Drawer 1,box,2,0,height * 0.3,depth/2 + 0.01,width - 0.02,height * 0.3,0.02,door,#A9A9A9,,,1.00,,2025-10-08 16:52:06.676597+00
+9d8a9086-40a1-40d2-baae-24011ca147d0,2e1ccd04-2c84-42fa-a4a7-e8decbae2963,Basin,box,1,0,0,0,width - 0.10,height,depth - 0.10,handle,#FFFFFF,,,1.00,,2025-10-08 17:10:09.489775+00
+9f7ccadb-0d37-4482-b05e-7dc87e1d99b2,48071a77-2b2c-4f6a-944f-728720ac1bc6,Plinth,box,1,0,-height / 2 + 0.075,0,width,0.15,depth - 0.05,plinth,plinthColor,,,1.00,,2025-10-08 16:16:19.97502+00
+9fcd4fa9-36c1-4b31-bcff-614e8ea6282d,6eb7a60e-26bc-404a-be49-dd71d9aadfdb,Upper Door,box,5,0,height * 0.25,depth/2 + 0.01,width - 0.02,height * 0.4,0.02,door,doorColor,,,1.00,,2025-10-08 17:10:22.990597+00
+a033ee93-0ff5-45a9-a7a1-1d8f6ecd4a92,c04436d2-a13a-4c22-99ba-d1966909d67e,Basin,box,1,0,0,0,width - 0.10,height,depth - 0.10,handle,#B87333,,,1.00,,2025-10-08 17:10:09.489775+00
+a0532b99-3c9b-496b-b851-0f3ec02d5c4a,8f2a88ca-8b2f-40ef-a4c1-db1908f36420,Left Glass,box,2,-width/4,0,depth/2 + 0.01,width/2 - 0.10,height - 0.10,0.01,handle,#E6E6FA,,,1.00,,2025-10-08 16:53:07.709429+00
+a08612cc-d278-494b-8e2c-15c751294afc,03eb0f79-0551-419a-9f91-9d384636cabc,Pedestal,box,2,0,0,0,0.25,height * 0.5,0.25,cabinet_body,#8B4513,,,1.00,,2025-10-08 16:52:38.215415+00
+a1f90999-d6d2-4867-8720-137b5ef706ff,b0d7edac-6808-4ff4-8d08-3c7db61bae29,Cabinet,box,1,0,0,0,width,height,depth,cabinet_body,cabinetColor,,,1.00,,2025-10-08 16:52:17.357255+00
+a223361d-3503-446c-90c8-b6a657814cb0,2572fce1-aec7-4381-a448-8bb739e45557,Cabinet,box,1,0,0,0,width,height,depth,cabinet_body,#8B4513,,,1.00,,2025-10-08 16:52:38.215415+00
+a24ee89b-ba8e-492e-8eaf-aff2916bed05,a000225c-807b-41ef-942f-768c8bc3308a,Body,box,1,0,0,0,width,height,depth,cabinet_body,#808080,,,1.00,,2025-10-08 16:52:06.676597+00
+a27326b5-d650-4406-9027-b294fa3dd178,60f2345b-4c36-4f2f-95d0-493b16b7374a,Stand Neck,box,4,0,-height / 2,depth / 4,0.05,0.1,depth / 3,handle,#333333,,,1.00,,2025-10-08 20:13:16.422946+00
+a33321c4-c77a-45d3-bc5f-7834f688eafa,18247c33-96d5-4d20-98f0-2aa1c16652b9,Body,box,1,0,0,0,width,height,depth,cabinet_body,cabinetColor,,,1.00,,2025-10-08 16:50:15.91125+00
+a34e80b9-1141-4647-b796-3881bbfc2a09,678d0eca-8539-42b0-82c9-a41ea45b92db,Body,box,1,0,0,0,width,height,depth,cabinet_body,cabinetColor,,,1.00,,2025-10-08 16:52:17.357255+00
+a4811ae3-4f20-4f7e-8d01-4846d343fd7b,8fef412a-8649-4895-8cd5-fd53d0677ac1,Door,box,3,0,plinthHeight / 2,depth / 2 + 0.01,width - 0.02,doorHeight,0.02,door,doorMaterial,,,1.00,,2025-10-08 15:51:04.652333+00
+a4c983df-1893-47fa-89fb-4f90ff273b4e,40a9b4a4-3446-45e2-a064-20563fd65872,Basin,box,1,-width/4,0,0,width * 0.4,height,depth - 0.10,handle,#FFFFFF,,,1.00,,2025-10-08 17:10:09.489775+00
+a4d0192f-e80e-471c-9e72-a6b3b616e5c0,932bc10c-f028-4375-8593-8d2f9bb30fbb,Leg Front Left,box,2,-width / 2 + 0.05,-height / 2 + 0.35,-depth * 1.5 / 2 + 0.05,0.08,0.7,0.08,wood,cabinetMaterial,,,1.00,,2025-10-08 20:13:16.422946+00
+a5b166fd-3c4a-4df6-a28d-f66da7163b31,cef957ae-dd2c-4af6-b5bf-1b912b9d168a,Door,box,3,0,plinthHeight / 2,depth / 2 + 0.01,width - 0.02,doorHeight,0.02,door,doorMaterial,,,1.00,,2025-10-08 15:51:04.652333+00
+a5ff2240-2015-414e-be7b-ac5060e5bcd5,69ee4b5a-4b1b-4bd7-a2c1-e6485f8585e2,Door,box,2,0,0,depth / 2 + 0.01,width - 0.02,height - 0.02,0.02,door,#c0c0c0,,,1.00,,2025-10-08 16:16:19.97502+00
+a6d89f0f-75a1-435c-821e-4b19697ae38b,32cb2cfc-c34e-4c65-be33-70e977ff9b0b,Body,box,1,0,0,0,width,height,depth,cabinet_body,#8B4513,,,1.00,,2025-10-08 16:52:06.676597+00
+a70bcee2-e4e1-456e-8495-bd3b889ed1c3,4ae82ee6-9f21-4b0d-a266-ffbf712213a7,Microwave Door,box,5,0,height * 0.05,depth/2 + 0.01,width - 0.02,height * 0.18,0.02,door,#000000,,,1.00,,2025-10-08 17:10:22.990597+00
+a7944f6b-195d-4756-a2ad-f0ce6bebb8e8,85148b77-0e57-40c1-995f-1858ad0a9793,Seat,box,1,0,-height * 0.25,0.05,width,height * 0.25,depth * 0.7,cabinet_body,#8B4513,,,1.00,,2025-10-08 16:50:52.815401+00
+a7e7bee6-88d2-4815-985b-ab4ce91576ae,cbcb38fc-44e4-48f0-ac36-eccc7c176b26,Upper Cabinet Door,box,7,0,height * 0.3,depth/2 + 0.01,width - 0.02,height * 0.35,0.02,door,doorColor,,,1.00,,2025-10-08 17:10:22.990597+00
+a908d6da-9ad5-4968-aa60-6f7d9439a1e1,db3232db-8bc4-4f1a-bee6-19b52573b0ca,Leg 4,box,5,width/2 - 0.05,-height * 0.25,depth/2 - 0.05,0.08,height * 0.5,0.08,cabinet_body,#8B4513,,,1.00,,2025-10-08 16:52:38.215415+00
+a94cde0f-84fd-48e9-b8ea-a45c626a7703,68a29542-98e7-4355-846f-4d57d0a3d341,Left Basin,box,2,-width * 0.25,height * 0.25,0,width * 0.4,height * 0.15,depth * 0.7,handle,#D3D3D3,,,1.00,,2025-10-08 16:52:53.546878+00
+a9ac528a-124f-4b35-a41a-428329276335,05ed4077-1175-4680-b6b4-5899e967f400,Base,box,1,0,-height * 0.1,0,width,height * 0.8,depth,cabinet_body,cabinetColor,,,1.00,,2025-10-08 16:50:52.815401+00
+ab551359-e2d8-4387-92df-95481d0a4393,6942fc4e-5bf6-480e-81ea-16c79a782954,Seat,box,4,0,-height / 2 + 0.65,depth * 0.15,width * 0.5,0.02,depth * 0.5,handle,#FFFFFF,,,1.00,,2025-10-08 20:21:21.129584+00
+ab63ebba-6e6c-44e4-a2bf-4482a8e208be,18278cf6-34b4-4a8a-aced-b5d959fcdc71,Door Left,box,3,-width/4,height * 0.08,depth/2 + 0.01,width/2 - 0.02,height * 0.75,0.02,door,doorColor,,,1.00,,2025-10-08 16:52:53.546878+00
+ad776e9b-3b18-43f4-bba3-e0b3714d03e1,011f5272-69b3-4e8a-8990-aea9ddc922c7,Plinth,box,1,0,-height / 2 + 0.075,0,width,0.15,depth - 0.05,plinth,plinthColor,,,1.00,,2025-10-08 16:21:41.621901+00
+adb5c832-02e4-44b6-87a2-e1f6b6e1499c,6d832a0d-b907-43fd-b2e7-ac5f567f9f66,Drawer 2,box,3,0,-height/2 + 0.37,depth/2 + 0.01,width - 0.02,0.22,0.02,door,doorColor,,,1.00,,2025-10-08 16:50:15.91125+00
+adf3e7ec-8c5c-4c70-879e-28d5f45e15a6,964e5f6b-ad77-4fa1-97ae-e8b749432420,Seat,box,1,0,-height * 0.2,0.05,width,height * 0.3,depth * 0.7,cabinet_body,#3A6EA5,,,1.00,,2025-10-08 16:51:41.19204+00
+ae43a77a-6a77-4a8f-a05e-f4893f201ac4,d2f09b50-7f56-4894-95a6-f09918efbaa8,Basin,box,1,0,0,0,width - 0.10,height,depth - 0.10,handle,#c0c0c0,,,1.00,,2025-10-08 17:10:09.489775+00
+ae45c8f8-90fe-461f-82fb-0e8f088de66c,ab48a209-ebc8-4e5e-9436-f2d3925ef60f,Sink Basin,box,1,0,-0.05,0,width - 0.10,height,depth - 0.10,handle,#c0c0c0,,,1.00,,2025-10-08 16:17:02.441798+00
+af190669-de0b-4923-9a25-522144167b73,bcf1a350-6a68-42a9-a552-297f16e2e697,Door,box,2,0,0,depth/2 + 0.01,width - 0.02,height - 0.02,0.02,door,doorColor,,,1.00,,2025-10-08 16:52:53.546878+00
+af7b6d3d-43cd-4034-b5f2-8a8c7b8b27c2,f7ed74c1-79a7-45d4-acc5-d8560647b38f,Basin,box,1,0,0,0,width - 0.10,height * 0.8,depth - 0.10,handle,#FFFFFF,,,1.00,,2025-10-08 17:10:09.489775+00
+b059c8e9-0bcd-4521-b7f8-65d9376f9af4,43b45e50-439e-4647-b320-7b0d2d51d311,Seat,box,1,0,0,0,width,0.1,depth,fabric,cabinetMaterial,,,1.00,,2025-10-08 20:13:16.422946+00
+b0a6a58d-55df-4f2c-9db6-26b895b94555,ec259a23-2f20-43c4-b668-03ad5b1f9572,Top,box,1,0,height/2 - 0.02,0,width,0.04,depth,cabinet_body,#8B4513,,,1.00,,2025-10-08 16:52:38.215415+00
+b0bb6842-27bd-4653-959e-5ea6872843f6,74a5dc8b-f168-4f9b-9af6-8a94af323573,Handle,box,4,width / 2 - 0.09,height / 2 - 0.15,depth / 2 + 0.03,0.14,0.03,0.04,handle,handleColor,,,1.00,,2025-10-08 16:16:19.97502+00
+b1799fdf-6c61-4dc7-bed9-e138d7e1daf4,22848d1e-3468-46fe-95e4-fe129380a07d,Drawer 1,box,2,0,height * 0.25,depth/2 + 0.01,width - 0.02,height * 0.25,0.02,door,doorColor,,,1.00,,2025-10-08 16:52:06.676597+00
+b1e98a6c-5286-4fbc-8df4-85532ca71083,28b5b220-dc59-4aa6-83e6-736b14a39923,Left Leg,box,2,-width/2 + 0.05,-height * 0.25,-depth/2 + 0.05,0.10,height * 0.5,0.10,cabinet_body,#8B4513,,,1.00,,2025-10-08 16:52:06.676597+00
+b2be9442-9953-4349-a6f2-8d8b5fe5ff96,84b234b5-f96f-4080-9b71-b9e66cf41dfb,Cabinet Body,box,1,0,0,0,width,height,depth,cabinet_body,cabinetColor,,,1.00,,2025-10-08 16:07:57.673274+00
+b2d5f873-c483-421e-a9e6-501b5e6394b8,e89494e7-18ed-4c7d-ae60-3ab9ef557530,Body,box,1,0,0,0,width,height,depth,cabinet_body,#FFFFFF,,,1.00,,2025-10-08 16:52:53.546878+00
+b3155f98-1e6f-426d-9b22-f96531782a6b,e7c2ceda-dd2b-44ee-b187-4e14baf4ff31,Door Leg 1,box,5,legLength/2,plinthHeight / 2,depth/2 + 0.01,legLength - 0.02,height - plinthHeight - 0.02,0.02,door,doorColor,,,1.00,,2025-10-08 17:08:02.404343+00
+b39c0dbb-40fb-41d6-9d74-ef457dbba136,00532189-1f15-4a64-a709-6e4c8a1f5a94,Left Bowl,box,1,-width / 4,-0.05,0,width / 2 - 0.10,height,depth - 0.10,handle,#c0c0c0,,,1.00,,2025-10-08 16:17:02.441798+00
+b3a0b288-3baa-4965-9b15-7237cb608260,6a45d0f6-5116-409a-8ab9-aacebd466a31,Front door,box,5,0,plinthHeight / 2,cornerDepth - legLength / 2 + 0.01,legLength - 0.05,doorHeight,0.02,door,doorColor,,,1.00,,2025-10-08 11:23:36.663103+00
+b4f3f5d0-733f-423d-b961-a4db3090b70c,60f97677-778e-4301-9a3f-70f5189b28d4,Basin,box,2,0,height/2 + 0.05,0,width - 0.10,0.10,depth - 0.10,handle,#FFFFFF,,,1.00,,2025-10-08 16:51:11.543287+00
+b4fce74b-3ed0-40f6-bd17-a3ce3871b414,34555b19-d1de-4afc-8cc0-b4763a45adad,Base,box,1,0,-height/2,0,width,height * 0.3,depth,cabinet_body,#8B4513,,,1.00,,2025-10-08 16:50:52.815401+00
+b5110096-42a5-441c-aa57-3d5d0bf97b99,6942fc4e-5bf6-480e-81ea-16c79a782954,Bowl,cylinder,2,0,-height / 2 + 0.4,depth * 0.15,width * 0.45,0.5,width * 0.42,ceramic,#FFFFFF,,,1.00,,2025-10-08 20:21:21.129584+00
+b5c32758-6faf-41d9-8d33-775294a66e1a,6eb7a60e-26bc-404a-be49-dd71d9aadfdb,Plinth,box,1,0,-height / 2 + plinthHeight / 2,0,width,plinthHeight,depth - 0.05,plinth,plinthColor,,,1.00,,2025-10-08 17:10:22.990597+00
+b616cb23-6ad7-42fe-8c5d-b9ce01373275,6d832a0d-b907-43fd-b2e7-ac5f567f9f66,Drawer 3,box,4,0,height/2 - 0.37,depth/2 + 0.01,width - 0.02,0.22,0.02,door,doorColor,,,1.00,,2025-10-08 16:50:15.91125+00
+b6b33b4e-cdb5-4b4f-92d4-45e0a863bd0b,4e51050f-bcc9-40d9-9d76-8bd927f038d9,Center Frame,box,1,0,0,depth * 0.15,width * 0.5,height,0.12,door,#FFFFFF,,,1.00,,2025-10-08 16:53:07.709429+00
+b75305f4-c8c8-40be-94bd-421a84eb3016,74a5dc8b-f168-4f9b-9af6-8a94af323573,Cabinet Body,box,2,0,0.075,0,width,height - 0.15,depth,cabinet_body,cabinetColor,,,1.00,,2025-10-08 16:16:19.97502+00
+b85e214f-140b-4df6-9b47-054128fdac97,138cf90c-ba72-450e-a50e-f39da21ca44d,Button 1,box,9,-width * 0.1,height * 0.22,depth / 2 + 0.015,0.06,0.02,0.005,handle,#444444,,,1.00,,2025-10-08 20:13:51.848363+00
+b8db1559-afd3-4d6b-b8c4-4ad1de149507,b131724a-219a-4011-8a42-02ba2d18fbc2,Drawer 2,box,3,0,-height/2 + 0.37,depth/2 + 0.01,width - 0.02,0.22,0.02,door,doorColor,,,1.00,,2025-10-08 16:50:15.91125+00
+b97f85dc-cd69-4ddd-b6e1-358121ec1bb7,2b2a4523-6cda-4b4e-85f2-1173d0d2f7d2,Drawer 1,box,2,-width/4,height * 0.3,depth/2 + 0.01,width/2 - 0.02,height * 0.2,0.02,door,doorColor,,,1.00,,2025-10-08 16:52:17.357255+00
+b9ccdc5a-cbb1-4ffb-862f-5a5c6dbbe949,8f84abca-d2c2-40ab-9cea-6452094a5fb5,Cabinet Body,box,2,0,0.075,0,width,height - 0.15,depth,cabinet_body,cabinetColor,,,1.00,,2025-10-08 16:21:41.621901+00
+ba16f45b-8f2c-4dcb-9b6a-d2f8629ee3dd,3bbaffbe-61c9-4100-ab07-141857341a66,Basin,box,2,0,height/2 + 0.05,0,width - 0.10,0.10,depth - 0.10,handle,#FFFFFF,,,1.00,,2025-10-08 16:51:11.543287+00
+ba27bc58-f9d1-43b2-a157-d92d1488214e,6a45d0f6-5116-409a-8ab9-aacebd466a31,Cabinet Z-leg,box,4,cornerDepth / 2 - legLength / 2,plinthHeight / 2,0,cornerDepth,cabinetHeight,legLength,cabinet,cabinetMaterial,,,1.00,,2025-10-08 11:23:36.663103+00
+ba933dd1-67e8-4bea-be5c-00367aa12a9e,88cbdc7f-4633-487c-b134-8993de9beb37,Basin,box,1,-width/4,0,0,width * 0.4,height,depth - 0.10,handle,#c0c0c0,,,1.00,,2025-10-08 17:10:09.489775+00
+bae408cb-e5dc-425c-a10b-f4902de2b49d,701c19a3-0083-41d2-aec8-96c540a1833d,cabinet_z_leg,box,4,cornerDepth/2 - legLength/2,plinthHeight/2,0,cornerDepth,cabinetHeight,legLength,cabinet_body,,,,1.00,,2025-10-08 10:51:01.108456+00
+baf3ad83-8531-4928-906d-e95e1b31879c,18278cf6-34b4-4a8a-aced-b5d959fcdc71,Plinth,box,1,0,-height / 2 + 0.075,0,width,0.15,depth - 0.05,plinth,plinthColor,,,1.00,,2025-10-08 16:52:53.546878+00
+bb1c22c9-79dc-4197-b03d-6b23299f8f43,e923b001-1a72-4ed9-8cd9-d22b501c0182,Right Glass,box,3,width/4,0,0,width/2 - 0.10,height - 0.10,depth * 0.5,handle,#E6E6FA,,,1.00,,2025-10-08 16:53:07.709429+00
+bb5635d2-c430-4b26-97ce-d6afcc9dd3c8,d2f09b50-7f56-4894-95a6-f09918efbaa8,Tap,box,2,0,height + 0.10,0,0.03,0.15,0.03,handle,#808080,,,1.00,,2025-10-08 17:10:09.489775+00
+bb80efd0-c550-4c03-bc11-17e590cacedb,4ae82ee6-9f21-4b0d-a266-ffbf712213a7,Oven Door,box,6,0,-height * 0.25,depth/2 + 0.01,width - 0.02,height * 0.25,0.02,door,#000000,,,1.00,,2025-10-08 17:10:22.990597+00
+bbd68e34-eb13-4268-882a-49aec2821921,185af074-b459-46f7-bc85-39f4d9a5ec5d,Tray,box,1,0,-height/2 + 0.05,0,width,0.10,depth,handle,#FFFFFF,,,1.00,,2025-10-08 16:51:11.543287+00
+bc50964c-cb3d-4390-a7ae-7c0539f63ffa,ca8750ee-44bd-463f-b2e1-cd1ae406fdab,Glass Door,box,3,0,height * 0.2,depth * 0.4 + 0.01,width - 0.02,height * 0.5,0.01,handle,#E6E6FA,,,1.00,,2025-10-08 16:52:38.215415+00
+bc9ccb09-8cdd-4a81-858e-cc17c46b9be7,7ead7f0c-afe5-4851-aec1-dc1b7911fab1,Lid,box,2,0,height/2 + 0.02,0,width - 0.05,0.04,depth - 0.05,door,#E0E0E0,,,1.00,,2025-10-08 16:52:53.546878+00
+bcc47034-9aa8-4938-b0fc-456e93cdbf36,233fc002-1ea4-4d6b-bc98-08491905c3bd,Door 3,box,4,width / 8,0,depth / 2 + 0.01,width / 4 - 0.02,height - 0.02,0.02,door,doorColor,,,1.00,,2025-10-08 16:50:15.91125+00
+bccf90d4-b984-49bb-90b9-dbb2eaf6cd0e,4ae82ee6-9f21-4b0d-a266-ffbf712213a7,Upper Cabinet,box,2,0,height * 0.3,0,width,height * 0.4,depth,cabinet_body,cabinetColor,,,1.00,,2025-10-08 17:10:22.990597+00
+bd51e8f4-c7ff-4ef5-b23f-77c60ba19f88,275d47ea-6d8f-42d0-9270-c895bac3edc7,Door,box,2,0,0,depth/2 + 0.01,width - 0.02,height - 0.02,0.02,door,#FFFFFF,,,1.00,,2025-10-08 16:51:11.543287+00
+be545ddb-c368-4db4-a2c0-8e5157aba788,99f5c123-079d-4b16-ab5c-3f2a5545263e,Plinth,box,1,0,-height / 2 + plinthHeight / 2,0,width,plinthHeight,depth - 0.05,plinth,plinthColor,,,1.00,,2025-10-08 17:10:22.990597+00
+bf8314dc-32c5-42bb-8ef3-d999ffaa36c3,d2960747-e61c-4df5-b56d-4a06f513d9c1,Door,box,2,0,0,depth / 2 + 0.01,width - 0.02,height - 0.02,0.02,door,doorColor,,,1.00,,2025-10-08 16:07:57.673274+00
+bff272ea-ee9a-4e0e-a773-67ef45a7186b,7ead7f0c-afe5-4851-aec1-dc1b7911fab1,Body,box,1,0,0,0,width,height,depth,cabinet_body,#FFFFFF,,,1.00,,2025-10-08 16:52:53.546878+00
+c0bbe5c1-38ae-4fdc-813f-c5635a6fec32,011f5272-69b3-4e8a-8990-aea9ddc922c7,Cabinet Body,box,2,0,0.075,0,width,height - 0.15,depth,cabinet_body,cabinetColor,,,1.00,,2025-10-08 16:21:41.621901+00
+c0ea111c-59e1-408e-acbc-c1a8805b415b,8f84abca-d2c2-40ab-9cea-6452094a5fb5,Plinth,box,1,0,-height / 2 + 0.075,0,width,0.15,depth - 0.05,plinth,plinthColor,,,1.00,,2025-10-08 16:21:41.621901+00
+c1b8db8e-54e5-497f-8a81-a504b27ee116,4ae82ee6-9f21-4b0d-a266-ffbf712213a7,Upper Cabinet Door,box,7,0,height * 0.3,depth/2 + 0.01,width - 0.02,height * 0.35,0.02,door,doorColor,,,1.00,,2025-10-08 17:10:22.990597+00
+c2a11ca8-4884-49ac-90a9-9f43ee1736dd,8e855643-889f-4175-bd24-49bc687c9b68,Cabinet Body,box,1,0,0,0,width,height,depth,cabinet_body,cabinetColor,,,1.00,,2025-10-08 16:07:57.673274+00
+c3ab3f39-907f-445e-a4a8-8af09e47e650,e6f8ec86-e4f5-46e5-b17f-52f925d5430b,Drawer 1,box,2,0,height * 0.2,depth/2 + 0.01,width - 0.02,height * 0.4,0.02,door,#A9A9A9,,,1.00,,2025-10-08 16:52:06.676597+00
+c3c618ea-9b3c-44b9-9253-3d427d8d5745,6942fc4e-5bf6-480e-81ea-16c79a782954,Tank,box,3,0,height * 0.1,-depth / 2 + 0.15,width - 0.05,height * 0.6,0.25,ceramic,#FFFFFF,,,1.00,,2025-10-08 20:21:21.129584+00
+c3e42942-5ed9-46e1-b290-552794ae7ba2,4d6a40bc-b781-414b-9aad-ac5cc3077cbb,Cabinet Body,box,2,0,0.075,0,width,height - 0.15,depth,cabinet_body,cabinetColor,,,1.00,,2025-10-08 16:21:41.621901+00
+c3e5dae0-9d73-4f55-8081-93d75f9df0d3,d91a5c3a-2af9-4c8f-8cb3-a62f84cef732,Right Wall,box,3,width / 2 - 0.02,0,0,0.01,height - 0.2,depth - 0.1,shower_glass,#E6F7FF,,,0.30,,2025-10-08 20:21:21.129584+00
+c42f46df-7fd4-49b0-a2c7-29d44e62138a,6eb7a60e-26bc-404a-be49-dd71d9aadfdb,Oven Housing,box,3,0,-height * 0.15,0,width,height * 0.35,depth,cabinet_body,#2c2c2c,,,1.00,,2025-10-08 17:10:22.990597+00
+c49e3984-6218-4e43-825e-f7a36aeabe7f,900687f1-600b-4b6a-a5ec-38d994a4e30c,Cabinet Body,box,1,0,0,0,width,height,depth,cabinet_body,cabinetColor,,,1.00,,2025-10-08 16:50:15.91125+00
+c553efbc-d988-4552-b164-609473f65cb8,011f5272-69b3-4e8a-8990-aea9ddc922c7,Drawer 3,box,5,0,0.35,depth / 2 + 0.01,width - 0.02,0.20,0.02,door,doorColor,,,1.00,,2025-10-08 16:21:41.621901+00
+c602d71a-d8f7-41f3-a1f2-adc7c7126d9c,0733d7f4-78d1-46a2-a638-92ed940bd0f7,Handle,box,3,width / 2 - 0.08,height / 2 - 0.10,depth / 2 + 0.03,0.12,0.03,0.04,handle,handleColor,,,1.00,,2025-10-08 16:07:57.673274+00
+c6422fa0-ee58-4954-aa39-181dbfcc3f9f,932bc10c-f028-4375-8593-8d2f9bb30fbb,Leg Back Left,box,4,-width / 2 + 0.05,-height / 2 + 0.35,depth * 1.5 / 2 - 0.05,0.08,0.7,0.08,wood,cabinetMaterial,,,1.00,,2025-10-08 20:13:16.422946+00
+c657b985-465e-49cd-ab4c-fef2f037fd5f,03846780-e5ea-4d9e-8b30-c9400090f7d0,Right Door,box,3,width / 4,0,depth / 2 + 0.02,width / 2 + 0.05,height - 0.02,0.02,door,doorColor,,,1.00,,2025-10-08 16:50:15.91125+00
+c6e21e46-9c8c-4595-b139-caed1ec2f86f,cef957ae-dd2c-4af6-b5bf-1b912b9d168a,Plinth,box,1,0,-height / 2 + plinthHeight / 2,0,width,plinthHeight,depth - 0.05,plinth,plinthColor,,,1.00,!isWallCabinet,2025-10-08 15:51:04.652333+00
+c7193689-d69d-4fe3-997b-c25abe98eb22,68fcf22e-52dc-4cd2-9bc4-47d888fb8752,Pillow Right,box,5,width / 4,-height / 2 + 0.2 + 0.3 + 0.05,-depth * 2 / 3,width / 3,0.1,depth / 2,mattress,#F5F5F5,,,1.00,,2025-10-08 20:13:16.422946+00
+c77b22e8-af5c-48b9-81a2-fd428b632c97,cd750faf-3986-4305-87fb-26d30dbb0b35,Cabinet,box,1,0,0,0,width,height,depth,cabinet_body,#8B4513,,,1.00,,2025-10-08 16:51:41.19204+00
+c7895b1c-1203-4399-bb9c-0dd6392f85a7,9aa02400-fcea-4e33-ab7f-c89892bbdad6,Glass Door,box,2,0,0,depth/2 + 0.01,width - 0.02,height - 0.02,0.01,handle,#E6E6FA,,,1.00,,2025-10-08 16:51:41.19204+00
+c7b52eb0-4e73-4e39-bc70-0dca8341d742,c2bd963a-3b33-496c-9c13-d427aebebab0,Door Leg 1,box,5,legLength/2,plinthHeight / 2,depth/2 + 0.01,legLength - 0.02,height - plinthHeight - 0.02,0.02,door,doorColor,,,1.00,,2025-10-08 17:08:02.404343+00
+c82d0006-d6ba-455e-b4bb-2e626cdc1832,520dc8d6-d9a7-4009-b755-761634410954,Cabinet Body,box,2,0,plinthHeight / 2,0,width,cabinetHeight,depth,cabinet_body,cabinetMaterial,,,1.00,,2025-10-08 15:51:04.652333+00
+c85cefe8-76e7-49da-900f-a51cceebb5fd,8fef412a-8649-4895-8cd5-fd53d0677ac1,Cabinet Body,box,2,0,plinthHeight / 2,0,width,cabinetHeight,depth,cabinet_body,cabinetMaterial,,,1.00,,2025-10-08 15:51:04.652333+00
+c87c2264-bcd1-46a7-bf33-63b89c749934,b03dbad7-52a0-4edf-ac46-31c7c353818e,Tap,box,2,0,height + 0.10,-depth/4,0.03,0.15,0.03,handle,#808080,,,1.00,,2025-10-08 17:10:09.489775+00
+c87d54bf-d3e8-4952-a8b4-35e2b215ae0a,bc8eb1f9-e05b-4098-aa78-78f4a23253ac,Basin Leg 2,box,2,0,0,legLength/2,depth - 0.10,height,legLength - 0.10,handle,#FFFFFF,,,1.00,,2025-10-08 17:10:09.489775+00
+c972073c-3729-4191-b8f1-072db8881a17,6633542b-1c9b-4ce6-8d44-e9923ca32628,Door,box,3,0,height * 0.08,depth/2 + 0.01,width - 0.02,height * 0.75,0.02,door,doorColor,,,1.00,,2025-10-08 16:52:53.546878+00
+c98adcda-07ea-41f1-996f-1814ce0d90cd,00532189-1f15-4a64-a709-6e4c8a1f5a94,Right Bowl,box,2,width / 4,-0.05,0,width / 2 - 0.10,height,depth - 0.10,handle,#c0c0c0,,,1.00,,2025-10-08 16:17:02.441798+00
+ca1a0985-7794-46b1-94c4-4ddcb8253ebc,bcc9bbc8-72b4-4c2a-bb58-5fd2516e1aa2,Door,box,2,0,0,depth/2 + 0.01,width - 0.02,height - 0.02,0.02,door,#F5DEB3,,,1.00,,2025-10-08 16:52:17.357255+00
+cbc0de8c-6d21-4d34-a684-0aeb500004b0,0e669224-8fff-44ce-a4b7-b7d65dc371b8,Worktop,box,1,0,0,0,width,height,depth,cabinet_body,worktopColor,,,1.00,,2025-10-08 16:17:02.441798+00
+cbe3cee2-e6d5-433a-b265-7fcd66e21d08,6942fc4e-5bf6-480e-81ea-16c79a782954,Base,box,1,0,-height / 2 + 0.15,0,width,0.3,depth,ceramic,#FFFFFF,,,1.00,,2025-10-08 20:21:21.129584+00
+cbe4b422-1fc3-46e2-b0cd-4f19b07651d2,60f2345b-4c36-4f2f-95d0-493b16b7374a,Screen,box,1,0,0,0,width,height,0.05,screen,#000000,,,1.00,,2025-10-08 20:13:16.422946+00
+cc444cd5-2632-4af5-92c9-9a9565a4768c,74a5dc8b-f168-4f9b-9af6-8a94af323573,Plinth,box,1,0,-height / 2 + 0.075,0,width,0.15,depth - 0.05,plinth,plinthColor,,,1.00,,2025-10-08 16:16:19.97502+00
+cc6d65cf-4a8d-455c-bcae-6863fb92708a,701c19a3-0083-41d2-aec8-96c540a1833d,handle_front,box,7,legLength/2 - 0.05,plinthHeight/2,cornerDepth - legLength/2 + 0.03,0.02,0.15,0.02,handle,,,,1.00,,2025-10-08 10:51:01.108456+00
+ccbad7c6-91a3-487c-9f58-dd01a625fef7,330bdaf0-cd6c-406f-bf64-365483ac96f1,Tap,box,3,-width/4,height + 0.10,-depth/4,0.03,0.15,0.03,handle,#808080,,,1.00,,2025-10-08 17:10:09.489775+00
+cd00af29-ce4f-49c8-8b80-cd71e24ba0e1,18278cf6-34b4-4a8a-aced-b5d959fcdc71,Body,box,2,0,height * 0.08,0,width,height * 0.75,depth,cabinet_body,cabinetColor,,,1.00,,2025-10-08 16:52:53.546878+00
+cd17714f-7089-4676-a46c-8e99c5ec90e2,aa8326b8-28dd-41aa-9882-dcc39abc4ea1,Pelmet,box,1,0,0,0,width,height,depth,door,#ffffff,,,1.00,,2025-10-08 16:21:59.376939+00
+cd40e5e6-c3be-4298-9fc6-438a5428bb09,275d47ea-6d8f-42d0-9270-c895bac3edc7,Cabinet,box,1,0,0,0,width,height,depth,cabinet_body,#F5F5DC,,,1.00,,2025-10-08 16:51:11.543287+00
+cd9c7a68-7a65-48df-a652-cf46047e6f2a,b3ad958f-cfc8-4067-a25a-aa78e43c7088,Right Panel,box,2,width/4,0,0,width/2 - 0.01,height,depth,door,doorColor,,,1.00,,2025-10-08 16:53:07.709429+00
+cdb4bfd8-aa2b-4c78-b6e6-9968e9e632ed,138cf90c-ba72-450e-a50e-f39da21ca44d,Program Dial,cylinder,8,-width * 0.2,height * 0.3,depth / 2 + 0.02,0.05,0.03,0.05,handle,#dddddd,,,1.00,,2025-10-08 20:13:51.848363+00
+ce024826-43f7-48df-b36d-f3ddcef69c61,856f9506-0b8d-4d1b-ad48-947f4b2cbbd6,Cabinet,box,1,0,0,0,width,height,depth,cabinet_body,cabinetColor,,,1.00,,2025-10-08 16:52:17.357255+00
+ce8a22d6-86c4-48b5-b3fe-396f8fb99c43,138cf90c-ba72-450e-a50e-f39da21ca44d,Round Door,cylinder,3,0,-height * 0.1,depth / 2 + 0.01,0.25,0.02,0.25,handle,#e0e0e0,0.60,0.40,1.00,,2025-10-08 20:13:51.848363+00
+ce8c4e06-c13b-4bfc-9825-be97c7da2daa,a50a1e0c-5be6-4196-8a5e-86ba3c15a3fe,Bottom Drawer,box,3,0,0,depth/2 + 0.01,width - 0.02,height * 0.6,0.02,door,doorColor,,,1.00,,2025-10-08 16:52:17.357255+00
+ce938b1c-ce43-4694-b0e0-2485572310ab,203e2f91-047f-4c1d-8374-952625516f22,Tub,box,1,0,0,0,width,height,depth,handle,#FFFFFF,,,1.00,,2025-10-08 16:51:11.543287+00
+cf8a4a79-3776-4396-b22f-80882ab4ad80,932bc10c-f028-4375-8593-8d2f9bb30fbb,Leg Front Right,box,3,width / 2 - 0.05,-height / 2 + 0.35,-depth * 1.5 / 2 + 0.05,0.08,0.7,0.08,wood,cabinetMaterial,,,1.00,,2025-10-08 20:13:16.422946+00
+cf9e3882-4bf1-42cc-9555-7c8089d2c30e,c2bd963a-3b33-496c-9c13-d427aebebab0,Cabinet Body Leg 1,box,3,legLength/2,plinthHeight / 2,0,legLength,height - plinthHeight,depth,cabinet_body,cabinetColor,,,1.00,,2025-10-08 17:08:02.404343+00
+d02032fa-32db-4a48-a143-34c0a069d1cc,8f84abca-d2c2-40ab-9cea-6452094a5fb5,Drawer 1,box,3,0,-0.15,depth / 2 + 0.01,width - 0.02,0.20,0.02,door,doorColor,,,1.00,,2025-10-08 16:21:41.621901+00
+d0dc7ba5-565c-436d-bd12-00510f73c5a4,d0a1fdac-6331-4173-be46-bdbeb403f825,Tap,box,3,0,height + 0.10,-depth/4,0.03,0.15,0.03,handle,#808080,,,1.00,,2025-10-08 17:10:09.489775+00
+d0f59ecd-1eb9-4253-8db4-9ccd1da3cec4,de555033-f7e3-4be5-a10b-0b9033098fca,Coffee Machine Housing,box,3,0,-height * 0.05,0,width,height * 0.25,depth,cabinet_body,#2c2c2c,,,1.00,,2025-10-08 17:10:22.990597+00
+d1206390-a0db-4297-99b5-95ca7d3dab2d,6db647e9-ed2f-493d-9361-e101b30bb5f2,Cabinet,box,1,0,0,0,width,height,depth,cabinet_body,#2F4F4F,,,1.00,,2025-10-08 16:51:41.19204+00
+d15220ba-5fdf-4148-a2fc-750031061ff1,e32d074e-30b5-4e20-828a-022b6c85812b,Door Right,box,3,width/4,0,depth/2 + 0.01,width/2 - 0.02,height - 0.02,0.02,door,doorColor,,,1.00,,2025-10-08 16:52:06.676597+00
+d182d691-e316-46c8-86ca-f05b70c44508,06749961-09a3-4e73-bee0-6e9adcc535d5,Top,box,1,0,height/2 - 0.02,0,width,0.04,depth,cabinet_body,#8B4513,,,1.00,,2025-10-08 16:52:38.215415+00
+d1b07eb5-1f90-4799-8b49-70d02a5d7eb7,d7d0dc73-dc02-4e5a-aee3-eac7a9198680,Oven Door,box,2,0,0,depth / 2 + 0.01,width - 0.02,height - 0.02,0.02,door,#2c2c2c,,,1.00,,2025-10-08 16:16:19.97502+00
+d215923d-bcc5-4988-a94c-5c78052973da,43b45e50-439e-4647-b320-7b0d2d51d311,Leg Back Right,box,6,width / 2 - 0.05,-height / 2 + 0.4,depth / 2 - 0.05,0.05,0.8,0.05,metal_leg,#2F4F4F,,,1.00,,2025-10-08 20:13:16.422946+00
+d26095f8-0993-47dc-bfc3-1973d6d73fb3,f4672c92-cb10-46bd-aaa9-ad034a993177,Cabinet Body,box,2,0,0.075,0,width,height - 0.15,depth,cabinet_body,cabinetColor,,,1.00,,2025-10-08 16:16:19.97502+00
+d312d2ed-ca71-4146-9387-85f56e4356b8,f0527384-cf37-47dd-a56f-50274a47acf1,Frame,box,1,0,0,0,width,height,depth,door,#FFFFFF,,,1.00,,2025-10-08 16:53:07.709429+00
+d340601e-11a5-49f3-bea1-1cd4199d85a8,67ffa17c-64bd-4d74-b065-4365078dbb47,Basin,box,2,0,height/2 + 0.05,0,width - 0.10,0.10,depth - 0.10,handle,#FFFFFF,,,1.00,,2025-10-08 16:51:11.543287+00
+d435a0b5-482d-411f-a519-9d0e9307ac5f,229fe763-0333-4310-a832-134e72d17095,Left Leg,box,2,-width/2 + 0.05,-height * 0.25,-depth/2 + 0.05,0.10,height * 0.5,0.10,cabinet_body,#8B4513,,,1.00,,2025-10-08 16:52:06.676597+00
+d4d2ae2d-1e2c-48c8-bcd6-7d05c123eb25,126b9469-5bf8-43fc-9974-cf49f27f3323,Frame,box,1,0,0,0,width,height,depth,door,#FFFFFF,,,1.00,,2025-10-08 16:53:07.709429+00
+d558c8d8-7b87-4d24-8870-58cfed5645c8,cef957ae-dd2c-4af6-b5bf-1b912b9d168a,Cabinet Body,box,2,0,plinthHeight / 2,0,width,cabinetHeight,depth,cabinet_body,cabinetMaterial,,,1.00,,2025-10-08 15:51:04.652333+00
+d56eb927-f37a-4d69-a750-7cdb80035e24,a42ba33e-850e-4f3a-8919-b6a568953a14,Plinth,box,1,0,-height / 2 + 0.075,0,width,0.15,depth - 0.05,plinth,plinthColor,,,1.00,,2025-10-08 16:21:41.621901+00
+d5d81308-fff1-407b-9654-543cfee4c925,a50a1e0c-5be6-4196-8a5e-86ba3c15a3fe,Body,box,1,0,0,0,width,height,depth,cabinet_body,cabinetColor,,,1.00,,2025-10-08 16:52:17.357255+00
+d5ef0fda-0267-41a5-9d56-38cfae7b5729,6e29b7b4-f7e3-4616-a36d-1390cdd3ac60,Body,box,1,0,0,0,width,height,depth,cabinet_body,#FFFFFF,,,1.00,,2025-10-08 16:52:53.546878+00
+d61c0326-c770-4c2f-9e88-6942c07e6fbe,8f84abca-d2c2-40ab-9cea-6452094a5fb5,Drawer 2,box,4,0,0.10,depth / 2 + 0.01,width - 0.02,0.20,0.02,door,doorColor,,,1.00,,2025-10-08 16:21:41.621901+00
+d6fa9574-93ef-4260-8666-3342bbe6dd22,dd4c0106-bff1-43d5-bda9-fbfe1ca54c18,Left Glass,box,3,-width/4,0,depth/2 + 0.01,width/2 - 0.10,height - 0.40,0.01,handle,#E6E6FA,,,1.00,,2025-10-08 16:53:07.709429+00
+d700e793-9105-4611-a4a3-bc28164b40b9,f7ed74c1-79a7-45d4-acc5-d8560647b38f,Tap,box,3,0,height + 0.10,-depth/4,0.03,0.15,0.03,handle,#808080,,,1.00,,2025-10-08 17:10:09.489775+00
+d74061c9-5d53-47df-8c14-0171243f305a,ae84c78f-02f7-4be9-8e48-66f3724e7a88,Left Panel,box,2,-width * 0.3,0,-0.02,width * 0.3,height,depth,handle,#E8E8E8,,,1.00,,2025-10-08 16:52:17.357255+00
+d79941a1-ff94-4ad4-bbd3-6bd0abd715d6,701c19a3-0083-41d2-aec8-96c540a1833d,cabinet_x_leg,box,3,0,plinthHeight/2,cornerDepth/2 - legLength/2,legLength,cabinetHeight,cornerDepth,cabinet_body,,,,1.00,,2025-10-08 10:51:01.108456+00
+d7c71113-d175-4448-a9f5-18e6657d435b,61b345fb-f418-469d-ad5b-96826f1b9609,Door Panel,box,1,0,0,0,width,height,depth,door,doorColor,,,1.00,,2025-10-08 16:53:07.709429+00
+daed43bc-ffd4-4f43-bf42-dc5a96d13b03,e7c2ceda-dd2b-44ee-b187-4e14baf4ff31,Cabinet Body Leg 1,box,3,legLength/2,plinthHeight / 2,0,legLength,height - plinthHeight,depth,cabinet_body,cabinetColor,,,1.00,,2025-10-08 17:08:02.404343+00
+dc168b8d-6fb9-4507-8974-b977d7bc67b0,cbcb38fc-44e4-48f0-ac36-eccc7c176b26,Lower Oven Housing,box,4,0,-height * 0.25,0,width,height * 0.28,depth,cabinet_body,#2c2c2c,,,1.00,,2025-10-08 17:10:22.990597+00
+dc4adbc0-bbcc-487a-a515-a40ac8c2cdb7,de35a214-4c26-4600-8a08-5f783086c8f8,Seat,box,1,0,-height * 0.25,0,width,height * 0.1,depth * 0.8,cabinet_body,#8B4513,,,1.00,,2025-10-08 16:52:38.215415+00
+dc9e4c62-6276-4732-9045-309ad7d705fd,92c43fb4-5598-4f65-a554-2cb54185360d,Left Leg,box,2,-width/2 + 0.05,-height * 0.25,-depth/2 + 0.05,0.10,height * 0.5,0.10,cabinet_body,#8B4513,,,1.00,,2025-10-08 16:52:06.676597+00
+dcc799d7-51be-49b7-a848-008de4082e68,540faede-366d-4fa2-b169-97fec6766db4,Cabinet Body,box,1,0,0,0,width,height,depth,cabinet_body,cabinetColor,,,1.00,,2025-10-08 16:07:57.673274+00
+dce6933d-7a22-4081-9881-d05e128dbbba,a4c89af3-8611-4a31-b74b-d2860c50af47,Pelmet,box,1,0,0,0,width,height,depth,door,#ffffff,,,1.00,,2025-10-08 16:21:59.376939+00
+dd84e53c-2a86-45e0-bedd-fee6b262818d,701c19a3-0083-41d2-aec8-96c540a1833d,door_front,box,5,0,plinthHeight/2,cornerDepth - legLength/2 + 0.01,legLength - 0.05,doorHeight,0.02,door,,,,1.00,,2025-10-08 10:51:01.108456+00
+ddf4f221-c645-4959-b2fa-41da9c14cc4e,60f97677-778e-4301-9a3f-70f5189b28d4,Cabinet,box,1,0,0,0,width,height,depth,cabinet_body,#F5F5DC,,,1.00,,2025-10-08 16:51:11.543287+00
+de0089d9-3aa7-4207-acd9-366989700010,b05e350b-5b39-4ff0-bdfa-a4f96cb836cf,Cornice,box,1,0,0,0,width,height,depth,door,#ffffff,,,1.00,,2025-10-08 16:21:59.376939+00
+de56c954-fcbe-47c6-8591-676f159eeab9,8c7ef8e7-5915-4f01-ace3-55252d0dcd2c,Handle,box,2,width/2 - 0.05,0,depth/2 + 0.03,0.03,0.15,0.05,handle,#C0C0C0,,,1.00,,2025-10-08 16:53:07.709429+00
+de933dbc-b78c-438c-9099-acbd34a14465,a6bf00b1-c863-45ed-8031-6674b836812a,Door,box,2,0,0,depth/2 + 0.01,width - 0.02,height - 0.02,0.02,door,doorColor,,,1.00,,2025-10-08 16:51:41.19204+00
+df58acf2-69fa-41dc-9f23-abc492c5e03d,de35a214-4c26-4600-8a08-5f783086c8f8,Back,box,2,0,height * 0.15,-depth * 0.3,width,height * 0.5,depth * 0.1,cabinet_body,#8B4513,,,1.00,,2025-10-08 16:52:38.215415+00
+df5b4e40-1fd2-4652-851e-777401255404,3fc2f0c1-75a5-4ea3-bb9f-e9f64b5ea443,Right Bowl,box,2,width / 4,-0.05,0,width / 2 - 0.10,height,depth - 0.10,handle,#c0c0c0,,,1.00,,2025-10-08 16:17:02.441798+00
+dfe5056b-6853-4ba5-b0d3-af63d6226e11,f8181512-886d-4cfa-873c-8ac43eced305,Back,box,2,0,height * 0.15,-depth * 0.25,width,height * 0.6,depth * 0.2,cabinet_body,#3A6EA5,,,1.00,,2025-10-08 16:51:41.19204+00
+e0d42101-d726-444d-af24-1cb95e79fb39,28b5b220-dc59-4aa6-83e6-736b14a39923,Top,box,1,0,height/2 - 0.02,0,width,0.04,depth,cabinet_body,#8B4513,,,1.00,,2025-10-08 16:52:06.676597+00
+e14fd802-00e1-4498-a429-5e16620a0677,7d2173f0-346d-4a0d-a9c8-b3602fafe1d3,Mirror,box,2,0,0,depth/2 + 0.01,width - 0.02,height - 0.02,0.01,handle,#C0C0C0,,,1.00,,2025-10-08 16:51:11.543287+00
+e1746ec7-1093-4541-9db8-6bb3b14b3618,a7eaee97-ddd8-4bf6-92b2-a7444b87fb10,Left Door,box,2,-width / 3,0,depth / 2 + 0.01,width / 3 - 0.02,height - 0.02,0.02,door,doorColor,,,1.00,,2025-10-08 16:50:15.91125+00
+e1868ba8-8b81-44db-bac2-197e634cd988,f4672c92-cb10-46bd-aaa9-ad034a993177,Oven Door,box,3,0,-0.20,depth / 2 + 0.01,width - 0.02,0.60,0.02,door,applianceColor,,,1.00,,2025-10-08 16:16:19.97502+00
+e19c3087-49b5-45ba-80ae-1319d449f5da,e6f8ec86-e4f5-46e5-b17f-52f925d5430b,Body,box,1,0,0,0,width,height,depth,cabinet_body,#808080,,,1.00,,2025-10-08 16:52:06.676597+00
+e1c6aaa7-b565-4ece-abde-7661b19f11e4,cbcb38fc-44e4-48f0-ac36-eccc7c176b26,Plinth,box,1,0,-height / 2 + plinthHeight / 2,0,width,plinthHeight,depth - 0.05,plinth,plinthColor,,,1.00,,2025-10-08 17:10:22.990597+00
+e1cdcb79-db11-463c-a077-c1844e53d97f,9aa02400-fcea-4e33-ab7f-c89892bbdad6,Cabinet,box,1,0,0,0,width,height,depth,cabinet_body,#8B4513,,,1.00,,2025-10-08 16:51:41.19204+00
+e23475a1-76ff-4090-b4e7-bd50dd4c6f72,9b93fa5d-fde1-4330-8f1d-84ecb01e0607,Rim,box,2,0,0,0,width,0.05,depth,ceramic,#F8F8F8,,,1.00,,2025-10-08 20:21:21.129584+00
+e26c1cb1-1855-4a64-bd87-09851b867793,43b45e50-439e-4647-b320-7b0d2d51d311,Leg Back Left,box,5,-width / 2 + 0.05,-height / 2 + 0.4,depth / 2 - 0.05,0.05,0.8,0.05,metal_leg,#2F4F4F,,,1.00,,2025-10-08 20:13:16.422946+00
+e280f41f-3cf9-498b-b5fc-224f66eaf954,507c86e2-b641-420b-baf5-a11afd594b69,Headboard,box,3,0,height * 0.5,-depth/2 + 0.05,width,height,0.10,door,#8B4513,,,1.00,,2025-10-08 16:50:52.815401+00
+e2db11cc-9b27-4553-b6d8-a2782307271d,bf9f977c-6f8e-4e79-bcbf-9160ce86e6da,Back,box,2,0,height * 0.15,-depth * 0.2,width,height * 0.5,depth * 0.15,cabinet_body,#4B4B4B,,,1.00,,2025-10-08 16:52:06.676597+00
+e2db5a78-19de-4456-be69-8cbe297bf83a,a42ba33e-850e-4f3a-8919-b6a568953a14,Drawer 2,box,4,0,0.10,depth / 2 + 0.01,width - 0.02,0.20,0.02,door,doorColor,,,1.00,,2025-10-08 16:21:41.621901+00
+e32fa75c-f883-4993-bc79-dd7d154de0db,e5b52882-1822-40bc-a5ce-549a3c2e67a5,Tray,box,1,0,0,0,width,height,depth,handle,#FFFFFF,,,1.00,,2025-10-08 16:51:11.543287+00
+e3903353-5e67-4f2f-ae35-0bbd162a696b,e7c2ceda-dd2b-44ee-b187-4e14baf4ff31,Plinth Leg 1,box,1,legLength/2,-height / 2 + plinthHeight / 2,0.05,legLength,plinthHeight,depth - 0.10,plinth,plinthColor,,,1.00,!isWallCabinet,2025-10-08 17:08:02.404343+00
+e3d40fa7-fdef-458d-875c-8884579c6343,58008eb6-1f8e-4b96-a083-68a9221ed984,Cabinet,box,1,0,0,0,width,height,depth,cabinet_body,#F5F5DC,,,1.00,,2025-10-08 16:51:11.543287+00
+e3ff8f55-a6bb-4ad6-a83d-7e257d72745c,ed0575ca-ce58-41d0-b512-a586e8058d20,Cabinet,box,1,0,0,0,width,height,depth,cabinet_body,#F5F5DC,,,1.00,,2025-10-08 16:51:11.543287+00
+e4735c95-a31f-49a3-9085-e5d82e755199,03846780-e5ea-4d9e-8b30-c9400090f7d0,Cabinet Body,box,1,0,0,0,width,height,depth,cabinet_body,cabinetColor,,,1.00,,2025-10-08 16:50:15.91125+00
+e497be51-60d4-4375-904e-1effcf259b37,7e845283-165b-4a1e-95e6-565adc87fc60,Button 1,box,9,-width * 0.1,height * 0.22,depth / 2 + 0.015,0.06,0.02,0.005,handle,#444444,,,1.00,,2025-10-08 20:13:51.848363+00
+e4dc6475-9521-484d-affd-fe705a12ad43,0f4e7a93-13e8-4c11-9c86-0cc9043649a6,Drawer 2,box,4,0,0.10,depth / 2 + 0.01,width - 0.02,0.20,0.02,door,doorColor,,,1.00,,2025-10-08 16:21:41.621901+00
+e52bd38b-6cd9-4c7d-960c-f34857d64864,0f4e7a93-13e8-4c11-9c86-0cc9043649a6,Drawer 3,box,5,0,0.35,depth / 2 + 0.01,width - 0.02,0.20,0.02,door,doorColor,,,1.00,,2025-10-08 16:21:41.621901+00
+e6808684-8e0b-48c9-9a33-139145f88c47,31aad16f-6742-437c-a580-3622b62b16fd,Cabinet,box,1,0,0,0,width,height,depth,cabinet_body,#8B4513,,,1.00,,2025-10-08 16:52:38.215415+00
+e6cd8c49-a13b-46a3-997e-69014fdc5a94,ed0575ca-ce58-41d0-b512-a586e8058d20,Door,box,2,0,0,depth/2 + 0.01,width - 0.02,height - 0.02,0.02,door,#FFFFFF,,,1.00,,2025-10-08 16:51:11.543287+00
+e6e3fdd4-7ca4-4437-8c88-1b70af2cc35d,a41095d4-0993-4a8d-b720-f13c5d4a4b86,Top,box,1,0,height/2 - 0.02,0,width,0.04,depth,cabinet_body,#8B4513,,,1.00,,2025-10-08 16:52:06.676597+00
+e71f7b30-4a7a-4dc8-9599-8c28a2fab2eb,5c56e7f0-6fdc-461b-bf2d-cb4df3c1cca4,Drawer 3,box,5,0,0.35,depth / 2 + 0.01,width - 0.02,0.20,0.02,door,doorColor,,,1.00,,2025-10-08 16:21:41.621901+00
+e865de68-08b2-42a8-9d01-89ffc203df1b,a8b66209-ccef-4e44-a761-df5f37ac640b,Side door,box,4,cornerDepth - legLength / 2 + 0.01,0,0,0.02,height - 0.05,legLength - 0.05,door,doorColor,,,1.00,,2025-10-08 11:23:36.663103+00
+e8badb0a-1f09-4e5a-8e42-52a58e0db361,cbcb38fc-44e4-48f0-ac36-eccc7c176b26,Upper Oven Housing,box,3,0,height * 0.05,0,width,height * 0.28,depth,cabinet_body,#2c2c2c,,,1.00,,2025-10-08 17:10:22.990597+00
+e91eb4db-0886-4505-8d0c-7f0e1518a825,4d6a40bc-b781-414b-9aad-ac5cc3077cbb,Plinth,box,1,0,-height / 2 + 0.075,0,width,0.15,depth - 0.05,plinth,plinthColor,,,1.00,,2025-10-08 16:21:41.621901+00
+e92df66e-ff7e-49cc-a5b7-cf209868427b,ca8750ee-44bd-463f-b2e1-cd1ae406fdab,Upper Cabinet,box,2,0,height * 0.2,0,width,height * 0.6,depth * 0.8,cabinet_body,#8B4513,,,1.00,,2025-10-08 16:52:38.215415+00
+e93b4096-9100-42e3-a208-d27d666360ae,bd4702ed-43dd-4723-a0b9-f82077e18d0c,Back,box,2,0,height * 0.15,-depth * 0.25,width,height * 0.5,depth * 0.2,cabinet_body,#8B7355,,,1.00,,2025-10-08 16:52:17.357255+00
+e9bb17c6-c544-4c25-876a-29b5bf12fcb4,c2bd963a-3b33-496c-9c13-d427aebebab0,Door Leg 2,box,6,depth/2 + 0.01,plinthHeight / 2,legLength/2,0.02,height - plinthHeight - 0.02,legLength - 0.02,door,doorColor,,,1.00,,2025-10-08 17:08:02.404343+00
+e9db991f-f105-4c66-9900-28c24f54d12b,d889fc8d-f31d-440a-8c20-8a2d1d071bdc,Leg 4,box,5,width/2 - 0.05,-height * 0.25,depth/2 - 0.05,0.08,height * 0.5,0.08,cabinet_body,#8B4513,,,1.00,,2025-10-08 16:52:38.215415+00
+eb5d8b64-2e44-47ec-bd4f-ad931c45c04f,c509bed1-9882-44d5-8e44-be6c625cf0b6,Back Cushions,box,6,0,0.1,-depth * 1.5 / 3,width - 1,0.4,0.2,cushion,#4A6F8C,,,1.00,,2025-10-08 20:13:16.422946+00
+eb6727c7-c807-42c7-bbe6-7b0269de3b15,6eb7a60e-26bc-404a-be49-dd71d9aadfdb,Oven Door,box,4,0,-height * 0.15,depth/2 + 0.01,width - 0.02,height * 0.3,0.02,door,#000000,,,1.00,,2025-10-08 17:10:22.990597+00
+eb7cb6ff-0d06-4458-92ad-0d1e718a0c58,d2960747-e61c-4df5-b56d-4a06f513d9c1,Handle,box,3,width / 2 - 0.07,height / 2 - 0.10,depth / 2 + 0.03,0.10,0.03,0.04,handle,handleColor,,,1.00,,2025-10-08 16:07:57.673274+00
+eba2bc80-ebbe-49b0-b48c-685d63c29dfb,138cf90c-ba72-450e-a50e-f39da21ca44d,Control Panel,box,6,0,height * 0.3,depth / 2 + 0.01,width * 0.7,0.15,0.005,control_panel,#222222,,,1.00,,2025-10-08 20:13:51.848363+00
+ed6a1c43-33fb-4493-ba47-81ec7ec3d638,0a59adb6-1f10-498e-804b-9dd14935f578,Cornice,box,1,0,0,0,width,height,depth,door,#ffffff,,,1.00,,2025-10-08 16:21:59.376939+00
+ee43f705-998a-4334-9396-576130f42331,30a1d0cc-8c19-41e0-9f2d-305321429836,Worktop,box,1,0,0,0,width,height,depth,cabinet_body,worktopColor,,,1.00,,2025-10-08 16:17:02.441798+00
+ee93945e-e498-4670-9b09-20e535512fca,db3232db-8bc4-4f1a-bee6-19b52573b0ca,Leg 2,box,3,width/2 - 0.05,-height * 0.25,-depth/2 + 0.05,0.08,height * 0.5,0.08,cabinet_body,#8B4513,,,1.00,,2025-10-08 16:52:38.215415+00
+eedd0d8b-48c1-4767-9e44-9ded127f3e4d,00532189-1f15-4a64-a709-6e4c8a1f5a94,Tap,box,3,0,0.15,-depth / 4,0.05,0.20,0.05,handle,#808080,,,1.00,,2025-10-08 16:17:02.441798+00
+ef042cdd-ea3e-4263-969d-b3a9f40a2beb,40a9b4a4-3446-45e2-a064-20563fd65872,Draining Board,box,2,width/4,-height * 0.3,0,width * 0.4,height * 0.5,depth - 0.10,counter,#FFFFFF,,,1.00,,2025-10-08 17:10:09.489775+00
+ef4934cd-38ed-46ea-b390-1779b2d84eeb,8ce55eaa-03fa-4005-821d-d69ff2e920b8,Door,box,2,0,0,depth/2 + 0.01,width - 0.02,height - 0.02,0.02,door,#E0E0E0,,,1.00,,2025-10-08 16:52:53.546878+00
+ef4ca798-808b-4aee-b6a1-3efef42ac6c3,a5e461d3-c78a-422d-a656-fa375ea5dc9b,Door Panel,box,1,0,0,0,width,height,depth,door,doorColor,,,1.00,,2025-10-08 16:53:07.709429+00
+ef79908b-dd97-418f-9aee-154d4dcf5740,48071a77-2b2c-4f6a-944f-728720ac1bc6,Door,box,3,0,0.075,depth / 2 + 0.01,width - 0.02,height - 0.17,0.02,door,doorColor,,,1.00,,2025-10-08 16:16:19.97502+00
+efbb6a1f-3d84-4be4-a6a2-0034d213e779,a3b62405-00f6-4c07-95b4-4b3e13119238,Glass,box,2,0,0,0,width - 0.10,height - 0.10,depth * 0.5,handle,#E6E6FA,,,1.00,,2025-10-08 16:53:07.709429+00
+f0d0c8ed-b08e-42dd-9af0-4bc9d66b179f,7e845283-165b-4a1e-95e6-565adc87fc60,Door Window,cylinder,4,0,-height * 0.1,depth / 2 + 0.015,0.2,0.01,0.2,screen,#222222,0.70,0.20,0.80,,2025-10-08 20:13:51.848363+00
+f163cba2-c1cb-4628-9629-18a81360aed8,de555033-f7e3-4be5-a10b-0b9033098fca,Upper Door,box,6,0,height * 0.25,depth/2 + 0.01,width - 0.02,height * 0.45,0.02,door,doorColor,,,1.00,,2025-10-08 17:10:22.990597+00
+f1dcd986-00a2-45bf-b4d7-09b77eb2ae54,00eae6e3-db91-499a-be77-5e486cd3ceac,Handle,box,4,width / 2 - 0.09,-height / 2 + 0.25,depth / 2 + 0.03,0.14,0.03,0.04,handle,handleColor,,,1.00,,2025-10-08 16:16:19.97502+00
+f240222c-c78c-49ca-b866-d62798664132,6404a530-2cdc-406e-b957-46de153409c3,Drawer 2,box,3,0,-height/2 + 0.30,depth/2 + 0.01,width - 0.02,0.18,0.02,door,doorColor,,,1.00,,2025-10-08 16:50:15.91125+00
+f2e2066b-449a-432c-95d6-d053091a9cda,185af074-b459-46f7-bc85-39f4d9a5ec5d,Glass,box,2,0,height * 0.05,depth/2,width,height * 0.9,0.01,handle,#E6E6FA,,,1.00,,2025-10-08 16:51:11.543287+00
+f3024956-d353-465d-a0ab-2dc83e854d39,3e1e02bc-f1dc-4099-8563-127df6cd50f3,Door,box,2,0,0,depth/2 + 0.01,width - 0.02,height - 0.02,0.02,door,doorColor,,,1.00,,2025-10-08 16:52:53.546878+00
+f406423d-a20c-47f6-9a8c-6d6cb4b8f8e8,cd750faf-3986-4305-87fb-26d30dbb0b35,Door 2,box,3,0,0,depth/2 + 0.01,width/3 - 0.02,height - 0.02,0.02,door,doorColor,,,1.00,,2025-10-08 16:51:41.19204+00
+f43b6e79-6f4d-4e36-a2bd-6387503fa2a1,0aa75ba7-6a09-4774-9972-37c80ebde638,Glass,box,2,0,0,0,width - 0.10,height - 0.10,depth * 0.5,handle,#E6E6FA,,,1.00,,2025-10-08 16:53:07.709429+00
+f46c7e4e-7847-4bad-ac7b-8813ce2e305f,c2bd963a-3b33-496c-9c13-d427aebebab0,Handle Leg 2,box,8,depth/2 + 0.03,0,legLength * 0.75,0.03,0.15,0.02,handle,handleColor,,,1.00,,2025-10-08 17:08:02.404343+00
+f4bfc403-47f7-442a-954e-c54ac1c36d07,330bdaf0-cd6c-406f-bf64-365483ac96f1,Basin,box,1,-width/4,0,0,width * 0.4,height,depth - 0.10,handle,#c0c0c0,,,1.00,,2025-10-08 17:10:09.489775+00
+f4e91683-11dc-4930-9190-b698dd3d2f3c,d889fc8d-f31d-440a-8c20-8a2d1d071bdc,Top,box,1,0,height/2 - 0.02,0,width,0.04,depth,cabinet_body,#8B4513,,,1.00,,2025-10-08 16:52:38.215415+00
+f4eb0233-c299-4255-856d-8e0dfca226cd,79550152-00cc-4107-9579-b9c39a3d3169,Basin,box,1,0,0,0,width - 0.10,height,depth - 0.10,handle,#FFFFFF,,,1.00,,2025-10-08 17:10:09.489775+00
+f56873a9-5b69-4983-94e6-96035745b49a,2572fce1-aec7-4381-a448-8bb739e45557,Glass Door Left,box,2,-width/4,height * 0.1,depth/2 + 0.01,width/2 - 0.02,height * 0.8,0.01,handle,#E6E6FA,,,1.00,,2025-10-08 16:52:38.215415+00
+f5c45e42-0c62-4e8f-b445-4d7e0c9269af,6e958c7e-fffd-48b1-b68b-b41ad95eee7b,Seat,box,1,0,-height * 0.2,0.05,width,height * 0.3,depth * 0.7,cabinet_body,#3A6EA5,,,1.00,,2025-10-08 16:51:41.19204+00
+f5c54bcd-503b-46f7-bf05-e4fc14a869c3,6eb7a60e-26bc-404a-be49-dd71d9aadfdb,Upper Cabinet,box,2,0,height * 0.25,0,width,height * 0.5,depth,cabinet_body,cabinetColor,,,1.00,,2025-10-08 17:10:22.990597+00
+f638e85d-be9f-49ba-b4db-0be40c64400c,ec259a23-2f20-43c4-b668-03ad5b1f9572,Leg 3,box,4,-width/2 + 0.05,-height * 0.25,depth/2 - 0.05,0.08,height * 0.5,0.08,cabinet_body,#8B4513,,,1.00,,2025-10-08 16:52:38.215415+00
+f64cacc7-9b0f-4bbd-b201-a4d2b946febe,fcadef1d-afb9-455a-9a0d-10dc63bac1c6,Tap,box,2,0,height + 0.05,-depth/4,0.03,0.15,0.03,handle,#808080,,,1.00,,2025-10-08 17:10:09.489775+00
+f66724cf-9873-40bc-bae4-2f7df26d91b3,d889fc8d-f31d-440a-8c20-8a2d1d071bdc,Leg 1,box,2,-width/2 + 0.05,-height * 0.25,-depth/2 + 0.05,0.08,height * 0.5,0.08,cabinet_body,#8B4513,,,1.00,,2025-10-08 16:52:38.215415+00
+f668cdb8-718a-4ed3-98f5-bd48b4fe7ee7,7e845283-165b-4a1e-95e6-565adc87fc60,Round Door,cylinder,3,0,-height * 0.1,depth / 2 + 0.01,0.25,0.02,0.25,handle,#dddddd,,,1.00,,2025-10-08 20:13:51.848363+00
+f6796974-4bac-4bea-92d4-a077307bade5,330bdaf0-cd6c-406f-bf64-365483ac96f1,Draining Board,box,2,width/4,-height * 0.3,0,width * 0.4,height * 0.5,depth - 0.10,counter,#c0c0c0,,,1.00,,2025-10-08 17:10:09.489775+00
+f6c5865b-2be8-463e-8627-79bb18cac545,af38ef2c-9765-4cea-abc0-43aeb3b58050,Cabinet,box,1,0,-height * 0.2,0,width,height * 0.6,depth,cabinet_body,cabinetColor,,,1.00,,2025-10-08 16:52:53.546878+00
+f6f116c4-5cd6-4d8b-bcd5-9184ab9856e2,38bcc725-42f6-40d4-a7c9-26e508488524,Basin,box,2,0,height/2 + 0.05,0,width - 0.10,0.10,depth - 0.10,handle,#FFFFFF,,,1.00,,2025-10-08 16:51:11.543287+00
+f7942675-61bb-4a6b-ab6a-86446de6e001,2c975132-b4a1-4294-a2f1-c71b1c939066,Door Panel,box,1,0,0,0,width,height,depth,door,doorColor,,,1.00,,2025-10-08 16:53:07.709429+00
+f7af5973-c1e8-40f8-8474-9eb4fba266ab,900687f1-600b-4b6a-a5ec-38d994a4e30c,Left Door,box,2,-width / 4,0,depth / 2 + 0.01,width / 2 - 0.02,height - 0.02,0.02,door,doorColor,,,1.00,,2025-10-08 16:50:15.91125+00
+f8039a8f-845a-4b39-8aaf-267c7eac954f,bc8eb1f9-e05b-4098-aa78-78f4a23253ac,Basin Leg 1,box,1,legLength/2,0,0,legLength - 0.10,height,depth - 0.10,handle,#FFFFFF,,,1.00,,2025-10-08 17:10:09.489775+00
+f8a45904-6abc-428c-afe3-31cf6378b396,f0527384-cf37-47dd-a56f-50274a47acf1,Glass,box,2,0,0,0,width - 0.10,height * 0.5,depth - 0.10,handle,#E6E6FA,,,1.00,,2025-10-08 16:53:07.709429+00
+f8b60d5d-d159-466b-85e0-62f24432648c,f7ed74c1-79a7-45d4-acc5-d8560647b38f,Apron Front,box,2,0,-height * 0.1,depth/2 + 0.01,width,height,0.03,door,#FFFFFF,,,1.00,,2025-10-08 17:10:09.489775+00
+f9450437-1632-4ed8-ad72-8efb79bd34c8,d91a5c3a-2af9-4c8f-8cb3-a62f84cef732,Shower Tray,box,1,0,-height / 2 + 0.05,0,width,0.1,depth,ceramic,#F5F5F5,,,1.00,,2025-10-08 20:21:21.129584+00
+fad5cb8c-15cc-403c-a7e7-851f34d6a5ec,011f5272-69b3-4e8a-8990-aea9ddc922c7,Drawer 1,box,3,0,-0.15,depth / 2 + 0.01,width - 0.02,0.20,0.02,door,doorColor,,,1.00,,2025-10-08 16:21:41.621901+00
+fb6b0611-c682-4502-94db-670eab95285c,84b234b5-f96f-4080-9b71-b9e66cf41dfb,Door,box,2,0,0,depth / 2 + 0.01,width - 0.02,height - 0.02,0.02,door,doorColor,,,1.00,,2025-10-08 16:07:57.673274+00
+fc021bc1-2f82-4cf7-b0c2-9ba9ec96d34b,a42ba33e-850e-4f3a-8919-b6a568953a14,Cabinet Body,box,2,0,0.075,0,width,height - 0.15,depth,cabinet_body,cabinetColor,,,1.00,,2025-10-08 16:21:41.621901+00
+fcdcf077-fdde-4a35-95e5-0c31e710e867,a7eaee97-ddd8-4bf6-92b2-a7444b87fb10,Cabinet Body,box,1,0,0,0,width,height,depth,cabinet_body,cabinetColor,,,1.00,,2025-10-08 16:50:15.91125+00
+fce18bb4-7680-4286-8c19-10d793509a6e,ab48a209-ebc8-4e5e-9436-f2d3925ef60f,Tap,box,2,0,0.15,-depth / 4,0.05,0.20,0.05,handle,#808080,,,1.00,,2025-10-08 16:17:02.441798+00
+fd06cae7-c014-468a-a742-99b65e923327,31aad16f-6742-437c-a580-3622b62b16fd,Door 1,box,2,-width/4,0,depth/2 + 0.01,width/2 - 0.02,height - 0.02,0.02,door,doorColor,,,1.00,,2025-10-08 16:52:38.215415+00
+fd0a50e2-8d4e-4b8f-8248-e4bf67286f30,0733d7f4-78d1-46a2-a638-92ed940bd0f7,Cabinet Body,box,1,0,0,0,width,height,depth,cabinet_body,cabinetColor,,,1.00,,2025-10-08 16:07:57.673274+00
+fd977c45-e282-43b1-9b5a-f846185f11d7,a000225c-807b-41ef-942f-768c8bc3308a,Drawer 2,box,3,0,0,depth/2 + 0.01,width - 0.02,height * 0.3,0.02,door,#A9A9A9,,,1.00,,2025-10-08 16:52:06.676597+00
+fd9d3fec-82c9-4fe0-b7e5-02aec8069fd1,6a45d0f6-5116-409a-8ab9-aacebd466a31,Plinth X-leg,box,1,0,-height / 2 + plinthHeight / 2,cornerDepth / 2 - legLength / 2 - 0.1,legLength,plinthHeight,cornerDepth - 0.2,plinth,plinthColor,,,1.00,!isWallCabinet,2025-10-08 11:23:36.663103+00
+fdc117ad-ff66-4539-9bce-17bad25f5849,79550152-00cc-4107-9579-b9c39a3d3169,Tap,box,2,0,height + 0.10,-depth/4,0.03,0.15,0.03,handle,#808080,,,1.00,,2025-10-08 17:10:09.489775+00
+fdd49f9a-e304-48b6-a554-416fcacee539,af38ef2c-9765-4cea-abc0-43aeb3b58050,Sink Basin,box,2,0,height * 0.25,0,width * 0.8,height * 0.15,depth * 0.7,handle,#D3D3D3,,,1.00,,2025-10-08 16:52:53.546878+00
+fe30b22d-d346-4888-8c4e-39720ed15dd5,69ee4b5a-4b1b-4bd7-a2c1-e6485f8585e2,Handle,box,3,width / 2 - 0.02,0,depth / 2 + 0.03,0.03,height - 0.10,0.03,handle,#808080,,,1.00,,2025-10-08 16:16:19.97502+00
+feb57198-f123-4b77-a3b1-eaf1115c0eb9,ba0d987f-fddd-4e7f-906e-696e4608fb80,Cabinet Body,box,2,0,plinthHeight / 2,0,width,cabinetHeight,depth,cabinet_body,cabinetMaterial,,,1.00,,2025-10-08 15:51:04.652333+00
+ff9b2dad-a7b7-46b1-9b3f-520628310c91,06749961-09a3-4e73-bee0-6e9adcc535d5,Pedestal,box,2,0,0,0,0.20,height * 0.5,0.20,cabinet_body,#8B4513,,,1.00,,2025-10-08 16:52:38.215415+00
+ffee8bef-43c0-4690-bcf8-c5a32f6c6175,d0a1fdac-6331-4173-be46-bdbeb403f825,Apron Front,box,2,0,-height * 0.1,depth/2 + 0.01,width,height,0.03,door,#FFFFFF,,,1.00,,2025-10-08 17:10:09.489775+00

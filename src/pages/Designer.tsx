@@ -24,9 +24,10 @@ import { KeyboardShortcutsHelp } from '@/components/designer/KeyboardShortcutsHe
 import MobileDesignerLayout from '@/components/designer/MobileDesignerLayout';
 import { toast } from 'sonner';
 import { useDesignValidation } from '@/hooks/useDesignValidation';
-import { RoomDesign, DesignElement, getDefaultZIndex } from '@/types/project';
+import { RoomDesign, DesignElement, getDefaultZIndex, ElevationViewConfig } from '@/types/project';
 import { migrateElements } from '@/utils/migrateElements';
 import { ComponentService } from '@/services/ComponentService';
+import { getElevationViews, duplicateElevationView, deleteElevationView, renameElevationView } from '@/utils/elevationViewHelpers';
 import rightfitLogo from '@/assets/logo.png';
 import '@/utils/godMode'; // Load God mode utilities in development
 import { testCurrentCoordinateSystem } from '@/utils/coordinateSystemDemo';
@@ -67,6 +68,11 @@ const Designer = () => {
   const [lastValidatedDesign, setLastValidatedDesign] = useState<string | null>(null);
   const [showPerformanceMonitor, setShowPerformanceMonitor] = useState(false);
   const [canvasZoom, setCanvasZoom] = useState(1.0);
+
+  // Elevation view management
+  const [elevationViews, setElevationViews] = useState<ElevationViewConfig[]>(() =>
+    getElevationViews(currentRoomDesign?.design_settings)
+  );
 
   // Zoom control functions
   const handleZoomIn = useCallback(() => {
@@ -154,6 +160,13 @@ const Designer = () => {
     }
   }, [active2DView, activeView]);
 
+  // Sync elevation views when room changes
+  useEffect(() => {
+    if (currentRoomDesign) {
+      setElevationViews(getElevationViews(currentRoomDesign.design_settings));
+    }
+  }, [currentRoomDesign?.id]);
+
   // Don't auto-reset tape measure when tool changes - let user manually clear
 
   const handleSaveDesign = async () => {
@@ -227,12 +240,11 @@ const Designer = () => {
     setHistory(prev => [...prev, { ...currentRoomDesign }]);
     setFuture([]);
 
-    // Assign default zIndex and isVisible values if not already set
+    // Assign default zIndex values if not already set
     const defaultZIndex = getDefaultZIndex(element.type, element.id);
     const elementWithDefaults: DesignElement = {
       ...element,
       zIndex: element.zIndex ?? defaultZIndex,
-      isVisible: element.isVisible ?? true
     };
     
     // Debug logging for layering
@@ -294,6 +306,86 @@ const Designer = () => {
     setSelectedElement(null);
   };
 
+  // Elevation view management functions
+  const handleDuplicateView = useCallback(async (viewId: string) => {
+    const updated = duplicateElevationView(viewId, elevationViews);
+    if (updated) {
+      setElevationViews(updated);
+      await updateCurrentRoomDesign({
+        design_settings: {
+          ...currentRoomDesign?.design_settings,
+          elevation_views: updated
+        }
+      });
+      toast.success('Elevation view duplicated');
+    } else {
+      toast.error('Cannot duplicate view - maximum 3 views per direction');
+    }
+  }, [elevationViews, currentRoomDesign, updateCurrentRoomDesign]);
+
+  const handleDeleteView = useCallback(async (viewId: string) => {
+    const updated = deleteElevationView(viewId, elevationViews);
+    if (updated) {
+      setElevationViews(updated);
+      await updateCurrentRoomDesign({
+        design_settings: {
+          ...currentRoomDesign?.design_settings,
+          elevation_views: updated
+        }
+      });
+      // If we're currently viewing the deleted view, switch to the default view for that direction
+      if (active2DView === viewId) {
+        const deletedView = elevationViews.find(v => v.id === viewId);
+        if (deletedView) {
+          const defaultView = updated.find(v => v.direction === deletedView.direction && v.is_default);
+          if (defaultView) {
+            setActive2DView(defaultView.id as any);
+          }
+        }
+      }
+      toast.success('Elevation view deleted');
+    } else {
+      toast.error('Cannot delete default view');
+    }
+  }, [elevationViews, currentRoomDesign, updateCurrentRoomDesign, active2DView]);
+
+  const handleRenameView = useCallback(async (viewId: string, newLabel: string) => {
+    const updated = renameElevationView(viewId, newLabel, elevationViews);
+    if (updated) {
+      setElevationViews(updated);
+      await updateCurrentRoomDesign({
+        design_settings: {
+          ...currentRoomDesign?.design_settings,
+          elevation_views: updated
+        }
+      });
+      toast.success('Elevation view renamed');
+    } else {
+      toast.error('Failed to rename view');
+    }
+  }, [elevationViews, currentRoomDesign, updateCurrentRoomDesign]);
+
+  const handleToggleElementVisibility = useCallback(async (elementId: string, viewId: string) => {
+    const { toggleElementVisibility, isElementVisibleInView } = await import('@/utils/elevationViewHelpers');
+
+    const isCurrentlyVisible = isElementVisibleInView(elementId, viewId, elevationViews);
+    const updated = toggleElementVisibility(viewId, elementId, elevationViews);
+
+    if (updated) {
+      setElevationViews(updated);
+      await updateCurrentRoomDesign({
+        design_settings: {
+          ...currentRoomDesign?.design_settings,
+          elevation_views: updated
+        }
+      });
+
+      const action = isCurrentlyVisible ? 'hidden' : 'shown';
+      toast.success(`Element ${action} in this view`);
+    } else {
+      toast.error('Failed to toggle element visibility');
+    }
+  }, [elevationViews, currentRoomDesign, updateCurrentRoomDesign]);
 
   // Toolbar functions
   const handleToolChange = (tool: 'select' | 'fit-screen' | 'pan' | 'tape-measure' | 'none') => {
@@ -777,6 +869,10 @@ const Designer = () => {
             onTapeMeasureClick={handleTapeMeasureClick}
             onTapeMeasureMouseMove={handleTapeMeasureMouseMove}
             onClearTapeMeasure={handleClearTapeMeasure}
+            elevationViews={elevationViews}
+            onDuplicateView={handleDuplicateView}
+            onDeleteView={handleDeleteView}
+            onRenameView={handleRenameView}
           />
         ) : (
           <div className="flex-1 flex">
@@ -791,6 +887,7 @@ const Designer = () => {
                     <CompactComponentSidebar
                       onAddElement={handleAddElement}
                       roomType={currentRoomDesign.room_type}
+                      canvasZoom={canvasZoom}
                     />
                   </div>
                 </>
@@ -862,6 +959,7 @@ const Designer = () => {
                         activeTool={activeTool}
                         fitToScreenSignal={fitToScreenSignal}
                         active2DView={active2DView}
+                        elevationViews={elevationViews}
                         completedMeasurements={completedMeasurements}
                         currentMeasureStart={currentMeasureStart}
                         tapeMeasurePreview={tapeMeasurePreview}
@@ -878,6 +976,10 @@ const Designer = () => {
                         <ViewSelector
                           activeView={active2DView}
                           onViewChange={setActive2DView}
+                          elevationViews={elevationViews}
+                          onDuplicateView={handleDuplicateView}
+                          onDeleteView={handleDeleteView}
+                          onRenameView={handleRenameView}
                         />
                         <ZoomController
                           zoom={canvasZoom}
@@ -893,6 +995,8 @@ const Designer = () => {
                         onSelectElement={setSelectedElement}
                         onUpdateElement={handleUpdateElement}
                         onDeleteElement={handleDeleteElement}
+                        activeView={active2DView}
+                        elevationViews={elevationViews}
                       />
                     </div>
                   ) : design ? (
@@ -905,8 +1009,9 @@ const Designer = () => {
                         activeTool={activeTool === 'tape-measure' ? 'select' : activeTool}
                         showGrid={showGrid}
                         fitToScreenSignal={fitToScreenSignal}
+                        elevationViews={elevationViews}
                       />
-                      
+
                       {/* Canvas Element Counter - Bottom Left */}
                       <CanvasElementCounter
                         elements={design.elements}
@@ -914,6 +1019,8 @@ const Designer = () => {
                         onSelectElement={setSelectedElement}
                         onUpdateElement={handleUpdateElement}
                         onDeleteElement={handleDeleteElement}
+                        activeView={'3d'}
+                        elevationViews={elevationViews}
                       />
                     </div>
                   ) : null}
@@ -934,7 +1041,9 @@ const Designer = () => {
                     roomDimensions={design.roomDimensions}
                     onUpdateRoomDimensions={handleUpdateRoomDimensions}
                     roomType={design.roomType}
-                    active2DView={active2DView}
+                    active2DView={activeView === '3d' ? '3d' : active2DView}
+                    elevationViews={elevationViews}
+                    onToggleElementVisibility={handleToggleElementVisibility}
                   />
                 </>
               )}

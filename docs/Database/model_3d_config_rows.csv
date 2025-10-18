@@ -1,0 +1,5 @@
+id,created_at,updated_at,component_id,primary_material,primary_color,secondary_color,wood_finish,metal_finish,roughness,metalness,transparency,enable_detailed_handles,enable_wood_grain_texture,enable_realistic_lighting,enable_door_detail,plinth_height,door_gap,handle_style,corner_door_style,corner_interior_shelving,detail_level,use_lod,version,deprecated
+68824979-f90d-409b-b37e-4698112cb1a7,2025-09-13 22:07:31.96654+00,2025-09-13 22:07:31.96654+00,,metal,#C0C0C0,,,,0.20,0.80,,true,false,true,false,0.000,0.000,modern,,false,2,false,1.0.0,false
+70e8a4a6-5967-4ce8-8772-f8649271a7a3,2025-09-13 22:07:31.96654+00,2025-09-13 22:07:31.96654+00,,wood,#8B4513,,,,0.70,0.10,,false,true,true,false,0.000,0.000,modern,,false,2,false,1.0.0,false
+986d0d4b-739c-48b2-9323-87e1f91ced6c,2025-09-13 22:07:31.96654+00,2025-09-13 22:07:31.96654+00,,stone,#D2B48C,,,,0.10,0.00,,false,false,true,false,0.000,0.000,minimalist,,false,2,false,1.0.0,false
+a3bc3dcc-7bb8-4d47-af17-944ab13d91a6,2025-09-13 22:07:31.96654+00,2025-09-13 22:07:31.96654+00,,wood,#8B4513,,,,0.70,0.10,,true,true,true,true,0.150,0.050,modern,,false,2,false,1.0.0,false

@@ -50,6 +50,7 @@ import {
 interface CompactComponentSidebarProps {
   onAddElement: (element: DesignElement) => void;
   roomType: RoomType;
+  canvasZoom?: number; // Canvas zoom level for accurate drag preview scaling
 }
 
 
@@ -69,9 +70,10 @@ const getIconComponent = (iconName: string): React.ReactNode => {
   return iconMap[iconName] || <Square className="h-4 w-4" />;
 };
 
-const CompactComponentSidebar: React.FC<CompactComponentSidebarProps> = ({ 
-  onAddElement, 
-  roomType 
+const CompactComponentSidebar: React.FC<CompactComponentSidebarProps> = ({
+  onAddElement,
+  roomType,
+  canvasZoom = 1.0 // Default to 1.0 if not provided
 }) => {
   const isMobile = useIsMobile();
   const [searchTerm, setSearchTerm] = useState('');
@@ -223,6 +225,7 @@ const CompactComponentSidebar: React.FC<CompactComponentSidebarProps> = ({
     // Create a new design element positioned at canvas center
     const newElement: DesignElement = {
       id: `${component.component_id}-${Date.now()}`,
+      component_id: component.component_id, // Database lookup key
       type: component.type as any,
       x: 200, // Center-ish position (will be adjustable by dragging)
       y: 150, // Center-ish position
@@ -232,7 +235,8 @@ const CompactComponentSidebar: React.FC<CompactComponentSidebarProps> = ({
       depth: component.depth,
       rotation: 0,
       color: component.color || '#8B4513',
-      name: component.name
+      name: component.name,
+      zIndex: 0, // Required by DesignElement interface
     };
 
     // Add to canvas and update recently used
@@ -270,8 +274,9 @@ const CompactComponentSidebar: React.FC<CompactComponentSidebarProps> = ({
     // Show the actual footprint/shape of the component with size adjustment
     const dragPreview = document.createElement('div');
 
-    // Calculate scale to make drag preview match canvas size better
-    const scaleFactor = 1.15; // Increase by 15% to better match canvas components
+    // Use canvas zoom level for accurate drag preview scaling (matches final placement size)
+    // This replaces the old 1.15x hack that caused mismatch between preview and drop
+    const scaleFactor = canvasZoom;
     
     // Check if this is a corner component that uses square footprint
     // Check both component_id and name since we're using DatabaseComponent interface

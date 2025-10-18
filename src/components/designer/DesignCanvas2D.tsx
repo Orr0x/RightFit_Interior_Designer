@@ -1,11 +1,22 @@
 import React, { useRef, useEffect, useState, useCallback } from 'react';
-import { DesignElement, Design } from '../../types/project';
+import { DesignElement, Design, ElevationViewConfig } from '../../types/project';
 import { ComponentService } from '@/services/ComponentService';
+import { getElevationViews } from '@/utils/elevationViewHelpers';
 import { RoomService } from '@/services/RoomService';
 import { useTouchEvents, TouchPoint } from '@/hooks/useTouchEvents';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { getEnhancedComponentPlacement } from '@/utils/canvasCoordinateIntegration';
 import { initializeCoordinateEngine } from '@/services/CoordinateTransformEngine';
+import { PositionCalculation } from '@/utils/PositionCalculation';
+import { ConfigurationService } from '@/services/ConfigurationService';
+import { render2DService } from '@/services/Render2DService';
+import { renderPlanView, renderElevationView } from '@/services/2d-renderers';
+import { FeatureFlagService } from '@/services/FeatureFlagService';
+import type { RoomGeometry } from '@/types/RoomGeometry';
+import * as GeometryUtils from '@/utils/GeometryUtils';
+import { useCollisionDetection } from '@/hooks/useCollisionDetection';
+import { useComponentMetadata } from '@/hooks/useComponentMetadata';
+import { useToast } from '@/hooks/use-toast';
 
 // Throttle function for performance optimization
 const throttle = <T extends (...args: any[]) => void>(func: T, delay: number): T => {
@@ -42,7 +53,9 @@ interface DesignCanvas2DProps {
   showColorDetail?: boolean;
   activeTool?: 'select' | 'fit-screen' | 'pan' | 'tape-measure' | 'none';
   fitToScreenSignal?: number;
-  active2DView: 'plan' | 'front' | 'back' | 'left' | 'right';
+  active2DView: 'plan' | 'front' | 'back' | 'left' | 'right' | string; // Now accepts view IDs like "front-default", "front-dup1"
+  // Elevation view management (optional)
+  elevationViews?: ElevationViewConfig[];
   // Tape measure props - multi-measurement support
   completedMeasurements?: { start: { x: number; y: number }, end: { x: number; y: number } }[];
   currentMeasureStart?: { x: number; y: number } | null;
@@ -56,12 +69,16 @@ interface DesignCanvas2DProps {
   onZoomOut?: () => void;
 }
 
-// Default room fallbacks (will be replaced by database values)
-const DEFAULT_ROOM_FALLBACK = {
-  width: 600, // cm
-  height: 400, // cm
-  wallHeight: 240 // cm - fallback only, should use roomDimensions.ceilingHeight
-};
+// =============================================================================
+// REMOVED: DEFAULT_ROOM_FALLBACK (deleted on 2025-10-10)
+// =============================================================================
+// Hardcoded room fallback removed. Room dimensions must come from:
+// 1. design.roomDimensions (primary source)
+// 2. room_type_templates database table (via RoomService)
+//
+// If design.roomDimensions is missing, this is a data integrity error
+// and should be logged/reported rather than silently falling back.
+// =============================================================================
 
 // Room configuration cache
 let roomConfigCache: any = null;
@@ -88,155 +105,68 @@ const getRoomConfig = async (roomType: string, roomDimensions: any) => {
   }
 };
 
-// Canvas constants
+// Canvas constants - Default fallbacks (database-driven via ConfigurationService)
 const CANVAS_WIDTH = 1600; // Larger workspace for better zoom
 const CANVAS_HEIGHT = 1200; // Larger workspace for better zoom
 const GRID_SIZE = 20; // Grid spacing in pixels
 const MIN_ZOOM = 0.5;
 const MAX_ZOOM = 4.0; // Increased to take advantage of larger canvas
 
-// Wall thickness constants to match 3D implementation
+// Wall thickness constants to match 3D implementation - Default fallbacks
 const WALL_THICKNESS = 10; // 10cm wall thickness (matches 3D: 0.1 meters)
 const WALL_CLEARANCE = 5; // 5cm clearance from walls for component placement
 const WALL_SNAP_THRESHOLD = 40; // Snap to wall if within 40cm
 
-// Helper function to calculate rotated bounding box for components
-const getRotatedBoundingBox = (element: DesignElement) => {
-  const rotation = (element.rotation || 0) * Math.PI / 180; // Convert to radians
-  
-  // Determine if this is a corner component with L-shaped footprint
-  const isCornerCounterTop = element.type === 'counter-top' && element.id.includes('counter-top-corner');
-  const isCornerWallCabinet = element.type === 'cabinet' && (element.id.includes('corner-wall-cabinet') || element.id.includes('new-corner-wall-cabinet'));
-  const isCornerBaseCabinet = element.type === 'cabinet' && (element.id.includes('corner-base-cabinet') || element.id.includes('l-shaped-test-cabinet'));
-  const isCornerTallUnit = element.type === 'cabinet' && (
-    element.id.includes('corner-tall') || 
-    element.id.includes('corner-larder') ||
-    element.id.includes('larder-corner')
-  );
-  
-  const isCornerComponent = isCornerCounterTop || isCornerWallCabinet || isCornerBaseCabinet || isCornerTallUnit;
-  
-  if (isCornerComponent) {
-    // Corner components use their ACTUAL dimensions (no more hardcoded 90x90)
-    const width = element.width;
-    const height = element.depth || element.height;
-    const centerX = element.x + width / 2;
-    const centerY = element.y + height / 2;
-    
-    // Use actual component dimensions for bounding box
-    return {
-      minX: element.x,
-      minY: element.y,
-      maxX: element.x + width,
-      maxY: element.y + height,
-      centerX,
-      centerY,
-      width: width,
-      height: height,
-      isCorner: true
-    };
-  } else {
-    // Standard rectangular component
-    const width = element.width;
-    const height = element.depth || element.height;
-    const centerX = element.x + width / 2;
-    const centerY = element.y + height / 2;
-    
-    if (rotation === 0) {
-      // No rotation - simple case
-      return {
-        minX: element.x,
-        minY: element.y,
-        maxX: element.x + width,
-        maxY: element.y + height,
-        centerX,
-        centerY,
-        width,
-        height,
-        isCorner: false
-      };
-    } else {
-      // Calculate rotated bounding box
-      const cos = Math.cos(rotation);
-      const sin = Math.sin(rotation);
-      
-      // Calculate the four corners of the rotated rectangle
-      const corners = [
-        { x: -width / 2, y: -height / 2 },
-        { x: width / 2, y: -height / 2 },
-        { x: width / 2, y: height / 2 },
-        { x: -width / 2, y: height / 2 }
-      ];
-      
-      // Rotate each corner and find the bounding box
-      const rotatedCorners = corners.map(corner => ({
-        x: centerX + corner.x * cos - corner.y * sin,
-        y: centerY + corner.x * sin + corner.y * cos
-      }));
-      
-      const minX = Math.min(...rotatedCorners.map(c => c.x));
-      const minY = Math.min(...rotatedCorners.map(c => c.y));
-      const maxX = Math.max(...rotatedCorners.map(c => c.x));
-      const maxY = Math.max(...rotatedCorners.map(c => c.y));
-      
-      return {
-        minX,
-        minY,
-        maxX,
-        maxY,
-        centerX,
-        centerY,
-        width: maxX - minX,
-        height: maxY - minY,
-        isCorner: false
-      };
-    }
-  }
-};
+// Configuration cache - loaded from database on component mount
+let configCache: Record<string, number> = {};
 
 // Helper function to check if a point is inside a rotated component
-const isPointInRotatedComponent = (pointX: number, pointY: number, element: DesignElement) => {
-  const rotation = (element.rotation || 0) * Math.PI / 180;
-  
-  // Determine if this is a corner component
-  const isCornerComponent = (element.type === 'counter-top' && element.id.includes('counter-top-corner')) ||
-                           (element.type === 'cabinet' && element.id.includes('corner-wall-cabinet')) ||
-                           (element.type === 'cabinet' && element.id.includes('corner-base-cabinet')) ||
-                           (element.type === 'cabinet' && (
-                             element.id.includes('corner-tall') || 
-                             element.id.includes('corner-larder') ||
-                             element.id.includes('larder-corner')
-                           ));
-  
-  if (isCornerComponent) {
-    // L-shaped components use their actual square footprint - dynamic check
-    const squareSize = Math.min(element.width, element.depth); // Use smaller dimension for square
-    return pointX >= element.x && pointX <= element.x + squareSize &&
-           pointY >= element.y && pointY <= element.y + squareSize;
-  } else {
-    // Standard rectangular component with rotation
+// Uses inverse rotation transform to check point in component's local space
+const isPointInRotatedComponent = (
+  pointX: number,
+  pointY: number,
+  element: DesignElement,
+  viewMode: 'plan' | 'elevation' = 'plan'
+) => {
+  if (viewMode === 'plan') {
+    // Plan view: use X/Y coordinates with rotation
     const width = element.width;
     const height = element.depth || element.height;
+    const rotation = (element.rotation || 0) * Math.PI / 180;
+
+    // Transform click point into component's local space
     const centerX = element.x + width / 2;
     const centerY = element.y + height / 2;
-    
-    if (rotation === 0) {
-      // No rotation - simple check
-      return pointX >= element.x && pointX <= element.x + width &&
-             pointY >= element.y && pointY <= element.y + height;
-    } else {
-      // Rotate the point relative to the component center
-      const cos = Math.cos(-rotation); // Negative rotation to transform point to component space
-      const sin = Math.sin(-rotation);
-      const dx = pointX - centerX;
-      const dy = pointY - centerY;
-      const rotatedX = dx * cos - dy * sin;
-      const rotatedY = dx * sin + dy * cos;
-      
-      // Check if the rotated point is within the original rectangle
-      return rotatedX >= -width / 2 && rotatedX <= width / 2 &&
-             rotatedY >= -height / 2 && rotatedY <= height / 2;
-    }
+
+    // Translate point to component center
+    const dx = pointX - centerX;
+    const dy = pointY - centerY;
+
+    // Rotate backwards (inverse rotation)
+    const cos = Math.cos(-rotation);
+    const sin = Math.sin(-rotation);
+    const localX = dx * cos - dy * sin;
+    const localY = dx * sin + dy * cos;
+
+    // Check if in un-rotated bounds
+    return Math.abs(localX) <= width / 2 && Math.abs(localY) <= height / 2;
+  } else {
+    // Elevation view: use X (horizontal) and Z (vertical) coordinates
+    const width = element.width;
+    const height = element.height || 90; // Use actual height for vertical dimension
+    const z = element.z || 0;
+
+    // In elevation view, Z represents the mount height (bottom of element above floor)
+    // The element extends from z (bottom) to z + height (top)
+    const centerX = element.x + width / 2;
+    const bottomZ = z; // Bottom of element above floor
+    const topZ = z + height; // Top of element above floor
+
+    // Check if point is within bounds (no rotation in elevation view)
+    const isInHorizontalBounds = Math.abs(pointX - centerX) <= width / 2;
+    const isInVerticalBounds = pointY >= bottomZ && pointY <= topZ;
+
+    return isInHorizontalBounds && isInVerticalBounds;
   }
 };
 
@@ -386,6 +316,8 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
   activeTool = 'select',
   fitToScreenSignal = 0,
   active2DView = 'plan',
+  // Elevation view management
+  elevationViews,
   // Tape measure props - multi-measurement support
   completedMeasurements = [],
   currentMeasureStart = null,
@@ -400,10 +332,41 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
 }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
-  
+
   // State management
   const [zoom, setZoom] = useState(1.0);
   const [panOffset, setPanOffset] = useState({ x: 0, y: 0 });
+  const [roomGeometry, setRoomGeometry] = useState<RoomGeometry | null>(null);
+  const [loadingGeometry, setLoadingGeometry] = useState(false);
+
+  // Extract current view direction and hidden elements from ALL view configs (plan, elevation, 3D)
+  const currentViewInfo = React.useMemo(() => {
+    // Get ALL view configs (includes plan + elevations + 3D)
+    const views = elevationViews || getElevationViews();
+
+    // Find view config by active view ID (works for plan, elevations, and 3D)
+    const currentView = views.find(v => v.id === active2DView);
+
+    if (currentView) {
+      return {
+        direction: currentView.direction,
+        hiddenElements: currentView.hidden_elements || []
+      };
+    }
+
+    // Fallback for legacy data that doesn't have plan/3D configs
+    if (active2DView === 'plan') {
+      return { direction: 'plan' as const, hiddenElements: [] };
+    }
+
+    // Fallback: if active2DView is a direction string (legacy behavior)
+    if (['front', 'back', 'left', 'right'].includes(active2DView)) {
+      return { direction: active2DView as 'front' | 'back' | 'left' | 'right', hiddenElements: [] };
+    }
+
+    // Default fallback
+    return { direction: 'front', hiddenElements: [] };
+  }, [active2DView, elevationViews]);
   
   // Notify parent of zoom changes
   useEffect(() => {
@@ -432,6 +395,7 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
   const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
   const [currentMousePos, setCurrentMousePos] = useState({ x: 0, y: 0 });
   const [draggedElement, setDraggedElement] = useState<DesignElement | null>(null);
+  const [draggedElementOriginalPos, setDraggedElementOriginalPos] = useState<{ x: number; y: number } | null>(null);
   const [hoveredElement, setHoveredElement] = useState<DesignElement | null>(null);
   const [dragThreshold, setDragThreshold] = useState<{ exceeded: boolean; startElement: DesignElement | null }>({ exceeded: false, startElement: null });
   const [snapGuides, setSnapGuides] = useState<{
@@ -440,18 +404,103 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
     snapPoint: { x: number; y: number } | null;
   }>({ vertical: [], horizontal: [], snapPoint: null });
 
-  // Use design dimensions or default
-  const roomDimensions = design.roomDimensions || DEFAULT_ROOM_FALLBACK;
+  // Collision detection with type-aware magnetic snapping
+  const { validatePlacement } = useCollisionDetection();
+  const { toast } = useToast();
+
+  // Component metadata for layer-aware selection
+  const { getComponentMetadata, loading: metadataLoading } = useComponentMetadata();
+
+  // Use design dimensions (required)
+  // If roomDimensions is missing, this indicates a data integrity error
+  if (!design.roomDimensions) {
+    console.error('[DesignCanvas2D] Missing room dimensions in design object:', design);
+    throw new Error('Room dimensions are required. This is a data integrity error.');
+  }
+  const roomDimensions = design.roomDimensions;
   
   // Mobile detection
   const isMobile = useIsMobile();
-  
+
   // Touch events state
   const [touchZoomStart, setTouchZoomStart] = useState<number | null>(null);
-  
+
+  // Preload configuration values from database on component mount
+  useEffect(() => {
+    const loadConfiguration = async () => {
+      try {
+        await ConfigurationService.preload();
+
+        // Load all config values into cache for synchronous access
+        configCache = {
+          canvas_width: ConfigurationService.getSync('canvas_width', CANVAS_WIDTH),
+          canvas_height: ConfigurationService.getSync('canvas_height', CANVAS_HEIGHT),
+          grid_size: ConfigurationService.getSync('grid_size', GRID_SIZE),
+          min_zoom: ConfigurationService.getSync('min_zoom', MIN_ZOOM),
+          max_zoom: ConfigurationService.getSync('max_zoom', MAX_ZOOM),
+          wall_thickness: ConfigurationService.getSync('wall_thickness', WALL_THICKNESS),
+          wall_clearance: ConfigurationService.getSync('wall_clearance', WALL_CLEARANCE),
+          wall_snap_threshold: ConfigurationService.getSync('wall_snap_threshold', WALL_SNAP_THRESHOLD),
+          snap_tolerance_default: ConfigurationService.getSync('snap_tolerance_default', 15),
+          snap_tolerance_countertop: ConfigurationService.getSync('snap_tolerance_countertop', 25),
+          proximity_threshold: ConfigurationService.getSync('proximity_threshold', 100),
+          wall_snap_distance_default: ConfigurationService.getSync('wall_snap_distance_default', 35),
+          wall_snap_distance_countertop: ConfigurationService.getSync('wall_snap_distance_countertop', 50),
+          corner_tolerance: ConfigurationService.getSync('corner_tolerance', 30),
+          toe_kick_height: ConfigurationService.getSync('toe_kick_height', 8),
+          drag_threshold_mouse: ConfigurationService.getSync('drag_threshold_mouse', 5),
+          drag_threshold_touch: ConfigurationService.getSync('drag_threshold_touch', 10),
+        };
+
+        console.log('[DesignCanvas2D] Configuration loaded from database:', configCache);
+
+        // Preload 2D render definitions (Phase 3: Database-Driven 2D Rendering)
+        await render2DService.preloadAll();
+        console.log('[DesignCanvas2D] 2D render definitions preloaded');
+      } catch (error) {
+        console.warn('[DesignCanvas2D] Failed to load configuration, using hardcoded fallbacks:', error);
+      }
+    };
+
+    loadConfiguration();
+  }, []);
+
+  // Load room geometry from database (Phase 4: Complex Room Shapes)
+  useEffect(() => {
+    const loadRoomGeometry = async () => {
+      // Only try to load if we have a design ID
+      if (design?.id) {
+        setLoadingGeometry(true);
+        try {
+          const geometry = await RoomService.getRoomGeometry(design.id);
+          if (geometry) {
+            setRoomGeometry(geometry as RoomGeometry);
+            console.log(`✅ [DesignCanvas2D] Loaded complex room geometry for room ${design.id}:`, geometry.shape_type);
+          } else {
+            // No complex geometry - will use simple rectangular fallback
+            setRoomGeometry(null);
+            console.log(`ℹ️ [DesignCanvas2D] No complex geometry found for room ${design.id}, using simple rectangular room`);
+          }
+        } catch (error) {
+          console.warn(`⚠️ [DesignCanvas2D] Failed to load room geometry for ${design.id}:`, error);
+          setRoomGeometry(null);
+        } finally {
+          setLoadingGeometry(false);
+        }
+      } else {
+        // No design ID - use simple rectangular room
+        setRoomGeometry(null);
+        setLoadingGeometry(false);
+      }
+    };
+
+    loadRoomGeometry();
+  }, [design?.id]);
+
   // Helper function to get wall height (ceiling height) - prioritize room dimensions over cache
   const getWallHeight = useCallback(() => {
-    return roomDimensions.ceilingHeight || roomConfigCache?.wall_height || DEFAULT_ROOM_FALLBACK.wallHeight;
+    // Priority: roomDimensions.ceilingHeight > roomConfigCache > hardcoded 250cm default
+    return roomDimensions.ceilingHeight || roomConfigCache?.wall_height || 250;
   }, [roomDimensions.ceilingHeight]);
   
   // Calculate room bounds with wall thickness
@@ -470,7 +519,7 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
   // Room positioning - align rooms to top-center of the canvas for better space utilization
   // For elevation views, use different centering logic
   const roomPosition = (() => {
-    if (active2DView === 'left' || active2DView === 'right') {
+    if (currentViewInfo.direction === 'left' || currentViewInfo.direction === 'right') {
       // Left/Right elevation views: top-center based on room depth and wall height
       const wallHeight = getWallHeight();
       const roomDepth = roomDimensions.height; // Use height as depth for side views
@@ -511,11 +560,21 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
 
   // Convert canvas coordinates to room coordinates (uses inner room for component placement)
   const canvasToRoom = useCallback((canvasX: number, canvasY: number) => {
-    return {
-      x: (canvasX - roomPosition.innerX) / zoom,
-      y: (canvasY - roomPosition.innerY) / zoom
-    };
-  }, [roomPosition, zoom, active2DView]);
+    const x = (canvasX - roomPosition.innerX) / zoom;
+
+    // For elevation views, Y represents vertical height (Z), and needs to be inverted
+    // (canvas top = ceiling, canvas bottom = floor)
+    if (active2DView !== 'plan') {
+      const wallHeight = getWallHeight();
+      // Invert Y so that canvas top (innerY) = ceiling (wallHeight) and bottom = floor (0)
+      const y = wallHeight - ((canvasY - roomPosition.innerY) / zoom);
+      return { x, y };
+    }
+
+    // For plan view, Y is normal depth coordinate
+    const y = (canvasY - roomPosition.innerY) / zoom;
+    return { x, y };
+  }, [roomPosition, zoom, active2DView, getWallHeight]);
 
   // Preload component behaviors and room configuration
   useEffect(() => {
@@ -576,9 +635,11 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
 
   // Smart snap detection for walls and components
   const getSnapPosition = useCallback((element: DesignElement, x: number, y: number) => {
-    // Use more generous snap tolerance for counter tops
+    // Use more generous snap tolerance for counter tops - database-driven
     const isCounterTop = element.type === 'counter-top';
-    const snapTolerance = isCounterTop ? 25 : 15; // cm - more generous for counter tops
+    const snapTolerance = isCounterTop
+      ? (configCache.snap_tolerance_countertop || 25)
+      : (configCache.snap_tolerance_default || 15);
     let snappedX = x;
     let snappedY = y;
     let rotation = element.rotation || 0;
@@ -619,8 +680,8 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
       guides.horizontal.push(roomDimensions.height);
     }
 
-    // Component-to-component snapping - only for nearby elements
-    const proximityThreshold = 100; // Only snap to elements within 100cm
+    // Component-to-component snapping - only for nearby elements (database-driven)
+    const proximityThreshold = configCache.proximity_threshold || 100;
     const otherElements = design.elements.filter(el => el.id !== element.id);
     
     for (const otherEl of otherElements) {
@@ -710,9 +771,11 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
     }
     
     if (componentData?.hasDirection) {
-      // Use more generous wall snap distance for counter tops
-      const wallSnapDistance = isCounterTop ? 50 : 35; // cm - more generous for counter tops
-      const cornerTolerance = 30; // cm tolerance for corner detection
+      // Use more generous wall snap distance for counter tops (database-driven)
+      const wallSnapDistance = isCounterTop
+        ? (configCache.wall_snap_distance_countertop || 50)
+        : (configCache.wall_snap_distance_default || 35);
+      const cornerTolerance = configCache.corner_tolerance || 30;
       
       // Check if this is a corner unit placement
       // ALL corner components use 90cm square dimensions for detection
@@ -879,26 +942,84 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
 
     if (active2DView === 'plan') {
       // Plan view - draw walls with proper thickness
-      
-      // Draw outer walls (wall structure)
-      ctx.fillStyle = '#e5e5e5';
-      ctx.fillRect(roomPosition.outerX, roomPosition.outerY, outerWidth, outerHeight);
-      
-      // Draw inner room (usable space)
-      ctx.fillStyle = '#f9f9f9';
-      ctx.fillRect(roomPosition.innerX, roomPosition.innerY, innerWidth, innerHeight);
 
-      // Draw wall outlines
-      ctx.strokeStyle = '#333';
-      ctx.lineWidth = 2;
-      ctx.setLineDash([]);
-      
-      // Outer wall boundary
-      ctx.strokeRect(roomPosition.outerX, roomPosition.outerY, outerWidth, outerHeight);
-      // Inner room boundary (where components can be placed)
-      ctx.strokeStyle = '#666';
-      ctx.lineWidth = 1;
-      ctx.strokeRect(roomPosition.innerX, roomPosition.innerY, innerWidth, innerHeight);
+      if (roomGeometry) {
+        // Complex room geometry (L-shape, U-shape, custom polygons)
+        const vertices = roomGeometry.floor.vertices;
+
+        // Convert vertices to canvas coordinates
+        const canvasVertices = vertices.map(v => [
+          roomPosition.innerX + v[0] * zoom,
+          roomPosition.innerY + v[1] * zoom
+        ]);
+
+        // Draw floor (usable space)
+        ctx.fillStyle = '#f9f9f9';
+        ctx.beginPath();
+        ctx.moveTo(canvasVertices[0][0], canvasVertices[0][1]);
+        for (let i = 1; i < canvasVertices.length; i++) {
+          ctx.lineTo(canvasVertices[i][0], canvasVertices[i][1]);
+        }
+        ctx.closePath();
+        ctx.fill();
+
+        // Draw floor outline (inner boundary)
+        ctx.strokeStyle = '#666';
+        ctx.lineWidth = 1;
+        ctx.setLineDash([]);
+        ctx.stroke();
+
+        // Draw wall segments
+        roomGeometry.walls.forEach(wall => {
+          const startX = roomPosition.innerX + wall.start[0] * zoom;
+          const startY = roomPosition.innerY + wall.start[1] * zoom;
+          const endX = roomPosition.innerX + wall.end[0] * zoom;
+          const endY = roomPosition.innerY + wall.end[1] * zoom;
+          const thickness = (wall.thickness || WALL_THICKNESS) * zoom;
+
+          // Calculate wall perpendicular vector (for thickness)
+          const dx = endX - startX;
+          const dy = endY - startY;
+          const len = Math.sqrt(dx * dx + dy * dy);
+          const perpX = (-dy / len) * thickness / 2;
+          const perpY = (dx / len) * thickness / 2;
+
+          // Draw wall as thick line
+          ctx.fillStyle = '#e5e5e5';
+          ctx.beginPath();
+          ctx.moveTo(startX + perpX, startY + perpY);
+          ctx.lineTo(endX + perpX, endY + perpY);
+          ctx.lineTo(endX - perpX, endY - perpY);
+          ctx.lineTo(startX - perpX, startY - perpY);
+          ctx.closePath();
+          ctx.fill();
+
+          // Draw wall outline
+          ctx.strokeStyle = '#333';
+          ctx.lineWidth = 1;
+          ctx.stroke();
+        });
+      } else {
+        // Simple rectangular room (boundary-only rendering)
+        // ✅ FIXED: Use boundary lines instead of filled rectangles to prevent visual overlap
+
+        // Optional: Very subtle inner room background (doesn't block components)
+        ctx.fillStyle = 'rgba(249, 249, 249, 0.3)'; // 70% transparent
+        ctx.fillRect(roomPosition.innerX, roomPosition.innerY, innerWidth, innerHeight);
+
+        // Draw wall boundaries (stroke only - no fills)
+        ctx.strokeStyle = '#333';
+        ctx.lineWidth = 2;
+        ctx.setLineDash([]);
+
+        // Outer wall boundary
+        ctx.strokeRect(roomPosition.outerX, roomPosition.outerY, outerWidth, outerHeight);
+
+        // Inner room boundary (where components can be placed)
+        ctx.strokeStyle = '#666';
+        ctx.lineWidth = 1;
+        ctx.strokeRect(roomPosition.innerX, roomPosition.innerY, innerWidth, innerHeight);
+      }
 
       // Room dimensions labels
       ctx.fillStyle = '#666';
@@ -944,15 +1065,15 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
       const floorY = roomPosition.innerY + (CANVAS_HEIGHT * 0.4); // Fixed floor position (adjusted for top-center alignment)
       const topY = floorY - wallHeight; // Ceiling moves up/down based on wall height
 
-      // CRITICAL FIX: Use appropriate dimension for each elevation view
+      // CRITICAL FIX: Use appropriate dimension for each elevation view based on direction
       let elevationRoomWidth: number;
-      if (active2DView === 'front' || active2DView === 'back') {
+      if (currentViewInfo.direction === 'front' || currentViewInfo.direction === 'back') {
         elevationRoomWidth = roomDimensions.width * zoom; // Use room width for front/back views
       } else {
         elevationRoomWidth = roomDimensions.height * zoom; // Use room depth for left/right views
       }
 
-      // Draw wall boundaries 
+      // Draw wall boundaries
       ctx.fillStyle = '#f9f9f9';
       ctx.fillRect(roomPosition.innerX, topY, elevationRoomWidth, wallHeight);
 
@@ -974,12 +1095,12 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
       ctx.textAlign = 'center';
       const wallLabels = {
         front: 'Front Wall',
-        back: 'Back Wall', 
+        back: 'Back Wall',
         left: 'Left Wall',
         right: 'Right Wall'
       };
       ctx.fillText(
-        wallLabels[active2DView] || '',
+        wallLabels[currentViewInfo.direction] || '',
         roomPosition.innerX + elevationRoomWidth / 2,
         roomPosition.innerY - 20
       );
@@ -987,10 +1108,10 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
       // Dimension labels
       ctx.fillStyle = '#666';
       ctx.font = '12px Arial';
-      
+
       // Width dimension (bottom) - use inner room dimensions
       let widthText = '';
-      if (active2DView === 'front' || active2DView === 'back') {
+      if (currentViewInfo.direction === 'front' || currentViewInfo.direction === 'back') {
         widthText = `${roomDimensions.width}cm (inner)`;
       } else {
         widthText = `${roomDimensions.height}cm (inner)`;
@@ -1034,183 +1155,11 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
       ctx.lineTo(indicatorX + 3, floorY - 8);
       ctx.stroke();
     }
-  }, [roomDimensions, roomPosition, zoom, active2DView]);
+  }, [roomDimensions, roomPosition, zoom, active2DView, roomGeometry, getWallHeight]);
 
-  // Draw sink in plan view with realistic bowl representation
-  const drawSinkPlanView = useCallback((ctx: CanvasRenderingContext2D, element: DesignElement, width: number, depth: number, isSelected: boolean, isHovered: boolean) => {
-    const isButlerSink = element.id.includes('butler-sink') || element.id.includes('butler') || element.id.includes('base-unit-sink');
-    const isDoubleBowl = element.id.includes('double-bowl') || element.id.includes('double');
-    const isCornerSink = element.id.includes('corner-sink');
-    const hasDrainingBoard = element.id.includes('draining-board') || element.metadata?.has_draining_board;
-    const isFarmhouseSink = element.id.includes('farmhouse');
-    
-    // Sink colors
-    const sinkColor = isButlerSink ? '#FFFFFF' : '#C0C0C0'; // White ceramic for butler, stainless steel for kitchen
-    const rimColor = isButlerSink ? '#F8F8F8' : '#B0B0B0';
-    
-    // Draw sink rim (outer edge) with gradient effect
-    ctx.fillStyle = rimColor;
-    ctx.fillRect(0, 0, width, depth);
-
-    // Add subtle rim highlight
-    ctx.fillStyle = isButlerSink ? '#FFFFFF' : '#E0E0E0';
-    ctx.fillRect(0, 0, width, depth * 0.1); // Top edge highlight
-    ctx.fillRect(0, 0, width * 0.1, depth); // Left edge highlight
-
-    // Draw sink bowl(s) with improved shapes
-    ctx.fillStyle = sinkColor;
-    
-    if (isDoubleBowl) {
-      // Double bowl sink
-      const bowlWidth = width * 0.4;
-      const bowlDepth = depth * 0.8;
-      const leftBowlX = width * 0.1;
-      const rightBowlX = width * 0.5;
-      const bowlY = depth * 0.1;
-      
-      // Left bowl with more realistic shape
-      ctx.beginPath();
-      const leftBowlRadiusX = bowlWidth/2 * 0.9;
-      const leftBowlRadiusY = bowlDepth/2 * 0.95;
-      ctx.ellipse(leftBowlX + bowlWidth/2, bowlY + bowlDepth/2, leftBowlRadiusX, leftBowlRadiusY, 0, 0, 2 * Math.PI);
-      ctx.fill();
-
-      // Left bowl inner shadow/highlight
-      ctx.fillStyle = isButlerSink ? '#F0F0F0' : '#D0D0D0';
-      ctx.beginPath();
-      ctx.ellipse(leftBowlX + bowlWidth/2, bowlY + bowlDepth/2 - bowlDepth * 0.1, leftBowlRadiusX * 0.7, leftBowlRadiusY * 0.3, 0, 0, 2 * Math.PI);
-      ctx.fill();
-
-      // Right bowl with more realistic shape
-      ctx.fillStyle = sinkColor;
-      ctx.beginPath();
-      const rightBowlRadiusX = bowlWidth/2 * 0.9;
-      const rightBowlRadiusY = bowlDepth/2 * 0.95;
-      ctx.ellipse(rightBowlX + bowlWidth/2, bowlY + bowlDepth/2, rightBowlRadiusX, rightBowlRadiusY, 0, 0, 2 * Math.PI);
-      ctx.fill();
-
-      // Right bowl inner shadow/highlight
-      ctx.fillStyle = isButlerSink ? '#F0F0F0' : '#D0D0D0';
-      ctx.beginPath();
-      ctx.ellipse(rightBowlX + bowlWidth/2, bowlY + bowlDepth/2 - bowlDepth * 0.1, rightBowlRadiusX * 0.7, rightBowlRadiusY * 0.3, 0, 0, 2 * Math.PI);
-      ctx.fill();
-      
-      // Center divider
-      ctx.fillStyle = rimColor;
-      ctx.fillRect(width * 0.45, bowlY, width * 0.1, bowlDepth);
-      
-    } else if (isCornerSink) {
-      // Corner sink (L-shaped) with improved shape
-      const mainBowlWidth = width * 0.6;
-      const mainBowlDepth = depth * 0.6;
-      const mainBowlX = width * 0.2;
-      const mainBowlY = depth * 0.2;
-
-      // Main bowl with more realistic shape
-      ctx.beginPath();
-      const mainBowlRadiusX = mainBowlWidth/2 * 0.9;
-      const mainBowlRadiusY = mainBowlDepth/2 * 0.95;
-      ctx.ellipse(mainBowlX + mainBowlWidth/2, mainBowlY + mainBowlDepth/2, mainBowlRadiusX, mainBowlRadiusY, 0, 0, 2 * Math.PI);
-      ctx.fill();
-
-      // Main bowl inner shadow/highlight
-      ctx.fillStyle = isButlerSink ? '#F0F0F0' : '#D0D0D0';
-      ctx.beginPath();
-      ctx.ellipse(mainBowlX + mainBowlWidth/2, mainBowlY + mainBowlDepth/2 - mainBowlDepth * 0.1, mainBowlRadiusX * 0.7, mainBowlRadiusY * 0.3, 0, 0, 2 * Math.PI);
-      ctx.fill();
-      
-      // Corner extension with highlight
-      const cornerWidth = width * 0.3;
-      const cornerDepth = depth * 0.3;
-      ctx.fillStyle = sinkColor;
-      ctx.fillRect(mainBowlX + mainBowlWidth * 0.7, mainBowlY + mainBowlDepth * 0.7, cornerWidth, cornerDepth);
-
-      // Corner extension highlight
-      ctx.fillStyle = isButlerSink ? '#F0F0F0' : '#D0D0D0';
-      ctx.fillRect(mainBowlX + mainBowlWidth * 0.7, mainBowlY + mainBowlDepth * 0.7, cornerWidth * 0.8, cornerDepth * 0.8);
-      
-    } else {
-      // Single bowl sink with improved shape
-      const bowlWidth = width * 0.7;
-      const bowlDepth = depth * 0.8;
-      const bowlX = width * 0.15;
-      const bowlY = depth * 0.1;
-
-      // Main bowl
-      ctx.beginPath();
-      const bowlRadiusX = bowlWidth/2 * 0.9;
-      const bowlRadiusY = bowlDepth/2 * 0.95;
-      ctx.ellipse(bowlX + bowlWidth/2, bowlY + bowlDepth/2, bowlRadiusX, bowlRadiusY, 0, 0, 2 * Math.PI);
-      ctx.fill();
-
-      // Bowl inner shadow/highlight
-      ctx.fillStyle = isButlerSink ? '#F0F0F0' : '#D0D0D0';
-      ctx.beginPath();
-      ctx.ellipse(bowlX + bowlWidth/2, bowlY + bowlDepth/2 - bowlDepth * 0.1, bowlRadiusX * 0.7, bowlRadiusY * 0.3, 0, 0, 2 * Math.PI);
-      ctx.fill();
-    }
-    
-    // Draw drain
-    ctx.fillStyle = '#2F2F2F';
-    const drainSize = Math.min(width, depth) * 0.1;
-    const drainX = width/2 - drainSize/2;
-    const drainY = depth/2 - drainSize/2;
-    ctx.beginPath();
-    ctx.arc(drainX + drainSize/2, drainY + drainSize/2, drainSize/2, 0, 2 * Math.PI);
-    ctx.fill();
-    
-    // Draw faucet mounting holes
-    ctx.fillStyle = '#2F2F2F';
-    const holeSize = Math.min(width, depth) * 0.03;
-    const holeY = depth * 0.2;
-    
-    if (isDoubleBowl) {
-      // Two holes for double bowl
-      ctx.beginPath();
-      ctx.arc(width * 0.25, holeY, holeSize/2, 0, 2 * Math.PI);
-      ctx.fill();
-      ctx.beginPath();
-      ctx.arc(width * 0.75, holeY, holeSize/2, 0, 2 * Math.PI);
-      ctx.fill();
-    } else {
-      // Single hole for single bowl
-      ctx.beginPath();
-      ctx.arc(width * 0.5, holeY, holeSize/2, 0, 2 * Math.PI);
-      ctx.fill();
-    }
-    
-    // Draw draining board if present with improved appearance
-    if (hasDrainingBoard) {
-      // Main draining board surface
-      ctx.fillStyle = rimColor;
-      ctx.fillRect(width * 0.05, depth * 0.65, width * 0.9, depth * 0.3);
-
-      // Draining board highlight
-      ctx.fillStyle = isButlerSink ? '#FFFFFF' : '#E8E8E8';
-      ctx.fillRect(width * 0.05, depth * 0.65, width * 0.9, depth * 0.05);
-
-      // Draw draining board grooves with improved appearance
-      ctx.strokeStyle = isButlerSink ? '#E0E0E0' : '#D0D0D0';
-      ctx.lineWidth = 1;
-      for (let i = 0; i < 10; i++) {
-        const x = width * 0.05 + (i + 0.5) * (width * 0.9) / 10;
-        ctx.beginPath();
-        ctx.moveTo(x, depth * 0.65);
-        ctx.lineTo(x, depth * 0.95);
-        ctx.stroke();
-
-        // Add subtle shadow to grooves
-        ctx.strokeStyle = isButlerSink ? '#D0D0D0' : '#C0C0C0';
-        ctx.beginPath();
-        ctx.moveTo(x + 0.5, depth * 0.65);
-        ctx.lineTo(x + 0.5, depth * 0.95);
-        ctx.stroke();
-      }
-
-      // Reset stroke style
-      ctx.strokeStyle = '#000000';
-    }
-  }, []);
+  // LEGACY CODE REMOVED: drawSinkPlanView function (173 lines)
+  // Replaced by database-driven handlers in src/services/2d-renderers/plan-view-handlers.ts
+  // See archive: docs/session-2025-10-09-2d-database-migration/LEGACY-CODE-FULL-ARCHIVE.md
 
   // Draw element with smart rendering
   const drawElement = useCallback((ctx: CanvasRenderingContext2D, element: DesignElement) => {
@@ -1226,18 +1175,10 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
 
       ctx.save();
       
-      // Check if this is a corner component for proper rotation center
-      const isCornerCounterTop = element.type === 'counter-top' && element.id.includes('counter-top-corner');
-      const isCornerWallCabinet = element.type === 'cabinet' && (element.id.includes('corner-wall-cabinet') || element.id.includes('new-corner-wall-cabinet'));
-      const isCornerBaseCabinet = element.type === 'cabinet' && (element.id.includes('corner-base-cabinet') || element.id.includes('l-shaped-test-cabinet'));
-      const isCornerTallUnit = element.type === 'cabinet' && (
-        element.id.includes('corner-tall') || 
-        element.id.includes('corner-larder') ||
-        element.id.includes('larder-corner')
-      );
-      
-      const isCornerComponent = isCornerCounterTop || isCornerWallCabinet || isCornerBaseCabinet || isCornerTallUnit;
-      
+      // Check if this is a corner component (needed for wireframe/selection overlays)
+      // Note: Main rendering now uses database field plan_view_type: 'corner-square'
+      const isCornerComponent = element.id.includes('corner-');
+
       // Apply rotation - convert degrees to radians if needed
       ctx.translate(pos.x + width / 2, pos.y + depth / 2);
       ctx.rotate(rotation * Math.PI / 180);
@@ -1245,24 +1186,36 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
 
       // COLOR DETAIL RENDERING (if enabled)
       if (showColorDetail) {
-        // Element fill
-        if (isSelected) {
-          ctx.fillStyle = '#ff6b6b';
-        } else if (isHovered) {
-          ctx.fillStyle = '#b0b0b0';
-        } else {
-          ctx.fillStyle = element.color || '#8b4513';
+        // Try database-driven rendering first (Phase 3: Database-Driven 2D Rendering)
+        const useDatabaseRendering = FeatureFlagService.isEnabled('use_database_2d_rendering');
+        let renderedByDatabase = false;
+
+        if (useDatabaseRendering) {
+          try {
+            const renderDef = render2DService.getCached(element.component_id);
+            if (renderDef) {
+              // Apply selection/hover colors
+              if (isSelected) {
+                ctx.fillStyle = '#ff6b6b';
+              } else if (isHovered) {
+                ctx.fillStyle = '#b0b0b0';
+              } else {
+                ctx.fillStyle = renderDef.fill_color || element.color || '#8b4513';
+              }
+
+              // Render using database-driven system
+              renderPlanView(ctx, element, renderDef, zoom);
+              renderedByDatabase = true;
+            }
+          } catch (error) {
+            console.warn('[DesignCanvas2D] Database rendering failed, falling back to legacy:', error);
+          }
         }
-        
-        if (element.type === 'sink') {
-          // Sink rendering - draw bowl shape
-          drawSinkPlanView(ctx, element, width, depth, isSelected, isHovered);
-        } else if (isCornerComponent) {
-          // Corner components: Draw as square
-          const squareSize = Math.min(element.width, element.depth) * zoom;
-          ctx.fillRect(0, 0, squareSize, squareSize);
-        } else {
-          // Standard components: Draw as rectangle
+
+        // Minimal fallback if database rendering not enabled or failed
+        if (!renderedByDatabase) {
+          // Simple rectangle fallback
+          ctx.fillStyle = element.color || '#8b4513';
           ctx.fillRect(0, 0, width, depth);
         }
       }
@@ -1311,36 +1264,48 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
   }, [active2DView, roomToCanvas, selectedElement, hoveredElement, zoom, showWireframe, showColorDetail]);
 
 
-  // Draw selection handles using rotated bounding box
+  // Draw selection handles using canvas rotation (matches component rendering)
   const drawSelectionHandles = (ctx: CanvasRenderingContext2D, element: DesignElement) => {
     const handleSize = 8;
+    const width = element.width * zoom;
+    const height = (element.depth || element.height) * zoom;
+    const rotation = (element.rotation || 0) * Math.PI / 180;
+
+    ctx.save();
+
+    // Apply same transform as component rendering
+    const pos = roomToCanvas(element.x, element.y);
+    ctx.translate(pos.x + width / 2, pos.y + height / 2);
+    ctx.rotate(rotation);
+
+    // Draw handles at corners of UN-rotated rectangle
     ctx.fillStyle = '#ff6b6b';
-    
-    // Get the rotated bounding box for the element
-    const bbox = getRotatedBoundingBox(element);
-    const canvasMin = roomToCanvas(bbox.minX, bbox.minY);
-    const canvasMax = roomToCanvas(bbox.maxX, bbox.maxY);
-    
-    // Draw handles at the corners of the bounding box
-    const handles = [
-      { x: canvasMin.x - handleSize/2, y: canvasMin.y - handleSize/2 },
-      { x: canvasMax.x - handleSize/2, y: canvasMin.y - handleSize/2 },
-      { x: canvasMin.x - handleSize/2, y: canvasMax.y - handleSize/2 },
-      { x: canvasMax.x - handleSize/2, y: canvasMax.y - handleSize/2 }
+
+    const corners = [
+      { x: -width / 2, y: -height / 2 },      // Top-left
+      { x: width / 2, y: -height / 2 },       // Top-right
+      { x: -width / 2, y: height / 2 },       // Bottom-left
+      { x: width / 2, y: height / 2 }         // Bottom-right
     ];
-    
-    handles.forEach(handle => {
-      ctx.fillRect(handle.x, handle.y, handleSize, handleSize);
+
+    corners.forEach(corner => {
+      ctx.fillRect(corner.x - handleSize / 2, corner.y - handleSize / 2, handleSize, handleSize);
     });
+
+    ctx.restore();
   };
 
   // Draw element in elevation view with detailed fronts
   const drawElementElevation = (ctx: CanvasRenderingContext2D, element: DesignElement, isSelected: boolean, isHovered: boolean, showWireframe: boolean) => {
     // Check if element should be visible in current elevation view
     const wall = getElementWall(element);
-    const isCornerVisible = isCornerVisibleInView(element, active2DView);
-    
-    if (!isCornerVisible && wall !== active2DView && wall !== 'center') return;
+    const isCornerVisible = isCornerVisibleInView(element, currentViewInfo.direction);
+
+    // Check direction visibility
+    if (!isCornerVisible && wall !== currentViewInfo.direction && wall !== 'center') return;
+
+    // Check if element is hidden in this specific view
+    if (currentViewInfo.hiddenElements.includes(element.id)) return;
 
     // Async preload behavior if not cached
     if (!componentBehaviorCache.has(element.type)) {
@@ -1370,127 +1335,164 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
       effectiveDepth = element.depth;
     }
 
-    // Calculate horizontal position - use innerX as baseline for all elevation views
-    let xPos: number;
-    let elementWidth: number;
-    
-    if (active2DView === 'front' || active2DView === 'back') {
-      // Front/back walls: use X coordinate from plan view
-      xPos = roomPosition.innerX + (element.x / roomDimensions.width) * elevationWidth;
-      elementWidth = (effectiveWidth / roomDimensions.width) * elevationWidth;
-    } else if (active2DView === 'left') {
-      // Left wall view - flip horizontally (mirror Y coordinate)
-      // When looking at left wall from inside room, far end of room appears on left side of view
-      const flippedY = roomDimensions.height - element.y - effectiveDepth;
-      xPos = roomPosition.innerX + (flippedY / roomDimensions.height) * elevationDepth;
-      
-      // For worktops/counter-tops, use depth as width (length along wall)
-      // For cabinets and other components, use effective width (length along wall)
-      if (element.type === 'counter-top') {
-        elementWidth = (element.depth / roomDimensions.height) * elevationDepth;
-      } else {
-        elementWidth = (effectiveWidth / roomDimensions.height) * elevationDepth; // Use rotation-aware width
-      }
-    } else { // right wall
-      // Right wall view: use Y coordinate from plan view  
-      xPos = roomPosition.innerX + (element.y / roomDimensions.height) * elevationDepth;
-      
-      // For worktops/counter-tops, use depth as width (length along wall)
-      // For cabinets and other components, use effective width (length along wall)
-      if (element.type === 'counter-top') {
-        elementWidth = (element.depth / roomDimensions.height) * elevationDepth;
-      } else {
-        elementWidth = (effectiveWidth / roomDimensions.height) * elevationDepth; // Use rotation-aware width
-      }
-    }
+    // 🎯 Calculate horizontal position using PositionCalculation utility
+    // Feature flag controls switching between legacy (asymmetric) and new (unified) coordinate systems
+    // Legacy code preserved inside PositionCalculation for instant rollback capability
+    // Now synchronous to avoid render race conditions
+    const { xPos, elementWidth } = PositionCalculation.calculateElevationPosition(
+      element,
+      roomDimensions,
+      roomPosition,
+      active2DView,
+      zoom,
+      elevationWidth,
+      elevationDepth
+    );
     
     // Tall corner unit dimensions are now correct (90x90cm) after database migration
     
-    // Calculate vertical position and height based on component type
-    // REVERT TO SIMPLE HARDCODED APPROACH - database system was too complex
+    // ✨ PHASE 3: Calculate vertical position and height using database layer metadata
+    // This aligns elevation views with collision detection system (single source of truth)
     let elementHeight: number;
     let yPos: number;
-    
-    // Simple hardcoded elevation heights that were working before
-    let elevationHeightCm: number;
-    
-    // Determine elevation height based on component type and ID
-    if (element.type === 'cornice') {
-      elevationHeightCm = 30; // Cornice height
-    } else if (element.type === 'pelmet') {
-      elevationHeightCm = 20; // Pelmet height
-    } else if (element.type === 'counter-top') {
-      elevationHeightCm = 4; // Counter top thickness
-    } else if (element.type === 'cabinet' && element.id.includes('wall-cabinet')) {
-      elevationHeightCm = 70; // Wall cabinet height
-    } else if (element.type === 'cabinet' && (element.id.includes('tall') || element.id.includes('larder'))) {
-      elevationHeightCm = element.height; // Use actual height for tall units - THIS IS KEY!
-    } else if (element.type === 'cabinet') {
-      elevationHeightCm = 90; // Base cabinet height
-    } else if (element.type === 'appliance') {
-      elevationHeightCm = element.height; // Use actual height for appliances
-    } else if (element.type === 'window') {
-      elevationHeightCm = 100; // Window height
-    } else if (element.type === 'wall-unit-end-panel') {
-      elevationHeightCm = 70; // Wall unit end panel height
-    } else if (element.type === 'sink') {
-      // Different heights for butler vs kitchen sinks
-      const isButlerSink = element.id.includes('butler-sink') || element.id.includes('butler') || element.id.includes('base-unit-sink');
-      elevationHeightCm = isButlerSink ? 30 : 20; // 30cm for butler sinks, 20cm for kitchen sinks
+
+    // Try to get metadata from database (Phase 1 collision detection)
+    const metadata = getComponentMetadata(element.component_id || element.id);
+
+    if (metadata) {
+      // ✅ DATABASE-DRIVEN: Use authoritative layer heights from database
+      const componentHeight = metadata.max_height_cm - metadata.min_height_cm;
+      const mountHeight = metadata.min_height_cm;
+
+      elementHeight = componentHeight * zoom;
+      yPos = floorY - (mountHeight * zoom) - elementHeight;
+
+      // Override with explicit Z position if present
+      if (element.z && element.z > 0) {
+        const explicitMountHeight = element.z * zoom;
+        yPos = floorY - explicitMountHeight - elementHeight;
+      }
     } else {
-      elevationHeightCm = element.height; // Default to actual element height
-    }
-    
-    elementHeight = elevationHeightCm * zoom;
-    
-    // Calculate Y position based on component Z position and type
-    if (element.z && element.z > 0) {
-      // Component has explicit Z position - use it
-      const mountHeight = element.z * zoom;
-      yPos = floorY - mountHeight - elementHeight;
-    } else {
-      // Default positioning based on type
-      if (element.type === 'cabinet' && element.id.includes('wall-cabinet')) {
-        // Wall cabinets at 140cm height
-        yPos = floorY - (140 * zoom) - elementHeight;
-      } else if (element.type === 'cornice') {
-        // Cornice at top of wall units (200cm)
-        yPos = floorY - (200 * zoom) - elementHeight;
+      // ⚠️ FALLBACK: Component not in database, use legacy hardcoded logic
+      let elevationHeightCm: number;
+
+      // Determine elevation height based on component type and ID
+      if (element.type === 'cornice') {
+        elevationHeightCm = 30; // Cornice height
       } else if (element.type === 'pelmet') {
-        // Pelmet at bottom of wall units (140cm)
-        yPos = floorY - (140 * zoom);
+        elevationHeightCm = 20; // Pelmet height
+      } else if (element.type === 'counter-top') {
+        elevationHeightCm = 4; // Counter top thickness
+      } else if (element.type === 'cabinet' && element.id.includes('wall-cabinet')) {
+        elevationHeightCm = 70; // Wall cabinet height
+      } else if (element.type === 'cabinet' && (element.id.includes('tall') || element.id.includes('larder'))) {
+        elevationHeightCm = element.height; // Use actual height for tall units
+      } else if (element.type === 'cabinet') {
+        elevationHeightCm = 90; // Base cabinet height
+      } else if (element.type === 'appliance') {
+        elevationHeightCm = element.height; // Use actual height for appliances
       } else if (element.type === 'window') {
-        // Windows at 90cm height
-        yPos = floorY - (90 * zoom) - elementHeight;
+        elevationHeightCm = 100; // Window height
+      } else if (element.type === 'wall-unit-end-panel') {
+        elevationHeightCm = 70; // Wall unit end panel height
       } else if (element.type === 'sink') {
-        // Sink positioning based on type
+        // Different heights for butler vs kitchen sinks
         const isButlerSink = element.id.includes('butler-sink') || element.id.includes('butler') || element.id.includes('base-unit-sink');
-        if (isButlerSink) {
-          // Butler sinks at Z position 65cm
-          yPos = floorY - (65 * zoom) - elementHeight;
-        } else {
-          // Kitchen sinks at Z position 75cm
-          yPos = floorY - (75 * zoom) - elementHeight;
-        }
+        elevationHeightCm = isButlerSink ? 30 : 20;
       } else {
-        // Floor level components
-        yPos = floorY - elementHeight;
+        elevationHeightCm = element.height; // Default to actual element height
+      }
+
+      elementHeight = elevationHeightCm * zoom;
+
+      // Calculate Y position based on component Z position and type
+      if (element.z && element.z > 0) {
+        // Component has explicit Z position - use it
+        const mountHeight = element.z * zoom;
+        yPos = floorY - mountHeight - elementHeight;
+      } else {
+        // Default positioning based on type
+        if (element.type === 'cabinet' && element.id.includes('wall-cabinet')) {
+          yPos = floorY - (140 * zoom) - elementHeight;
+        } else if (element.type === 'cornice') {
+          yPos = floorY - (200 * zoom) - elementHeight;
+        } else if (element.type === 'pelmet') {
+          yPos = floorY - (140 * zoom);
+        } else if (element.type === 'window') {
+          yPos = floorY - (90 * zoom) - elementHeight;
+        } else if (element.type === 'sink') {
+          const isButlerSink = element.id.includes('butler-sink') || element.id.includes('butler') || element.id.includes('base-unit-sink');
+          if (isButlerSink) {
+            yPos = floorY - (65 * zoom) - elementHeight;
+          } else {
+            yPos = floorY - (75 * zoom) - elementHeight;
+          }
+        } else {
+          // Floor level components
+          yPos = floorY - elementHeight;
+        }
       }
     }
 
     // Draw detailed elevation view
     ctx.save();
 
-    // Main cabinet body
-    if (isSelected) {
-      ctx.fillStyle = '#ff6b6b';
-    } else if (isHovered) {
-      ctx.fillStyle = '#b0b0b0';
+    // Try database-driven rendering first (Phase 3: Database-Driven 2D Rendering)
+    const useDatabaseRendering = FeatureFlagService.isEnabled('use_database_2d_rendering');
+    let renderedByDatabase = false;
+
+    if (useDatabaseRendering) {
+      try {
+        const renderDef = render2DService.getCached(element.component_id);
+        if (renderDef) {
+          console.log('[DesignCanvas2D] Rendering elevation for:', element.component_id, 'with data:', renderDef.elevation_data);
+
+          // Apply selection/hover colors
+          if (isSelected) {
+            ctx.fillStyle = '#ff6b6b';
+          } else if (isHovered) {
+            ctx.fillStyle = '#b0b0b0';
+          } else {
+            ctx.fillStyle = renderDef.fill_color || element.color || '#8b4513';
+          }
+
+          // Render using database-driven system (with roomDimensions for corner logic)
+          renderElevationView(
+            ctx,
+            element,
+            renderDef,
+            active2DView,
+            xPos,
+            yPos,
+            elementWidth,
+            elementHeight,
+            zoom,
+            roomDimensions // Pass room dimensions for corner cabinet positioning
+          );
+          renderedByDatabase = true;
+        } else {
+          console.warn('[DesignCanvas2D] No render definition found for:', element.component_id);
+        }
+      } catch (error) {
+        console.warn('[DesignCanvas2D] Elevation database rendering failed, falling back to legacy:', error);
+      }
     } else {
-      ctx.fillStyle = element.color || '#8b4513';
+      console.warn('[DesignCanvas2D] Database rendering disabled by feature flag');
     }
-    
-    ctx.fillRect(xPos, yPos, elementWidth, elementHeight);
+
+    // Fallback to legacy rendering if database rendering not enabled or failed
+    if (!renderedByDatabase) {
+      // Main cabinet body
+      if (isSelected) {
+        ctx.fillStyle = '#ff6b6b';
+      } else if (isHovered) {
+        ctx.fillStyle = '#b0b0b0';
+      } else {
+        ctx.fillStyle = element.color || '#8b4513';
+      }
+
+      ctx.fillRect(xPos, yPos, elementWidth, elementHeight);
+    }
 
     // Element border (only when selected)
     if (isSelected) {
@@ -1507,839 +1509,59 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
       ctx.strokeRect(xPos, yPos, elementWidth, elementHeight);
     }
 
-    // Draw detailed fronts based on component type
-    if (element.type.includes('cabinet')) {
-      drawCabinetElevationDetails(ctx, xPos, yPos, elementWidth, elementHeight, element);
-    } else if (element.type.includes('appliance')) {
-      drawApplianceElevationDetails(ctx, xPos, yPos, elementWidth, elementHeight, element);
-    } else if (element.type === 'counter-top') {
-      drawCounterTopElevationDetails(ctx, xPos, yPos, elementWidth, elementHeight, element);
-    } else if (element.type === 'end-panel') {
-      drawEndPanelElevationDetails(ctx, xPos, yPos, elementWidth, elementHeight, element);
-    } else if (element.type === 'window') {
-      drawWindowElevationDetails(ctx, xPos, yPos, elementWidth, elementHeight, element);
-    } else if (element.type === 'door') {
-      drawDoorElevationDetails(ctx, xPos, yPos, elementWidth, elementHeight, element);
-    } else if (element.type === 'flooring') {
-      drawFlooringElevationDetails(ctx, xPos, yPos, elementWidth, elementHeight, element);
-    } else if (element.type === 'toe-kick') {
-      drawToeKickElevationDetails(ctx, xPos, yPos, elementWidth, elementHeight, element);
-    } else if (element.type === 'cornice') {
-      drawCorniceElevationDetails(ctx, xPos, yPos, elementWidth, elementHeight, element);
-    } else if (element.type === 'pelmet') {
-      drawPelmetElevationDetails(ctx, xPos, yPos, elementWidth, elementHeight, element);
-    } else if (element.type === 'wall-unit-end-panel') {
-      drawWallUnitEndPanelElevationDetails(ctx, xPos, yPos, elementWidth, elementHeight, element);
-    } else if (element.type === 'sink') {
-      drawSinkElevationDetails(ctx, xPos, yPos, elementWidth, elementHeight, element);
-    }
+    // LEGACY CODE REMOVED: Elevation detail function calls (28 lines)
+    // All elevation detail rendering now handled by database-driven handlers
+    // See archive: docs/session-2025-10-09-2d-database-migration/LEGACY-CODE-FULL-ARCHIVE.md
 
     ctx.restore();
   };
 
-  // Draw detailed cabinet elevation with doors and handles
-  const drawCabinetElevationDetails = (ctx: CanvasRenderingContext2D, x: number, y: number, width: number, height: number, element: DesignElement) => {
-    const doorInset = 3;
-    const handleSize = Math.max(2, width * 0.02);
-    
-    // Calculate rotation-aware dimensions for door count
-    const rotation = (element.rotation || 0) * Math.PI / 180;
-    const isRotated = Math.abs(Math.sin(rotation)) > 0.1; // 90° or 270° rotation
-    const effectiveWidth = isRotated ? element.depth : element.width;
-    const showDoorFace = shouldShowCornerDoorFace(element, active2DView);
-    
-    ctx.strokeStyle = '#4a3728';
-    ctx.lineWidth = 1;
+  // =============================================================================
+  // LEGACY ELEVATION DETAIL FUNCTIONS REMOVED (875 lines)
+  // =============================================================================
+  // Date: 2025-10-10
+  // Reason: Migrated to database-driven 2D rendering system
+  //
+  // All elevation detail rendering now handled by:
+  // - src/services/2d-renderers/elevation-view-handlers.ts
+  // - Database: component_2d_renders table (elevation_data JSONB)
+  //
+  // Functions removed:
+  // - drawCabinetElevationDetails (233 lines)
+  // - drawApplianceElevationDetails (75 lines)
+  // - drawCounterTopElevationDetails (32 lines)
+  // - drawEndPanelElevationDetails (32 lines)
+  // - drawWindowElevationDetails (32 lines)
+  // - drawDoorElevationDetails (45 lines)
+  // - drawFlooringElevationDetails (69 lines)
+  // - drawToeKickElevationDetails (27 lines)
+  // - drawCorniceElevationDetails (31 lines)
+  // - drawPelmetElevationDetails (34 lines)
+  // - drawWallUnitEndPanelElevationDetails (27 lines)
+  // - drawSinkElevationDetails (71 lines)
+  // - isCornerUnit (19 lines)
+  // - getElementWall (23 lines)
+  // - isCornerVisibleInView (16 lines)
+  // - shouldShowCornerDoorFace (8 lines)
+  //
+  // Full archive available at:
+  // docs/session-2025-10-09-2d-database-migration/LEGACY-CODE-FULL-ARCHIVE.md
+  //
+  // Git commit before removal: 14b478d (feat: Implement view-specific corner cabinet door logic)
+  // Git commit with removal: d31b6e2 (Refactor: Remove 875 lines of legacy elevation rendering code)
+  // =============================================================================
 
-    // If this is a corner unit showing the back panel, draw simplified back view
-    if (!showDoorFace && isCornerUnit(element).isCorner) {
-      // Draw simple back panel for corner unit
-      ctx.strokeStyle = '#5a4738';
-      ctx.lineWidth = 1;
-      
-      // Back panel outline
-      ctx.strokeRect(x + doorInset, y + doorInset, width - doorInset * 2, height - doorInset * 2);
-      
-      // Simple back panel detail (vertical lines for wood grain effect)
-      ctx.strokeStyle = '#6a5748';
-      ctx.lineWidth = 0.5;
-      for (let i = 1; i < 4; i++) {
-        const lineX = x + (width / 4) * i;
-        ctx.beginPath();
-        ctx.moveTo(lineX, y + doorInset * 2);
-        ctx.lineTo(lineX, y + height - doorInset * 2);
-        ctx.stroke();
-      }
-      return;
-    }
-
-    // Check if this is a wall cabinet
-    const isWallCabinet = element.type.includes('wall-cabinet') ||
-                         element.type.includes('wall_cabinet') ||
-                         element.style?.toLowerCase().includes('wall');
-
-    if (isWallCabinet) {
-      // Wall cabinet - typically 2 doors, NO toe kick
-      // Check if it's a corner unit - corner wall units should have 1 door
-      const cornerInfo = isCornerUnit(element);
-      const isCorner = cornerInfo.isCorner;
-      const doorCount = isCorner ? 1 : (effectiveWidth > 60 ? 2 : 1);
-      // Corner wall units should have thin doors like base corner units (33% of width)
-      const doorWidth = isCorner ? width * 0.33 : ((width - doorInset * 2) / doorCount);
-      
-      for (let i = 0; i < doorCount; i++) {
-        let doorX: number;
-        
-        if (isCorner) {
-          // CORNER WALL DOOR POSITIONING: Use centerline logic with manual override support
-          // Manual override takes precedence
-          if (element.cornerDoorSide && element.cornerDoorSide !== 'auto') {
-            doorX = element.cornerDoorSide === 'left' 
-              ? x + doorInset
-              : x + width - doorWidth - doorInset;
-          } else {
-            // Automatic centerline logic based on current view
-            let isLeftSide: boolean;
-            
-            if (active2DView === 'front' || active2DView === 'back') {
-              // For front/back views: Left side of room = door on right, Right side = door on left
-              const roomCenter = roomDimensions.width / 2;
-              isLeftSide = element.x < roomCenter;
-            } else {
-              // For left/right views: Front side of room = door on right, Back side = door on left
-              const roomCenter = roomDimensions.height / 2;
-              isLeftSide = element.y < roomCenter;
-            }
-            
-            // For left elevation view, the logic is inverted
-            if (active2DView === 'left') {
-              doorX = isLeftSide 
-                ? x + doorInset                     // Left side door
-                : x + width - doorWidth - doorInset; // Right side door
-            } else {
-              doorX = isLeftSide 
-                ? x + width - doorWidth - doorInset  // Right side door
-                : x + doorInset;                     // Left side door
-            }
-          }
-        } else {
-          // Standard wall cabinet door positioning
-          doorX = x + doorInset + i * doorWidth;
-        }
-        const doorY = y + doorInset;
-        const doorH = height - doorInset * 2; // Full height for wall cabinets (no toe kick)
-        
-        // Door panel
-        ctx.strokeRect(doorX, doorY, doorWidth - (i < doorCount - 1 ? 1 : 0), doorH);
-        
-        // Door frame detail
-        ctx.strokeRect(doorX + 3, doorY + 3, doorWidth - 6 - (i < doorCount - 1 ? 1 : 0), doorH - 6);
-        
-        // Handle (positioned lower on wall cabinets for accessibility)
-        const handleX = doorCount === 1 ? doorX + doorWidth * 0.8 : (i === 0 ? doorX + doorWidth * 0.7 : doorX + doorWidth * 0.3);
-        const handleY = doorY + doorH * 0.7; // Lower position on wall cabinets
-        
-        ctx.fillStyle = '#2c1810';
-        ctx.fillRect(handleX - handleSize/2, handleY - handleSize*2, handleSize, handleSize*4);
-      }
-    } else if (element.type.includes('base-cabinet') || element.type === 'cabinet') {
-      // Base cabinet - doors and possibly drawers with toe kick
-      const hasDoors = true;
-      const cornerInfo = isCornerUnit(element);
-      const isCorner = cornerInfo.isCorner;
-      
-      // Corner units have different door configurations
-      const doorCount = isCorner ? 1 : (effectiveWidth > 60 ? 2 : 1);
-      const toeKickHeight = 8 * zoom; // 8cm toe kick
-      
-      // Draw toe kick (recessed area at bottom)
-      const toeKickDepth = 3; // Visual depth in pixels
-      ctx.fillStyle = '#3d2f1f'; // Darker shade for recessed appearance
-      ctx.fillRect(x + toeKickDepth, y + height - toeKickHeight, width - toeKickDepth * 2, toeKickHeight);
-      
-      // Toe kick border (top edge)
-      ctx.strokeStyle = '#2c1810';
-      ctx.lineWidth = 1;
-      ctx.beginPath();
-      ctx.moveTo(x + toeKickDepth, y + height - toeKickHeight);
-      ctx.lineTo(x + width - toeKickDepth, y + height - toeKickHeight);
-      ctx.stroke();
-      
-      if (hasDoors && showDoorFace) {
-        // CRITICAL FIX: Corner units should have 30cm door (narrow section), not 60cm
-        // The door should be on the side OPPOSITE to the wall connection
-        const doorWidth = isCorner ? width * 0.33 : ((width - doorInset * 2) / doorCount); // Corner door is 30cm (~33% of 90cm)
-        const adjustedDoorHeight = height - doorInset * 2 - toeKickHeight; // Account for toe kick
-        
-        for (let i = 0; i < doorCount; i++) {
-          // CRITICAL FIX: Corner door position depends on which wall the unit is against
-          // Door should always be on the side OPPOSITE to the wall connection
-          let doorX: number;
-          
-          if (isCorner) {
-            // CORNER DOOR POSITIONING: Use centerline logic with manual override support
-            // Manual override takes precedence
-            if (element.cornerDoorSide && element.cornerDoorSide !== 'auto') {
-              doorX = element.cornerDoorSide === 'left' 
-                ? x + doorInset
-                : x + width - doorWidth - doorInset;
-            } else {
-              // Automatic centerline logic based on current view
-              let isLeftSide: boolean;
-              
-              if (active2DView === 'front' || active2DView === 'back') {
-                // For front/back views: Left side of room = door on right, Right side = door on left
-                const roomCenter = roomDimensions.width / 2;
-                isLeftSide = element.x < roomCenter;
-              } else {
-                // For left/right views: Front side of room = door on right, Back side = door on left
-                const roomCenter = roomDimensions.height / 2;
-                isLeftSide = element.y < roomCenter;
-              }
-              
-              // For left elevation view, the logic is inverted
-              if (active2DView === 'left') {
-                doorX = isLeftSide 
-                  ? x + doorInset                     // Left side door
-                  : x + width - doorWidth - doorInset; // Right side door
-              } else {
-                doorX = isLeftSide 
-                  ? x + width - doorWidth - doorInset  // Right side door
-                  : x + doorInset;                     // Left side door
-              }
-            }
-          } else {
-            // Standard cabinet door positioning
-            doorX = x + doorInset + i * doorWidth;
-          }
-          const doorY = y + doorInset;
-          const doorH = adjustedDoorHeight;
-          const doorW = isCorner ? doorWidth : (doorWidth - (i < doorCount - 1 ? 1 : 0));
-          
-          // Door panel
-          ctx.strokeRect(doorX, doorY, doorW, doorH);
-          
-          // Door frame detail
-          ctx.strokeRect(doorX + 4, doorY + 4, doorW - 8, doorH - 8);
-          
-          // Handle (corner units have handle on the right side of the narrow door)
-          const handleX = isCorner ? doorX + doorW * 0.9 : (doorCount === 1 ? doorX + doorW * 0.8 : (i === 0 ? doorX + doorW * 0.8 : doorX + doorW * 0.2));
-          const handleY = doorY + doorH * 0.5;
-          
-          ctx.fillStyle = '#2c1810';
-          ctx.fillRect(handleX - handleSize/2, handleY - handleSize*3, handleSize, handleSize*6);
-        }
-      } else if (!showDoorFace && isCorner) {
-        // Corner unit back panel - show side view
-        ctx.strokeStyle = '#5a4738';
-        ctx.strokeRect(x + doorInset, y + doorInset, width - doorInset * 2, height - doorInset * 2 - toeKickHeight);
-        
-        // Side panel details (horizontal lines)
-        ctx.strokeStyle = '#6a5748';
-        ctx.lineWidth = 0.5;
-        for (let i = 1; i < 3; i++) {
-          const lineY = y + doorInset + (height - doorInset * 2 - toeKickHeight) / 3 * i;
-          ctx.beginPath();
-          ctx.moveTo(x + doorInset * 2, lineY);
-          ctx.lineTo(x + width - doorInset * 2, lineY);
-          ctx.stroke();
-        }
-      }
-    } else if (element.style?.toLowerCase().includes('drawer') || element.id.includes('drawer')) {
-      // Drawer unit
-      const drawerCount = Math.max(2, Math.min(4, Math.floor(height / 25)));
-      const drawerHeight = (height - doorInset * 2) / drawerCount;
-      
-      for (let i = 0; i < drawerCount; i++) {
-        const drawerY = y + doorInset + i * drawerHeight;
-        const drawerX = x + doorInset;
-        const drawerW = width - doorInset * 2;
-        const drawerH = drawerHeight - 2;
-        
-        // Drawer front
-        ctx.strokeRect(drawerX, drawerY, drawerW, drawerH);
-        ctx.strokeRect(drawerX + 3, drawerY + 3, drawerW - 6, drawerH - 6);
-        
-        // Drawer handle
-        const handleX = drawerX + drawerW * 0.8;
-        const handleY = drawerY + drawerH * 0.5;
-        
-        ctx.fillStyle = '#2c1810';
-        ctx.fillRect(handleX - handleSize/2, handleY - handleSize/2, handleSize*3, handleSize);
-      }
-    }
-  };
-
-  // Draw detailed appliance elevation
-  const drawApplianceElevationDetails = (ctx: CanvasRenderingContext2D, x: number, y: number, width: number, height: number, element: DesignElement) => {
-    ctx.strokeStyle = '#333';
-    ctx.lineWidth = 1;
-
-    if (element.style?.toLowerCase().includes('refrigerator') || element.id.includes('refrigerator')) {
-      // Refrigerator with two doors
-      const doorWidth = width / 2;
-      
-      // Left door
-      ctx.strokeRect(x + 2, y + 2, doorWidth - 3, height - 4);
-      ctx.strokeRect(x + 6, y + 6, doorWidth - 11, height - 12);
-      
-      // Right door
-      ctx.strokeRect(x + doorWidth + 1, y + 2, doorWidth - 3, height - 4);
-      ctx.strokeRect(x + doorWidth + 5, y + 6, doorWidth - 11, height - 12);
-      
-      // Handles
-      ctx.fillStyle = '#666';
-      const handleHeight = Math.max(8, height * 0.1);
-      ctx.fillRect(x + doorWidth - 8, y + height * 0.3, 3, handleHeight);
-      ctx.fillRect(x + doorWidth + 5, y + height * 0.3, 3, handleHeight);
-      
-      // Freezer section line (if tall enough)
-      if (height > 120) {
-        ctx.beginPath();
-        ctx.moveTo(x + 2, y + height * 0.3);
-        ctx.lineTo(x + width - 2, y + height * 0.3);
-        ctx.stroke();
-      }
-    } else if (element.style?.toLowerCase().includes('oven') || element.id.includes('oven')) {
-      // Built-in oven
-      ctx.strokeRect(x + 3, y + 3, width - 6, height - 6);
-      ctx.strokeRect(x + 8, y + 8, width - 16, height - 16);
-      
-      // Oven door handle
-      ctx.fillStyle = '#666';
-      ctx.fillRect(x + width * 0.1, y + height - 12, width * 0.8, 4);
-      
-      // Control panel (top section)
-      if (height > 60) {
-        ctx.fillStyle = '#2a2a2a';
-        ctx.fillRect(x + width * 0.2, y + 8, width * 0.6, 15);
-        
-        // Control knobs
-        ctx.fillStyle = '#555';
-        for (let i = 0; i < 3; i++) {
-          const knobX = x + width * (0.3 + i * 0.2);
-          ctx.beginPath();
-          ctx.arc(knobX, y + 15, 3, 0, Math.PI * 2);
-          ctx.fill();
-        }
-      }
-    } else if (element.style?.toLowerCase().includes('dishwasher') || element.id.includes('dishwasher')) {
-      // Dishwasher
-      ctx.strokeRect(x + 2, y + 2, width - 4, height - 4);
-      ctx.strokeRect(x + 5, y + 5, width - 10, height - 10);
-      
-      // Control panel
-      ctx.fillStyle = '#2a2a2a';
-      ctx.fillRect(x + width * 0.1, y + 5, width * 0.8, 12);
-      
-      // Handle (bottom)
-      ctx.fillStyle = '#666';
-      ctx.fillRect(x + width * 0.1, y + height - 8, width * 0.8, 3);
-    } else {
-      // Generic appliance
-      ctx.strokeRect(x + 3, y + 3, width - 6, height - 6);
-      
-      // Generic handle
-      ctx.fillStyle = '#666';
-      const handleHeight = Math.min(height * 0.4, 30);
-      ctx.fillRect(x + width - 8, y + (height - handleHeight) / 2, 3, handleHeight);
-    }
-  };
-
-  // Draw detailed counter top elevation
-  const drawCounterTopElevationDetails = (ctx: CanvasRenderingContext2D, x: number, y: number, width: number, height: number, _element: DesignElement) => {
-    ctx.strokeStyle = '#8B7355'; // Darker brown for counter top edge
-    ctx.lineWidth = 1;
-
-    // Draw counter top surface with subtle texture lines
-    ctx.strokeStyle = '#A0522D'; // Saddle brown for surface lines
-    ctx.lineWidth = 0.5;
-    
-    // Horizontal surface lines to simulate wood grain or stone texture
-    const lineSpacing = Math.max(2, height * 0.5);
-    for (let i = 0; i < Math.floor(height / lineSpacing); i++) {
-      const lineY = y + i * lineSpacing;
-      ctx.beginPath();
-      ctx.moveTo(x + 2, lineY);
-      ctx.lineTo(x + width - 2, lineY);
-      ctx.stroke();
-    }
-    
-    // Draw edge detail (slightly darker)
-    ctx.strokeStyle = '#8B7355';
-    ctx.lineWidth = 1;
-    ctx.strokeRect(x, y, width, height);
-    
-    // Draw subtle highlight on top edge
-    ctx.strokeStyle = '#D2B48C';
-    ctx.lineWidth = 0.5;
-    ctx.beginPath();
-    ctx.moveTo(x, y);
-    ctx.lineTo(x + width, y);
-    ctx.stroke();
-  };
-
-  // Draw detailed end panel elevation
-  const drawEndPanelElevationDetails = (ctx: CanvasRenderingContext2D, x: number, y: number, width: number, height: number, _element: DesignElement) => {
-    ctx.strokeStyle = '#654321'; // Darker brown for end panel edge
-    ctx.lineWidth = 1;
-
-    // Draw end panel surface with subtle texture lines
-    ctx.strokeStyle = '#8B4513'; // Saddle brown for surface lines
-    ctx.lineWidth = 0.5;
-    
-    // Vertical surface lines to simulate wood grain
-    const lineSpacing = Math.max(2, width * 0.5);
-    for (let i = 0; i < Math.floor(width / lineSpacing); i++) {
-      const lineX = x + i * lineSpacing;
-      ctx.beginPath();
-      ctx.moveTo(lineX, y + 2);
-      ctx.lineTo(lineX, y + height - 2);
-      ctx.stroke();
-    }
-    
-    // Draw edge detail (slightly darker)
-    ctx.strokeStyle = '#654321';
-    ctx.lineWidth = 1;
-    ctx.strokeRect(x, y, width, height);
-    
-    // Draw subtle highlight on left edge
-    ctx.strokeStyle = '#A0522D';
-    ctx.lineWidth = 0.5;
-    ctx.beginPath();
-    ctx.moveTo(x, y);
-    ctx.lineTo(x, y + height);
-    ctx.stroke();
-  };
-
-  // Draw detailed window elevation
-  const drawWindowElevationDetails = (ctx: CanvasRenderingContext2D, x: number, y: number, width: number, height: number, _element: DesignElement) => {
-    ctx.strokeStyle = '#2F4F4F'; // Dark slate gray for window frame
-    ctx.lineWidth = 2;
-
-    // Draw window frame
-    ctx.strokeRect(x, y, width, height);
-    
-    // Draw window panes (2x2 grid)
-    const paneWidth = width / 2;
-    const paneHeight = height / 2;
-    
-    // Vertical divider
-    ctx.beginPath();
-    ctx.moveTo(x + paneWidth, y);
-    ctx.lineTo(x + paneWidth, y + height);
-    ctx.stroke();
-    
-    // Horizontal divider
-    ctx.beginPath();
-    ctx.moveTo(x, y + paneHeight);
-    ctx.lineTo(x + width, y + paneHeight);
-    ctx.stroke();
-    
-    // Draw glass effect (slight transparency)
-    ctx.fillStyle = 'rgba(173, 216, 230, 0.3)'; // Light blue with transparency
-    ctx.fillRect(x + 2, y + 2, width - 4, height - 4);
-    
-    // Draw window sill
-    ctx.fillStyle = '#8B4513';
-    ctx.fillRect(x - 5, y + height, width + 10, 3);
-  };
-
-  // Draw detailed door elevation
-  const drawDoorElevationDetails = (ctx: CanvasRenderingContext2D, x: number, y: number, width: number, height: number, _element: DesignElement) => {
-    ctx.strokeStyle = '#8B4513'; // Brown for door frame
-    ctx.lineWidth = 2;
-
-    // Draw door frame
-    ctx.strokeRect(x, y, width, height);
-    
-    // Draw door panel
-    ctx.fillStyle = '#D2691E'; // Slightly lighter brown for door
-    ctx.fillRect(x + 2, y + 2, width - 4, height - 4);
-    
-    // Draw door panel details
-    ctx.strokeStyle = '#A0522D';
-    ctx.lineWidth = 1;
-    
-    // Vertical panel lines
-    for (let i = 1; i < 3; i++) {
-      const lineX = x + (width / 3) * i;
-      ctx.beginPath();
-      ctx.moveTo(lineX, y + 2);
-      ctx.lineTo(lineX, y + height - 2);
-      ctx.stroke();
-    }
-    
-    // Horizontal panel lines
-    for (let i = 1; i < 3; i++) {
-      const lineY = y + (height / 3) * i;
-      ctx.beginPath();
-      ctx.moveTo(x + 2, lineY);
-      ctx.lineTo(x + width - 2, lineY);
-      ctx.stroke();
-    }
-    
-    // Draw door handle
-    ctx.fillStyle = '#FFD700'; // Gold handle
-    ctx.beginPath();
-    ctx.arc(x + width - 15, y + height / 2, 4, 0, 2 * Math.PI);
-    ctx.fill();
-    
-    // Draw door handle backplate
-    ctx.strokeStyle = '#B8860B';
-    ctx.lineWidth = 1;
-    ctx.stroke();
-  };
-
-  // Draw detailed flooring elevation
-  const drawFlooringElevationDetails = (ctx: CanvasRenderingContext2D, x: number, y: number, width: number, height: number, element: DesignElement) => {
-    ctx.strokeStyle = '#8B4513'; // Brown for flooring edge
-    ctx.lineWidth = 1;
-
-    // Draw flooring surface with texture based on type
-    if (element.id.includes('hardwood')) {
-      // Hardwood planks
-      ctx.strokeStyle = '#D2691E';
-      ctx.lineWidth = 0.5;
-      
-      const plankHeight = Math.max(2, height / 8);
-      for (let i = 0; i < 8; i++) {
-        const plankY = y + i * plankHeight;
-        ctx.beginPath();
-        ctx.moveTo(x, plankY);
-        ctx.lineTo(x + width, plankY);
-        ctx.stroke();
-      }
-    } else if (element.id.includes('tile')) {
-      // Tile pattern
-      ctx.strokeStyle = '#CD853F';
-      ctx.lineWidth = 0.5;
-      
-      const tileSize = Math.max(4, width / 6);
-      for (let i = 0; i < Math.floor(width / tileSize); i++) {
-        for (let j = 0; j < Math.floor(height / tileSize); j++) {
-          const tileX = x + i * tileSize;
-          const tileY = y + j * tileSize;
-          ctx.strokeRect(tileX, tileY, tileSize, tileSize);
-        }
-      }
-    } else if (element.id.includes('carpet')) {
-      // Carpet texture
-      ctx.strokeStyle = '#8B4513';
-      ctx.lineWidth = 0.3;
-      
-      // Random texture lines
-      for (let i = 0; i < 20; i++) {
-        const startX = x + Math.random() * width;
-        const startY = y + Math.random() * height;
-        const endX = startX + (Math.random() - 0.5) * 20;
-        const endY = startY + (Math.random() - 0.5) * 20;
-        
-        ctx.beginPath();
-        ctx.moveTo(startX, startY);
-        ctx.lineTo(endX, endY);
-        ctx.stroke();
-      }
-    } else {
-      // Vinyl - smooth surface
-      ctx.strokeStyle = '#D2691E';
-      ctx.lineWidth = 0.5;
-      
-      // Subtle horizontal lines
-      for (let i = 0; i < 3; i++) {
-        const lineY = y + (height / 4) * (i + 1);
-        ctx.beginPath();
-        ctx.moveTo(x, lineY);
-        ctx.lineTo(x + width, lineY);
-        ctx.stroke();
-      }
-    }
-    
-    // Draw edge detail
-    ctx.strokeStyle = '#8B4513';
-    ctx.lineWidth = 1;
-    ctx.strokeRect(x, y, width, height);
-  };
-
-  // Draw detailed toe kick elevation
-  const drawToeKickElevationDetails = (ctx: CanvasRenderingContext2D, x: number, y: number, width: number, height: number, _element: DesignElement) => {
-    ctx.strokeStyle = '#654321'; // Dark brown for toe kick
-    ctx.lineWidth = 1;
-
-    // Draw toe kick surface
-    ctx.fillStyle = '#8B4513';
-    ctx.fillRect(x, y, width, height);
-    
-    // Draw recessed effect
-    ctx.strokeStyle = '#5D4037';
-    ctx.lineWidth = 1;
-    ctx.strokeRect(x + 1, y + 1, width - 2, height - 2);
-    
-    // Draw subtle texture lines
-    ctx.strokeStyle = '#A0522D';
-    ctx.lineWidth = 0.5;
-    
-    // Horizontal lines for wood grain
-    for (let i = 0; i < 3; i++) {
-      const lineY = y + (height / 4) * (i + 1);
-      ctx.beginPath();
-      ctx.moveTo(x + 2, lineY);
-      ctx.lineTo(x + width - 2, lineY);
-      ctx.stroke();
-    }
-  };
-
-  // Draw detailed cornice elevation
-  const drawCorniceElevationDetails = (ctx: CanvasRenderingContext2D, x: number, y: number, width: number, height: number, _element: DesignElement) => {
-    ctx.strokeStyle = '#8B4513'; // Brown for cornice
-    ctx.lineWidth = 1;
-
-    // Draw cornice surface
-    ctx.fillStyle = '#D2691E';
-    ctx.fillRect(x, y, width, height);
-    
-    // Draw decorative profile
-    ctx.strokeStyle = '#A0522D';
-    ctx.lineWidth = 1;
-    
-    // Top edge detail
-    ctx.beginPath();
-    ctx.moveTo(x, y);
-    ctx.lineTo(x + width, y);
-    ctx.stroke();
-    
-    // Bottom edge detail
-    ctx.beginPath();
-    ctx.moveTo(x, y + height);
-    ctx.lineTo(x + width, y + height);
-    ctx.stroke();
-    
-    // Decorative line in middle
-    ctx.beginPath();
-    ctx.moveTo(x, y + height / 2);
-    ctx.lineTo(x + width, y + height / 2);
-    ctx.stroke();
-  };
-
-  // Draw detailed pelmet elevation
-  const drawPelmetElevationDetails = (ctx: CanvasRenderingContext2D, x: number, y: number, width: number, height: number, _element: DesignElement) => {
-    ctx.strokeStyle = '#8B4513'; // Brown for pelmet
-    ctx.lineWidth = 1;
-
-    // Draw pelmet surface
-    ctx.fillStyle = '#D2691E';
-    ctx.fillRect(x, y, width, height);
-    
-    // Draw pelmet profile
-    ctx.strokeStyle = '#A0522D';
-    ctx.lineWidth = 1;
-    
-    // Top edge detail
-    ctx.beginPath();
-    ctx.moveTo(x, y);
-    ctx.lineTo(x + width, y);
-    ctx.stroke();
-    
-    // Bottom edge detail
-    ctx.beginPath();
-    ctx.moveTo(x, y + height);
-    ctx.lineTo(x + width, y + height);
-    ctx.stroke();
-    
-    // Decorative lines
-    for (let i = 1; i < 3; i++) {
-      const lineY = y + (height / 4) * i;
-      ctx.beginPath();
-      ctx.moveTo(x, lineY);
-      ctx.lineTo(x + width, lineY);
-      ctx.stroke();
-    }
-  };
-
-  // Draw detailed wall unit end panel elevation
-  const drawWallUnitEndPanelElevationDetails = (ctx: CanvasRenderingContext2D, x: number, y: number, width: number, height: number, _element: DesignElement) => {
-    ctx.strokeStyle = '#654321'; // Dark brown for wall unit end panel
-    ctx.lineWidth = 1;
-
-    // Draw end panel surface
-    ctx.fillStyle = '#8B4513';
-    ctx.fillRect(x, y, width, height);
-    
-    // Draw vertical grain lines
-    ctx.strokeStyle = '#A0522D';
-    ctx.lineWidth = 0.5;
-    
-    const lineSpacing = Math.max(2, width * 0.3);
-    for (let i = 0; i < Math.floor(width / lineSpacing); i++) {
-      const lineX = x + i * lineSpacing;
-      ctx.beginPath();
-      ctx.moveTo(lineX, y + 2);
-      ctx.lineTo(lineX, y + height - 2);
-      ctx.stroke();
-    }
-    
-    // Draw edge detail
-    ctx.strokeStyle = '#654321';
-    ctx.lineWidth = 1;
-    ctx.strokeRect(x, y, width, height);
-  };
-
-  // Draw detailed sink elevation with realistic bowl representation
-  const drawSinkElevationDetails = (ctx: CanvasRenderingContext2D, x: number, y: number, width: number, height: number, element: DesignElement) => {
-    const isButlerSink = element.id.includes('butler-sink') || element.id.includes('butler') || element.id.includes('base-unit-sink');
-    const isDoubleBowl = element.id.includes('double-bowl') || element.id.includes('double');
-    const isCornerSink = element.id.includes('corner-sink');
-    const isFarmhouseSink = element.id.includes('farmhouse');
-    const hasDrainingBoard = element.id.includes('draining-board') || element.metadata?.has_draining_board;
-    
-    // Sink colors
-    const sinkColor = isButlerSink ? '#FFFFFF' : '#C0C0C0'; // White ceramic for butler, stainless steel for kitchen
-    const rimColor = isButlerSink ? '#F8F8F8' : '#B0B0B0';
-    const drainColor = '#2F2F2F';
-    
-    // Draw sink rim (top edge) with improved appearance
-    ctx.fillStyle = rimColor;
-    ctx.fillRect(x, y, width, height * 0.1); // 10% of height for rim
-
-    // Add rim highlight
-    ctx.fillStyle = isButlerSink ? '#FFFFFF' : '#E0E0E0';
-    ctx.fillRect(x, y, width, height * 0.03); // Top highlight
-
-    // Add side rim detail
-    ctx.fillRect(x, y, width * 0.02, height * 0.1); // Left rim edge
-    ctx.fillRect(x + width - width * 0.02, y, width * 0.02, height * 0.1); // Right rim edge
-
-    // Draw sink bowl with improved appearance
-    ctx.fillStyle = sinkColor;
-    const bowlY = y + height * 0.1;
-    const bowlHeight = height * 0.9;
-    
-    if (isDoubleBowl) {
-      // Double bowl sink with improved appearance
-      const leftBowlWidth = width * 0.45;
-      const rightBowlWidth = width * 0.45;
-      const centerDivider = width * 0.1;
-
-      // Left bowl with highlight
-      ctx.fillRect(x, bowlY, leftBowlWidth, bowlHeight);
-
-      // Left bowl inner highlight
-      ctx.fillStyle = isButlerSink ? '#F0F0F0' : '#D0D0D0';
-      ctx.fillRect(x + 2, bowlY + 2, leftBowlWidth - 4, bowlHeight * 0.3);
-
-      // Right bowl with highlight
-      ctx.fillStyle = sinkColor;
-      ctx.fillRect(x + leftBowlWidth + centerDivider, bowlY, rightBowlWidth, bowlHeight);
-
-      // Right bowl inner highlight
-      ctx.fillStyle = isButlerSink ? '#F0F0F0' : '#D0D0D0';
-      ctx.fillRect(x + leftBowlWidth + centerDivider + 2, bowlY + 2, rightBowlWidth - 4, bowlHeight * 0.3);
-
-      // Center divider with depth
-      ctx.fillStyle = rimColor;
-      ctx.fillRect(x + leftBowlWidth, bowlY, centerDivider, bowlHeight);
-
-      // Center divider highlight
-      ctx.fillStyle = isButlerSink ? '#FFFFFF' : '#E0E0E0';
-      ctx.fillRect(x + leftBowlWidth, bowlY, centerDivider * 0.3, bowlHeight);
-      
-    } else if (isCornerSink) {
-      // Corner sink (L-shaped) with improved appearance
-      const mainBowlWidth = width * 0.7;
-      const mainBowlHeight = height * 0.7;
-
-      // Main bowl with highlight
-      ctx.fillRect(x, bowlY, mainBowlWidth, mainBowlHeight);
-
-      // Main bowl inner highlight
-      ctx.fillStyle = isButlerSink ? '#F0F0F0' : '#D0D0D0';
-      ctx.fillRect(x + 2, bowlY + 2, mainBowlWidth - 4, mainBowlHeight * 0.3);
-
-      // Corner extension with highlight
-      ctx.fillStyle = sinkColor;
-      const cornerWidth = width * 0.3;
-      const cornerHeight = height * 0.3;
-      ctx.fillRect(x + mainBowlWidth * 0.7, bowlY + mainBowlHeight * 0.7, cornerWidth, cornerHeight);
-
-      // Corner extension highlight
-      ctx.fillStyle = isButlerSink ? '#F0F0F0' : '#D0D0D0';
-      ctx.fillRect(x + mainBowlWidth * 0.7 + 1, bowlY + mainBowlHeight * 0.7 + 1, cornerWidth - 2, cornerHeight * 0.5);
-      
-    } else {
-      // Single bowl sink with improved appearance
-      ctx.fillRect(x, bowlY, width, bowlHeight);
-
-      // Single bowl inner highlight
-      ctx.fillStyle = isButlerSink ? '#F0F0F0' : '#D0D0D0';
-      ctx.fillRect(x + 2, bowlY + 2, width - 4, bowlHeight * 0.3);
-    }
-    
-    // Draw drain
-    ctx.fillStyle = drainColor;
-    const drainSize = Math.min(width, height) * 0.15;
-    const drainX = x + width/2 - drainSize/2;
-    const drainY = y + height/2 - drainSize/2;
-    ctx.fillRect(drainX, drainY, drainSize, drainSize);
-    
-    // Draw faucet mounting holes
-    ctx.fillStyle = drainColor;
-    const holeSize = Math.min(width, height) * 0.05;
-    const holeY = y + height * 0.2;
-    
-    if (isDoubleBowl) {
-      // Two holes for double bowl
-      ctx.fillRect(x + width * 0.25 - holeSize/2, holeY, holeSize, holeSize);
-      ctx.fillRect(x + width * 0.75 - holeSize/2, holeY, holeSize, holeSize);
-    } else {
-      // Single hole for single bowl
-      ctx.fillRect(x + width/2 - holeSize/2, holeY, holeSize, holeSize);
-    }
-    
-    // Draw draining board if present with improved appearance
-    if (hasDrainingBoard) {
-      const drainingBoardY = y - height * 0.3; // Position above the sink
-      const drainingBoardHeight = height * 0.2;
-
-      // Draining board surface
-      ctx.fillStyle = rimColor;
-      ctx.fillRect(x, drainingBoardY, width, drainingBoardHeight);
-
-      // Draining board highlight
-      ctx.fillStyle = isButlerSink ? '#FFFFFF' : '#E8E8E8';
-      ctx.fillRect(x, drainingBoardY, width, drainingBoardHeight * 0.25);
-
-      // Draining board grooves with improved appearance
-      ctx.strokeStyle = isButlerSink ? '#E0E0E0' : '#D0D0D0';
-      ctx.lineWidth = 1;
-      for (let i = 0; i < 10; i++) {
-        const grooveX = x + (i + 0.5) * (width / 10);
-        ctx.beginPath();
-        ctx.moveTo(grooveX, drainingBoardY);
-        ctx.lineTo(grooveX, drainingBoardY + drainingBoardHeight);
-        ctx.stroke();
-
-        // Add subtle shadow to grooves
-        ctx.strokeStyle = isButlerSink ? '#D0D0D0' : '#C0C0C0';
-        ctx.beginPath();
-        ctx.moveTo(grooveX + 0.5, drainingBoardY);
-        ctx.lineTo(grooveX + 0.5, drainingBoardY + drainingBoardHeight);
-        ctx.stroke();
-      }
-
-      // Reset stroke style
-      ctx.strokeStyle = '#000000';
-    }
-    
-    // Draw edge detail
-    ctx.strokeStyle = isButlerSink ? '#E0E0E0' : '#A0A0A0';
-    ctx.lineWidth = 1;
-    ctx.strokeRect(x, y, width, height);
-  };
+  // =============================================================================
+  // HELPER FUNCTIONS - Element Visibility Logic (Required for Elevation Views)
+  // =============================================================================
+  // These functions were preserved because they're used throughout the component
+  // for determining element visibility in elevation views, not just for rendering.
+  // =============================================================================
 
   // Check if element is a corner unit
   const isCornerUnit = (element: DesignElement): { isCorner: boolean; corner?: 'front-left' | 'front-right' | 'back-left' | 'back-right' } => {
     const tolerance = 30; // cm tolerance for corner detection
-    
+
     // Check each corner position
     if (element.x <= tolerance && element.y <= tolerance) {
       return { isCorner: true, corner: 'front-left' };
@@ -2354,7 +1576,7 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
         element.y >= roomDimensions.height - element.height - tolerance) {
       return { isCorner: true, corner: 'back-right' };
     }
-    
+
     return { isCorner: false };
   };
 
@@ -2363,7 +1585,7 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
     const centerX = element.x + element.width / 2;
     const centerY = element.y + element.height / 2;
     const tolerance = 50;
-    
+
     // Check for corner units first
     const cornerInfo = isCornerUnit(element);
     if (cornerInfo.isCorner) {
@@ -2376,7 +1598,7 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
         case 'back-right': return 'back'; // Also visible in 'right'
       }
     }
-    
+
     if (centerY <= tolerance) return 'front';
     if (centerY >= roomDimensions.height - tolerance) return 'back';
     if (centerX <= tolerance) return 'left';
@@ -2388,7 +1610,7 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
   const isCornerVisibleInView = (element: DesignElement, view: string): boolean => {
     const cornerInfo = isCornerUnit(element);
     if (!cornerInfo.isCorner) return false;
-    
+
     switch (cornerInfo.corner) {
       case 'front-left':
         return view === 'front' || view === 'left';
@@ -2403,15 +1625,9 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
     }
   };
 
-  // Determine if corner unit should show door face in current view
-  const shouldShowCornerDoorFace = (element: DesignElement, _view: string): boolean => {
-    const cornerInfo = isCornerUnit(element);
-    if (!cornerInfo.isCorner) return true; // Non-corner units always show door face
-    
-    // CRITICAL FIX: Corner units ALWAYS show door + panel in ALL elevation views
-    // Never show back panels - always show the door face with proper positioning
-    return true;
-  };
+  // =============================================================================
+  // END HELPER FUNCTIONS
+  // =============================================================================
 
   // Zoom controls removed - now handled by React component in Designer.tsx
 
@@ -2472,7 +1688,7 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
       }
     } else {
       // Elevation view rulers
-      const roomWidth = active2DView === 'front' || active2DView === 'back'
+      const roomWidth = currentViewInfo.direction === 'front' || currentViewInfo.direction === 'back'
         ? roomDimensions.width
         : roomDimensions.height;
       
@@ -2757,25 +1973,43 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
     drawRoom(ctx);
 
     // Draw elements with proper layering and visibility
-    let elementsToRender = active2DView === 'plan'
-      ? design.elements
-      : design.elements.filter(el => {
-          const wall = getElementWall(el);
-          const isCornerVisible = isCornerVisibleInView(el, active2DView);
-          return wall === active2DView || wall === 'center' || isCornerVisible;
-        });
+    // Filter elements based on view type
+    let elementsToRender = design.elements.filter(el => {
+      // For plan view: only check per-view hidden_elements (no direction filtering)
+      if (active2DView === 'plan') {
+        const isHiddenInView = currentViewInfo.hiddenElements.includes(el.id);
+        if (isHiddenInView) {
+          return false;
+        }
+        return true;
+      }
 
-    // Filter out invisible elements
-    elementsToRender = elementsToRender.filter(element => element.isVisible !== false);
+      // For elevation views: check both direction AND hidden_elements
+      const wall = getElementWall(el);
+      const isCornerVisible = isCornerVisibleInView(el, currentViewInfo.direction);
+
+      // Check direction visibility
+      const isDirectionVisible = wall === currentViewInfo.direction || wall === 'center' || isCornerVisible;
+      if (!isDirectionVisible) {
+        return false;
+      }
+
+      // Check if element is hidden in this specific view
+      const isHiddenInView = currentViewInfo.hiddenElements.includes(el.id);
+      if (isHiddenInView) {
+        return false;
+      }
+
+      return true;
+    });
 
     // Sort elements by zIndex for proper layering (lower zIndex = drawn first/behind)
     elementsToRender.sort((a, b) => (a.zIndex || 0) - (b.zIndex || 0));
-    
-    // Debug logging for layering order
-    if (elementsToRender.length > 0) {
-      console.log(`🎯 [Rendering] Elements in order:`, elementsToRender.map(el => `${el.id} (${el.type}) -> zIndex: ${el.zIndex}`));
-    }
 
+    // Debug logging for layering order (disabled - causes console spam)
+    // Uncomment for debugging: console.log(`🎯 [Rendering] Elements in order:`, elementsToRender.map(el => `${el.id} (${el.type}) -> zIndex: ${el.zIndex}`));
+
+    // Use for...of loop to handle async drawElement calls
     elementsToRender.forEach(element => {
       // Always draw all elements, but make dragged element semi-transparent
       if (isDragging && draggedElement?.id === element.id) {
@@ -2844,32 +2078,86 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
     const roomPos = canvasToRoom(x, y);
     
     // Filter and sort elements the same way as rendering (but in reverse order for selection)
-    let elementsToCheck = active2DView === 'plan'
-      ? design.elements
-      : design.elements.filter(el => {
-          const wall = getElementWall(el);
-          const isCornerVisible = isCornerVisibleInView(el, active2DView);
-          return wall === active2DView || wall === 'center' || isCornerVisible;
+    let elementsToCheck = design.elements.filter(el => {
+      // For plan view: only check per-view hidden_elements
+      if (active2DView === 'plan') {
+        return !currentViewInfo.hiddenElements.includes(el.id);
+      }
+
+      // For elevation views: check both direction AND hidden_elements
+      const wall = getElementWall(el);
+      const isCornerVisible = isCornerVisibleInView(el, currentViewInfo.direction);
+
+      // Check direction visibility
+      const isDirectionVisible = wall === currentViewInfo.direction || wall === 'center' || isCornerVisible;
+      if (!isDirectionVisible) return false;
+
+      // Check if element is hidden in this specific view
+      if (currentViewInfo.hiddenElements.includes(el.id)) return false;
+
+          return true;
         });
 
-    // Filter out invisible elements
-    elementsToCheck = elementsToCheck.filter(element => element.isVisible !== false);
+    // Sort elements by layer height first (wall units over base units), then by zIndex
+    elementsToCheck.sort((a, b) => {
+      // Get layer metadata for height-based sorting
+      const metaA = getComponentMetadata(a.component_id || a.id);
+      const metaB = getComponentMetadata(b.component_id || b.id);
 
-    // Sort elements by zIndex in DESCENDING order (highest zIndex first) for selection
-    elementsToCheck.sort((a, b) => (b.zIndex || 0) - (a.zIndex || 0));
+      // Priority 1: Sort by max_height (higher components should be selected first when overlapping)
+      const heightA = metaA?.max_height_cm ?? 0;
+      const heightB = metaB?.max_height_cm ?? 0;
+
+      if (heightB !== heightA) {
+        return heightB - heightA;  // Higher height first (wall units before base units)
+      }
+
+      // Priority 2: If same height, sort by zIndex
+      return (b.zIndex || 0) - (a.zIndex || 0);
+    });
     
     const clickedElement = elementsToCheck.find(element => {
-      // Special handling for corner counter tops - use square bounding box
-      const isCornerCounterTop = element.type === 'counter-top' && element.id.includes('counter-top-corner');
-      
-      if (isCornerCounterTop) {
-        // Use 90cm x 90cm square for corner counter tops
-        return roomPos.x >= element.x && roomPos.x <= element.x + 90 &&
-               roomPos.y >= element.y && roomPos.y <= element.y + 90;
+      // Different hit detection for plan vs elevation views
+      if (active2DView === 'plan') {
+        // Plan view: use X/Y coordinates with rotation
+        const width = element.width;
+        const height = element.depth || element.height;
+        const rotation = (element.rotation || 0) * Math.PI / 180;
+
+        // Transform click point into component's local space
+        const centerX = element.x + width / 2;
+        const centerY = element.y + height / 2;
+
+        // Translate click to component center
+        const dx = roomPos.x - centerX;
+        const dy = roomPos.y - centerY;
+
+        // Rotate backwards (inverse rotation)
+        const cos = Math.cos(-rotation);
+        const sin = Math.sin(-rotation);
+        const localX = dx * cos - dy * sin;
+        const localY = dx * sin + dy * cos;
+
+        // Check if in un-rotated bounds
+        return Math.abs(localX) <= width / 2 && Math.abs(localY) <= height / 2;
       } else {
-        // Standard rectangular hit detection
-        return roomPos.x >= element.x && roomPos.x <= element.x + element.width &&
-               roomPos.y >= element.y && roomPos.y <= element.y + (element.depth || element.height);
+        // Elevation view: use X (horizontal) and Z (vertical) coordinates
+        const width = element.width;
+        const height = element.height || 90; // Use actual height for vertical dimension
+        const z = element.z || 0;
+
+        // In elevation view, Z represents the mount height (bottom of element above floor)
+        // The element extends from z (bottom) to z + height (top)
+        const centerX = element.x + width / 2;
+        const bottomZ = z; // Bottom of element above floor
+        const topZ = z + height; // Top of element above floor
+        const centerZ = (bottomZ + topZ) / 2; // Same as z + height/2
+
+        // Check if click is within bounds (no rotation in elevation view)
+        const isInHorizontalBounds = Math.abs(roomPos.x - centerX) <= width / 2;
+        const isInVerticalBounds = roomPos.y >= bottomZ && roomPos.y <= topZ;
+
+        return isInHorizontalBounds && isInVerticalBounds;
       }
     });
 
@@ -2883,7 +2171,7 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
     } else {
       onSelectElement(null);
     }
-  }, [activeTool, canvasToRoom, design.elements, onSelectElement, zoom]);
+  }, [activeTool, canvasToRoom, design.elements, onSelectElement, zoom, getComponentMetadata]);
 
   // Throttled snap guide update to improve performance
   const throttledSnapUpdate = useCallback(
@@ -2919,23 +2207,48 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
       const roomPos = canvasToRoom(x, y);
       
       // Use same filtering and ordering as selection for hover detection
-      let elementsToCheck = active2DView === 'plan'
-        ? design.elements
-        : design.elements.filter(el => {
-            const wall = getElementWall(el);
-            const isCornerVisible = isCornerVisibleInView(el, active2DView);
-            return wall === active2DView || wall === 'center' || isCornerVisible;
-          });
+      let elementsToCheck = design.elements.filter(el => {
+        // For plan view: only check per-view hidden_elements
+        if (active2DView === 'plan') {
+          return !currentViewInfo.hiddenElements.includes(el.id);
+        }
 
-      // Filter out invisible elements
-      elementsToCheck = elementsToCheck.filter(element => element.isVisible !== false);
+        // For elevation views: check both direction AND hidden_elements
+        const wall = getElementWall(el);
+        const isCornerVisible = isCornerVisibleInView(el, currentViewInfo.direction);
 
-      // Sort elements by zIndex in DESCENDING order (highest zIndex first) for hover
-      elementsToCheck.sort((a, b) => (b.zIndex || 0) - (a.zIndex || 0));
+        // Check direction visibility
+        const isDirectionVisible = wall === currentViewInfo.direction || wall === 'center' || isCornerVisible;
+        if (!isDirectionVisible) return false;
+
+        // Check if element is hidden in this specific view
+        if (currentViewInfo.hiddenElements.includes(el.id)) return false;
+
+        return true;
+      });
+
+      // Sort elements by layer height first (wall units over base units), then by zIndex for hover
+      elementsToCheck.sort((a, b) => {
+        // Get layer metadata for height-based sorting
+        const metaA = getComponentMetadata(a.component_id || a.id);
+        const metaB = getComponentMetadata(b.component_id || b.id);
+
+        // Priority 1: Sort by max_height (higher components should be hovered first when overlapping)
+        const heightA = metaA?.max_height_cm ?? 0;
+        const heightB = metaB?.max_height_cm ?? 0;
+
+        if (heightB !== heightA) {
+          return heightB - heightA;  // Higher height first (wall units before base units)
+        }
+
+        // Priority 2: If same height, sort by zIndex
+        return (b.zIndex || 0) - (a.zIndex || 0);
+      });
       
       const hoveredEl = elementsToCheck.find(element => {
         // Use the new rotation-aware boundary detection
-        return isPointInRotatedComponent(roomPos.x, roomPos.y, element);
+        const viewMode = active2DView === 'plan' ? 'plan' : 'elevation';
+        return isPointInRotatedComponent(roomPos.x, roomPos.y, element, viewMode);
       });
       setHoveredElement(hoveredEl || null);
       
@@ -2955,12 +2268,17 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
       const deltaX = x - dragStart.x;
       const deltaY = y - dragStart.y;
       const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
-      const DRAG_THRESHOLD = 5; // pixels - must move at least 5px to start dragging
-      
+      const DRAG_THRESHOLD = configCache.drag_threshold_mouse || 5; // Database-driven drag threshold
+
       if (distance >= DRAG_THRESHOLD && !dragThreshold.exceeded) {
         // Start dragging now that threshold is exceeded
         setIsDragging(true);
         setDraggedElement(dragThreshold.startElement);
+        // Store original position for collision detection fallback
+        setDraggedElementOriginalPos({
+          x: dragThreshold.startElement.x,
+          y: dragThreshold.startElement.y
+        });
         setDragThreshold({ exceeded: true, startElement: dragThreshold.startElement });
       }
     }
@@ -2984,7 +2302,7 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
       // Trigger re-render to show drag preview (also throttled by requestAnimationFrame)
       requestAnimationFrame(() => render());
     }
-  }, [isDragging, activeTool, dragStart, draggedElement, canvasToRoom, design.elements, active2DView, render, throttledSnapUpdate, snapGuides, onTapeMeasureMouseMove]);
+  }, [isDragging, activeTool, dragStart, draggedElement, canvasToRoom, design.elements, active2DView, render, throttledSnapUpdate, snapGuides, onTapeMeasureMouseMove, getComponentMetadata]);
 
   // Prevent context menu on right-click
   const handleContextMenu = useCallback((e: React.MouseEvent<HTMLCanvasElement>) => {
@@ -3057,12 +2375,55 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
         finalClampedY = Math.max(0, Math.min(finalY, innerRoomBounds.height - clampDepth));
       }
 
-      onUpdateElement(draggedElement.id, {
-        // CRITICAL FIX: Don't apply grid snapping if component was snapped to wall
+      // **COLLISION DETECTION** - Validate placement on drop
+      const proposedElement: DesignElement = {
+        ...draggedElement,
         x: dragWallSnappedPos.snappedToWall ? finalClampedX : snapToGrid(finalClampedX),
         y: dragWallSnappedPos.snappedToWall ? finalClampedY : snapToGrid(finalClampedY),
         rotation: snapped.rotation
-      });
+      };
+
+      const validationResult = validatePlacement(
+        proposedElement,
+        design.elements.filter(el => el.id !== draggedElement.id),
+        draggedElementOriginalPos || undefined
+      );
+
+      if (validationResult.isValid) {
+        // ✅ Valid placement - update position
+        onUpdateElement(draggedElement.id, {
+          x: proposedElement.x,
+          y: proposedElement.y,
+          rotation: proposedElement.rotation
+        });
+      } else if (validationResult.suggestedPosition) {
+        // ⚠️ Invalid placement - snap to suggested valid position
+        onUpdateElement(draggedElement.id, {
+          x: validationResult.suggestedPosition.x,
+          y: validationResult.suggestedPosition.y,
+          rotation: proposedElement.rotation
+        });
+        toast({
+          title: "Position Adjusted",
+          description: validationResult.reason || "Position adjusted to avoid collision",
+          variant: "default",
+        });
+        console.log(`🔄 [Collision] Adjusted position: ${validationResult.reason}`);
+      } else {
+        // ❌ No valid position found - return to original position
+        const fallbackPos = draggedElementOriginalPos || { x: draggedElement.x, y: draggedElement.y };
+        onUpdateElement(draggedElement.id, {
+          x: fallbackPos.x,
+          y: fallbackPos.y,
+          rotation: draggedElement.rotation  // Keep original rotation
+        });
+        toast({
+          title: "Invalid Placement",
+          description: validationResult.reason || "Cannot place component here",
+          variant: "destructive",
+        });
+        console.warn(`❌ [Collision] Returned to original: ${validationResult.reason}`);
+      }
     }
 
     // Handle tape measure clicks
@@ -3074,9 +2435,10 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
     // Clear drag state
     setIsDragging(false);
     setDraggedElement(null);
+    setDraggedElementOriginalPos(null);  // Clear original position
     setSnapGuides({ vertical: [], horizontal: [], snapPoint: null });
     setDragThreshold({ exceeded: false, startElement: null }); // 🎯 Clear drag threshold
-  }, [isDragging, draggedElement, canvasToRoom, currentMousePos, getSnapPosition, snapToGrid, onUpdateElement, roomDimensions, activeTool, onTapeMeasureClick]);
+  }, [isDragging, draggedElement, draggedElementOriginalPos, canvasToRoom, currentMousePos, getSnapPosition, snapToGrid, onUpdateElement, roomDimensions, activeTool, onTapeMeasureClick, validatePlacement, toast, design.elements]);
 
 
   // Touch event handlers
@@ -3155,22 +2517,32 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
         const roomPos = canvasToRoom(x, y);
         
         // Use same filtering and ordering as selection for hover detection
-        let elementsToCheck = active2DView === 'plan'
-          ? design.elements
-          : design.elements.filter(el => {
-              const wall = getElementWall(el);
-              const isCornerVisible = isCornerVisibleInView(el, active2DView);
-              return wall === active2DView || wall === 'center' || isCornerVisible;
-            });
+        let elementsToCheck = design.elements.filter(el => {
+          // For plan view: only check per-view hidden_elements
+          if (active2DView === 'plan') {
+            return !currentViewInfo.hiddenElements.includes(el.id);
+          }
 
-        // Filter out invisible elements
-        elementsToCheck = elementsToCheck.filter(element => element.isVisible !== false);
+          // For elevation views: check both direction AND hidden_elements
+          const wall = getElementWall(el);
+          const isCornerVisible = isCornerVisibleInView(el, currentViewInfo.direction);
+
+          // Check direction visibility
+          const isDirectionVisible = wall === currentViewInfo.direction || wall === 'center' || isCornerVisible;
+          if (!isDirectionVisible) return false;
+
+          // Check if element is hidden in this specific view
+          if (currentViewInfo.hiddenElements.includes(el.id)) return false;
+
+          return true;
+        });
 
         // Sort elements by zIndex in DESCENDING order (highest zIndex first) for hover
         elementsToCheck.sort((a, b) => (b.zIndex || 0) - (a.zIndex || 0));
         
         const hoveredEl = elementsToCheck.find(element => {
-          return isPointInRotatedComponent(roomPos.x, roomPos.y, element);
+          const viewMode = active2DView === 'plan' ? 'plan' : 'elevation';
+          return isPointInRotatedComponent(roomPos.x, roomPos.y, element, viewMode);
         });
         setHoveredElement(hoveredEl || null);
       }
@@ -3185,8 +2557,8 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
         const deltaX = x - dragStart.x;
         const deltaY = y - dragStart.y;
         const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
-        const DRAG_THRESHOLD = 10; // Increased threshold for touch (10px vs 5px for mouse)
-        
+        const DRAG_THRESHOLD = configCache.drag_threshold_touch || 10; // Database-driven touch drag threshold
+
         if (distance >= DRAG_THRESHOLD && !dragThreshold.exceeded) {
           // Start dragging now that threshold is exceeded
           setIsDragging(true);
@@ -3328,8 +2700,9 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
       const y = point.y * scaleY;
       
       const roomPos = canvasToRoom(x, y);
+      const viewMode = active2DView === 'plan' ? 'plan' : 'elevation';
       const longPressedElement = design.elements.find(element => {
-        return isPointInRotatedComponent(roomPos.x, roomPos.y, element);
+        return isPointInRotatedComponent(roomPos.x, roomPos.y, element, viewMode);
       });
 
       if (longPressedElement) {
@@ -3376,7 +2749,8 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
 
       // 🎯 BOUNDARY CHECK: Prevent drops outside inner room boundaries (usable space)
       // Components should only be placed within the inner room, not in the wall thickness
-      if (dropX < -50 || dropY < -50 || dropX > innerRoomBounds.width + 50 || dropY > innerRoomBounds.height + 50) {
+      const dropBoundaryTolerance = ConfigurationService.getSync('drop_boundary_tolerance', 50); // 50cm tolerance (fallback)
+      if (dropX < -dropBoundaryTolerance || dropY < -dropBoundaryTolerance || dropX > innerRoomBounds.width + dropBoundaryTolerance || dropY > innerRoomBounds.height + dropBoundaryTolerance) {
         console.warn('⚠️ Drop cancelled: Component dropped outside inner room boundaries');
         return;
       }
@@ -3389,20 +2763,31 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
       const effectiveWidth = componentData.width;
       const effectiveDepth = componentData.depth;
 
-      // Set default Z position based on component type
+      // Set default Z position based on component type (from database configuration)
+      const zPositionDefaults = ConfigurationService.getJSONSync('z_position_defaults', {
+        floor_unit: 0,
+        base_unit: 10,
+        wall_unit: 150,
+        tall_unit: 0,
+        appliance: 0,
+        sink: 92,
+        worktop: 92
+      });
+
+      // Get Y-offset config for elevation-specific components
       let defaultZ = 0; // Default for floor-mounted components
       if (componentData.type === 'cornice') {
-        defaultZ = 200; // 200cm height for cornice (top of wall units)
+        defaultZ = ConfigurationService.getSync('cornice_y_offset', 200); // Top of wall units
       } else if (componentData.type === 'pelmet') {
-        defaultZ = 140; // 140cm height for pelmet (FIXED: bottom of wall units)
+        defaultZ = ConfigurationService.getSync('pelmet_y_offset', 140); // Bottom of wall units
       } else if (componentData.type === 'counter-top') {
-        defaultZ = 90; // 90cm height for counter tops
+        defaultZ = ConfigurationService.getSync('countertop_y_offset', 90); // Counter top height
       } else if (componentData.type === 'wall-cabinet' || componentData.id?.includes('wall-cabinet')) {
-        defaultZ = 140; // 140cm height for wall cabinets
+        defaultZ = ConfigurationService.getSync('wall_cabinet_y_offset', 140); // Wall cabinet height
       } else if (componentData.type === 'wall-unit-end-panel') {
-        defaultZ = 200; // 200cm height for wall unit end panels
+        defaultZ = ConfigurationService.getSync('cornice_y_offset', 200); // Top of wall units
       } else if (componentData.type === 'window') {
-        defaultZ = 90; // 90cm height for windows
+        defaultZ = ConfigurationService.getSync('countertop_y_offset', 90); // Window sill height
       }
 
       // Apply Enhanced Component Placement using unified coordinate system
@@ -3428,6 +2813,7 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
 
       const newElement: DesignElement = {
         id: `${componentData.id}-${Date.now()}`,
+        component_id: componentData.id, // Database lookup key for 2D/3D rendering
         type: componentData.type,
         // Use enhanced placement results with proper wall clearance and rotation
         x: placementResult.snappedToWall ? placementResult.x : snapToGrid(placementResult.x),
@@ -3438,14 +2824,12 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
         height: componentData.height, // Z-axis dimension (bottom-to-top)
         rotation: placementResult.rotation, // Use calculated rotation from enhanced placement
         color: componentData.color,
-        style: componentData.name
+        style: componentData.name,
+        zIndex: 0, // Required by DesignElement interface
       };
 
-      // Apply smart snapping for new elements
-      const snapped = getSnapPosition(newElement, newElement.x, newElement.y);
-      newElement.x = snapped.x;
-      newElement.y = snapped.y;
-      newElement.rotation = snapped.rotation;
+      // ✅ Enhanced placement already handled snapping - no need for duplicate getSnapPosition() call
+      // This was causing components to snap twice with potentially conflicting results
 
       onAddElement(newElement);
     } catch (error) {
@@ -3503,40 +2887,49 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
 
   // Auto-fit when switching to different views with specific zoom and alignment
   useEffect(() => {
-    if (active2DView === 'plan') {
+    if (currentViewInfo.direction === 'plan') {
       // Plan view - 150% zoom, centered
       setZoom(1.5); // 150% zoom
       setPanOffset({ x: 0, y: 0 });
-    } else if (active2DView === 'front' || active2DView === 'back') {
+    } else if (currentViewInfo.direction === 'front' || currentViewInfo.direction === 'back') {
       // Front/Back views - 170% zoom, top-center aligned
       setZoom(1.7); // 170% zoom
       // Top-center alignment: move view up slightly
       setPanOffset({ x: 0, y: -50 });
-    } else if (active2DView === 'left' || active2DView === 'right') {
+    } else if (currentViewInfo.direction === 'left' || currentViewInfo.direction === 'right') {
       // Left/Right views - 170% zoom, centered (same as front/back)
       setZoom(1.7); // 170% zoom
       setPanOffset({ x: 0, y: 0 });
     }
-  }, [active2DView, roomDimensions, getWallHeight]);
+  }, [active2DView, roomDimensions, getWallHeight, currentViewInfo.direction]);
 
   // Fit to screen - different logic for elevation views
   useEffect(() => {
     if (fitToScreenSignal > 0) {
-      if (active2DView === 'plan') {
+      if (currentViewInfo.direction === 'plan') {
         // Plan view - 150% zoom, centered
         setZoom(1.5); // 150% zoom
         setPanOffset({ x: 0, y: 0 });
-      } else if (active2DView === 'front' || active2DView === 'back') {
+      } else if (currentViewInfo.direction === 'front' || currentViewInfo.direction === 'back') {
         // Front/Back views - 170% zoom, top-center aligned
         setZoom(1.7); // 170% zoom
         setPanOffset({ x: 0, y: -50 });
-      } else if (active2DView === 'left' || active2DView === 'right') {
+      } else if (currentViewInfo.direction === 'left' || currentViewInfo.direction === 'right') {
         // Left/Right views - 170% zoom, centered (same as front/back)
         setZoom(1.7); // 170% zoom
         setPanOffset({ x: 0, y: 0 });
       }
     }
-  }, [fitToScreenSignal, roomDimensions, active2DView, getWallHeight]);
+  }, [fitToScreenSignal, roomDimensions, getWallHeight, currentViewInfo.direction]);
+
+  // Wait for component metadata to load before rendering (prevents height flash bug)
+  if (metadataLoading) {
+    return (
+      <div className="w-full h-full flex items-center justify-center bg-gray-50">
+        <div className="text-gray-500">Loading component data...</div>
+      </div>
+    );
+  }
 
   return (
     <div

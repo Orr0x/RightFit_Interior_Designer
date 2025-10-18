@@ -2,16 +2,15 @@
 
 A professional-grade interior design application built with React, TypeScript, and Supabase. Create, edit, and visualize interior layouts with advanced 2D multi-view planning and immersive 3D visualization.
 
-## 🎯 **CURRENT STATUS: v2.6 - Farrow & Ball Integration Complete**
-- 🎉 **NEW: Farrow & Ball Gallery**: 301 authentic colors with professional product images
-- ✅ **Database-Driven Colors**: Complete migration from CSV to Supabase with 100% coverage
-- ✅ **Individual Color Pages**: Themed product pages with color-specific backgrounds
-- ✅ **Mobile/Touch Support**: Complete responsive design with touch gestures
-- ✅ **Clean Codebase**: All TypeScript linting errors resolved (32+ → 0)
-- ✅ **Performance Optimized**: Phase 4 complete with 47% smaller bundles
-- ✅ **Database-Driven**: 100% database-driven component system (154+ components)
-- ⚠️ **Architecture Issues**: Core positioning system needs overhaul (see DEVELOPMENT-BACKLOG.md)
-
+## 🎯 **CURRENT STATUS: v2.7 - Infinite Loop Fix & Console Logger**
+- 🎉 **FIXED: Critical Render Loop Bug**: Resolved "Maximum update depth exceeded" error
+- ✅ **Context Memoization**: All ProjectContext functions properly memoized with useCallback
+- ✅ **Console Logger**: Automated browser console log capture for testing (development mode)
+- ✅ **Project Loading**: Fixed - projects now open successfully without errors
+- ✅ **Database Integration**: Room colors and configuration loading from database confirmed
+- ✅ **Farrow & Ball Gallery**: 301 authentic colors with professional product images
+- ✅ **Database-Driven**: Complete database-driven component system
+- ✅ **Performance Optimized**: Phase 4 complete with 47% smaller bundles 
 ## ✨ Features
 
 ### 🏗️ Multi-Room Project System
@@ -51,7 +50,7 @@ A professional-grade interior design application built with React, TypeScript, a
 ### 📱 **Mobile/Touch Support (v2.5)**
 - **Responsive Design**: Adaptive layout for mobile and desktop
 - **Touch Gestures**: Pinch-to-zoom, touch pan, long press selection
-- **Mobile-First UX**: Click-to-add components (no drag-and-drop on mobile)
+- **Mobile-First UX**: Click-to-add components (no drag-and-drop on mobile) - remove mobile layout but keep touch for tablet and touch screen monitors
 - **Touch-Optimized UI**: Sheet panels, larger touch targets, mobile toolbar
 - **Cross-Device Sync**: Seamless experience across devices
 
@@ -283,8 +282,7 @@ npm run preview
 
 ## ⚠️ Known Issues & Current State
 
-### 🔴 Critical Architecture Issues (See DEVELOPMENT-BACKLOG.md)
-- **Corner Logic System**: Only 2/4 corners work correctly for auto-rotation
+### ⚠️ Architecture Issues 
 - **Component Boundaries**: Rotation boundaries don't match visual components
 - **Wide Component Positioning**: Left/right wall snapping has 1cm offset
 - **3D Ceiling Height**: Room height control doesn't affect 3D view
@@ -299,7 +297,7 @@ npm run preview
 ### ✅ Recently Fixed (v2.5)
 - **All TypeScript Linting Errors**: Cleaned up 32+ warnings/errors to zero
 - **Mobile Support**: Complete responsive design with touch gestures
-- **effectiveWidth/effectiveDepth Bug**: Fixed wall snapping calculations
+
 
 ## 🐛 Troubleshooting
 
@@ -331,4 +329,3 @@ MIT License - see LICENSE file for details.
 
 ---
 
-*Built with ❤️ using modern web technologies*

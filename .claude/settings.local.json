@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(//i//**)",
+      "Bash(tail:*)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}

@@ -1,0 +1,11 @@
+id,created_at,name,description,element_type,id_includes,style_includes,config_overrides,priority,active
+005473dd-dfc9-43a4-91f8-c5c8cb018955,2025-09-13 22:07:31.96654+00,Media Units,Detects TV and media units,cabinet,"[""tv-unit"",""media""]",,"{""primary_color"": ""#654321"", ""enable_detailed_handles"": false}",15,true
+0b4ec95e-77cf-4440-83eb-dfaff1d97b9a,2025-09-13 22:07:31.96654+00,Bathroom Vanities,Detects bathroom vanity units,cabinet,"[""vanity""]",,"{""primary_color"": ""#F5F5DC"", ""primary_material"": ""composite""}",15,true
+0c2fe675-08ec-4845-a746-805df5ef4a00,2025-09-13 22:07:31.96654+00,Dishwashers,Detects dishwasher appliances,appliance,"[""dishwasher""]",,"{""metalness"": 0.8, ""primary_color"": ""#C0C0C0""}",10,true
+2610cb6a-98fd-4445-af9c-4919eed571c0,2025-09-13 22:07:31.96654+00,Larder Units - Oven,Detects larder oven units,cabinet,"[""larder-single-oven"",""larder-double-oven""]",,"{""detail_level"": 3, ""primary_color"": ""#2F2F2F""}",25,true
+397ac3a0-c4a6-4b99-af24-605511ab8e59,2025-09-13 22:07:31.96654+00,Bedroom Storage,Detects bedroom storage units,cabinet,"[""wardrobe"",""chest"",""bedside""]",,"{""wood_finish"": ""oak"", ""handle_style"": ""traditional""}",15,true
+65989215-64b8-46ec-8286-00c4c2b7f0e1,2025-09-13 22:07:31.96654+00,Refrigerators,Detects refrigerator appliances,appliance,"[""refrigerator""]",,"{""metalness"": 0.3, ""primary_color"": ""#FFFFFF""}",10,true
+7a0957cf-abda-48cc-b81a-adf7a219a012,2025-09-13 22:07:31.96654+00,Wall Cabinets,Detects wall-mounted cabinets,cabinet,"[""wall-cabinet""]","[""wall""]","{""plinth_height"": 0.0, ""primary_color"": ""#A0522D""}",10,true
+b172095f-60d5-498e-9906-6e39b7528ca5,2025-09-13 22:07:31.96654+00,Pan Drawer Units,Detects pan drawer cabinet units,cabinet,"[""pan-drawers""]","[""pan drawer""]","{""handle_style"": ""minimalist"", ""enable_door_detail"": false}",15,true
+bc92542f-b5e2-46cf-84d8-00e9fc611249,2025-09-13 22:07:31.96654+00,Corner Cabinets,Detects corner cabinet units,cabinet,"[""corner-cabinet""]","[""corner""]","{""corner_door_style"": ""bi-fold"", ""corner_interior_shelving"": true}",20,true
+bd47d3cc-32bd-4e5f-adea-0d74800ba25b,2025-09-13 22:07:31.96654+00,Larder Units - Fridge,Detects larder built-in fridge units,cabinet,"[""larder-built-in-fridge""]",,"{""detail_level"": 3, ""primary_color"": ""#FFFFFF""}",25,true

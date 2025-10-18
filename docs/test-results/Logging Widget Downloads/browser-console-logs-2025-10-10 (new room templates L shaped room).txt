@@ -1,0 +1,168 @@
+
+================================================================================
+BROWSER CONSOLE LOGS
+================================================================================
+Captured: 72 log entries
+Session Start: 2025-10-10T16:43:57.667Z
+Session End: 2025-10-10T16:44:07.775Z
+================================================================================
+
+[2025-10-10T16:43:57.667Z] 📝 [LOG] 📂 [CompactComponentSidebar] Grouping 0 filtered components by category
+[2025-10-10T16:43:57.667Z] 📝 [LOG] 📂 [CompactComponentSidebar] Final categories with components: []
+[2025-10-10T16:43:57.667Z] ❌ [ERROR] ❌ [CompactComponentSidebar] WALL UNITS CATEGORY MISSING FROM FINAL GROUPS!
+[2025-10-10T16:43:57.667Z] 📝 [LOG] 📂 [CompactComponentSidebar] Available categories: []
+[2025-10-10T16:43:57.667Z] 📝 [LOG] ⏳ [CompactComponentSidebar] Component sidebar in loading state
+[2025-10-10T16:43:57.672Z] 📝 [LOG] 🎯 [PerformanceMonitor] Performance monitor hidden
+[2025-10-10T16:43:57.679Z] 📝 [LOG] ⚡ [useOptimizedComponents] Loaded components from cache
+[2025-10-10T16:43:57.682Z] 📝 [LOG] 🚀 [Designer] Preloading common component behaviors for performance
+[2025-10-10T16:43:57.682Z] 📝 [LOG] 🔥 [ComponentService] Preloading common component behaviors
+[2025-10-10T16:43:57.682Z] 📝 [LOG] 🔄 [ComponentService] Batch loading behaviors for 10 component types
+[2025-10-10T16:43:57.682Z] 📝 [LOG] ⚡ [ComponentService] All 10 behaviors found in cache
+[2025-10-10T16:43:57.689Z] 📝 [LOG] 🏗️ [CoordinateEngine] Initialized with inner room dimensions: {
+  "innerWidth": 600,
+  "innerHeight": 400,
+  "ceilingHeight": 240,
+  "wallThickness": 10
+}
+[2025-10-10T16:43:57.689Z] 📝 [LOG] 🏗️ [DesignCanvas2D] Coordinate engine initialized for room: {
+  "width": 600,
+  "height": 400
+}
+[2025-10-10T16:43:57.692Z] 📝 [LOG] ✅ [Designer] Preloading complete
+[2025-10-10T16:43:57.693Z] 📝 [LOG] 🚀 [DesignCanvas2D] Preloaded component behaviors and room config
+[2025-10-10T16:43:57.794Z] 📝 [LOG] ✅ [RoomService] Loaded 3 geometry templates
+[2025-10-10T16:43:57.794Z] 📝 [LOG] 📐 [RoomService] Generating simple rectangle for room 55c29969-af57-4cd5-9897-cb42c2977baf
+[2025-10-10T16:43:57.794Z] 📝 [LOG] ✅ [DesignCanvas2D] Loaded complex room geometry for room 55c29969-af57-4cd5-9897-cb42c2977baf: rectangle
+[2025-10-10T16:43:57.801Z] 📝 [LOG] [ConfigService] Feature disabled, skipping preload
+[2025-10-10T16:43:57.801Z] 📝 [LOG] [DesignCanvas2D] Configuration loaded from database: {
+  "canvas_width": 1600,
+  "canvas_height": 1200,
+  "grid_size": 20,
+  "min_zoom": 0.5,
+  "max_zoom": 4,
+  "wall_thickness": 10,
+  "wall_clearance": 5,
+  "wall_snap_threshold": 40,
+  "snap_tolerance_default": 15,
+  "snap_tolerance_countertop": 25,
+  "proximity_threshold": 100,
+  "wall_snap_distance_default": 35,
+  "wall_snap_distance_countertop": 50,
+  "corner_tolerance": 30,
+  "toe_kick_height": 8,
+  "drag_threshold_mouse": 5,
+  "drag_threshold_touch": 10
+}
+[2025-10-10T16:43:57.801Z] 📝 [LOG] [DesignCanvas2D] 2D render definitions preloaded
+[2025-10-10T16:43:57.809Z] 📝 [LOG] 🧹 [ProjectContext] Cleaning up auto-save interval on room change
+[2025-10-10T16:43:57.809Z] 📝 [LOG] 🔧 [ProjectContext] Auto-save initialization check {
+  "autoSaveEnabled": true,
+  "hasInterval": true,
+  "hasCurrentRoom": false
+}
+[2025-10-10T16:43:57.869Z] 📝 [LOG] ✅ [RoomService] Loaded 3 geometry templates
+[2025-10-10T16:44:04.799Z] ❌ [ERROR] [ProjectContext] Error fetching template: {}
+[2025-10-10T16:44:04.842Z] 📝 [LOG] 📂 [CompactComponentSidebar] Grouping 0 filtered components by category
+[2025-10-10T16:44:04.842Z] 📝 [LOG] 📂 [CompactComponentSidebar] Final categories with components: []
+[2025-10-10T16:44:04.842Z] ❌ [ERROR] ❌ [CompactComponentSidebar] WALL UNITS CATEGORY MISSING FROM FINAL GROUPS!
+[2025-10-10T16:44:04.842Z] 📝 [LOG] 📂 [CompactComponentSidebar] Available categories: []
+[2025-10-10T16:44:04.842Z] 📝 [LOG] ⏳ [CompactComponentSidebar] Component sidebar in loading state
+[2025-10-10T16:44:04.848Z] 📝 [LOG] 🎯 [PerformanceMonitor] Performance monitor hidden
+[2025-10-10T16:44:04.849Z] 📝 [LOG] 🧹 [ProjectContext] Cleaning up auto-save interval on room change
+[2025-10-10T16:44:04.853Z] 📝 [LOG] ⚡ [useOptimizedComponents] Loaded components from cache
+[2025-10-10T16:44:04.855Z] 📝 [LOG] 🔧 [ProjectContext] Auto-save initialization check {
+  "autoSaveEnabled": true,
+  "hasInterval": false,
+  "hasCurrentRoom": true,
+  "roomId": "2ac2df60-66e3-4ab6-8a53-6d5985ff170c"
+}
+[2025-10-10T16:44:04.855Z] 📝 [LOG] 🚀 [ProjectContext] Initializing auto-save for room: 2ac2df60-66e3-4ab6-8a53-6d5985ff170c
+[2025-10-10T16:44:04.859Z] 📝 [LOG] [ConfigService] Feature disabled, skipping preload
+[2025-10-10T16:44:04.860Z] 📝 [LOG] 🏗️ [CoordinateEngine] Initialized with inner room dimensions: {
+  "innerWidth": 600,
+  "innerHeight": 400,
+  "ceilingHeight": 240,
+  "wallThickness": 10
+}
+[2025-10-10T16:44:04.860Z] 📝 [LOG] 🏗️ [DesignCanvas2D] Coordinate engine initialized for room: {
+  "width": 600,
+  "height": 400
+}
+[2025-10-10T16:44:04.860Z] 📝 [LOG] [DesignCanvas2D] Configuration loaded from database: {
+  "canvas_width": 1600,
+  "canvas_height": 1200,
+  "grid_size": 20,
+  "min_zoom": 0.5,
+  "max_zoom": 4,
+  "wall_thickness": 10,
+  "wall_clearance": 5,
+  "wall_snap_threshold": 40,
+  "snap_tolerance_default": 15,
+  "snap_tolerance_countertop": 25,
+  "proximity_threshold": 100,
+  "wall_snap_distance_default": 35,
+  "wall_snap_distance_countertop": 50,
+  "corner_tolerance": 30,
+  "toe_kick_height": 8,
+  "drag_threshold_mouse": 5,
+  "drag_threshold_touch": 10
+}
+[2025-10-10T16:44:04.860Z] 📝 [LOG] 🚀 [DesignCanvas2D] Preloaded component behaviors and room config
+[2025-10-10T16:44:04.860Z] 📝 [LOG] [DesignCanvas2D] 2D render definitions preloaded
+[2025-10-10T16:44:04.866Z] 📝 [LOG] 🔍 [CompactComponentSidebar] Filtering components for room type: kitchen
+[2025-10-10T16:44:04.867Z] 📝 [LOG] 🔍 [CompactComponentSidebar] Total components loaded: 194
+[2025-10-10T16:44:04.867Z] 📝 [LOG] 🔍 [CompactComponentSidebar] Components available for kitchen: 94
+[2025-10-10T16:44:04.867Z] 📝 [LOG] 🏠 [CompactComponentSidebar] Wall units available for kitchen: 0 (lowercase: 0, title: 0)
+[2025-10-10T16:44:04.867Z] ⚠️ [WARN] ⚠️ [CompactComponentSidebar] NO WALL UNITS AVAILABLE for room type: kitchen
+[2025-10-10T16:44:04.867Z] 📝 [LOG] 📂 [CompactComponentSidebar] Grouping 94 filtered components by category
+[2025-10-10T16:44:04.868Z] 📝 [LOG] 📂 [CompactComponentSidebar] Final categories with components: [
+  "appliances",
+  "base-cabinets",
+  "counter-tops",
+  "doors-external",
+  "doors-internal",
+  "finishing",
+  "kitchen-larder",
+  "sinks",
+  "wall-cabinets",
+  "windows"
+]
+[2025-10-10T16:44:04.868Z] 📝 [LOG] 📂 [CompactComponentSidebar] appliances: 11 components
+[2025-10-10T16:44:04.868Z] 📝 [LOG] 📂 [CompactComponentSidebar] base-cabinets: 15 components
+[2025-10-10T16:44:04.868Z] 📝 [LOG] 📂 [CompactComponentSidebar] counter-tops: 6 components
+[2025-10-10T16:44:04.868Z] 📝 [LOG] 📂 [CompactComponentSidebar] doors-external: 4 components
+[2025-10-10T16:44:04.868Z] 📝 [LOG] 📂 [CompactComponentSidebar] doors-internal: 8 components
+[2025-10-10T16:44:04.868Z] 📝 [LOG] 📂 [CompactComponentSidebar] finishing: 11 components
+[2025-10-10T16:44:04.869Z] 📝 [LOG] 📂 [CompactComponentSidebar] kitchen-larder: 5 components
+[2025-10-10T16:44:04.869Z] 📝 [LOG] 📂 [CompactComponentSidebar] sinks: 20 components
+[2025-10-10T16:44:04.869Z] 📝 [LOG] 📂 [CompactComponentSidebar] wall-cabinets: 7 components
+[2025-10-10T16:44:04.869Z] 📝 [LOG] 📂 [CompactComponentSidebar] windows: 7 components
+[2025-10-10T16:44:04.869Z] ❌ [ERROR] ❌ [CompactComponentSidebar] WALL UNITS CATEGORY MISSING FROM FINAL GROUPS!
+[2025-10-10T16:44:04.870Z] 📝 [LOG] 📂 [CompactComponentSidebar] Available categories: [
+  "appliances",
+  "base-cabinets",
+  "counter-tops",
+  "doors-external",
+  "doors-internal",
+  "finishing",
+  "kitchen-larder",
+  "sinks",
+  "wall-cabinets",
+  "windows"
+]
+[2025-10-10T16:44:04.870Z] 📝 [LOG] ✅ [CompactComponentSidebar] Component sidebar rendered successfully
+[2025-10-10T16:44:04.870Z] 📝 [LOG] ✅ [CompactComponentSidebar] Summary: 194 total, 94 for kitchen, 10 categories
+[2025-10-10T16:44:04.881Z] 📝 [LOG] 🎯 [PerformanceMonitor] Performance monitor hidden
+[2025-10-10T16:44:04.902Z] 📝 [LOG] ✅ [CompactComponentSidebar] Component sidebar rendered successfully
+[2025-10-10T16:44:04.902Z] 📝 [LOG] ✅ [CompactComponentSidebar] Summary: 194 total, 94 for kitchen, 10 categories
+[2025-10-10T16:44:04.908Z] 📝 [LOG] 🎯 [PerformanceMonitor] Performance monitor hidden
+[2025-10-10T16:44:04.934Z] 📝 [LOG] ✅ [RoomService] Loaded 3 geometry templates
+[2025-10-10T16:44:04.977Z] 📝 [LOG] 📐 [RoomService] Generating simple rectangle for room 2ac2df60-66e3-4ab6-8a53-6d5985ff170c
+[2025-10-10T16:44:04.978Z] 📝 [LOG] ✅ [DesignCanvas2D] Loaded complex room geometry for room 2ac2df60-66e3-4ab6-8a53-6d5985ff170c: rectangle
+[2025-10-10T16:44:07.769Z] 📝 [LOG] ✅ [CompactComponentSidebar] Component sidebar rendered successfully
+[2025-10-10T16:44:07.770Z] 📝 [LOG] ✅ [CompactComponentSidebar] Summary: 194 total, 94 for kitchen, 10 categories
+[2025-10-10T16:44:07.775Z] 📝 [LOG] 🎯 [PerformanceMonitor] Performance monitor hidden
+
+================================================================================
+END OF LOGS (72 entries)
+================================================================================

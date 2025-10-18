@@ -6,13 +6,17 @@
 import React, { Suspense, useEffect, useRef, useState, useMemo } from 'react';
 import { Canvas, useThree } from '@react-three/fiber';
 import { OrbitControls, Environment, Grid, Text } from '@react-three/drei';
-import { DesignElement, Design } from '@/types/project';
+import { DesignElement, Design, ElevationViewConfig } from '@/types/project';
+import { getElevationViews } from '@/utils/elevationViewHelpers';
 import { performanceDetector, RenderQuality, DeviceCapabilities } from '@/services/PerformanceDetector';
 import { memoryManager } from '@/services/MemoryManager';
 import { useIsMobile } from '@/hooks/use-mobile';
+import { RoomService, RoomColors } from '@/services/RoomService';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Settings, Zap, Gauge } from 'lucide-react';
+import { Settings, Zap, Gauge, Eye, EyeOff } from 'lucide-react';
+import type { RoomGeometry } from '@/types/RoomGeometry';
+import { ComplexRoomGeometry } from '@/components/3d/ComplexRoomGeometry';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -45,72 +49,46 @@ interface AdaptiveView3DProps {
   activeTool?: 'select' | 'fit-screen' | 'pan' | 'tape-measure' | 'none';
   showGrid?: boolean;
   fitToScreenSignal?: number;
+  elevationViews?: ElevationViewConfig[];
 }
 
-// Convert 2D coordinates to 3D world coordinates accounting for wall thickness
-const convertTo3D = (x: number, y: number, roomWidth: number, roomHeight: number) => {
-  // CRITICAL FIX: Account for wall thickness in coordinate conversion
-  // 2D coordinates now represent positions within the inner room bounds (usable space)
-  const WALL_THICKNESS_CM = 10; // 10cm wall thickness (matches DesignCanvas2D)
-  const WALL_THICKNESS_METERS = WALL_THICKNESS_CM / 100; // Convert to meters
-  
-  // Scale down the room to reasonable 3D size
-  const roomWidthMeters = roomWidth / 100;
-  const roomHeightMeters = roomHeight / 100;
-  
-  // Convert 2D inner room coordinates to 3D world coordinates
-  // 2D coordinates represent positions within the inner usable space (after wall thickness)
-  // 3D needs to map these coordinates to the actual inner 3D space
-  
-  // Calculate the inner 3D room dimensions (subtracting wall thickness)
-  const inner3DWidth = roomWidthMeters - WALL_THICKNESS_METERS;
-  const inner3DHeight = roomHeightMeters - WALL_THICKNESS_METERS;
-  
-  // PRECISION FIX: Account for exact wall positioning
-  const halfWallThickness = WALL_THICKNESS_METERS / 2; // 5cm in meters
-  
-  // Calculate 3D inner boundaries (where wall inner faces are)
-  const innerLeftBoundary = -roomWidthMeters / 2 + halfWallThickness;
-  const innerRightBoundary = roomWidthMeters / 2 - halfWallThickness;
-  const innerBackBoundary = -roomHeightMeters / 2 + halfWallThickness;
-  const innerFrontBoundary = roomHeightMeters / 2 - halfWallThickness;
-  
-  // Map 2D coordinates directly to 3D inner space
-  const xRange = innerRightBoundary - innerLeftBoundary;
-  const zRange = innerFrontBoundary - innerBackBoundary;
-  
-  return {
-    x: innerLeftBoundary + (x / roomWidth) * xRange,
-    z: innerBackBoundary + (y / roomHeight) * zRange
-  };
-};
-
 // Adaptive Room component with quality-based features
-const AdaptiveRoom3D: React.FC<{ 
-  roomDimensions: { width: number; height: number }; 
+const AdaptiveRoom3D: React.FC<{
+  roomDimensions: { width: number; height: number; ceilingHeight?: number };
   quality: RenderQuality;
-}> = ({ roomDimensions, quality }) => {
+  roomColors?: RoomColors | null;
+}> = ({ roomDimensions, quality, roomColors }) => {
   const roomWidth = roomDimensions.width / 100;
   const roomDepth = roomDimensions.height / 100;
-  const wallHeight = 2.5;
+  const wallHeight = (roomDimensions.ceilingHeight || 250) / 100;
+
+  // Room colors from database or fallback to defaults
+  const floorColor = roomColors?.floor || "#f5f5f5";
+  const wallColor = roomColors?.walls || "#ffffff";
 
   // Use simpler materials for low quality
-  const floorMaterial = quality.level === 'low' 
-    ? <meshBasicMaterial color="#f5f5f5" />
-    : <meshLambertMaterial color="#f5f5f5" />;
+  const floorMaterial = quality.level === 'low'
+    ? <meshBasicMaterial color={floorColor} side={THREE.DoubleSide} />
+    : <meshLambertMaterial color={floorColor} side={THREE.DoubleSide} />;
 
   const wallMaterial = quality.level === 'low'
-    ? <meshBasicMaterial color="#ffffff" />
-    : <meshLambertMaterial color="#ffffff" />;
+    ? <meshBasicMaterial color={wallColor} />
+    : <meshLambertMaterial color={wallColor} />;
 
   return (
     <group>
       {/* Floor */}
-      <mesh position={[0, -0.01, 0]} receiveShadow={quality.shadows}>
-        <boxGeometry args={[roomWidth, 0.02, roomDepth]} />
+      <mesh position={[0, -0.001, 0]} rotation={[-Math.PI / 2, 0, 0]} receiveShadow={quality.shadows}>
+        <planeGeometry args={[roomWidth, roomDepth]} />
         {floorMaterial}
       </mesh>
-      
+
+      {/* Ceiling */}
+      <mesh position={[0, wallHeight - 0.001, 0]} rotation={[Math.PI / 2, 0, 0]} receiveShadow={quality.shadows}>
+        <planeGeometry args={[roomWidth, roomDepth]} />
+        <meshLambertMaterial color={roomColors?.ceiling || "#ffffff"} side={THREE.FrontSide} />
+      </mesh>
+
       {/* Back Wall */}
       <mesh position={[0, wallHeight / 2, -roomDepth / 2]} receiveShadow={quality.shadows}>
         <boxGeometry args={[roomWidth, wallHeight, 0.1]} />
@@ -301,14 +279,107 @@ const QualitySettings: React.FC<{
   );
 };
 
+// First Person Controls (Walk Mode)
+const FirstPersonControls: React.FC<{
+  enabled: boolean;
+}> = ({ enabled }) => {
+  const { camera } = useThree();
+  const moveSpeed = 0.05; // Movement speed
+  const lookSpeed = 0.002; // Mouse look speed
+
+  useEffect(() => {
+    if (!enabled) return;
+
+    // Set camera to center of room at eye level (170cm / 1.7m)
+    camera.position.set(0, 1.7, 0);
+
+    const keys: { [key: string]: boolean } = {};
+    let mouseX = 0;
+    let mouseY = 0;
+    let yaw = 0;
+    let pitch = 0;
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      keys[e.key.toLowerCase()] = true;
+    };
+
+    const handleKeyUp = (e: KeyboardEvent) => {
+      keys[e.key.toLowerCase()] = false;
+    };
+
+    const handleMouseMove = (e: MouseEvent) => {
+      if (document.pointerLockElement) {
+        mouseX = e.movementX;
+        mouseY = e.movementY;
+      }
+    };
+
+    const handleClick = () => {
+      if (enabled) {
+        document.body.requestPointerLock();
+      }
+    };
+
+    // Movement loop
+    const moveInterval = setInterval(() => {
+      if (!enabled) return;
+
+      // Update camera rotation from mouse
+      yaw -= mouseX * lookSpeed;
+      pitch -= mouseY * lookSpeed;
+      pitch = Math.max(-Math.PI / 2, Math.min(Math.PI / 2, pitch)); // Clamp pitch
+
+      mouseX = 0;
+      mouseY = 0;
+
+      // Calculate forward/right vectors
+      const forward = new THREE.Vector3(
+        -Math.sin(yaw),
+        0,
+        -Math.cos(yaw)
+      );
+      const right = new THREE.Vector3(
+        Math.cos(yaw),
+        0,
+        -Math.sin(yaw)
+      );
+
+      // WASD movement
+      if (keys['w']) camera.position.add(forward.clone().multiplyScalar(moveSpeed));
+      if (keys['s']) camera.position.add(forward.clone().multiplyScalar(-moveSpeed));
+      if (keys['a']) camera.position.add(right.clone().multiplyScalar(-moveSpeed));
+      if (keys['d']) camera.position.add(right.clone().multiplyScalar(moveSpeed));
+
+      // Update camera rotation
+      camera.rotation.set(pitch, yaw, 0, 'YXZ');
+    }, 16); // ~60fps
+
+    document.addEventListener('keydown', handleKeyDown);
+    document.addEventListener('keyup', handleKeyUp);
+    document.addEventListener('mousemove', handleMouseMove);
+    document.body.addEventListener('click', handleClick);
+
+    return () => {
+      clearInterval(moveInterval);
+      document.removeEventListener('keydown', handleKeyDown);
+      document.removeEventListener('keyup', handleKeyUp);
+      document.removeEventListener('mousemove', handleMouseMove);
+      document.body.removeEventListener('click', handleClick);
+      document.exitPointerLock();
+    };
+  }, [enabled, camera]);
+
+  return null;
+};
+
 // Fit to Screen Controller
-const FitToScreenController: React.FC<{ 
-  roomDimensions: { width: number; height: number }; 
-  signal: number; 
-  controlsRef: React.RefObject<any>; 
+const FitToScreenController: React.FC<{
+  roomDimensions: { width: number; height: number };
+  signal: number;
+  controlsRef: React.RefObject<any>;
 }> = ({ roomDimensions, signal, controlsRef }) => {
   const { camera } = useThree();
-  
+
   useEffect(() => {
     if (!signal) return;
     const maxDim = Math.max(roomDimensions.width, roomDimensions.height) / 100;
@@ -320,7 +391,7 @@ const FitToScreenController: React.FC<{
       controlsRef.current.update();
     }
   }, [signal, roomDimensions.width, roomDimensions.height, camera, controlsRef]);
-  
+
   return null;
 };
 
@@ -330,29 +401,126 @@ export const AdaptiveView3D: React.FC<AdaptiveView3DProps> = ({
   onSelectElement,
   activeTool = 'select',
   showGrid = true,
-  fitToScreenSignal = 0
+  fitToScreenSignal = 0,
+  elevationViews
 }) => {
   const [capabilities, setCapabilities] = useState<DeviceCapabilities | null>(null);
   const [currentQuality, setCurrentQuality] = useState<RenderQuality | null>(null);
   const [isAutoMode, setIsAutoMode] = useState(false); // Default to manual mode
   const [isInitializing, setIsInitializing] = useState(true);
+  const [roomColors, setRoomColors] = useState<RoomColors | null>(null);
+  const [roomGeometry, setRoomGeometry] = useState<RoomGeometry | null>(null);
+  const [isFullyLoaded, setIsFullyLoaded] = useState(false); // NEW: Track when ALL async data is loaded
+  const [hiddenWalls, setHiddenWalls] = useState<string[]>([]); // Manual control: array of wall directions to hide
+  const [hideInterior, setHideInterior] = useState(false); // Manual toggle for interior/return walls
+  const [showCeiling, setShowCeiling] = useState(false); // Manual ceiling toggle
+  const [walkMode, setWalkMode] = useState(false); // First-person walk mode
   const controlsRef = useRef<any>(null);
   const isMobile = useIsMobile();
 
   // Always define roomDimensions (before any early returns)
   const roomDimensions = {
     width: design?.roomDimensions?.width || 600,
-    height: design?.roomDimensions?.height || 400
+    height: design?.roomDimensions?.height || 400,
+    ceilingHeight: design?.roomDimensions?.ceilingHeight
   };
 
-  // Filter elements based on quality settings (always call this hook)
+  // Consolidated async data loader - prevents render flashes by loading all data before rendering
+  useEffect(() => {
+    const loadAllAsyncData = async () => {
+      console.log('🔄 [AdaptiveView3D] Starting consolidated data load...');
+      setIsFullyLoaded(false);
+
+      try {
+        // Load room colors and geometry in parallel
+        const loadPromises: Promise<void>[] = [];
+
+        // Load room colors
+        if (design?.roomType) {
+          const colorsPromise = RoomService.getRoomTypeTemplate(design.roomType)
+            .then(template => {
+              if (template.default_colors) {
+                setRoomColors(template.default_colors);
+                console.log(`✅ [AdaptiveView3D] Loaded room colors for ${design.roomType}`);
+              }
+            })
+            .catch(error => {
+              console.warn(`⚠️ [AdaptiveView3D] Failed to load room colors:`, error);
+              setRoomColors(null);
+            });
+          loadPromises.push(colorsPromise);
+        }
+
+        // Load room geometry
+        if (design?.id) {
+          const geometryPromise = RoomService.getRoomGeometry(design.id)
+            .then(geometry => {
+              if (geometry) {
+                setRoomGeometry(geometry as RoomGeometry);
+                console.log(`✅ [AdaptiveView3D] Loaded room geometry for room ${design.id}`);
+              } else {
+                setRoomGeometry(null);
+                console.log(`ℹ️ [AdaptiveView3D] No complex geometry found, using simple room`);
+              }
+            })
+            .catch(error => {
+              console.warn(`⚠️ [AdaptiveView3D] Failed to load room geometry:`, error);
+              setRoomGeometry(null);
+            });
+          loadPromises.push(geometryPromise);
+        }
+
+        // Wait for all data to load in parallel
+        await Promise.all(loadPromises);
+
+        console.log('✅ [AdaptiveView3D] All async data loaded successfully');
+      } catch (error) {
+        console.error('❌ [AdaptiveView3D] Error loading async data:', error);
+      } finally {
+        setIsFullyLoaded(true);
+      }
+    };
+
+    loadAllAsyncData();
+  }, [design?.roomType, design?.id]);
+
+  // Filter elements based on per-view visibility and quality settings
   const visibleElements = useMemo(() => {
     if (!design?.elements) return [];
-    
+
+    // Get the 3D view config to check hidden_elements
+    // FIX: Don't use fallback - we need to detect when elevationViews prop changes
+    const views = elevationViews || getElevationViews();
+    const view3D = views.find(v => v.id === '3d');
+    const hiddenElementIds = view3D?.hidden_elements || [];
+
+    console.log('🎨 [3D VIEW DEBUG] Filtering elements:', {
+      totalElements: design.elements.length,
+      hiddenElementIds,
+      view3DConfig: view3D,
+      elevationViewsProp: elevationViews ? 'provided' : 'using fallback'
+    });
+
+    // Filter out hidden elements
+    const filteredByVisibility = design.elements.filter(el => {
+      const isHidden = hiddenElementIds.includes(el.id);
+      if (isHidden) {
+        console.log('🎨 [3D VIEW DEBUG] Element HIDDEN in 3D view:', { id: el.id });
+      }
+      return !isHidden;
+    });
+
     // Limit elements for performance - use fallback if currentQuality is null
     const maxElements = currentQuality?.maxElements || 100;
-    return design.elements.slice(0, maxElements);
-  }, [design?.elements, currentQuality?.maxElements]);
+    const limited = filteredByVisibility.slice(0, maxElements);
+
+    console.log('🎨 [3D VIEW DEBUG] Visible elements after filtering:', {
+      afterVisibilityFilter: filteredByVisibility.length,
+      afterPerformanceLimit: limited.length
+    });
+
+    return limited;
+  }, [design?.elements, currentQuality?.maxElements, elevationViews, JSON.stringify(elevationViews)]);
 
   // Initialize performance detection
   useEffect(() => {
@@ -412,11 +580,11 @@ export const AdaptiveView3D: React.FC<AdaptiveView3DProps> = ({
   }, []);
 
   // Safety checks - AFTER all hooks
-  if (!design || !design.roomDimensions || isInitializing || !currentQuality) {
+  if (!design || !design.roomDimensions || isInitializing || !currentQuality || !isFullyLoaded) {
     return (
       <div className="w-full h-full relative bg-gray-50 rounded-lg overflow-hidden flex items-center justify-center">
         <div className="text-gray-500">
-          {isInitializing ? 'Optimizing 3D performance...' : 'Loading 3D View...'}
+          {isInitializing ? 'Optimizing 3D performance...' : !isFullyLoaded ? 'Loading 3D scene data...' : 'Loading 3D View...'}
         </div>
       </div>
     );
@@ -456,6 +624,98 @@ export const AdaptiveView3D: React.FC<AdaptiveView3DProps> = ({
         />
       )}
 
+      {/* Wall & Ceiling Visibility Controls - only show for complex room geometry */}
+      {roomGeometry && (
+        <div className="absolute top-4 left-1/2 transform -translate-x-1/2 z-50 flex gap-2 bg-white/90 backdrop-blur-sm p-2 rounded-lg shadow-lg">
+          <div className="flex items-center gap-1">
+            <span className="text-xs font-medium mr-2">Walls:</span>
+            <Button
+              variant={hiddenWalls.includes('north') ? "outline" : "default"}
+              size="sm"
+              className="h-7 px-2 text-xs"
+              onClick={() => setHiddenWalls(prev =>
+                prev.includes('north') ? prev.filter(w => w !== 'north') : [...prev, 'north']
+              )}
+            >
+              N
+            </Button>
+            <Button
+              variant={hiddenWalls.includes('south') ? "outline" : "default"}
+              size="sm"
+              className="h-7 px-2 text-xs"
+              onClick={() => setHiddenWalls(prev =>
+                prev.includes('south') ? prev.filter(w => w !== 'south') : [...prev, 'south']
+              )}
+            >
+              S
+            </Button>
+            <Button
+              variant={hiddenWalls.includes('east') ? "outline" : "default"}
+              size="sm"
+              className="h-7 px-2 text-xs"
+              onClick={() => setHiddenWalls(prev =>
+                prev.includes('east') ? prev.filter(w => w !== 'east') : [...prev, 'east']
+              )}
+            >
+              E
+            </Button>
+            <Button
+              variant={hiddenWalls.includes('west') ? "outline" : "default"}
+              size="sm"
+              className="h-7 px-2 text-xs"
+              onClick={() => setHiddenWalls(prev =>
+                prev.includes('west') ? prev.filter(w => w !== 'west') : [...prev, 'west']
+              )}
+            >
+              W
+            </Button>
+            <div className="w-px h-6 bg-gray-300 mx-1"></div>
+            <Button
+              variant={hiddenWalls.length === 0 ? "default" : "outline"}
+              size="sm"
+              className="h-7 px-3 text-xs"
+              onClick={() => setHiddenWalls([])}
+            >
+              All
+            </Button>
+            <Button
+              variant={hiddenWalls.length === 4 ? "default" : "outline"}
+              size="sm"
+              className="h-7 px-3 text-xs"
+              onClick={() => setHiddenWalls(['north', 'south', 'east', 'west'])}
+            >
+              None
+            </Button>
+            <div className="w-px h-6 bg-gray-300 mx-1"></div>
+            <Button
+              variant={hideInterior ? "outline" : "default"}
+              size="sm"
+              className="h-7 px-3 text-xs"
+              onClick={() => setHideInterior(!hideInterior)}
+            >
+              Interior
+            </Button>
+            <Button
+              variant={showCeiling ? "default" : "outline"}
+              size="sm"
+              className="h-7 px-3 text-xs"
+              onClick={() => setShowCeiling(!showCeiling)}
+            >
+              Ceiling
+            </Button>
+            <div className="w-px h-6 bg-gray-300 mx-1"></div>
+            <Button
+              variant={walkMode ? "default" : "outline"}
+              size="sm"
+              className="h-7 px-3 text-xs"
+              onClick={() => setWalkMode(!walkMode)}
+            >
+              Walk Mode
+            </Button>
+          </div>
+        </div>
+      )}
+
       <Canvas
         camera={{
           position: [5, 4, 5],
@@ -477,9 +737,22 @@ export const AdaptiveView3D: React.FC<AdaptiveView3DProps> = ({
           {currentQuality.environmentLighting && (
             <Environment preset="apartment" />
           )}
-          
-          {/* Adaptive Room */}
-          <AdaptiveRoom3D roomDimensions={roomDimensions} quality={currentQuality} />
+
+          {/* Render complex or simple room geometry */}
+          {roomGeometry ? (
+            // Phase 3: Complex room geometry (L-shape, U-shape, custom polygons)
+            <ComplexRoomGeometry
+              geometry={roomGeometry}
+              quality={currentQuality}
+              roomColors={roomColors}
+              hiddenWalls={hiddenWalls}
+              hideInterior={hideInterior}
+              showCeiling={showCeiling}
+            />
+          ) : (
+            // Legacy: Simple rectangular room (backward compatible)
+            <AdaptiveRoom3D roomDimensions={roomDimensions} quality={currentQuality} roomColors={roomColors} />
+          )}
           
           {/* Grid - simplified for low quality */}
           {showGrid && (
@@ -498,7 +771,6 @@ export const AdaptiveView3D: React.FC<AdaptiveView3DProps> = ({
           {/* Design Elements - limited by quality */}
           {visibleElements.map((element) => {
             const isSelected = selectedElement?.id === element.id;
-            const { x, z } = convertTo3D(element.x, element.y, roomDimensions.width, roomDimensions.height);
 
             // Render appropriate 3D model based on element type
             switch (element.type) {
@@ -622,8 +894,35 @@ export const AdaptiveView3D: React.FC<AdaptiveView3DProps> = ({
                     onClick={() => handleElementClick(element)}
                   />
                 );
+              // Multi-room furniture types (bedroom, bathroom, living room, office, etc.)
+              case 'bed':
+              case 'seating':
+              case 'storage':
+              case 'desk':
+              case 'table':
+              case 'chair':
+                return (
+                  <EnhancedCabinet3D
+                    key={element.id}
+                    element={element}
+                    roomDimensions={roomDimensions}
+                    isSelected={isSelected}
+                    onClick={() => handleElementClick(element)}
+                  />
+                );
               default:
-                return null;
+                // For any unhandled types, try to render with EnhancedCabinet3D
+                // which will use DynamicComponentRenderer if feature flag is enabled
+                console.log(`[AdaptiveView3D] Rendering unhandled type "${element.type}" with EnhancedCabinet3D`);
+                return (
+                  <EnhancedCabinet3D
+                    key={element.id}
+                    element={element}
+                    roomDimensions={roomDimensions}
+                    isSelected={isSelected}
+                    onClick={() => handleElementClick(element)}
+                  />
+                );
             }
           })}
           
@@ -632,7 +931,8 @@ export const AdaptiveView3D: React.FC<AdaptiveView3DProps> = ({
             ref={controlsRef}
             enablePan={true} // Always enable panning for right-click support
             enableZoom={true}
-            enableRotate={activeTool === 'select' || activeTool === 'pan'}
+            enableRotate={!walkMode && (activeTool === 'select' || activeTool === 'pan')}
+            enabled={!walkMode}
             target={[0, 0, 0]}
             // Mobile-optimized touch settings
             enableDamping={true}
@@ -661,6 +961,9 @@ export const AdaptiveView3D: React.FC<AdaptiveView3DProps> = ({
             }}
           />
           
+          {/* First-Person Walk Mode Controls */}
+          <FirstPersonControls enabled={walkMode} />
+
           {/* Fit to Screen Controller */}
           <FitToScreenController
             roomDimensions={roomDimensions}
@@ -669,6 +972,21 @@ export const AdaptiveView3D: React.FC<AdaptiveView3DProps> = ({
           />
         </Suspense>
       </Canvas>
+
+      {/* Walk Mode Instructions */}
+      {walkMode && (
+        <div className="absolute top-20 left-1/2 transform -translate-x-1/2 z-50 bg-black/75 text-white px-4 py-2 rounded-lg text-sm">
+          <div className="flex items-center gap-2">
+            <span>🚶 Walk Mode:</span>
+            <span className="font-mono">WASD</span>
+            <span>to move</span>
+            <span>•</span>
+            <span>🖱️ Mouse to look</span>
+            <span>•</span>
+            <span>Click to capture pointer</span>
+          </div>
+        </div>
+      )}
       
       {/* Element count indicator for performance monitoring */}
       {visibleElements.length < (design.elements?.length || 0) && (

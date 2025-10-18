@@ -1,0 +1,315 @@
+
+================================================================================
+BROWSER CONSOLE LOGS
+================================================================================
+Captured: 143 log entries
+Session Start: 2025-10-10T16:37:17.758Z
+Session End: 2025-10-10T16:37:35.229Z
+================================================================================
+
+[2025-10-10T16:37:17.758Z] ℹ️ [INFO] 🔧 [App] Console logger enabled (development mode)
+[2025-10-10T16:37:18.020Z] 📝 [LOG] [Model3DLoader] Preloading 18 models...
+[2025-10-10T16:37:18.028Z] 📝 [LOG] 🔐 [ProjectContext] Auth ready, loading user projects...
+[2025-10-10T16:37:18.082Z] 📝 [LOG] 🔐 [ProjectContext] Auth ready, loading user projects...
+[2025-10-10T16:37:18.101Z] 📝 [LOG] [Model3DLoader] Loaded model from database: new-corner-wall-cabinet-90
+[2025-10-10T16:37:18.103Z] 📝 [LOG] [Model3DLoader] Loaded model from database: shower-standard
+[2025-10-10T16:37:18.107Z] 📝 [LOG] [Model3DLoader] Loaded model from database: wall-cabinet-60
+[2025-10-10T16:37:18.108Z] 📝 [LOG] [Model3DLoader] Loaded model from database: l-shaped-test-cabinet-90
+[2025-10-10T16:37:18.113Z] 📝 [LOG] [Model3DLoader] Loaded model from database: l-shaped-test-cabinet-60
+[2025-10-10T16:37:18.114Z] 📝 [LOG] [Model3DLoader] Loaded model from database: bed-single
+[2025-10-10T16:37:18.118Z] 📝 [LOG] [Model3DLoader] Loaded model from database: washing-machine
+[2025-10-10T16:37:18.123Z] 📝 [LOG] [Model3DLoader] Loaded model from database: base-cabinet-60
+[2025-10-10T16:37:18.124Z] 📝 [LOG] [Model3DLoader] Loaded model from database: dining-chair
+[2025-10-10T16:37:18.124Z] 📝 [LOG] [Model3DLoader] Loaded model from database: bathtub-standard
+[2025-10-10T16:37:18.127Z] 📝 [LOG] [Model3DLoader] Loaded model from database: wall-cabinet-80
+[2025-10-10T16:37:18.128Z] 📝 [LOG] [Model3DLoader] Loaded model from database: dining-table
+[2025-10-10T16:37:18.128Z] 📝 [LOG] [Model3DLoader] Loaded model from database: new-corner-wall-cabinet-60
+[2025-10-10T16:37:18.129Z] 📝 [LOG] [Model3DLoader] Loaded model from database: sofa-3-seater
+[2025-10-10T16:37:18.130Z] 📝 [LOG] [Model3DLoader] Loaded model from database: tv-55-inch
+[2025-10-10T16:37:18.130Z] 📝 [LOG] [Model3DLoader] Loaded model from database: toilet-standard
+[2025-10-10T16:37:18.134Z] 📝 [LOG] 🔐 [ProjectContext] Auth ready, loading user projects...
+[2025-10-10T16:37:18.135Z] 📝 [LOG] [Model3DLoader] Loaded model from database: tumble-dryer
+[2025-10-10T16:37:18.155Z] 📝 [LOG] [Model3DLoader] Loaded model from database: base-cabinet-80
+[2025-10-10T16:37:18.197Z] 📝 [LOG] 🔐 [ProjectContext] Auth ready, loading user projects...
+[2025-10-10T16:37:18.260Z] 📝 [LOG] [Model3DLoader] Loaded 5 geometry parts for model: 68fcf22e-52dc-4cd2-9bc4-47d888fb8752
+[2025-10-10T16:37:18.334Z] 📝 [LOG] [Model3DLoader] Loaded 6 geometry parts for model: c509bed1-9882-44d5-8e44-be6c625cf0b6
+[2025-10-10T16:37:18.345Z] 📝 [LOG] [Model3DLoader] Loaded 8 geometry parts for model: 701c19a3-0083-41d2-aec8-96c540a1833d
+[2025-10-10T16:37:18.346Z] 📝 [LOG] [Model3DLoader] Loaded 4 geometry parts for model: f8ac534e-6911-477b-bbf3-5c66afa03ed8
+[2025-10-10T16:37:18.349Z] 📝 [LOG] [Model3DLoader] Loaded 5 geometry parts for model: 932bc10c-f028-4375-8593-8d2f9bb30fbb
+[2025-10-10T16:37:18.353Z] 📝 [LOG] [Model3DLoader] Loaded 4 geometry parts for model: 8fef412a-8649-4895-8cd5-fd53d0677ac1
+[2025-10-10T16:37:18.354Z] 📝 [LOG] [Model3DLoader] Loaded 5 geometry parts for model: d91a5c3a-2af9-4c8f-8cb3-a62f84cef732
+[2025-10-10T16:37:18.358Z] 📝 [LOG] [Model3DLoader] Loaded 4 geometry parts for model: 60f2345b-4c36-4f2f-95d0-493b16b7374a
+[2025-10-10T16:37:18.359Z] 📝 [LOG] [Model3DLoader] Loaded 3 geometry parts for model: 540faede-366d-4fa2-b169-97fec6766db4
+[2025-10-10T16:37:18.361Z] 📝 [LOG] [Model3DLoader] Loaded 5 geometry parts for model: 6942fc4e-5bf6-480e-81ea-16c79a782954
+[2025-10-10T16:37:18.361Z] 📝 [LOG] 🔐 [ProjectContext] Auth ready, loading user projects...
+[2025-10-10T16:37:18.363Z] 📝 [LOG] [Model3DLoader] Loaded 3 geometry parts for model: 84b234b5-f96f-4080-9b71-b9e66cf41dfb
+[2025-10-10T16:37:18.363Z] 📝 [LOG] [Model3DLoader] Loaded 6 geometry parts for model: 43b45e50-439e-4647-b320-7b0d2d51d311
+[2025-10-10T16:37:18.364Z] 📝 [LOG] [Model3DLoader] Loaded 6 geometry parts for model: a8b66209-ccef-4e44-a761-df5f37ac640b
+[2025-10-10T16:37:18.365Z] 📝 [LOG] [Model3DLoader] Loaded 10 geometry parts for model: 138cf90c-ba72-450e-a50e-f39da21ca44d
+[2025-10-10T16:37:18.366Z] 📝 [LOG] [Model3DLoader] Loaded 6 geometry parts for model: dee1b997-eb19-4228-b69f-7dff6204ae01
+[2025-10-10T16:37:18.367Z] 📝 [LOG] [Model3DLoader] Loaded 11 geometry parts for model: 7e845283-165b-4a1e-95e6-565adc87fc60
+[2025-10-10T16:37:18.373Z] 📝 [LOG] [Model3DLoader] Loaded 5 geometry parts for model: 9b93fa5d-fde1-4330-8f1d-84ecb01e0607
+[2025-10-10T16:37:18.374Z] 📝 [LOG] [Model3DLoader] Loaded 8 geometry parts for model: 6a45d0f6-5116-409a-8ab9-aacebd466a31
+[2025-10-10T16:37:18.434Z] 📝 [LOG] [Model3DLoader] Loaded 17 materials
+[2025-10-10T16:37:18.434Z] 📝 [LOG] [Model3DLoader] Preloaded 18 models with geometry and materials
+[2025-10-10T16:37:18.434Z] 📝 [LOG] [DynamicRenderer] Preloaded common components
+[2025-10-10T16:37:25.388Z] 📝 [LOG] 📂 [CompactComponentSidebar] Grouping 0 filtered components by category
+[2025-10-10T16:37:25.389Z] 📝 [LOG] 📂 [CompactComponentSidebar] Final categories with components: []
+[2025-10-10T16:37:25.389Z] ❌ [ERROR] ❌ [CompactComponentSidebar] WALL UNITS CATEGORY MISSING FROM FINAL GROUPS!
+[2025-10-10T16:37:25.389Z] 📝 [LOG] 📂 [CompactComponentSidebar] Available categories: []
+[2025-10-10T16:37:25.389Z] 📝 [LOG] ⏳ [CompactComponentSidebar] Component sidebar in loading state
+[2025-10-10T16:37:25.399Z] 📝 [LOG] 🎯 [PerformanceMonitor] Performance monitor hidden
+[2025-10-10T16:37:25.407Z] 📝 [LOG] 🔄 [useOptimizedComponents] Fetching components from database...
+[2025-10-10T16:37:25.408Z] 📝 [LOG] 🏠 [RoomService] Loading template for room type: kitchen
+[2025-10-10T16:37:25.411Z] 📝 [LOG] 🚀 [Designer] Preloading common component behaviors for performance
+[2025-10-10T16:37:25.411Z] 📝 [LOG] 🔥 [ComponentService] Preloading common component behaviors
+[2025-10-10T16:37:25.412Z] 📝 [LOG] 🔄 [ComponentService] Batch loading behaviors for 10 component types
+[2025-10-10T16:37:25.412Z] 📝 [LOG] 🔍 [ComponentService] Loading 10 uncached behaviors from database
+[2025-10-10T16:37:25.412Z] 📝 [LOG] 🔧 [ProjectContext] Auto-save initialization check {
+  "autoSaveEnabled": true,
+  "hasInterval": false,
+  "hasCurrentRoom": true,
+  "roomId": "762f6f1c-0fcc-477d-80db-b9b619dcff48"
+}
+[2025-10-10T16:37:25.412Z] 📝 [LOG] 🚀 [ProjectContext] Initializing auto-save for room: 762f6f1c-0fcc-477d-80db-b9b619dcff48
+[2025-10-10T16:37:25.427Z] 📝 [LOG] ⏳ [CompactComponentSidebar] Component sidebar in loading state
+[2025-10-10T16:37:25.433Z] 📝 [LOG] 🎯 [PerformanceMonitor] Performance monitor hidden
+[2025-10-10T16:37:25.442Z] 📝 [LOG] ⏳ [CompactComponentSidebar] Component sidebar in loading state
+[2025-10-10T16:37:25.448Z] 📝 [LOG] 🎯 [PerformanceMonitor] Performance monitor hidden
+[2025-10-10T16:37:25.511Z] 📝 [LOG] ✅ [RoomService] Loaded 3 geometry templates
+[2025-10-10T16:37:25.517Z] ❌ [ERROR] The above error occurred in the <RoomShapeSelector> component:
+
+    at RoomShapeSelector (http://localhost:5173/src/components/designer/RoomShapeSelector.tsx:35:37)
+    at RoomTabs (http://localhost:5173/src/components/designer/RoomTabs.tsx:53:28)
+    at div
+    at ErrorBoundary (http://localhost:5173/src/components/designer/ErrorBoundary.tsx:62:5)
+    at Designer (http://localhost:5173/src/pages/Designer.tsx:45:22)
+    at RenderedRoute (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=ca946787:4069:5)
+    at Routes (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=ca946787:4508:5)
+    at Router (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=ca946787:4451:15)
+    at BrowserRouter (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=ca946787:5196:5)
+    at Provider (http://localhost:5173/node_modules/.vite/deps/chunk-7MSDU5OG.js?v=ca946787:38:15)
+    at TooltipProvider (http://localhost:5173/node_modules/.vite/deps/@radix-ui_react-tooltip.js?v=ca946787:59:5)
+    at ProjectProvider (http://localhost:5173/src/contexts/ProjectContext.tsx:182:35)
+    at AuthProvider (http://localhost:5173/src/contexts/AuthContext.tsx:23:32)
+    at QueryClientProvider (http://localhost:5173/node_modules/.vite/deps/@tanstack_react-query.js?v=ca946787:2794:3)
+    at App (http://localhost:5173/src/App.tsx:50:5)
+
+React will try to recreate this component tree from scratch using the error boundary you provided, ErrorBoundary.
+[2025-10-10T16:37:25.517Z] ❌ [ERROR] Design Designer Error: {} {
+  "componentStack": "\n    at RoomShapeSelector (http://localhost:5173/src/components/designer/RoomShapeSelector.tsx:35:37)\n    at RoomTabs (http://localhost:5173/src/components/designer/RoomTabs.tsx:53:28)\n    at div\n    at ErrorBoundary (http://localhost:5173/src/components/designer/ErrorBoundary.tsx:62:5)\n    at Designer (http://localhost:5173/src/pages/Designer.tsx:45:22)\n    at RenderedRoute (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=ca946787:4069:5)\n    at Routes (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=ca946787:4508:5)\n    at Router (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=ca946787:4451:15)\n    at BrowserRouter (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=ca946787:5196:5)\n    at Provider (http://localhost:5173/node_modules/.vite/deps/chunk-7MSDU5OG.js?v=ca946787:38:15)\n    at TooltipProvider (http://localhost:5173/node_modules/.vite/deps/@radix-ui_react-tooltip.js?v=ca946787:59:5)\n    at ProjectProvider (http://localhost:5173/src/contexts/ProjectContext.tsx:182:35)\n    at AuthProvider (http://localhost:5173/src/contexts/AuthContext.tsx:23:32)\n    at QueryClientProvider (http://localhost:5173/node_modules/.vite/deps/@tanstack_react-query.js?v=ca946787:2794:3)\n    at App (http://localhost:5173/src/App.tsx:50:5)"
+}
+[2025-10-10T16:37:25.524Z] 📝 [LOG] [ConfigService] Feature disabled, skipping preload
+[2025-10-10T16:37:25.524Z] 📝 [LOG] [DesignCanvas2D] Configuration loaded from database: {
+  "canvas_width": 1600,
+  "canvas_height": 1200,
+  "grid_size": 20,
+  "min_zoom": 0.5,
+  "max_zoom": 4,
+  "wall_thickness": 10,
+  "wall_clearance": 5,
+  "wall_snap_threshold": 40,
+  "snap_tolerance_default": 15,
+  "snap_tolerance_countertop": 25,
+  "proximity_threshold": 100,
+  "wall_snap_distance_default": 35,
+  "wall_snap_distance_countertop": 50,
+  "corner_tolerance": 30,
+  "toe_kick_height": 8,
+  "drag_threshold_mouse": 5,
+  "drag_threshold_touch": 10
+}
+[2025-10-10T16:37:25.525Z] 📝 [LOG] [Render2DService] Preloading 2D render definitions...
+[2025-10-10T16:37:25.530Z] 📝 [LOG] 📐 [RoomService] Generating simple rectangle for room 762f6f1c-0fcc-477d-80db-b9b619dcff48
+[2025-10-10T16:37:25.530Z] 📝 [LOG] ✅ [DesignCanvas2D] Loaded complex room geometry for room 762f6f1c-0fcc-477d-80db-b9b619dcff48: rectangle
+[2025-10-10T16:37:25.533Z] 📝 [LOG] ✅ [RoomService] Loaded template for kitchen: {
+  "id": "3a7ba612-e98c-49ff-9d25-43b7efde253f",
+  "room_type": "kitchen",
+  "name": "Kitchen",
+  "icon_name": "ChefHat",
+  "description": "Kitchen design with cabinets and appliances",
+  "default_width": 600,
+  "default_height": 400,
+  "default_wall_height": 240,
+  "default_ceiling_height": 250,
+  "default_settings": {
+    "view_preferences": {
+      "grid_enabled": true,
+      "snap_to_grid": true,
+      "default_2d_mode": "plan",
+      "default_2d_view": "2d"
+    },
+    "default_wall_height": 250
+  }
+}
+[2025-10-10T16:37:25.533Z] 📝 [LOG] 🏗️ [CoordinateEngine] Initialized with inner room dimensions: {
+  "innerWidth": 528,
+  "innerHeight": 329,
+  "ceilingHeight": 240,
+  "wallThickness": 10
+}
+[2025-10-10T16:37:25.534Z] 📝 [LOG] 🏗️ [DesignCanvas2D] Coordinate engine initialized for room: {
+  "width": 528,
+  "height": 329,
+  "ceilingHeight": 240
+}
+[2025-10-10T16:37:25.534Z] 📝 [LOG] 🔍 [ComponentService] Loading behavior for component type: cabinet
+[2025-10-10T16:37:25.534Z] 📝 [LOG] 🔍 [ComponentService] Loading behavior for component type: appliance
+[2025-10-10T16:37:25.534Z] 📝 [LOG] 🔍 [ComponentService] Loading behavior for component type: counter-top
+[2025-10-10T16:37:25.535Z] 📝 [LOG] 🔍 [ComponentService] Loading behavior for component type: end-panel
+[2025-10-10T16:37:25.535Z] 📝 [LOG] 🔍 [ComponentService] Loading behavior for component type: window
+[2025-10-10T16:37:25.535Z] 📝 [LOG] 🔍 [ComponentService] Loading behavior for component type: door
+[2025-10-10T16:37:25.535Z] 📝 [LOG] 🔍 [ComponentService] Loading behavior for component type: flooring
+[2025-10-10T16:37:25.535Z] 📝 [LOG] 🔍 [ComponentService] Loading behavior for component type: toe-kick
+[2025-10-10T16:37:25.536Z] 📝 [LOG] 🔍 [ComponentService] Loading behavior for component type: cornice
+[2025-10-10T16:37:25.536Z] 📝 [LOG] 🔍 [ComponentService] Loading behavior for component type: pelmet
+[2025-10-10T16:37:25.539Z] 📝 [LOG] ✅ [ComponentService] Batch loaded 10 component behaviors
+[2025-10-10T16:37:25.539Z] 📝 [LOG] ✅ [Designer] Preloading complete
+[2025-10-10T16:37:25.579Z] 📝 [LOG] ⏱️ [useOptimizedComponents] Database query completed in 172ms
+[2025-10-10T16:37:25.579Z] 📝 [LOG] ✅ [useOptimizedComponents] Loaded 194 database components
+[2025-10-10T16:37:25.580Z] 📝 [LOG] 🔥 [useOptimizedComponents] Pre-warming category and room type caches
+[2025-10-10T16:37:25.580Z] 📝 [LOG] 🔥 [useOptimizedComponents] Pre-warmed 26 categories and 12 room types
+[2025-10-10T16:37:25.580Z] 📝 [LOG] 🏠 [useOptimizedComponents] Wall units: 0 (lowercase: 0, title: 0)
+[2025-10-10T16:37:25.580Z] ⚠️ [WARN] ⚠️ [useOptimizedComponents] NO WALL UNITS FOUND!
+[2025-10-10T16:37:25.581Z] 📝 [LOG] 📂 [useOptimizedComponents] Available categories: [
+  "appliances",
+  "base-cabinets",
+  "bathroom-fixtures",
+  "bathroom-storage",
+  "bathroom-vanities",
+  "bedroom-furniture",
+  "bedroom-storage",
+  "counter-tops",
+  "dining-room-furniture",
+  "dining-room-storage",
+  "doors-external",
+  "doors-internal",
+  "dressing-room-furniture",
+  "dressing-room-storage",
+  "finishing",
+  "kitchen-larder",
+  "living-room-furniture",
+  "living-room-storage",
+  "office-furniture",
+  "office-storage",
+  "sinks",
+  "utility-appliances",
+  "utility-fixtures",
+  "utility-storage",
+  "wall-cabinets",
+  "windows"
+]
+[2025-10-10T16:37:25.581Z] 📝 [LOG] 🍳 [useOptimizedComponents] Kitchen components: 94
+[2025-10-10T16:37:25.605Z] 📝 [LOG] ✅ [ComponentService] Loaded and cached behavior for counter-top
+[2025-10-10T16:37:25.605Z] 📝 [LOG] ⚡ [ComponentService] Cache hit for component type: counter-top
+[2025-10-10T16:37:25.606Z] 📝 [LOG] ✅ [ComponentService] Loaded and cached behavior for cabinet
+[2025-10-10T16:37:25.606Z] 📝 [LOG] ⚡ [ComponentService] Cache hit for component type: cabinet
+[2025-10-10T16:37:25.626Z] 📝 [LOG] ✅ [ComponentService] Loaded and cached behavior for door
+[2025-10-10T16:37:25.626Z] 📝 [LOG] ⚡ [ComponentService] Cache hit for component type: door
+[2025-10-10T16:37:25.629Z] 📝 [LOG] ✅ [ComponentService] Loaded and cached behavior for end-panel
+[2025-10-10T16:37:25.629Z] 📝 [LOG] ⚡ [ComponentService] Cache hit for component type: end-panel
+[2025-10-10T16:37:25.630Z] 📝 [LOG] ✅ [ComponentService] Loaded and cached behavior for appliance
+[2025-10-10T16:37:25.630Z] 📝 [LOG] ⚡ [ComponentService] Cache hit for component type: appliance
+[2025-10-10T16:37:25.647Z] 📝 [LOG] ✅ [ComponentService] Loaded and cached behavior for window
+[2025-10-10T16:37:25.647Z] 📝 [LOG] ⚡ [ComponentService] Cache hit for component type: window
+[2025-10-10T16:37:25.649Z] 📝 [LOG] ✅ [ComponentService] Loaded and cached behavior for cornice
+[2025-10-10T16:37:25.649Z] 📝 [LOG] ⚡ [ComponentService] Cache hit for component type: cornice
+[2025-10-10T16:37:25.654Z] ⚠️ [WARN] ⚠️ [ComponentService] No behavior data found for flooring, using defaults: {
+  "code": "PGRST116",
+  "details": "The result contains 0 rows",
+  "hint": null,
+  "message": "Cannot coerce the result to a single JSON object"
+}
+[2025-10-10T16:37:25.655Z] 📝 [LOG] ⚡ [ComponentService] Cache hit for component type: flooring
+[2025-10-10T16:37:25.655Z] ⚠️ [WARN] ⚠️ [ComponentService] No behavior data found for toe-kick, using defaults: {
+  "code": "PGRST116",
+  "details": "The result contains 0 rows",
+  "hint": null,
+  "message": "Cannot coerce the result to a single JSON object"
+}
+[2025-10-10T16:37:25.655Z] 📝 [LOG] ⚡ [ComponentService] Cache hit for component type: toe-kick
+[2025-10-10T16:37:25.657Z] 📝 [LOG] [Render2DService] ✅ Preloaded 194 definitions in 133ms
+[2025-10-10T16:37:25.658Z] 📝 [LOG] [DesignCanvas2D] 2D render definitions preloaded
+[2025-10-10T16:37:25.662Z] 📝 [LOG] ✅ [ComponentService] Loaded and cached behavior for pelmet
+[2025-10-10T16:37:25.662Z] 📝 [LOG] ⚡ [ComponentService] Cache hit for component type: pelmet
+[2025-10-10T16:37:25.663Z] 📝 [LOG] 🚀 [DesignCanvas2D] Preloaded component behaviors and room config
+[2025-10-10T16:37:35.083Z] 📝 [LOG] 📂 [CompactComponentSidebar] Grouping 0 filtered components by category
+[2025-10-10T16:37:35.083Z] 📝 [LOG] 📂 [CompactComponentSidebar] Final categories with components: []
+[2025-10-10T16:37:35.083Z] ❌ [ERROR] ❌ [CompactComponentSidebar] WALL UNITS CATEGORY MISSING FROM FINAL GROUPS!
+[2025-10-10T16:37:35.084Z] 📝 [LOG] 📂 [CompactComponentSidebar] Available categories: []
+[2025-10-10T16:37:35.084Z] 📝 [LOG] ⏳ [CompactComponentSidebar] Component sidebar in loading state
+[2025-10-10T16:37:35.090Z] 📝 [LOG] 🎯 [PerformanceMonitor] Performance monitor hidden
+[2025-10-10T16:37:35.098Z] 📝 [LOG] ⚡ [useOptimizedComponents] Loaded components from cache
+[2025-10-10T16:37:35.100Z] 📝 [LOG] 🚀 [Designer] Preloading common component behaviors for performance
+[2025-10-10T16:37:35.101Z] 📝 [LOG] 🔥 [ComponentService] Preloading common component behaviors
+[2025-10-10T16:37:35.102Z] 📝 [LOG] 🔄 [ComponentService] Batch loading behaviors for 10 component types
+[2025-10-10T16:37:35.102Z] 📝 [LOG] ⚡ [ComponentService] All 10 behaviors found in cache
+[2025-10-10T16:37:35.111Z] 📝 [LOG] [ConfigService] Feature disabled, skipping preload
+[2025-10-10T16:37:35.112Z] 📝 [LOG] 🏗️ [CoordinateEngine] Initialized with inner room dimensions: {
+  "innerWidth": 528,
+  "innerHeight": 329,
+  "ceilingHeight": 240,
+  "wallThickness": 10
+}
+[2025-10-10T16:37:35.112Z] 📝 [LOG] 🏗️ [DesignCanvas2D] Coordinate engine initialized for room: {
+  "width": 528,
+  "height": 329,
+  "ceilingHeight": 240
+}
+[2025-10-10T16:37:35.113Z] 📝 [LOG] [DesignCanvas2D] Configuration loaded from database: {
+  "canvas_width": 1600,
+  "canvas_height": 1200,
+  "grid_size": 20,
+  "min_zoom": 0.5,
+  "max_zoom": 4,
+  "wall_thickness": 10,
+  "wall_clearance": 5,
+  "wall_snap_threshold": 40,
+  "snap_tolerance_default": 15,
+  "snap_tolerance_countertop": 25,
+  "proximity_threshold": 100,
+  "wall_snap_distance_default": 35,
+  "wall_snap_distance_countertop": 50,
+  "corner_tolerance": 30,
+  "toe_kick_height": 8,
+  "drag_threshold_mouse": 5,
+  "drag_threshold_touch": 10
+}
+[2025-10-10T16:37:35.113Z] 📝 [LOG] ✅ [Designer] Preloading complete
+[2025-10-10T16:37:35.113Z] 📝 [LOG] 🚀 [DesignCanvas2D] Preloaded component behaviors and room config
+[2025-10-10T16:37:35.114Z] 📝 [LOG] [DesignCanvas2D] 2D render definitions preloaded
+[2025-10-10T16:37:35.162Z] 📝 [LOG] 📐 [RoomService] Generating simple rectangle for room 762f6f1c-0fcc-477d-80db-b9b619dcff48
+[2025-10-10T16:37:35.163Z] 📝 [LOG] ✅ [DesignCanvas2D] Loaded complex room geometry for room 762f6f1c-0fcc-477d-80db-b9b619dcff48: rectangle
+[2025-10-10T16:37:35.167Z] 📝 [LOG] ✅ [RoomService] Loaded 3 geometry templates
+[2025-10-10T16:37:35.194Z] 📝 [LOG] 🔧 [ProjectContext] Auto-save initialization check {
+  "autoSaveEnabled": true,
+  "hasInterval": true,
+  "hasCurrentRoom": false
+}
+[2025-10-10T16:37:35.226Z] 📝 [LOG] ✅ [RoomService] Loaded 3 geometry templates
+[2025-10-10T16:37:35.229Z] ❌ [ERROR] The above error occurred in the <RoomShapeSelector> component:
+
+    at RoomShapeSelector (http://localhost:5173/src/components/designer/RoomShapeSelector.tsx:35:37)
+    at RoomTabs (http://localhost:5173/src/components/designer/RoomTabs.tsx:53:28)
+    at div
+    at ErrorBoundary (http://localhost:5173/src/components/designer/ErrorBoundary.tsx:62:5)
+    at Designer (http://localhost:5173/src/pages/Designer.tsx:45:22)
+    at RenderedRoute (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=ca946787:4069:5)
+    at Routes (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=ca946787:4508:5)
+    at Router (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=ca946787:4451:15)
+    at BrowserRouter (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=ca946787:5196:5)
+    at Provider (http://localhost:5173/node_modules/.vite/deps/chunk-7MSDU5OG.js?v=ca946787:38:15)
+    at TooltipProvider (http://localhost:5173/node_modules/.vite/deps/@radix-ui_react-tooltip.js?v=ca946787:59:5)
+    at ProjectProvider (http://localhost:5173/src/contexts/ProjectContext.tsx:182:35)
+    at AuthProvider (http://localhost:5173/src/contexts/AuthContext.tsx:23:32)
+    at QueryClientProvider (http://localhost:5173/node_modules/.vite/deps/@tanstack_react-query.js?v=ca946787:2794:3)
+    at App (http://localhost:5173/src/App.tsx:50:5)
+
+React will try to recreate this component tree from scratch using the error boundary you provided, ErrorBoundary.
+[2025-10-10T16:37:35.229Z] ❌ [ERROR] Design Designer Error: {} {
+  "componentStack": "\n    at RoomShapeSelector (http://localhost:5173/src/components/designer/RoomShapeSelector.tsx:35:37)\n    at RoomTabs (http://localhost:5173/src/components/designer/RoomTabs.tsx:53:28)\n    at div\n    at ErrorBoundary (http://localhost:5173/src/components/designer/ErrorBoundary.tsx:62:5)\n    at Designer (http://localhost:5173/src/pages/Designer.tsx:45:22)\n    at RenderedRoute (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=ca946787:4069:5)\n    at Routes (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=ca946787:4508:5)\n    at Router (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=ca946787:4451:15)\n    at BrowserRouter (http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=ca946787:5196:5)\n    at Provider (http://localhost:5173/node_modules/.vite/deps/chunk-7MSDU5OG.js?v=ca946787:38:15)\n    at TooltipProvider (http://localhost:5173/node_modules/.vite/deps/@radix-ui_react-tooltip.js?v=ca946787:59:5)\n    at ProjectProvider (http://localhost:5173/src/contexts/ProjectContext.tsx:182:35)\n    at AuthProvider (http://localhost:5173/src/contexts/AuthContext.tsx:23:32)\n    at QueryClientProvider (http://localhost:5173/node_modules/.vite/deps/@tanstack_react-query.js?v=ca946787:2794:3)\n    at App (http://localhost:5173/src/App.tsx:50:5)"
+}
+
+================================================================================
+END OF LOGS (143 entries)
+================================================================================

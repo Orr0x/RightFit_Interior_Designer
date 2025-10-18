@@ -14,7 +14,7 @@ import {
   Maximize2
 } from 'lucide-react';
 import { useIsMobile } from '@/hooks/use-mobile';
-import { DesignElement, RoomType, RoomDimensions } from '@/types/project';
+import { DesignElement, RoomType, RoomDimensions, ElevationViewConfig } from '@/types/project';
 import { DesignCanvas2D } from './DesignCanvas2D';
 import { Lazy3DView } from './Lazy3DView';
 import CompactComponentSidebar from './CompactComponentSidebar';
@@ -67,6 +67,12 @@ interface MobileDesignerLayoutProps {
   onTapeMeasureClick?: (x: number, y: number) => void;
   onTapeMeasureMouseMove?: (x: number, y: number) => void;
   onClearTapeMeasure?: () => void;
+
+  // Elevation view management (optional)
+  elevationViews?: ElevationViewConfig[];
+  onDuplicateView?: (viewId: string) => void;
+  onDeleteView?: (viewId: string) => void;
+  onRenameView?: (viewId: string, newLabel: string) => void;
 }
 
 export const MobileDesignerLayout: React.FC<MobileDesignerLayoutProps> = ({
@@ -96,7 +102,11 @@ export const MobileDesignerLayout: React.FC<MobileDesignerLayoutProps> = ({
   tapeMeasurePreview = null,
   onTapeMeasureClick,
   onTapeMeasureMouseMove,
-  onClearTapeMeasure
+  onClearTapeMeasure,
+  elevationViews,
+  onDuplicateView,
+  onDeleteView,
+  onRenameView
 }) => {
   const isMobile = useIsMobile();
   const [showComponentPanel, setShowComponentPanel] = useState(false);
@@ -240,6 +250,10 @@ export const MobileDesignerLayout: React.FC<MobileDesignerLayoutProps> = ({
             <ViewSelector
               activeView={active2DView}
               onViewChange={onActive2DViewChange}
+              elevationViews={elevationViews}
+              onDuplicateView={onDuplicateView}
+              onDeleteView={onDeleteView}
+              onRenameView={onRenameView}
             />
           </div>
         )}
@@ -276,6 +290,7 @@ export const MobileDesignerLayout: React.FC<MobileDesignerLayoutProps> = ({
                 activeTool={activeTool}
                 fitToScreenSignal={fitToScreenSignal}
                 active2DView={active2DView}
+                elevationViews={elevationViews}
                 completedMeasurements={completedMeasurements}
                 currentMeasureStart={currentMeasureStart}
                 tapeMeasurePreview={tapeMeasurePreview}
