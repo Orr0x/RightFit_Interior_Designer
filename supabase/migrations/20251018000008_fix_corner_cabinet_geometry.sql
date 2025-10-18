@@ -141,6 +141,7 @@ WHERE model_id = (SELECT id FROM component_3d_models WHERE component_id = 'new-c
 ON CONFLICT DO NOTHING;
 
 -- Add 7th part: Plinth (base cabinets only)
+-- Plinth is recessed 10cm back from cabinet front to create toe-kick space
 INSERT INTO geometry_parts (
   model_id,
   part_name,
@@ -159,17 +160,34 @@ VALUES (
   (SELECT id FROM component_3d_models WHERE component_id = 'corner-cabinet'),
   'Plinth',
   'box',
-  'legLength',
+  'legLength - 0.1',  -- 10cm narrower than cabinet
   '0.15',  -- 15cm plinth height
-  'legLength',
+  'legLength - 0.1',  -- 10cm shallower than cabinet
   '0',
-  '-0.15',  -- Position below cabinet body
-  '0',
+  '0',  -- At ground level (Y=0)
+  '0.05',  -- Recessed 5cm back from front edge
   'plinth',
   'plinthColor',
   0  -- Render first (at bottom)
 )
 ON CONFLICT DO NOTHING;
+
+-- Raise cabinet body to sit on top of plinth
+-- Update all 6 L-shaped parts to start at Y = 0.15 (plinth height)
+UPDATE geometry_parts
+SET position_y = 'height / 2 + 0.15'  -- Raise by plinth height
+WHERE model_id = (SELECT id FROM component_3d_models WHERE component_id = 'corner-cabinet')
+  AND part_name IN ('Cabinet X-leg', 'Cabinet Z-leg');
+
+UPDATE geometry_parts
+SET position_y = 'height / 2 + 0.15'  -- Raise doors to match cabinet body
+WHERE model_id = (SELECT id FROM component_3d_models WHERE component_id = 'corner-cabinet')
+  AND part_name IN ('Front door', 'Side door');
+
+UPDATE geometry_parts
+SET position_y = 'height / 2 + 0.15'  -- Raise handles to match doors
+WHERE model_id = (SELECT id FROM component_3d_models WHERE component_id = 'corner-cabinet')
+  AND part_name IN ('Front handle', 'Side handle');
 
 -- =============================================================================
 -- STEP 4: Add L-shaped geometry to larder-corner-unit-60 (TALL cabinet, 60cm legs)
@@ -214,6 +232,7 @@ WHERE model_id = (SELECT id FROM component_3d_models WHERE component_id = 'new-c
 ON CONFLICT DO NOTHING;
 
 -- Add plinth for tall unit (sits on floor like base cabinets)
+-- Recessed to create toe-kick space
 INSERT INTO geometry_parts (
   model_id,
   part_name,
@@ -232,17 +251,23 @@ VALUES (
   (SELECT id FROM component_3d_models WHERE component_id = 'larder-corner-unit-60'),
   'Plinth',
   'box',
-  'legLength',
+  'legLength - 0.1',  -- 10cm narrower (recessed)
   '0.15',
-  'legLength',
+  'legLength - 0.1',  -- 10cm shallower (recessed)
   '0',
-  '-0.15',
-  '0',
+  '0',  -- At ground level
+  '0.05',  -- Recessed 5cm back
   'plinth',
   'plinthColor',
   0
 )
 ON CONFLICT DO NOTHING;
+
+-- Raise cabinet body to sit on top of plinth
+UPDATE geometry_parts
+SET position_y = 'height / 2 + 0.15'  -- Raise by plinth height
+WHERE model_id = (SELECT id FROM component_3d_models WHERE component_id = 'larder-corner-unit-60')
+  AND part_name IN ('Cabinet X-leg', 'Cabinet Z-leg', 'Front door', 'Side door', 'Front handle', 'Side handle');
 
 -- =============================================================================
 -- STEP 5: Add L-shaped geometry to larder-corner-unit-90 (TALL cabinet, 90cm legs)
@@ -287,6 +312,7 @@ WHERE model_id = (SELECT id FROM component_3d_models WHERE component_id = 'new-c
 ON CONFLICT DO NOTHING;
 
 -- Add plinth for tall unit (sits on floor like base cabinets)
+-- Recessed to create toe-kick space
 INSERT INTO geometry_parts (
   model_id,
   part_name,
@@ -305,17 +331,23 @@ VALUES (
   (SELECT id FROM component_3d_models WHERE component_id = 'larder-corner-unit-90'),
   'Plinth',
   'box',
-  'legLength',
+  'legLength - 0.1',  -- 10cm narrower (recessed)
   '0.15',
-  'legLength',
+  'legLength - 0.1',  -- 10cm shallower (recessed)
   '0',
-  '-0.15',
-  '0',
+  '0',  -- At ground level
+  '0.05',  -- Recessed 5cm back
   'plinth',
   'plinthColor',
   0
 )
 ON CONFLICT DO NOTHING;
+
+-- Raise cabinet body to sit on top of plinth
+UPDATE geometry_parts
+SET position_y = 'height / 2 + 0.15'  -- Raise by plinth height
+WHERE model_id = (SELECT id FROM component_3d_models WHERE component_id = 'larder-corner-unit-90')
+  AND part_name IN ('Cabinet X-leg', 'Cabinet Z-leg', 'Front door', 'Side door', 'Front handle', 'Side handle');
 
 -- =============================================================================
 -- STEP 6: Verify all corner units have geometry
