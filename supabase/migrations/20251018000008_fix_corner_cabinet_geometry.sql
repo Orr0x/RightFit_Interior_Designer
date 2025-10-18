@@ -140,8 +140,10 @@ FROM geometry_parts
 WHERE model_id = (SELECT id FROM component_3d_models WHERE component_id = 'new-corner-wall-cabinet-90')
 ON CONFLICT DO NOTHING;
 
--- Add 7th part: Plinth (base cabinets only)
--- Plinth is recessed 10cm back from cabinet front to create toe-kick space
+-- Add L-shaped plinth (2 parts: X-leg plinth + Z-leg plinth)
+-- Recessed 10cm to create toe-kick space
+
+-- Plinth X-leg (horizontal leg of L)
 INSERT INTO geometry_parts (
   model_id,
   part_name,
@@ -158,36 +160,57 @@ INSERT INTO geometry_parts (
 )
 VALUES (
   (SELECT id FROM component_3d_models WHERE component_id = 'corner-cabinet'),
-  'Plinth',
+  'Plinth X-leg',
   'box',
-  'legLength - 0.1',  -- 10cm narrower than cabinet
+  'legLength - 0.1',  -- 10cm narrower (recessed)
   '0.15',  -- 15cm plinth height
-  'legLength - 0.1',  -- 10cm shallower than cabinet
+  'cornerDepth - 0.1',  -- 10cm shallower (recessed)
   '0',
-  '0',  -- At ground level (Y=0)
-  '0.05',  -- Recessed 5cm back from front edge
+  '0.075',  -- Center of 15cm plinth (0.15/2 = 0.075)
+  'cornerDepth / 2 - legLength / 2 + 0.05',  -- Match cabinet position but recessed
   'plinth',
   'plinthColor',
-  0  -- Render first (at bottom)
+  0  -- Render first
 )
 ON CONFLICT DO NOTHING;
 
--- Raise cabinet body to sit on top of plinth
--- Update all 6 L-shaped parts to start at Y = 0.15 (plinth height)
-UPDATE geometry_parts
-SET position_y = 'height / 2 + 0.15'  -- Raise by plinth height
-WHERE model_id = (SELECT id FROM component_3d_models WHERE component_id = 'corner-cabinet')
-  AND part_name IN ('Cabinet X-leg', 'Cabinet Z-leg');
+-- Plinth Z-leg (vertical leg of L)
+INSERT INTO geometry_parts (
+  model_id,
+  part_name,
+  part_type,
+  dimension_width,
+  dimension_height,
+  dimension_depth,
+  position_x,
+  position_y,
+  position_z,
+  material_name,
+  color_override,
+  render_order
+)
+VALUES (
+  (SELECT id FROM component_3d_models WHERE component_id = 'corner-cabinet'),
+  'Plinth Z-leg',
+  'box',
+  'cornerDepth - 0.1',  -- 10cm narrower (recessed)
+  '0.15',  -- 15cm plinth height
+  'legLength - 0.1',  -- 10cm shallower (recessed)
+  'cornerDepth / 2 - legLength / 2 + 0.05',  -- Match cabinet position but recessed
+  '0.075',  -- Center of 15cm plinth (0.15/2 = 0.075)
+  '0',
+  'plinth',
+  'plinthColor',
+  0  -- Render first
+)
+ON CONFLICT DO NOTHING;
 
+-- Raise cabinet body to sit on top of plinth (15cm above ground)
+-- Cabinet parts use position_y = 0 (centered), so we raise to position_y = height/2 + 0.15
 UPDATE geometry_parts
-SET position_y = 'height / 2 + 0.15'  -- Raise doors to match cabinet body
+SET position_y = 'height / 2 + 0.15'
 WHERE model_id = (SELECT id FROM component_3d_models WHERE component_id = 'corner-cabinet')
-  AND part_name IN ('Front door', 'Side door');
-
-UPDATE geometry_parts
-SET position_y = 'height / 2 + 0.15'  -- Raise handles to match doors
-WHERE model_id = (SELECT id FROM component_3d_models WHERE component_id = 'corner-cabinet')
-  AND part_name IN ('Front handle', 'Side handle');
+  AND part_name IN ('Cabinet X-leg', 'Cabinet Z-leg', 'Front door', 'Side door', 'Front handle', 'Side handle');
 
 -- =============================================================================
 -- STEP 4: Add L-shaped geometry to larder-corner-unit-60 (TALL cabinet, 60cm legs)
@@ -231,8 +254,9 @@ FROM geometry_parts
 WHERE model_id = (SELECT id FROM component_3d_models WHERE component_id = 'new-corner-wall-cabinet-60')
 ON CONFLICT DO NOTHING;
 
--- Add plinth for tall unit (sits on floor like base cabinets)
--- Recessed to create toe-kick space
+-- Add L-shaped plinth (2 parts matching L-shaped footprint)
+
+-- Plinth X-leg
 INSERT INTO geometry_parts (
   model_id,
   part_name,
@@ -249,14 +273,45 @@ INSERT INTO geometry_parts (
 )
 VALUES (
   (SELECT id FROM component_3d_models WHERE component_id = 'larder-corner-unit-60'),
-  'Plinth',
+  'Plinth X-leg',
   'box',
-  'legLength - 0.1',  -- 10cm narrower (recessed)
+  'legLength - 0.1',
   '0.15',
-  'legLength - 0.1',  -- 10cm shallower (recessed)
+  'cornerDepth - 0.1',
   '0',
-  '0',  -- At ground level
-  '0.05',  -- Recessed 5cm back
+  '0.075',
+  'cornerDepth / 2 - legLength / 2 + 0.05',
+  'plinth',
+  'plinthColor',
+  0
+)
+ON CONFLICT DO NOTHING;
+
+-- Plinth Z-leg
+INSERT INTO geometry_parts (
+  model_id,
+  part_name,
+  part_type,
+  dimension_width,
+  dimension_height,
+  dimension_depth,
+  position_x,
+  position_y,
+  position_z,
+  material_name,
+  color_override,
+  render_order
+)
+VALUES (
+  (SELECT id FROM component_3d_models WHERE component_id = 'larder-corner-unit-60'),
+  'Plinth Z-leg',
+  'box',
+  'cornerDepth - 0.1',
+  '0.15',
+  'legLength - 0.1',
+  'cornerDepth / 2 - legLength / 2 + 0.05',
+  '0.075',
+  '0',
   'plinth',
   'plinthColor',
   0
@@ -265,7 +320,7 @@ ON CONFLICT DO NOTHING;
 
 -- Raise cabinet body to sit on top of plinth
 UPDATE geometry_parts
-SET position_y = 'height / 2 + 0.15'  -- Raise by plinth height
+SET position_y = 'height / 2 + 0.15'
 WHERE model_id = (SELECT id FROM component_3d_models WHERE component_id = 'larder-corner-unit-60')
   AND part_name IN ('Cabinet X-leg', 'Cabinet Z-leg', 'Front door', 'Side door', 'Front handle', 'Side handle');
 
@@ -311,8 +366,9 @@ FROM geometry_parts
 WHERE model_id = (SELECT id FROM component_3d_models WHERE component_id = 'new-corner-wall-cabinet-90')
 ON CONFLICT DO NOTHING;
 
--- Add plinth for tall unit (sits on floor like base cabinets)
--- Recessed to create toe-kick space
+-- Add L-shaped plinth (2 parts matching L-shaped footprint)
+
+-- Plinth X-leg
 INSERT INTO geometry_parts (
   model_id,
   part_name,
@@ -329,14 +385,45 @@ INSERT INTO geometry_parts (
 )
 VALUES (
   (SELECT id FROM component_3d_models WHERE component_id = 'larder-corner-unit-90'),
-  'Plinth',
+  'Plinth X-leg',
   'box',
-  'legLength - 0.1',  -- 10cm narrower (recessed)
+  'legLength - 0.1',
   '0.15',
-  'legLength - 0.1',  -- 10cm shallower (recessed)
+  'cornerDepth - 0.1',
   '0',
-  '0',  -- At ground level
-  '0.05',  -- Recessed 5cm back
+  '0.075',
+  'cornerDepth / 2 - legLength / 2 + 0.05',
+  'plinth',
+  'plinthColor',
+  0
+)
+ON CONFLICT DO NOTHING;
+
+-- Plinth Z-leg
+INSERT INTO geometry_parts (
+  model_id,
+  part_name,
+  part_type,
+  dimension_width,
+  dimension_height,
+  dimension_depth,
+  position_x,
+  position_y,
+  position_z,
+  material_name,
+  color_override,
+  render_order
+)
+VALUES (
+  (SELECT id FROM component_3d_models WHERE component_id = 'larder-corner-unit-90'),
+  'Plinth Z-leg',
+  'box',
+  'cornerDepth - 0.1',
+  '0.15',
+  'legLength - 0.1',
+  'cornerDepth / 2 - legLength / 2 + 0.05',
+  '0.075',
+  '0',
   'plinth',
   'plinthColor',
   0
@@ -345,7 +432,7 @@ ON CONFLICT DO NOTHING;
 
 -- Raise cabinet body to sit on top of plinth
 UPDATE geometry_parts
-SET position_y = 'height / 2 + 0.15'  -- Raise by plinth height
+SET position_y = 'height / 2 + 0.15'
 WHERE model_id = (SELECT id FROM component_3d_models WHERE component_id = 'larder-corner-unit-90')
   AND part_name IN ('Cabinet X-leg', 'Cabinet Z-leg', 'Front door', 'Side door', 'Front handle', 'Side handle');
 
@@ -390,34 +477,35 @@ BEGIN
   RAISE NOTICE '=============================================================================';
   RAISE NOTICE 'POST-MIGRATION GEOMETRY STATUS';
   RAISE NOTICE '=============================================================================';
-  RAISE NOTICE 'corner-cabinet (base 90cm): % parts (expected: 7)', corner_base_parts;
-  RAISE NOTICE 'larder-corner-unit-60 (tall 60cm): % parts (expected: 7)', larder_60_parts;
-  RAISE NOTICE 'larder-corner-unit-90 (tall 90cm): % parts (expected: 7)', larder_90_parts;
+  RAISE NOTICE 'corner-cabinet (base 90cm): % parts (expected: 8)', corner_base_parts;
+  RAISE NOTICE 'larder-corner-unit-60 (tall 60cm): % parts (expected: 8)', larder_60_parts;
+  RAISE NOTICE 'larder-corner-unit-90 (tall 90cm): % parts (expected: 8)', larder_90_parts;
   RAISE NOTICE 'new-corner-wall-cabinet-60 (wall 60cm): % parts (expected: 6)', wall_60_parts;
   RAISE NOTICE 'new-corner-wall-cabinet-90 (wall 90cm): % parts (expected: 6)', wall_90_parts;
   RAISE NOTICE '';
 
-  IF corner_base_parts = 7 AND larder_60_parts = 7 AND larder_90_parts = 7 THEN
+  IF corner_base_parts = 8 AND larder_60_parts = 8 AND larder_90_parts = 8 THEN
     RAISE NOTICE '✅ SUCCESS: All corner units have proper L-shaped geometry!';
-    RAISE NOTICE '✅ Base cabinet: 6 L-shape parts + 1 plinth = 7 parts';
-    RAISE NOTICE '✅ Tall cabinets: 6 L-shape parts + 1 plinth = 7 parts each';
+    RAISE NOTICE '✅ Base cabinet: 6 L-shape parts + 2 L-plinth parts = 8 parts';
+    RAISE NOTICE '✅ Tall cabinets: 6 L-shape parts + 2 L-plinth parts = 8 parts each';
     RAISE NOTICE '✅ Wall cabinets: 6 L-shape parts (no plinth needed)';
     RAISE NOTICE '';
     RAISE NOTICE 'Expected rendering:';
     RAISE NOTICE '  - L-shaped corner with 2 legs (X and Z)';
     RAISE NOTICE '  - Doors on both faces';
     RAISE NOTICE '  - Handles on both doors';
-    RAISE NOTICE '  - Plinth at bottom (base/tall units only)';
+    RAISE NOTICE '  - L-shaped plinth at bottom (base/tall units only)';
+    RAISE NOTICE '  - Cabinet body sits on plinth (everything on floor)';
   ELSE
     RAISE WARNING 'INCOMPLETE: Some corner units missing geometry!';
-    IF corner_base_parts <> 7 THEN
-      RAISE WARNING '❌ corner-cabinet: % parts (expected 7)', corner_base_parts;
+    IF corner_base_parts <> 8 THEN
+      RAISE WARNING '❌ corner-cabinet: % parts (expected 8)', corner_base_parts;
     END IF;
-    IF larder_60_parts <> 7 THEN
-      RAISE WARNING '❌ larder-corner-unit-60: % parts (expected 7)', larder_60_parts;
+    IF larder_60_parts <> 8 THEN
+      RAISE WARNING '❌ larder-corner-unit-60: % parts (expected 8)', larder_60_parts;
     END IF;
-    IF larder_90_parts <> 7 THEN
-      RAISE WARNING '❌ larder-corner-unit-90: % parts (expected 7)', larder_90_parts;
+    IF larder_90_parts <> 8 THEN
+      RAISE WARNING '❌ larder-corner-unit-90: % parts (expected 8)', larder_90_parts;
     END IF;
   END IF;
   RAISE NOTICE '=============================================================================';
@@ -463,13 +551,13 @@ ORDER BY
 --   - Only wall cabinets had correct L-shaped geometry
 --
 -- AFTER (this migration):
---   ✅ corner-cabinet (base): 6 L-shape parts + 1 plinth = 7 parts
---   ✅ larder-corner-unit-60 (tall): 6 L-shape parts + 1 plinth = 7 parts
---   ✅ larder-corner-unit-90 (tall): 6 L-shape parts + 1 plinth = 7 parts
+--   ✅ corner-cabinet (base): 6 L-shape parts + 2 L-plinth parts = 8 parts
+--   ✅ larder-corner-unit-60 (tall): 6 L-shape parts + 2 L-plinth parts = 8 parts
+--   ✅ larder-corner-unit-90 (tall): 6 L-shape parts + 2 L-plinth parts = 8 parts
 --   ✅ new-corner-wall-cabinet-60 (wall): 6 L-shape parts (unchanged)
 --   ✅ new-corner-wall-cabinet-90 (wall): 6 L-shape parts (unchanged)
 --
--- L-Shaped Geometry Structure (6 parts):
+-- L-Shaped Cabinet Geometry (6 parts):
 --   1. Cabinet X-leg (horizontal leg of L)
 --   2. Cabinet Z-leg (vertical leg of L)
 --   3. Front door (on X-leg face)
@@ -477,8 +565,9 @@ ORDER BY
 --   5. Front handle (on front door)
 --   6. Side handle (on side door)
 --
--- Plus for Base/Tall Units (7th part):
---   7. Plinth (15cm toe-kick at bottom)
+-- Plus for Base/Tall Units (2 L-shaped plinth parts):
+--   7. Plinth X-leg (15cm toe-kick, recessed 10cm)
+--   8. Plinth Z-leg (15cm toe-kick, recessed 10cm)
 --
 -- Formula Variables (auto-adjust per cabinet type):
 --   - Wall cabinets: cornerDepth=0.4m, height=0.7m
