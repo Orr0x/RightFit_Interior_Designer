@@ -1005,6 +1005,8 @@ const Designer = () => {
                         onSelectElement={setSelectedElement}
                         onUpdateElement={handleUpdateElement}
                         onDeleteElement={handleDeleteElement}
+                        activeView={active2DView}
+                        elevationViews={elevationViews}
                       />
                     </div>
                   ) : design ? (
@@ -1019,7 +1021,7 @@ const Designer = () => {
                         fitToScreenSignal={fitToScreenSignal}
                         elevationViews={elevationViews}
                       />
-                      
+
                       {/* Canvas Element Counter - Bottom Left */}
                       <CanvasElementCounter
                         elements={design.elements}
@@ -1027,6 +1029,8 @@ const Designer = () => {
                         onSelectElement={setSelectedElement}
                         onUpdateElement={handleUpdateElement}
                         onDeleteElement={handleDeleteElement}
+                        activeView={'3d'}
+                        elevationViews={elevationViews}
                       />
                     </div>
                   ) : null}

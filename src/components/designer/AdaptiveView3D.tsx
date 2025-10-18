@@ -410,7 +410,7 @@ export const AdaptiveView3D: React.FC<AdaptiveView3DProps> = ({
   const [isInitializing, setIsInitializing] = useState(true);
   const [roomColors, setRoomColors] = useState<RoomColors | null>(null);
   const [roomGeometry, setRoomGeometry] = useState<RoomGeometry | null>(null);
-  const [loadingGeometry, setLoadingGeometry] = useState(false);
+  const [isFullyLoaded, setIsFullyLoaded] = useState(false); // NEW: Track when ALL async data is loaded
   const [hiddenWalls, setHiddenWalls] = useState<string[]>([]); // Manual control: array of wall directions to hide
   const [hideInterior, setHideInterior] = useState(false); // Manual toggle for interior/return walls
   const [showCeiling, setShowCeiling] = useState(false); // Manual ceiling toggle
@@ -425,56 +425,64 @@ export const AdaptiveView3D: React.FC<AdaptiveView3DProps> = ({
     ceilingHeight: design?.roomDimensions?.ceilingHeight
   };
 
-  // Load room colors from database
+  // Consolidated async data loader - prevents render flashes by loading all data before rendering
   useEffect(() => {
-    const loadRoomColors = async () => {
-      if (design?.roomType) {
-        try {
-          const template = await RoomService.getRoomTypeTemplate(design.roomType);
-          if (template.default_colors) {
-            setRoomColors(template.default_colors);
-            console.log(`✅ [AdaptiveView3D] Loaded room colors from database for ${design.roomType}:`, template.default_colors);
-          }
-        } catch (error) {
-          console.warn(`⚠️ [AdaptiveView3D] Failed to load room colors for ${design.roomType}:`, error);
+    const loadAllAsyncData = async () => {
+      console.log('🔄 [AdaptiveView3D] Starting consolidated data load...');
+      setIsFullyLoaded(false);
+
+      try {
+        // Load room colors and geometry in parallel
+        const loadPromises: Promise<void>[] = [];
+
+        // Load room colors
+        if (design?.roomType) {
+          const colorsPromise = RoomService.getRoomTypeTemplate(design.roomType)
+            .then(template => {
+              if (template.default_colors) {
+                setRoomColors(template.default_colors);
+                console.log(`✅ [AdaptiveView3D] Loaded room colors for ${design.roomType}`);
+              }
+            })
+            .catch(error => {
+              console.warn(`⚠️ [AdaptiveView3D] Failed to load room colors:`, error);
+              setRoomColors(null);
+            });
+          loadPromises.push(colorsPromise);
         }
+
+        // Load room geometry
+        if (design?.id) {
+          const geometryPromise = RoomService.getRoomGeometry(design.id)
+            .then(geometry => {
+              if (geometry) {
+                setRoomGeometry(geometry as RoomGeometry);
+                console.log(`✅ [AdaptiveView3D] Loaded room geometry for room ${design.id}`);
+              } else {
+                setRoomGeometry(null);
+                console.log(`ℹ️ [AdaptiveView3D] No complex geometry found, using simple room`);
+              }
+            })
+            .catch(error => {
+              console.warn(`⚠️ [AdaptiveView3D] Failed to load room geometry:`, error);
+              setRoomGeometry(null);
+            });
+          loadPromises.push(geometryPromise);
+        }
+
+        // Wait for all data to load in parallel
+        await Promise.all(loadPromises);
+
+        console.log('✅ [AdaptiveView3D] All async data loaded successfully');
+      } catch (error) {
+        console.error('❌ [AdaptiveView3D] Error loading async data:', error);
+      } finally {
+        setIsFullyLoaded(true);
       }
     };
 
-    loadRoomColors();
-  }, [design?.roomType]);
-
-  // Load room geometry from database (Phase 3: Complex Room Shapes)
-  useEffect(() => {
-    const loadRoomGeometry = async () => {
-      // Only try to load if we have a room/design ID
-      if (design?.id) {
-        setLoadingGeometry(true);
-        try {
-          const geometry = await RoomService.getRoomGeometry(design.id);
-          if (geometry) {
-            setRoomGeometry(geometry as RoomGeometry);
-            console.log(`✅ [AdaptiveView3D] Loaded complex room geometry for room ${design.id}:`, geometry.shape_type);
-          } else {
-            // No complex geometry - will use simple rectangular fallback
-            setRoomGeometry(null);
-            console.log(`ℹ️ [AdaptiveView3D] No complex geometry found for room ${design.id}, using simple rectangular room`);
-          }
-        } catch (error) {
-          console.warn(`⚠️ [AdaptiveView3D] Failed to load room geometry for ${design.id}:`, error);
-          setRoomGeometry(null);
-        } finally {
-          setLoadingGeometry(false);
-        }
-      } else {
-        // No room ID - use simple rectangular room
-        setRoomGeometry(null);
-        setLoadingGeometry(false);
-      }
-    };
-
-    loadRoomGeometry();
-  }, [design?.id]);
+    loadAllAsyncData();
+  }, [design?.roomType, design?.id]);
 
   // Filter elements based on per-view visibility and quality settings
   const visibleElements = useMemo(() => {
@@ -570,11 +578,11 @@ export const AdaptiveView3D: React.FC<AdaptiveView3DProps> = ({
   }, []);
 
   // Safety checks - AFTER all hooks
-  if (!design || !design.roomDimensions || isInitializing || !currentQuality) {
+  if (!design || !design.roomDimensions || isInitializing || !currentQuality || !isFullyLoaded) {
     return (
       <div className="w-full h-full relative bg-gray-50 rounded-lg overflow-hidden flex items-center justify-center">
         <div className="text-gray-500">
-          {isInitializing ? 'Optimizing 3D performance...' : 'Loading 3D View...'}
+          {isInitializing ? 'Optimizing 3D performance...' : !isFullyLoaded ? 'Loading 3D scene data...' : 'Loading 3D View...'}
         </div>
       </div>
     );

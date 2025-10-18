@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { DesignElement } from '@/types/project';
+import { DesignElement, ElevationViewConfig } from '@/types/project';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent } from '@/components/ui/card';
-import { 
+import {
   Layers,
   Square,
   Box,
@@ -18,6 +18,8 @@ interface CanvasElementCounterProps {
   onSelectElement: (element: DesignElement | null) => void;
   onUpdateElement: (id: string, updates: Partial<DesignElement>) => void;
   onDeleteElement: (id: string) => void;
+  activeView?: string; // Current view ID (plan, front-default, 3d, etc.)
+  elevationViews?: ElevationViewConfig[];
 }
 
 interface GroupedElements {
@@ -29,10 +31,22 @@ export const CanvasElementCounter: React.FC<CanvasElementCounterProps> = ({
   selectedElement,
   onSelectElement,
   onUpdateElement,
-  onDeleteElement
+  onDeleteElement,
+  activeView,
+  elevationViews
 }) => {
   const [isHovered, setIsHovered] = useState(false);
   const [hoverTimeout, setHoverTimeout] = useState<NodeJS.Timeout | null>(null);
+
+  // Helper function to check if element is hidden in current view
+  const isElementHidden = (elementId: string): boolean => {
+    if (!activeView || !elevationViews) return false;
+
+    const currentView = elevationViews.find(v => v.id === activeView);
+    if (!currentView) return false;
+
+    return currentView.hidden_elements?.includes(elementId) || false;
+  };
 
   // Cleanup timeout on unmount
   useEffect(() => {
@@ -149,21 +163,25 @@ export const CanvasElementCounter: React.FC<CanvasElementCounterProps> = ({
                   <div className="divide-y divide-border/30">
                     {categoryElements.map((element) => {
                       const isSelected = selectedElement?.id === element.id;
-                      // ⚠️ COMMENTED OUT 2025-10-18: Global isVisible replaced by per-view hidden_elements
-                      // const isHidden = !element.isVisible;
-                      const isHidden = false; // Temporarily disabled - will use per-view visibility system
-                      
+                      const isHidden = isElementHidden(element.id);
+
                       return (
                         <div
                           key={element.id}
                           className={`flex items-center gap-2 p-2 text-xs hover:bg-muted/20 cursor-pointer transition-colors ${
                             isSelected ? 'bg-primary/10 border-l-2 border-l-primary' : ''
-                          } ${isHidden ? 'opacity-50' : ''}`}
+                          } ${isHidden ? 'opacity-40' : ''}`}
                           onClick={() => onSelectElement(isSelected ? null : element)}
                         >
                           <div className="flex-1 min-w-0">
-                            <div className="font-medium truncate text-xs">
+                            <div className="font-medium truncate text-xs flex items-center gap-1">
                               {getElementDisplayName(element)}
+                              {isHidden && (
+                                <Badge variant="secondary" className="text-[9px] px-1 py-0 h-auto">
+                                  <EyeOff className="h-2 w-2 mr-0.5" />
+                                  Hidden
+                                </Badge>
+                              )}
                             </div>
                             <div className="text-muted-foreground flex items-center gap-2 text-[10px]">
                               <span>
@@ -174,25 +192,8 @@ export const CanvasElementCounter: React.FC<CanvasElementCounterProps> = ({
                               </Badge>
                             </div>
                           </div>
-                          
+
                           <div className="flex items-center gap-1">
-                            {/* ⚠️ COMMENTED OUT 2025-10-18: Global isVisible button replaced by per-view visibility */}
-                            {/* Visibility is now controlled per-view via ViewSelector component */}
-                            {/* <Button
-                              variant="ghost"
-                              size="sm"
-                              className="p-1 h-5 w-5"
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                handleElementVisibilityToggle(element);
-                              }}
-                            >
-                              {isHidden ?
-                                <EyeOff className="h-2.5 w-2.5" /> :
-                                <Eye className="h-2.5 w-2.5" />
-                              }
-                            </Button> */}
-                            
                             <Button
                               variant="ghost"
                               size="sm"
