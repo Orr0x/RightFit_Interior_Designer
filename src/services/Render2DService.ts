@@ -83,17 +83,41 @@ class Render2DService {
       return this.cache.get(componentId)!;
     }
 
+    // 🔧 FALLBACK: Try base component for directional variants
+    const fallbackId = this.getBaseComponentId(componentId);
+    if (fallbackId !== componentId && this.cache.has(fallbackId)) {
+      console.log(`✨ [Render2DService] Using cached fallback '${fallbackId}' for '${componentId}'`);
+      return this.cache.get(fallbackId)!;
+    }
+
     // If not preloaded yet, try to fetch individually
     // This handles edge cases where rendering happens before preload
     if (!this.isPreloaded) {
       console.warn(`[Render2DService] Definition for "${componentId}" requested before preload`);
 
       try {
-        const { data, error } = await supabase
+        let { data, error } = await supabase
           .from('component_2d_renders')
           .select('*')
           .eq('component_id', componentId)
           .single();
+
+        // 🔧 FALLBACK: If not found, try base component for directional variants
+        if (!data && !error && fallbackId !== componentId) {
+          console.log(`✨ [Render2DService] Trying fallback for '${componentId}' → '${fallbackId}'`);
+          const fallbackResult = await supabase
+            .from('component_2d_renders')
+            .select('*')
+            .eq('component_id', fallbackId)
+            .single();
+
+          data = fallbackResult.data;
+          error = fallbackResult.error;
+
+          if (data) {
+            console.log(`✨ [Render2DService] Fallback successful: Using '${fallbackId}' for '${componentId}'`);
+          }
+        }
 
         if (error) {
           console.error(`[Render2DService] Error fetching definition for "${componentId}":`, error);
@@ -111,9 +135,26 @@ class Render2DService {
       }
     }
 
+    // Not in cache and preload is complete - try fallback one more time
+    if (fallbackId !== componentId && this.cache.has(fallbackId)) {
+      console.log(`✨ [Render2DService] Using fallback '${fallbackId}' for '${componentId}'`);
+      return this.cache.get(fallbackId)!;
+    }
+
     // Not in cache and preload is complete - definition doesn't exist
     console.warn(`[Render2DService] No 2D render definition found for "${componentId}"`);
     return null;
+  }
+
+  /**
+   * Get base component ID by stripping directional suffixes (-ns, -ew)
+   * These variants are just rotational orientations of the same base component
+   */
+  private getBaseComponentId(componentId: string): string {
+    if (componentId.endsWith('-ns') || componentId.endsWith('-ew')) {
+      return componentId.slice(0, -3); // Remove last 3 chars ("-ns" or "-ew")
+    }
+    return componentId;
   }
 
   /**
@@ -193,7 +234,21 @@ class Render2DService {
    * Returns null if not in cache - caller should handle fallback
    */
   getCached(componentId: string): Render2DDefinition | null {
-    return this.cache.get(componentId) || null;
+    // Try exact match first
+    let cached = this.cache.get(componentId);
+
+    // 🔧 FALLBACK: Try base component for directional variants
+    if (!cached) {
+      const fallbackId = this.getBaseComponentId(componentId);
+      if (fallbackId !== componentId) {
+        cached = this.cache.get(fallbackId);
+        if (cached) {
+          console.log(`✨ [Render2DService] Using cached fallback '${fallbackId}' for '${componentId}'`);
+        }
+      }
+    }
+
+    return cached || null;
   }
 
   /**

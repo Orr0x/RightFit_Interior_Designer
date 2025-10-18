@@ -69,7 +69,21 @@ export const useComponentMetadata = () => {
   // Get metadata by component_id (memoized for performance)
   const getComponentMetadata = useMemo(() => {
     return (componentId: string): ComponentMetadata | undefined => {
-      return metadata.find(m => m.component_id === componentId);
+      // Try exact match first
+      let found = metadata.find(m => m.component_id === componentId);
+
+      // 🔧 FALLBACK: If not found, try stripping directional suffixes (-ns, -ew)
+      // These variants are just rotational orientations of the same base component
+      if (!found && (componentId.endsWith('-ns') || componentId.endsWith('-ew'))) {
+        const baseComponentId = componentId.slice(0, -3); // Remove last 3 chars ("-ns" or "-ew")
+        found = metadata.find(m => m.component_id === baseComponentId);
+
+        if (found) {
+          console.log(`✨ [useComponentMetadata] Fallback: Using metadata from '${baseComponentId}' for variant '${componentId}'`);
+        }
+      }
+
+      return found;
     };
   }, [metadata]);
 

@@ -130,11 +130,31 @@ export class Model3DLoaderService {
       }
 
       // Load from database
-      const { data, error } = await supabase
+      let { data, error } = await supabase
         .from('component_3d_models')
         .select('*')
         .eq('component_id', componentId)
         .single();
+
+      // 🔧 FALLBACK: If not found, try stripping directional suffixes (-ns, -ew)
+      // These variants are just rotational orientations of the same base component
+      if (!data && !error && (componentId.endsWith('-ns') || componentId.endsWith('-ew'))) {
+        const baseComponentId = componentId.slice(0, -3); // Remove last 3 chars
+        console.log(`✨ [Model3DLoader] Trying fallback for '${componentId}' → '${baseComponentId}'`);
+
+        const fallbackResult = await supabase
+          .from('component_3d_models')
+          .select('*')
+          .eq('component_id', baseComponentId)
+          .single();
+
+        data = fallbackResult.data;
+        error = fallbackResult.error;
+
+        if (data) {
+          console.log(`✨ [Model3DLoader] Fallback successful: Using metadata from '${baseComponentId}' for variant '${componentId}'`);
+        }
+      }
 
       if (error) {
         console.error(`[Model3DLoader] Error loading model ${componentId}:`, error);
