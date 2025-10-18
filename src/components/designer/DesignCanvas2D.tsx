@@ -314,17 +314,12 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
   const [roomGeometry, setRoomGeometry] = useState<RoomGeometry | null>(null);
   const [loadingGeometry, setLoadingGeometry] = useState(false);
 
-  // Extract current view direction and hidden elements from elevation views
+  // Extract current view direction and hidden elements from ALL view configs (plan, elevation, 3D)
   const currentViewInfo = React.useMemo(() => {
-    // If plan view, return early
-    if (active2DView === 'plan') {
-      return { direction: 'plan', hiddenElements: [] };
-    }
-
-    // Get elevation views (default to 4 cardinal views if not provided)
+    // Get ALL view configs (includes plan + elevations + 3D)
     const views = elevationViews || getElevationViews();
 
-    // Find the current view by ID
+    // Find view config by active view ID (works for plan, elevations, and 3D)
     const currentView = views.find(v => v.id === active2DView);
 
     if (currentView) {
@@ -332,6 +327,11 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
         direction: currentView.direction,
         hiddenElements: currentView.hidden_elements || []
       };
+    }
+
+    // Fallback for legacy data that doesn't have plan/3D configs
+    if (active2DView === 'plan') {
+      return { direction: 'plan' as const, hiddenElements: [] };
     }
 
     // Fallback: if active2DView is a direction string (legacy behavior)

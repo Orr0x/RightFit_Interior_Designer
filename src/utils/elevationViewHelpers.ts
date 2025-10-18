@@ -1,13 +1,13 @@
 /**
- * Elevation View Management Helpers
+ * View Management Helpers
  *
- * Purpose: Manage custom elevation views for complex rooms
- * - Create default views (4 cardinal directions)
- * - Duplicate views (max 3 per direction)
- * - Rename/delete custom views
- * - Validate view configurations
+ * Purpose: Manage all view types with independent visibility filtering
+ * - Plan view (2D top-down)
+ * - Elevation views (4 cardinal directions, up to 3 per direction)
+ * - 3D view
+ * - Each view has independent hidden_elements array
  *
- * Supports up to 12 total views (3 per direction) for H-shaped rooms
+ * Supports up to 14 total views (plan + 12 elevations + 3D) for H-shaped rooms
  */
 
 import type { ElevationViewConfig, RoomDesignSettings } from '@/types/project';
@@ -15,13 +15,22 @@ import type { ElevationViewConfig, RoomDesignSettings } from '@/types/project';
 // Constants
 export const MAX_VIEWS_PER_DIRECTION = 3;
 export const DEFAULT_DIRECTIONS = ['front', 'back', 'left', 'right'] as const;
+export const SPECIAL_VIEWS = ['plan', '3d'] as const;
 
 /**
- * Generate default elevation views (4 cardinal directions)
+ * Generate default view configs (plan + 4 elevations + 3D)
  * Used when elevation_views is undefined in design_settings
  */
 export function getDefaultElevationViews(): ElevationViewConfig[] {
   return [
+    {
+      id: 'plan',
+      direction: 'plan',
+      label: 'Plan View',
+      hidden_elements: [],
+      is_default: true,
+      sort_order: 0
+    },
     {
       id: 'front-default',
       direction: 'front',
@@ -53,6 +62,14 @@ export function getDefaultElevationViews(): ElevationViewConfig[] {
       hidden_elements: [],
       is_default: true,
       sort_order: 4
+    },
+    {
+      id: '3d',
+      direction: '3d',
+      label: '3D View',
+      hidden_elements: [],
+      is_default: true,
+      sort_order: 5
     }
   ];
 }

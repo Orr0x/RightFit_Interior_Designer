@@ -77,16 +77,17 @@ export interface ViewPreferences {
   snap_to_grid?: boolean;
 }
 
-// Elevation view configuration for complex rooms
+// View configuration for all view types (plan, elevation, 3D)
 // Allows up to 3 views per cardinal direction (original + 2 duplicates)
 // Supports H-shaped rooms with 3 walls per direction = 12 total views max
+// Plus plan view and 3D view (each with independent visibility filtering)
 export interface ElevationViewConfig {
-  id: string;                                          // Unique ID: "front-default", "front-dup1", etc.
-  direction: 'front' | 'back' | 'left' | 'right';     // Base cardinal direction
-  label: string;                                       // User-friendly name: "Front", "Front (Interior)", etc.
-  hidden_elements: string[];                           // Element IDs to hide in this view
-  is_default: boolean;                                 // True for original 4 cardinal views
-  sort_order: number;                                  // Display order in ViewSelector (1-12)
+  id: string;                                                       // Unique ID: "front-default", "plan", "3d", etc.
+  direction: 'front' | 'back' | 'left' | 'right' | 'plan' | '3d';  // View type/direction
+  label: string;                                                    // User-friendly name
+  hidden_elements: string[];                                        // Element IDs to hide in this view
+  is_default: boolean;                                              // True for standard views
+  sort_order: number;                                               // Display order in ViewSelector
 }
 
 // Design interface for component compatibility
