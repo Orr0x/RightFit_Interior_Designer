@@ -196,7 +196,7 @@ BEGIN
   RAISE NOTICE '=============================================================================';
   RAISE NOTICE 'Remaining corner components: %', remaining_count;
   RAISE NOTICE '';
-  RAISE NOTICE 'Expected remaining (4 corner components):';
+  RAISE NOTICE 'Expected remaining (6 corner components):';
   RAISE NOTICE '  ✅ corner-cabinet (base 90cm)';
   RAISE NOTICE '  ✅ larder-corner-unit-90 (tall 90cm)';
   RAISE NOTICE '  ✅ new-corner-wall-cabinet-60 (wall 60cm)';
