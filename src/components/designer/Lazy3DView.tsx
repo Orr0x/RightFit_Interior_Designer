@@ -4,7 +4,7 @@
  */
 
 import React, { Suspense, lazy } from 'react';
-import { DesignElement, Design } from '@/types/project';
+import { DesignElement, Design, ElevationViewConfig } from '@/types/project';
 import { LoadingSpinner } from './LoadingSpinner';
 
 // Lazy load the heavy 3D components
@@ -17,6 +17,7 @@ interface Lazy3DViewProps {
   activeTool?: 'select' | 'fit-screen' | 'pan' | 'tape-measure' | 'none';
   showGrid?: boolean;
   fitToScreenSignal?: number;
+  elevationViews?: ElevationViewConfig[];
 }
 
 // Loading fallback component

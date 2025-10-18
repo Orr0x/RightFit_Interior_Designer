@@ -6,7 +6,8 @@
 import React, { Suspense, useEffect, useRef, useState, useMemo } from 'react';
 import { Canvas, useThree } from '@react-three/fiber';
 import { OrbitControls, Environment, Grid, Text } from '@react-three/drei';
-import { DesignElement, Design } from '@/types/project';
+import { DesignElement, Design, ElevationViewConfig } from '@/types/project';
+import { getElevationViews } from '@/utils/elevationViewHelpers';
 import { performanceDetector, RenderQuality, DeviceCapabilities } from '@/services/PerformanceDetector';
 import { memoryManager } from '@/services/MemoryManager';
 import { useIsMobile } from '@/hooks/use-mobile';
@@ -48,6 +49,7 @@ interface AdaptiveView3DProps {
   activeTool?: 'select' | 'fit-screen' | 'pan' | 'tape-measure' | 'none';
   showGrid?: boolean;
   fitToScreenSignal?: number;
+  elevationViews?: ElevationViewConfig[];
 }
 
 // Adaptive Room component with quality-based features
@@ -399,7 +401,8 @@ export const AdaptiveView3D: React.FC<AdaptiveView3DProps> = ({
   onSelectElement,
   activeTool = 'select',
   showGrid = true,
-  fitToScreenSignal = 0
+  fitToScreenSignal = 0,
+  elevationViews
 }) => {
   const [capabilities, setCapabilities] = useState<DeviceCapabilities | null>(null);
   const [currentQuality, setCurrentQuality] = useState<RenderQuality | null>(null);
@@ -473,14 +476,41 @@ export const AdaptiveView3D: React.FC<AdaptiveView3DProps> = ({
     loadRoomGeometry();
   }, [design?.id]);
 
-  // Filter elements based on quality settings (always call this hook)
+  // Filter elements based on per-view visibility and quality settings
   const visibleElements = useMemo(() => {
     if (!design?.elements) return [];
-    
+
+    // Get the 3D view config to check hidden_elements
+    const views = elevationViews || getElevationViews();
+    const view3D = views.find(v => v.id === '3d');
+    const hiddenElementIds = view3D?.hidden_elements || [];
+
+    console.log('🎨 [3D VIEW DEBUG] Filtering elements:', {
+      totalElements: design.elements.length,
+      hiddenElementIds,
+      view3DConfig: view3D
+    });
+
+    // Filter out hidden elements
+    const filteredByVisibility = design.elements.filter(el => {
+      const isHidden = hiddenElementIds.includes(el.id);
+      if (isHidden) {
+        console.log('🎨 [3D VIEW DEBUG] Element HIDDEN in 3D view:', { id: el.id });
+      }
+      return !isHidden;
+    });
+
     // Limit elements for performance - use fallback if currentQuality is null
     const maxElements = currentQuality?.maxElements || 100;
-    return design.elements.slice(0, maxElements);
-  }, [design?.elements, currentQuality?.maxElements]);
+    const limited = filteredByVisibility.slice(0, maxElements);
+
+    console.log('🎨 [3D VIEW DEBUG] Visible elements after filtering:', {
+      afterVisibilityFilter: filteredByVisibility.length,
+      afterPerformanceLimit: limited.length
+    });
+
+    return limited;
+  }, [design?.elements, currentQuality?.maxElements, elevationViews]);
 
   // Initialize performance detection
   useEffect(() => {

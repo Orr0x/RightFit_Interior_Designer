@@ -1017,6 +1017,7 @@ const Designer = () => {
                         activeTool={activeTool === 'tape-measure' ? 'select' : activeTool}
                         showGrid={showGrid}
                         fitToScreenSignal={fitToScreenSignal}
+                        elevationViews={elevationViews}
                       />
                       
                       {/* Canvas Element Counter - Bottom Left */}
