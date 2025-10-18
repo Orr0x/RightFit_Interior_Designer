@@ -162,11 +162,12 @@ export class PositionCalculation {
     let xPos: number;
     let elementWidth: number;
 
-    if (view === 'front' || view === 'back') {
+    // 🔧 FIX: View can be 'front-default', 'back-default', etc. - use startsWith instead of exact match
+    if (view.startsWith('front') || view.startsWith('back')) {
       // Front/back walls: use X coordinate from plan view
       xPos = roomPosition.innerX + (element.x / roomDimensions.width) * calcElevationWidth;
       elementWidth = (effectiveWidth / roomDimensions.width) * calcElevationWidth;
-    } else if (view === 'left') {
+    } else if (view.startsWith('left')) {
       // 🔒 LEGACY: Left wall view - flip horizontally (mirror Y coordinate)
       // When looking at left wall from inside room, far end of room appears on left side of view
       const flippedY = roomDimensions.height - element.y - effectiveDepth;
@@ -224,11 +225,14 @@ export class PositionCalculation {
     let xPos: number;
     let elementWidth: number;
 
-    if (view === 'front' || view === 'back') {
+    // 🔧 FIX: View can be 'front-default', 'back-default', etc. - use startsWith instead of exact match
+    if (view.startsWith('front') || view.startsWith('back')) {
       // Front/back walls: use X coordinate from plan view
       // Normalized: element at 40% of room width → 40% of elevation width
       xPos = roomPosition.innerX + (element.x / roomDimensions.width) * calcElevationWidth;
       elementWidth = (effectiveWidth / roomDimensions.width) * calcElevationWidth;
+
+      console.log(`[PositionCalc] ${view} view: element.x=${element.x}, roomWidth=${roomDimensions.width}, calcElevWidth=${calcElevationWidth}, innerX=${roomPosition.innerX} → xPos=${xPos}`);
     } else {
       // ✨ NEW: Unified coordinate system for left AND right walls
       // Both walls use the same Y coordinate mapping - no flipping at coordinate level
@@ -236,6 +240,8 @@ export class PositionCalculation {
       // Calculate base position using direct Y coordinate (same for both walls)
       const normalizedPosition = element.y / roomDimensions.height;
       xPos = roomPosition.innerX + normalizedPosition * calcElevationDepth;
+
+      console.log(`[PositionCalc] ${view} view: element.y=${element.y}, roomHeight=${roomDimensions.height}, calcElevDepth=${calcElevationDepth}, innerX=${roomPosition.innerX}, normalizedPos=${normalizedPosition} → xPos=${xPos}`);
 
       // Calculate element width
       if (element.type === 'counter-top') {
@@ -247,11 +253,12 @@ export class PositionCalculation {
       // For left wall, mirror the rendering by inverting the X position
       // This is done at rendering time, not in coordinate calculation
       // This keeps the coordinate system consistent while achieving the visual effect
-      if (view === 'left') {
+      if (view.startsWith('left')) {
         // Mirror position: reflect around center of elevation
         const elevationCenter = roomPosition.innerX + calcElevationDepth / 2;
         const distanceFromCenter = xPos - elevationCenter;
         xPos = elevationCenter - distanceFromCenter - elementWidth;
+        console.log(`[PositionCalc] Left wall mirror: elevCenter=${elevationCenter}, distFromCenter=${distanceFromCenter} → mirrored xPos=${xPos}`);
       }
     }
 
