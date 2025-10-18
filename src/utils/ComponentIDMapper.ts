@@ -94,6 +94,13 @@ export const COMPONENT_ID_MAPPINGS: ComponentIDMapping[] = [
     priority: 50,
   },
 
+  {
+    pattern: /pan-drawer/i,
+    mapper: (elementId, width) => `pan-drawers-${width}`,
+    description: 'Pan drawer units (30, 40, 50, 60, 80, 100cm)',
+    priority: 50,
+  },
+
   // =====================================================================
   // P2: Tall Units & Larders
   // =====================================================================
