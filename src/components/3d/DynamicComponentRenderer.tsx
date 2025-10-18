@@ -196,9 +196,9 @@ export const DynamicComponentRenderer: React.FC<DynamicComponentRendererProps> =
 export const preloadCommonComponents = async () => {
   const commonComponents = [
     // Corner cabinets (P0 - most critical)
-    'corner-cabinet', // Only corner cabinet in database after cleanup
-    'new-corner-wall-cabinet-60',
-    'new-corner-wall-cabinet-90',
+    'corner-cabinet', // Base corner cabinet (90cm)
+    'larder-corner-unit-90', // Tall corner larder (90cm, 200cm height)
+    'new-corner-wall-cabinet-60', // Wall corner cabinet (60cm)
     // Standard cabinets (P1 - not yet populated in database)
     // Note: base-cabinet-60, base-cabinet-80, wall-cabinet-60, wall-cabinet-80
     // exist in database but may not have 3D models yet
