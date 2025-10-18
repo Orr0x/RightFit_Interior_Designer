@@ -1051,7 +1051,7 @@ const Designer = () => {
                     roomDimensions={design.roomDimensions}
                     onUpdateRoomDimensions={handleUpdateRoomDimensions}
                     roomType={design.roomType}
-                    active2DView={active2DView}
+                    active2DView={activeView === '3d' ? '3d' : active2DView}
                     elevationViews={elevationViews}
                     onToggleElementVisibility={handleToggleElementVisibility}
                   />

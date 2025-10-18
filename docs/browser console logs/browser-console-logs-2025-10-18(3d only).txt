@@ -1,0 +1,2807 @@
+
+================================================================================
+BROWSER CONSOLE LOGS
+================================================================================
+Captured: 1066 log entries
+Session Start: 2025-10-18T13:19:11.499Z
+Session End: 2025-10-18T13:20:11.514Z
+================================================================================
+
+[2025-10-18T13:19:11.499Z] 📝 [LOG] ✅ [CompactComponentSidebar] Component sidebar rendered successfully
+[2025-10-18T13:19:11.500Z] 📝 [LOG] ✅ [CompactComponentSidebar] Summary: 226 total, 126 for kitchen, 10 categories
+[2025-10-18T13:19:11.510Z] 📝 [LOG] 🎯 [PerformanceMonitor] Performance monitor hidden
+[2025-10-18T13:19:11.800Z] 📝 [LOG] 🎨 [3D VIEW DEBUG] Filtering elements: {
+  "totalElements": 18,
+  "hiddenElementIds": [],
+  "view3DConfig": {
+    "id": "3d",
+    "label": "3D View",
+    "direction": "3d",
+    "is_default": true,
+    "sort_order": 5,
+    "hidden_elements": []
+  },
+  "elevationViewsProp": "provided"
+}
+[2025-10-18T13:19:11.800Z] 📝 [LOG] 🎨 [3D VIEW DEBUG] Visible elements after filtering: {
+  "afterVisibilityFilter": 18,
+  "afterPerformanceLimit": 18
+}
+[2025-10-18T13:19:11.804Z] 📝 [LOG] 🔄 [AdaptiveView3D] Starting consolidated data load...
+[2025-10-18T13:19:11.805Z] 📝 [LOG] 🔍 [PerformanceDetector] Analyzing device capabilities...
+[2025-10-18T13:19:11.823Z] 📝 [LOG] ✅ [PerformanceDetector] Device analysis complete: {
+  "gpuTier": "high",
+  "memoryGB": 4,
+  "webglVersion": 2,
+  "maxTextureSize": 16384,
+  "supportsWebGL2": true,
+  "isMobile": false,
+  "recommendedQuality": {
+    "level": "low",
+    "shadows": false,
+    "shadowMapSize": 512,
+    "antialias": false,
+    "environmentLighting": false,
+    "textureQuality": "low",
+    "modelDetail": "low",
+    "maxElements": 25
+  }
+}
+[2025-10-18T13:19:11.824Z] 📝 [LOG] 👁️ [MemoryManager] Memory monitoring started
+[2025-10-18T13:19:11.824Z] 📝 [LOG] 🔧 [MemoryManager] Automatic cleanup listeners registered
+[2025-10-18T13:19:11.825Z] 📝 [LOG] 🎮 [AdaptiveView3D] Performance detection complete: {
+  "gpu": "high",
+  "recommended": "low",
+  "defaultUsing": "medium",
+  "autoMode": false
+}
+[2025-10-18T13:19:11.827Z] 📝 [LOG] 🎨 [3D VIEW DEBUG] Filtering elements: {
+  "totalElements": 18,
+  "hiddenElementIds": [],
+  "view3DConfig": {
+    "id": "3d",
+    "label": "3D View",
+    "direction": "3d",
+    "is_default": true,
+    "sort_order": 5,
+    "hidden_elements": []
+  },
+  "elevationViewsProp": "provided"
+}
+[2025-10-18T13:19:11.827Z] 📝 [LOG] 🎨 [3D VIEW DEBUG] Visible elements after filtering: {
+  "afterVisibilityFilter": 18,
+  "afterPerformanceLimit": 18
+}
+[2025-10-18T13:19:11.866Z] 📝 [LOG] 📐 [RoomService] Generating simple rectangle for room ff110bba-6ec1-4a40-a799-b8d4aa0b6d1f
+[2025-10-18T13:19:11.867Z] 📝 [LOG] ✅ [AdaptiveView3D] Loaded room geometry for room ff110bba-6ec1-4a40-a799-b8d4aa0b6d1f
+[2025-10-18T13:19:11.867Z] 📝 [LOG] ✅ [AdaptiveView3D] All async data loaded successfully
+[2025-10-18T13:19:11.965Z] 📝 [LOG] 🔍 [validateElementDimensions] Processing element base-cabinet-30-1760788641585: {
+  "elementZ": 0,
+  "isUndefined": false,
+  "isNaN": false,
+  "elementType": "cabinet"
+}
+[2025-10-18T13:19:11.965Z] 📝 [LOG] ✅ [validateElementDimensions] Using existing Z value: 0cm
+[2025-10-18T13:19:11.965Z] 📝 [LOG] 🔧 [EnhancedCabinet3D] Using default Z position: 0cm for base-cabinet-30-1760788641585 (base cabinet)
+[2025-10-18T13:19:11.966Z] 📝 [LOG] 🔍 [validateElementDimensions] Processing element base-cabinet-40-1760788646697: {
+  "elementZ": 0,
+  "isUndefined": false,
+  "isNaN": false,
+  "elementType": "cabinet"
+}
+[2025-10-18T13:19:11.966Z] 📝 [LOG] ✅ [validateElementDimensions] Using existing Z value: 0cm
+[2025-10-18T13:19:11.966Z] 📝 [LOG] 🔧 [EnhancedCabinet3D] Using default Z position: 0cm for base-cabinet-40-1760788646697 (base cabinet)
+[2025-10-18T13:19:11.967Z] 📝 [LOG] 🔍 [validateElementDimensions] Processing element base-cabinet-50-1760788652937: {
+  "elementZ": 0,
+  "isUndefined": false,
+  "isNaN": false,
+  "elementType": "cabinet"
+}
+[2025-10-18T13:19:11.967Z] 📝 [LOG] ✅ [validateElementDimensions] Using existing Z value: 0cm
+[2025-10-18T13:19:11.967Z] 📝 [LOG] 🔧 [EnhancedCabinet3D] Using default Z position: 0cm for base-cabinet-50-1760788652937 (base cabinet)
+[2025-10-18T13:19:11.968Z] 📝 [LOG] 🔍 [validateElementDimensions] Processing element base-cabinet-60-1760788664528: {
+  "elementZ": 0,
+  "isUndefined": false,
+  "isNaN": false,
+  "elementType": "cabinet"
+}
+[2025-10-18T13:19:11.968Z] 📝 [LOG] ✅ [validateElementDimensions] Using existing Z value: 0cm
+[2025-10-18T13:19:11.968Z] 📝 [LOG] 🔧 [EnhancedCabinet3D] Using default Z position: 0cm for base-cabinet-60-1760788664528 (base cabinet)
+[2025-10-18T13:19:11.968Z] 📝 [LOG] 🔍 [validateElementDimensions] Processing element base-cabinet-80-1760788686425: {
+  "elementZ": 0,
+  "isUndefined": false,
+  "isNaN": false,
+  "elementType": "cabinet"
+}
+[2025-10-18T13:19:11.969Z] 📝 [LOG] ✅ [validateElementDimensions] Using existing Z value: 0cm
+[2025-10-18T13:19:11.969Z] 📝 [LOG] 🔧 [EnhancedCabinet3D] Using default Z position: 0cm for base-cabinet-80-1760788686425 (base cabinet)
+[2025-10-18T13:19:11.969Z] 📝 [LOG] 🔍 [validateElementDimensions] Processing element new-corner-wall-cabinet-60-1760788779197: {
+  "elementZ": 140,
+  "isUndefined": false,
+  "isNaN": false,
+  "elementType": "cabinet"
+}
+[2025-10-18T13:19:11.969Z] 📝 [LOG] ✅ [validateElementDimensions] Using existing Z value: 140cm
+[2025-10-18T13:19:11.970Z] 📝 [LOG] ✅ [EnhancedCabinet3D] Using custom Z position: 140cm for new-corner-wall-cabinet-60-1760788779197
+[2025-10-18T13:19:11.970Z] 📝 [LOG] 🔍 [validateElementDimensions] Processing element wall-cabinet-30-1760788788486: {
+  "elementZ": 140,
+  "isUndefined": false,
+  "isNaN": false,
+  "elementType": "cabinet"
+}
+[2025-10-18T13:19:11.970Z] 📝 [LOG] ✅ [validateElementDimensions] Using existing Z value: 140cm
+[2025-10-18T13:19:11.971Z] 📝 [LOG] ✅ [EnhancedCabinet3D] Using custom Z position: 140cm for wall-cabinet-30-1760788788486
+[2025-10-18T13:19:11.971Z] 📝 [LOG] 🔍 [validateElementDimensions] Processing element wall-cabinet-40-1760788795319: {
+  "elementZ": 140,
+  "isUndefined": false,
+  "isNaN": false,
+  "elementType": "cabinet"
+}
+[2025-10-18T13:19:11.971Z] 📝 [LOG] ✅ [validateElementDimensions] Using existing Z value: 140cm
+[2025-10-18T13:19:11.971Z] 📝 [LOG] ✅ [EnhancedCabinet3D] Using custom Z position: 140cm for wall-cabinet-40-1760788795319
+[2025-10-18T13:19:11.972Z] 📝 [LOG] 🔍 [validateElementDimensions] Processing element wall-cabinet-50-1760788802405: {
+  "elementZ": 140,
+  "isUndefined": false,
+  "isNaN": false,
+  "elementType": "cabinet"
+}
+[2025-10-18T13:19:11.972Z] 📝 [LOG] ✅ [validateElementDimensions] Using existing Z value: 140cm
+[2025-10-18T13:19:11.972Z] 📝 [LOG] ✅ [EnhancedCabinet3D] Using custom Z position: 140cm for wall-cabinet-50-1760788802405
+[2025-10-18T13:19:11.973Z] 📝 [LOG] 🔍 [validateElementDimensions] Processing element wall-cabinet-60-1760788808433: {
+  "elementZ": 140,
+  "isUndefined": false,
+  "isNaN": false,
+  "elementType": "cabinet"
+}
+[2025-10-18T13:19:11.973Z] 📝 [LOG] ✅ [validateElementDimensions] Using existing Z value: 140cm
+[2025-10-18T13:19:11.973Z] 📝 [LOG] ✅ [EnhancedCabinet3D] Using custom Z position: 140cm for wall-cabinet-60-1760788808433
+[2025-10-18T13:19:11.974Z] 📝 [LOG] 🔍 [validateElementDimensions] Processing element wall-cabinet-80-1760788814537: {
+  "elementZ": 140,
+  "isUndefined": false,
+  "isNaN": false,
+  "elementType": "cabinet"
+}
+[2025-10-18T13:19:11.974Z] 📝 [LOG] ✅ [validateElementDimensions] Using existing Z value: 140cm
+[2025-10-18T13:19:11.974Z] 📝 [LOG] ✅ [EnhancedCabinet3D] Using custom Z position: 140cm for wall-cabinet-80-1760788814537
+[2025-10-18T13:19:11.975Z] 📝 [LOG] 🔍 [validateElementDimensions] Processing element dishwasher-1760788869471: {
+  "elementZ": 0,
+  "isUndefined": false,
+  "isNaN": false,
+  "elementType": "appliance"
+}
+[2025-10-18T13:19:11.976Z] 📝 [LOG] ✅ [validateElementDimensions] Using existing Z value: 0cm
+[2025-10-18T13:19:11.976Z] 📝 [LOG] 🔧 [EnhancedAppliance3D] Using default Z position: 0cm for dishwasher-1760788869471 (floor level)
+[2025-10-18T13:19:11.977Z] 📝 [LOG] 🔍 [validateElementDimensions] Processing element dishwasher-60-1760788873637: {
+  "elementZ": 0,
+  "isUndefined": false,
+  "isNaN": false,
+  "elementType": "appliance"
+}
+[2025-10-18T13:19:11.977Z] 📝 [LOG] ✅ [validateElementDimensions] Using existing Z value: 0cm
+[2025-10-18T13:19:11.978Z] 📝 [LOG] 🔧 [EnhancedAppliance3D] Using default Z position: 0cm for dishwasher-60-1760788873637 (floor level)
+[2025-10-18T13:19:11.979Z] 📝 [LOG] 🔍 [validateElementDimensions] Processing element fridge-90-1760788877593: {
+  "elementZ": 0,
+  "isUndefined": false,
+  "isNaN": false,
+  "elementType": "appliance"
+}
+[2025-10-18T13:19:11.980Z] 📝 [LOG] ✅ [validateElementDimensions] Using existing Z value: 0cm
+[2025-10-18T13:19:11.980Z] 📝 [LOG] 🔧 [EnhancedAppliance3D] Using default Z position: 0cm for fridge-90-1760788877593 (floor level)
+[2025-10-18T13:19:11.980Z] 📝 [LOG] 🔍 [validateElementDimensions] Processing element larder-oven-microwave-1760788897494: {
+  "elementZ": 0,
+  "isUndefined": false,
+  "isNaN": false,
+  "elementType": "appliance"
+}
+[2025-10-18T13:19:11.981Z] 📝 [LOG] ✅ [validateElementDimensions] Using existing Z value: 0cm
+[2025-10-18T13:19:11.981Z] 📝 [LOG] 🔧 [EnhancedAppliance3D] Using default Z position: 0cm for larder-oven-microwave-1760788897494 (floor level)
+[2025-10-18T13:19:11.982Z] 📝 [LOG] 🔍 [validateElementDimensions] Processing element l-shaped-test-cabinet-90-1760790249209: {
+  "elementZ": 0,
+  "isUndefined": false,
+  "isNaN": false,
+  "elementType": "cabinet"
+}
+[2025-10-18T13:19:11.982Z] 📝 [LOG] ✅ [validateElementDimensions] Using existing Z value: 0cm
+[2025-10-18T13:19:11.982Z] 📝 [LOG] 🔧 [EnhancedCabinet3D] Using default Z position: 0cm for l-shaped-test-cabinet-90-1760790249209 (base cabinet)
+[2025-10-18T13:19:11.983Z] 📝 [LOG] 🔍 [validateElementDimensions] Processing element l-shaped-test-cabinet-90-1760792471952: {
+  "elementZ": 0,
+  "isUndefined": false,
+  "isNaN": false,
+  "elementType": "cabinet"
+}
+[2025-10-18T13:19:11.983Z] 📝 [LOG] ✅ [validateElementDimensions] Using existing Z value: 0cm
+[2025-10-18T13:19:11.983Z] 📝 [LOG] 🔧 [EnhancedCabinet3D] Using default Z position: 0cm for l-shaped-test-cabinet-90-1760792471952 (base cabinet)
+[2025-10-18T13:19:11.984Z] 📝 [LOG] 🔍 [validateElementDimensions] Processing element base-cabinet-50-1760792508921: {
+  "elementZ": 0,
+  "isUndefined": false,
+  "isNaN": false,
+  "elementType": "cabinet"
+}
+[2025-10-18T13:19:11.984Z] 📝 [LOG] ✅ [validateElementDimensions] Using existing Z value: 0cm
+[2025-10-18T13:19:11.984Z] 📝 [LOG] 🔧 [EnhancedCabinet3D] Using default Z position: 0cm for base-cabinet-50-1760792508921 (base cabinet)
+[2025-10-18T13:19:19.425Z] 📝 [LOG] 🔍 [validateElementDimensions] Processing element base-cabinet-30-1760788641585: {
+  "elementZ": 0,
+  "isUndefined": false,
+  "isNaN": false,
+  "elementType": "cabinet"
+}
+[2025-10-18T13:19:19.425Z] 📝 [LOG] ✅ [validateElementDimensions] Using existing Z value: 0cm
+[2025-10-18T13:19:19.426Z] 📝 [LOG] 🔧 [EnhancedCabinet3D] Using default Z position: 0cm for base-cabinet-30-1760788641585 (base cabinet)
+[2025-10-18T13:19:19.426Z] 📝 [LOG] 🔍 [validateElementDimensions] Processing element base-cabinet-40-1760788646697: {
+  "elementZ": 0,
+  "isUndefined": false,
+  "isNaN": false,
+  "elementType": "cabinet"
+}
+[2025-10-18T13:19:19.427Z] 📝 [LOG] ✅ [validateElementDimensions] Using existing Z value: 0cm
+[2025-10-18T13:19:19.427Z] 📝 [LOG] 🔧 [EnhancedCabinet3D] Using default Z position: 0cm for base-cabinet-40-1760788646697 (base cabinet)
+[2025-10-18T13:19:19.427Z] 📝 [LOG] 🔍 [validateElementDimensions] Processing element base-cabinet-50-1760788652937: {
+  "elementZ": 0,
+  "isUndefined": false,
+  "isNaN": false,
+  "elementType": "cabinet"
+}
+[2025-10-18T13:19:19.428Z] 📝 [LOG] ✅ [validateElementDimensions] Using existing Z value: 0cm
+[2025-10-18T13:19:19.428Z] 📝 [LOG] 🔧 [EnhancedCabinet3D] Using default Z position: 0cm for base-cabinet-50-1760788652937 (base cabinet)
+[2025-10-18T13:19:19.429Z] 📝 [LOG] 🔍 [validateElementDimensions] Processing element base-cabinet-60-1760788664528: {
+  "elementZ": 0,
+  "isUndefined": false,
+  "isNaN": false,
+  "elementType": "cabinet"
+}
+[2025-10-18T13:19:19.430Z] 📝 [LOG] ✅ [validateElementDimensions] Using existing Z value: 0cm
+[2025-10-18T13:19:19.430Z] 📝 [LOG] 🔧 [EnhancedCabinet3D] Using default Z position: 0cm for base-cabinet-60-1760788664528 (base cabinet)
+[2025-10-18T13:19:19.431Z] 📝 [LOG] 🔍 [validateElementDimensions] Processing element base-cabinet-80-1760788686425: {
+  "elementZ": 0,
+  "isUndefined": false,
+  "isNaN": false,
+  "elementType": "cabinet"
+}
+[2025-10-18T13:19:19.431Z] 📝 [LOG] ✅ [validateElementDimensions] Using existing Z value: 0cm
+[2025-10-18T13:19:19.431Z] 📝 [LOG] 🔧 [EnhancedCabinet3D] Using default Z position: 0cm for base-cabinet-80-1760788686425 (base cabinet)
+[2025-10-18T13:19:19.432Z] 📝 [LOG] 🔍 [validateElementDimensions] Processing element new-corner-wall-cabinet-60-1760788779197: {
+  "elementZ": 140,
+  "isUndefined": false,
+  "isNaN": false,
+  "elementType": "cabinet"
+}
+[2025-10-18T13:19:19.432Z] 📝 [LOG] ✅ [validateElementDimensions] Using existing Z value: 140cm
+[2025-10-18T13:19:19.432Z] 📝 [LOG] ✅ [EnhancedCabinet3D] Using custom Z position: 140cm for new-corner-wall-cabinet-60-1760788779197
+[2025-10-18T13:19:19.433Z] 📝 [LOG] 🔍 [validateElementDimensions] Processing element wall-cabinet-30-1760788788486: {
+  "elementZ": 140,
+  "isUndefined": false,
+  "isNaN": false,
+  "elementType": "cabinet"
+}
+[2025-10-18T13:19:19.434Z] 📝 [LOG] ✅ [validateElementDimensions] Using existing Z value: 140cm
+[2025-10-18T13:19:19.434Z] 📝 [LOG] ✅ [EnhancedCabinet3D] Using custom Z position: 140cm for wall-cabinet-30-1760788788486
+[2025-10-18T13:19:19.435Z] 📝 [LOG] 🔍 [validateElementDimensions] Processing element wall-cabinet-40-1760788795319: {
+  "elementZ": 140,
+  "isUndefined": false,
+  "isNaN": false,
+  "elementType": "cabinet"
+}
+[2025-10-18T13:19:19.436Z] 📝 [LOG] ✅ [validateElementDimensions] Using existing Z value: 140cm
+[2025-10-18T13:19:19.436Z] 📝 [LOG] ✅ [EnhancedCabinet3D] Using custom Z position: 140cm for wall-cabinet-40-1760788795319
+[2025-10-18T13:19:19.436Z] 📝 [LOG] 🔍 [validateElementDimensions] Processing element wall-cabinet-50-1760788802405: {
+  "elementZ": 140,
+  "isUndefined": false,
+  "isNaN": false,
+  "elementType": "cabinet"
+}
+[2025-10-18T13:19:19.437Z] 📝 [LOG] ✅ [validateElementDimensions] Using existing Z value: 140cm
+[2025-10-18T13:19:19.437Z] 📝 [LOG] ✅ [EnhancedCabinet3D] Using custom Z position: 140cm for wall-cabinet-50-1760788802405
+[2025-10-18T13:19:19.437Z] 📝 [LOG] 🔍 [validateElementDimensions] Processing element wall-cabinet-60-1760788808433: {
+  "elementZ": 140,
+  "isUndefined": false,
+  "isNaN": false,
+  "elementType": "cabinet"
+}
+[2025-10-18T13:19:19.438Z] 📝 [LOG] ✅ [validateElementDimensions] Using existing Z value: 140cm
+[2025-10-18T13:19:19.438Z] 📝 [LOG] ✅ [EnhancedCabinet3D] Using custom Z position: 140cm for wall-cabinet-60-1760788808433
+[2025-10-18T13:19:19.439Z] 📝 [LOG] 🔍 [validateElementDimensions] Processing element wall-cabinet-80-1760788814537: {
+  "elementZ": 140,
+  "isUndefined": false,
+  "isNaN": false,
+  "elementType": "cabinet"
+}
+[2025-10-18T13:19:19.439Z] 📝 [LOG] ✅ [validateElementDimensions] Using existing Z value: 140cm
+[2025-10-18T13:19:19.439Z] 📝 [LOG] ✅ [EnhancedCabinet3D] Using custom Z position: 140cm for wall-cabinet-80-1760788814537
+[2025-10-18T13:19:19.440Z] 📝 [LOG] 🔍 [validateElementDimensions] Processing element dishwasher-1760788869471: {
+  "elementZ": 0,
+  "isUndefined": false,
+  "isNaN": false,
+  "elementType": "appliance"
+}
+[2025-10-18T13:19:19.440Z] 📝 [LOG] ✅ [validateElementDimensions] Using existing Z value: 0cm
+[2025-10-18T13:19:19.440Z] 📝 [LOG] 🔧 [EnhancedAppliance3D] Using default Z position: 0cm for dishwasher-1760788869471 (floor level)
+[2025-10-18T13:19:19.443Z] 📝 [LOG] 🔍 [validateElementDimensions] Processing element dishwasher-60-1760788873637: {
+  "elementZ": 0,
+  "isUndefined": false,
+  "isNaN": false,
+  "elementType": "appliance"
+}
+[2025-10-18T13:19:19.443Z] 📝 [LOG] ✅ [validateElementDimensions] Using existing Z value: 0cm
+[2025-10-18T13:19:19.444Z] 📝 [LOG] 🔧 [EnhancedAppliance3D] Using default Z position: 0cm for dishwasher-60-1760788873637 (floor level)
+[2025-10-18T13:19:19.444Z] 📝 [LOG] 🔍 [validateElementDimensions] Processing element fridge-90-1760788877593: {
+  "elementZ": 0,
+  "isUndefined": false,
+  "isNaN": false,
+  "elementType": "appliance"
+}
+[2025-10-18T13:19:19.445Z] 📝 [LOG] ✅ [validateElementDimensions] Using existing Z value: 0cm
+[2025-10-18T13:19:19.445Z] 📝 [LOG] 🔧 [EnhancedAppliance3D] Using default Z position: 0cm for fridge-90-1760788877593 (floor level)
+[2025-10-18T13:19:19.446Z] 📝 [LOG] 🔍 [validateElementDimensions] Processing element larder-oven-microwave-1760788897494: {
+  "elementZ": 0,
+  "isUndefined": false,
+  "isNaN": false,
+  "elementType": "appliance"
+}
+[2025-10-18T13:19:19.446Z] 📝 [LOG] ✅ [validateElementDimensions] Using existing Z value: 0cm
+[2025-10-18T13:19:19.446Z] 📝 [LOG] 🔧 [EnhancedAppliance3D] Using default Z position: 0cm for larder-oven-microwave-1760788897494 (floor level)
+[2025-10-18T13:19:19.449Z] 📝 [LOG] 🔍 [validateElementDimensions] Processing element l-shaped-test-cabinet-90-1760790249209: {
+  "elementZ": 0,
+  "isUndefined": false,
+  "isNaN": false,
+  "elementType": "cabinet"
+}
+[2025-10-18T13:19:19.450Z] 📝 [LOG] ✅ [validateElementDimensions] Using existing Z value: 0cm
+[2025-10-18T13:19:19.450Z] 📝 [LOG] 🔧 [EnhancedCabinet3D] Using default Z position: 0cm for l-shaped-test-cabinet-90-1760790249209 (base cabinet)
+[2025-10-18T13:19:19.451Z] 📝 [LOG] 🔍 [validateElementDimensions] Processing element l-shaped-test-cabinet-90-1760792471952: {
+  "elementZ": 0,
+  "isUndefined": false,
+  "isNaN": false,
+  "elementType": "cabinet"
+}
+[2025-10-18T13:19:19.451Z] 📝 [LOG] ✅ [validateElementDimensions] Using existing Z value: 0cm
+[2025-10-18T13:19:19.451Z] 📝 [LOG] 🔧 [EnhancedCabinet3D] Using default Z position: 0cm for l-shaped-test-cabinet-90-1760792471952 (base cabinet)
+[2025-10-18T13:19:19.452Z] 📝 [LOG] 🔍 [validateElementDimensions] Processing element base-cabinet-50-1760792508921: {
+  "elementZ": 0,
+  "isUndefined": false,
+  "isNaN": false,
+  "elementType": "cabinet"
+}
+[2025-10-18T13:19:19.452Z] 📝 [LOG] ✅ [validateElementDimensions] Using existing Z value: 0cm
+[2025-10-18T13:19:19.453Z] 📝 [LOG] 🔧 [EnhancedCabinet3D] Using default Z position: 0cm for base-cabinet-50-1760792508921 (base cabinet)
+[2025-10-18T13:19:20.917Z] 📝 [LOG] 🔍 [validateElementDimensions] Processing element base-cabinet-30-1760788641585: {
+  "elementZ": 0,
+  "isUndefined": false,
+  "isNaN": false,
+  "elementType": "cabinet"
+}
+[2025-10-18T13:19:20.918Z] 📝 [LOG] ✅ [validateElementDimensions] Using existing Z value: 0cm
+[2025-10-18T13:19:20.918Z] 📝 [LOG] 🔧 [EnhancedCabinet3D] Using default Z position: 0cm for base-cabinet-30-1760788641585 (base cabinet)
+[2025-10-18T13:19:20.919Z] 📝 [LOG] 🔍 [validateElementDimensions] Processing element base-cabinet-40-1760788646697: {
+  "elementZ": 0,
+  "isUndefined": false,
+  "isNaN": false,
+  "elementType": "cabinet"
+}
+[2025-10-18T13:19:20.919Z] 📝 [LOG] ✅ [validateElementDimensions] Using existing Z value: 0cm
+[2025-10-18T13:19:20.919Z] 📝 [LOG] 🔧 [EnhancedCabinet3D] Using default Z position: 0cm for base-cabinet-40-1760788646697 (base cabinet)
+[2025-10-18T13:19:20.920Z] 📝 [LOG] 🔍 [validateElementDimensions] Processing element base-cabinet-50-1760788652937: {
+  "elementZ": 0,
+  "isUndefined": false,
+  "isNaN": false,
+  "elementType": "cabinet"
+}
+[2025-10-18T13:19:20.920Z] 📝 [LOG] ✅ [validateElementDimensions] Using existing Z value: 0cm
+[2025-10-18T13:19:20.920Z] 📝 [LOG] 🔧 [EnhancedCabinet3D] Using default Z position: 0cm for base-cabinet-50-1760788652937 (base cabinet)
+[2025-10-18T13:19:20.921Z] 📝 [LOG] 🔍 [validateElementDimensions] Processing element base-cabinet-60-1760788664528: {
+  "elementZ": 0,
+  "isUndefined": false,
+  "isNaN": false,
+  "elementType": "cabinet"
+}
+[2025-10-18T13:19:20.921Z] 📝 [LOG] ✅ [validateElementDimensions] Using existing Z value: 0cm
+[2025-10-18T13:19:20.922Z] 📝 [LOG] 🔧 [EnhancedCabinet3D] Using default Z position: 0cm for base-cabinet-60-1760788664528 (base cabinet)
+[2025-10-18T13:19:20.922Z] 📝 [LOG] 🔍 [validateElementDimensions] Processing element base-cabinet-80-1760788686425: {
+  "elementZ": 0,
+  "isUndefined": false,
+  "isNaN": false,
+  "elementType": "cabinet"
+}
+[2025-10-18T13:19:20.923Z] 📝 [LOG] ✅ [validateElementDimensions] Using existing Z value: 0cm
+[2025-10-18T13:19:20.923Z] 📝 [LOG] 🔧 [EnhancedCabinet3D] Using default Z position: 0cm for base-cabinet-80-1760788686425 (base cabinet)
+[2025-10-18T13:19:20.924Z] 📝 [LOG] 🔍 [validateElementDimensions] Processing element new-corner-wall-cabinet-60-1760788779197: {
+  "elementZ": 140,
+  "isUndefined": false,
+  "isNaN": false,
+  "elementType": "cabinet"
+}
+[2025-10-18T13:19:20.924Z] 📝 [LOG] ✅ [validateElementDimensions] Using existing Z value: 140cm
+[2025-10-18T13:19:20.925Z] 📝 [LOG] ✅ [EnhancedCabinet3D] Using custom Z position: 140cm for new-corner-wall-cabinet-60-1760788779197
+[2025-10-18T13:19:20.925Z] 📝 [LOG] 🔍 [validateElementDimensions] Processing element wall-cabinet-30-1760788788486: {
+  "elementZ": 140,
+  "isUndefined": false,
+  "isNaN": false,
+  "elementType": "cabinet"
+}
+[2025-10-18T13:19:20.925Z] 📝 [LOG] ✅ [validateElementDimensions] Using existing Z value: 140cm
+[2025-10-18T13:19:20.926Z] 📝 [LOG] ✅ [EnhancedCabinet3D] Using custom Z position: 140cm for wall-cabinet-30-1760788788486
+[2025-10-18T13:19:20.927Z] 📝 [LOG] 🔍 [validateElementDimensions] Processing element wall-cabinet-40-1760788795319: {
+  "elementZ": 140,
+  "isUndefined": false,
+  "isNaN": false,
+  "elementType": "cabinet"
+}
+[2025-10-18T13:19:20.927Z] 📝 [LOG] ✅ [validateElementDimensions] Using existing Z value: 140cm
+[2025-10-18T13:19:20.928Z] 📝 [LOG] ✅ [EnhancedCabinet3D] Using custom Z position: 140cm for wall-cabinet-40-1760788795319
+[2025-10-18T13:19:20.928Z] 📝 [LOG] 🔍 [validateElementDimensions] Processing element wall-cabinet-50-1760788802405: {
+  "elementZ": 140,
+  "isUndefined": false,
+  "isNaN": false,
+  "elementType": "cabinet"
+}
+[2025-10-18T13:19:20.929Z] 📝 [LOG] ✅ [validateElementDimensions] Using existing Z value: 140cm
+[2025-10-18T13:19:20.929Z] 📝 [LOG] ✅ [EnhancedCabinet3D] Using custom Z position: 140cm for wall-cabinet-50-1760788802405
+[2025-10-18T13:19:20.930Z] 📝 [LOG] 🔍 [validateElementDimensions] Processing element wall-cabinet-60-1760788808433: {
+  "elementZ": 140,
+  "isUndefined": false,
+  "isNaN": false,
+  "elementType": "cabinet"
+}
+[2025-10-18T13:19:20.930Z] 📝 [LOG] ✅ [validateElementDimensions] Using existing Z value: 140cm
+[2025-10-18T13:19:20.931Z] 📝 [LOG] ✅ [EnhancedCabinet3D] Using custom Z position: 140cm for wall-cabinet-60-1760788808433
+[2025-10-18T13:19:20.931Z] 📝 [LOG] 🔍 [validateElementDimensions] Processing element wall-cabinet-80-1760788814537: {
+  "elementZ": 140,
+  "isUndefined": false,
+  "isNaN": false,
+  "elementType": "cabinet"
+}
+[2025-10-18T13:19:20.932Z] 📝 [LOG] ✅ [validateElementDimensions] Using existing Z value: 140cm
+[2025-10-18T13:19:20.932Z] 📝 [LOG] ✅ [EnhancedCabinet3D] Using custom Z position: 140cm for wall-cabinet-80-1760788814537
+[2025-10-18T13:19:20.935Z] 📝 [LOG] 🔍 [validateElementDimensions] Processing element dishwasher-1760788869471: {
+  "elementZ": 0,
+  "isUndefined": false,
+  "isNaN": false,
+  "elementType": "appliance"
+}
+[2025-10-18T13:19:20.935Z] 📝 [LOG] ✅ [validateElementDimensions] Using existing Z value: 0cm
+[2025-10-18T13:19:20.935Z] 📝 [LOG] 🔧 [EnhancedAppliance3D] Using default Z position: 0cm for dishwasher-1760788869471 (floor level)
+[2025-10-18T13:19:20.936Z] 📝 [LOG] 🔍 [validateElementDimensions] Processing element dishwasher-60-1760788873637: {
+  "elementZ": 0,
+  "isUndefined": false,
+  "isNaN": false,
+  "elementType": "appliance"
+}
+[2025-10-18T13:19:20.937Z] 📝 [LOG] ✅ [validateElementDimensions] Using existing Z value: 0cm
+[2025-10-18T13:19:20.937Z] 📝 [LOG] 🔧 [EnhancedAppliance3D] Using default Z position: 0cm for dishwasher-60-1760788873637 (floor level)
+[2025-10-18T13:19:20.938Z] 📝 [LOG] 🔍 [validateElementDimensions] Processing element fridge-90-1760788877593: {
+  "elementZ": 0,
+  "isUndefined": false,
+  "isNaN": false,
+  "elementType": "appliance"
+}
+[2025-10-18T13:19:20.939Z] 📝 [LOG] ✅ [validateElementDimensions] Using existing Z value: 0cm
+[2025-10-18T13:19:20.939Z] 📝 [LOG] 🔧 [EnhancedAppliance3D] Using default Z position: 0cm for fridge-90-1760788877593 (floor level)
+[2025-10-18T13:19:20.942Z] 📝 [LOG] 🔍 [validateElementDimensions] Processing element larder-oven-microwave-1760788897494: {
+  "elementZ": 0,
+  "isUndefined": false,
+  "isNaN": false,
+  "elementType": "appliance"
+}
+[2025-10-18T13:19:20.942Z] 📝 [LOG] ✅ [validateElementDimensions] Using existing Z value: 0cm
+[2025-10-18T13:19:20.943Z] 📝 [LOG] 🔧 [EnhancedAppliance3D] Using default Z position: 0cm for larder-oven-microwave-1760788897494 (floor level)
+[2025-10-18T13:19:20.944Z] 📝 [LOG] 🔍 [validateElementDimensions] Processing element l-shaped-test-cabinet-90-1760790249209: {
+  "elementZ": 0,
+  "isUndefined": false,
+  "isNaN": false,
+  "elementType": "cabinet"
+}
+[2025-10-18T13:19:20.944Z] 📝 [LOG] ✅ [validateElementDimensions] Using existing Z value: 0cm
+[2025-10-18T13:19:20.945Z] 📝 [LOG] 🔧 [EnhancedCabinet3D] Using default Z position: 0cm for l-shaped-test-cabinet-90-1760790249209 (base cabinet)
+[2025-10-18T13:19:20.946Z] 📝 [LOG] 🔍 [validateElementDimensions] Processing element l-shaped-test-cabinet-90-1760792471952: {
+  "elementZ": 0,
+  "isUndefined": false,
+  "isNaN": false,
+  "elementType": "cabinet"
+}
+[2025-10-18T13:19:20.946Z] 📝 [LOG] ✅ [validateElementDimensions] Using existing Z value: 0cm
+[2025-10-18T13:19:20.947Z] 📝 [LOG] 🔧 [EnhancedCabinet3D] Using default Z position: 0cm for l-shaped-test-cabinet-90-1760792471952 (base cabinet)
+[2025-10-18T13:19:20.949Z] 📝 [LOG] 🔍 [validateElementDimensions] Processing element base-cabinet-50-1760792508921: {
+  "elementZ": 0,
+  "isUndefined": false,
+  "isNaN": false,
+  "elementType": "cabinet"
+}
+[2025-10-18T13:19:20.950Z] 📝 [LOG] ✅ [validateElementDimensions] Using existing Z value: 0cm
+[2025-10-18T13:19:20.950Z] 📝 [LOG] 🔧 [EnhancedCabinet3D] Using default Z position: 0cm for base-cabinet-50-1760792508921 (base cabinet)
+[2025-10-18T13:19:20.954Z] 📝 [LOG] [EnhancedCabinet3D] Dynamic 3D models ENABLED
+[2025-10-18T13:19:20.954Z] 📝 [LOG] [EnhancedCabinet3D] Dynamic 3D models ENABLED
+[2025-10-18T13:19:20.954Z] 📝 [LOG] [EnhancedCabinet3D] Dynamic 3D models ENABLED
+[2025-10-18T13:19:20.955Z] 📝 [LOG] [EnhancedCabinet3D] Dynamic 3D models ENABLED
+[2025-10-18T13:19:20.956Z] 📝 [LOG] [EnhancedCabinet3D] Dynamic 3D models ENABLED
+[2025-10-18T13:19:20.956Z] 📝 [LOG] [EnhancedCabinet3D] Dynamic 3D models ENABLED
+[2025-10-18T13:19:20.956Z] 📝 [LOG] [EnhancedCabinet3D] Dynamic 3D models ENABLED
+[2025-10-18T13:19:20.957Z] 📝 [LOG] [EnhancedCabinet3D] Dynamic 3D models ENABLED
+[2025-10-18T13:19:20.957Z] 📝 [LOG] [EnhancedCabinet3D] Dynamic 3D models ENABLED
+[2025-10-18T13:19:20.957Z] 📝 [LOG] [EnhancedCabinet3D] Dynamic 3D models ENABLED
+[2025-10-18T13:19:20.958Z] 📝 [LOG] [EnhancedCabinet3D] Dynamic 3D models ENABLED
+[2025-10-18T13:19:20.958Z] 📝 [LOG] [EnhancedCabinet3D] Dynamic 3D models ENABLED
+[2025-10-18T13:19:20.959Z] 📝 [LOG] [EnhancedCabinet3D] Dynamic 3D models ENABLED
+[2025-10-18T13:19:20.959Z] 📝 [LOG] [EnhancedCabinet3D] Dynamic 3D models ENABLED
+[2025-10-18T13:19:20.962Z] 📝 [LOG] [EnhancedCabinet3D] Rendering base-cabinet-30-1760788641585 with DynamicComponentRenderer
+[2025-10-18T13:19:20.963Z] 📝 [LOG] [ComponentIDMapper] Mapped 'base-cabinet-30-1760788641585' (30cm) -> 'base-cabinet-30' using: Standard base cabinets (30, 40, 50, 60, 80, 100cm)
+[2025-10-18T13:19:20.963Z] 📝 [LOG] [EnhancedCabinet3D] Rendering base-cabinet-40-1760788646697 with DynamicComponentRenderer
+[2025-10-18T13:19:20.964Z] 📝 [LOG] [ComponentIDMapper] Mapped 'base-cabinet-40-1760788646697' (40cm) -> 'base-cabinet-40' using: Standard base cabinets (30, 40, 50, 60, 80, 100cm)
+[2025-10-18T13:19:20.964Z] 📝 [LOG] [EnhancedCabinet3D] Rendering base-cabinet-50-1760788652937 with DynamicComponentRenderer
+[2025-10-18T13:19:20.965Z] 📝 [LOG] [ComponentIDMapper] Mapped 'base-cabinet-50-1760788652937' (50cm) -> 'base-cabinet-50' using: Standard base cabinets (30, 40, 50, 60, 80, 100cm)
+[2025-10-18T13:19:20.965Z] 📝 [LOG] [EnhancedCabinet3D] Rendering base-cabinet-60-1760788664528 with DynamicComponentRenderer
+[2025-10-18T13:19:20.966Z] 📝 [LOG] [ComponentIDMapper] Mapped 'base-cabinet-60-1760788664528' (60cm) -> 'base-cabinet-60' using: Standard base cabinets (30, 40, 50, 60, 80, 100cm)
+[2025-10-18T13:19:20.966Z] 📝 [LOG] [EnhancedCabinet3D] Rendering base-cabinet-80-1760788686425 with DynamicComponentRenderer
+[2025-10-18T13:19:20.966Z] 📝 [LOG] [ComponentIDMapper] Mapped 'base-cabinet-80-1760788686425' (80cm) -> 'base-cabinet-80' using: Standard base cabinets (30, 40, 50, 60, 80, 100cm)
+[2025-10-18T13:19:20.967Z] 📝 [LOG] [EnhancedCabinet3D] Rendering new-corner-wall-cabinet-60-1760788779197 with DynamicComponentRenderer
+[2025-10-18T13:19:20.967Z] 📝 [LOG] [ComponentIDMapper] Mapped 'new-corner-wall-cabinet-60-1760788779197' (60cm) -> 'new-corner-wall-cabinet-60' using: Corner wall cabinets (60cm, 90cm)
+[2025-10-18T13:19:20.968Z] 📝 [LOG] [EnhancedCabinet3D] Rendering wall-cabinet-30-1760788788486 with DynamicComponentRenderer
+[2025-10-18T13:19:20.968Z] 📝 [LOG] [ComponentIDMapper] Mapped 'wall-cabinet-30-1760788788486' (30cm) -> 'wall-cabinet-30' using: Standard wall cabinets (30, 40, 50, 60, 80cm)
+[2025-10-18T13:19:20.968Z] 📝 [LOG] [EnhancedCabinet3D] Rendering wall-cabinet-40-1760788795319 with DynamicComponentRenderer
+[2025-10-18T13:19:20.969Z] 📝 [LOG] [ComponentIDMapper] Mapped 'wall-cabinet-40-1760788795319' (40cm) -> 'wall-cabinet-40' using: Standard wall cabinets (30, 40, 50, 60, 80cm)
+[2025-10-18T13:19:20.969Z] 📝 [LOG] [EnhancedCabinet3D] Rendering wall-cabinet-50-1760788802405 with DynamicComponentRenderer
+[2025-10-18T13:19:20.970Z] 📝 [LOG] [ComponentIDMapper] Mapped 'wall-cabinet-50-1760788802405' (50cm) -> 'wall-cabinet-50' using: Standard wall cabinets (30, 40, 50, 60, 80cm)
+[2025-10-18T13:19:20.970Z] 📝 [LOG] [EnhancedCabinet3D] Rendering wall-cabinet-60-1760788808433 with DynamicComponentRenderer
+[2025-10-18T13:19:20.971Z] 📝 [LOG] [ComponentIDMapper] Mapped 'wall-cabinet-60-1760788808433' (60cm) -> 'wall-cabinet-60' using: Standard wall cabinets (30, 40, 50, 60, 80cm)
+[2025-10-18T13:19:20.971Z] 📝 [LOG] [EnhancedCabinet3D] Rendering wall-cabinet-80-1760788814537 with DynamicComponentRenderer
+[2025-10-18T13:19:20.972Z] 📝 [LOG] [ComponentIDMapper] Mapped 'wall-cabinet-80-1760788814537' (80cm) -> 'wall-cabinet-80' using: Standard wall cabinets (30, 40, 50, 60, 80cm)
+[2025-10-18T13:19:20.972Z] 📝 [LOG] [EnhancedCabinet3D] Rendering l-shaped-test-cabinet-90-1760790249209 with DynamicComponentRenderer
+[2025-10-18T13:19:20.972Z] 📝 [LOG] [ComponentIDMapper] Mapped 'l-shaped-test-cabinet-90-1760790249209' (90cm) -> 'l-shaped-test-cabinet-90' using: Corner base cabinets / L-shaped test cabinet (60cm, 90cm)
+[2025-10-18T13:19:20.973Z] 📝 [LOG] [EnhancedCabinet3D] Rendering l-shaped-test-cabinet-90-1760792471952 with DynamicComponentRenderer
+[2025-10-18T13:19:20.973Z] 📝 [LOG] [ComponentIDMapper] Mapped 'l-shaped-test-cabinet-90-1760792471952' (90cm) -> 'l-shaped-test-cabinet-90' using: Corner base cabinets / L-shaped test cabinet (60cm, 90cm)
+[2025-10-18T13:19:20.974Z] 📝 [LOG] [EnhancedCabinet3D] Rendering base-cabinet-50-1760792508921 with DynamicComponentRenderer
+[2025-10-18T13:19:20.974Z] 📝 [LOG] [ComponentIDMapper] Mapped 'base-cabinet-50-1760792508921' (50cm) -> 'base-cabinet-50' using: Standard base cabinets (30, 40, 50, 60, 80, 100cm)
+[2025-10-18T13:19:21.086Z] 📝 [LOG] [Model3DLoader] Cache hit for model: base-cabinet-60
+[2025-10-18T13:19:21.087Z] 📝 [LOG] [Model3DLoader] Cache hit for model: base-cabinet-80
+[2025-10-18T13:19:21.087Z] 📝 [LOG] [Model3DLoader] Cache hit for model: new-corner-wall-cabinet-60
+[2025-10-18T13:19:21.087Z] 📝 [LOG] [Model3DLoader] Cache hit for model: wall-cabinet-60
+[2025-10-18T13:19:21.088Z] 📝 [LOG] [Model3DLoader] Cache hit for model: wall-cabinet-80
+[2025-10-18T13:19:21.088Z] 📝 [LOG] [Model3DLoader] Cache hit for model: l-shaped-test-cabinet-90
+[2025-10-18T13:19:21.089Z] 📝 [LOG] [Model3DLoader] Cache hit for model: l-shaped-test-cabinet-90
+[2025-10-18T13:19:21.089Z] 📝 [LOG] [Model3DLoader] Cache hit for geometry: f8ac534e-6911-477b-bbf3-5c66afa03ed8
+[2025-10-18T13:19:21.090Z] 📝 [LOG] [Model3DLoader] Cache hit for materials
+[2025-10-18T13:19:21.090Z] 📝 [LOG] [Model3DLoader] Cache hit for geometry: 8fef412a-8649-4895-8cd5-fd53d0677ac1
+[2025-10-18T13:19:21.091Z] 📝 [LOG] [Model3DLoader] Cache hit for materials
+[2025-10-18T13:19:21.091Z] 📝 [LOG] [Model3DLoader] Cache hit for geometry: dee1b997-eb19-4228-b69f-7dff6204ae01
+[2025-10-18T13:19:21.091Z] 📝 [LOG] [Model3DLoader] Cache hit for materials
+[2025-10-18T13:19:21.092Z] 📝 [LOG] [Model3DLoader] Cache hit for geometry: 84b234b5-f96f-4080-9b71-b9e66cf41dfb
+[2025-10-18T13:19:21.092Z] 📝 [LOG] [Model3DLoader] Cache hit for materials
+[2025-10-18T13:19:21.093Z] 📝 [LOG] [Model3DLoader] Cache hit for geometry: 540faede-366d-4fa2-b169-97fec6766db4
+[2025-10-18T13:19:21.093Z] 📝 [LOG] [Model3DLoader] Cache hit for materials
+[2025-10-18T13:19:21.094Z] 📝 [LOG] [Model3DLoader] Cache hit for geometry: 6a45d0f6-5116-409a-8ab9-aacebd466a31
+[2025-10-18T13:19:21.094Z] 📝 [LOG] [Model3DLoader] Cache hit for materials
+[2025-10-18T13:19:21.095Z] 📝 [LOG] [Model3DLoader] Cache hit for geometry: 6a45d0f6-5116-409a-8ab9-aacebd466a31
+[2025-10-18T13:19:21.095Z] 📝 [LOG] [Model3DLoader] Cache hit for materials
+[2025-10-18T13:19:21.097Z] 📝 [LOG] [GeometryBuilder] Built 4 geometry parts
+[2025-10-18T13:19:21.098Z] 📝 [LOG] [DynamicRenderer] Built component: base-cabinet-60 (4 parts)
+[2025-10-18T13:19:21.098Z] 📝 [LOG] [GeometryBuilder] Built 4 geometry parts
+[2025-10-18T13:19:21.099Z] 📝 [LOG] [DynamicRenderer] Built component: base-cabinet-80 (4 parts)
+[2025-10-18T13:19:21.099Z] 📝 [LOG] [GeometryBuilder] Built 6 geometry parts
+[2025-10-18T13:19:21.100Z] 📝 [LOG] [DynamicRenderer] Built component: new-corner-wall-cabinet-60 (6 parts)
+[2025-10-18T13:19:21.100Z] 📝 [LOG] [GeometryBuilder] Built 3 geometry parts
+[2025-10-18T13:19:21.101Z] 📝 [LOG] [DynamicRenderer] Built component: wall-cabinet-60 (3 parts)
+[2025-10-18T13:19:21.101Z] 📝 [LOG] [GeometryBuilder] Built 3 geometry parts
+[2025-10-18T13:19:21.102Z] 📝 [LOG] [DynamicRenderer] Built component: wall-cabinet-80 (3 parts)
+[2025-10-18T13:19:21.103Z] 📝 [LOG] [GeometryBuilder] Built 8 geometry parts
+[2025-10-18T13:19:21.103Z] 📝 [LOG] [DynamicRenderer] Built component: l-shaped-test-cabinet-90 (8 parts)
+[2025-10-18T13:19:21.104Z] 📝 [LOG] [GeometryBuilder] Built 8 geometry parts
+[2025-10-18T13:19:21.104Z] 📝 [LOG] [DynamicRenderer] Built component: l-shaped-test-cabinet-90 (8 parts)
+[2025-10-18T13:19:21.135Z] 📝 [LOG] ✅ [EnhancedAppliance3D] Loaded color from database: #e0e0e0 for dishwasher
+[2025-10-18T13:19:21.138Z] 📝 [LOG] 🔍 [validateElementDimensions] Processing element dishwasher-1760788869471: {
+  "elementZ": 0,
+  "isUndefined": false,
+  "isNaN": false,
+  "elementType": "appliance"
+}
+[2025-10-18T13:19:21.139Z] 📝 [LOG] ✅ [validateElementDimensions] Using existing Z value: 0cm
+[2025-10-18T13:19:21.139Z] 📝 [LOG] 🔧 [EnhancedAppliance3D] Using default Z position: 0cm for dishwasher-1760788869471 (floor level)
+[2025-10-18T13:19:21.169Z] 📝 [LOG] ✅ [EnhancedAppliance3D] Loaded color from database: #e0e0e0 for dishwasher
+[2025-10-18T13:19:21.169Z] 📝 [LOG] 🔍 [validateElementDimensions] Processing element dishwasher-60-1760788873637: {
+  "elementZ": 0,
+  "isUndefined": false,
+  "isNaN": false,
+  "elementType": "appliance"
+}
+[2025-10-18T13:19:21.170Z] 📝 [LOG] ✅ [validateElementDimensions] Using existing Z value: 0cm
+[2025-10-18T13:19:21.170Z] 📝 [LOG] 🔧 [EnhancedAppliance3D] Using default Z position: 0cm for dishwasher-60-1760788873637 (floor level)
+[2025-10-18T13:19:21.193Z] 📝 [LOG] ✅ [EnhancedAppliance3D] Loaded color from database: #2c2c2c for oven
+[2025-10-18T13:19:21.195Z] 📝 [LOG] 🔍 [validateElementDimensions] Processing element larder-oven-microwave-1760788897494: {
+  "elementZ": 0,
+  "isUndefined": false,
+  "isNaN": false,
+  "elementType": "appliance"
+}
+[2025-10-18T13:19:21.195Z] 📝 [LOG] ✅ [validateElementDimensions] Using existing Z value: 0cm
+[2025-10-18T13:19:21.196Z] 📝 [LOG] 🔧 [EnhancedAppliance3D] Using default Z position: 0cm for larder-oven-microwave-1760788897494 (floor level)
+[2025-10-18T13:19:21.200Z] 📝 [LOG] [Model3DLoader] Loaded model from database: base-cabinet-40
+[2025-10-18T13:19:21.201Z] 📝 [LOG] [Model3DLoader] Cache hit for materials
+[2025-10-18T13:19:21.203Z] ⚠️ [WARN] [ComponentTypeService] Appliance type not found: generic {
+  "code": "PGRST116",
+  "details": "The result contains 0 rows",
+  "hint": null,
+  "message": "Cannot coerce the result to a single JSON object"
+}
+[2025-10-18T13:19:21.204Z] 📝 [LOG] [Model3DLoader] Loaded model from database: wall-cabinet-40
+[2025-10-18T13:19:21.205Z] 📝 [LOG] [Model3DLoader] Cache hit for materials
+[2025-10-18T13:19:21.205Z] 📝 [LOG] [Model3DLoader] Loaded model from database: wall-cabinet-30
+[2025-10-18T13:19:21.206Z] 📝 [LOG] [Model3DLoader] Cache hit for materials
+[2025-10-18T13:19:21.207Z] 📝 [LOG] [Model3DLoader] Loaded model from database: base-cabinet-50
+[2025-10-18T13:19:21.207Z] 📝 [LOG] [Model3DLoader] Cache hit for materials
+[2025-10-18T13:19:21.209Z] 📝 [LOG] [Model3DLoader] Loaded model from database: wall-cabinet-50
+[2025-10-18T13:19:21.210Z] 📝 [LOG] [Model3DLoader] Cache hit for materials
+[2025-10-18T13:19:21.214Z] 📝 [LOG] [Model3DLoader] Loaded model from database: base-cabinet-30
+[2025-10-18T13:19:21.215Z] 📝 [LOG] [Model3DLoader] Cache hit for materials
+[2025-10-18T13:19:21.234Z] 📝 [LOG] [Model3DLoader] Loaded model from database: base-cabinet-50
+[2025-10-18T13:19:21.235Z] 📝 [LOG] [Model3DLoader] Cache hit for materials
+[2025-10-18T13:19:21.261Z] 📝 [LOG] [Model3DLoader] Loaded 4 geometry parts for model: ba0d987f-fddd-4e7f-906e-696e4608fb80
+[2025-10-18T13:19:21.262Z] 📝 [LOG] [GeometryBuilder] Built 4 geometry parts
+[2025-10-18T13:19:21.262Z] 📝 [LOG] [DynamicRenderer] Built component: base-cabinet-40 (4 parts)
+[2025-10-18T13:19:21.266Z] ⚠️ [WARN] [ComponentTypeService] Furniture type not found: generic {
+  "code": "PGRST116",
+  "details": "The result contains 0 rows",
+  "hint": null,
+  "message": "Cannot coerce the result to a single JSON object"
+}
+[2025-10-18T13:19:21.273Z] 📝 [LOG] [Model3DLoader] Loaded 3 geometry parts for model: 8e855643-889f-4175-bd24-49bc687c9b68
+[2025-10-18T13:19:21.275Z] 📝 [LOG] [GeometryBuilder] Built 3 geometry parts
+[2025-10-18T13:19:21.275Z] 📝 [LOG] [DynamicRenderer] Built component: wall-cabinet-30 (3 parts)
+[2025-10-18T13:19:21.277Z] 📝 [LOG] [Model3DLoader] Loaded 3 geometry parts for model: d2960747-e61c-4df5-b56d-4a06f513d9c1
+[2025-10-18T13:19:21.278Z] 📝 [LOG] [GeometryBuilder] Built 3 geometry parts
+[2025-10-18T13:19:21.279Z] 📝 [LOG] [DynamicRenderer] Built component: wall-cabinet-40 (3 parts)
+[2025-10-18T13:19:21.279Z] 📝 [LOG] [Model3DLoader] Loaded 3 geometry parts for model: 0733d7f4-78d1-46a2-a638-92ed940bd0f7
+[2025-10-18T13:19:21.280Z] 📝 [LOG] [GeometryBuilder] Built 3 geometry parts
+[2025-10-18T13:19:21.280Z] 📝 [LOG] [DynamicRenderer] Built component: wall-cabinet-50 (3 parts)
+[2025-10-18T13:19:21.284Z] 📝 [LOG] [Model3DLoader] Loaded 4 geometry parts for model: 520dc8d6-d9a7-4009-b755-761634410954
+[2025-10-18T13:19:21.284Z] 📝 [LOG] [GeometryBuilder] Built 4 geometry parts
+[2025-10-18T13:19:21.285Z] 📝 [LOG] [DynamicRenderer] Built component: base-cabinet-50 (4 parts)
+[2025-10-18T13:19:21.288Z] 📝 [LOG] [Model3DLoader] Loaded 4 geometry parts for model: a8c47a62-5286-4dad-8773-494724766939
+[2025-10-18T13:19:21.289Z] 📝 [LOG] [GeometryBuilder] Built 4 geometry parts
+[2025-10-18T13:19:21.289Z] 📝 [LOG] [DynamicRenderer] Built component: base-cabinet-30 (4 parts)
+[2025-10-18T13:19:21.309Z] 📝 [LOG] [Model3DLoader] Loaded 4 geometry parts for model: 520dc8d6-d9a7-4009-b755-761634410954
+[2025-10-18T13:19:21.310Z] 📝 [LOG] [GeometryBuilder] Built 4 geometry parts
+[2025-10-18T13:19:21.310Z] 📝 [LOG] [DynamicRenderer] Built component: base-cabinet-50 (4 parts)
+[2025-10-18T13:19:25.628Z] 📝 [LOG] 💾 [ProjectContext] Auto-saving design...
+[2025-10-18T13:19:25.629Z] 📝 [LOG] 💾 [ProjectContext] Saving current design... {
+  "roomId": "ff110bba-6ec1-4a40-a799-b8d4aa0b6d1f",
+  "showNotification": false
+}
+[2025-10-18T13:19:25.714Z] 📝 [LOG] ✅ [CompactComponentSidebar] Component sidebar rendered successfully
+[2025-10-18T13:19:25.714Z] 📝 [LOG] ✅ [CompactComponentSidebar] Summary: 226 total, 126 for kitchen, 10 categories
+[2025-10-18T13:19:25.723Z] 📝 [LOG] 🎨 [3D VIEW DEBUG] Filtering elements: {
+  "totalElements": 18,
+  "hiddenElementIds": [],
+  "view3DConfig": {
+    "id": "3d",
+    "label": "3D View",
+    "direction": "3d",
+    "is_default": true,
+    "sort_order": 5,
+    "hidden_elements": []
+  },
+  "elevationViewsProp": "provided"
+}
+[2025-10-18T13:19:25.723Z] 📝 [LOG] 🎨 [3D VIEW DEBUG] Visible elements after filtering: {
+  "afterVisibilityFilter": 18,
+  "afterPerformanceLimit": 18
+}
+[2025-10-18T13:19:25.725Z] 📝 [LOG] 🎯 [PerformanceMonitor] Performance monitor hidden
+[2025-10-18T13:19:25.732Z] 📝 [LOG] [EnhancedCabinet3D] Rendering base-cabinet-30-1760788641585 with DynamicComponentRenderer
+[2025-10-18T13:19:25.733Z] 📝 [LOG] [EnhancedCabinet3D] Rendering base-cabinet-40-1760788646697 with DynamicComponentRenderer
+[2025-10-18T13:19:25.734Z] 📝 [LOG] [EnhancedCabinet3D] Rendering base-cabinet-50-1760788652937 with DynamicComponentRenderer
+[2025-10-18T13:19:25.734Z] 📝 [LOG] [EnhancedCabinet3D] Rendering base-cabinet-60-1760788664528 with DynamicComponentRenderer
+[2025-10-18T13:19:25.735Z] 📝 [LOG] [EnhancedCabinet3D] Rendering base-cabinet-80-1760788686425 with DynamicComponentRenderer
+[2025-10-18T13:19:25.735Z] 📝 [LOG] [EnhancedCabinet3D] Rendering new-corner-wall-cabinet-60-1760788779197 with DynamicComponentRenderer
+[2025-10-18T13:19:25.736Z] 📝 [LOG] [EnhancedCabinet3D] Rendering wall-cabinet-30-1760788788486 with DynamicComponentRenderer
+[2025-10-18T13:19:25.736Z] 📝 [LOG] [EnhancedCabinet3D] Rendering wall-cabinet-40-1760788795319 with DynamicComponentRenderer
+[2025-10-18T13:19:25.737Z] 📝 [LOG] [EnhancedCabinet3D] Rendering wall-cabinet-50-1760788802405 with DynamicComponentRenderer
+[2025-10-18T13:19:25.738Z] 📝 [LOG] [EnhancedCabinet3D] Rendering wall-cabinet-60-1760788808433 with DynamicComponentRenderer
+[2025-10-18T13:19:25.738Z] 📝 [LOG] [EnhancedCabinet3D] Rendering wall-cabinet-80-1760788814537 with DynamicComponentRenderer
+[2025-10-18T13:19:25.739Z] 📝 [LOG] 🔍 [validateElementDimensions] Processing element dishwasher-1760788869471: {
+  "elementZ": 0,
+  "isUndefined": false,
+  "isNaN": false,
+  "elementType": "appliance"
+}
+[2025-10-18T13:19:25.739Z] 📝 [LOG] ✅ [validateElementDimensions] Using existing Z value: 0cm
+[2025-10-18T13:19:25.740Z] 📝 [LOG] 🔧 [EnhancedAppliance3D] Using default Z position: 0cm for dishwasher-1760788869471 (floor level)
+[2025-10-18T13:19:25.741Z] 📝 [LOG] 🔍 [validateElementDimensions] Processing element dishwasher-60-1760788873637: {
+  "elementZ": 0,
+  "isUndefined": false,
+  "isNaN": false,
+  "elementType": "appliance"
+}
+[2025-10-18T13:19:25.741Z] 📝 [LOG] ✅ [validateElementDimensions] Using existing Z value: 0cm
+[2025-10-18T13:19:25.742Z] 📝 [LOG] 🔧 [EnhancedAppliance3D] Using default Z position: 0cm for dishwasher-60-1760788873637 (floor level)
+[2025-10-18T13:19:25.743Z] 📝 [LOG] 🔍 [validateElementDimensions] Processing element fridge-90-1760788877593: {
+  "elementZ": 0,
+  "isUndefined": false,
+  "isNaN": false,
+  "elementType": "appliance"
+}
+[2025-10-18T13:19:25.743Z] 📝 [LOG] ✅ [validateElementDimensions] Using existing Z value: 0cm
+[2025-10-18T13:19:25.744Z] 📝 [LOG] 🔧 [EnhancedAppliance3D] Using default Z position: 0cm for fridge-90-1760788877593 (floor level)
+[2025-10-18T13:19:25.745Z] 📝 [LOG] 🔍 [validateElementDimensions] Processing element larder-oven-microwave-1760788897494: {
+  "elementZ": 0,
+  "isUndefined": false,
+  "isNaN": false,
+  "elementType": "appliance"
+}
+[2025-10-18T13:19:25.745Z] 📝 [LOG] ✅ [validateElementDimensions] Using existing Z value: 0cm
+[2025-10-18T13:19:25.746Z] 📝 [LOG] 🔧 [EnhancedAppliance3D] Using default Z position: 0cm for larder-oven-microwave-1760788897494 (floor level)
+[2025-10-18T13:19:25.746Z] 📝 [LOG] [EnhancedCabinet3D] Rendering l-shaped-test-cabinet-90-1760790249209 with DynamicComponentRenderer
+[2025-10-18T13:19:25.747Z] 📝 [LOG] [EnhancedCabinet3D] Rendering l-shaped-test-cabinet-90-1760792471952 with DynamicComponentRenderer
+[2025-10-18T13:19:25.748Z] 📝 [LOG] [EnhancedCabinet3D] Rendering base-cabinet-50-1760792508921 with DynamicComponentRenderer
+[2025-10-18T13:19:25.752Z] 📝 [LOG] ✅ [CompactComponentSidebar] Component sidebar rendered successfully
+[2025-10-18T13:19:25.753Z] 📝 [LOG] ✅ [CompactComponentSidebar] Summary: 226 total, 126 for kitchen, 10 categories
+[2025-10-18T13:19:25.761Z] 📝 [LOG] 🎨 [3D VIEW DEBUG] Filtering elements: {
+  "totalElements": 18,
+  "hiddenElementIds": [],
+  "view3DConfig": {
+    "id": "3d",
+    "label": "3D View",
+    "direction": "3d",
+    "is_default": true,
+    "sort_order": 5,
+    "hidden_elements": []
+  },
+  "elevationViewsProp": "provided"
+}
+[2025-10-18T13:19:25.762Z] 📝 [LOG] 🎨 [3D VIEW DEBUG] Visible elements after filtering: {
+  "afterVisibilityFilter": 18,
+  "afterPerformanceLimit": 18
+}
+[2025-10-18T13:19:25.764Z] 📝 [LOG] 🎯 [PerformanceMonitor] Performance monitor hidden
+[2025-10-18T13:19:25.771Z] 📝 [LOG] [EnhancedCabinet3D] Rendering base-cabinet-30-1760788641585 with DynamicComponentRenderer
+[2025-10-18T13:19:25.772Z] 📝 [LOG] [EnhancedCabinet3D] Rendering base-cabinet-40-1760788646697 with DynamicComponentRenderer
+[2025-10-18T13:19:25.772Z] 📝 [LOG] [EnhancedCabinet3D] Rendering base-cabinet-50-1760788652937 with DynamicComponentRenderer
+[2025-10-18T13:19:25.773Z] 📝 [LOG] [EnhancedCabinet3D] Rendering base-cabinet-60-1760788664528 with DynamicComponentRenderer
+[2025-10-18T13:19:25.774Z] 📝 [LOG] [EnhancedCabinet3D] Rendering base-cabinet-80-1760788686425 with DynamicComponentRenderer
+[2025-10-18T13:19:25.774Z] 📝 [LOG] [EnhancedCabinet3D] Rendering new-corner-wall-cabinet-60-1760788779197 with DynamicComponentRenderer
+[2025-10-18T13:19:25.775Z] 📝 [LOG] [EnhancedCabinet3D] Rendering wall-cabinet-30-1760788788486 with DynamicComponentRenderer
+[2025-10-18T13:19:25.775Z] 📝 [LOG] [EnhancedCabinet3D] Rendering wall-cabinet-40-1760788795319 with DynamicComponentRenderer
+[2025-10-18T13:19:25.776Z] 📝 [LOG] [EnhancedCabinet3D] Rendering wall-cabinet-50-1760788802405 with DynamicComponentRenderer
+[2025-10-18T13:19:25.777Z] 📝 [LOG] [EnhancedCabinet3D] Rendering wall-cabinet-60-1760788808433 with DynamicComponentRenderer
+[2025-10-18T13:19:25.777Z] 📝 [LOG] [EnhancedCabinet3D] Rendering wall-cabinet-80-1760788814537 with DynamicComponentRenderer
+[2025-10-18T13:19:25.778Z] 📝 [LOG] 🔍 [validateElementDimensions] Processing element dishwasher-1760788869471: {
+  "elementZ": 0,
+  "isUndefined": false,
+  "isNaN": false,
+  "elementType": "appliance"
+}
+[2025-10-18T13:19:25.779Z] 📝 [LOG] ✅ [validateElementDimensions] Using existing Z value: 0cm
+[2025-10-18T13:19:25.781Z] 📝 [LOG] 🔧 [EnhancedAppliance3D] Using default Z position: 0cm for dishwasher-1760788869471 (floor level)
+[2025-10-18T13:19:25.782Z] 📝 [LOG] 🔍 [validateElementDimensions] Processing element dishwasher-60-1760788873637: {
+  "elementZ": 0,
+  "isUndefined": false,
+  "isNaN": false,
+  "elementType": "appliance"
+}
+[2025-10-18T13:19:25.783Z] 📝 [LOG] ✅ [validateElementDimensions] Using existing Z value: 0cm
+[2025-10-18T13:19:25.783Z] 📝 [LOG] 🔧 [EnhancedAppliance3D] Using default Z position: 0cm for dishwasher-60-1760788873637 (floor level)
+[2025-10-18T13:19:25.784Z] 📝 [LOG] 🔍 [validateElementDimensions] Processing element fridge-90-1760788877593: {
+  "elementZ": 0,
+  "isUndefined": false,
+  "isNaN": false,
+  "elementType": "appliance"
+}
+[2025-10-18T13:19:25.785Z] 📝 [LOG] ✅ [validateElementDimensions] Using existing Z value: 0cm
+[2025-10-18T13:19:25.785Z] 📝 [LOG] 🔧 [EnhancedAppliance3D] Using default Z position: 0cm for fridge-90-1760788877593 (floor level)
+[2025-10-18T13:19:25.786Z] 📝 [LOG] 🔍 [validateElementDimensions] Processing element larder-oven-microwave-1760788897494: {
+  "elementZ": 0,
+  "isUndefined": false,
+  "isNaN": false,
+  "elementType": "appliance"
+}
+[2025-10-18T13:19:25.787Z] 📝 [LOG] ✅ [validateElementDimensions] Using existing Z value: 0cm
+[2025-10-18T13:19:25.787Z] 📝 [LOG] 🔧 [EnhancedAppliance3D] Using default Z position: 0cm for larder-oven-microwave-1760788897494 (floor level)
+[2025-10-18T13:19:25.788Z] 📝 [LOG] [EnhancedCabinet3D] Rendering l-shaped-test-cabinet-90-1760790249209 with DynamicComponentRenderer
+[2025-10-18T13:19:25.789Z] 📝 [LOG] [EnhancedCabinet3D] Rendering l-shaped-test-cabinet-90-1760792471952 with DynamicComponentRenderer
+[2025-10-18T13:19:25.789Z] 📝 [LOG] [EnhancedCabinet3D] Rendering base-cabinet-50-1760792508921 with DynamicComponentRenderer
+[2025-10-18T13:19:27.270Z] 📝 [LOG] ✅ [CompactComponentSidebar] Component sidebar rendered successfully
+[2025-10-18T13:19:27.270Z] 📝 [LOG] ✅ [CompactComponentSidebar] Summary: 226 total, 126 for kitchen, 10 categories
+[2025-10-18T13:19:27.278Z] 📝 [LOG] 🎨 [3D VIEW DEBUG] Filtering elements: {
+  "totalElements": 18,
+  "hiddenElementIds": [],
+  "view3DConfig": {
+    "id": "3d",
+    "label": "3D View",
+    "direction": "3d",
+    "is_default": true,
+    "sort_order": 5,
+    "hidden_elements": []
+  },
+  "elevationViewsProp": "provided"
+}
+[2025-10-18T13:19:27.279Z] 📝 [LOG] 🎨 [3D VIEW DEBUG] Visible elements after filtering: {
+  "afterVisibilityFilter": 18,
+  "afterPerformanceLimit": 18
+}
+[2025-10-18T13:19:27.284Z] 📝 [LOG] 🎯 [PerformanceMonitor] Performance monitor hidden
+[2025-10-18T13:19:27.294Z] 📝 [LOG] [EnhancedCabinet3D] Rendering base-cabinet-30-1760788641585 with DynamicComponentRenderer
+[2025-10-18T13:19:27.295Z] 📝 [LOG] [EnhancedCabinet3D] Rendering base-cabinet-40-1760788646697 with DynamicComponentRenderer
+[2025-10-18T13:19:27.296Z] 📝 [LOG] [EnhancedCabinet3D] Rendering base-cabinet-50-1760788652937 with DynamicComponentRenderer
+[2025-10-18T13:19:27.296Z] 📝 [LOG] [EnhancedCabinet3D] Rendering base-cabinet-60-1760788664528 with DynamicComponentRenderer
+[2025-10-18T13:19:27.297Z] 📝 [LOG] [EnhancedCabinet3D] Rendering base-cabinet-80-1760788686425 with DynamicComponentRenderer
+[2025-10-18T13:19:27.298Z] 📝 [LOG] [EnhancedCabinet3D] Rendering new-corner-wall-cabinet-60-1760788779197 with DynamicComponentRenderer
+[2025-10-18T13:19:27.298Z] 📝 [LOG] [EnhancedCabinet3D] Rendering wall-cabinet-30-1760788788486 with DynamicComponentRenderer
+[2025-10-18T13:19:27.299Z] 📝 [LOG] [EnhancedCabinet3D] Rendering wall-cabinet-40-1760788795319 with DynamicComponentRenderer
+[2025-10-18T13:19:27.300Z] 📝 [LOG] [EnhancedCabinet3D] Rendering wall-cabinet-50-1760788802405 with DynamicComponentRenderer
+[2025-10-18T13:19:27.300Z] 📝 [LOG] [EnhancedCabinet3D] Rendering wall-cabinet-60-1760788808433 with DynamicComponentRenderer
+[2025-10-18T13:19:27.301Z] 📝 [LOG] [EnhancedCabinet3D] Rendering wall-cabinet-80-1760788814537 with DynamicComponentRenderer
+[2025-10-18T13:19:27.302Z] 📝 [LOG] 🔍 [validateElementDimensions] Processing element dishwasher-1760788869471: {
+  "elementZ": 0,
+  "isUndefined": false,
+  "isNaN": false,
+  "elementType": "appliance"
+}
+[2025-10-18T13:19:27.302Z] 📝 [LOG] ✅ [validateElementDimensions] Using existing Z value: 0cm
+[2025-10-18T13:19:27.303Z] 📝 [LOG] 🔧 [EnhancedAppliance3D] Using default Z position: 0cm for dishwasher-1760788869471 (floor level)
+[2025-10-18T13:19:27.304Z] 📝 [LOG] 🔍 [validateElementDimensions] Processing element dishwasher-60-1760788873637: {
+  "elementZ": 0,
+  "isUndefined": false,
+  "isNaN": false,
+  "elementType": "appliance"
+}
+[2025-10-18T13:19:27.304Z] 📝 [LOG] ✅ [validateElementDimensions] Using existing Z value: 0cm
+[2025-10-18T13:19:27.305Z] 📝 [LOG] 🔧 [EnhancedAppliance3D] Using default Z position: 0cm for dishwasher-60-1760788873637 (floor level)
+[2025-10-18T13:19:27.306Z] 📝 [LOG] 🔍 [validateElementDimensions] Processing element fridge-90-1760788877593: {
+  "elementZ": 0,
+  "isUndefined": false,
+  "isNaN": false,
+  "elementType": "appliance"
+}
+[2025-10-18T13:19:27.307Z] 📝 [LOG] ✅ [validateElementDimensions] Using existing Z value: 0cm
+[2025-10-18T13:19:27.307Z] 📝 [LOG] 🔧 [EnhancedAppliance3D] Using default Z position: 0cm for fridge-90-1760788877593 (floor level)
+[2025-10-18T13:19:27.308Z] 📝 [LOG] 🔍 [validateElementDimensions] Processing element larder-oven-microwave-1760788897494: {
+  "elementZ": 0,
+  "isUndefined": false,
+  "isNaN": false,
+  "elementType": "appliance"
+}
+[2025-10-18T13:19:27.309Z] 📝 [LOG] ✅ [validateElementDimensions] Using existing Z value: 0cm
+[2025-10-18T13:19:27.309Z] 📝 [LOG] 🔧 [EnhancedAppliance3D] Using default Z position: 0cm for larder-oven-microwave-1760788897494 (floor level)
+[2025-10-18T13:19:27.310Z] 📝 [LOG] [EnhancedCabinet3D] Rendering l-shaped-test-cabinet-90-1760790249209 with DynamicComponentRenderer
+[2025-10-18T13:19:27.311Z] 📝 [LOG] [EnhancedCabinet3D] Rendering l-shaped-test-cabinet-90-1760792471952 with DynamicComponentRenderer
+[2025-10-18T13:19:27.312Z] 📝 [LOG] [EnhancedCabinet3D] Rendering base-cabinet-50-1760792508921 with DynamicComponentRenderer
+[2025-10-18T13:19:41.378Z] 📝 [LOG] 🔍 [VISIBILITY DEBUG] Toggle requested: {
+  "elementId": "fridge-90-1760788877593",
+  "viewId": "plan"
+}
+[2025-10-18T13:19:41.380Z] 📝 [LOG] 🔍 [VISIBILITY DEBUG] Current elevationViews state: [
+  {
+    "id": "plan",
+    "label": "Plan View",
+    "direction": "plan",
+    "is_default": true,
+    "sort_order": 0,
+    "hidden_elements": [
+      "new-corner-wall-cabinet-60-1760788779197",
+      "fridge-90-1760788877593"
+    ]
+  },
+  {
+    "id": "front-default",
+    "label": "Front",
+    "direction": "front",
+    "is_default": true,
+    "sort_order": 1,
+    "hidden_elements": [
+      "base-cabinet-80-1760788686425"
+    ]
+  },
+  {
+    "id": "back-default",
+    "label": "Back",
+    "direction": "back",
+    "is_default": true,
+    "sort_order": 2,
+    "hidden_elements": []
+  },
+  {
+    "id": "left-default",
+    "label": "Left",
+    "direction": "left",
+    "is_default": true,
+    "sort_order": 3,
+    "hidden_elements": [
+      "l-shaped-test-cabinet-90-1760792471952"
+    ]
+  },
+  {
+    "id": "right-default",
+    "label": "Right",
+    "direction": "right",
+    "is_default": true,
+    "sort_order": 4,
+    "hidden_elements": []
+  },
+  {
+    "id": "3d",
+    "label": "3D View",
+    "direction": "3d",
+    "is_default": true,
+    "sort_order": 5,
+    "hidden_elements": []
+  }
+]
+[2025-10-18T13:19:41.380Z] 📝 [LOG] 🔍 [VISIBILITY DEBUG] Is currently visible: false
+[2025-10-18T13:19:41.381Z] 📝 [LOG] 🔍 [VISIBILITY DEBUG] Updated elevationViews: [
+  {
+    "id": "plan",
+    "label": "Plan View",
+    "direction": "plan",
+    "is_default": true,
+    "sort_order": 0,
+    "hidden_elements": [
+      "new-corner-wall-cabinet-60-1760788779197"
+    ]
+  },
+  {
+    "id": "front-default",
+    "label": "Front",
+    "direction": "front",
+    "is_default": true,
+    "sort_order": 1,
+    "hidden_elements": [
+      "base-cabinet-80-1760788686425"
+    ]
+  },
+  {
+    "id": "back-default",
+    "label": "Back",
+    "direction": "back",
+    "is_default": true,
+    "sort_order": 2,
+    "hidden_elements": []
+  },
+  {
+    "id": "left-default",
+    "label": "Left",
+    "direction": "left",
+    "is_default": true,
+    "sort_order": 3,
+    "hidden_elements": [
+      "l-shaped-test-cabinet-90-1760792471952"
+    ]
+  },
+  {
+    "id": "right-default",
+    "label": "Right",
+    "direction": "right",
+    "is_default": true,
+    "sort_order": 4,
+    "hidden_elements": []
+  },
+  {
+    "id": "3d",
+    "label": "3D View",
+    "direction": "3d",
+    "is_default": true,
+    "sort_order": 5,
+    "hidden_elements": []
+  }
+]
+[2025-10-18T13:19:41.386Z] 📝 [LOG] ✅ [CompactComponentSidebar] Component sidebar rendered successfully
+[2025-10-18T13:19:41.387Z] 📝 [LOG] ✅ [CompactComponentSidebar] Summary: 226 total, 126 for kitchen, 10 categories
+[2025-10-18T13:19:41.395Z] 📝 [LOG] 🎨 [3D VIEW DEBUG] Filtering elements: {
+  "totalElements": 18,
+  "hiddenElementIds": [],
+  "view3DConfig": {
+    "id": "3d",
+    "label": "3D View",
+    "direction": "3d",
+    "is_default": true,
+    "sort_order": 5,
+    "hidden_elements": []
+  },
+  "elevationViewsProp": "provided"
+}
+[2025-10-18T13:19:41.396Z] 📝 [LOG] 🎨 [3D VIEW DEBUG] Visible elements after filtering: {
+  "afterVisibilityFilter": 18,
+  "afterPerformanceLimit": 18
+}
+[2025-10-18T13:19:41.400Z] 📝 [LOG] 🎯 [PerformanceMonitor] Performance monitor hidden
+[2025-10-18T13:19:41.407Z] 📝 [LOG] [EnhancedCabinet3D] Rendering base-cabinet-30-1760788641585 with DynamicComponentRenderer
+[2025-10-18T13:19:41.408Z] 📝 [LOG] [EnhancedCabinet3D] Rendering base-cabinet-40-1760788646697 with DynamicComponentRenderer
+[2025-10-18T13:19:41.409Z] 📝 [LOG] [EnhancedCabinet3D] Rendering base-cabinet-50-1760788652937 with DynamicComponentRenderer
+[2025-10-18T13:19:41.409Z] 📝 [LOG] [EnhancedCabinet3D] Rendering base-cabinet-60-1760788664528 with DynamicComponentRenderer
+[2025-10-18T13:19:41.410Z] 📝 [LOG] [EnhancedCabinet3D] Rendering base-cabinet-80-1760788686425 with DynamicComponentRenderer
+[2025-10-18T13:19:41.411Z] 📝 [LOG] [EnhancedCabinet3D] Rendering new-corner-wall-cabinet-60-1760788779197 with DynamicComponentRenderer
+[2025-10-18T13:19:41.411Z] 📝 [LOG] [EnhancedCabinet3D] Rendering wall-cabinet-30-1760788788486 with DynamicComponentRenderer
+[2025-10-18T13:19:41.412Z] 📝 [LOG] [EnhancedCabinet3D] Rendering wall-cabinet-40-1760788795319 with DynamicComponentRenderer
+[2025-10-18T13:19:41.414Z] 📝 [LOG] [EnhancedCabinet3D] Rendering wall-cabinet-50-1760788802405 with DynamicComponentRenderer
+[2025-10-18T13:19:41.415Z] 📝 [LOG] [EnhancedCabinet3D] Rendering wall-cabinet-60-1760788808433 with DynamicComponentRenderer
+[2025-10-18T13:19:41.416Z] 📝 [LOG] [EnhancedCabinet3D] Rendering wall-cabinet-80-1760788814537 with DynamicComponentRenderer
+[2025-10-18T13:19:41.416Z] 📝 [LOG] 🔍 [validateElementDimensions] Processing element dishwasher-1760788869471: {
+  "elementZ": 0,
+  "isUndefined": false,
+  "isNaN": false,
+  "elementType": "appliance"
+}
+[2025-10-18T13:19:41.417Z] 📝 [LOG] ✅ [validateElementDimensions] Using existing Z value: 0cm
+[2025-10-18T13:19:41.418Z] 📝 [LOG] 🔧 [EnhancedAppliance3D] Using default Z position: 0cm for dishwasher-1760788869471 (floor level)
+[2025-10-18T13:19:41.419Z] 📝 [LOG] 🔍 [validateElementDimensions] Processing element dishwasher-60-1760788873637: {
+  "elementZ": 0,
+  "isUndefined": false,
+  "isNaN": false,
+  "elementType": "appliance"
+}
+[2025-10-18T13:19:41.420Z] 📝 [LOG] ✅ [validateElementDimensions] Using existing Z value: 0cm
+[2025-10-18T13:19:41.421Z] 📝 [LOG] 🔧 [EnhancedAppliance3D] Using default Z position: 0cm for dishwasher-60-1760788873637 (floor level)
+[2025-10-18T13:19:41.422Z] 📝 [LOG] 🔍 [validateElementDimensions] Processing element fridge-90-1760788877593: {
+  "elementZ": 0,
+  "isUndefined": false,
+  "isNaN": false,
+  "elementType": "appliance"
+}
+[2025-10-18T13:19:41.423Z] 📝 [LOG] ✅ [validateElementDimensions] Using existing Z value: 0cm
+[2025-10-18T13:19:41.424Z] 📝 [LOG] 🔧 [EnhancedAppliance3D] Using default Z position: 0cm for fridge-90-1760788877593 (floor level)
+[2025-10-18T13:19:41.424Z] 📝 [LOG] 🔍 [validateElementDimensions] Processing element larder-oven-microwave-1760788897494: {
+  "elementZ": 0,
+  "isUndefined": false,
+  "isNaN": false,
+  "elementType": "appliance"
+}
+[2025-10-18T13:19:41.425Z] 📝 [LOG] ✅ [validateElementDimensions] Using existing Z value: 0cm
+[2025-10-18T13:19:41.426Z] 📝 [LOG] 🔧 [EnhancedAppliance3D] Using default Z position: 0cm for larder-oven-microwave-1760788897494 (floor level)
+[2025-10-18T13:19:41.427Z] 📝 [LOG] [EnhancedCabinet3D] Rendering l-shaped-test-cabinet-90-1760790249209 with DynamicComponentRenderer
+[2025-10-18T13:19:41.428Z] 📝 [LOG] [EnhancedCabinet3D] Rendering l-shaped-test-cabinet-90-1760792471952 with DynamicComponentRenderer
+[2025-10-18T13:19:41.429Z] 📝 [LOG] [EnhancedCabinet3D] Rendering base-cabinet-50-1760792508921 with DynamicComponentRenderer
+[2025-10-18T13:19:41.494Z] 📝 [LOG] 🔍 [VISIBILITY DEBUG] State and database updated successfully
+[2025-10-18T13:19:41.503Z] 📝 [LOG] ✅ [CompactComponentSidebar] Component sidebar rendered successfully
+[2025-10-18T13:19:41.504Z] 📝 [LOG] ✅ [CompactComponentSidebar] Summary: 226 total, 126 for kitchen, 10 categories
+[2025-10-18T13:19:41.513Z] 📝 [LOG] 🎨 [3D VIEW DEBUG] Filtering elements: {
+  "totalElements": 18,
+  "hiddenElementIds": [],
+  "view3DConfig": {
+    "id": "3d",
+    "label": "3D View",
+    "direction": "3d",
+    "is_default": true,
+    "sort_order": 5,
+    "hidden_elements": []
+  },
+  "elevationViewsProp": "provided"
+}
+[2025-10-18T13:19:41.514Z] 📝 [LOG] 🎨 [3D VIEW DEBUG] Visible elements after filtering: {
+  "afterVisibilityFilter": 18,
+  "afterPerformanceLimit": 18
+}
+[2025-10-18T13:19:41.517Z] 📝 [LOG] 🎯 [PerformanceMonitor] Performance monitor hidden
+[2025-10-18T13:19:41.525Z] 📝 [LOG] [EnhancedCabinet3D] Rendering base-cabinet-30-1760788641585 with DynamicComponentRenderer
+[2025-10-18T13:19:41.525Z] 📝 [LOG] [EnhancedCabinet3D] Rendering base-cabinet-40-1760788646697 with DynamicComponentRenderer
+[2025-10-18T13:19:41.526Z] 📝 [LOG] [EnhancedCabinet3D] Rendering base-cabinet-50-1760788652937 with DynamicComponentRenderer
+[2025-10-18T13:19:41.527Z] 📝 [LOG] [EnhancedCabinet3D] Rendering base-cabinet-60-1760788664528 with DynamicComponentRenderer
+[2025-10-18T13:19:41.528Z] 📝 [LOG] [EnhancedCabinet3D] Rendering base-cabinet-80-1760788686425 with DynamicComponentRenderer
+[2025-10-18T13:19:41.528Z] 📝 [LOG] [EnhancedCabinet3D] Rendering new-corner-wall-cabinet-60-1760788779197 with DynamicComponentRenderer
+[2025-10-18T13:19:41.529Z] 📝 [LOG] [EnhancedCabinet3D] Rendering wall-cabinet-30-1760788788486 with DynamicComponentRenderer
+[2025-10-18T13:19:41.530Z] 📝 [LOG] [EnhancedCabinet3D] Rendering wall-cabinet-40-1760788795319 with DynamicComponentRenderer
+[2025-10-18T13:19:41.531Z] 📝 [LOG] [EnhancedCabinet3D] Rendering wall-cabinet-50-1760788802405 with DynamicComponentRenderer
+[2025-10-18T13:19:41.531Z] 📝 [LOG] [EnhancedCabinet3D] Rendering wall-cabinet-60-1760788808433 with DynamicComponentRenderer
+[2025-10-18T13:19:41.532Z] 📝 [LOG] [EnhancedCabinet3D] Rendering wall-cabinet-80-1760788814537 with DynamicComponentRenderer
+[2025-10-18T13:19:41.533Z] 📝 [LOG] 🔍 [validateElementDimensions] Processing element dishwasher-1760788869471: {
+  "elementZ": 0,
+  "isUndefined": false,
+  "isNaN": false,
+  "elementType": "appliance"
+}
+[2025-10-18T13:19:41.534Z] 📝 [LOG] ✅ [validateElementDimensions] Using existing Z value: 0cm
+[2025-10-18T13:19:41.534Z] 📝 [LOG] 🔧 [EnhancedAppliance3D] Using default Z position: 0cm for dishwasher-1760788869471 (floor level)
+[2025-10-18T13:19:41.536Z] 📝 [LOG] 🔍 [validateElementDimensions] Processing element dishwasher-60-1760788873637: {
+  "elementZ": 0,
+  "isUndefined": false,
+  "isNaN": false,
+  "elementType": "appliance"
+}
+[2025-10-18T13:19:41.537Z] 📝 [LOG] ✅ [validateElementDimensions] Using existing Z value: 0cm
+[2025-10-18T13:19:41.538Z] 📝 [LOG] 🔧 [EnhancedAppliance3D] Using default Z position: 0cm for dishwasher-60-1760788873637 (floor level)
+[2025-10-18T13:19:41.539Z] 📝 [LOG] 🔍 [validateElementDimensions] Processing element fridge-90-1760788877593: {
+  "elementZ": 0,
+  "isUndefined": false,
+  "isNaN": false,
+  "elementType": "appliance"
+}
+[2025-10-18T13:19:41.539Z] 📝 [LOG] ✅ [validateElementDimensions] Using existing Z value: 0cm
+[2025-10-18T13:19:41.540Z] 📝 [LOG] 🔧 [EnhancedAppliance3D] Using default Z position: 0cm for fridge-90-1760788877593 (floor level)
+[2025-10-18T13:19:41.541Z] 📝 [LOG] 🔍 [validateElementDimensions] Processing element larder-oven-microwave-1760788897494: {
+  "elementZ": 0,
+  "isUndefined": false,
+  "isNaN": false,
+  "elementType": "appliance"
+}
+[2025-10-18T13:19:41.542Z] 📝 [LOG] ✅ [validateElementDimensions] Using existing Z value: 0cm
+[2025-10-18T13:19:41.543Z] 📝 [LOG] 🔧 [EnhancedAppliance3D] Using default Z position: 0cm for larder-oven-microwave-1760788897494 (floor level)
+[2025-10-18T13:19:41.544Z] 📝 [LOG] [EnhancedCabinet3D] Rendering l-shaped-test-cabinet-90-1760790249209 with DynamicComponentRenderer
+[2025-10-18T13:19:41.545Z] 📝 [LOG] [EnhancedCabinet3D] Rendering l-shaped-test-cabinet-90-1760792471952 with DynamicComponentRenderer
+[2025-10-18T13:19:41.546Z] 📝 [LOG] [EnhancedCabinet3D] Rendering base-cabinet-50-1760792508921 with DynamicComponentRenderer
+[2025-10-18T13:19:41.550Z] 📝 [LOG] ✅ [CompactComponentSidebar] Component sidebar rendered successfully
+[2025-10-18T13:19:41.551Z] 📝 [LOG] ✅ [CompactComponentSidebar] Summary: 226 total, 126 for kitchen, 10 categories
+[2025-10-18T13:19:41.560Z] 📝 [LOG] 🎨 [3D VIEW DEBUG] Filtering elements: {
+  "totalElements": 18,
+  "hiddenElementIds": [],
+  "view3DConfig": {
+    "id": "3d",
+    "label": "3D View",
+    "direction": "3d",
+    "is_default": true,
+    "sort_order": 5,
+    "hidden_elements": []
+  },
+  "elevationViewsProp": "provided"
+}
+[2025-10-18T13:19:41.562Z] 📝 [LOG] 🎨 [3D VIEW DEBUG] Visible elements after filtering: {
+  "afterVisibilityFilter": 18,
+  "afterPerformanceLimit": 18
+}
+[2025-10-18T13:19:41.566Z] 📝 [LOG] 🎯 [PerformanceMonitor] Performance monitor hidden
+[2025-10-18T13:19:41.576Z] 📝 [LOG] [EnhancedCabinet3D] Rendering base-cabinet-30-1760788641585 with DynamicComponentRenderer
+[2025-10-18T13:19:41.577Z] 📝 [LOG] [EnhancedCabinet3D] Rendering base-cabinet-40-1760788646697 with DynamicComponentRenderer
+[2025-10-18T13:19:41.578Z] 📝 [LOG] [EnhancedCabinet3D] Rendering base-cabinet-50-1760788652937 with DynamicComponentRenderer
+[2025-10-18T13:19:41.579Z] 📝 [LOG] [EnhancedCabinet3D] Rendering base-cabinet-60-1760788664528 with DynamicComponentRenderer
+[2025-10-18T13:19:41.580Z] 📝 [LOG] [EnhancedCabinet3D] Rendering base-cabinet-80-1760788686425 with DynamicComponentRenderer
+[2025-10-18T13:19:41.581Z] 📝 [LOG] [EnhancedCabinet3D] Rendering new-corner-wall-cabinet-60-1760788779197 with DynamicComponentRenderer
+[2025-10-18T13:19:41.582Z] 📝 [LOG] [EnhancedCabinet3D] Rendering wall-cabinet-30-1760788788486 with DynamicComponentRenderer
+[2025-10-18T13:19:41.583Z] 📝 [LOG] [EnhancedCabinet3D] Rendering wall-cabinet-40-1760788795319 with DynamicComponentRenderer
+[2025-10-18T13:19:41.583Z] 📝 [LOG] [EnhancedCabinet3D] Rendering wall-cabinet-50-1760788802405 with DynamicComponentRenderer
+[2025-10-18T13:19:41.584Z] 📝 [LOG] [EnhancedCabinet3D] Rendering wall-cabinet-60-1760788808433 with DynamicComponentRenderer
+[2025-10-18T13:19:41.585Z] 📝 [LOG] [EnhancedCabinet3D] Rendering wall-cabinet-80-1760788814537 with DynamicComponentRenderer
+[2025-10-18T13:19:41.586Z] 📝 [LOG] 🔍 [validateElementDimensions] Processing element dishwasher-1760788869471: {
+  "elementZ": 0,
+  "isUndefined": false,
+  "isNaN": false,
+  "elementType": "appliance"
+}
+[2025-10-18T13:19:41.587Z] 📝 [LOG] ✅ [validateElementDimensions] Using existing Z value: 0cm
+[2025-10-18T13:19:41.589Z] 📝 [LOG] 🔧 [EnhancedAppliance3D] Using default Z position: 0cm for dishwasher-1760788869471 (floor level)
+[2025-10-18T13:19:41.590Z] 📝 [LOG] 🔍 [validateElementDimensions] Processing element dishwasher-60-1760788873637: {
+  "elementZ": 0,
+  "isUndefined": false,
+  "isNaN": false,
+  "elementType": "appliance"
+}
+[2025-10-18T13:19:41.591Z] 📝 [LOG] ✅ [validateElementDimensions] Using existing Z value: 0cm
+[2025-10-18T13:19:41.592Z] 📝 [LOG] 🔧 [EnhancedAppliance3D] Using default Z position: 0cm for dishwasher-60-1760788873637 (floor level)
+[2025-10-18T13:19:41.593Z] 📝 [LOG] 🔍 [validateElementDimensions] Processing element fridge-90-1760788877593: {
+  "elementZ": 0,
+  "isUndefined": false,
+  "isNaN": false,
+  "elementType": "appliance"
+}
+[2025-10-18T13:19:41.594Z] 📝 [LOG] ✅ [validateElementDimensions] Using existing Z value: 0cm
+[2025-10-18T13:19:41.594Z] 📝 [LOG] 🔧 [EnhancedAppliance3D] Using default Z position: 0cm for fridge-90-1760788877593 (floor level)
+[2025-10-18T13:19:41.595Z] 📝 [LOG] 🔍 [validateElementDimensions] Processing element larder-oven-microwave-1760788897494: {
+  "elementZ": 0,
+  "isUndefined": false,
+  "isNaN": false,
+  "elementType": "appliance"
+}
+[2025-10-18T13:19:41.596Z] 📝 [LOG] ✅ [validateElementDimensions] Using existing Z value: 0cm
+[2025-10-18T13:19:41.597Z] 📝 [LOG] 🔧 [EnhancedAppliance3D] Using default Z position: 0cm for larder-oven-microwave-1760788897494 (floor level)
+[2025-10-18T13:19:41.598Z] 📝 [LOG] [EnhancedCabinet3D] Rendering l-shaped-test-cabinet-90-1760790249209 with DynamicComponentRenderer
+[2025-10-18T13:19:41.599Z] 📝 [LOG] [EnhancedCabinet3D] Rendering l-shaped-test-cabinet-90-1760792471952 with DynamicComponentRenderer
+[2025-10-18T13:19:41.600Z] 📝 [LOG] [EnhancedCabinet3D] Rendering base-cabinet-50-1760792508921 with DynamicComponentRenderer
+[2025-10-18T13:19:54.261Z] 📝 [LOG] 🔍 [VISIBILITY DEBUG] Toggle requested: {
+  "elementId": "fridge-90-1760788877593",
+  "viewId": "plan"
+}
+[2025-10-18T13:19:54.263Z] 📝 [LOG] 🔍 [VISIBILITY DEBUG] Current elevationViews state: [
+  {
+    "id": "plan",
+    "label": "Plan View",
+    "direction": "plan",
+    "is_default": true,
+    "sort_order": 0,
+    "hidden_elements": [
+      "new-corner-wall-cabinet-60-1760788779197"
+    ]
+  },
+  {
+    "id": "front-default",
+    "label": "Front",
+    "direction": "front",
+    "is_default": true,
+    "sort_order": 1,
+    "hidden_elements": [
+      "base-cabinet-80-1760788686425"
+    ]
+  },
+  {
+    "id": "back-default",
+    "label": "Back",
+    "direction": "back",
+    "is_default": true,
+    "sort_order": 2,
+    "hidden_elements": []
+  },
+  {
+    "id": "left-default",
+    "label": "Left",
+    "direction": "left",
+    "is_default": true,
+    "sort_order": 3,
+    "hidden_elements": [
+      "l-shaped-test-cabinet-90-1760792471952"
+    ]
+  },
+  {
+    "id": "right-default",
+    "label": "Right",
+    "direction": "right",
+    "is_default": true,
+    "sort_order": 4,
+    "hidden_elements": []
+  },
+  {
+    "id": "3d",
+    "label": "3D View",
+    "direction": "3d",
+    "is_default": true,
+    "sort_order": 5,
+    "hidden_elements": []
+  }
+]
+[2025-10-18T13:19:54.264Z] 📝 [LOG] 🔍 [VISIBILITY DEBUG] Is currently visible: true
+[2025-10-18T13:19:54.265Z] 📝 [LOG] 🔍 [VISIBILITY DEBUG] Updated elevationViews: [
+  {
+    "id": "plan",
+    "label": "Plan View",
+    "direction": "plan",
+    "is_default": true,
+    "sort_order": 0,
+    "hidden_elements": [
+      "new-corner-wall-cabinet-60-1760788779197",
+      "fridge-90-1760788877593"
+    ]
+  },
+  {
+    "id": "front-default",
+    "label": "Front",
+    "direction": "front",
+    "is_default": true,
+    "sort_order": 1,
+    "hidden_elements": [
+      "base-cabinet-80-1760788686425"
+    ]
+  },
+  {
+    "id": "back-default",
+    "label": "Back",
+    "direction": "back",
+    "is_default": true,
+    "sort_order": 2,
+    "hidden_elements": []
+  },
+  {
+    "id": "left-default",
+    "label": "Left",
+    "direction": "left",
+    "is_default": true,
+    "sort_order": 3,
+    "hidden_elements": [
+      "l-shaped-test-cabinet-90-1760792471952"
+    ]
+  },
+  {
+    "id": "right-default",
+    "label": "Right",
+    "direction": "right",
+    "is_default": true,
+    "sort_order": 4,
+    "hidden_elements": []
+  },
+  {
+    "id": "3d",
+    "label": "3D View",
+    "direction": "3d",
+    "is_default": true,
+    "sort_order": 5,
+    "hidden_elements": []
+  }
+]
+[2025-10-18T13:19:54.270Z] 📝 [LOG] ✅ [CompactComponentSidebar] Component sidebar rendered successfully
+[2025-10-18T13:19:54.271Z] 📝 [LOG] ✅ [CompactComponentSidebar] Summary: 226 total, 126 for kitchen, 10 categories
+[2025-10-18T13:19:54.280Z] 📝 [LOG] 🎨 [3D VIEW DEBUG] Filtering elements: {
+  "totalElements": 18,
+  "hiddenElementIds": [],
+  "view3DConfig": {
+    "id": "3d",
+    "label": "3D View",
+    "direction": "3d",
+    "is_default": true,
+    "sort_order": 5,
+    "hidden_elements": []
+  },
+  "elevationViewsProp": "provided"
+}
+[2025-10-18T13:19:54.281Z] 📝 [LOG] 🎨 [3D VIEW DEBUG] Visible elements after filtering: {
+  "afterVisibilityFilter": 18,
+  "afterPerformanceLimit": 18
+}
+[2025-10-18T13:19:54.284Z] 📝 [LOG] 🎯 [PerformanceMonitor] Performance monitor hidden
+[2025-10-18T13:19:54.293Z] 📝 [LOG] [EnhancedCabinet3D] Rendering base-cabinet-30-1760788641585 with DynamicComponentRenderer
+[2025-10-18T13:19:54.294Z] 📝 [LOG] [EnhancedCabinet3D] Rendering base-cabinet-40-1760788646697 with DynamicComponentRenderer
+[2025-10-18T13:19:54.295Z] 📝 [LOG] [EnhancedCabinet3D] Rendering base-cabinet-50-1760788652937 with DynamicComponentRenderer
+[2025-10-18T13:19:54.296Z] 📝 [LOG] [EnhancedCabinet3D] Rendering base-cabinet-60-1760788664528 with DynamicComponentRenderer
+[2025-10-18T13:19:54.297Z] 📝 [LOG] [EnhancedCabinet3D] Rendering base-cabinet-80-1760788686425 with DynamicComponentRenderer
+[2025-10-18T13:19:54.298Z] 📝 [LOG] [EnhancedCabinet3D] Rendering new-corner-wall-cabinet-60-1760788779197 with DynamicComponentRenderer
+[2025-10-18T13:19:54.300Z] 📝 [LOG] [EnhancedCabinet3D] Rendering wall-cabinet-30-1760788788486 with DynamicComponentRenderer
+[2025-10-18T13:19:54.301Z] 📝 [LOG] [EnhancedCabinet3D] Rendering wall-cabinet-40-1760788795319 with DynamicComponentRenderer
+[2025-10-18T13:19:54.302Z] 📝 [LOG] [EnhancedCabinet3D] Rendering wall-cabinet-50-1760788802405 with DynamicComponentRenderer
+[2025-10-18T13:19:54.303Z] 📝 [LOG] [EnhancedCabinet3D] Rendering wall-cabinet-60-1760788808433 with DynamicComponentRenderer
+[2025-10-18T13:19:54.304Z] 📝 [LOG] [EnhancedCabinet3D] Rendering wall-cabinet-80-1760788814537 with DynamicComponentRenderer
+[2025-10-18T13:19:54.305Z] 📝 [LOG] 🔍 [validateElementDimensions] Processing element dishwasher-1760788869471: {
+  "elementZ": 0,
+  "isUndefined": false,
+  "isNaN": false,
+  "elementType": "appliance"
+}
+[2025-10-18T13:19:54.306Z] 📝 [LOG] ✅ [validateElementDimensions] Using existing Z value: 0cm
+[2025-10-18T13:19:54.307Z] 📝 [LOG] 🔧 [EnhancedAppliance3D] Using default Z position: 0cm for dishwasher-1760788869471 (floor level)
+[2025-10-18T13:19:54.308Z] 📝 [LOG] 🔍 [validateElementDimensions] Processing element dishwasher-60-1760788873637: {
+  "elementZ": 0,
+  "isUndefined": false,
+  "isNaN": false,
+  "elementType": "appliance"
+}
+[2025-10-18T13:19:54.309Z] 📝 [LOG] ✅ [validateElementDimensions] Using existing Z value: 0cm
+[2025-10-18T13:19:54.310Z] 📝 [LOG] 🔧 [EnhancedAppliance3D] Using default Z position: 0cm for dishwasher-60-1760788873637 (floor level)
+[2025-10-18T13:19:54.311Z] 📝 [LOG] 🔍 [validateElementDimensions] Processing element fridge-90-1760788877593: {
+  "elementZ": 0,
+  "isUndefined": false,
+  "isNaN": false,
+  "elementType": "appliance"
+}
+[2025-10-18T13:19:54.312Z] 📝 [LOG] ✅ [validateElementDimensions] Using existing Z value: 0cm
+[2025-10-18T13:19:54.314Z] 📝 [LOG] 🔧 [EnhancedAppliance3D] Using default Z position: 0cm for fridge-90-1760788877593 (floor level)
+[2025-10-18T13:19:54.316Z] 📝 [LOG] 🔍 [validateElementDimensions] Processing element larder-oven-microwave-1760788897494: {
+  "elementZ": 0,
+  "isUndefined": false,
+  "isNaN": false,
+  "elementType": "appliance"
+}
+[2025-10-18T13:19:54.317Z] 📝 [LOG] ✅ [validateElementDimensions] Using existing Z value: 0cm
+[2025-10-18T13:19:54.317Z] 📝 [LOG] 🔧 [EnhancedAppliance3D] Using default Z position: 0cm for larder-oven-microwave-1760788897494 (floor level)
+[2025-10-18T13:19:54.319Z] 📝 [LOG] [EnhancedCabinet3D] Rendering l-shaped-test-cabinet-90-1760790249209 with DynamicComponentRenderer
+[2025-10-18T13:19:54.320Z] 📝 [LOG] [EnhancedCabinet3D] Rendering l-shaped-test-cabinet-90-1760792471952 with DynamicComponentRenderer
+[2025-10-18T13:19:54.321Z] 📝 [LOG] [EnhancedCabinet3D] Rendering base-cabinet-50-1760792508921 with DynamicComponentRenderer
+[2025-10-18T13:19:54.424Z] 📝 [LOG] 🔍 [VISIBILITY DEBUG] State and database updated successfully
+[2025-10-18T13:19:54.428Z] 📝 [LOG] ✅ [CompactComponentSidebar] Component sidebar rendered successfully
+[2025-10-18T13:19:54.429Z] 📝 [LOG] ✅ [CompactComponentSidebar] Summary: 226 total, 126 for kitchen, 10 categories
+[2025-10-18T13:19:54.437Z] 📝 [LOG] 🎨 [3D VIEW DEBUG] Filtering elements: {
+  "totalElements": 18,
+  "hiddenElementIds": [],
+  "view3DConfig": {
+    "id": "3d",
+    "label": "3D View",
+    "direction": "3d",
+    "is_default": true,
+    "sort_order": 5,
+    "hidden_elements": []
+  },
+  "elevationViewsProp": "provided"
+}
+[2025-10-18T13:19:54.438Z] 📝 [LOG] 🎨 [3D VIEW DEBUG] Visible elements after filtering: {
+  "afterVisibilityFilter": 18,
+  "afterPerformanceLimit": 18
+}
+[2025-10-18T13:19:54.441Z] 📝 [LOG] 🎯 [PerformanceMonitor] Performance monitor hidden
+[2025-10-18T13:19:54.450Z] 📝 [LOG] [EnhancedCabinet3D] Rendering base-cabinet-30-1760788641585 with DynamicComponentRenderer
+[2025-10-18T13:19:54.451Z] 📝 [LOG] [EnhancedCabinet3D] Rendering base-cabinet-40-1760788646697 with DynamicComponentRenderer
+[2025-10-18T13:19:54.452Z] 📝 [LOG] [EnhancedCabinet3D] Rendering base-cabinet-50-1760788652937 with DynamicComponentRenderer
+[2025-10-18T13:19:54.453Z] 📝 [LOG] [EnhancedCabinet3D] Rendering base-cabinet-60-1760788664528 with DynamicComponentRenderer
+[2025-10-18T13:19:54.454Z] 📝 [LOG] [EnhancedCabinet3D] Rendering base-cabinet-80-1760788686425 with DynamicComponentRenderer
+[2025-10-18T13:19:54.455Z] 📝 [LOG] [EnhancedCabinet3D] Rendering new-corner-wall-cabinet-60-1760788779197 with DynamicComponentRenderer
+[2025-10-18T13:19:54.455Z] 📝 [LOG] [EnhancedCabinet3D] Rendering wall-cabinet-30-1760788788486 with DynamicComponentRenderer
+[2025-10-18T13:19:54.456Z] 📝 [LOG] [EnhancedCabinet3D] Rendering wall-cabinet-40-1760788795319 with DynamicComponentRenderer
+[2025-10-18T13:19:54.457Z] 📝 [LOG] [EnhancedCabinet3D] Rendering wall-cabinet-50-1760788802405 with DynamicComponentRenderer
+[2025-10-18T13:19:54.458Z] 📝 [LOG] [EnhancedCabinet3D] Rendering wall-cabinet-60-1760788808433 with DynamicComponentRenderer
+[2025-10-18T13:19:54.459Z] 📝 [LOG] [EnhancedCabinet3D] Rendering wall-cabinet-80-1760788814537 with DynamicComponentRenderer
+[2025-10-18T13:19:54.460Z] 📝 [LOG] 🔍 [validateElementDimensions] Processing element dishwasher-1760788869471: {
+  "elementZ": 0,
+  "isUndefined": false,
+  "isNaN": false,
+  "elementType": "appliance"
+}
+[2025-10-18T13:19:54.461Z] 📝 [LOG] ✅ [validateElementDimensions] Using existing Z value: 0cm
+[2025-10-18T13:19:54.462Z] 📝 [LOG] 🔧 [EnhancedAppliance3D] Using default Z position: 0cm for dishwasher-1760788869471 (floor level)
+[2025-10-18T13:19:54.464Z] 📝 [LOG] 🔍 [validateElementDimensions] Processing element dishwasher-60-1760788873637: {
+  "elementZ": 0,
+  "isUndefined": false,
+  "isNaN": false,
+  "elementType": "appliance"
+}
+[2025-10-18T13:19:54.464Z] 📝 [LOG] ✅ [validateElementDimensions] Using existing Z value: 0cm
+[2025-10-18T13:19:54.465Z] 📝 [LOG] 🔧 [EnhancedAppliance3D] Using default Z position: 0cm for dishwasher-60-1760788873637 (floor level)
+[2025-10-18T13:19:54.467Z] 📝 [LOG] 🔍 [validateElementDimensions] Processing element fridge-90-1760788877593: {
+  "elementZ": 0,
+  "isUndefined": false,
+  "isNaN": false,
+  "elementType": "appliance"
+}
+[2025-10-18T13:19:54.468Z] 📝 [LOG] ✅ [validateElementDimensions] Using existing Z value: 0cm
+[2025-10-18T13:19:54.469Z] 📝 [LOG] 🔧 [EnhancedAppliance3D] Using default Z position: 0cm for fridge-90-1760788877593 (floor level)
+[2025-10-18T13:19:54.470Z] 📝 [LOG] 🔍 [validateElementDimensions] Processing element larder-oven-microwave-1760788897494: {
+  "elementZ": 0,
+  "isUndefined": false,
+  "isNaN": false,
+  "elementType": "appliance"
+}
+[2025-10-18T13:19:54.471Z] 📝 [LOG] ✅ [validateElementDimensions] Using existing Z value: 0cm
+[2025-10-18T13:19:54.472Z] 📝 [LOG] 🔧 [EnhancedAppliance3D] Using default Z position: 0cm for larder-oven-microwave-1760788897494 (floor level)
+[2025-10-18T13:19:54.474Z] 📝 [LOG] [EnhancedCabinet3D] Rendering l-shaped-test-cabinet-90-1760790249209 with DynamicComponentRenderer
+[2025-10-18T13:19:54.475Z] 📝 [LOG] [EnhancedCabinet3D] Rendering l-shaped-test-cabinet-90-1760792471952 with DynamicComponentRenderer
+[2025-10-18T13:19:54.477Z] 📝 [LOG] [EnhancedCabinet3D] Rendering base-cabinet-50-1760792508921 with DynamicComponentRenderer
+[2025-10-18T13:19:54.481Z] 📝 [LOG] ✅ [CompactComponentSidebar] Component sidebar rendered successfully
+[2025-10-18T13:19:54.482Z] 📝 [LOG] ✅ [CompactComponentSidebar] Summary: 226 total, 126 for kitchen, 10 categories
+[2025-10-18T13:19:54.491Z] 📝 [LOG] 🎨 [3D VIEW DEBUG] Filtering elements: {
+  "totalElements": 18,
+  "hiddenElementIds": [],
+  "view3DConfig": {
+    "id": "3d",
+    "label": "3D View",
+    "direction": "3d",
+    "is_default": true,
+    "sort_order": 5,
+    "hidden_elements": []
+  },
+  "elevationViewsProp": "provided"
+}
+[2025-10-18T13:19:54.492Z] 📝 [LOG] 🎨 [3D VIEW DEBUG] Visible elements after filtering: {
+  "afterVisibilityFilter": 18,
+  "afterPerformanceLimit": 18
+}
+[2025-10-18T13:19:54.495Z] 📝 [LOG] 🎯 [PerformanceMonitor] Performance monitor hidden
+[2025-10-18T13:19:54.507Z] 📝 [LOG] [EnhancedCabinet3D] Rendering base-cabinet-30-1760788641585 with DynamicComponentRenderer
+[2025-10-18T13:19:54.508Z] 📝 [LOG] [EnhancedCabinet3D] Rendering base-cabinet-40-1760788646697 with DynamicComponentRenderer
+[2025-10-18T13:19:54.510Z] 📝 [LOG] [EnhancedCabinet3D] Rendering base-cabinet-50-1760788652937 with DynamicComponentRenderer
+[2025-10-18T13:19:54.511Z] 📝 [LOG] [EnhancedCabinet3D] Rendering base-cabinet-60-1760788664528 with DynamicComponentRenderer
+[2025-10-18T13:19:54.512Z] 📝 [LOG] [EnhancedCabinet3D] Rendering base-cabinet-80-1760788686425 with DynamicComponentRenderer
+[2025-10-18T13:19:54.513Z] 📝 [LOG] [EnhancedCabinet3D] Rendering new-corner-wall-cabinet-60-1760788779197 with DynamicComponentRenderer
+[2025-10-18T13:19:54.514Z] 📝 [LOG] [EnhancedCabinet3D] Rendering wall-cabinet-30-1760788788486 with DynamicComponentRenderer
+[2025-10-18T13:19:54.515Z] 📝 [LOG] [EnhancedCabinet3D] Rendering wall-cabinet-40-1760788795319 with DynamicComponentRenderer
+[2025-10-18T13:19:54.516Z] 📝 [LOG] [EnhancedCabinet3D] Rendering wall-cabinet-50-1760788802405 with DynamicComponentRenderer
+[2025-10-18T13:19:54.517Z] 📝 [LOG] [EnhancedCabinet3D] Rendering wall-cabinet-60-1760788808433 with DynamicComponentRenderer
+[2025-10-18T13:19:54.518Z] 📝 [LOG] [EnhancedCabinet3D] Rendering wall-cabinet-80-1760788814537 with DynamicComponentRenderer
+[2025-10-18T13:19:54.519Z] 📝 [LOG] 🔍 [validateElementDimensions] Processing element dishwasher-1760788869471: {
+  "elementZ": 0,
+  "isUndefined": false,
+  "isNaN": false,
+  "elementType": "appliance"
+}
+[2025-10-18T13:19:54.520Z] 📝 [LOG] ✅ [validateElementDimensions] Using existing Z value: 0cm
+[2025-10-18T13:19:54.521Z] 📝 [LOG] 🔧 [EnhancedAppliance3D] Using default Z position: 0cm for dishwasher-1760788869471 (floor level)
+[2025-10-18T13:19:54.522Z] 📝 [LOG] 🔍 [validateElementDimensions] Processing element dishwasher-60-1760788873637: {
+  "elementZ": 0,
+  "isUndefined": false,
+  "isNaN": false,
+  "elementType": "appliance"
+}
+[2025-10-18T13:19:54.524Z] 📝 [LOG] ✅ [validateElementDimensions] Using existing Z value: 0cm
+[2025-10-18T13:19:54.525Z] 📝 [LOG] 🔧 [EnhancedAppliance3D] Using default Z position: 0cm for dishwasher-60-1760788873637 (floor level)
+[2025-10-18T13:19:54.526Z] 📝 [LOG] 🔍 [validateElementDimensions] Processing element fridge-90-1760788877593: {
+  "elementZ": 0,
+  "isUndefined": false,
+  "isNaN": false,
+  "elementType": "appliance"
+}
+[2025-10-18T13:19:54.530Z] 📝 [LOG] ✅ [validateElementDimensions] Using existing Z value: 0cm
+[2025-10-18T13:19:54.532Z] 📝 [LOG] 🔧 [EnhancedAppliance3D] Using default Z position: 0cm for fridge-90-1760788877593 (floor level)
+[2025-10-18T13:19:54.534Z] 📝 [LOG] 🔍 [validateElementDimensions] Processing element larder-oven-microwave-1760788897494: {
+  "elementZ": 0,
+  "isUndefined": false,
+  "isNaN": false,
+  "elementType": "appliance"
+}
+[2025-10-18T13:19:54.535Z] 📝 [LOG] ✅ [validateElementDimensions] Using existing Z value: 0cm
+[2025-10-18T13:19:54.536Z] 📝 [LOG] 🔧 [EnhancedAppliance3D] Using default Z position: 0cm for larder-oven-microwave-1760788897494 (floor level)
+[2025-10-18T13:19:54.538Z] 📝 [LOG] [EnhancedCabinet3D] Rendering l-shaped-test-cabinet-90-1760790249209 with DynamicComponentRenderer
+[2025-10-18T13:19:54.539Z] 📝 [LOG] [EnhancedCabinet3D] Rendering l-shaped-test-cabinet-90-1760792471952 with DynamicComponentRenderer
+[2025-10-18T13:19:54.541Z] 📝 [LOG] [EnhancedCabinet3D] Rendering base-cabinet-50-1760792508921 with DynamicComponentRenderer
+[2025-10-18T13:19:55.627Z] 📝 [LOG] 💾 [ProjectContext] Auto-saving design...
+[2025-10-18T13:19:55.628Z] 📝 [LOG] 💾 [ProjectContext] Saving current design... {
+  "roomId": "ff110bba-6ec1-4a40-a799-b8d4aa0b6d1f",
+  "showNotification": false
+}
+[2025-10-18T13:19:55.720Z] 📝 [LOG] ✅ [CompactComponentSidebar] Component sidebar rendered successfully
+[2025-10-18T13:19:55.722Z] 📝 [LOG] ✅ [CompactComponentSidebar] Summary: 226 total, 126 for kitchen, 10 categories
+[2025-10-18T13:19:55.730Z] 📝 [LOG] 🎨 [3D VIEW DEBUG] Filtering elements: {
+  "totalElements": 18,
+  "hiddenElementIds": [],
+  "view3DConfig": {
+    "id": "3d",
+    "label": "3D View",
+    "direction": "3d",
+    "is_default": true,
+    "sort_order": 5,
+    "hidden_elements": []
+  },
+  "elevationViewsProp": "provided"
+}
+[2025-10-18T13:19:55.731Z] 📝 [LOG] 🎨 [3D VIEW DEBUG] Visible elements after filtering: {
+  "afterVisibilityFilter": 18,
+  "afterPerformanceLimit": 18
+}
+[2025-10-18T13:19:55.734Z] 📝 [LOG] 🎯 [PerformanceMonitor] Performance monitor hidden
+[2025-10-18T13:19:55.741Z] 📝 [LOG] [EnhancedCabinet3D] Rendering base-cabinet-30-1760788641585 with DynamicComponentRenderer
+[2025-10-18T13:19:55.742Z] 📝 [LOG] [EnhancedCabinet3D] Rendering base-cabinet-40-1760788646697 with DynamicComponentRenderer
+[2025-10-18T13:19:55.744Z] 📝 [LOG] [EnhancedCabinet3D] Rendering base-cabinet-50-1760788652937 with DynamicComponentRenderer
+[2025-10-18T13:19:55.745Z] 📝 [LOG] [EnhancedCabinet3D] Rendering base-cabinet-60-1760788664528 with DynamicComponentRenderer
+[2025-10-18T13:19:55.746Z] 📝 [LOG] [EnhancedCabinet3D] Rendering base-cabinet-80-1760788686425 with DynamicComponentRenderer
+[2025-10-18T13:19:55.747Z] 📝 [LOG] [EnhancedCabinet3D] Rendering new-corner-wall-cabinet-60-1760788779197 with DynamicComponentRenderer
+[2025-10-18T13:19:55.748Z] 📝 [LOG] [EnhancedCabinet3D] Rendering wall-cabinet-30-1760788788486 with DynamicComponentRenderer
+[2025-10-18T13:19:55.749Z] 📝 [LOG] [EnhancedCabinet3D] Rendering wall-cabinet-40-1760788795319 with DynamicComponentRenderer
+[2025-10-18T13:19:55.750Z] 📝 [LOG] [EnhancedCabinet3D] Rendering wall-cabinet-50-1760788802405 with DynamicComponentRenderer
+[2025-10-18T13:19:55.751Z] 📝 [LOG] [EnhancedCabinet3D] Rendering wall-cabinet-60-1760788808433 with DynamicComponentRenderer
+[2025-10-18T13:19:55.752Z] 📝 [LOG] [EnhancedCabinet3D] Rendering wall-cabinet-80-1760788814537 with DynamicComponentRenderer
+[2025-10-18T13:19:55.754Z] 📝 [LOG] 🔍 [validateElementDimensions] Processing element dishwasher-1760788869471: {
+  "elementZ": 0,
+  "isUndefined": false,
+  "isNaN": false,
+  "elementType": "appliance"
+}
+[2025-10-18T13:19:55.755Z] 📝 [LOG] ✅ [validateElementDimensions] Using existing Z value: 0cm
+[2025-10-18T13:19:55.756Z] 📝 [LOG] 🔧 [EnhancedAppliance3D] Using default Z position: 0cm for dishwasher-1760788869471 (floor level)
+[2025-10-18T13:19:55.757Z] 📝 [LOG] 🔍 [validateElementDimensions] Processing element dishwasher-60-1760788873637: {
+  "elementZ": 0,
+  "isUndefined": false,
+  "isNaN": false,
+  "elementType": "appliance"
+}
+[2025-10-18T13:19:55.758Z] 📝 [LOG] ✅ [validateElementDimensions] Using existing Z value: 0cm
+[2025-10-18T13:19:55.759Z] 📝 [LOG] 🔧 [EnhancedAppliance3D] Using default Z position: 0cm for dishwasher-60-1760788873637 (floor level)
+[2025-10-18T13:19:55.763Z] 📝 [LOG] 🔍 [validateElementDimensions] Processing element fridge-90-1760788877593: {
+  "elementZ": 0,
+  "isUndefined": false,
+  "isNaN": false,
+  "elementType": "appliance"
+}
+[2025-10-18T13:19:55.764Z] 📝 [LOG] ✅ [validateElementDimensions] Using existing Z value: 0cm
+[2025-10-18T13:19:55.765Z] 📝 [LOG] 🔧 [EnhancedAppliance3D] Using default Z position: 0cm for fridge-90-1760788877593 (floor level)
+[2025-10-18T13:19:55.766Z] 📝 [LOG] 🔍 [validateElementDimensions] Processing element larder-oven-microwave-1760788897494: {
+  "elementZ": 0,
+  "isUndefined": false,
+  "isNaN": false,
+  "elementType": "appliance"
+}
+[2025-10-18T13:19:55.767Z] 📝 [LOG] ✅ [validateElementDimensions] Using existing Z value: 0cm
+[2025-10-18T13:19:55.768Z] 📝 [LOG] 🔧 [EnhancedAppliance3D] Using default Z position: 0cm for larder-oven-microwave-1760788897494 (floor level)
+[2025-10-18T13:19:55.770Z] 📝 [LOG] [EnhancedCabinet3D] Rendering l-shaped-test-cabinet-90-1760790249209 with DynamicComponentRenderer
+[2025-10-18T13:19:55.771Z] 📝 [LOG] [EnhancedCabinet3D] Rendering l-shaped-test-cabinet-90-1760792471952 with DynamicComponentRenderer
+[2025-10-18T13:19:55.772Z] 📝 [LOG] [EnhancedCabinet3D] Rendering base-cabinet-50-1760792508921 with DynamicComponentRenderer
+[2025-10-18T13:19:55.776Z] 📝 [LOG] ✅ [CompactComponentSidebar] Component sidebar rendered successfully
+[2025-10-18T13:19:55.778Z] 📝 [LOG] ✅ [CompactComponentSidebar] Summary: 226 total, 126 for kitchen, 10 categories
+[2025-10-18T13:19:55.786Z] 📝 [LOG] 🎨 [3D VIEW DEBUG] Filtering elements: {
+  "totalElements": 18,
+  "hiddenElementIds": [],
+  "view3DConfig": {
+    "id": "3d",
+    "label": "3D View",
+    "direction": "3d",
+    "is_default": true,
+    "sort_order": 5,
+    "hidden_elements": []
+  },
+  "elevationViewsProp": "provided"
+}
+[2025-10-18T13:19:55.787Z] 📝 [LOG] 🎨 [3D VIEW DEBUG] Visible elements after filtering: {
+  "afterVisibilityFilter": 18,
+  "afterPerformanceLimit": 18
+}
+[2025-10-18T13:19:55.791Z] 📝 [LOG] 🎯 [PerformanceMonitor] Performance monitor hidden
+[2025-10-18T13:19:55.801Z] 📝 [LOG] [EnhancedCabinet3D] Rendering base-cabinet-30-1760788641585 with DynamicComponentRenderer
+[2025-10-18T13:19:55.803Z] 📝 [LOG] [EnhancedCabinet3D] Rendering base-cabinet-40-1760788646697 with DynamicComponentRenderer
+[2025-10-18T13:19:55.804Z] 📝 [LOG] [EnhancedCabinet3D] Rendering base-cabinet-50-1760788652937 with DynamicComponentRenderer
+[2025-10-18T13:19:55.805Z] 📝 [LOG] [EnhancedCabinet3D] Rendering base-cabinet-60-1760788664528 with DynamicComponentRenderer
+[2025-10-18T13:19:55.807Z] 📝 [LOG] [EnhancedCabinet3D] Rendering base-cabinet-80-1760788686425 with DynamicComponentRenderer
+[2025-10-18T13:19:55.808Z] 📝 [LOG] [EnhancedCabinet3D] Rendering new-corner-wall-cabinet-60-1760788779197 with DynamicComponentRenderer
+[2025-10-18T13:19:55.809Z] 📝 [LOG] [EnhancedCabinet3D] Rendering wall-cabinet-30-1760788788486 with DynamicComponentRenderer
+[2025-10-18T13:19:55.810Z] 📝 [LOG] [EnhancedCabinet3D] Rendering wall-cabinet-40-1760788795319 with DynamicComponentRenderer
+[2025-10-18T13:19:55.813Z] 📝 [LOG] [EnhancedCabinet3D] Rendering wall-cabinet-50-1760788802405 with DynamicComponentRenderer
+[2025-10-18T13:19:55.814Z] 📝 [LOG] [EnhancedCabinet3D] Rendering wall-cabinet-60-1760788808433 with DynamicComponentRenderer
+[2025-10-18T13:19:55.816Z] 📝 [LOG] [EnhancedCabinet3D] Rendering wall-cabinet-80-1760788814537 with DynamicComponentRenderer
+[2025-10-18T13:19:55.817Z] 📝 [LOG] 🔍 [validateElementDimensions] Processing element dishwasher-1760788869471: {
+  "elementZ": 0,
+  "isUndefined": false,
+  "isNaN": false,
+  "elementType": "appliance"
+}
+[2025-10-18T13:19:55.818Z] 📝 [LOG] ✅ [validateElementDimensions] Using existing Z value: 0cm
+[2025-10-18T13:19:55.819Z] 📝 [LOG] 🔧 [EnhancedAppliance3D] Using default Z position: 0cm for dishwasher-1760788869471 (floor level)
+[2025-10-18T13:19:55.820Z] 📝 [LOG] 🔍 [validateElementDimensions] Processing element dishwasher-60-1760788873637: {
+  "elementZ": 0,
+  "isUndefined": false,
+  "isNaN": false,
+  "elementType": "appliance"
+}
+[2025-10-18T13:19:55.822Z] 📝 [LOG] ✅ [validateElementDimensions] Using existing Z value: 0cm
+[2025-10-18T13:19:55.823Z] 📝 [LOG] 🔧 [EnhancedAppliance3D] Using default Z position: 0cm for dishwasher-60-1760788873637 (floor level)
+[2025-10-18T13:19:55.824Z] 📝 [LOG] 🔍 [validateElementDimensions] Processing element fridge-90-1760788877593: {
+  "elementZ": 0,
+  "isUndefined": false,
+  "isNaN": false,
+  "elementType": "appliance"
+}
+[2025-10-18T13:19:55.825Z] 📝 [LOG] ✅ [validateElementDimensions] Using existing Z value: 0cm
+[2025-10-18T13:19:55.826Z] 📝 [LOG] 🔧 [EnhancedAppliance3D] Using default Z position: 0cm for fridge-90-1760788877593 (floor level)
+[2025-10-18T13:19:55.828Z] 📝 [LOG] 🔍 [validateElementDimensions] Processing element larder-oven-microwave-1760788897494: {
+  "elementZ": 0,
+  "isUndefined": false,
+  "isNaN": false,
+  "elementType": "appliance"
+}
+[2025-10-18T13:19:55.829Z] 📝 [LOG] ✅ [validateElementDimensions] Using existing Z value: 0cm
+[2025-10-18T13:19:55.830Z] 📝 [LOG] 🔧 [EnhancedAppliance3D] Using default Z position: 0cm for larder-oven-microwave-1760788897494 (floor level)
+[2025-10-18T13:19:55.831Z] 📝 [LOG] [EnhancedCabinet3D] Rendering l-shaped-test-cabinet-90-1760790249209 with DynamicComponentRenderer
+[2025-10-18T13:19:55.832Z] 📝 [LOG] [EnhancedCabinet3D] Rendering l-shaped-test-cabinet-90-1760792471952 with DynamicComponentRenderer
+[2025-10-18T13:19:55.834Z] 📝 [LOG] [EnhancedCabinet3D] Rendering base-cabinet-50-1760792508921 with DynamicComponentRenderer
+[2025-10-18T13:19:56.445Z] 📝 [LOG] 🔍 [VISIBILITY DEBUG] Toggle requested: {
+  "elementId": "fridge-90-1760788877593",
+  "viewId": "plan"
+}
+[2025-10-18T13:19:56.447Z] 📝 [LOG] 🔍 [VISIBILITY DEBUG] Current elevationViews state: [
+  {
+    "id": "plan",
+    "label": "Plan View",
+    "direction": "plan",
+    "is_default": true,
+    "sort_order": 0,
+    "hidden_elements": [
+      "new-corner-wall-cabinet-60-1760788779197",
+      "fridge-90-1760788877593"
+    ]
+  },
+  {
+    "id": "front-default",
+    "label": "Front",
+    "direction": "front",
+    "is_default": true,
+    "sort_order": 1,
+    "hidden_elements": [
+      "base-cabinet-80-1760788686425"
+    ]
+  },
+  {
+    "id": "back-default",
+    "label": "Back",
+    "direction": "back",
+    "is_default": true,
+    "sort_order": 2,
+    "hidden_elements": []
+  },
+  {
+    "id": "left-default",
+    "label": "Left",
+    "direction": "left",
+    "is_default": true,
+    "sort_order": 3,
+    "hidden_elements": [
+      "l-shaped-test-cabinet-90-1760792471952"
+    ]
+  },
+  {
+    "id": "right-default",
+    "label": "Right",
+    "direction": "right",
+    "is_default": true,
+    "sort_order": 4,
+    "hidden_elements": []
+  },
+  {
+    "id": "3d",
+    "label": "3D View",
+    "direction": "3d",
+    "is_default": true,
+    "sort_order": 5,
+    "hidden_elements": []
+  }
+]
+[2025-10-18T13:19:56.448Z] 📝 [LOG] 🔍 [VISIBILITY DEBUG] Is currently visible: false
+[2025-10-18T13:19:56.449Z] 📝 [LOG] 🔍 [VISIBILITY DEBUG] Updated elevationViews: [
+  {
+    "id": "plan",
+    "label": "Plan View",
+    "direction": "plan",
+    "is_default": true,
+    "sort_order": 0,
+    "hidden_elements": [
+      "new-corner-wall-cabinet-60-1760788779197"
+    ]
+  },
+  {
+    "id": "front-default",
+    "label": "Front",
+    "direction": "front",
+    "is_default": true,
+    "sort_order": 1,
+    "hidden_elements": [
+      "base-cabinet-80-1760788686425"
+    ]
+  },
+  {
+    "id": "back-default",
+    "label": "Back",
+    "direction": "back",
+    "is_default": true,
+    "sort_order": 2,
+    "hidden_elements": []
+  },
+  {
+    "id": "left-default",
+    "label": "Left",
+    "direction": "left",
+    "is_default": true,
+    "sort_order": 3,
+    "hidden_elements": [
+      "l-shaped-test-cabinet-90-1760792471952"
+    ]
+  },
+  {
+    "id": "right-default",
+    "label": "Right",
+    "direction": "right",
+    "is_default": true,
+    "sort_order": 4,
+    "hidden_elements": []
+  },
+  {
+    "id": "3d",
+    "label": "3D View",
+    "direction": "3d",
+    "is_default": true,
+    "sort_order": 5,
+    "hidden_elements": []
+  }
+]
+[2025-10-18T13:19:56.457Z] 📝 [LOG] ✅ [CompactComponentSidebar] Component sidebar rendered successfully
+[2025-10-18T13:19:56.459Z] 📝 [LOG] ✅ [CompactComponentSidebar] Summary: 226 total, 126 for kitchen, 10 categories
+[2025-10-18T13:19:56.468Z] 📝 [LOG] 🎨 [3D VIEW DEBUG] Filtering elements: {
+  "totalElements": 18,
+  "hiddenElementIds": [],
+  "view3DConfig": {
+    "id": "3d",
+    "label": "3D View",
+    "direction": "3d",
+    "is_default": true,
+    "sort_order": 5,
+    "hidden_elements": []
+  },
+  "elevationViewsProp": "provided"
+}
+[2025-10-18T13:19:56.470Z] 📝 [LOG] 🎨 [3D VIEW DEBUG] Visible elements after filtering: {
+  "afterVisibilityFilter": 18,
+  "afterPerformanceLimit": 18
+}
+[2025-10-18T13:19:56.473Z] 📝 [LOG] 🎯 [PerformanceMonitor] Performance monitor hidden
+[2025-10-18T13:19:56.482Z] 📝 [LOG] [EnhancedCabinet3D] Rendering base-cabinet-30-1760788641585 with DynamicComponentRenderer
+[2025-10-18T13:19:56.484Z] 📝 [LOG] [EnhancedCabinet3D] Rendering base-cabinet-40-1760788646697 with DynamicComponentRenderer
+[2025-10-18T13:19:56.485Z] 📝 [LOG] [EnhancedCabinet3D] Rendering base-cabinet-50-1760788652937 with DynamicComponentRenderer
+[2025-10-18T13:19:56.487Z] 📝 [LOG] [EnhancedCabinet3D] Rendering base-cabinet-60-1760788664528 with DynamicComponentRenderer
+[2025-10-18T13:19:56.488Z] 📝 [LOG] [EnhancedCabinet3D] Rendering base-cabinet-80-1760788686425 with DynamicComponentRenderer
+[2025-10-18T13:19:56.489Z] 📝 [LOG] [EnhancedCabinet3D] Rendering new-corner-wall-cabinet-60-1760788779197 with DynamicComponentRenderer
+[2025-10-18T13:19:56.490Z] 📝 [LOG] [EnhancedCabinet3D] Rendering wall-cabinet-30-1760788788486 with DynamicComponentRenderer
+[2025-10-18T13:19:56.492Z] 📝 [LOG] [EnhancedCabinet3D] Rendering wall-cabinet-40-1760788795319 with DynamicComponentRenderer
+[2025-10-18T13:19:56.493Z] 📝 [LOG] [EnhancedCabinet3D] Rendering wall-cabinet-50-1760788802405 with DynamicComponentRenderer
+[2025-10-18T13:19:56.495Z] 📝 [LOG] [EnhancedCabinet3D] Rendering wall-cabinet-60-1760788808433 with DynamicComponentRenderer
+[2025-10-18T13:19:56.496Z] 📝 [LOG] [EnhancedCabinet3D] Rendering wall-cabinet-80-1760788814537 with DynamicComponentRenderer
+[2025-10-18T13:19:56.497Z] 📝 [LOG] 🔍 [validateElementDimensions] Processing element dishwasher-1760788869471: {
+  "elementZ": 0,
+  "isUndefined": false,
+  "isNaN": false,
+  "elementType": "appliance"
+}
+[2025-10-18T13:19:56.499Z] 📝 [LOG] ✅ [validateElementDimensions] Using existing Z value: 0cm
+[2025-10-18T13:19:56.500Z] 📝 [LOG] 🔧 [EnhancedAppliance3D] Using default Z position: 0cm for dishwasher-1760788869471 (floor level)
+[2025-10-18T13:19:56.501Z] 📝 [LOG] 🔍 [validateElementDimensions] Processing element dishwasher-60-1760788873637: {
+  "elementZ": 0,
+  "isUndefined": false,
+  "isNaN": false,
+  "elementType": "appliance"
+}
+[2025-10-18T13:19:56.504Z] 📝 [LOG] ✅ [validateElementDimensions] Using existing Z value: 0cm
+[2025-10-18T13:19:56.505Z] 📝 [LOG] 🔧 [EnhancedAppliance3D] Using default Z position: 0cm for dishwasher-60-1760788873637 (floor level)
+[2025-10-18T13:19:56.507Z] 📝 [LOG] 🔍 [validateElementDimensions] Processing element fridge-90-1760788877593: {
+  "elementZ": 0,
+  "isUndefined": false,
+  "isNaN": false,
+  "elementType": "appliance"
+}
+[2025-10-18T13:19:56.508Z] 📝 [LOG] ✅ [validateElementDimensions] Using existing Z value: 0cm
+[2025-10-18T13:19:56.509Z] 📝 [LOG] 🔧 [EnhancedAppliance3D] Using default Z position: 0cm for fridge-90-1760788877593 (floor level)
+[2025-10-18T13:19:56.510Z] 📝 [LOG] 🔍 [validateElementDimensions] Processing element larder-oven-microwave-1760788897494: {
+  "elementZ": 0,
+  "isUndefined": false,
+  "isNaN": false,
+  "elementType": "appliance"
+}
+[2025-10-18T13:19:56.512Z] 📝 [LOG] ✅ [validateElementDimensions] Using existing Z value: 0cm
+[2025-10-18T13:19:56.513Z] 📝 [LOG] 🔧 [EnhancedAppliance3D] Using default Z position: 0cm for larder-oven-microwave-1760788897494 (floor level)
+[2025-10-18T13:19:56.514Z] 📝 [LOG] [EnhancedCabinet3D] Rendering l-shaped-test-cabinet-90-1760790249209 with DynamicComponentRenderer
+[2025-10-18T13:19:56.516Z] 📝 [LOG] [EnhancedCabinet3D] Rendering l-shaped-test-cabinet-90-1760792471952 with DynamicComponentRenderer
+[2025-10-18T13:19:56.517Z] 📝 [LOG] [EnhancedCabinet3D] Rendering base-cabinet-50-1760792508921 with DynamicComponentRenderer
+[2025-10-18T13:19:56.600Z] 📝 [LOG] 🔍 [VISIBILITY DEBUG] State and database updated successfully
+[2025-10-18T13:19:56.610Z] 📝 [LOG] ✅ [CompactComponentSidebar] Component sidebar rendered successfully
+[2025-10-18T13:19:56.612Z] 📝 [LOG] ✅ [CompactComponentSidebar] Summary: 226 total, 126 for kitchen, 10 categories
+[2025-10-18T13:19:56.625Z] 📝 [LOG] 🎨 [3D VIEW DEBUG] Filtering elements: {
+  "totalElements": 18,
+  "hiddenElementIds": [],
+  "view3DConfig": {
+    "id": "3d",
+    "label": "3D View",
+    "direction": "3d",
+    "is_default": true,
+    "sort_order": 5,
+    "hidden_elements": []
+  },
+  "elevationViewsProp": "provided"
+}
+[2025-10-18T13:19:56.626Z] 📝 [LOG] 🎨 [3D VIEW DEBUG] Visible elements after filtering: {
+  "afterVisibilityFilter": 18,
+  "afterPerformanceLimit": 18
+}
+[2025-10-18T13:19:56.630Z] 📝 [LOG] 🎯 [PerformanceMonitor] Performance monitor hidden
+[2025-10-18T13:19:56.640Z] 📝 [LOG] [EnhancedCabinet3D] Rendering base-cabinet-30-1760788641585 with DynamicComponentRenderer
+[2025-10-18T13:19:56.642Z] 📝 [LOG] [EnhancedCabinet3D] Rendering base-cabinet-40-1760788646697 with DynamicComponentRenderer
+[2025-10-18T13:19:56.643Z] 📝 [LOG] [EnhancedCabinet3D] Rendering base-cabinet-50-1760788652937 with DynamicComponentRenderer
+[2025-10-18T13:19:56.647Z] 📝 [LOG] [EnhancedCabinet3D] Rendering base-cabinet-60-1760788664528 with DynamicComponentRenderer
+[2025-10-18T13:19:56.648Z] 📝 [LOG] [EnhancedCabinet3D] Rendering base-cabinet-80-1760788686425 with DynamicComponentRenderer
+[2025-10-18T13:19:56.649Z] 📝 [LOG] [EnhancedCabinet3D] Rendering new-corner-wall-cabinet-60-1760788779197 with DynamicComponentRenderer
+[2025-10-18T13:19:56.651Z] 📝 [LOG] [EnhancedCabinet3D] Rendering wall-cabinet-30-1760788788486 with DynamicComponentRenderer
+[2025-10-18T13:19:56.652Z] 📝 [LOG] [EnhancedCabinet3D] Rendering wall-cabinet-40-1760788795319 with DynamicComponentRenderer
+[2025-10-18T13:19:56.653Z] 📝 [LOG] [EnhancedCabinet3D] Rendering wall-cabinet-50-1760788802405 with DynamicComponentRenderer
+[2025-10-18T13:19:56.654Z] 📝 [LOG] [EnhancedCabinet3D] Rendering wall-cabinet-60-1760788808433 with DynamicComponentRenderer
+[2025-10-18T13:19:56.656Z] 📝 [LOG] [EnhancedCabinet3D] Rendering wall-cabinet-80-1760788814537 with DynamicComponentRenderer
+[2025-10-18T13:19:56.657Z] 📝 [LOG] 🔍 [validateElementDimensions] Processing element dishwasher-1760788869471: {
+  "elementZ": 0,
+  "isUndefined": false,
+  "isNaN": false,
+  "elementType": "appliance"
+}
+[2025-10-18T13:19:56.658Z] 📝 [LOG] ✅ [validateElementDimensions] Using existing Z value: 0cm
+[2025-10-18T13:19:56.659Z] 📝 [LOG] 🔧 [EnhancedAppliance3D] Using default Z position: 0cm for dishwasher-1760788869471 (floor level)
+[2025-10-18T13:19:56.661Z] 📝 [LOG] 🔍 [validateElementDimensions] Processing element dishwasher-60-1760788873637: {
+  "elementZ": 0,
+  "isUndefined": false,
+  "isNaN": false,
+  "elementType": "appliance"
+}
+[2025-10-18T13:19:56.662Z] 📝 [LOG] ✅ [validateElementDimensions] Using existing Z value: 0cm
+[2025-10-18T13:19:56.664Z] 📝 [LOG] 🔧 [EnhancedAppliance3D] Using default Z position: 0cm for dishwasher-60-1760788873637 (floor level)
+[2025-10-18T13:19:56.665Z] 📝 [LOG] 🔍 [validateElementDimensions] Processing element fridge-90-1760788877593: {
+  "elementZ": 0,
+  "isUndefined": false,
+  "isNaN": false,
+  "elementType": "appliance"
+}
+[2025-10-18T13:19:56.666Z] 📝 [LOG] ✅ [validateElementDimensions] Using existing Z value: 0cm
+[2025-10-18T13:19:56.667Z] 📝 [LOG] 🔧 [EnhancedAppliance3D] Using default Z position: 0cm for fridge-90-1760788877593 (floor level)
+[2025-10-18T13:19:56.669Z] 📝 [LOG] 🔍 [validateElementDimensions] Processing element larder-oven-microwave-1760788897494: {
+  "elementZ": 0,
+  "isUndefined": false,
+  "isNaN": false,
+  "elementType": "appliance"
+}
+[2025-10-18T13:19:56.670Z] 📝 [LOG] ✅ [validateElementDimensions] Using existing Z value: 0cm
+[2025-10-18T13:19:56.673Z] 📝 [LOG] 🔧 [EnhancedAppliance3D] Using default Z position: 0cm for larder-oven-microwave-1760788897494 (floor level)
+[2025-10-18T13:19:56.674Z] 📝 [LOG] [EnhancedCabinet3D] Rendering l-shaped-test-cabinet-90-1760790249209 with DynamicComponentRenderer
+[2025-10-18T13:19:56.676Z] 📝 [LOG] [EnhancedCabinet3D] Rendering l-shaped-test-cabinet-90-1760792471952 with DynamicComponentRenderer
+[2025-10-18T13:19:56.677Z] 📝 [LOG] [EnhancedCabinet3D] Rendering base-cabinet-50-1760792508921 with DynamicComponentRenderer
+[2025-10-18T13:19:56.682Z] 📝 [LOG] ✅ [CompactComponentSidebar] Component sidebar rendered successfully
+[2025-10-18T13:19:56.683Z] 📝 [LOG] ✅ [CompactComponentSidebar] Summary: 226 total, 126 for kitchen, 10 categories
+[2025-10-18T13:19:56.691Z] 📝 [LOG] 🎨 [3D VIEW DEBUG] Filtering elements: {
+  "totalElements": 18,
+  "hiddenElementIds": [],
+  "view3DConfig": {
+    "id": "3d",
+    "label": "3D View",
+    "direction": "3d",
+    "is_default": true,
+    "sort_order": 5,
+    "hidden_elements": []
+  },
+  "elevationViewsProp": "provided"
+}
+[2025-10-18T13:19:56.693Z] 📝 [LOG] 🎨 [3D VIEW DEBUG] Visible elements after filtering: {
+  "afterVisibilityFilter": 18,
+  "afterPerformanceLimit": 18
+}
+[2025-10-18T13:19:56.697Z] 📝 [LOG] 🎯 [PerformanceMonitor] Performance monitor hidden
+[2025-10-18T13:19:56.711Z] 📝 [LOG] [EnhancedCabinet3D] Rendering base-cabinet-30-1760788641585 with DynamicComponentRenderer
+[2025-10-18T13:19:56.713Z] 📝 [LOG] [EnhancedCabinet3D] Rendering base-cabinet-40-1760788646697 with DynamicComponentRenderer
+[2025-10-18T13:19:56.715Z] 📝 [LOG] [EnhancedCabinet3D] Rendering base-cabinet-50-1760788652937 with DynamicComponentRenderer
+[2025-10-18T13:19:56.716Z] 📝 [LOG] [EnhancedCabinet3D] Rendering base-cabinet-60-1760788664528 with DynamicComponentRenderer
+[2025-10-18T13:19:56.718Z] 📝 [LOG] [EnhancedCabinet3D] Rendering base-cabinet-80-1760788686425 with DynamicComponentRenderer
+[2025-10-18T13:19:56.719Z] 📝 [LOG] [EnhancedCabinet3D] Rendering new-corner-wall-cabinet-60-1760788779197 with DynamicComponentRenderer
+[2025-10-18T13:19:56.720Z] 📝 [LOG] [EnhancedCabinet3D] Rendering wall-cabinet-30-1760788788486 with DynamicComponentRenderer
+[2025-10-18T13:19:56.721Z] 📝 [LOG] [EnhancedCabinet3D] Rendering wall-cabinet-40-1760788795319 with DynamicComponentRenderer
+[2025-10-18T13:19:56.723Z] 📝 [LOG] [EnhancedCabinet3D] Rendering wall-cabinet-50-1760788802405 with DynamicComponentRenderer
+[2025-10-18T13:19:56.724Z] 📝 [LOG] [EnhancedCabinet3D] Rendering wall-cabinet-60-1760788808433 with DynamicComponentRenderer
+[2025-10-18T13:19:56.727Z] 📝 [LOG] [EnhancedCabinet3D] Rendering wall-cabinet-80-1760788814537 with DynamicComponentRenderer
+[2025-10-18T13:19:56.728Z] 📝 [LOG] 🔍 [validateElementDimensions] Processing element dishwasher-1760788869471: {
+  "elementZ": 0,
+  "isUndefined": false,
+  "isNaN": false,
+  "elementType": "appliance"
+}
+[2025-10-18T13:19:56.730Z] 📝 [LOG] ✅ [validateElementDimensions] Using existing Z value: 0cm
+[2025-10-18T13:19:56.731Z] 📝 [LOG] 🔧 [EnhancedAppliance3D] Using default Z position: 0cm for dishwasher-1760788869471 (floor level)
+[2025-10-18T13:19:56.733Z] 📝 [LOG] 🔍 [validateElementDimensions] Processing element dishwasher-60-1760788873637: {
+  "elementZ": 0,
+  "isUndefined": false,
+  "isNaN": false,
+  "elementType": "appliance"
+}
+[2025-10-18T13:19:56.734Z] 📝 [LOG] ✅ [validateElementDimensions] Using existing Z value: 0cm
+[2025-10-18T13:19:56.735Z] 📝 [LOG] 🔧 [EnhancedAppliance3D] Using default Z position: 0cm for dishwasher-60-1760788873637 (floor level)
+[2025-10-18T13:19:56.737Z] 📝 [LOG] 🔍 [validateElementDimensions] Processing element fridge-90-1760788877593: {
+  "elementZ": 0,
+  "isUndefined": false,
+  "isNaN": false,
+  "elementType": "appliance"
+}
+[2025-10-18T13:19:56.738Z] 📝 [LOG] ✅ [validateElementDimensions] Using existing Z value: 0cm
+[2025-10-18T13:19:56.740Z] 📝 [LOG] 🔧 [EnhancedAppliance3D] Using default Z position: 0cm for fridge-90-1760788877593 (floor level)
+[2025-10-18T13:19:56.741Z] 📝 [LOG] 🔍 [validateElementDimensions] Processing element larder-oven-microwave-1760788897494: {
+  "elementZ": 0,
+  "isUndefined": false,
+  "isNaN": false,
+  "elementType": "appliance"
+}
+[2025-10-18T13:19:56.742Z] 📝 [LOG] ✅ [validateElementDimensions] Using existing Z value: 0cm
+[2025-10-18T13:19:56.744Z] 📝 [LOG] 🔧 [EnhancedAppliance3D] Using default Z position: 0cm for larder-oven-microwave-1760788897494 (floor level)
+[2025-10-18T13:19:56.745Z] 📝 [LOG] [EnhancedCabinet3D] Rendering l-shaped-test-cabinet-90-1760790249209 with DynamicComponentRenderer
+[2025-10-18T13:19:56.747Z] 📝 [LOG] [EnhancedCabinet3D] Rendering l-shaped-test-cabinet-90-1760792471952 with DynamicComponentRenderer
+[2025-10-18T13:19:56.748Z] 📝 [LOG] [EnhancedCabinet3D] Rendering base-cabinet-50-1760792508921 with DynamicComponentRenderer
+[2025-10-18T13:19:58.584Z] 📝 [LOG] ✅ [CompactComponentSidebar] Component sidebar rendered successfully
+[2025-10-18T13:19:58.586Z] 📝 [LOG] ✅ [CompactComponentSidebar] Summary: 226 total, 126 for kitchen, 10 categories
+[2025-10-18T13:19:58.596Z] 📝 [LOG] 🎨 [3D VIEW DEBUG] Filtering elements: {
+  "totalElements": 18,
+  "hiddenElementIds": [],
+  "view3DConfig": {
+    "id": "3d",
+    "label": "3D View",
+    "direction": "3d",
+    "is_default": true,
+    "sort_order": 5,
+    "hidden_elements": []
+  },
+  "elevationViewsProp": "provided"
+}
+[2025-10-18T13:19:58.598Z] 📝 [LOG] 🎨 [3D VIEW DEBUG] Visible elements after filtering: {
+  "afterVisibilityFilter": 18,
+  "afterPerformanceLimit": 18
+}
+[2025-10-18T13:19:58.601Z] 📝 [LOG] 🎯 [PerformanceMonitor] Performance monitor hidden
+[2025-10-18T13:19:58.610Z] 📝 [LOG] [EnhancedCabinet3D] Rendering base-cabinet-30-1760788641585 with DynamicComponentRenderer
+[2025-10-18T13:19:58.612Z] 📝 [LOG] [EnhancedCabinet3D] Rendering base-cabinet-40-1760788646697 with DynamicComponentRenderer
+[2025-10-18T13:19:58.613Z] 📝 [LOG] [EnhancedCabinet3D] Rendering base-cabinet-50-1760788652937 with DynamicComponentRenderer
+[2025-10-18T13:19:58.614Z] 📝 [LOG] [EnhancedCabinet3D] Rendering base-cabinet-60-1760788664528 with DynamicComponentRenderer
+[2025-10-18T13:19:58.616Z] 📝 [LOG] [EnhancedCabinet3D] Rendering base-cabinet-80-1760788686425 with DynamicComponentRenderer
+[2025-10-18T13:19:58.617Z] 📝 [LOG] [EnhancedCabinet3D] Rendering new-corner-wall-cabinet-60-1760788779197 with DynamicComponentRenderer
+[2025-10-18T13:19:58.618Z] 📝 [LOG] [EnhancedCabinet3D] Rendering wall-cabinet-30-1760788788486 with DynamicComponentRenderer
+[2025-10-18T13:19:58.620Z] 📝 [LOG] [EnhancedCabinet3D] Rendering wall-cabinet-40-1760788795319 with DynamicComponentRenderer
+[2025-10-18T13:19:58.621Z] 📝 [LOG] [EnhancedCabinet3D] Rendering wall-cabinet-50-1760788802405 with DynamicComponentRenderer
+[2025-10-18T13:19:58.622Z] 📝 [LOG] [EnhancedCabinet3D] Rendering wall-cabinet-60-1760788808433 with DynamicComponentRenderer
+[2025-10-18T13:19:58.624Z] 📝 [LOG] [EnhancedCabinet3D] Rendering wall-cabinet-80-1760788814537 with DynamicComponentRenderer
+[2025-10-18T13:19:58.627Z] 📝 [LOG] 🔍 [validateElementDimensions] Processing element dishwasher-1760788869471: {
+  "elementZ": 0,
+  "isUndefined": false,
+  "isNaN": false,
+  "elementType": "appliance"
+}
+[2025-10-18T13:19:58.628Z] 📝 [LOG] ✅ [validateElementDimensions] Using existing Z value: 0cm
+[2025-10-18T13:19:58.630Z] 📝 [LOG] 🔧 [EnhancedAppliance3D] Using default Z position: 0cm for dishwasher-1760788869471 (floor level)
+[2025-10-18T13:19:58.632Z] 📝 [LOG] 🔍 [validateElementDimensions] Processing element dishwasher-60-1760788873637: {
+  "elementZ": 0,
+  "isUndefined": false,
+  "isNaN": false,
+  "elementType": "appliance"
+}
+[2025-10-18T13:19:58.635Z] 📝 [LOG] ✅ [validateElementDimensions] Using existing Z value: 0cm
+[2025-10-18T13:19:58.636Z] 📝 [LOG] 🔧 [EnhancedAppliance3D] Using default Z position: 0cm for dishwasher-60-1760788873637 (floor level)
+[2025-10-18T13:19:58.638Z] 📝 [LOG] 🔍 [validateElementDimensions] Processing element fridge-90-1760788877593: {
+  "elementZ": 0,
+  "isUndefined": false,
+  "isNaN": false,
+  "elementType": "appliance"
+}
+[2025-10-18T13:19:58.640Z] 📝 [LOG] ✅ [validateElementDimensions] Using existing Z value: 0cm
+[2025-10-18T13:19:58.641Z] 📝 [LOG] 🔧 [EnhancedAppliance3D] Using default Z position: 0cm for fridge-90-1760788877593 (floor level)
+[2025-10-18T13:19:58.643Z] 📝 [LOG] 🔍 [validateElementDimensions] Processing element larder-oven-microwave-1760788897494: {
+  "elementZ": 0,
+  "isUndefined": false,
+  "isNaN": false,
+  "elementType": "appliance"
+}
+[2025-10-18T13:19:58.645Z] 📝 [LOG] ✅ [validateElementDimensions] Using existing Z value: 0cm
+[2025-10-18T13:19:58.646Z] 📝 [LOG] 🔧 [EnhancedAppliance3D] Using default Z position: 0cm for larder-oven-microwave-1760788897494 (floor level)
+[2025-10-18T13:19:58.648Z] 📝 [LOG] [EnhancedCabinet3D] Rendering l-shaped-test-cabinet-90-1760790249209 with DynamicComponentRenderer
+[2025-10-18T13:19:58.650Z] 📝 [LOG] [EnhancedCabinet3D] Rendering l-shaped-test-cabinet-90-1760792471952 with DynamicComponentRenderer
+[2025-10-18T13:19:58.652Z] 📝 [LOG] [EnhancedCabinet3D] Rendering base-cabinet-50-1760792508921 with DynamicComponentRenderer
+[2025-10-18T13:19:58.747Z] 📝 [LOG] [Model3DLoader] Cache hit for model: l-shaped-test-cabinet-90
+[2025-10-18T13:19:58.749Z] 📝 [LOG] [Model3DLoader] Cache hit for geometry: 6a45d0f6-5116-409a-8ab9-aacebd466a31
+[2025-10-18T13:19:58.750Z] 📝 [LOG] [Model3DLoader] Cache hit for materials
+[2025-10-18T13:19:58.752Z] 📝 [LOG] [GeometryBuilder] Built 8 geometry parts
+[2025-10-18T13:19:58.753Z] 📝 [LOG] [DynamicRenderer] Built component: l-shaped-test-cabinet-90 (8 parts)
+[2025-10-18T13:19:59.668Z] 📝 [LOG] ✅ [CompactComponentSidebar] Component sidebar rendered successfully
+[2025-10-18T13:19:59.670Z] 📝 [LOG] ✅ [CompactComponentSidebar] Summary: 226 total, 126 for kitchen, 10 categories
+[2025-10-18T13:19:59.679Z] 📝 [LOG] 🎨 [3D VIEW DEBUG] Filtering elements: {
+  "totalElements": 18,
+  "hiddenElementIds": [],
+  "view3DConfig": {
+    "id": "3d",
+    "label": "3D View",
+    "direction": "3d",
+    "is_default": true,
+    "sort_order": 5,
+    "hidden_elements": []
+  },
+  "elevationViewsProp": "provided"
+}
+[2025-10-18T13:19:59.680Z] 📝 [LOG] 🎨 [3D VIEW DEBUG] Visible elements after filtering: {
+  "afterVisibilityFilter": 18,
+  "afterPerformanceLimit": 18
+}
+[2025-10-18T13:19:59.684Z] 📝 [LOG] 🎯 [PerformanceMonitor] Performance monitor hidden
+[2025-10-18T13:19:59.693Z] 📝 [LOG] [EnhancedCabinet3D] Rendering base-cabinet-30-1760788641585 with DynamicComponentRenderer
+[2025-10-18T13:19:59.694Z] 📝 [LOG] [EnhancedCabinet3D] Rendering base-cabinet-40-1760788646697 with DynamicComponentRenderer
+[2025-10-18T13:19:59.696Z] 📝 [LOG] [EnhancedCabinet3D] Rendering base-cabinet-50-1760788652937 with DynamicComponentRenderer
+[2025-10-18T13:19:59.697Z] 📝 [LOG] [EnhancedCabinet3D] Rendering base-cabinet-60-1760788664528 with DynamicComponentRenderer
+[2025-10-18T13:19:59.699Z] 📝 [LOG] [EnhancedCabinet3D] Rendering base-cabinet-80-1760788686425 with DynamicComponentRenderer
+[2025-10-18T13:19:59.700Z] 📝 [LOG] [EnhancedCabinet3D] Rendering new-corner-wall-cabinet-60-1760788779197 with DynamicComponentRenderer
+[2025-10-18T13:19:59.701Z] 📝 [LOG] [EnhancedCabinet3D] Rendering wall-cabinet-30-1760788788486 with DynamicComponentRenderer
+[2025-10-18T13:19:59.703Z] 📝 [LOG] [EnhancedCabinet3D] Rendering wall-cabinet-40-1760788795319 with DynamicComponentRenderer
+[2025-10-18T13:19:59.704Z] 📝 [LOG] [EnhancedCabinet3D] Rendering wall-cabinet-50-1760788802405 with DynamicComponentRenderer
+[2025-10-18T13:19:59.705Z] 📝 [LOG] [EnhancedCabinet3D] Rendering wall-cabinet-60-1760788808433 with DynamicComponentRenderer
+[2025-10-18T13:19:59.707Z] 📝 [LOG] [EnhancedCabinet3D] Rendering wall-cabinet-80-1760788814537 with DynamicComponentRenderer
+[2025-10-18T13:19:59.708Z] 📝 [LOG] 🔍 [validateElementDimensions] Processing element dishwasher-1760788869471: {
+  "elementZ": 0,
+  "isUndefined": false,
+  "isNaN": false,
+  "elementType": "appliance"
+}
+[2025-10-18T13:19:59.710Z] 📝 [LOG] ✅ [validateElementDimensions] Using existing Z value: 0cm
+[2025-10-18T13:19:59.711Z] 📝 [LOG] 🔧 [EnhancedAppliance3D] Using default Z position: 0cm for dishwasher-1760788869471 (floor level)
+[2025-10-18T13:19:59.713Z] 📝 [LOG] 🔍 [validateElementDimensions] Processing element dishwasher-60-1760788873637: {
+  "elementZ": 0,
+  "isUndefined": false,
+  "isNaN": false,
+  "elementType": "appliance"
+}
+[2025-10-18T13:19:59.714Z] 📝 [LOG] ✅ [validateElementDimensions] Using existing Z value: 0cm
+[2025-10-18T13:19:59.716Z] 📝 [LOG] 🔧 [EnhancedAppliance3D] Using default Z position: 0cm for dishwasher-60-1760788873637 (floor level)
+[2025-10-18T13:19:59.718Z] 📝 [LOG] 🔍 [validateElementDimensions] Processing element fridge-90-1760788877593: {
+  "elementZ": 0,
+  "isUndefined": false,
+  "isNaN": false,
+  "elementType": "appliance"
+}
+[2025-10-18T13:19:59.719Z] 📝 [LOG] ✅ [validateElementDimensions] Using existing Z value: 0cm
+[2025-10-18T13:19:59.721Z] 📝 [LOG] 🔧 [EnhancedAppliance3D] Using default Z position: 0cm for fridge-90-1760788877593 (floor level)
+[2025-10-18T13:19:59.722Z] 📝 [LOG] 🔍 [validateElementDimensions] Processing element larder-oven-microwave-1760788897494: {
+  "elementZ": 0,
+  "isUndefined": false,
+  "isNaN": false,
+  "elementType": "appliance"
+}
+[2025-10-18T13:19:59.724Z] 📝 [LOG] ✅ [validateElementDimensions] Using existing Z value: 0cm
+[2025-10-18T13:19:59.725Z] 📝 [LOG] 🔧 [EnhancedAppliance3D] Using default Z position: 0cm for larder-oven-microwave-1760788897494 (floor level)
+[2025-10-18T13:19:59.727Z] 📝 [LOG] [EnhancedCabinet3D] Rendering l-shaped-test-cabinet-90-1760790249209 with DynamicComponentRenderer
+[2025-10-18T13:19:59.729Z] 📝 [LOG] [EnhancedCabinet3D] Rendering l-shaped-test-cabinet-90-1760792471952 with DynamicComponentRenderer
+[2025-10-18T13:19:59.730Z] 📝 [LOG] [EnhancedCabinet3D] Rendering base-cabinet-50-1760792508921 with DynamicComponentRenderer
+[2025-10-18T13:19:59.732Z] 📝 [LOG] [Model3DLoader] Cache hit for model: l-shaped-test-cabinet-90
+[2025-10-18T13:19:59.734Z] 📝 [LOG] [Model3DLoader] Cache hit for model: base-cabinet-50
+[2025-10-18T13:19:59.735Z] 📝 [LOG] [Model3DLoader] Cache hit for geometry: 6a45d0f6-5116-409a-8ab9-aacebd466a31
+[2025-10-18T13:19:59.736Z] 📝 [LOG] [Model3DLoader] Cache hit for materials
+[2025-10-18T13:19:59.738Z] 📝 [LOG] [Model3DLoader] Cache hit for geometry: 520dc8d6-d9a7-4009-b755-761634410954
+[2025-10-18T13:19:59.741Z] 📝 [LOG] [Model3DLoader] Cache hit for materials
+[2025-10-18T13:19:59.743Z] 📝 [LOG] [GeometryBuilder] Built 8 geometry parts
+[2025-10-18T13:19:59.745Z] 📝 [LOG] [DynamicRenderer] Built component: l-shaped-test-cabinet-90 (8 parts)
+[2025-10-18T13:19:59.747Z] 📝 [LOG] [GeometryBuilder] Built 4 geometry parts
+[2025-10-18T13:19:59.748Z] 📝 [LOG] [DynamicRenderer] Built component: base-cabinet-50 (4 parts)
+[2025-10-18T13:20:05.464Z] 📝 [LOG] ✅ [CompactComponentSidebar] Component sidebar rendered successfully
+[2025-10-18T13:20:05.466Z] 📝 [LOG] ✅ [CompactComponentSidebar] Summary: 226 total, 126 for kitchen, 10 categories
+[2025-10-18T13:20:05.474Z] 📝 [LOG] 🎨 [3D VIEW DEBUG] Filtering elements: {
+  "totalElements": 18,
+  "hiddenElementIds": [],
+  "view3DConfig": {
+    "id": "3d",
+    "label": "3D View",
+    "direction": "3d",
+    "is_default": true,
+    "sort_order": 5,
+    "hidden_elements": []
+  },
+  "elevationViewsProp": "provided"
+}
+[2025-10-18T13:20:05.476Z] 📝 [LOG] 🎨 [3D VIEW DEBUG] Visible elements after filtering: {
+  "afterVisibilityFilter": 18,
+  "afterPerformanceLimit": 18
+}
+[2025-10-18T13:20:05.480Z] 📝 [LOG] 🎯 [PerformanceMonitor] Performance monitor hidden
+[2025-10-18T13:20:05.490Z] 📝 [LOG] [EnhancedCabinet3D] Rendering base-cabinet-30-1760788641585 with DynamicComponentRenderer
+[2025-10-18T13:20:05.492Z] 📝 [LOG] [EnhancedCabinet3D] Rendering base-cabinet-40-1760788646697 with DynamicComponentRenderer
+[2025-10-18T13:20:05.494Z] 📝 [LOG] [EnhancedCabinet3D] Rendering base-cabinet-50-1760788652937 with DynamicComponentRenderer
+[2025-10-18T13:20:05.496Z] 📝 [LOG] [EnhancedCabinet3D] Rendering base-cabinet-60-1760788664528 with DynamicComponentRenderer
+[2025-10-18T13:20:05.498Z] 📝 [LOG] [EnhancedCabinet3D] Rendering base-cabinet-80-1760788686425 with DynamicComponentRenderer
+[2025-10-18T13:20:05.499Z] 📝 [LOG] [EnhancedCabinet3D] Rendering new-corner-wall-cabinet-60-1760788779197 with DynamicComponentRenderer
+[2025-10-18T13:20:05.501Z] 📝 [LOG] [EnhancedCabinet3D] Rendering wall-cabinet-30-1760788788486 with DynamicComponentRenderer
+[2025-10-18T13:20:05.503Z] 📝 [LOG] [EnhancedCabinet3D] Rendering wall-cabinet-40-1760788795319 with DynamicComponentRenderer
+[2025-10-18T13:20:05.504Z] 📝 [LOG] [EnhancedCabinet3D] Rendering wall-cabinet-50-1760788802405 with DynamicComponentRenderer
+[2025-10-18T13:20:05.506Z] 📝 [LOG] [EnhancedCabinet3D] Rendering wall-cabinet-60-1760788808433 with DynamicComponentRenderer
+[2025-10-18T13:20:05.508Z] 📝 [LOG] [EnhancedCabinet3D] Rendering wall-cabinet-80-1760788814537 with DynamicComponentRenderer
+[2025-10-18T13:20:05.510Z] 📝 [LOG] 🔍 [validateElementDimensions] Processing element dishwasher-1760788869471: {
+  "elementZ": 0,
+  "isUndefined": false,
+  "isNaN": false,
+  "elementType": "appliance"
+}
+[2025-10-18T13:20:05.511Z] 📝 [LOG] ✅ [validateElementDimensions] Using existing Z value: 0cm
+[2025-10-18T13:20:05.513Z] 📝 [LOG] 🔧 [EnhancedAppliance3D] Using default Z position: 0cm for dishwasher-1760788869471 (floor level)
+[2025-10-18T13:20:05.515Z] 📝 [LOG] 🔍 [validateElementDimensions] Processing element dishwasher-60-1760788873637: {
+  "elementZ": 0,
+  "isUndefined": false,
+  "isNaN": false,
+  "elementType": "appliance"
+}
+[2025-10-18T13:20:05.517Z] 📝 [LOG] ✅ [validateElementDimensions] Using existing Z value: 0cm
+[2025-10-18T13:20:05.519Z] 📝 [LOG] 🔧 [EnhancedAppliance3D] Using default Z position: 0cm for dishwasher-60-1760788873637 (floor level)
+[2025-10-18T13:20:05.521Z] 📝 [LOG] 🔍 [validateElementDimensions] Processing element fridge-90-1760788877593: {
+  "elementZ": 0,
+  "isUndefined": false,
+  "isNaN": false,
+  "elementType": "appliance"
+}
+[2025-10-18T13:20:05.522Z] 📝 [LOG] ✅ [validateElementDimensions] Using existing Z value: 0cm
+[2025-10-18T13:20:05.524Z] 📝 [LOG] 🔧 [EnhancedAppliance3D] Using default Z position: 0cm for fridge-90-1760788877593 (floor level)
+[2025-10-18T13:20:05.526Z] 📝 [LOG] 🔍 [validateElementDimensions] Processing element larder-oven-microwave-1760788897494: {
+  "elementZ": 0,
+  "isUndefined": false,
+  "isNaN": false,
+  "elementType": "appliance"
+}
+[2025-10-18T13:20:05.527Z] 📝 [LOG] ✅ [validateElementDimensions] Using existing Z value: 0cm
+[2025-10-18T13:20:05.529Z] 📝 [LOG] 🔧 [EnhancedAppliance3D] Using default Z position: 0cm for larder-oven-microwave-1760788897494 (floor level)
+[2025-10-18T13:20:05.531Z] 📝 [LOG] [EnhancedCabinet3D] Rendering l-shaped-test-cabinet-90-1760790249209 with DynamicComponentRenderer
+[2025-10-18T13:20:05.533Z] 📝 [LOG] [EnhancedCabinet3D] Rendering l-shaped-test-cabinet-90-1760792471952 with DynamicComponentRenderer
+[2025-10-18T13:20:05.535Z] 📝 [LOG] [EnhancedCabinet3D] Rendering base-cabinet-50-1760792508921 with DynamicComponentRenderer
+[2025-10-18T13:20:05.537Z] 📝 [LOG] [Model3DLoader] Cache hit for model: base-cabinet-50
+[2025-10-18T13:20:05.539Z] 📝 [LOG] [Model3DLoader] Cache hit for geometry: 520dc8d6-d9a7-4009-b755-761634410954
+[2025-10-18T13:20:05.541Z] 📝 [LOG] [Model3DLoader] Cache hit for materials
+[2025-10-18T13:20:05.546Z] 📝 [LOG] [GeometryBuilder] Built 4 geometry parts
+[2025-10-18T13:20:05.548Z] 📝 [LOG] [DynamicRenderer] Built component: base-cabinet-50 (4 parts)
+[2025-10-18T13:20:09.261Z] 📝 [LOG] 🔍 [VISIBILITY DEBUG] Toggle requested: {
+  "elementId": "larder-oven-microwave-1760788897494",
+  "viewId": "plan"
+}
+[2025-10-18T13:20:09.263Z] 📝 [LOG] 🔍 [VISIBILITY DEBUG] Current elevationViews state: [
+  {
+    "id": "plan",
+    "label": "Plan View",
+    "direction": "plan",
+    "is_default": true,
+    "sort_order": 0,
+    "hidden_elements": [
+      "new-corner-wall-cabinet-60-1760788779197"
+    ]
+  },
+  {
+    "id": "front-default",
+    "label": "Front",
+    "direction": "front",
+    "is_default": true,
+    "sort_order": 1,
+    "hidden_elements": [
+      "base-cabinet-80-1760788686425"
+    ]
+  },
+  {
+    "id": "back-default",
+    "label": "Back",
+    "direction": "back",
+    "is_default": true,
+    "sort_order": 2,
+    "hidden_elements": []
+  },
+  {
+    "id": "left-default",
+    "label": "Left",
+    "direction": "left",
+    "is_default": true,
+    "sort_order": 3,
+    "hidden_elements": [
+      "l-shaped-test-cabinet-90-1760792471952"
+    ]
+  },
+  {
+    "id": "right-default",
+    "label": "Right",
+    "direction": "right",
+    "is_default": true,
+    "sort_order": 4,
+    "hidden_elements": []
+  },
+  {
+    "id": "3d",
+    "label": "3D View",
+    "direction": "3d",
+    "is_default": true,
+    "sort_order": 5,
+    "hidden_elements": []
+  }
+]
+[2025-10-18T13:20:09.265Z] 📝 [LOG] 🔍 [VISIBILITY DEBUG] Is currently visible: true
+[2025-10-18T13:20:09.267Z] 📝 [LOG] 🔍 [VISIBILITY DEBUG] Updated elevationViews: [
+  {
+    "id": "plan",
+    "label": "Plan View",
+    "direction": "plan",
+    "is_default": true,
+    "sort_order": 0,
+    "hidden_elements": [
+      "new-corner-wall-cabinet-60-1760788779197",
+      "larder-oven-microwave-1760788897494"
+    ]
+  },
+  {
+    "id": "front-default",
+    "label": "Front",
+    "direction": "front",
+    "is_default": true,
+    "sort_order": 1,
+    "hidden_elements": [
+      "base-cabinet-80-1760788686425"
+    ]
+  },
+  {
+    "id": "back-default",
+    "label": "Back",
+    "direction": "back",
+    "is_default": true,
+    "sort_order": 2,
+    "hidden_elements": []
+  },
+  {
+    "id": "left-default",
+    "label": "Left",
+    "direction": "left",
+    "is_default": true,
+    "sort_order": 3,
+    "hidden_elements": [
+      "l-shaped-test-cabinet-90-1760792471952"
+    ]
+  },
+  {
+    "id": "right-default",
+    "label": "Right",
+    "direction": "right",
+    "is_default": true,
+    "sort_order": 4,
+    "hidden_elements": []
+  },
+  {
+    "id": "3d",
+    "label": "3D View",
+    "direction": "3d",
+    "is_default": true,
+    "sort_order": 5,
+    "hidden_elements": []
+  }
+]
+[2025-10-18T13:20:09.273Z] 📝 [LOG] ✅ [CompactComponentSidebar] Component sidebar rendered successfully
+[2025-10-18T13:20:09.275Z] 📝 [LOG] ✅ [CompactComponentSidebar] Summary: 226 total, 126 for kitchen, 10 categories
+[2025-10-18T13:20:09.284Z] 📝 [LOG] 🎨 [3D VIEW DEBUG] Filtering elements: {
+  "totalElements": 18,
+  "hiddenElementIds": [],
+  "view3DConfig": {
+    "id": "3d",
+    "label": "3D View",
+    "direction": "3d",
+    "is_default": true,
+    "sort_order": 5,
+    "hidden_elements": []
+  },
+  "elevationViewsProp": "provided"
+}
+[2025-10-18T13:20:09.286Z] 📝 [LOG] 🎨 [3D VIEW DEBUG] Visible elements after filtering: {
+  "afterVisibilityFilter": 18,
+  "afterPerformanceLimit": 18
+}
+[2025-10-18T13:20:09.290Z] 📝 [LOG] 🎯 [PerformanceMonitor] Performance monitor hidden
+[2025-10-18T13:20:09.299Z] 📝 [LOG] [EnhancedCabinet3D] Rendering base-cabinet-30-1760788641585 with DynamicComponentRenderer
+[2025-10-18T13:20:09.301Z] 📝 [LOG] [EnhancedCabinet3D] Rendering base-cabinet-40-1760788646697 with DynamicComponentRenderer
+[2025-10-18T13:20:09.303Z] 📝 [LOG] [EnhancedCabinet3D] Rendering base-cabinet-50-1760788652937 with DynamicComponentRenderer
+[2025-10-18T13:20:09.305Z] 📝 [LOG] [EnhancedCabinet3D] Rendering base-cabinet-60-1760788664528 with DynamicComponentRenderer
+[2025-10-18T13:20:09.307Z] 📝 [LOG] [EnhancedCabinet3D] Rendering base-cabinet-80-1760788686425 with DynamicComponentRenderer
+[2025-10-18T13:20:09.309Z] 📝 [LOG] [EnhancedCabinet3D] Rendering new-corner-wall-cabinet-60-1760788779197 with DynamicComponentRenderer
+[2025-10-18T13:20:09.311Z] 📝 [LOG] [EnhancedCabinet3D] Rendering wall-cabinet-30-1760788788486 with DynamicComponentRenderer
+[2025-10-18T13:20:09.313Z] 📝 [LOG] [EnhancedCabinet3D] Rendering wall-cabinet-40-1760788795319 with DynamicComponentRenderer
+[2025-10-18T13:20:09.315Z] 📝 [LOG] [EnhancedCabinet3D] Rendering wall-cabinet-50-1760788802405 with DynamicComponentRenderer
+[2025-10-18T13:20:09.316Z] 📝 [LOG] [EnhancedCabinet3D] Rendering wall-cabinet-60-1760788808433 with DynamicComponentRenderer
+[2025-10-18T13:20:09.318Z] 📝 [LOG] [EnhancedCabinet3D] Rendering wall-cabinet-80-1760788814537 with DynamicComponentRenderer
+[2025-10-18T13:20:09.320Z] 📝 [LOG] 🔍 [validateElementDimensions] Processing element dishwasher-1760788869471: {
+  "elementZ": 0,
+  "isUndefined": false,
+  "isNaN": false,
+  "elementType": "appliance"
+}
+[2025-10-18T13:20:09.322Z] 📝 [LOG] ✅ [validateElementDimensions] Using existing Z value: 0cm
+[2025-10-18T13:20:09.324Z] 📝 [LOG] 🔧 [EnhancedAppliance3D] Using default Z position: 0cm for dishwasher-1760788869471 (floor level)
+[2025-10-18T13:20:09.326Z] 📝 [LOG] 🔍 [validateElementDimensions] Processing element dishwasher-60-1760788873637: {
+  "elementZ": 0,
+  "isUndefined": false,
+  "isNaN": false,
+  "elementType": "appliance"
+}
+[2025-10-18T13:20:09.328Z] 📝 [LOG] ✅ [validateElementDimensions] Using existing Z value: 0cm
+[2025-10-18T13:20:09.330Z] 📝 [LOG] 🔧 [EnhancedAppliance3D] Using default Z position: 0cm for dishwasher-60-1760788873637 (floor level)
+[2025-10-18T13:20:09.333Z] 📝 [LOG] 🔍 [validateElementDimensions] Processing element fridge-90-1760788877593: {
+  "elementZ": 0,
+  "isUndefined": false,
+  "isNaN": false,
+  "elementType": "appliance"
+}
+[2025-10-18T13:20:09.335Z] 📝 [LOG] ✅ [validateElementDimensions] Using existing Z value: 0cm
+[2025-10-18T13:20:09.337Z] 📝 [LOG] 🔧 [EnhancedAppliance3D] Using default Z position: 0cm for fridge-90-1760788877593 (floor level)
+[2025-10-18T13:20:09.339Z] 📝 [LOG] 🔍 [validateElementDimensions] Processing element larder-oven-microwave-1760788897494: {
+  "elementZ": 0,
+  "isUndefined": false,
+  "isNaN": false,
+  "elementType": "appliance"
+}
+[2025-10-18T13:20:09.341Z] 📝 [LOG] ✅ [validateElementDimensions] Using existing Z value: 0cm
+[2025-10-18T13:20:09.343Z] 📝 [LOG] 🔧 [EnhancedAppliance3D] Using default Z position: 0cm for larder-oven-microwave-1760788897494 (floor level)
+[2025-10-18T13:20:09.348Z] 📝 [LOG] [EnhancedCabinet3D] Rendering l-shaped-test-cabinet-90-1760790249209 with DynamicComponentRenderer
+[2025-10-18T13:20:09.351Z] 📝 [LOG] [EnhancedCabinet3D] Rendering l-shaped-test-cabinet-90-1760792471952 with DynamicComponentRenderer
+[2025-10-18T13:20:09.353Z] 📝 [LOG] [EnhancedCabinet3D] Rendering base-cabinet-50-1760792508921 with DynamicComponentRenderer
+[2025-10-18T13:20:09.432Z] 📝 [LOG] 🔍 [VISIBILITY DEBUG] State and database updated successfully
+[2025-10-18T13:20:09.437Z] 📝 [LOG] ✅ [CompactComponentSidebar] Component sidebar rendered successfully
+[2025-10-18T13:20:09.439Z] 📝 [LOG] ✅ [CompactComponentSidebar] Summary: 226 total, 126 for kitchen, 10 categories
+[2025-10-18T13:20:09.447Z] 📝 [LOG] 🎨 [3D VIEW DEBUG] Filtering elements: {
+  "totalElements": 18,
+  "hiddenElementIds": [],
+  "view3DConfig": {
+    "id": "3d",
+    "label": "3D View",
+    "direction": "3d",
+    "is_default": true,
+    "sort_order": 5,
+    "hidden_elements": []
+  },
+  "elevationViewsProp": "provided"
+}
+[2025-10-18T13:20:09.450Z] 📝 [LOG] 🎨 [3D VIEW DEBUG] Visible elements after filtering: {
+  "afterVisibilityFilter": 18,
+  "afterPerformanceLimit": 18
+}
+[2025-10-18T13:20:09.453Z] 📝 [LOG] 🎯 [PerformanceMonitor] Performance monitor hidden
+[2025-10-18T13:20:09.464Z] 📝 [LOG] [EnhancedCabinet3D] Rendering base-cabinet-30-1760788641585 with DynamicComponentRenderer
+[2025-10-18T13:20:09.466Z] 📝 [LOG] [EnhancedCabinet3D] Rendering base-cabinet-40-1760788646697 with DynamicComponentRenderer
+[2025-10-18T13:20:09.468Z] 📝 [LOG] [EnhancedCabinet3D] Rendering base-cabinet-50-1760788652937 with DynamicComponentRenderer
+[2025-10-18T13:20:09.470Z] 📝 [LOG] [EnhancedCabinet3D] Rendering base-cabinet-60-1760788664528 with DynamicComponentRenderer
+[2025-10-18T13:20:09.472Z] 📝 [LOG] [EnhancedCabinet3D] Rendering base-cabinet-80-1760788686425 with DynamicComponentRenderer
+[2025-10-18T13:20:09.474Z] 📝 [LOG] [EnhancedCabinet3D] Rendering new-corner-wall-cabinet-60-1760788779197 with DynamicComponentRenderer
+[2025-10-18T13:20:09.476Z] 📝 [LOG] [EnhancedCabinet3D] Rendering wall-cabinet-30-1760788788486 with DynamicComponentRenderer
+[2025-10-18T13:20:09.478Z] 📝 [LOG] [EnhancedCabinet3D] Rendering wall-cabinet-40-1760788795319 with DynamicComponentRenderer
+[2025-10-18T13:20:09.481Z] 📝 [LOG] [EnhancedCabinet3D] Rendering wall-cabinet-50-1760788802405 with DynamicComponentRenderer
+[2025-10-18T13:20:09.483Z] 📝 [LOG] [EnhancedCabinet3D] Rendering wall-cabinet-60-1760788808433 with DynamicComponentRenderer
+[2025-10-18T13:20:09.485Z] 📝 [LOG] [EnhancedCabinet3D] Rendering wall-cabinet-80-1760788814537 with DynamicComponentRenderer
+[2025-10-18T13:20:09.487Z] 📝 [LOG] 🔍 [validateElementDimensions] Processing element dishwasher-1760788869471: {
+  "elementZ": 0,
+  "isUndefined": false,
+  "isNaN": false,
+  "elementType": "appliance"
+}
+[2025-10-18T13:20:09.489Z] 📝 [LOG] ✅ [validateElementDimensions] Using existing Z value: 0cm
+[2025-10-18T13:20:09.491Z] 📝 [LOG] 🔧 [EnhancedAppliance3D] Using default Z position: 0cm for dishwasher-1760788869471 (floor level)
+[2025-10-18T13:20:09.494Z] 📝 [LOG] 🔍 [validateElementDimensions] Processing element dishwasher-60-1760788873637: {
+  "elementZ": 0,
+  "isUndefined": false,
+  "isNaN": false,
+  "elementType": "appliance"
+}
+[2025-10-18T13:20:09.496Z] 📝 [LOG] ✅ [validateElementDimensions] Using existing Z value: 0cm
+[2025-10-18T13:20:09.499Z] 📝 [LOG] 🔧 [EnhancedAppliance3D] Using default Z position: 0cm for dishwasher-60-1760788873637 (floor level)
+[2025-10-18T13:20:09.501Z] 📝 [LOG] 🔍 [validateElementDimensions] Processing element fridge-90-1760788877593: {
+  "elementZ": 0,
+  "isUndefined": false,
+  "isNaN": false,
+  "elementType": "appliance"
+}
+[2025-10-18T13:20:09.503Z] 📝 [LOG] ✅ [validateElementDimensions] Using existing Z value: 0cm
+[2025-10-18T13:20:09.505Z] 📝 [LOG] 🔧 [EnhancedAppliance3D] Using default Z position: 0cm for fridge-90-1760788877593 (floor level)
+[2025-10-18T13:20:09.507Z] 📝 [LOG] 🔍 [validateElementDimensions] Processing element larder-oven-microwave-1760788897494: {
+  "elementZ": 0,
+  "isUndefined": false,
+  "isNaN": false,
+  "elementType": "appliance"
+}
+[2025-10-18T13:20:09.512Z] 📝 [LOG] ✅ [validateElementDimensions] Using existing Z value: 0cm
+[2025-10-18T13:20:09.515Z] 📝 [LOG] 🔧 [EnhancedAppliance3D] Using default Z position: 0cm for larder-oven-microwave-1760788897494 (floor level)
+[2025-10-18T13:20:09.517Z] 📝 [LOG] [EnhancedCabinet3D] Rendering l-shaped-test-cabinet-90-1760790249209 with DynamicComponentRenderer
+[2025-10-18T13:20:09.520Z] 📝 [LOG] [EnhancedCabinet3D] Rendering l-shaped-test-cabinet-90-1760792471952 with DynamicComponentRenderer
+[2025-10-18T13:20:09.523Z] 📝 [LOG] [EnhancedCabinet3D] Rendering base-cabinet-50-1760792508921 with DynamicComponentRenderer
+[2025-10-18T13:20:09.529Z] 📝 [LOG] ✅ [CompactComponentSidebar] Component sidebar rendered successfully
+[2025-10-18T13:20:09.531Z] 📝 [LOG] ✅ [CompactComponentSidebar] Summary: 226 total, 126 for kitchen, 10 categories
+[2025-10-18T13:20:09.540Z] 📝 [LOG] 🎨 [3D VIEW DEBUG] Filtering elements: {
+  "totalElements": 18,
+  "hiddenElementIds": [],
+  "view3DConfig": {
+    "id": "3d",
+    "label": "3D View",
+    "direction": "3d",
+    "is_default": true,
+    "sort_order": 5,
+    "hidden_elements": []
+  },
+  "elevationViewsProp": "provided"
+}
+[2025-10-18T13:20:09.543Z] 📝 [LOG] 🎨 [3D VIEW DEBUG] Visible elements after filtering: {
+  "afterVisibilityFilter": 18,
+  "afterPerformanceLimit": 18
+}
+[2025-10-18T13:20:09.547Z] 📝 [LOG] 🎯 [PerformanceMonitor] Performance monitor hidden
+[2025-10-18T13:20:09.562Z] 📝 [LOG] [EnhancedCabinet3D] Rendering base-cabinet-30-1760788641585 with DynamicComponentRenderer
+[2025-10-18T13:20:09.564Z] 📝 [LOG] [EnhancedCabinet3D] Rendering base-cabinet-40-1760788646697 with DynamicComponentRenderer
+[2025-10-18T13:20:09.567Z] 📝 [LOG] [EnhancedCabinet3D] Rendering base-cabinet-50-1760788652937 with DynamicComponentRenderer
+[2025-10-18T13:20:09.569Z] 📝 [LOG] [EnhancedCabinet3D] Rendering base-cabinet-60-1760788664528 with DynamicComponentRenderer
+[2025-10-18T13:20:09.571Z] 📝 [LOG] [EnhancedCabinet3D] Rendering base-cabinet-80-1760788686425 with DynamicComponentRenderer
+[2025-10-18T13:20:09.573Z] 📝 [LOG] [EnhancedCabinet3D] Rendering new-corner-wall-cabinet-60-1760788779197 with DynamicComponentRenderer
+[2025-10-18T13:20:09.575Z] 📝 [LOG] [EnhancedCabinet3D] Rendering wall-cabinet-30-1760788788486 with DynamicComponentRenderer
+[2025-10-18T13:20:09.578Z] 📝 [LOG] [EnhancedCabinet3D] Rendering wall-cabinet-40-1760788795319 with DynamicComponentRenderer
+[2025-10-18T13:20:09.580Z] 📝 [LOG] [EnhancedCabinet3D] Rendering wall-cabinet-50-1760788802405 with DynamicComponentRenderer
+[2025-10-18T13:20:09.582Z] 📝 [LOG] [EnhancedCabinet3D] Rendering wall-cabinet-60-1760788808433 with DynamicComponentRenderer
+[2025-10-18T13:20:09.584Z] 📝 [LOG] [EnhancedCabinet3D] Rendering wall-cabinet-80-1760788814537 with DynamicComponentRenderer
+[2025-10-18T13:20:09.587Z] 📝 [LOG] 🔍 [validateElementDimensions] Processing element dishwasher-1760788869471: {
+  "elementZ": 0,
+  "isUndefined": false,
+  "isNaN": false,
+  "elementType": "appliance"
+}
+[2025-10-18T13:20:09.589Z] 📝 [LOG] ✅ [validateElementDimensions] Using existing Z value: 0cm
+[2025-10-18T13:20:09.591Z] 📝 [LOG] 🔧 [EnhancedAppliance3D] Using default Z position: 0cm for dishwasher-1760788869471 (floor level)
+[2025-10-18T13:20:09.594Z] 📝 [LOG] 🔍 [validateElementDimensions] Processing element dishwasher-60-1760788873637: {
+  "elementZ": 0,
+  "isUndefined": false,
+  "isNaN": false,
+  "elementType": "appliance"
+}
+[2025-10-18T13:20:09.596Z] 📝 [LOG] ✅ [validateElementDimensions] Using existing Z value: 0cm
+[2025-10-18T13:20:09.598Z] 📝 [LOG] 🔧 [EnhancedAppliance3D] Using default Z position: 0cm for dishwasher-60-1760788873637 (floor level)
+[2025-10-18T13:20:09.601Z] 📝 [LOG] 🔍 [validateElementDimensions] Processing element fridge-90-1760788877593: {
+  "elementZ": 0,
+  "isUndefined": false,
+  "isNaN": false,
+  "elementType": "appliance"
+}
+[2025-10-18T13:20:09.603Z] 📝 [LOG] ✅ [validateElementDimensions] Using existing Z value: 0cm
+[2025-10-18T13:20:09.607Z] 📝 [LOG] 🔧 [EnhancedAppliance3D] Using default Z position: 0cm for fridge-90-1760788877593 (floor level)
+[2025-10-18T13:20:09.613Z] 📝 [LOG] 🔍 [validateElementDimensions] Processing element larder-oven-microwave-1760788897494: {
+  "elementZ": 0,
+  "isUndefined": false,
+  "isNaN": false,
+  "elementType": "appliance"
+}
+[2025-10-18T13:20:09.615Z] 📝 [LOG] ✅ [validateElementDimensions] Using existing Z value: 0cm
+[2025-10-18T13:20:09.617Z] 📝 [LOG] 🔧 [EnhancedAppliance3D] Using default Z position: 0cm for larder-oven-microwave-1760788897494 (floor level)
+[2025-10-18T13:20:09.620Z] 📝 [LOG] [EnhancedCabinet3D] Rendering l-shaped-test-cabinet-90-1760790249209 with DynamicComponentRenderer
+[2025-10-18T13:20:09.622Z] 📝 [LOG] [EnhancedCabinet3D] Rendering l-shaped-test-cabinet-90-1760792471952 with DynamicComponentRenderer
+[2025-10-18T13:20:09.625Z] 📝 [LOG] [EnhancedCabinet3D] Rendering base-cabinet-50-1760792508921 with DynamicComponentRenderer
+[2025-10-18T13:20:11.128Z] 📝 [LOG] 🔍 [VISIBILITY DEBUG] Toggle requested: {
+  "elementId": "larder-oven-microwave-1760788897494",
+  "viewId": "plan"
+}
+[2025-10-18T13:20:11.130Z] 📝 [LOG] 🔍 [VISIBILITY DEBUG] Current elevationViews state: [
+  {
+    "id": "plan",
+    "label": "Plan View",
+    "direction": "plan",
+    "is_default": true,
+    "sort_order": 0,
+    "hidden_elements": [
+      "new-corner-wall-cabinet-60-1760788779197",
+      "larder-oven-microwave-1760788897494"
+    ]
+  },
+  {
+    "id": "front-default",
+    "label": "Front",
+    "direction": "front",
+    "is_default": true,
+    "sort_order": 1,
+    "hidden_elements": [
+      "base-cabinet-80-1760788686425"
+    ]
+  },
+  {
+    "id": "back-default",
+    "label": "Back",
+    "direction": "back",
+    "is_default": true,
+    "sort_order": 2,
+    "hidden_elements": []
+  },
+  {
+    "id": "left-default",
+    "label": "Left",
+    "direction": "left",
+    "is_default": true,
+    "sort_order": 3,
+    "hidden_elements": [
+      "l-shaped-test-cabinet-90-1760792471952"
+    ]
+  },
+  {
+    "id": "right-default",
+    "label": "Right",
+    "direction": "right",
+    "is_default": true,
+    "sort_order": 4,
+    "hidden_elements": []
+  },
+  {
+    "id": "3d",
+    "label": "3D View",
+    "direction": "3d",
+    "is_default": true,
+    "sort_order": 5,
+    "hidden_elements": []
+  }
+]
+[2025-10-18T13:20:11.132Z] 📝 [LOG] 🔍 [VISIBILITY DEBUG] Is currently visible: false
+[2025-10-18T13:20:11.134Z] 📝 [LOG] 🔍 [VISIBILITY DEBUG] Updated elevationViews: [
+  {
+    "id": "plan",
+    "label": "Plan View",
+    "direction": "plan",
+    "is_default": true,
+    "sort_order": 0,
+    "hidden_elements": [
+      "new-corner-wall-cabinet-60-1760788779197"
+    ]
+  },
+  {
+    "id": "front-default",
+    "label": "Front",
+    "direction": "front",
+    "is_default": true,
+    "sort_order": 1,
+    "hidden_elements": [
+      "base-cabinet-80-1760788686425"
+    ]
+  },
+  {
+    "id": "back-default",
+    "label": "Back",
+    "direction": "back",
+    "is_default": true,
+    "sort_order": 2,
+    "hidden_elements": []
+  },
+  {
+    "id": "left-default",
+    "label": "Left",
+    "direction": "left",
+    "is_default": true,
+    "sort_order": 3,
+    "hidden_elements": [
+      "l-shaped-test-cabinet-90-1760792471952"
+    ]
+  },
+  {
+    "id": "right-default",
+    "label": "Right",
+    "direction": "right",
+    "is_default": true,
+    "sort_order": 4,
+    "hidden_elements": []
+  },
+  {
+    "id": "3d",
+    "label": "3D View",
+    "direction": "3d",
+    "is_default": true,
+    "sort_order": 5,
+    "hidden_elements": []
+  }
+]
+[2025-10-18T13:20:11.140Z] 📝 [LOG] ✅ [CompactComponentSidebar] Component sidebar rendered successfully
+[2025-10-18T13:20:11.143Z] 📝 [LOG] ✅ [CompactComponentSidebar] Summary: 226 total, 126 for kitchen, 10 categories
+[2025-10-18T13:20:11.152Z] 📝 [LOG] 🎨 [3D VIEW DEBUG] Filtering elements: {
+  "totalElements": 18,
+  "hiddenElementIds": [],
+  "view3DConfig": {
+    "id": "3d",
+    "label": "3D View",
+    "direction": "3d",
+    "is_default": true,
+    "sort_order": 5,
+    "hidden_elements": []
+  },
+  "elevationViewsProp": "provided"
+}
+[2025-10-18T13:20:11.154Z] 📝 [LOG] 🎨 [3D VIEW DEBUG] Visible elements after filtering: {
+  "afterVisibilityFilter": 18,
+  "afterPerformanceLimit": 18
+}
+[2025-10-18T13:20:11.159Z] 📝 [LOG] 🎯 [PerformanceMonitor] Performance monitor hidden
+[2025-10-18T13:20:11.169Z] 📝 [LOG] [EnhancedCabinet3D] Rendering base-cabinet-30-1760788641585 with DynamicComponentRenderer
+[2025-10-18T13:20:11.171Z] 📝 [LOG] [EnhancedCabinet3D] Rendering base-cabinet-40-1760788646697 with DynamicComponentRenderer
+[2025-10-18T13:20:11.173Z] 📝 [LOG] [EnhancedCabinet3D] Rendering base-cabinet-50-1760788652937 with DynamicComponentRenderer
+[2025-10-18T13:20:11.176Z] 📝 [LOG] [EnhancedCabinet3D] Rendering base-cabinet-60-1760788664528 with DynamicComponentRenderer
+[2025-10-18T13:20:11.178Z] 📝 [LOG] [EnhancedCabinet3D] Rendering base-cabinet-80-1760788686425 with DynamicComponentRenderer
+[2025-10-18T13:20:11.180Z] 📝 [LOG] [EnhancedCabinet3D] Rendering new-corner-wall-cabinet-60-1760788779197 with DynamicComponentRenderer
+[2025-10-18T13:20:11.182Z] 📝 [LOG] [EnhancedCabinet3D] Rendering wall-cabinet-30-1760788788486 with DynamicComponentRenderer
+[2025-10-18T13:20:11.185Z] 📝 [LOG] [EnhancedCabinet3D] Rendering wall-cabinet-40-1760788795319 with DynamicComponentRenderer
+[2025-10-18T13:20:11.187Z] 📝 [LOG] [EnhancedCabinet3D] Rendering wall-cabinet-50-1760788802405 with DynamicComponentRenderer
+[2025-10-18T13:20:11.190Z] 📝 [LOG] [EnhancedCabinet3D] Rendering wall-cabinet-60-1760788808433 with DynamicComponentRenderer
+[2025-10-18T13:20:11.192Z] 📝 [LOG] [EnhancedCabinet3D] Rendering wall-cabinet-80-1760788814537 with DynamicComponentRenderer
+[2025-10-18T13:20:11.195Z] 📝 [LOG] 🔍 [validateElementDimensions] Processing element dishwasher-1760788869471: {
+  "elementZ": 0,
+  "isUndefined": false,
+  "isNaN": false,
+  "elementType": "appliance"
+}
+[2025-10-18T13:20:11.197Z] 📝 [LOG] ✅ [validateElementDimensions] Using existing Z value: 0cm
+[2025-10-18T13:20:11.199Z] 📝 [LOG] 🔧 [EnhancedAppliance3D] Using default Z position: 0cm for dishwasher-1760788869471 (floor level)
+[2025-10-18T13:20:11.202Z] 📝 [LOG] 🔍 [validateElementDimensions] Processing element dishwasher-60-1760788873637: {
+  "elementZ": 0,
+  "isUndefined": false,
+  "isNaN": false,
+  "elementType": "appliance"
+}
+[2025-10-18T13:20:11.205Z] 📝 [LOG] ✅ [validateElementDimensions] Using existing Z value: 0cm
+[2025-10-18T13:20:11.207Z] 📝 [LOG] 🔧 [EnhancedAppliance3D] Using default Z position: 0cm for dishwasher-60-1760788873637 (floor level)
+[2025-10-18T13:20:11.211Z] 📝 [LOG] 🔍 [validateElementDimensions] Processing element fridge-90-1760788877593: {
+  "elementZ": 0,
+  "isUndefined": false,
+  "isNaN": false,
+  "elementType": "appliance"
+}
+[2025-10-18T13:20:11.215Z] 📝 [LOG] ✅ [validateElementDimensions] Using existing Z value: 0cm
+[2025-10-18T13:20:11.217Z] 📝 [LOG] 🔧 [EnhancedAppliance3D] Using default Z position: 0cm for fridge-90-1760788877593 (floor level)
+[2025-10-18T13:20:11.223Z] 📝 [LOG] 🔍 [validateElementDimensions] Processing element larder-oven-microwave-1760788897494: {
+  "elementZ": 0,
+  "isUndefined": false,
+  "isNaN": false,
+  "elementType": "appliance"
+}
+[2025-10-18T13:20:11.226Z] 📝 [LOG] ✅ [validateElementDimensions] Using existing Z value: 0cm
+[2025-10-18T13:20:11.228Z] 📝 [LOG] 🔧 [EnhancedAppliance3D] Using default Z position: 0cm for larder-oven-microwave-1760788897494 (floor level)
+[2025-10-18T13:20:11.231Z] 📝 [LOG] [EnhancedCabinet3D] Rendering l-shaped-test-cabinet-90-1760790249209 with DynamicComponentRenderer
+[2025-10-18T13:20:11.233Z] 📝 [LOG] [EnhancedCabinet3D] Rendering l-shaped-test-cabinet-90-1760792471952 with DynamicComponentRenderer
+[2025-10-18T13:20:11.235Z] 📝 [LOG] [EnhancedCabinet3D] Rendering base-cabinet-50-1760792508921 with DynamicComponentRenderer
+[2025-10-18T13:20:11.316Z] 📝 [LOG] 🔍 [VISIBILITY DEBUG] State and database updated successfully
+[2025-10-18T13:20:11.321Z] 📝 [LOG] ✅ [CompactComponentSidebar] Component sidebar rendered successfully
+[2025-10-18T13:20:11.324Z] 📝 [LOG] ✅ [CompactComponentSidebar] Summary: 226 total, 126 for kitchen, 10 categories
+[2025-10-18T13:20:11.333Z] 📝 [LOG] 🎨 [3D VIEW DEBUG] Filtering elements: {
+  "totalElements": 18,
+  "hiddenElementIds": [],
+  "view3DConfig": {
+    "id": "3d",
+    "label": "3D View",
+    "direction": "3d",
+    "is_default": true,
+    "sort_order": 5,
+    "hidden_elements": []
+  },
+  "elevationViewsProp": "provided"
+}
+[2025-10-18T13:20:11.335Z] 📝 [LOG] 🎨 [3D VIEW DEBUG] Visible elements after filtering: {
+  "afterVisibilityFilter": 18,
+  "afterPerformanceLimit": 18
+}
+[2025-10-18T13:20:11.339Z] 📝 [LOG] 🎯 [PerformanceMonitor] Performance monitor hidden
+[2025-10-18T13:20:11.350Z] 📝 [LOG] [EnhancedCabinet3D] Rendering base-cabinet-30-1760788641585 with DynamicComponentRenderer
+[2025-10-18T13:20:11.353Z] 📝 [LOG] [EnhancedCabinet3D] Rendering base-cabinet-40-1760788646697 with DynamicComponentRenderer
+[2025-10-18T13:20:11.355Z] 📝 [LOG] [EnhancedCabinet3D] Rendering base-cabinet-50-1760788652937 with DynamicComponentRenderer
+[2025-10-18T13:20:11.357Z] 📝 [LOG] [EnhancedCabinet3D] Rendering base-cabinet-60-1760788664528 with DynamicComponentRenderer
+[2025-10-18T13:20:11.360Z] 📝 [LOG] [EnhancedCabinet3D] Rendering base-cabinet-80-1760788686425 with DynamicComponentRenderer
+[2025-10-18T13:20:11.362Z] 📝 [LOG] [EnhancedCabinet3D] Rendering new-corner-wall-cabinet-60-1760788779197 with DynamicComponentRenderer
+[2025-10-18T13:20:11.364Z] 📝 [LOG] [EnhancedCabinet3D] Rendering wall-cabinet-30-1760788788486 with DynamicComponentRenderer
+[2025-10-18T13:20:11.367Z] 📝 [LOG] [EnhancedCabinet3D] Rendering wall-cabinet-40-1760788795319 with DynamicComponentRenderer
+[2025-10-18T13:20:11.369Z] 📝 [LOG] [EnhancedCabinet3D] Rendering wall-cabinet-50-1760788802405 with DynamicComponentRenderer
+[2025-10-18T13:20:11.372Z] 📝 [LOG] [EnhancedCabinet3D] Rendering wall-cabinet-60-1760788808433 with DynamicComponentRenderer
+[2025-10-18T13:20:11.374Z] 📝 [LOG] [EnhancedCabinet3D] Rendering wall-cabinet-80-1760788814537 with DynamicComponentRenderer
+[2025-10-18T13:20:11.377Z] 📝 [LOG] 🔍 [validateElementDimensions] Processing element dishwasher-1760788869471: {
+  "elementZ": 0,
+  "isUndefined": false,
+  "isNaN": false,
+  "elementType": "appliance"
+}
+[2025-10-18T13:20:11.379Z] 📝 [LOG] ✅ [validateElementDimensions] Using existing Z value: 0cm
+[2025-10-18T13:20:11.381Z] 📝 [LOG] 🔧 [EnhancedAppliance3D] Using default Z position: 0cm for dishwasher-1760788869471 (floor level)
+[2025-10-18T13:20:11.384Z] 📝 [LOG] 🔍 [validateElementDimensions] Processing element dishwasher-60-1760788873637: {
+  "elementZ": 0,
+  "isUndefined": false,
+  "isNaN": false,
+  "elementType": "appliance"
+}
+[2025-10-18T13:20:11.388Z] 📝 [LOG] ✅ [validateElementDimensions] Using existing Z value: 0cm
+[2025-10-18T13:20:11.390Z] 📝 [LOG] 🔧 [EnhancedAppliance3D] Using default Z position: 0cm for dishwasher-60-1760788873637 (floor level)
+[2025-10-18T13:20:11.392Z] 📝 [LOG] 🔍 [validateElementDimensions] Processing element fridge-90-1760788877593: {
+  "elementZ": 0,
+  "isUndefined": false,
+  "isNaN": false,
+  "elementType": "appliance"
+}
+[2025-10-18T13:20:11.395Z] 📝 [LOG] ✅ [validateElementDimensions] Using existing Z value: 0cm
+[2025-10-18T13:20:11.397Z] 📝 [LOG] 🔧 [EnhancedAppliance3D] Using default Z position: 0cm for fridge-90-1760788877593 (floor level)
+[2025-10-18T13:20:11.399Z] 📝 [LOG] 🔍 [validateElementDimensions] Processing element larder-oven-microwave-1760788897494: {
+  "elementZ": 0,
+  "isUndefined": false,
+  "isNaN": false,
+  "elementType": "appliance"
+}
+[2025-10-18T13:20:11.401Z] 📝 [LOG] ✅ [validateElementDimensions] Using existing Z value: 0cm
+[2025-10-18T13:20:11.403Z] 📝 [LOG] 🔧 [EnhancedAppliance3D] Using default Z position: 0cm for larder-oven-microwave-1760788897494 (floor level)
+[2025-10-18T13:20:11.405Z] 📝 [LOG] [EnhancedCabinet3D] Rendering l-shaped-test-cabinet-90-1760790249209 with DynamicComponentRenderer
+[2025-10-18T13:20:11.407Z] 📝 [LOG] [EnhancedCabinet3D] Rendering l-shaped-test-cabinet-90-1760792471952 with DynamicComponentRenderer
+[2025-10-18T13:20:11.410Z] 📝 [LOG] [EnhancedCabinet3D] Rendering base-cabinet-50-1760792508921 with DynamicComponentRenderer
+[2025-10-18T13:20:11.415Z] 📝 [LOG] ✅ [CompactComponentSidebar] Component sidebar rendered successfully
+[2025-10-18T13:20:11.417Z] 📝 [LOG] ✅ [CompactComponentSidebar] Summary: 226 total, 126 for kitchen, 10 categories
+[2025-10-18T13:20:11.426Z] 📝 [LOG] 🎨 [3D VIEW DEBUG] Filtering elements: {
+  "totalElements": 18,
+  "hiddenElementIds": [],
+  "view3DConfig": {
+    "id": "3d",
+    "label": "3D View",
+    "direction": "3d",
+    "is_default": true,
+    "sort_order": 5,
+    "hidden_elements": []
+  },
+  "elevationViewsProp": "provided"
+}
+[2025-10-18T13:20:11.430Z] 📝 [LOG] 🎨 [3D VIEW DEBUG] Visible elements after filtering: {
+  "afterVisibilityFilter": 18,
+  "afterPerformanceLimit": 18
+}
+[2025-10-18T13:20:11.434Z] 📝 [LOG] 🎯 [PerformanceMonitor] Performance monitor hidden
+[2025-10-18T13:20:11.454Z] 📝 [LOG] [EnhancedCabinet3D] Rendering base-cabinet-30-1760788641585 with DynamicComponentRenderer
+[2025-10-18T13:20:11.457Z] 📝 [LOG] [EnhancedCabinet3D] Rendering base-cabinet-40-1760788646697 with DynamicComponentRenderer
+[2025-10-18T13:20:11.460Z] 📝 [LOG] [EnhancedCabinet3D] Rendering base-cabinet-50-1760788652937 with DynamicComponentRenderer
+[2025-10-18T13:20:11.462Z] 📝 [LOG] [EnhancedCabinet3D] Rendering base-cabinet-60-1760788664528 with DynamicComponentRenderer
+[2025-10-18T13:20:11.465Z] 📝 [LOG] [EnhancedCabinet3D] Rendering base-cabinet-80-1760788686425 with DynamicComponentRenderer
+[2025-10-18T13:20:11.467Z] 📝 [LOG] [EnhancedCabinet3D] Rendering new-corner-wall-cabinet-60-1760788779197 with DynamicComponentRenderer
+[2025-10-18T13:20:11.469Z] 📝 [LOG] [EnhancedCabinet3D] Rendering wall-cabinet-30-1760788788486 with DynamicComponentRenderer
+[2025-10-18T13:20:11.471Z] 📝 [LOG] [EnhancedCabinet3D] Rendering wall-cabinet-40-1760788795319 with DynamicComponentRenderer
+[2025-10-18T13:20:11.474Z] 📝 [LOG] [EnhancedCabinet3D] Rendering wall-cabinet-50-1760788802405 with DynamicComponentRenderer
+[2025-10-18T13:20:11.476Z] 📝 [LOG] [EnhancedCabinet3D] Rendering wall-cabinet-60-1760788808433 with DynamicComponentRenderer
+[2025-10-18T13:20:11.478Z] 📝 [LOG] [EnhancedCabinet3D] Rendering wall-cabinet-80-1760788814537 with DynamicComponentRenderer
+[2025-10-18T13:20:11.482Z] 📝 [LOG] 🔍 [validateElementDimensions] Processing element dishwasher-1760788869471: {
+  "elementZ": 0,
+  "isUndefined": false,
+  "isNaN": false,
+  "elementType": "appliance"
+}
+[2025-10-18T13:20:11.484Z] 📝 [LOG] ✅ [validateElementDimensions] Using existing Z value: 0cm
+[2025-10-18T13:20:11.486Z] 📝 [LOG] 🔧 [EnhancedAppliance3D] Using default Z position: 0cm for dishwasher-1760788869471 (floor level)
+[2025-10-18T13:20:11.489Z] 📝 [LOG] 🔍 [validateElementDimensions] Processing element dishwasher-60-1760788873637: {
+  "elementZ": 0,
+  "isUndefined": false,
+  "isNaN": false,
+  "elementType": "appliance"
+}
+[2025-10-18T13:20:11.491Z] 📝 [LOG] ✅ [validateElementDimensions] Using existing Z value: 0cm
+[2025-10-18T13:20:11.493Z] 📝 [LOG] 🔧 [EnhancedAppliance3D] Using default Z position: 0cm for dishwasher-60-1760788873637 (floor level)
+[2025-10-18T13:20:11.496Z] 📝 [LOG] 🔍 [validateElementDimensions] Processing element fridge-90-1760788877593: {
+  "elementZ": 0,
+  "isUndefined": false,
+  "isNaN": false,
+  "elementType": "appliance"
+}
+[2025-10-18T13:20:11.498Z] 📝 [LOG] ✅ [validateElementDimensions] Using existing Z value: 0cm
+[2025-10-18T13:20:11.500Z] 📝 [LOG] 🔧 [EnhancedAppliance3D] Using default Z position: 0cm for fridge-90-1760788877593 (floor level)
+[2025-10-18T13:20:11.502Z] 📝 [LOG] 🔍 [validateElementDimensions] Processing element larder-oven-microwave-1760788897494: {
+  "elementZ": 0,
+  "isUndefined": false,
+  "isNaN": false,
+  "elementType": "appliance"
+}
+[2025-10-18T13:20:11.505Z] 📝 [LOG] ✅ [validateElementDimensions] Using existing Z value: 0cm
+[2025-10-18T13:20:11.507Z] 📝 [LOG] 🔧 [EnhancedAppliance3D] Using default Z position: 0cm for larder-oven-microwave-1760788897494 (floor level)
+[2025-10-18T13:20:11.509Z] 📝 [LOG] [EnhancedCabinet3D] Rendering l-shaped-test-cabinet-90-1760790249209 with DynamicComponentRenderer
+[2025-10-18T13:20:11.512Z] 📝 [LOG] [EnhancedCabinet3D] Rendering l-shaped-test-cabinet-90-1760792471952 with DynamicComponentRenderer
+[2025-10-18T13:20:11.514Z] 📝 [LOG] [EnhancedCabinet3D] Rendering base-cabinet-50-1760792508921 with DynamicComponentRenderer
+
+================================================================================
+END OF LOGS (1066 entries)
+================================================================================
