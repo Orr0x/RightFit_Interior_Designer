@@ -63,9 +63,9 @@ export const COMPONENT_ID_MAPPINGS: ComponentIDMapping[] = [
   },
 
   {
-    pattern: /corner-cabinet|corner-base-cabinet|l-shaped-test-cabinet/i,
-    mapper: (elementId, width) => `l-shaped-test-cabinet-${width}`,
-    description: 'Corner base cabinets / L-shaped test cabinet (60cm, 90cm)',
+    pattern: /corner-cabinet|corner-base-cabinet/i,
+    mapper: (elementId, width) => `corner-cabinet`,
+    description: 'Corner base cabinet (L-shaped, 90cm)',
     priority: 100,
   },
 

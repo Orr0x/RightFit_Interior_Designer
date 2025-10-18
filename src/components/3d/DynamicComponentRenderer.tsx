@@ -84,7 +84,6 @@ export const DynamicComponentRenderer: React.FC<DynamicComponentRendererProps> =
 
   const isCornerCabinet = useMemo(() => {
     return element.id.includes('corner-cabinet') ||
-           element.id.includes('l-shaped-test-cabinet') ||
            element.style?.toLowerCase().includes('corner');
   }, [element.id, element.style]);
 
@@ -193,28 +192,19 @@ export const DynamicComponentRenderer: React.FC<DynamicComponentRendererProps> =
 export const preloadCommonComponents = async () => {
   const commonComponents = [
     // Corner cabinets (P0 - most critical)
-    'l-shaped-test-cabinet-60',
-    'l-shaped-test-cabinet-90',
+    'corner-cabinet', // Only corner cabinet in database after cleanup
     'new-corner-wall-cabinet-60',
     'new-corner-wall-cabinet-90',
-    // Standard cabinets (P1 - not yet populated)
+    // Standard cabinets (P1 - not yet populated in database)
+    // Note: base-cabinet-60, base-cabinet-80, wall-cabinet-60, wall-cabinet-80
+    // exist in database but may not have 3D models yet
     'base-cabinet-60',
     'base-cabinet-80',
     'wall-cabinet-60',
     'wall-cabinet-80',
-    // Multi-room furniture (Living/Bedroom)
-    'bed-single',
-    'sofa-3-seater',
-    'dining-chair',
-    'dining-table',
-    'tv-55-inch',
-    // Multi-room appliances (Utility)
-    'washing-machine',
-    'tumble-dryer',
-    // Multi-room fixtures (Bathroom)
-    'toilet-standard',
-    'shower-standard',
-    'bathtub-standard',
+    // Appliances (confirmed in database)
+    'dishwasher',
+    'refrigerator',
   ];
 
   try {
