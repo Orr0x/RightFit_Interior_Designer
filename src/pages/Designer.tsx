@@ -240,12 +240,13 @@ const Designer = () => {
     setHistory(prev => [...prev, { ...currentRoomDesign }]);
     setFuture([]);
 
-    // Assign default zIndex and isVisible values if not already set
+    // ⚠️ COMMENTED OUT 2025-10-18: Global isVisible replaced by per-view hidden_elements
+    // Assign default zIndex values if not already set
     const defaultZIndex = getDefaultZIndex(element.type, element.id);
     const elementWithDefaults: DesignElement = {
       ...element,
       zIndex: element.zIndex ?? defaultZIndex,
-      isVisible: element.isVisible ?? true
+      // isVisible: element.isVisible ?? true  // Using per-view hidden_elements instead
     };
     
     // Debug logging for layering

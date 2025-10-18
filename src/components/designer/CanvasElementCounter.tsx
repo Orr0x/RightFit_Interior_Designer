@@ -84,9 +84,11 @@ export const CanvasElementCounter: React.FC<CanvasElementCounterProps> = ({
     return element.style || element.id.split('-').slice(0, -1).join(' ');
   };
 
-  const handleElementVisibilityToggle = (element: DesignElement) => {
-    onUpdateElement(element.id, { isVisible: !element.isVisible });
-  };
+  // ⚠️ COMMENTED OUT 2025-10-18: Global isVisible replaced by per-view hidden_elements
+  // This function is now DEAD CODE - visibility is managed per-view in elevationViews array
+  // const handleElementVisibilityToggle = (element: DesignElement) => {
+  //   onUpdateElement(element.id, { isVisible: !element.isVisible });
+  // };
 
   const handleMouseEnter = () => {
     if (hoverTimeout) {
@@ -147,7 +149,9 @@ export const CanvasElementCounter: React.FC<CanvasElementCounterProps> = ({
                   <div className="divide-y divide-border/30">
                     {categoryElements.map((element) => {
                       const isSelected = selectedElement?.id === element.id;
-                      const isHidden = !element.isVisible;
+                      // ⚠️ COMMENTED OUT 2025-10-18: Global isVisible replaced by per-view hidden_elements
+                      // const isHidden = !element.isVisible;
+                      const isHidden = false; // Temporarily disabled - will use per-view visibility system
                       
                       return (
                         <div
@@ -172,7 +176,9 @@ export const CanvasElementCounter: React.FC<CanvasElementCounterProps> = ({
                           </div>
                           
                           <div className="flex items-center gap-1">
-                            <Button
+                            {/* ⚠️ COMMENTED OUT 2025-10-18: Global isVisible button replaced by per-view visibility */}
+                            {/* Visibility is now controlled per-view via ViewSelector component */}
+                            {/* <Button
                               variant="ghost"
                               size="sm"
                               className="p-1 h-5 w-5"
@@ -181,11 +187,11 @@ export const CanvasElementCounter: React.FC<CanvasElementCounterProps> = ({
                                 handleElementVisibilityToggle(element);
                               }}
                             >
-                              {isHidden ? 
-                                <EyeOff className="h-2.5 w-2.5" /> : 
+                              {isHidden ?
+                                <EyeOff className="h-2.5 w-2.5" /> :
                                 <Eye className="h-2.5 w-2.5" />
                               }
-                            </Button>
+                            </Button> */}
                             
                             <Button
                               variant="ghost"

@@ -1954,8 +1954,10 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
           return true;
         });
 
+    // ⚠️ COMMENTED OUT 2025-10-18: Global isVisible replaced by per-view hidden_elements
+    // Already filtered by per-view hidden_elements system above (line 1949-1955)
     // Filter out invisible elements
-    elementsToRender = elementsToRender.filter(element => element.isVisible !== false);
+    // elementsToRender = elementsToRender.filter(element => element.isVisible !== false);
 
     // Sort elements by zIndex for proper layering (lower zIndex = drawn first/behind)
     elementsToRender.sort((a, b) => (a.zIndex || 0) - (b.zIndex || 0));
@@ -2048,8 +2050,10 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
           return true;
         });
 
+    // ⚠️ COMMENTED OUT 2025-10-18: Global isVisible replaced by per-view hidden_elements
+    // Already filtered by per-view hidden_elements system above
     // Filter out invisible elements
-    elementsToCheck = elementsToCheck.filter(element => element.isVisible !== false);
+    // elementsToCheck = elementsToCheck.filter(element => element.isVisible !== false);
 
     // Sort elements by layer height first (wall units over base units), then by zIndex
     elementsToCheck.sort((a, b) => {
@@ -2155,8 +2159,10 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
             return true;
           });
 
+      // ⚠️ COMMENTED OUT 2025-10-18: Global isVisible replaced by per-view hidden_elements
+      // Already filtered by per-view hidden_elements system above
       // Filter out invisible elements
-      elementsToCheck = elementsToCheck.filter(element => element.isVisible !== false);
+      // elementsToCheck = elementsToCheck.filter(element => element.isVisible !== false);
 
       // Sort elements by layer height first (wall units over base units), then by zIndex for hover
       elementsToCheck.sort((a, b) => {
@@ -2463,8 +2469,10 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
               return true;
             });
 
+        // ⚠️ COMMENTED OUT 2025-10-18: Global isVisible replaced by per-view hidden_elements
+        // Already filtered by per-view hidden_elements system above
         // Filter out invisible elements
-        elementsToCheck = elementsToCheck.filter(element => element.isVisible !== false);
+        // elementsToCheck = elementsToCheck.filter(element => element.isVisible !== false);
 
         // Sort elements by zIndex in DESCENDING order (highest zIndex first) for hover
         elementsToCheck.sort((a, b) => (b.zIndex || 0) - (a.zIndex || 0));
@@ -2753,7 +2761,8 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
         color: componentData.color,
         style: componentData.name,
         zIndex: 0, // Required by DesignElement interface
-        isVisible: true // Required by DesignElement interface
+        // ⚠️ COMMENTED OUT 2025-10-18: Global isVisible replaced by per-view hidden_elements
+        // isVisible: true // No longer required by DesignElement interface
       };
 
       // ✅ Enhanced placement already handled snapping - no need for duplicate getSnapPosition() call

@@ -119,7 +119,10 @@ export interface DesignElement {
   material?: string;
   // Layering and visibility properties
   zIndex: number; // Rendering layer order (lower = behind, higher = in front)
-  isVisible: boolean; // Whether the component is visible in the 2D plan view
+  // ⚠️ COMMENTED OUT 2025-10-18: Global isVisible replaced by per-view hidden_elements
+  // Reason: Redundant with view-specific visibility (ElevationViewConfig.hidden_elements)
+  // Per-view system provides finer control - each view (plan, elevations, 3D) has independent visibility
+  // isVisible: boolean; // Whether the component is visible in the 2D plan view
   // Corner unit door positioning
   cornerDoorSide?: 'left' | 'right' | 'auto'; // Manual override for corner unit door side (auto = use centerline logic)
 }
