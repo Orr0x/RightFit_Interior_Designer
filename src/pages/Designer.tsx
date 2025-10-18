@@ -370,8 +370,14 @@ const Designer = () => {
   const handleToggleElementVisibility = useCallback(async (elementId: string, viewId: string) => {
     const { toggleElementVisibility, isElementVisibleInView } = await import('@/utils/elevationViewHelpers');
 
+    console.log('🔍 [VISIBILITY DEBUG] Toggle requested:', { elementId, viewId });
+    console.log('🔍 [VISIBILITY DEBUG] Current elevationViews state:', JSON.stringify(elevationViews, null, 2));
+
     const isCurrentlyVisible = isElementVisibleInView(elementId, viewId, elevationViews);
+    console.log('🔍 [VISIBILITY DEBUG] Is currently visible:', isCurrentlyVisible);
+
     const updated = toggleElementVisibility(viewId, elementId, elevationViews);
+    console.log('🔍 [VISIBILITY DEBUG] Updated elevationViews:', JSON.stringify(updated, null, 2));
 
     if (updated) {
       setElevationViews(updated);
@@ -381,10 +387,12 @@ const Designer = () => {
           elevation_views: updated
         }
       });
+      console.log('🔍 [VISIBILITY DEBUG] State and database updated successfully');
 
       const action = isCurrentlyVisible ? 'hidden' : 'shown';
       toast.success(`Element ${action} in this view`);
     } else {
+      console.error('🔍 [VISIBILITY DEBUG] Toggle failed - no updated config returned');
       toast.error('Failed to toggle element visibility');
     }
   }, [elevationViews, currentRoomDesign, updateCurrentRoomDesign]);

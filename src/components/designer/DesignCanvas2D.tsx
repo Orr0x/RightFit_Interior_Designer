@@ -1938,6 +1938,13 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
     drawRoom(ctx);
 
     // Draw elements with proper layering and visibility
+    console.log('🎨 [CANVAS DEBUG] Rendering with currentViewInfo:', {
+      direction: currentViewInfo.direction,
+      hiddenElements: currentViewInfo.hiddenElements,
+      active2DView,
+      totalElements: design.elements.length
+    });
+
     let elementsToRender = active2DView === 'plan'
       ? design.elements
       : design.elements.filter(el => {
@@ -1946,13 +1953,22 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
 
           // Check direction visibility
           const isDirectionVisible = wall === currentViewInfo.direction || wall === 'center' || isCornerVisible;
-          if (!isDirectionVisible) return false;
+          if (!isDirectionVisible) {
+            console.log('🎨 [CANVAS DEBUG] Element filtered by direction:', { id: el.id, wall, viewDirection: currentViewInfo.direction });
+            return false;
+          }
 
           // Check if element is hidden in this specific view
-          if (currentViewInfo.hiddenElements.includes(el.id)) return false;
+          const isHiddenInView = currentViewInfo.hiddenElements.includes(el.id);
+          if (isHiddenInView) {
+            console.log('🎨 [CANVAS DEBUG] Element HIDDEN by per-view filter:', { id: el.id, viewId: active2DView });
+            return false;
+          }
 
           return true;
         });
+
+    console.log('🎨 [CANVAS DEBUG] Elements to render after filtering:', elementsToRender.length);
 
     // ⚠️ COMMENTED OUT 2025-10-18: Global isVisible replaced by per-view hidden_elements
     // Already filtered by per-view hidden_elements system above (line 1949-1955)
