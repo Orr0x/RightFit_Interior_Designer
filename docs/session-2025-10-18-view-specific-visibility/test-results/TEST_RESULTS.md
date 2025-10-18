@@ -110,13 +110,19 @@ Must show `"viewId": "3d"` NOT "plan" when toggling in 3D view!
 
 **Total Progress: 4/6 tests complete (67%)**
 
-## ⚠️ NEW BUG DISCOVERED
+## ⚠️ BUG DISCOVERED AND FIXED ✅
 
 **Bug:** Tall appliances (e.g., fridge 90cm) change height to base cabinet height after loading in elevation views
 
 **User Report:** "Tall appliances like the fridge 90cm change height to the same as base cabinets after they load in elevation view."
 
-**Priority:** MEDIUM - Visual rendering issue, not data corruption
+**Root Cause:** useComponentMetadata hook loads asynchronously. Canvas renders with fallback heights while metadata loads, then re-renders with correct heights causing visible "flash".
+
+**Fix:** Added metadataLoading check before rendering canvas. Shows "Loading component data..." until metadata ready.
+
+**Status:** ✅ FIXED in commit edb6034
+
+**Impact:** All tall components (fridges, tall cabinets, wall cabinets) now render with correct heights immediately. No more flashing.
 
 ---
 

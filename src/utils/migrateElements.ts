@@ -1,4 +1,3 @@
-// ⚠️ UPDATED 2025-10-18: Migration utility updated - removed isVisible (now using per-view hidden_elements)
 // Migration utility for existing DesignElements to add zIndex property
 import { DesignElement, getDefaultZIndex } from '@/types/project';
 
@@ -11,9 +10,6 @@ export const migrateElement = (element: DesignElement): DesignElement => {
   return {
     ...element,
     zIndex: element.zIndex ?? getDefaultZIndex(element.type, element.id),
-    // ⚠️ REMOVED 2025-10-18: isVisible no longer part of DesignElement
-    // Now using per-view hidden_elements array in ElevationViewConfig
-    // isVisible: element.isVisible ?? true
   };
 };
 

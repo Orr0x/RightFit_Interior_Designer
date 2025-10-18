@@ -237,8 +237,6 @@ const CompactComponentSidebar: React.FC<CompactComponentSidebarProps> = ({
       color: component.color || '#8B4513',
       name: component.name,
       zIndex: 0, // Required by DesignElement interface
-      // ⚠️ COMMENTED OUT 2025-10-18: Global isVisible replaced by per-view hidden_elements
-      // isVisible: true // No longer required by DesignElement interface
     };
 
     // Add to canvas and update recently used

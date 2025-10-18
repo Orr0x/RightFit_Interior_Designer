@@ -7,7 +7,6 @@ import {
   Layers,
   Square,
   Box,
-  Eye,
   EyeOff,
   Trash2
 } from 'lucide-react';
@@ -97,12 +96,6 @@ export const CanvasElementCounter: React.FC<CanvasElementCounterProps> = ({
   const getElementDisplayName = (element: DesignElement) => {
     return element.style || element.id.split('-').slice(0, -1).join(' ');
   };
-
-  // ⚠️ COMMENTED OUT 2025-10-18: Global isVisible replaced by per-view hidden_elements
-  // This function is now DEAD CODE - visibility is managed per-view in elevationViews array
-  // const handleElementVisibilityToggle = (element: DesignElement) => {
-  //   onUpdateElement(element.id, { isVisible: !element.isVisible });
-  // };
 
   const handleMouseEnter = () => {
     if (hoverTimeout) {
@@ -194,6 +187,7 @@ export const CanvasElementCounter: React.FC<CanvasElementCounterProps> = ({
                           </div>
 
                           <div className="flex items-center gap-1">
+                            {/* Delete Button */}
                             <Button
                               variant="ghost"
                               size="sm"
@@ -202,6 +196,7 @@ export const CanvasElementCounter: React.FC<CanvasElementCounterProps> = ({
                                 e.stopPropagation();
                                 onDeleteElement(element.id);
                               }}
+                              title="Delete element"
                             >
                               <Trash2 className="h-2.5 w-2.5" />
                             </Button>

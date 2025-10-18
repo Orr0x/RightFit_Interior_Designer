@@ -264,15 +264,56 @@ export const PropertiesPanel: React.FC<PropertiesPanelProps> = ({
       
       {/* Element Properties - Show first when element is selected */}
       {selectedElement ? (
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center space-x-2 text-sm">
-              <Settings className="h-4 w-4" />
-              <span>Element Properties</span>
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <Tabs defaultValue="basic" className="w-full">
+        <>
+          {/* Quick Actions - Show at top when element is selected */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-sm">Quick Actions</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-2">
+              {/* Hide/Show in current view button */}
+              {onToggleElementVisibility && elevationViews && (
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="w-full text-xs flex items-center justify-center gap-2"
+                  onClick={handleToggleVisibility}
+                >
+                  {isElementHidden() ? (
+                    <>
+                      <Eye className="h-3 w-3" />
+                      Show in This View
+                    </>
+                  ) : (
+                    <>
+                      <EyeOff className="h-3 w-3" />
+                      Hide in This View
+                    </>
+                  )}
+                </Button>
+              )}
+
+              <Button variant="outline" size="sm" className="w-full text-xs">
+                Duplicate Element
+              </Button>
+              <Button variant="outline" size="sm" className="w-full text-xs">
+                Reset Position
+              </Button>
+              <Button variant="destructive" size="sm" className="w-full text-xs">
+                Delete Element
+              </Button>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center space-x-2 text-sm">
+                <Settings className="h-4 w-4" />
+                <span>Element Properties</span>
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <Tabs defaultValue="basic" className="w-full">
               <TabsList className="grid w-full grid-cols-3">
                 <TabsTrigger value="basic" className="text-xs">Basic</TabsTrigger>
                 <TabsTrigger value="style" className="text-xs">Style</TabsTrigger>
@@ -620,6 +661,7 @@ export const PropertiesPanel: React.FC<PropertiesPanelProps> = ({
             </Tabs>
           </CardContent>
         </Card>
+        </>
       ) : null}
 
       {/* Room Properties - Show at top when no element selected, at bottom when element is selected */}
@@ -681,48 +723,6 @@ export const PropertiesPanel: React.FC<PropertiesPanelProps> = ({
             <p className="text-sm text-gray-600">
               Select an element to edit its properties
             </p>
-          </CardContent>
-        </Card>
-      )}
-
-      {/* Quick Actions */}
-      {selectedElement && (
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-sm">Quick Actions</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-2">
-            {/* Hide/Show in current view button */}
-            {onToggleElementVisibility && elevationViews && (
-              <Button
-                variant="outline"
-                size="sm"
-                className="w-full text-xs flex items-center justify-center gap-2"
-                onClick={handleToggleVisibility}
-              >
-                {isElementHidden() ? (
-                  <>
-                    <Eye className="h-3 w-3" />
-                    Show in This View
-                  </>
-                ) : (
-                  <>
-                    <EyeOff className="h-3 w-3" />
-                    Hide in This View
-                  </>
-                )}
-              </Button>
-            )}
-
-            <Button variant="outline" size="sm" className="w-full text-xs">
-              Duplicate Element
-            </Button>
-            <Button variant="outline" size="sm" className="w-full text-xs">
-              Reset Position
-            </Button>
-            <Button variant="destructive" size="sm" className="w-full text-xs">
-              Delete Element
-            </Button>
           </CardContent>
         </Card>
       )}

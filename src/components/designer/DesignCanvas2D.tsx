@@ -122,27 +122,52 @@ let configCache: Record<string, number> = {};
 
 // Helper function to check if a point is inside a rotated component
 // Uses inverse rotation transform to check point in component's local space
-const isPointInRotatedComponent = (pointX: number, pointY: number, element: DesignElement) => {
-  const width = element.width;
-  const height = element.depth || element.height;
-  const rotation = (element.rotation || 0) * Math.PI / 180;
+const isPointInRotatedComponent = (
+  pointX: number,
+  pointY: number,
+  element: DesignElement,
+  viewMode: 'plan' | 'elevation' = 'plan'
+) => {
+  if (viewMode === 'plan') {
+    // Plan view: use X/Y coordinates with rotation
+    const width = element.width;
+    const height = element.depth || element.height;
+    const rotation = (element.rotation || 0) * Math.PI / 180;
 
-  // Transform click point into component's local space
-  const centerX = element.x + width / 2;
-  const centerY = element.y + height / 2;
+    // Transform click point into component's local space
+    const centerX = element.x + width / 2;
+    const centerY = element.y + height / 2;
 
-  // Translate point to component center
-  const dx = pointX - centerX;
-  const dy = pointY - centerY;
+    // Translate point to component center
+    const dx = pointX - centerX;
+    const dy = pointY - centerY;
 
-  // Rotate backwards (inverse rotation)
-  const cos = Math.cos(-rotation);
-  const sin = Math.sin(-rotation);
-  const localX = dx * cos - dy * sin;
-  const localY = dx * sin + dy * cos;
+    // Rotate backwards (inverse rotation)
+    const cos = Math.cos(-rotation);
+    const sin = Math.sin(-rotation);
+    const localX = dx * cos - dy * sin;
+    const localY = dx * sin + dy * cos;
 
-  // Check if in un-rotated bounds
-  return Math.abs(localX) <= width / 2 && Math.abs(localY) <= height / 2;
+    // Check if in un-rotated bounds
+    return Math.abs(localX) <= width / 2 && Math.abs(localY) <= height / 2;
+  } else {
+    // Elevation view: use X (horizontal) and Z (vertical) coordinates
+    const width = element.width;
+    const height = element.height || 90; // Use actual height for vertical dimension
+    const z = element.z || 0;
+
+    // In elevation view, Z represents the mount height (bottom of element above floor)
+    // The element extends from z (bottom) to z + height (top)
+    const centerX = element.x + width / 2;
+    const bottomZ = z; // Bottom of element above floor
+    const topZ = z + height; // Top of element above floor
+
+    // Check if point is within bounds (no rotation in elevation view)
+    const isInHorizontalBounds = Math.abs(pointX - centerX) <= width / 2;
+    const isInVerticalBounds = pointY >= bottomZ && pointY <= topZ;
+
+    return isInHorizontalBounds && isInVerticalBounds;
+  }
 };
 
 // Smart Wall Snapping System with 5cm clearance
@@ -535,11 +560,21 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
 
   // Convert canvas coordinates to room coordinates (uses inner room for component placement)
   const canvasToRoom = useCallback((canvasX: number, canvasY: number) => {
-    return {
-      x: (canvasX - roomPosition.innerX) / zoom,
-      y: (canvasY - roomPosition.innerY) / zoom
-    };
-  }, [roomPosition, zoom, active2DView]);
+    const x = (canvasX - roomPosition.innerX) / zoom;
+
+    // For elevation views, Y represents vertical height (Z), and needs to be inverted
+    // (canvas top = ceiling, canvas bottom = floor)
+    if (active2DView !== 'plan') {
+      const wallHeight = getWallHeight();
+      // Invert Y so that canvas top (innerY) = ceiling (wallHeight) and bottom = floor (0)
+      const y = wallHeight - ((canvasY - roomPosition.innerY) / zoom);
+      return { x, y };
+    }
+
+    // For plan view, Y is normal depth coordinate
+    const y = (canvasY - roomPosition.innerY) / zoom;
+    return { x, y };
+  }, [roomPosition, zoom, active2DView, getWallHeight]);
 
   // Preload component behaviors and room configuration
   useEffect(() => {
@@ -1938,20 +1973,12 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
     drawRoom(ctx);
 
     // Draw elements with proper layering and visibility
-    console.log('🎨 [CANVAS DEBUG] Rendering with currentViewInfo:', {
-      direction: currentViewInfo.direction,
-      hiddenElements: currentViewInfo.hiddenElements,
-      active2DView,
-      totalElements: design.elements.length
-    });
-
     // Filter elements based on view type
     let elementsToRender = design.elements.filter(el => {
       // For plan view: only check per-view hidden_elements (no direction filtering)
       if (active2DView === 'plan') {
         const isHiddenInView = currentViewInfo.hiddenElements.includes(el.id);
         if (isHiddenInView) {
-          console.log('🎨 [CANVAS DEBUG] Element HIDDEN in plan view:', { id: el.id });
           return false;
         }
         return true;
@@ -1964,26 +1991,17 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
       // Check direction visibility
       const isDirectionVisible = wall === currentViewInfo.direction || wall === 'center' || isCornerVisible;
       if (!isDirectionVisible) {
-        console.log('🎨 [CANVAS DEBUG] Element filtered by direction:', { id: el.id, wall, viewDirection: currentViewInfo.direction });
         return false;
       }
 
       // Check if element is hidden in this specific view
       const isHiddenInView = currentViewInfo.hiddenElements.includes(el.id);
       if (isHiddenInView) {
-        console.log('🎨 [CANVAS DEBUG] Element HIDDEN by per-view filter:', { id: el.id, viewId: active2DView });
         return false;
       }
 
       return true;
     });
-
-    console.log('🎨 [CANVAS DEBUG] Elements to render after filtering:', elementsToRender.length);
-
-    // ⚠️ COMMENTED OUT 2025-10-18: Global isVisible replaced by per-view hidden_elements
-    // Already filtered by per-view hidden_elements system above (line 1949-1955)
-    // Filter out invisible elements
-    // elementsToRender = elementsToRender.filter(element => element.isVisible !== false);
 
     // Sort elements by zIndex for proper layering (lower zIndex = drawn first/behind)
     elementsToRender.sort((a, b) => (a.zIndex || 0) - (b.zIndex || 0));
@@ -2080,11 +2098,6 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
           return true;
         });
 
-    // ⚠️ COMMENTED OUT 2025-10-18: Global isVisible replaced by per-view hidden_elements
-    // Already filtered by per-view hidden_elements system above
-    // Filter out invisible elements
-    // elementsToCheck = elementsToCheck.filter(element => element.isVisible !== false);
-
     // Sort elements by layer height first (wall units over base units), then by zIndex
     elementsToCheck.sort((a, b) => {
       // Get layer metadata for height-based sorting
@@ -2104,27 +2117,48 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
     });
     
     const clickedElement = elementsToCheck.find(element => {
-      // Rotation-aware hit detection
-      const width = element.width;
-      const height = element.depth || element.height;
-      const rotation = (element.rotation || 0) * Math.PI / 180;
+      // Different hit detection for plan vs elevation views
+      if (active2DView === 'plan') {
+        // Plan view: use X/Y coordinates with rotation
+        const width = element.width;
+        const height = element.depth || element.height;
+        const rotation = (element.rotation || 0) * Math.PI / 180;
 
-      // Transform click point into component's local space
-      const centerX = element.x + width / 2;
-      const centerY = element.y + height / 2;
+        // Transform click point into component's local space
+        const centerX = element.x + width / 2;
+        const centerY = element.y + height / 2;
 
-      // Translate click to component center
-      const dx = roomPos.x - centerX;
-      const dy = roomPos.y - centerY;
+        // Translate click to component center
+        const dx = roomPos.x - centerX;
+        const dy = roomPos.y - centerY;
 
-      // Rotate backwards (inverse rotation)
-      const cos = Math.cos(-rotation);
-      const sin = Math.sin(-rotation);
-      const localX = dx * cos - dy * sin;
-      const localY = dx * sin + dy * cos;
+        // Rotate backwards (inverse rotation)
+        const cos = Math.cos(-rotation);
+        const sin = Math.sin(-rotation);
+        const localX = dx * cos - dy * sin;
+        const localY = dx * sin + dy * cos;
 
-      // Check if in un-rotated bounds
-      return Math.abs(localX) <= width / 2 && Math.abs(localY) <= height / 2;
+        // Check if in un-rotated bounds
+        return Math.abs(localX) <= width / 2 && Math.abs(localY) <= height / 2;
+      } else {
+        // Elevation view: use X (horizontal) and Z (vertical) coordinates
+        const width = element.width;
+        const height = element.height || 90; // Use actual height for vertical dimension
+        const z = element.z || 0;
+
+        // In elevation view, Z represents the mount height (bottom of element above floor)
+        // The element extends from z (bottom) to z + height (top)
+        const centerX = element.x + width / 2;
+        const bottomZ = z; // Bottom of element above floor
+        const topZ = z + height; // Top of element above floor
+        const centerZ = (bottomZ + topZ) / 2; // Same as z + height/2
+
+        // Check if click is within bounds (no rotation in elevation view)
+        const isInHorizontalBounds = Math.abs(roomPos.x - centerX) <= width / 2;
+        const isInVerticalBounds = roomPos.y >= bottomZ && roomPos.y <= topZ;
+
+        return isInHorizontalBounds && isInVerticalBounds;
+      }
     });
 
     if (clickedElement) {
@@ -2193,11 +2227,6 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
         return true;
       });
 
-      // ⚠️ COMMENTED OUT 2025-10-18: Global isVisible replaced by per-view hidden_elements
-      // Already filtered by per-view hidden_elements system above
-      // Filter out invisible elements
-      // elementsToCheck = elementsToCheck.filter(element => element.isVisible !== false);
-
       // Sort elements by layer height first (wall units over base units), then by zIndex for hover
       elementsToCheck.sort((a, b) => {
         // Get layer metadata for height-based sorting
@@ -2218,7 +2247,8 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
       
       const hoveredEl = elementsToCheck.find(element => {
         // Use the new rotation-aware boundary detection
-        return isPointInRotatedComponent(roomPos.x, roomPos.y, element);
+        const viewMode = active2DView === 'plan' ? 'plan' : 'elevation';
+        return isPointInRotatedComponent(roomPos.x, roomPos.y, element, viewMode);
       });
       setHoveredElement(hoveredEl || null);
       
@@ -2507,16 +2537,12 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
           return true;
         });
 
-        // ⚠️ COMMENTED OUT 2025-10-18: Global isVisible replaced by per-view hidden_elements
-        // Already filtered by per-view hidden_elements system above
-        // Filter out invisible elements
-        // elementsToCheck = elementsToCheck.filter(element => element.isVisible !== false);
-
         // Sort elements by zIndex in DESCENDING order (highest zIndex first) for hover
         elementsToCheck.sort((a, b) => (b.zIndex || 0) - (a.zIndex || 0));
         
         const hoveredEl = elementsToCheck.find(element => {
-          return isPointInRotatedComponent(roomPos.x, roomPos.y, element);
+          const viewMode = active2DView === 'plan' ? 'plan' : 'elevation';
+          return isPointInRotatedComponent(roomPos.x, roomPos.y, element, viewMode);
         });
         setHoveredElement(hoveredEl || null);
       }
@@ -2674,8 +2700,9 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
       const y = point.y * scaleY;
       
       const roomPos = canvasToRoom(x, y);
+      const viewMode = active2DView === 'plan' ? 'plan' : 'elevation';
       const longPressedElement = design.elements.find(element => {
-        return isPointInRotatedComponent(roomPos.x, roomPos.y, element);
+        return isPointInRotatedComponent(roomPos.x, roomPos.y, element, viewMode);
       });
 
       if (longPressedElement) {
@@ -2799,8 +2826,6 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
         color: componentData.color,
         style: componentData.name,
         zIndex: 0, // Required by DesignElement interface
-        // ⚠️ COMMENTED OUT 2025-10-18: Global isVisible replaced by per-view hidden_elements
-        // isVisible: true // No longer required by DesignElement interface
       };
 
       // ✅ Enhanced placement already handled snapping - no need for duplicate getSnapPosition() call
