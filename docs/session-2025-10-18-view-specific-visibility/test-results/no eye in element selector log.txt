@@ -1,0 +1,2830 @@
+
+================================================================================
+BROWSER CONSOLE LOGS
+================================================================================
+Captured: 802 log entries
+Session Start: 2025-10-18T13:53:35.338Z
+Session End: 2025-10-18T13:56:10.990Z
+================================================================================
+
+[2025-10-18T13:53:35.338Z] ℹ️ [INFO] 🔧 [App] Console logger enabled (development mode)
+[2025-10-18T13:53:35.701Z] 📝 [LOG] 🔐 [ProjectContext] Auth ready, loading user projects...
+[2025-10-18T13:53:35.868Z] 📝 [LOG] 🔐 [ProjectContext] Auth ready, loading user projects...
+[2025-10-18T13:53:35.933Z] 📝 [LOG] [ConfigService] Feature disabled, skipping preload
+[2025-10-18T13:53:35.933Z] ℹ️ [INFO] ✅ [App] Configuration preloaded from database
+[2025-10-18T13:53:35.941Z] 📝 [LOG] 🔐 [ProjectContext] Auth ready, loading user projects...
+[2025-10-18T13:53:35.943Z] 📝 [LOG] 🔐 [ProjectContext] Auth ready, loading user projects...
+[2025-10-18T13:53:35.953Z] 📝 [LOG] 🔐 [ProjectContext] Auth ready, loading user projects...
+[2025-10-18T13:53:35.968Z] 📝 [LOG] [Model3DLoader] Preloading 18 models...
+[2025-10-18T13:53:36.020Z] 📝 [LOG] ✅ [ComponentService] Batch loaded 10 component behaviors
+[2025-10-18T13:53:36.020Z] 📝 [LOG] ✅ [Designer] Preloading complete
+[2025-10-18T13:53:36.155Z] 📝 [LOG] [Model3DLoader] Loaded model from database: wall-cabinet-80
+[2025-10-18T13:53:36.156Z] 📝 [LOG] [Model3DLoader] Loaded model from database: new-corner-wall-cabinet-60
+[2025-10-18T13:53:36.157Z] 📝 [LOG] [Model3DLoader] Loaded model from database: bed-single
+[2025-10-18T13:53:36.159Z] 📝 [LOG] [Model3DLoader] Loaded model from database: new-corner-wall-cabinet-90
+[2025-10-18T13:53:36.159Z] 📝 [LOG] [Model3DLoader] Loaded model from database: base-cabinet-80
+[2025-10-18T13:53:36.159Z] 📝 [LOG] [Model3DLoader] Loaded model from database: sofa-3-seater
+[2025-10-18T13:53:36.163Z] 📝 [LOG] [Model3DLoader] Loaded model from database: bathtub-standard
+[2025-10-18T13:53:36.163Z] 📝 [LOG] [Model3DLoader] Loaded model from database: toilet-standard
+[2025-10-18T13:53:36.171Z] 📝 [LOG] [Model3DLoader] Loaded model from database: base-cabinet-60
+[2025-10-18T13:53:36.172Z] 📝 [LOG] [Model3DLoader] Loaded model from database: shower-standard
+[2025-10-18T13:53:36.174Z] 📝 [LOG] [Model3DLoader] Loaded model from database: washing-machine
+[2025-10-18T13:53:36.223Z] 📝 [LOG] [Model3DLoader] Loaded model from database: l-shaped-test-cabinet-60
+[2025-10-18T13:53:36.240Z] 📝 [LOG] [Model3DLoader] Loaded model from database: l-shaped-test-cabinet-90
+[2025-10-18T13:53:36.240Z] 📝 [LOG] [Model3DLoader] Loaded model from database: dining-table
+[2025-10-18T13:53:36.249Z] 📝 [LOG] [Model3DLoader] Loaded model from database: wall-cabinet-60
+[2025-10-18T13:53:36.250Z] 📝 [LOG] [Model3DLoader] Loaded model from database: dining-chair
+[2025-10-18T13:53:36.265Z] 📝 [LOG] [Model3DLoader] Loaded model from database: tv-55-inch
+[2025-10-18T13:53:36.272Z] 📝 [LOG] [Model3DLoader] Loaded model from database: tumble-dryer
+[2025-10-18T13:53:36.378Z] 📝 [LOG] [Model3DLoader] Loaded 6 geometry parts for model: a8b66209-ccef-4e44-a761-df5f37ac640b
+[2025-10-18T13:53:36.381Z] 📝 [LOG] [Model3DLoader] Loaded 8 geometry parts for model: 701c19a3-0083-41d2-aec8-96c540a1833d
+[2025-10-18T13:53:36.382Z] 📝 [LOG] [Model3DLoader] Loaded 6 geometry parts for model: dee1b997-eb19-4228-b69f-7dff6204ae01
+[2025-10-18T13:53:36.392Z] 📝 [LOG] [Model3DLoader] Loaded 3 geometry parts for model: 540faede-366d-4fa2-b169-97fec6766db4
+[2025-10-18T13:53:36.393Z] 📝 [LOG] [Model3DLoader] Loaded 4 geometry parts for model: 8fef412a-8649-4895-8cd5-fd53d0677ac1
+[2025-10-18T13:53:36.395Z] 📝 [LOG] [Model3DLoader] Loaded 11 geometry parts for model: 7e845283-165b-4a1e-95e6-565adc87fc60
+[2025-10-18T13:53:36.399Z] 📝 [LOG] [Model3DLoader] Loaded 5 geometry parts for model: 6942fc4e-5bf6-480e-81ea-16c79a782954
+[2025-10-18T13:53:36.404Z] 📝 [LOG] [Model3DLoader] Loaded 10 geometry parts for model: 138cf90c-ba72-450e-a50e-f39da21ca44d
+[2025-10-18T13:53:36.406Z] 📝 [LOG] [Model3DLoader] Loaded 3 geometry parts for model: 84b234b5-f96f-4080-9b71-b9e66cf41dfb
+[2025-10-18T13:53:36.406Z] 📝 [LOG] [Model3DLoader] Loaded 5 geometry parts for model: 68fcf22e-52dc-4cd2-9bc4-47d888fb8752
+[2025-10-18T13:53:36.408Z] 📝 [LOG] [Model3DLoader] Loaded 4 geometry parts for model: 60f2345b-4c36-4f2f-95d0-493b16b7374a
+[2025-10-18T13:53:36.409Z] 📝 [LOG] [Model3DLoader] Loaded 5 geometry parts for model: 932bc10c-f028-4375-8593-8d2f9bb30fbb
+[2025-10-18T13:53:36.411Z] 📝 [LOG] [Model3DLoader] Loaded 6 geometry parts for model: c509bed1-9882-44d5-8e44-be6c625cf0b6
+[2025-10-18T13:53:36.412Z] 📝 [LOG] [Model3DLoader] Loaded 5 geometry parts for model: d91a5c3a-2af9-4c8f-8cb3-a62f84cef732
+[2025-10-18T13:53:36.412Z] 📝 [LOG] [Model3DLoader] Loaded 8 geometry parts for model: 6a45d0f6-5116-409a-8ab9-aacebd466a31
+[2025-10-18T13:53:36.414Z] 📝 [LOG] [Model3DLoader] Loaded 6 geometry parts for model: 43b45e50-439e-4647-b320-7b0d2d51d311
+[2025-10-18T13:53:36.414Z] 📝 [LOG] [Model3DLoader] Loaded 4 geometry parts for model: f8ac534e-6911-477b-bbf3-5c66afa03ed8
+[2025-10-18T13:53:36.417Z] 📝 [LOG] [Model3DLoader] Loaded 5 geometry parts for model: 9b93fa5d-fde1-4330-8f1d-84ecb01e0607
+[2025-10-18T13:53:36.480Z] 📝 [LOG] [Model3DLoader] Loaded 17 materials
+[2025-10-18T13:53:36.481Z] 📝 [LOG] [Model3DLoader] Preloaded 18 models with geometry and materials
+[2025-10-18T13:53:36.481Z] 📝 [LOG] [DynamicRenderer] Preloaded common components
+[2025-10-18T13:54:10.793Z] 📝 [LOG] 📂 [CompactComponentSidebar] Grouping 0 filtered components by category
+[2025-10-18T13:54:10.793Z] 📝 [LOG] 📂 [CompactComponentSidebar] Final categories with components: []
+[2025-10-18T13:54:10.797Z] ❌ [ERROR] ❌ [CompactComponentSidebar] WALL UNITS CATEGORY MISSING FROM FINAL GROUPS!
+[2025-10-18T13:54:10.797Z] 📝 [LOG] 📂 [CompactComponentSidebar] Available categories: []
+[2025-10-18T13:54:10.797Z] 📝 [LOG] ⏳ [CompactComponentSidebar] Component sidebar in loading state
+[2025-10-18T13:54:10.808Z] 📝 [LOG] 🎯 [PerformanceMonitor] Performance monitor hidden
+[2025-10-18T13:54:10.817Z] 📝 [LOG] 🔄 [useOptimizedComponents] Fetching components from database...
+[2025-10-18T13:54:10.817Z] 📝 [LOG] 🔄 [useComponentMetadata] Fetching component metadata from component_3d_models...
+[2025-10-18T13:54:10.817Z] 📝 [LOG] 🔄 [useComponentMetadata] Fetching component metadata from component_3d_models...
+[2025-10-18T13:54:10.818Z] 📝 [LOG] 🏠 [RoomService] Loading template for room type: kitchen
+[2025-10-18T13:54:10.819Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Rendering with currentViewInfo: {
+  "direction": "plan",
+  "hiddenElements": [
+    "new-corner-wall-cabinet-60-1760788779197"
+  ],
+  "active2DView": "plan",
+  "totalElements": 18
+}
+[2025-10-18T13:54:10.819Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Element HIDDEN in plan view: {
+  "id": "new-corner-wall-cabinet-60-1760788779197"
+}
+[2025-10-18T13:54:10.819Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Elements to render after filtering: 17
+[2025-10-18T13:54:10.822Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Rendering with currentViewInfo: {
+  "direction": "plan",
+  "hiddenElements": [
+    "new-corner-wall-cabinet-60-1760788779197"
+  ],
+  "active2DView": "plan",
+  "totalElements": 18
+}
+[2025-10-18T13:54:10.822Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Element HIDDEN in plan view: {
+  "id": "new-corner-wall-cabinet-60-1760788779197"
+}
+[2025-10-18T13:54:10.822Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Elements to render after filtering: 17
+[2025-10-18T13:54:10.824Z] 📝 [LOG] 🚀 [Designer] Preloading common component behaviors for performance
+[2025-10-18T13:54:10.824Z] 📝 [LOG] 🔥 [ComponentService] Preloading common component behaviors
+[2025-10-18T13:54:10.824Z] 📝 [LOG] 🔄 [ComponentService] Batch loading behaviors for 10 component types
+[2025-10-18T13:54:10.824Z] 📝 [LOG] ⚡ [ComponentService] All 10 behaviors found in cache
+[2025-10-18T13:54:10.824Z] 📝 [LOG] 🔧 [ProjectContext] Auto-save initialization check {
+  "autoSaveEnabled": true,
+  "hasInterval": false,
+  "hasCurrentRoom": true,
+  "roomId": "ff110bba-6ec1-4a40-a799-b8d4aa0b6d1f"
+}
+[2025-10-18T13:54:10.825Z] 📝 [LOG] 🚀 [ProjectContext] Initializing auto-save for room: ff110bba-6ec1-4a40-a799-b8d4aa0b6d1f
+[2025-10-18T13:54:10.831Z] 📝 [LOG] [ConfigService] Feature disabled, skipping preload
+[2025-10-18T13:54:10.832Z] 📝 [LOG] [DesignCanvas2D] Configuration loaded from database: {
+  "canvas_width": 1600,
+  "canvas_height": 1200,
+  "grid_size": 20,
+  "min_zoom": 0.5,
+  "max_zoom": 4,
+  "wall_thickness": 10,
+  "wall_clearance": 5,
+  "wall_snap_threshold": 40,
+  "snap_tolerance_default": 15,
+  "snap_tolerance_countertop": 25,
+  "proximity_threshold": 100,
+  "wall_snap_distance_default": 35,
+  "wall_snap_distance_countertop": 50,
+  "corner_tolerance": 30,
+  "toe_kick_height": 8,
+  "drag_threshold_mouse": 5,
+  "drag_threshold_touch": 10
+}
+[2025-10-18T13:54:10.833Z] 📝 [LOG] [Render2DService] Preloading 2D render definitions...
+[2025-10-18T13:54:10.833Z] 📝 [LOG] ✅ [Designer] Preloading complete
+[2025-10-18T13:54:10.842Z] 📝 [LOG] ⏳ [CompactComponentSidebar] Component sidebar in loading state
+[2025-10-18T13:54:10.848Z] 📝 [LOG] 🎯 [PerformanceMonitor] Performance monitor hidden
+[2025-10-18T13:54:10.851Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Rendering with currentViewInfo: {
+  "direction": "plan",
+  "hiddenElements": [
+    "new-corner-wall-cabinet-60-1760788779197"
+  ],
+  "active2DView": "plan",
+  "totalElements": 18
+}
+[2025-10-18T13:54:10.851Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Element HIDDEN in plan view: {
+  "id": "new-corner-wall-cabinet-60-1760788779197"
+}
+[2025-10-18T13:54:10.851Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Elements to render after filtering: 17
+[2025-10-18T13:54:10.852Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Rendering with currentViewInfo: {
+  "direction": "plan",
+  "hiddenElements": [
+    "new-corner-wall-cabinet-60-1760788779197"
+  ],
+  "active2DView": "plan",
+  "totalElements": 18
+}
+[2025-10-18T13:54:10.852Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Element HIDDEN in plan view: {
+  "id": "new-corner-wall-cabinet-60-1760788779197"
+}
+[2025-10-18T13:54:10.852Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Elements to render after filtering: 17
+[2025-10-18T13:54:10.863Z] 📝 [LOG] ⏳ [CompactComponentSidebar] Component sidebar in loading state
+[2025-10-18T13:54:10.869Z] 📝 [LOG] 🎯 [PerformanceMonitor] Performance monitor hidden
+[2025-10-18T13:54:10.876Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Rendering with currentViewInfo: {
+  "direction": "plan",
+  "hiddenElements": [
+    "new-corner-wall-cabinet-60-1760788779197"
+  ],
+  "active2DView": "plan",
+  "totalElements": 18
+}
+[2025-10-18T13:54:10.876Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Element HIDDEN in plan view: {
+  "id": "new-corner-wall-cabinet-60-1760788779197"
+}
+[2025-10-18T13:54:10.877Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Elements to render after filtering: 17
+[2025-10-18T13:54:10.877Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Rendering with currentViewInfo: {
+  "direction": "plan",
+  "hiddenElements": [
+    "new-corner-wall-cabinet-60-1760788779197"
+  ],
+  "active2DView": "plan",
+  "totalElements": 18
+}
+[2025-10-18T13:54:10.878Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Element HIDDEN in plan view: {
+  "id": "new-corner-wall-cabinet-60-1760788779197"
+}
+[2025-10-18T13:54:10.878Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Elements to render after filtering: 17
+[2025-10-18T13:54:10.999Z] 📝 [LOG] ✅ [RoomService] Loaded 6 geometry templates
+[2025-10-18T13:54:11.087Z] 📝 [LOG] 📐 [RoomService] Generating simple rectangle for room ff110bba-6ec1-4a40-a799-b8d4aa0b6d1f
+[2025-10-18T13:54:11.088Z] 📝 [LOG] ✅ [DesignCanvas2D] Loaded complex room geometry for room ff110bba-6ec1-4a40-a799-b8d4aa0b6d1f: rectangle
+[2025-10-18T13:54:11.088Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Rendering with currentViewInfo: {
+  "direction": "plan",
+  "hiddenElements": [
+    "new-corner-wall-cabinet-60-1760788779197"
+  ],
+  "active2DView": "plan",
+  "totalElements": 18
+}
+[2025-10-18T13:54:11.089Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Element HIDDEN in plan view: {
+  "id": "new-corner-wall-cabinet-60-1760788779197"
+}
+[2025-10-18T13:54:11.089Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Elements to render after filtering: 17
+[2025-10-18T13:54:11.089Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Rendering with currentViewInfo: {
+  "direction": "plan",
+  "hiddenElements": [
+    "new-corner-wall-cabinet-60-1760788779197"
+  ],
+  "active2DView": "plan",
+  "totalElements": 18
+}
+[2025-10-18T13:54:11.089Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Element HIDDEN in plan view: {
+  "id": "new-corner-wall-cabinet-60-1760788779197"
+}
+[2025-10-18T13:54:11.090Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Elements to render after filtering: 17
+[2025-10-18T13:54:11.102Z] 📝 [LOG] ✅ [useComponentMetadata] Loaded 198 component metadata records
+[2025-10-18T13:54:11.103Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Rendering with currentViewInfo: {
+  "direction": "plan",
+  "hiddenElements": [
+    "new-corner-wall-cabinet-60-1760788779197"
+  ],
+  "active2DView": "plan",
+  "totalElements": 18
+}
+[2025-10-18T13:54:11.103Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Element HIDDEN in plan view: {
+  "id": "new-corner-wall-cabinet-60-1760788779197"
+}
+[2025-10-18T13:54:11.104Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Elements to render after filtering: 17
+[2025-10-18T13:54:11.104Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Rendering with currentViewInfo: {
+  "direction": "plan",
+  "hiddenElements": [
+    "new-corner-wall-cabinet-60-1760788779197"
+  ],
+  "active2DView": "plan",
+  "totalElements": 18
+}
+[2025-10-18T13:54:11.104Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Element HIDDEN in plan view: {
+  "id": "new-corner-wall-cabinet-60-1760788779197"
+}
+[2025-10-18T13:54:11.104Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Elements to render after filtering: 17
+[2025-10-18T13:54:11.118Z] 📝 [LOG] ✅ [RoomService] Loaded template for kitchen: {
+  "id": "3a7ba612-e98c-49ff-9d25-43b7efde253f",
+  "room_type": "kitchen",
+  "name": "Kitchen",
+  "icon_name": "ChefHat",
+  "description": "Kitchen design with cabinets and appliances",
+  "default_width": 600,
+  "default_height": 400,
+  "default_wall_height": 240,
+  "default_ceiling_height": 250,
+  "default_settings": {
+    "view_preferences": {
+      "grid_enabled": true,
+      "snap_to_grid": true,
+      "default_2d_mode": "plan",
+      "default_2d_view": "2d"
+    },
+    "default_wall_height": 250
+  }
+}
+[2025-10-18T13:54:11.119Z] 📝 [LOG] 🏗️ [CoordinateEngine] Initialized with inner room dimensions: {
+  "innerWidth": 600,
+  "innerHeight": 400,
+  "ceilingHeight": 240,
+  "wallThickness": 10
+}
+[2025-10-18T13:54:11.119Z] 📝 [LOG] 🏗️ [DesignCanvas2D] Coordinate engine initialized for room: {
+  "width": 600,
+  "height": 400
+}
+[2025-10-18T13:54:11.119Z] 📝 [LOG] ⚡ [ComponentService] Cache hit for component type: cabinet
+[2025-10-18T13:54:11.120Z] 📝 [LOG] ⚡ [ComponentService] Cache hit for component type: appliance
+[2025-10-18T13:54:11.120Z] 📝 [LOG] ⚡ [ComponentService] Cache hit for component type: counter-top
+[2025-10-18T13:54:11.120Z] 📝 [LOG] ⚡ [ComponentService] Cache hit for component type: end-panel
+[2025-10-18T13:54:11.120Z] 📝 [LOG] ⚡ [ComponentService] Cache hit for component type: window
+[2025-10-18T13:54:11.120Z] 📝 [LOG] ⚡ [ComponentService] Cache hit for component type: door
+[2025-10-18T13:54:11.121Z] 📝 [LOG] ⚡ [ComponentService] Cache hit for component type: flooring
+[2025-10-18T13:54:11.121Z] 📝 [LOG] ⚡ [ComponentService] Cache hit for component type: toe-kick
+[2025-10-18T13:54:11.121Z] 📝 [LOG] ⚡ [ComponentService] Cache hit for component type: cornice
+[2025-10-18T13:54:11.121Z] 📝 [LOG] ⚡ [ComponentService] Cache hit for component type: pelmet
+[2025-10-18T13:54:11.122Z] 📝 [LOG] ⚡ [ComponentService] Cache hit for component type: cabinet
+[2025-10-18T13:54:11.122Z] 📝 [LOG] ⚡ [ComponentService] Cache hit for component type: appliance
+[2025-10-18T13:54:11.122Z] 📝 [LOG] ⚡ [ComponentService] Cache hit for component type: counter-top
+[2025-10-18T13:54:11.122Z] 📝 [LOG] ⚡ [ComponentService] Cache hit for component type: end-panel
+[2025-10-18T13:54:11.122Z] 📝 [LOG] ⚡ [ComponentService] Cache hit for component type: window
+[2025-10-18T13:54:11.123Z] 📝 [LOG] ⚡ [ComponentService] Cache hit for component type: door
+[2025-10-18T13:54:11.123Z] 📝 [LOG] ⚡ [ComponentService] Cache hit for component type: flooring
+[2025-10-18T13:54:11.123Z] 📝 [LOG] ⚡ [ComponentService] Cache hit for component type: toe-kick
+[2025-10-18T13:54:11.124Z] 📝 [LOG] ⚡ [ComponentService] Cache hit for component type: cornice
+[2025-10-18T13:54:11.124Z] 📝 [LOG] ⚡ [ComponentService] Cache hit for component type: pelmet
+[2025-10-18T13:54:11.125Z] 📝 [LOG] 🚀 [DesignCanvas2D] Preloaded component behaviors and room config
+[2025-10-18T13:54:11.142Z] 📝 [LOG] ⏱️ [useOptimizedComponents] Database query completed in 325ms
+[2025-10-18T13:54:11.143Z] 📝 [LOG] ✅ [useOptimizedComponents] Loaded 226 database components
+[2025-10-18T13:54:11.143Z] 📝 [LOG] 🔥 [useOptimizedComponents] Pre-warming category and room type caches
+[2025-10-18T13:54:11.143Z] 📝 [LOG] 🔥 [useOptimizedComponents] Pre-warmed 26 categories and 12 room types
+[2025-10-18T13:54:11.144Z] 📝 [LOG] 🏠 [useOptimizedComponents] Wall units: 0 (lowercase: 0, title: 0)
+[2025-10-18T13:54:11.144Z] ⚠️ [WARN] ⚠️ [useOptimizedComponents] NO WALL UNITS FOUND!
+[2025-10-18T13:54:11.144Z] 📝 [LOG] 📂 [useOptimizedComponents] Available categories: [
+  "appliances",
+  "base-cabinets",
+  "bathroom-fixtures",
+  "bathroom-storage",
+  "bathroom-vanities",
+  "bedroom-furniture",
+  "bedroom-storage",
+  "counter-tops",
+  "dining-room-furniture",
+  "dining-room-storage",
+  "doors-external",
+  "doors-internal",
+  "dressing-room-furniture",
+  "dressing-room-storage",
+  "finishing",
+  "kitchen-larder",
+  "living-room-furniture",
+  "living-room-storage",
+  "office-furniture",
+  "office-storage",
+  "sinks",
+  "utility-appliances",
+  "utility-fixtures",
+  "utility-storage",
+  "wall-cabinets",
+  "windows"
+]
+[2025-10-18T13:54:11.145Z] 📝 [LOG] 🍳 [useOptimizedComponents] Kitchen components: 126
+[2025-10-18T13:54:11.146Z] 📝 [LOG] 🔍 [CompactComponentSidebar] Filtering components for room type: kitchen
+[2025-10-18T13:54:11.146Z] 📝 [LOG] 🔍 [CompactComponentSidebar] Total components loaded: 226
+[2025-10-18T13:54:11.147Z] 📝 [LOG] 🔍 [CompactComponentSidebar] Components available for kitchen: 126
+[2025-10-18T13:54:11.147Z] 📝 [LOG] 🏠 [CompactComponentSidebar] Wall units available for kitchen: 0 (lowercase: 0, title: 0)
+[2025-10-18T13:54:11.149Z] ⚠️ [WARN] ⚠️ [CompactComponentSidebar] NO WALL UNITS AVAILABLE for room type: kitchen
+[2025-10-18T13:54:11.149Z] 📝 [LOG] 📂 [CompactComponentSidebar] Grouping 126 filtered components by category
+[2025-10-18T13:54:11.150Z] 📝 [LOG] 📂 [CompactComponentSidebar] Final categories with components: [
+  "appliances",
+  "base-cabinets",
+  "counter-tops",
+  "doors-external",
+  "doors-internal",
+  "finishing",
+  "kitchen-larder",
+  "sinks",
+  "wall-cabinets",
+  "windows"
+]
+[2025-10-18T13:54:11.150Z] 📝 [LOG] 📂 [CompactComponentSidebar] appliances: 11 components
+[2025-10-18T13:54:11.150Z] 📝 [LOG] 📂 [CompactComponentSidebar] base-cabinets: 35 components
+[2025-10-18T13:54:11.151Z] 📝 [LOG] 📂 [CompactComponentSidebar] counter-tops: 6 components
+[2025-10-18T13:54:11.151Z] 📝 [LOG] 📂 [CompactComponentSidebar] doors-external: 4 components
+[2025-10-18T13:54:11.151Z] 📝 [LOG] 📂 [CompactComponentSidebar] doors-internal: 8 components
+[2025-10-18T13:54:11.151Z] 📝 [LOG] 📂 [CompactComponentSidebar] finishing: 11 components
+[2025-10-18T13:54:11.152Z] 📝 [LOG] 📂 [CompactComponentSidebar] kitchen-larder: 5 components
+[2025-10-18T13:54:11.152Z] 📝 [LOG] 📂 [CompactComponentSidebar] sinks: 20 components
+[2025-10-18T13:54:11.152Z] 📝 [LOG] 📂 [CompactComponentSidebar] wall-cabinets: 19 components
+[2025-10-18T13:54:11.152Z] 📝 [LOG] 📂 [CompactComponentSidebar] windows: 7 components
+[2025-10-18T13:54:11.154Z] ❌ [ERROR] ❌ [CompactComponentSidebar] WALL UNITS CATEGORY MISSING FROM FINAL GROUPS!
+[2025-10-18T13:54:11.155Z] 📝 [LOG] 📂 [CompactComponentSidebar] Available categories: [
+  "appliances",
+  "base-cabinets",
+  "counter-tops",
+  "doors-external",
+  "doors-internal",
+  "finishing",
+  "kitchen-larder",
+  "sinks",
+  "wall-cabinets",
+  "windows"
+]
+[2025-10-18T13:54:11.155Z] 📝 [LOG] ✅ [CompactComponentSidebar] Component sidebar rendered successfully
+[2025-10-18T13:54:11.155Z] 📝 [LOG] ✅ [CompactComponentSidebar] Summary: 226 total, 126 for kitchen, 10 categories
+[2025-10-18T13:54:11.187Z] 📝 [LOG] [Render2DService] ✅ Preloaded 194 definitions in 355ms
+[2025-10-18T13:54:11.188Z] 📝 [LOG] [DesignCanvas2D] 2D render definitions preloaded
+[2025-10-18T13:54:11.188Z] 📝 [LOG] ✅ [useComponentMetadata] Loaded 198 component metadata records
+[2025-10-18T13:54:11.190Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Rendering with currentViewInfo: {
+  "direction": "plan",
+  "hiddenElements": [
+    "new-corner-wall-cabinet-60-1760788779197"
+  ],
+  "active2DView": "plan",
+  "totalElements": 18
+}
+[2025-10-18T13:54:11.190Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Element HIDDEN in plan view: {
+  "id": "new-corner-wall-cabinet-60-1760788779197"
+}
+[2025-10-18T13:54:11.191Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Elements to render after filtering: 17
+[2025-10-18T13:54:11.191Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Rendering with currentViewInfo: {
+  "direction": "plan",
+  "hiddenElements": [
+    "new-corner-wall-cabinet-60-1760788779197"
+  ],
+  "active2DView": "plan",
+  "totalElements": 18
+}
+[2025-10-18T13:54:11.192Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Element HIDDEN in plan view: {
+  "id": "new-corner-wall-cabinet-60-1760788779197"
+}
+[2025-10-18T13:54:11.192Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Elements to render after filtering: 17
+[2025-10-18T13:54:11.880Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Rendering with currentViewInfo: {
+  "direction": "plan",
+  "hiddenElements": [
+    "new-corner-wall-cabinet-60-1760788779197"
+  ],
+  "active2DView": "plan",
+  "totalElements": 18
+}
+[2025-10-18T13:54:11.881Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Element HIDDEN in plan view: {
+  "id": "new-corner-wall-cabinet-60-1760788779197"
+}
+[2025-10-18T13:54:11.881Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Elements to render after filtering: 17
+[2025-10-18T13:54:11.881Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Rendering with currentViewInfo: {
+  "direction": "plan",
+  "hiddenElements": [
+    "new-corner-wall-cabinet-60-1760788779197"
+  ],
+  "active2DView": "plan",
+  "totalElements": 18
+}
+[2025-10-18T13:54:11.882Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Element HIDDEN in plan view: {
+  "id": "new-corner-wall-cabinet-60-1760788779197"
+}
+[2025-10-18T13:54:11.882Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Elements to render after filtering: 17
+[2025-10-18T13:54:11.920Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Rendering with currentViewInfo: {
+  "direction": "plan",
+  "hiddenElements": [
+    "new-corner-wall-cabinet-60-1760788779197"
+  ],
+  "active2DView": "plan",
+  "totalElements": 18
+}
+[2025-10-18T13:54:11.920Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Element HIDDEN in plan view: {
+  "id": "new-corner-wall-cabinet-60-1760788779197"
+}
+[2025-10-18T13:54:11.920Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Elements to render after filtering: 17
+[2025-10-18T13:54:11.921Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Rendering with currentViewInfo: {
+  "direction": "plan",
+  "hiddenElements": [
+    "new-corner-wall-cabinet-60-1760788779197"
+  ],
+  "active2DView": "plan",
+  "totalElements": 18
+}
+[2025-10-18T13:54:11.921Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Element HIDDEN in plan view: {
+  "id": "new-corner-wall-cabinet-60-1760788779197"
+}
+[2025-10-18T13:54:11.921Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Elements to render after filtering: 17
+[2025-10-18T13:54:11.930Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Rendering with currentViewInfo: {
+  "direction": "plan",
+  "hiddenElements": [
+    "new-corner-wall-cabinet-60-1760788779197"
+  ],
+  "active2DView": "plan",
+  "totalElements": 18
+}
+[2025-10-18T13:54:11.930Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Element HIDDEN in plan view: {
+  "id": "new-corner-wall-cabinet-60-1760788779197"
+}
+[2025-10-18T13:54:11.930Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Elements to render after filtering: 17
+[2025-10-18T13:54:11.931Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Rendering with currentViewInfo: {
+  "direction": "plan",
+  "hiddenElements": [
+    "new-corner-wall-cabinet-60-1760788779197"
+  ],
+  "active2DView": "plan",
+  "totalElements": 18
+}
+[2025-10-18T13:54:11.931Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Element HIDDEN in plan view: {
+  "id": "new-corner-wall-cabinet-60-1760788779197"
+}
+[2025-10-18T13:54:11.931Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Elements to render after filtering: 17
+[2025-10-18T13:54:11.960Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Rendering with currentViewInfo: {
+  "direction": "plan",
+  "hiddenElements": [
+    "new-corner-wall-cabinet-60-1760788779197"
+  ],
+  "active2DView": "plan",
+  "totalElements": 18
+}
+[2025-10-18T13:54:11.961Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Element HIDDEN in plan view: {
+  "id": "new-corner-wall-cabinet-60-1760788779197"
+}
+[2025-10-18T13:54:11.961Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Elements to render after filtering: 17
+[2025-10-18T13:54:11.961Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Rendering with currentViewInfo: {
+  "direction": "plan",
+  "hiddenElements": [
+    "new-corner-wall-cabinet-60-1760788779197"
+  ],
+  "active2DView": "plan",
+  "totalElements": 18
+}
+[2025-10-18T13:54:11.962Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Element HIDDEN in plan view: {
+  "id": "new-corner-wall-cabinet-60-1760788779197"
+}
+[2025-10-18T13:54:11.962Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Elements to render after filtering: 17
+[2025-10-18T13:54:11.976Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Rendering with currentViewInfo: {
+  "direction": "plan",
+  "hiddenElements": [
+    "new-corner-wall-cabinet-60-1760788779197"
+  ],
+  "active2DView": "plan",
+  "totalElements": 18
+}
+[2025-10-18T13:54:11.976Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Element HIDDEN in plan view: {
+  "id": "new-corner-wall-cabinet-60-1760788779197"
+}
+[2025-10-18T13:54:11.977Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Elements to render after filtering: 17
+[2025-10-18T13:54:11.977Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Rendering with currentViewInfo: {
+  "direction": "plan",
+  "hiddenElements": [
+    "new-corner-wall-cabinet-60-1760788779197"
+  ],
+  "active2DView": "plan",
+  "totalElements": 18
+}
+[2025-10-18T13:54:11.977Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Element HIDDEN in plan view: {
+  "id": "new-corner-wall-cabinet-60-1760788779197"
+}
+[2025-10-18T13:54:11.978Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Elements to render after filtering: 17
+[2025-10-18T13:54:11.986Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Rendering with currentViewInfo: {
+  "direction": "plan",
+  "hiddenElements": [
+    "new-corner-wall-cabinet-60-1760788779197"
+  ],
+  "active2DView": "plan",
+  "totalElements": 18
+}
+[2025-10-18T13:54:11.986Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Element HIDDEN in plan view: {
+  "id": "new-corner-wall-cabinet-60-1760788779197"
+}
+[2025-10-18T13:54:11.987Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Elements to render after filtering: 17
+[2025-10-18T13:54:11.987Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Rendering with currentViewInfo: {
+  "direction": "plan",
+  "hiddenElements": [
+    "new-corner-wall-cabinet-60-1760788779197"
+  ],
+  "active2DView": "plan",
+  "totalElements": 18
+}
+[2025-10-18T13:54:11.987Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Element HIDDEN in plan view: {
+  "id": "new-corner-wall-cabinet-60-1760788779197"
+}
+[2025-10-18T13:54:11.988Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Elements to render after filtering: 17
+[2025-10-18T13:54:11.996Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Rendering with currentViewInfo: {
+  "direction": "plan",
+  "hiddenElements": [
+    "new-corner-wall-cabinet-60-1760788779197"
+  ],
+  "active2DView": "plan",
+  "totalElements": 18
+}
+[2025-10-18T13:54:11.996Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Element HIDDEN in plan view: {
+  "id": "new-corner-wall-cabinet-60-1760788779197"
+}
+[2025-10-18T13:54:11.996Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Elements to render after filtering: 17
+[2025-10-18T13:54:11.997Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Rendering with currentViewInfo: {
+  "direction": "plan",
+  "hiddenElements": [
+    "new-corner-wall-cabinet-60-1760788779197"
+  ],
+  "active2DView": "plan",
+  "totalElements": 18
+}
+[2025-10-18T13:54:11.997Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Element HIDDEN in plan view: {
+  "id": "new-corner-wall-cabinet-60-1760788779197"
+}
+[2025-10-18T13:54:11.997Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Elements to render after filtering: 17
+[2025-10-18T13:54:12.002Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Rendering with currentViewInfo: {
+  "direction": "plan",
+  "hiddenElements": [
+    "new-corner-wall-cabinet-60-1760788779197"
+  ],
+  "active2DView": "plan",
+  "totalElements": 18
+}
+[2025-10-18T13:54:12.003Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Element HIDDEN in plan view: {
+  "id": "new-corner-wall-cabinet-60-1760788779197"
+}
+[2025-10-18T13:54:12.003Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Elements to render after filtering: 17
+[2025-10-18T13:54:12.004Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Rendering with currentViewInfo: {
+  "direction": "plan",
+  "hiddenElements": [
+    "new-corner-wall-cabinet-60-1760788779197"
+  ],
+  "active2DView": "plan",
+  "totalElements": 18
+}
+[2025-10-18T13:54:12.004Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Element HIDDEN in plan view: {
+  "id": "new-corner-wall-cabinet-60-1760788779197"
+}
+[2025-10-18T13:54:12.004Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Elements to render after filtering: 17
+[2025-10-18T13:54:12.012Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Rendering with currentViewInfo: {
+  "direction": "plan",
+  "hiddenElements": [
+    "new-corner-wall-cabinet-60-1760788779197"
+  ],
+  "active2DView": "plan",
+  "totalElements": 18
+}
+[2025-10-18T13:54:12.012Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Element HIDDEN in plan view: {
+  "id": "new-corner-wall-cabinet-60-1760788779197"
+}
+[2025-10-18T13:54:12.012Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Elements to render after filtering: 17
+[2025-10-18T13:54:12.013Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Rendering with currentViewInfo: {
+  "direction": "plan",
+  "hiddenElements": [
+    "new-corner-wall-cabinet-60-1760788779197"
+  ],
+  "active2DView": "plan",
+  "totalElements": 18
+}
+[2025-10-18T13:54:12.013Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Element HIDDEN in plan view: {
+  "id": "new-corner-wall-cabinet-60-1760788779197"
+}
+[2025-10-18T13:54:12.014Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Elements to render after filtering: 17
+[2025-10-18T13:54:12.016Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Rendering with currentViewInfo: {
+  "direction": "plan",
+  "hiddenElements": [
+    "new-corner-wall-cabinet-60-1760788779197"
+  ],
+  "active2DView": "plan",
+  "totalElements": 18
+}
+[2025-10-18T13:54:12.016Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Element HIDDEN in plan view: {
+  "id": "new-corner-wall-cabinet-60-1760788779197"
+}
+[2025-10-18T13:54:12.017Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Elements to render after filtering: 17
+[2025-10-18T13:54:12.017Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Rendering with currentViewInfo: {
+  "direction": "plan",
+  "hiddenElements": [
+    "new-corner-wall-cabinet-60-1760788779197"
+  ],
+  "active2DView": "plan",
+  "totalElements": 18
+}
+[2025-10-18T13:54:12.018Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Element HIDDEN in plan view: {
+  "id": "new-corner-wall-cabinet-60-1760788779197"
+}
+[2025-10-18T13:54:12.019Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Elements to render after filtering: 17
+[2025-10-18T13:54:12.027Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Rendering with currentViewInfo: {
+  "direction": "plan",
+  "hiddenElements": [
+    "new-corner-wall-cabinet-60-1760788779197"
+  ],
+  "active2DView": "plan",
+  "totalElements": 18
+}
+[2025-10-18T13:54:12.027Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Element HIDDEN in plan view: {
+  "id": "new-corner-wall-cabinet-60-1760788779197"
+}
+[2025-10-18T13:54:12.028Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Elements to render after filtering: 17
+[2025-10-18T13:54:12.028Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Rendering with currentViewInfo: {
+  "direction": "plan",
+  "hiddenElements": [
+    "new-corner-wall-cabinet-60-1760788779197"
+  ],
+  "active2DView": "plan",
+  "totalElements": 18
+}
+[2025-10-18T13:54:12.028Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Element HIDDEN in plan view: {
+  "id": "new-corner-wall-cabinet-60-1760788779197"
+}
+[2025-10-18T13:54:12.029Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Elements to render after filtering: 17
+[2025-10-18T13:54:12.036Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Rendering with currentViewInfo: {
+  "direction": "plan",
+  "hiddenElements": [
+    "new-corner-wall-cabinet-60-1760788779197"
+  ],
+  "active2DView": "plan",
+  "totalElements": 18
+}
+[2025-10-18T13:54:12.036Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Element HIDDEN in plan view: {
+  "id": "new-corner-wall-cabinet-60-1760788779197"
+}
+[2025-10-18T13:54:12.037Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Elements to render after filtering: 17
+[2025-10-18T13:54:12.037Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Rendering with currentViewInfo: {
+  "direction": "plan",
+  "hiddenElements": [
+    "new-corner-wall-cabinet-60-1760788779197"
+  ],
+  "active2DView": "plan",
+  "totalElements": 18
+}
+[2025-10-18T13:54:12.038Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Element HIDDEN in plan view: {
+  "id": "new-corner-wall-cabinet-60-1760788779197"
+}
+[2025-10-18T13:54:12.038Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Elements to render after filtering: 17
+[2025-10-18T13:54:12.043Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Rendering with currentViewInfo: {
+  "direction": "plan",
+  "hiddenElements": [
+    "new-corner-wall-cabinet-60-1760788779197"
+  ],
+  "active2DView": "plan",
+  "totalElements": 18
+}
+[2025-10-18T13:54:12.044Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Element HIDDEN in plan view: {
+  "id": "new-corner-wall-cabinet-60-1760788779197"
+}
+[2025-10-18T13:54:12.044Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Elements to render after filtering: 17
+[2025-10-18T13:54:12.045Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Rendering with currentViewInfo: {
+  "direction": "plan",
+  "hiddenElements": [
+    "new-corner-wall-cabinet-60-1760788779197"
+  ],
+  "active2DView": "plan",
+  "totalElements": 18
+}
+[2025-10-18T13:54:12.045Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Element HIDDEN in plan view: {
+  "id": "new-corner-wall-cabinet-60-1760788779197"
+}
+[2025-10-18T13:54:12.046Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Elements to render after filtering: 17
+[2025-10-18T13:54:12.052Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Rendering with currentViewInfo: {
+  "direction": "plan",
+  "hiddenElements": [
+    "new-corner-wall-cabinet-60-1760788779197"
+  ],
+  "active2DView": "plan",
+  "totalElements": 18
+}
+[2025-10-18T13:54:12.053Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Element HIDDEN in plan view: {
+  "id": "new-corner-wall-cabinet-60-1760788779197"
+}
+[2025-10-18T13:54:12.053Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Elements to render after filtering: 17
+[2025-10-18T13:54:12.054Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Rendering with currentViewInfo: {
+  "direction": "plan",
+  "hiddenElements": [
+    "new-corner-wall-cabinet-60-1760788779197"
+  ],
+  "active2DView": "plan",
+  "totalElements": 18
+}
+[2025-10-18T13:54:12.054Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Element HIDDEN in plan view: {
+  "id": "new-corner-wall-cabinet-60-1760788779197"
+}
+[2025-10-18T13:54:12.055Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Elements to render after filtering: 17
+[2025-10-18T13:54:12.057Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Rendering with currentViewInfo: {
+  "direction": "plan",
+  "hiddenElements": [
+    "new-corner-wall-cabinet-60-1760788779197"
+  ],
+  "active2DView": "plan",
+  "totalElements": 18
+}
+[2025-10-18T13:54:12.057Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Element HIDDEN in plan view: {
+  "id": "new-corner-wall-cabinet-60-1760788779197"
+}
+[2025-10-18T13:54:12.058Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Elements to render after filtering: 17
+[2025-10-18T13:54:12.058Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Rendering with currentViewInfo: {
+  "direction": "plan",
+  "hiddenElements": [
+    "new-corner-wall-cabinet-60-1760788779197"
+  ],
+  "active2DView": "plan",
+  "totalElements": 18
+}
+[2025-10-18T13:54:12.059Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Element HIDDEN in plan view: {
+  "id": "new-corner-wall-cabinet-60-1760788779197"
+}
+[2025-10-18T13:54:12.059Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Elements to render after filtering: 17
+[2025-10-18T13:54:12.066Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Rendering with currentViewInfo: {
+  "direction": "plan",
+  "hiddenElements": [
+    "new-corner-wall-cabinet-60-1760788779197"
+  ],
+  "active2DView": "plan",
+  "totalElements": 18
+}
+[2025-10-18T13:54:12.066Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Element HIDDEN in plan view: {
+  "id": "new-corner-wall-cabinet-60-1760788779197"
+}
+[2025-10-18T13:54:12.067Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Elements to render after filtering: 17
+[2025-10-18T13:54:12.067Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Rendering with currentViewInfo: {
+  "direction": "plan",
+  "hiddenElements": [
+    "new-corner-wall-cabinet-60-1760788779197"
+  ],
+  "active2DView": "plan",
+  "totalElements": 18
+}
+[2025-10-18T13:54:12.068Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Element HIDDEN in plan view: {
+  "id": "new-corner-wall-cabinet-60-1760788779197"
+}
+[2025-10-18T13:54:12.069Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Elements to render after filtering: 17
+[2025-10-18T13:54:12.088Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Rendering with currentViewInfo: {
+  "direction": "plan",
+  "hiddenElements": [
+    "new-corner-wall-cabinet-60-1760788779197"
+  ],
+  "active2DView": "plan",
+  "totalElements": 18
+}
+[2025-10-18T13:54:12.089Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Element HIDDEN in plan view: {
+  "id": "new-corner-wall-cabinet-60-1760788779197"
+}
+[2025-10-18T13:54:12.089Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Elements to render after filtering: 17
+[2025-10-18T13:54:12.090Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Rendering with currentViewInfo: {
+  "direction": "plan",
+  "hiddenElements": [
+    "new-corner-wall-cabinet-60-1760788779197"
+  ],
+  "active2DView": "plan",
+  "totalElements": 18
+}
+[2025-10-18T13:54:12.091Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Element HIDDEN in plan view: {
+  "id": "new-corner-wall-cabinet-60-1760788779197"
+}
+[2025-10-18T13:54:12.092Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Elements to render after filtering: 17
+[2025-10-18T13:54:12.095Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Rendering with currentViewInfo: {
+  "direction": "plan",
+  "hiddenElements": [
+    "new-corner-wall-cabinet-60-1760788779197"
+  ],
+  "active2DView": "plan",
+  "totalElements": 18
+}
+[2025-10-18T13:54:12.095Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Element HIDDEN in plan view: {
+  "id": "new-corner-wall-cabinet-60-1760788779197"
+}
+[2025-10-18T13:54:12.096Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Elements to render after filtering: 17
+[2025-10-18T13:54:12.096Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Rendering with currentViewInfo: {
+  "direction": "plan",
+  "hiddenElements": [
+    "new-corner-wall-cabinet-60-1760788779197"
+  ],
+  "active2DView": "plan",
+  "totalElements": 18
+}
+[2025-10-18T13:54:12.097Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Element HIDDEN in plan view: {
+  "id": "new-corner-wall-cabinet-60-1760788779197"
+}
+[2025-10-18T13:54:12.097Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Elements to render after filtering: 17
+[2025-10-18T13:54:12.101Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Rendering with currentViewInfo: {
+  "direction": "plan",
+  "hiddenElements": [
+    "new-corner-wall-cabinet-60-1760788779197"
+  ],
+  "active2DView": "plan",
+  "totalElements": 18
+}
+[2025-10-18T13:54:12.101Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Element HIDDEN in plan view: {
+  "id": "new-corner-wall-cabinet-60-1760788779197"
+}
+[2025-10-18T13:54:12.102Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Elements to render after filtering: 17
+[2025-10-18T13:54:12.102Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Rendering with currentViewInfo: {
+  "direction": "plan",
+  "hiddenElements": [
+    "new-corner-wall-cabinet-60-1760788779197"
+  ],
+  "active2DView": "plan",
+  "totalElements": 18
+}
+[2025-10-18T13:54:12.103Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Element HIDDEN in plan view: {
+  "id": "new-corner-wall-cabinet-60-1760788779197"
+}
+[2025-10-18T13:54:12.103Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Elements to render after filtering: 17
+[2025-10-18T13:54:12.112Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Rendering with currentViewInfo: {
+  "direction": "plan",
+  "hiddenElements": [
+    "new-corner-wall-cabinet-60-1760788779197"
+  ],
+  "active2DView": "plan",
+  "totalElements": 18
+}
+[2025-10-18T13:54:12.113Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Element HIDDEN in plan view: {
+  "id": "new-corner-wall-cabinet-60-1760788779197"
+}
+[2025-10-18T13:54:12.114Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Elements to render after filtering: 17
+[2025-10-18T13:54:12.114Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Rendering with currentViewInfo: {
+  "direction": "plan",
+  "hiddenElements": [
+    "new-corner-wall-cabinet-60-1760788779197"
+  ],
+  "active2DView": "plan",
+  "totalElements": 18
+}
+[2025-10-18T13:54:12.115Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Element HIDDEN in plan view: {
+  "id": "new-corner-wall-cabinet-60-1760788779197"
+}
+[2025-10-18T13:54:12.115Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Elements to render after filtering: 17
+[2025-10-18T13:54:12.122Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Rendering with currentViewInfo: {
+  "direction": "plan",
+  "hiddenElements": [
+    "new-corner-wall-cabinet-60-1760788779197"
+  ],
+  "active2DView": "plan",
+  "totalElements": 18
+}
+[2025-10-18T13:54:12.123Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Element HIDDEN in plan view: {
+  "id": "new-corner-wall-cabinet-60-1760788779197"
+}
+[2025-10-18T13:54:12.123Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Elements to render after filtering: 17
+[2025-10-18T13:54:12.124Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Rendering with currentViewInfo: {
+  "direction": "plan",
+  "hiddenElements": [
+    "new-corner-wall-cabinet-60-1760788779197"
+  ],
+  "active2DView": "plan",
+  "totalElements": 18
+}
+[2025-10-18T13:54:12.125Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Element HIDDEN in plan view: {
+  "id": "new-corner-wall-cabinet-60-1760788779197"
+}
+[2025-10-18T13:54:12.125Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Elements to render after filtering: 17
+[2025-10-18T13:54:12.132Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Rendering with currentViewInfo: {
+  "direction": "plan",
+  "hiddenElements": [
+    "new-corner-wall-cabinet-60-1760788779197"
+  ],
+  "active2DView": "plan",
+  "totalElements": 18
+}
+[2025-10-18T13:54:12.133Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Element HIDDEN in plan view: {
+  "id": "new-corner-wall-cabinet-60-1760788779197"
+}
+[2025-10-18T13:54:12.133Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Elements to render after filtering: 17
+[2025-10-18T13:54:12.134Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Rendering with currentViewInfo: {
+  "direction": "plan",
+  "hiddenElements": [
+    "new-corner-wall-cabinet-60-1760788779197"
+  ],
+  "active2DView": "plan",
+  "totalElements": 18
+}
+[2025-10-18T13:54:12.134Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Element HIDDEN in plan view: {
+  "id": "new-corner-wall-cabinet-60-1760788779197"
+}
+[2025-10-18T13:54:12.135Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Elements to render after filtering: 17
+[2025-10-18T13:54:12.138Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Rendering with currentViewInfo: {
+  "direction": "plan",
+  "hiddenElements": [
+    "new-corner-wall-cabinet-60-1760788779197"
+  ],
+  "active2DView": "plan",
+  "totalElements": 18
+}
+[2025-10-18T13:54:12.139Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Element HIDDEN in plan view: {
+  "id": "new-corner-wall-cabinet-60-1760788779197"
+}
+[2025-10-18T13:54:12.139Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Elements to render after filtering: 17
+[2025-10-18T13:54:12.140Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Rendering with currentViewInfo: {
+  "direction": "plan",
+  "hiddenElements": [
+    "new-corner-wall-cabinet-60-1760788779197"
+  ],
+  "active2DView": "plan",
+  "totalElements": 18
+}
+[2025-10-18T13:54:12.141Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Element HIDDEN in plan view: {
+  "id": "new-corner-wall-cabinet-60-1760788779197"
+}
+[2025-10-18T13:54:12.141Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Elements to render after filtering: 17
+[2025-10-18T13:54:12.148Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Rendering with currentViewInfo: {
+  "direction": "plan",
+  "hiddenElements": [
+    "new-corner-wall-cabinet-60-1760788779197"
+  ],
+  "active2DView": "plan",
+  "totalElements": 18
+}
+[2025-10-18T13:54:12.149Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Element HIDDEN in plan view: {
+  "id": "new-corner-wall-cabinet-60-1760788779197"
+}
+[2025-10-18T13:54:12.149Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Elements to render after filtering: 17
+[2025-10-18T13:54:12.150Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Rendering with currentViewInfo: {
+  "direction": "plan",
+  "hiddenElements": [
+    "new-corner-wall-cabinet-60-1760788779197"
+  ],
+  "active2DView": "plan",
+  "totalElements": 18
+}
+[2025-10-18T13:54:12.151Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Element HIDDEN in plan view: {
+  "id": "new-corner-wall-cabinet-60-1760788779197"
+}
+[2025-10-18T13:54:12.151Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Elements to render after filtering: 17
+[2025-10-18T13:54:12.158Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Rendering with currentViewInfo: {
+  "direction": "plan",
+  "hiddenElements": [
+    "new-corner-wall-cabinet-60-1760788779197"
+  ],
+  "active2DView": "plan",
+  "totalElements": 18
+}
+[2025-10-18T13:54:12.158Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Element HIDDEN in plan view: {
+  "id": "new-corner-wall-cabinet-60-1760788779197"
+}
+[2025-10-18T13:54:12.159Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Elements to render after filtering: 17
+[2025-10-18T13:54:12.160Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Rendering with currentViewInfo: {
+  "direction": "plan",
+  "hiddenElements": [
+    "new-corner-wall-cabinet-60-1760788779197"
+  ],
+  "active2DView": "plan",
+  "totalElements": 18
+}
+[2025-10-18T13:54:12.160Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Element HIDDEN in plan view: {
+  "id": "new-corner-wall-cabinet-60-1760788779197"
+}
+[2025-10-18T13:54:12.161Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Elements to render after filtering: 17
+[2025-10-18T13:54:12.163Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Rendering with currentViewInfo: {
+  "direction": "plan",
+  "hiddenElements": [
+    "new-corner-wall-cabinet-60-1760788779197"
+  ],
+  "active2DView": "plan",
+  "totalElements": 18
+}
+[2025-10-18T13:54:12.164Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Element HIDDEN in plan view: {
+  "id": "new-corner-wall-cabinet-60-1760788779197"
+}
+[2025-10-18T13:54:12.165Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Elements to render after filtering: 17
+[2025-10-18T13:54:12.165Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Rendering with currentViewInfo: {
+  "direction": "plan",
+  "hiddenElements": [
+    "new-corner-wall-cabinet-60-1760788779197"
+  ],
+  "active2DView": "plan",
+  "totalElements": 18
+}
+[2025-10-18T13:54:12.166Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Element HIDDEN in plan view: {
+  "id": "new-corner-wall-cabinet-60-1760788779197"
+}
+[2025-10-18T13:54:12.166Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Elements to render after filtering: 17
+[2025-10-18T13:54:12.172Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Rendering with currentViewInfo: {
+  "direction": "plan",
+  "hiddenElements": [
+    "new-corner-wall-cabinet-60-1760788779197"
+  ],
+  "active2DView": "plan",
+  "totalElements": 18
+}
+[2025-10-18T13:54:12.173Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Element HIDDEN in plan view: {
+  "id": "new-corner-wall-cabinet-60-1760788779197"
+}
+[2025-10-18T13:54:12.174Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Elements to render after filtering: 17
+[2025-10-18T13:54:12.174Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Rendering with currentViewInfo: {
+  "direction": "plan",
+  "hiddenElements": [
+    "new-corner-wall-cabinet-60-1760788779197"
+  ],
+  "active2DView": "plan",
+  "totalElements": 18
+}
+[2025-10-18T13:54:12.175Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Element HIDDEN in plan view: {
+  "id": "new-corner-wall-cabinet-60-1760788779197"
+}
+[2025-10-18T13:54:12.176Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Elements to render after filtering: 17
+[2025-10-18T13:54:12.178Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Rendering with currentViewInfo: {
+  "direction": "plan",
+  "hiddenElements": [
+    "new-corner-wall-cabinet-60-1760788779197"
+  ],
+  "active2DView": "plan",
+  "totalElements": 18
+}
+[2025-10-18T13:54:12.178Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Element HIDDEN in plan view: {
+  "id": "new-corner-wall-cabinet-60-1760788779197"
+}
+[2025-10-18T13:54:12.179Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Elements to render after filtering: 17
+[2025-10-18T13:54:12.180Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Rendering with currentViewInfo: {
+  "direction": "plan",
+  "hiddenElements": [
+    "new-corner-wall-cabinet-60-1760788779197"
+  ],
+  "active2DView": "plan",
+  "totalElements": 18
+}
+[2025-10-18T13:54:12.180Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Element HIDDEN in plan view: {
+  "id": "new-corner-wall-cabinet-60-1760788779197"
+}
+[2025-10-18T13:54:12.181Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Elements to render after filtering: 17
+[2025-10-18T13:54:12.189Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Rendering with currentViewInfo: {
+  "direction": "plan",
+  "hiddenElements": [
+    "new-corner-wall-cabinet-60-1760788779197"
+  ],
+  "active2DView": "plan",
+  "totalElements": 18
+}
+[2025-10-18T13:54:12.190Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Element HIDDEN in plan view: {
+  "id": "new-corner-wall-cabinet-60-1760788779197"
+}
+[2025-10-18T13:54:12.190Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Elements to render after filtering: 17
+[2025-10-18T13:54:12.191Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Rendering with currentViewInfo: {
+  "direction": "plan",
+  "hiddenElements": [
+    "new-corner-wall-cabinet-60-1760788779197"
+  ],
+  "active2DView": "plan",
+  "totalElements": 18
+}
+[2025-10-18T13:54:12.192Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Element HIDDEN in plan view: {
+  "id": "new-corner-wall-cabinet-60-1760788779197"
+}
+[2025-10-18T13:54:12.193Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Elements to render after filtering: 17
+[2025-10-18T13:54:12.198Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Rendering with currentViewInfo: {
+  "direction": "plan",
+  "hiddenElements": [
+    "new-corner-wall-cabinet-60-1760788779197"
+  ],
+  "active2DView": "plan",
+  "totalElements": 18
+}
+[2025-10-18T13:54:12.202Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Element HIDDEN in plan view: {
+  "id": "new-corner-wall-cabinet-60-1760788779197"
+}
+[2025-10-18T13:54:12.203Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Elements to render after filtering: 17
+[2025-10-18T13:54:12.204Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Rendering with currentViewInfo: {
+  "direction": "plan",
+  "hiddenElements": [
+    "new-corner-wall-cabinet-60-1760788779197"
+  ],
+  "active2DView": "plan",
+  "totalElements": 18
+}
+[2025-10-18T13:54:12.205Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Element HIDDEN in plan view: {
+  "id": "new-corner-wall-cabinet-60-1760788779197"
+}
+[2025-10-18T13:54:12.205Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Elements to render after filtering: 17
+[2025-10-18T13:54:12.209Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Rendering with currentViewInfo: {
+  "direction": "plan",
+  "hiddenElements": [
+    "new-corner-wall-cabinet-60-1760788779197"
+  ],
+  "active2DView": "plan",
+  "totalElements": 18
+}
+[2025-10-18T13:54:12.211Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Element HIDDEN in plan view: {
+  "id": "new-corner-wall-cabinet-60-1760788779197"
+}
+[2025-10-18T13:54:12.212Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Elements to render after filtering: 17
+[2025-10-18T13:54:12.212Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Rendering with currentViewInfo: {
+  "direction": "plan",
+  "hiddenElements": [
+    "new-corner-wall-cabinet-60-1760788779197"
+  ],
+  "active2DView": "plan",
+  "totalElements": 18
+}
+[2025-10-18T13:54:12.213Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Element HIDDEN in plan view: {
+  "id": "new-corner-wall-cabinet-60-1760788779197"
+}
+[2025-10-18T13:54:12.214Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Elements to render after filtering: 17
+[2025-10-18T13:54:12.220Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Rendering with currentViewInfo: {
+  "direction": "plan",
+  "hiddenElements": [
+    "new-corner-wall-cabinet-60-1760788779197"
+  ],
+  "active2DView": "plan",
+  "totalElements": 18
+}
+[2025-10-18T13:54:12.221Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Element HIDDEN in plan view: {
+  "id": "new-corner-wall-cabinet-60-1760788779197"
+}
+[2025-10-18T13:54:12.222Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Elements to render after filtering: 17
+[2025-10-18T13:54:12.223Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Rendering with currentViewInfo: {
+  "direction": "plan",
+  "hiddenElements": [
+    "new-corner-wall-cabinet-60-1760788779197"
+  ],
+  "active2DView": "plan",
+  "totalElements": 18
+}
+[2025-10-18T13:54:12.223Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Element HIDDEN in plan view: {
+  "id": "new-corner-wall-cabinet-60-1760788779197"
+}
+[2025-10-18T13:54:12.224Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Elements to render after filtering: 17
+[2025-10-18T13:54:12.233Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Rendering with currentViewInfo: {
+  "direction": "plan",
+  "hiddenElements": [
+    "new-corner-wall-cabinet-60-1760788779197"
+  ],
+  "active2DView": "plan",
+  "totalElements": 18
+}
+[2025-10-18T13:54:12.234Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Element HIDDEN in plan view: {
+  "id": "new-corner-wall-cabinet-60-1760788779197"
+}
+[2025-10-18T13:54:12.235Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Elements to render after filtering: 17
+[2025-10-18T13:54:12.236Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Rendering with currentViewInfo: {
+  "direction": "plan",
+  "hiddenElements": [
+    "new-corner-wall-cabinet-60-1760788779197"
+  ],
+  "active2DView": "plan",
+  "totalElements": 18
+}
+[2025-10-18T13:54:12.236Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Element HIDDEN in plan view: {
+  "id": "new-corner-wall-cabinet-60-1760788779197"
+}
+[2025-10-18T13:54:12.237Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Elements to render after filtering: 17
+[2025-10-18T13:54:12.241Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Rendering with currentViewInfo: {
+  "direction": "plan",
+  "hiddenElements": [
+    "new-corner-wall-cabinet-60-1760788779197"
+  ],
+  "active2DView": "plan",
+  "totalElements": 18
+}
+[2025-10-18T13:54:12.242Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Element HIDDEN in plan view: {
+  "id": "new-corner-wall-cabinet-60-1760788779197"
+}
+[2025-10-18T13:54:12.243Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Elements to render after filtering: 17
+[2025-10-18T13:54:12.244Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Rendering with currentViewInfo: {
+  "direction": "plan",
+  "hiddenElements": [
+    "new-corner-wall-cabinet-60-1760788779197"
+  ],
+  "active2DView": "plan",
+  "totalElements": 18
+}
+[2025-10-18T13:54:12.245Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Element HIDDEN in plan view: {
+  "id": "new-corner-wall-cabinet-60-1760788779197"
+}
+[2025-10-18T13:54:12.245Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Elements to render after filtering: 17
+[2025-10-18T13:54:12.250Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Rendering with currentViewInfo: {
+  "direction": "plan",
+  "hiddenElements": [
+    "new-corner-wall-cabinet-60-1760788779197"
+  ],
+  "active2DView": "plan",
+  "totalElements": 18
+}
+[2025-10-18T13:54:12.250Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Element HIDDEN in plan view: {
+  "id": "new-corner-wall-cabinet-60-1760788779197"
+}
+[2025-10-18T13:54:12.251Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Elements to render after filtering: 17
+[2025-10-18T13:54:12.252Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Rendering with currentViewInfo: {
+  "direction": "plan",
+  "hiddenElements": [
+    "new-corner-wall-cabinet-60-1760788779197"
+  ],
+  "active2DView": "plan",
+  "totalElements": 18
+}
+[2025-10-18T13:54:12.253Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Element HIDDEN in plan view: {
+  "id": "new-corner-wall-cabinet-60-1760788779197"
+}
+[2025-10-18T13:54:12.253Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Elements to render after filtering: 17
+[2025-10-18T13:54:12.259Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Rendering with currentViewInfo: {
+  "direction": "plan",
+  "hiddenElements": [
+    "new-corner-wall-cabinet-60-1760788779197"
+  ],
+  "active2DView": "plan",
+  "totalElements": 18
+}
+[2025-10-18T13:54:12.260Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Element HIDDEN in plan view: {
+  "id": "new-corner-wall-cabinet-60-1760788779197"
+}
+[2025-10-18T13:54:12.261Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Elements to render after filtering: 17
+[2025-10-18T13:54:12.262Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Rendering with currentViewInfo: {
+  "direction": "plan",
+  "hiddenElements": [
+    "new-corner-wall-cabinet-60-1760788779197"
+  ],
+  "active2DView": "plan",
+  "totalElements": 18
+}
+[2025-10-18T13:54:12.263Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Element HIDDEN in plan view: {
+  "id": "new-corner-wall-cabinet-60-1760788779197"
+}
+[2025-10-18T13:54:12.263Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Elements to render after filtering: 17
+[2025-10-18T13:54:12.272Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Rendering with currentViewInfo: {
+  "direction": "plan",
+  "hiddenElements": [
+    "new-corner-wall-cabinet-60-1760788779197"
+  ],
+  "active2DView": "plan",
+  "totalElements": 18
+}
+[2025-10-18T13:54:12.273Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Element HIDDEN in plan view: {
+  "id": "new-corner-wall-cabinet-60-1760788779197"
+}
+[2025-10-18T13:54:12.274Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Elements to render after filtering: 17
+[2025-10-18T13:54:12.275Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Rendering with currentViewInfo: {
+  "direction": "plan",
+  "hiddenElements": [
+    "new-corner-wall-cabinet-60-1760788779197"
+  ],
+  "active2DView": "plan",
+  "totalElements": 18
+}
+[2025-10-18T13:54:12.276Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Element HIDDEN in plan view: {
+  "id": "new-corner-wall-cabinet-60-1760788779197"
+}
+[2025-10-18T13:54:12.276Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Elements to render after filtering: 17
+[2025-10-18T13:54:12.279Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Rendering with currentViewInfo: {
+  "direction": "plan",
+  "hiddenElements": [
+    "new-corner-wall-cabinet-60-1760788779197"
+  ],
+  "active2DView": "plan",
+  "totalElements": 18
+}
+[2025-10-18T13:54:12.280Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Element HIDDEN in plan view: {
+  "id": "new-corner-wall-cabinet-60-1760788779197"
+}
+[2025-10-18T13:54:12.281Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Elements to render after filtering: 17
+[2025-10-18T13:54:12.282Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Rendering with currentViewInfo: {
+  "direction": "plan",
+  "hiddenElements": [
+    "new-corner-wall-cabinet-60-1760788779197"
+  ],
+  "active2DView": "plan",
+  "totalElements": 18
+}
+[2025-10-18T13:54:12.283Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Element HIDDEN in plan view: {
+  "id": "new-corner-wall-cabinet-60-1760788779197"
+}
+[2025-10-18T13:54:12.284Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Elements to render after filtering: 17
+[2025-10-18T13:54:12.289Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Rendering with currentViewInfo: {
+  "direction": "plan",
+  "hiddenElements": [
+    "new-corner-wall-cabinet-60-1760788779197"
+  ],
+  "active2DView": "plan",
+  "totalElements": 18
+}
+[2025-10-18T13:54:12.290Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Element HIDDEN in plan view: {
+  "id": "new-corner-wall-cabinet-60-1760788779197"
+}
+[2025-10-18T13:54:12.291Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Elements to render after filtering: 17
+[2025-10-18T13:54:12.292Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Rendering with currentViewInfo: {
+  "direction": "plan",
+  "hiddenElements": [
+    "new-corner-wall-cabinet-60-1760788779197"
+  ],
+  "active2DView": "plan",
+  "totalElements": 18
+}
+[2025-10-18T13:54:12.293Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Element HIDDEN in plan view: {
+  "id": "new-corner-wall-cabinet-60-1760788779197"
+}
+[2025-10-18T13:54:12.294Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Elements to render after filtering: 17
+[2025-10-18T13:54:12.299Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Rendering with currentViewInfo: {
+  "direction": "plan",
+  "hiddenElements": [
+    "new-corner-wall-cabinet-60-1760788779197"
+  ],
+  "active2DView": "plan",
+  "totalElements": 18
+}
+[2025-10-18T13:54:12.300Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Element HIDDEN in plan view: {
+  "id": "new-corner-wall-cabinet-60-1760788779197"
+}
+[2025-10-18T13:54:12.301Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Elements to render after filtering: 17
+[2025-10-18T13:54:12.302Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Rendering with currentViewInfo: {
+  "direction": "plan",
+  "hiddenElements": [
+    "new-corner-wall-cabinet-60-1760788779197"
+  ],
+  "active2DView": "plan",
+  "totalElements": 18
+}
+[2025-10-18T13:54:12.303Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Element HIDDEN in plan view: {
+  "id": "new-corner-wall-cabinet-60-1760788779197"
+}
+[2025-10-18T13:54:12.304Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Elements to render after filtering: 17
+[2025-10-18T13:54:12.312Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Rendering with currentViewInfo: {
+  "direction": "plan",
+  "hiddenElements": [
+    "new-corner-wall-cabinet-60-1760788779197"
+  ],
+  "active2DView": "plan",
+  "totalElements": 18
+}
+[2025-10-18T13:54:12.313Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Element HIDDEN in plan view: {
+  "id": "new-corner-wall-cabinet-60-1760788779197"
+}
+[2025-10-18T13:54:12.314Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Elements to render after filtering: 17
+[2025-10-18T13:54:12.314Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Rendering with currentViewInfo: {
+  "direction": "plan",
+  "hiddenElements": [
+    "new-corner-wall-cabinet-60-1760788779197"
+  ],
+  "active2DView": "plan",
+  "totalElements": 18
+}
+[2025-10-18T13:54:12.315Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Element HIDDEN in plan view: {
+  "id": "new-corner-wall-cabinet-60-1760788779197"
+}
+[2025-10-18T13:54:12.316Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Elements to render after filtering: 17
+[2025-10-18T13:54:12.323Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Rendering with currentViewInfo: {
+  "direction": "plan",
+  "hiddenElements": [
+    "new-corner-wall-cabinet-60-1760788779197"
+  ],
+  "active2DView": "plan",
+  "totalElements": 18
+}
+[2025-10-18T13:54:12.324Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Element HIDDEN in plan view: {
+  "id": "new-corner-wall-cabinet-60-1760788779197"
+}
+[2025-10-18T13:54:12.325Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Elements to render after filtering: 17
+[2025-10-18T13:54:12.326Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Rendering with currentViewInfo: {
+  "direction": "plan",
+  "hiddenElements": [
+    "new-corner-wall-cabinet-60-1760788779197"
+  ],
+  "active2DView": "plan",
+  "totalElements": 18
+}
+[2025-10-18T13:54:12.327Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Element HIDDEN in plan view: {
+  "id": "new-corner-wall-cabinet-60-1760788779197"
+}
+[2025-10-18T13:54:12.327Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Elements to render after filtering: 17
+[2025-10-18T13:54:12.334Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Rendering with currentViewInfo: {
+  "direction": "plan",
+  "hiddenElements": [
+    "new-corner-wall-cabinet-60-1760788779197"
+  ],
+  "active2DView": "plan",
+  "totalElements": 18
+}
+[2025-10-18T13:54:12.335Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Element HIDDEN in plan view: {
+  "id": "new-corner-wall-cabinet-60-1760788779197"
+}
+[2025-10-18T13:54:12.336Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Elements to render after filtering: 17
+[2025-10-18T13:54:12.337Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Rendering with currentViewInfo: {
+  "direction": "plan",
+  "hiddenElements": [
+    "new-corner-wall-cabinet-60-1760788779197"
+  ],
+  "active2DView": "plan",
+  "totalElements": 18
+}
+[2025-10-18T13:54:12.338Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Element HIDDEN in plan view: {
+  "id": "new-corner-wall-cabinet-60-1760788779197"
+}
+[2025-10-18T13:54:12.339Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Elements to render after filtering: 17
+[2025-10-18T13:54:12.346Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Rendering with currentViewInfo: {
+  "direction": "plan",
+  "hiddenElements": [
+    "new-corner-wall-cabinet-60-1760788779197"
+  ],
+  "active2DView": "plan",
+  "totalElements": 18
+}
+[2025-10-18T13:54:12.347Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Element HIDDEN in plan view: {
+  "id": "new-corner-wall-cabinet-60-1760788779197"
+}
+[2025-10-18T13:54:12.348Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Elements to render after filtering: 17
+[2025-10-18T13:54:12.349Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Rendering with currentViewInfo: {
+  "direction": "plan",
+  "hiddenElements": [
+    "new-corner-wall-cabinet-60-1760788779197"
+  ],
+  "active2DView": "plan",
+  "totalElements": 18
+}
+[2025-10-18T13:54:12.351Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Element HIDDEN in plan view: {
+  "id": "new-corner-wall-cabinet-60-1760788779197"
+}
+[2025-10-18T13:54:12.351Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Elements to render after filtering: 17
+[2025-10-18T13:54:12.357Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Rendering with currentViewInfo: {
+  "direction": "plan",
+  "hiddenElements": [
+    "new-corner-wall-cabinet-60-1760788779197"
+  ],
+  "active2DView": "plan",
+  "totalElements": 18
+}
+[2025-10-18T13:54:12.359Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Element HIDDEN in plan view: {
+  "id": "new-corner-wall-cabinet-60-1760788779197"
+}
+[2025-10-18T13:54:12.360Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Elements to render after filtering: 17
+[2025-10-18T13:54:12.360Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Rendering with currentViewInfo: {
+  "direction": "plan",
+  "hiddenElements": [
+    "new-corner-wall-cabinet-60-1760788779197"
+  ],
+  "active2DView": "plan",
+  "totalElements": 18
+}
+[2025-10-18T13:54:12.361Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Element HIDDEN in plan view: {
+  "id": "new-corner-wall-cabinet-60-1760788779197"
+}
+[2025-10-18T13:54:12.362Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Elements to render after filtering: 17
+[2025-10-18T13:54:12.368Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Rendering with currentViewInfo: {
+  "direction": "plan",
+  "hiddenElements": [
+    "new-corner-wall-cabinet-60-1760788779197"
+  ],
+  "active2DView": "plan",
+  "totalElements": 18
+}
+[2025-10-18T13:54:12.369Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Element HIDDEN in plan view: {
+  "id": "new-corner-wall-cabinet-60-1760788779197"
+}
+[2025-10-18T13:54:12.370Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Elements to render after filtering: 17
+[2025-10-18T13:54:12.371Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Rendering with currentViewInfo: {
+  "direction": "plan",
+  "hiddenElements": [
+    "new-corner-wall-cabinet-60-1760788779197"
+  ],
+  "active2DView": "plan",
+  "totalElements": 18
+}
+[2025-10-18T13:54:12.372Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Element HIDDEN in plan view: {
+  "id": "new-corner-wall-cabinet-60-1760788779197"
+}
+[2025-10-18T13:54:12.372Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Elements to render after filtering: 17
+[2025-10-18T13:54:12.379Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Rendering with currentViewInfo: {
+  "direction": "plan",
+  "hiddenElements": [
+    "new-corner-wall-cabinet-60-1760788779197"
+  ],
+  "active2DView": "plan",
+  "totalElements": 18
+}
+[2025-10-18T13:54:12.381Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Element HIDDEN in plan view: {
+  "id": "new-corner-wall-cabinet-60-1760788779197"
+}
+[2025-10-18T13:54:12.382Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Elements to render after filtering: 17
+[2025-10-18T13:54:12.384Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Rendering with currentViewInfo: {
+  "direction": "plan",
+  "hiddenElements": [
+    "new-corner-wall-cabinet-60-1760788779197"
+  ],
+  "active2DView": "plan",
+  "totalElements": 18
+}
+[2025-10-18T13:54:12.384Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Element HIDDEN in plan view: {
+  "id": "new-corner-wall-cabinet-60-1760788779197"
+}
+[2025-10-18T13:54:12.385Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Elements to render after filtering: 17
+[2025-10-18T13:54:12.391Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Rendering with currentViewInfo: {
+  "direction": "plan",
+  "hiddenElements": [
+    "new-corner-wall-cabinet-60-1760788779197"
+  ],
+  "active2DView": "plan",
+  "totalElements": 18
+}
+[2025-10-18T13:54:12.393Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Element HIDDEN in plan view: {
+  "id": "new-corner-wall-cabinet-60-1760788779197"
+}
+[2025-10-18T13:54:12.394Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Elements to render after filtering: 17
+[2025-10-18T13:54:12.395Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Rendering with currentViewInfo: {
+  "direction": "plan",
+  "hiddenElements": [
+    "new-corner-wall-cabinet-60-1760788779197"
+  ],
+  "active2DView": "plan",
+  "totalElements": 18
+}
+[2025-10-18T13:54:12.396Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Element HIDDEN in plan view: {
+  "id": "new-corner-wall-cabinet-60-1760788779197"
+}
+[2025-10-18T13:54:12.397Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Elements to render after filtering: 17
+[2025-10-18T13:54:29.625Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Rendering with currentViewInfo: {
+  "direction": "plan",
+  "hiddenElements": [
+    "new-corner-wall-cabinet-60-1760788779197"
+  ],
+  "active2DView": "plan",
+  "totalElements": 18
+}
+[2025-10-18T13:54:29.627Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Element HIDDEN in plan view: {
+  "id": "new-corner-wall-cabinet-60-1760788779197"
+}
+[2025-10-18T13:54:29.627Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Elements to render after filtering: 17
+[2025-10-18T13:54:29.628Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Rendering with currentViewInfo: {
+  "direction": "plan",
+  "hiddenElements": [
+    "new-corner-wall-cabinet-60-1760788779197"
+  ],
+  "active2DView": "plan",
+  "totalElements": 18
+}
+[2025-10-18T13:54:29.629Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Element HIDDEN in plan view: {
+  "id": "new-corner-wall-cabinet-60-1760788779197"
+}
+[2025-10-18T13:54:29.630Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Elements to render after filtering: 17
+[2025-10-18T13:54:29.640Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Rendering with currentViewInfo: {
+  "direction": "plan",
+  "hiddenElements": [
+    "new-corner-wall-cabinet-60-1760788779197"
+  ],
+  "active2DView": "plan",
+  "totalElements": 18
+}
+[2025-10-18T13:54:29.641Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Element HIDDEN in plan view: {
+  "id": "new-corner-wall-cabinet-60-1760788779197"
+}
+[2025-10-18T13:54:29.642Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Elements to render after filtering: 17
+[2025-10-18T13:54:29.643Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Rendering with currentViewInfo: {
+  "direction": "plan",
+  "hiddenElements": [
+    "new-corner-wall-cabinet-60-1760788779197"
+  ],
+  "active2DView": "plan",
+  "totalElements": 18
+}
+[2025-10-18T13:54:29.643Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Element HIDDEN in plan view: {
+  "id": "new-corner-wall-cabinet-60-1760788779197"
+}
+[2025-10-18T13:54:29.644Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Elements to render after filtering: 17
+[2025-10-18T13:54:29.648Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Rendering with currentViewInfo: {
+  "direction": "plan",
+  "hiddenElements": [
+    "new-corner-wall-cabinet-60-1760788779197"
+  ],
+  "active2DView": "plan",
+  "totalElements": 18
+}
+[2025-10-18T13:54:29.649Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Element HIDDEN in plan view: {
+  "id": "new-corner-wall-cabinet-60-1760788779197"
+}
+[2025-10-18T13:54:29.650Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Elements to render after filtering: 17
+[2025-10-18T13:54:29.651Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Rendering with currentViewInfo: {
+  "direction": "plan",
+  "hiddenElements": [
+    "new-corner-wall-cabinet-60-1760788779197"
+  ],
+  "active2DView": "plan",
+  "totalElements": 18
+}
+[2025-10-18T13:54:29.653Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Element HIDDEN in plan view: {
+  "id": "new-corner-wall-cabinet-60-1760788779197"
+}
+[2025-10-18T13:54:29.654Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Elements to render after filtering: 17
+[2025-10-18T13:54:29.658Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Rendering with currentViewInfo: {
+  "direction": "plan",
+  "hiddenElements": [
+    "new-corner-wall-cabinet-60-1760788779197"
+  ],
+  "active2DView": "plan",
+  "totalElements": 18
+}
+[2025-10-18T13:54:29.660Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Element HIDDEN in plan view: {
+  "id": "new-corner-wall-cabinet-60-1760788779197"
+}
+[2025-10-18T13:54:29.661Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Elements to render after filtering: 17
+[2025-10-18T13:54:29.662Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Rendering with currentViewInfo: {
+  "direction": "plan",
+  "hiddenElements": [
+    "new-corner-wall-cabinet-60-1760788779197"
+  ],
+  "active2DView": "plan",
+  "totalElements": 18
+}
+[2025-10-18T13:54:29.663Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Element HIDDEN in plan view: {
+  "id": "new-corner-wall-cabinet-60-1760788779197"
+}
+[2025-10-18T13:54:29.664Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Elements to render after filtering: 17
+[2025-10-18T13:54:29.669Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Rendering with currentViewInfo: {
+  "direction": "plan",
+  "hiddenElements": [
+    "new-corner-wall-cabinet-60-1760788779197"
+  ],
+  "active2DView": "plan",
+  "totalElements": 18
+}
+[2025-10-18T13:54:29.670Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Element HIDDEN in plan view: {
+  "id": "new-corner-wall-cabinet-60-1760788779197"
+}
+[2025-10-18T13:54:29.671Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Elements to render after filtering: 17
+[2025-10-18T13:54:29.672Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Rendering with currentViewInfo: {
+  "direction": "plan",
+  "hiddenElements": [
+    "new-corner-wall-cabinet-60-1760788779197"
+  ],
+  "active2DView": "plan",
+  "totalElements": 18
+}
+[2025-10-18T13:54:29.673Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Element HIDDEN in plan view: {
+  "id": "new-corner-wall-cabinet-60-1760788779197"
+}
+[2025-10-18T13:54:29.674Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Elements to render after filtering: 17
+[2025-10-18T13:54:29.681Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Rendering with currentViewInfo: {
+  "direction": "plan",
+  "hiddenElements": [
+    "new-corner-wall-cabinet-60-1760788779197"
+  ],
+  "active2DView": "plan",
+  "totalElements": 18
+}
+[2025-10-18T13:54:29.683Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Element HIDDEN in plan view: {
+  "id": "new-corner-wall-cabinet-60-1760788779197"
+}
+[2025-10-18T13:54:29.684Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Elements to render after filtering: 17
+[2025-10-18T13:54:29.685Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Rendering with currentViewInfo: {
+  "direction": "plan",
+  "hiddenElements": [
+    "new-corner-wall-cabinet-60-1760788779197"
+  ],
+  "active2DView": "plan",
+  "totalElements": 18
+}
+[2025-10-18T13:54:29.686Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Element HIDDEN in plan view: {
+  "id": "new-corner-wall-cabinet-60-1760788779197"
+}
+[2025-10-18T13:54:29.687Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Elements to render after filtering: 17
+[2025-10-18T13:54:29.694Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Rendering with currentViewInfo: {
+  "direction": "plan",
+  "hiddenElements": [
+    "new-corner-wall-cabinet-60-1760788779197"
+  ],
+  "active2DView": "plan",
+  "totalElements": 18
+}
+[2025-10-18T13:54:29.696Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Element HIDDEN in plan view: {
+  "id": "new-corner-wall-cabinet-60-1760788779197"
+}
+[2025-10-18T13:54:29.697Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Elements to render after filtering: 17
+[2025-10-18T13:54:29.698Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Rendering with currentViewInfo: {
+  "direction": "plan",
+  "hiddenElements": [
+    "new-corner-wall-cabinet-60-1760788779197"
+  ],
+  "active2DView": "plan",
+  "totalElements": 18
+}
+[2025-10-18T13:54:29.700Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Element HIDDEN in plan view: {
+  "id": "new-corner-wall-cabinet-60-1760788779197"
+}
+[2025-10-18T13:54:29.701Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Elements to render after filtering: 17
+[2025-10-18T13:54:29.708Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Rendering with currentViewInfo: {
+  "direction": "plan",
+  "hiddenElements": [
+    "new-corner-wall-cabinet-60-1760788779197"
+  ],
+  "active2DView": "plan",
+  "totalElements": 18
+}
+[2025-10-18T13:54:29.709Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Element HIDDEN in plan view: {
+  "id": "new-corner-wall-cabinet-60-1760788779197"
+}
+[2025-10-18T13:54:29.710Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Elements to render after filtering: 17
+[2025-10-18T13:54:29.711Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Rendering with currentViewInfo: {
+  "direction": "plan",
+  "hiddenElements": [
+    "new-corner-wall-cabinet-60-1760788779197"
+  ],
+  "active2DView": "plan",
+  "totalElements": 18
+}
+[2025-10-18T13:54:29.712Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Element HIDDEN in plan view: {
+  "id": "new-corner-wall-cabinet-60-1760788779197"
+}
+[2025-10-18T13:54:29.713Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Elements to render after filtering: 17
+[2025-10-18T13:54:29.720Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Rendering with currentViewInfo: {
+  "direction": "plan",
+  "hiddenElements": [
+    "new-corner-wall-cabinet-60-1760788779197"
+  ],
+  "active2DView": "plan",
+  "totalElements": 18
+}
+[2025-10-18T13:54:29.721Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Element HIDDEN in plan view: {
+  "id": "new-corner-wall-cabinet-60-1760788779197"
+}
+[2025-10-18T13:54:29.722Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Elements to render after filtering: 17
+[2025-10-18T13:54:29.723Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Rendering with currentViewInfo: {
+  "direction": "plan",
+  "hiddenElements": [
+    "new-corner-wall-cabinet-60-1760788779197"
+  ],
+  "active2DView": "plan",
+  "totalElements": 18
+}
+[2025-10-18T13:54:29.724Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Element HIDDEN in plan view: {
+  "id": "new-corner-wall-cabinet-60-1760788779197"
+}
+[2025-10-18T13:54:29.725Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Elements to render after filtering: 17
+[2025-10-18T13:54:29.732Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Rendering with currentViewInfo: {
+  "direction": "plan",
+  "hiddenElements": [
+    "new-corner-wall-cabinet-60-1760788779197"
+  ],
+  "active2DView": "plan",
+  "totalElements": 18
+}
+[2025-10-18T13:54:29.734Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Element HIDDEN in plan view: {
+  "id": "new-corner-wall-cabinet-60-1760788779197"
+}
+[2025-10-18T13:54:29.735Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Elements to render after filtering: 17
+[2025-10-18T13:54:29.736Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Rendering with currentViewInfo: {
+  "direction": "plan",
+  "hiddenElements": [
+    "new-corner-wall-cabinet-60-1760788779197"
+  ],
+  "active2DView": "plan",
+  "totalElements": 18
+}
+[2025-10-18T13:54:29.737Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Element HIDDEN in plan view: {
+  "id": "new-corner-wall-cabinet-60-1760788779197"
+}
+[2025-10-18T13:54:29.738Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Elements to render after filtering: 17
+[2025-10-18T13:54:29.748Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Rendering with currentViewInfo: {
+  "direction": "plan",
+  "hiddenElements": [
+    "new-corner-wall-cabinet-60-1760788779197"
+  ],
+  "active2DView": "plan",
+  "totalElements": 18
+}
+[2025-10-18T13:54:29.749Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Element HIDDEN in plan view: {
+  "id": "new-corner-wall-cabinet-60-1760788779197"
+}
+[2025-10-18T13:54:29.750Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Elements to render after filtering: 17
+[2025-10-18T13:54:29.751Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Rendering with currentViewInfo: {
+  "direction": "plan",
+  "hiddenElements": [
+    "new-corner-wall-cabinet-60-1760788779197"
+  ],
+  "active2DView": "plan",
+  "totalElements": 18
+}
+[2025-10-18T13:54:29.752Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Element HIDDEN in plan view: {
+  "id": "new-corner-wall-cabinet-60-1760788779197"
+}
+[2025-10-18T13:54:29.753Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Elements to render after filtering: 17
+[2025-10-18T13:54:29.759Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Rendering with currentViewInfo: {
+  "direction": "plan",
+  "hiddenElements": [
+    "new-corner-wall-cabinet-60-1760788779197"
+  ],
+  "active2DView": "plan",
+  "totalElements": 18
+}
+[2025-10-18T13:54:29.761Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Element HIDDEN in plan view: {
+  "id": "new-corner-wall-cabinet-60-1760788779197"
+}
+[2025-10-18T13:54:29.762Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Elements to render after filtering: 17
+[2025-10-18T13:54:29.763Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Rendering with currentViewInfo: {
+  "direction": "plan",
+  "hiddenElements": [
+    "new-corner-wall-cabinet-60-1760788779197"
+  ],
+  "active2DView": "plan",
+  "totalElements": 18
+}
+[2025-10-18T13:54:29.764Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Element HIDDEN in plan view: {
+  "id": "new-corner-wall-cabinet-60-1760788779197"
+}
+[2025-10-18T13:54:29.765Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Elements to render after filtering: 17
+[2025-10-18T13:54:29.769Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Rendering with currentViewInfo: {
+  "direction": "plan",
+  "hiddenElements": [
+    "new-corner-wall-cabinet-60-1760788779197"
+  ],
+  "active2DView": "plan",
+  "totalElements": 18
+}
+[2025-10-18T13:54:29.771Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Element HIDDEN in plan view: {
+  "id": "new-corner-wall-cabinet-60-1760788779197"
+}
+[2025-10-18T13:54:29.772Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Elements to render after filtering: 17
+[2025-10-18T13:54:29.773Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Rendering with currentViewInfo: {
+  "direction": "plan",
+  "hiddenElements": [
+    "new-corner-wall-cabinet-60-1760788779197"
+  ],
+  "active2DView": "plan",
+  "totalElements": 18
+}
+[2025-10-18T13:54:29.774Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Element HIDDEN in plan view: {
+  "id": "new-corner-wall-cabinet-60-1760788779197"
+}
+[2025-10-18T13:54:29.775Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Elements to render after filtering: 17
+[2025-10-18T13:54:29.782Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Rendering with currentViewInfo: {
+  "direction": "plan",
+  "hiddenElements": [
+    "new-corner-wall-cabinet-60-1760788779197"
+  ],
+  "active2DView": "plan",
+  "totalElements": 18
+}
+[2025-10-18T13:54:29.784Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Element HIDDEN in plan view: {
+  "id": "new-corner-wall-cabinet-60-1760788779197"
+}
+[2025-10-18T13:54:29.785Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Elements to render after filtering: 17
+[2025-10-18T13:54:29.786Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Rendering with currentViewInfo: {
+  "direction": "plan",
+  "hiddenElements": [
+    "new-corner-wall-cabinet-60-1760788779197"
+  ],
+  "active2DView": "plan",
+  "totalElements": 18
+}
+[2025-10-18T13:54:29.787Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Element HIDDEN in plan view: {
+  "id": "new-corner-wall-cabinet-60-1760788779197"
+}
+[2025-10-18T13:54:29.788Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Elements to render after filtering: 17
+[2025-10-18T13:54:29.794Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Rendering with currentViewInfo: {
+  "direction": "plan",
+  "hiddenElements": [
+    "new-corner-wall-cabinet-60-1760788779197"
+  ],
+  "active2DView": "plan",
+  "totalElements": 18
+}
+[2025-10-18T13:54:29.796Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Element HIDDEN in plan view: {
+  "id": "new-corner-wall-cabinet-60-1760788779197"
+}
+[2025-10-18T13:54:29.798Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Elements to render after filtering: 17
+[2025-10-18T13:54:29.799Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Rendering with currentViewInfo: {
+  "direction": "plan",
+  "hiddenElements": [
+    "new-corner-wall-cabinet-60-1760788779197"
+  ],
+  "active2DView": "plan",
+  "totalElements": 18
+}
+[2025-10-18T13:54:29.800Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Element HIDDEN in plan view: {
+  "id": "new-corner-wall-cabinet-60-1760788779197"
+}
+[2025-10-18T13:54:29.801Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Elements to render after filtering: 17
+[2025-10-18T13:54:29.808Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Rendering with currentViewInfo: {
+  "direction": "plan",
+  "hiddenElements": [
+    "new-corner-wall-cabinet-60-1760788779197"
+  ],
+  "active2DView": "plan",
+  "totalElements": 18
+}
+[2025-10-18T13:54:29.810Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Element HIDDEN in plan view: {
+  "id": "new-corner-wall-cabinet-60-1760788779197"
+}
+[2025-10-18T13:54:29.811Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Elements to render after filtering: 17
+[2025-10-18T13:54:29.812Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Rendering with currentViewInfo: {
+  "direction": "plan",
+  "hiddenElements": [
+    "new-corner-wall-cabinet-60-1760788779197"
+  ],
+  "active2DView": "plan",
+  "totalElements": 18
+}
+[2025-10-18T13:54:29.814Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Element HIDDEN in plan view: {
+  "id": "new-corner-wall-cabinet-60-1760788779197"
+}
+[2025-10-18T13:54:29.815Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Elements to render after filtering: 17
+[2025-10-18T13:54:29.822Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Rendering with currentViewInfo: {
+  "direction": "plan",
+  "hiddenElements": [
+    "new-corner-wall-cabinet-60-1760788779197"
+  ],
+  "active2DView": "plan",
+  "totalElements": 18
+}
+[2025-10-18T13:54:29.824Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Element HIDDEN in plan view: {
+  "id": "new-corner-wall-cabinet-60-1760788779197"
+}
+[2025-10-18T13:54:29.826Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Elements to render after filtering: 17
+[2025-10-18T13:54:29.827Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Rendering with currentViewInfo: {
+  "direction": "plan",
+  "hiddenElements": [
+    "new-corner-wall-cabinet-60-1760788779197"
+  ],
+  "active2DView": "plan",
+  "totalElements": 18
+}
+[2025-10-18T13:54:29.828Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Element HIDDEN in plan view: {
+  "id": "new-corner-wall-cabinet-60-1760788779197"
+}
+[2025-10-18T13:54:29.829Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Elements to render after filtering: 17
+[2025-10-18T13:54:29.838Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Rendering with currentViewInfo: {
+  "direction": "plan",
+  "hiddenElements": [
+    "new-corner-wall-cabinet-60-1760788779197"
+  ],
+  "active2DView": "plan",
+  "totalElements": 18
+}
+[2025-10-18T13:54:29.840Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Element HIDDEN in plan view: {
+  "id": "new-corner-wall-cabinet-60-1760788779197"
+}
+[2025-10-18T13:54:29.841Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Elements to render after filtering: 17
+[2025-10-18T13:54:29.842Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Rendering with currentViewInfo: {
+  "direction": "plan",
+  "hiddenElements": [
+    "new-corner-wall-cabinet-60-1760788779197"
+  ],
+  "active2DView": "plan",
+  "totalElements": 18
+}
+[2025-10-18T13:54:29.843Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Element HIDDEN in plan view: {
+  "id": "new-corner-wall-cabinet-60-1760788779197"
+}
+[2025-10-18T13:54:29.844Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Elements to render after filtering: 17
+[2025-10-18T13:54:29.856Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Rendering with currentViewInfo: {
+  "direction": "plan",
+  "hiddenElements": [
+    "new-corner-wall-cabinet-60-1760788779197"
+  ],
+  "active2DView": "plan",
+  "totalElements": 18
+}
+[2025-10-18T13:54:29.857Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Element HIDDEN in plan view: {
+  "id": "new-corner-wall-cabinet-60-1760788779197"
+}
+[2025-10-18T13:54:29.858Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Elements to render after filtering: 17
+[2025-10-18T13:54:29.859Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Rendering with currentViewInfo: {
+  "direction": "plan",
+  "hiddenElements": [
+    "new-corner-wall-cabinet-60-1760788779197"
+  ],
+  "active2DView": "plan",
+  "totalElements": 18
+}
+[2025-10-18T13:54:29.860Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Element HIDDEN in plan view: {
+  "id": "new-corner-wall-cabinet-60-1760788779197"
+}
+[2025-10-18T13:54:29.861Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Elements to render after filtering: 17
+[2025-10-18T13:54:29.878Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Rendering with currentViewInfo: {
+  "direction": "plan",
+  "hiddenElements": [
+    "new-corner-wall-cabinet-60-1760788779197"
+  ],
+  "active2DView": "plan",
+  "totalElements": 18
+}
+[2025-10-18T13:54:29.880Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Element HIDDEN in plan view: {
+  "id": "new-corner-wall-cabinet-60-1760788779197"
+}
+[2025-10-18T13:54:29.881Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Elements to render after filtering: 17
+[2025-10-18T13:54:29.883Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Rendering with currentViewInfo: {
+  "direction": "plan",
+  "hiddenElements": [
+    "new-corner-wall-cabinet-60-1760788779197"
+  ],
+  "active2DView": "plan",
+  "totalElements": 18
+}
+[2025-10-18T13:54:29.885Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Element HIDDEN in plan view: {
+  "id": "new-corner-wall-cabinet-60-1760788779197"
+}
+[2025-10-18T13:54:29.886Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Elements to render after filtering: 17
+[2025-10-18T13:54:40.293Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Rendering with currentViewInfo: {
+  "direction": "plan",
+  "hiddenElements": [
+    "new-corner-wall-cabinet-60-1760788779197"
+  ],
+  "active2DView": "plan",
+  "totalElements": 18
+}
+[2025-10-18T13:54:40.295Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Element HIDDEN in plan view: {
+  "id": "new-corner-wall-cabinet-60-1760788779197"
+}
+[2025-10-18T13:54:40.296Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Elements to render after filtering: 17
+[2025-10-18T13:54:40.297Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Rendering with currentViewInfo: {
+  "direction": "plan",
+  "hiddenElements": [
+    "new-corner-wall-cabinet-60-1760788779197"
+  ],
+  "active2DView": "plan",
+  "totalElements": 18
+}
+[2025-10-18T13:54:40.299Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Element HIDDEN in plan view: {
+  "id": "new-corner-wall-cabinet-60-1760788779197"
+}
+[2025-10-18T13:54:40.300Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Elements to render after filtering: 17
+[2025-10-18T13:54:40.304Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Rendering with currentViewInfo: {
+  "direction": "plan",
+  "hiddenElements": [
+    "new-corner-wall-cabinet-60-1760788779197"
+  ],
+  "active2DView": "plan",
+  "totalElements": 18
+}
+[2025-10-18T13:54:40.306Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Element HIDDEN in plan view: {
+  "id": "new-corner-wall-cabinet-60-1760788779197"
+}
+[2025-10-18T13:54:40.307Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Elements to render after filtering: 17
+[2025-10-18T13:54:40.308Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Rendering with currentViewInfo: {
+  "direction": "plan",
+  "hiddenElements": [
+    "new-corner-wall-cabinet-60-1760788779197"
+  ],
+  "active2DView": "plan",
+  "totalElements": 18
+}
+[2025-10-18T13:54:40.310Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Element HIDDEN in plan view: {
+  "id": "new-corner-wall-cabinet-60-1760788779197"
+}
+[2025-10-18T13:54:40.311Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Elements to render after filtering: 17
+[2025-10-18T13:54:40.826Z] 📝 [LOG] 💾 [ProjectContext] Auto-saving design...
+[2025-10-18T13:54:40.827Z] 📝 [LOG] 💾 [ProjectContext] Saving current design... {
+  "roomId": "ff110bba-6ec1-4a40-a799-b8d4aa0b6d1f",
+  "showNotification": false
+}
+[2025-10-18T13:54:40.905Z] 📝 [LOG] ✅ [CompactComponentSidebar] Component sidebar rendered successfully
+[2025-10-18T13:54:40.906Z] 📝 [LOG] ✅ [CompactComponentSidebar] Summary: 226 total, 126 for kitchen, 10 categories
+[2025-10-18T13:54:40.919Z] 📝 [LOG] 🎯 [PerformanceMonitor] Performance monitor hidden
+[2025-10-18T13:54:40.922Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Rendering with currentViewInfo: {
+  "direction": "plan",
+  "hiddenElements": [
+    "new-corner-wall-cabinet-60-1760788779197"
+  ],
+  "active2DView": "plan",
+  "totalElements": 18
+}
+[2025-10-18T13:54:40.924Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Element HIDDEN in plan view: {
+  "id": "new-corner-wall-cabinet-60-1760788779197"
+}
+[2025-10-18T13:54:40.925Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Elements to render after filtering: 17
+[2025-10-18T13:54:40.926Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Rendering with currentViewInfo: {
+  "direction": "plan",
+  "hiddenElements": [
+    "new-corner-wall-cabinet-60-1760788779197"
+  ],
+  "active2DView": "plan",
+  "totalElements": 18
+}
+[2025-10-18T13:54:40.927Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Element HIDDEN in plan view: {
+  "id": "new-corner-wall-cabinet-60-1760788779197"
+}
+[2025-10-18T13:54:40.929Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Elements to render after filtering: 17
+[2025-10-18T13:54:40.931Z] 📝 [LOG] 🏗️ [CoordinateEngine] Initialized with inner room dimensions: {
+  "innerWidth": 600,
+  "innerHeight": 400,
+  "ceilingHeight": 240,
+  "wallThickness": 10
+}
+[2025-10-18T13:54:40.932Z] 📝 [LOG] 🏗️ [DesignCanvas2D] Coordinate engine initialized for room: {
+  "width": 600,
+  "height": 400
+}
+[2025-10-18T13:54:40.933Z] 📝 [LOG] 🚀 [DesignCanvas2D] Preloaded component behaviors and room config
+[2025-10-18T13:54:40.941Z] 📝 [LOG] ✅ [CompactComponentSidebar] Component sidebar rendered successfully
+[2025-10-18T13:54:40.943Z] 📝 [LOG] ✅ [CompactComponentSidebar] Summary: 226 total, 126 for kitchen, 10 categories
+[2025-10-18T13:54:40.955Z] 📝 [LOG] 🎯 [PerformanceMonitor] Performance monitor hidden
+[2025-10-18T13:54:40.958Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Rendering with currentViewInfo: {
+  "direction": "plan",
+  "hiddenElements": [
+    "new-corner-wall-cabinet-60-1760788779197"
+  ],
+  "active2DView": "plan",
+  "totalElements": 18
+}
+[2025-10-18T13:54:40.959Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Element HIDDEN in plan view: {
+  "id": "new-corner-wall-cabinet-60-1760788779197"
+}
+[2025-10-18T13:54:40.960Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Elements to render after filtering: 17
+[2025-10-18T13:54:40.961Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Rendering with currentViewInfo: {
+  "direction": "plan",
+  "hiddenElements": [
+    "new-corner-wall-cabinet-60-1760788779197"
+  ],
+  "active2DView": "plan",
+  "totalElements": 18
+}
+[2025-10-18T13:54:40.962Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Element HIDDEN in plan view: {
+  "id": "new-corner-wall-cabinet-60-1760788779197"
+}
+[2025-10-18T13:54:40.964Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Elements to render after filtering: 17
+[2025-10-18T13:54:54.699Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Rendering with currentViewInfo: {
+  "direction": "plan",
+  "hiddenElements": [
+    "new-corner-wall-cabinet-60-1760788779197"
+  ],
+  "active2DView": "plan",
+  "totalElements": 18
+}
+[2025-10-18T13:54:54.701Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Element HIDDEN in plan view: {
+  "id": "new-corner-wall-cabinet-60-1760788779197"
+}
+[2025-10-18T13:54:54.702Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Elements to render after filtering: 17
+[2025-10-18T13:54:54.703Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Rendering with currentViewInfo: {
+  "direction": "plan",
+  "hiddenElements": [
+    "new-corner-wall-cabinet-60-1760788779197"
+  ],
+  "active2DView": "plan",
+  "totalElements": 18
+}
+[2025-10-18T13:54:54.704Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Element HIDDEN in plan view: {
+  "id": "new-corner-wall-cabinet-60-1760788779197"
+}
+[2025-10-18T13:54:54.705Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Elements to render after filtering: 17
+[2025-10-18T13:54:54.710Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Rendering with currentViewInfo: {
+  "direction": "plan",
+  "hiddenElements": [
+    "new-corner-wall-cabinet-60-1760788779197"
+  ],
+  "active2DView": "plan",
+  "totalElements": 18
+}
+[2025-10-18T13:54:54.712Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Element HIDDEN in plan view: {
+  "id": "new-corner-wall-cabinet-60-1760788779197"
+}
+[2025-10-18T13:54:54.713Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Elements to render after filtering: 17
+[2025-10-18T13:54:54.714Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Rendering with currentViewInfo: {
+  "direction": "plan",
+  "hiddenElements": [
+    "new-corner-wall-cabinet-60-1760788779197"
+  ],
+  "active2DView": "plan",
+  "totalElements": 18
+}
+[2025-10-18T13:54:54.715Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Element HIDDEN in plan view: {
+  "id": "new-corner-wall-cabinet-60-1760788779197"
+}
+[2025-10-18T13:54:54.717Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Elements to render after filtering: 17
+[2025-10-18T13:54:54.723Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Rendering with currentViewInfo: {
+  "direction": "plan",
+  "hiddenElements": [
+    "new-corner-wall-cabinet-60-1760788779197"
+  ],
+  "active2DView": "plan",
+  "totalElements": 18
+}
+[2025-10-18T13:54:54.725Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Element HIDDEN in plan view: {
+  "id": "new-corner-wall-cabinet-60-1760788779197"
+}
+[2025-10-18T13:54:54.727Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Elements to render after filtering: 17
+[2025-10-18T13:54:54.729Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Rendering with currentViewInfo: {
+  "direction": "plan",
+  "hiddenElements": [
+    "new-corner-wall-cabinet-60-1760788779197"
+  ],
+  "active2DView": "plan",
+  "totalElements": 18
+}
+[2025-10-18T13:54:54.730Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Element HIDDEN in plan view: {
+  "id": "new-corner-wall-cabinet-60-1760788779197"
+}
+[2025-10-18T13:54:54.731Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Elements to render after filtering: 17
+[2025-10-18T13:54:54.740Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Rendering with currentViewInfo: {
+  "direction": "plan",
+  "hiddenElements": [
+    "new-corner-wall-cabinet-60-1760788779197"
+  ],
+  "active2DView": "plan",
+  "totalElements": 18
+}
+[2025-10-18T13:54:54.742Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Element HIDDEN in plan view: {
+  "id": "new-corner-wall-cabinet-60-1760788779197"
+}
+[2025-10-18T13:54:54.744Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Elements to render after filtering: 17
+[2025-10-18T13:54:54.746Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Rendering with currentViewInfo: {
+  "direction": "plan",
+  "hiddenElements": [
+    "new-corner-wall-cabinet-60-1760788779197"
+  ],
+  "active2DView": "plan",
+  "totalElements": 18
+}
+[2025-10-18T13:54:54.747Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Element HIDDEN in plan view: {
+  "id": "new-corner-wall-cabinet-60-1760788779197"
+}
+[2025-10-18T13:54:54.748Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Elements to render after filtering: 17
+[2025-10-18T13:54:54.757Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Rendering with currentViewInfo: {
+  "direction": "plan",
+  "hiddenElements": [
+    "new-corner-wall-cabinet-60-1760788779197"
+  ],
+  "active2DView": "plan",
+  "totalElements": 18
+}
+[2025-10-18T13:54:54.759Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Element HIDDEN in plan view: {
+  "id": "new-corner-wall-cabinet-60-1760788779197"
+}
+[2025-10-18T13:54:54.761Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Elements to render after filtering: 17
+[2025-10-18T13:54:54.763Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Rendering with currentViewInfo: {
+  "direction": "plan",
+  "hiddenElements": [
+    "new-corner-wall-cabinet-60-1760788779197"
+  ],
+  "active2DView": "plan",
+  "totalElements": 18
+}
+[2025-10-18T13:54:54.765Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Element HIDDEN in plan view: {
+  "id": "new-corner-wall-cabinet-60-1760788779197"
+}
+[2025-10-18T13:54:54.766Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Elements to render after filtering: 17
+[2025-10-18T13:54:54.775Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Rendering with currentViewInfo: {
+  "direction": "plan",
+  "hiddenElements": [
+    "new-corner-wall-cabinet-60-1760788779197"
+  ],
+  "active2DView": "plan",
+  "totalElements": 18
+}
+[2025-10-18T13:54:54.777Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Element HIDDEN in plan view: {
+  "id": "new-corner-wall-cabinet-60-1760788779197"
+}
+[2025-10-18T13:54:54.780Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Elements to render after filtering: 17
+[2025-10-18T13:54:54.783Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Rendering with currentViewInfo: {
+  "direction": "plan",
+  "hiddenElements": [
+    "new-corner-wall-cabinet-60-1760788779197"
+  ],
+  "active2DView": "plan",
+  "totalElements": 18
+}
+[2025-10-18T13:54:54.786Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Element HIDDEN in plan view: {
+  "id": "new-corner-wall-cabinet-60-1760788779197"
+}
+[2025-10-18T13:54:54.788Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Elements to render after filtering: 17
+[2025-10-18T13:54:56.325Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Rendering with currentViewInfo: {
+  "direction": "plan",
+  "hiddenElements": [
+    "new-corner-wall-cabinet-60-1760788779197"
+  ],
+  "active2DView": "plan",
+  "totalElements": 18
+}
+[2025-10-18T13:54:56.327Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Element HIDDEN in plan view: {
+  "id": "new-corner-wall-cabinet-60-1760788779197"
+}
+[2025-10-18T13:54:56.329Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Elements to render after filtering: 17
+[2025-10-18T13:54:56.331Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Rendering with currentViewInfo: {
+  "direction": "plan",
+  "hiddenElements": [
+    "new-corner-wall-cabinet-60-1760788779197"
+  ],
+  "active2DView": "plan",
+  "totalElements": 18
+}
+[2025-10-18T13:54:56.334Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Element HIDDEN in plan view: {
+  "id": "new-corner-wall-cabinet-60-1760788779197"
+}
+[2025-10-18T13:54:56.336Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Elements to render after filtering: 17
+[2025-10-18T13:54:56.342Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Rendering with currentViewInfo: {
+  "direction": "plan",
+  "hiddenElements": [
+    "new-corner-wall-cabinet-60-1760788779197"
+  ],
+  "active2DView": "plan",
+  "totalElements": 18
+}
+[2025-10-18T13:54:56.345Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Element HIDDEN in plan view: {
+  "id": "new-corner-wall-cabinet-60-1760788779197"
+}
+[2025-10-18T13:54:56.347Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Elements to render after filtering: 17
+[2025-10-18T13:54:56.350Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Rendering with currentViewInfo: {
+  "direction": "plan",
+  "hiddenElements": [
+    "new-corner-wall-cabinet-60-1760788779197"
+  ],
+  "active2DView": "plan",
+  "totalElements": 18
+}
+[2025-10-18T13:54:56.352Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Element HIDDEN in plan view: {
+  "id": "new-corner-wall-cabinet-60-1760788779197"
+}
+[2025-10-18T13:54:56.354Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Elements to render after filtering: 17
+[2025-10-18T13:54:56.364Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Rendering with currentViewInfo: {
+  "direction": "plan",
+  "hiddenElements": [
+    "new-corner-wall-cabinet-60-1760788779197"
+  ],
+  "active2DView": "plan",
+  "totalElements": 18
+}
+[2025-10-18T13:54:56.366Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Element HIDDEN in plan view: {
+  "id": "new-corner-wall-cabinet-60-1760788779197"
+}
+[2025-10-18T13:54:56.368Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Elements to render after filtering: 17
+[2025-10-18T13:54:56.371Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Rendering with currentViewInfo: {
+  "direction": "plan",
+  "hiddenElements": [
+    "new-corner-wall-cabinet-60-1760788779197"
+  ],
+  "active2DView": "plan",
+  "totalElements": 18
+}
+[2025-10-18T13:54:56.373Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Element HIDDEN in plan view: {
+  "id": "new-corner-wall-cabinet-60-1760788779197"
+}
+[2025-10-18T13:54:56.375Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Elements to render after filtering: 17
+[2025-10-18T13:54:56.392Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Rendering with currentViewInfo: {
+  "direction": "plan",
+  "hiddenElements": [
+    "new-corner-wall-cabinet-60-1760788779197"
+  ],
+  "active2DView": "plan",
+  "totalElements": 18
+}
+[2025-10-18T13:54:56.395Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Element HIDDEN in plan view: {
+  "id": "new-corner-wall-cabinet-60-1760788779197"
+}
+[2025-10-18T13:54:56.397Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Elements to render after filtering: 17
+[2025-10-18T13:54:56.400Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Rendering with currentViewInfo: {
+  "direction": "plan",
+  "hiddenElements": [
+    "new-corner-wall-cabinet-60-1760788779197"
+  ],
+  "active2DView": "plan",
+  "totalElements": 18
+}
+[2025-10-18T13:54:56.402Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Element HIDDEN in plan view: {
+  "id": "new-corner-wall-cabinet-60-1760788779197"
+}
+[2025-10-18T13:54:56.404Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Elements to render after filtering: 17
+[2025-10-18T13:55:01.958Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Rendering with currentViewInfo: {
+  "direction": "plan",
+  "hiddenElements": [
+    "new-corner-wall-cabinet-60-1760788779197"
+  ],
+  "active2DView": "plan",
+  "totalElements": 18
+}
+[2025-10-18T13:55:01.960Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Element HIDDEN in plan view: {
+  "id": "new-corner-wall-cabinet-60-1760788779197"
+}
+[2025-10-18T13:55:01.962Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Elements to render after filtering: 17
+[2025-10-18T13:55:01.963Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Rendering with currentViewInfo: {
+  "direction": "plan",
+  "hiddenElements": [
+    "new-corner-wall-cabinet-60-1760788779197"
+  ],
+  "active2DView": "plan",
+  "totalElements": 18
+}
+[2025-10-18T13:55:01.965Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Element HIDDEN in plan view: {
+  "id": "new-corner-wall-cabinet-60-1760788779197"
+}
+[2025-10-18T13:55:01.966Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Elements to render after filtering: 17
+[2025-10-18T13:55:01.970Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Rendering with currentViewInfo: {
+  "direction": "plan",
+  "hiddenElements": [
+    "new-corner-wall-cabinet-60-1760788779197"
+  ],
+  "active2DView": "plan",
+  "totalElements": 18
+}
+[2025-10-18T13:55:01.971Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Element HIDDEN in plan view: {
+  "id": "new-corner-wall-cabinet-60-1760788779197"
+}
+[2025-10-18T13:55:01.972Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Elements to render after filtering: 17
+[2025-10-18T13:55:01.974Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Rendering with currentViewInfo: {
+  "direction": "plan",
+  "hiddenElements": [
+    "new-corner-wall-cabinet-60-1760788779197"
+  ],
+  "active2DView": "plan",
+  "totalElements": 18
+}
+[2025-10-18T13:55:01.975Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Element HIDDEN in plan view: {
+  "id": "new-corner-wall-cabinet-60-1760788779197"
+}
+[2025-10-18T13:55:01.976Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Elements to render after filtering: 17
+[2025-10-18T13:55:01.982Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Rendering with currentViewInfo: {
+  "direction": "plan",
+  "hiddenElements": [
+    "new-corner-wall-cabinet-60-1760788779197"
+  ],
+  "active2DView": "plan",
+  "totalElements": 18
+}
+[2025-10-18T13:55:01.983Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Element HIDDEN in plan view: {
+  "id": "new-corner-wall-cabinet-60-1760788779197"
+}
+[2025-10-18T13:55:01.985Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Elements to render after filtering: 17
+[2025-10-18T13:55:01.986Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Rendering with currentViewInfo: {
+  "direction": "plan",
+  "hiddenElements": [
+    "new-corner-wall-cabinet-60-1760788779197"
+  ],
+  "active2DView": "plan",
+  "totalElements": 18
+}
+[2025-10-18T13:55:01.988Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Element HIDDEN in plan view: {
+  "id": "new-corner-wall-cabinet-60-1760788779197"
+}
+[2025-10-18T13:55:01.989Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Elements to render after filtering: 17
+[2025-10-18T13:55:01.996Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Rendering with currentViewInfo: {
+  "direction": "plan",
+  "hiddenElements": [
+    "new-corner-wall-cabinet-60-1760788779197"
+  ],
+  "active2DView": "plan",
+  "totalElements": 18
+}
+[2025-10-18T13:55:01.997Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Element HIDDEN in plan view: {
+  "id": "new-corner-wall-cabinet-60-1760788779197"
+}
+[2025-10-18T13:55:01.999Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Elements to render after filtering: 17
+[2025-10-18T13:55:02.000Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Rendering with currentViewInfo: {
+  "direction": "plan",
+  "hiddenElements": [
+    "new-corner-wall-cabinet-60-1760788779197"
+  ],
+  "active2DView": "plan",
+  "totalElements": 18
+}
+[2025-10-18T13:55:02.002Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Element HIDDEN in plan view: {
+  "id": "new-corner-wall-cabinet-60-1760788779197"
+}
+[2025-10-18T13:55:02.003Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Elements to render after filtering: 17
+[2025-10-18T13:55:02.029Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Rendering with currentViewInfo: {
+  "direction": "plan",
+  "hiddenElements": [
+    "new-corner-wall-cabinet-60-1760788779197"
+  ],
+  "active2DView": "plan",
+  "totalElements": 18
+}
+[2025-10-18T13:55:02.030Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Element HIDDEN in plan view: {
+  "id": "new-corner-wall-cabinet-60-1760788779197"
+}
+[2025-10-18T13:55:02.031Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Elements to render after filtering: 17
+[2025-10-18T13:55:02.033Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Rendering with currentViewInfo: {
+  "direction": "plan",
+  "hiddenElements": [
+    "new-corner-wall-cabinet-60-1760788779197"
+  ],
+  "active2DView": "plan",
+  "totalElements": 18
+}
+[2025-10-18T13:55:02.035Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Element HIDDEN in plan view: {
+  "id": "new-corner-wall-cabinet-60-1760788779197"
+}
+[2025-10-18T13:55:02.036Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Elements to render after filtering: 17
+[2025-10-18T13:55:02.222Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Rendering with currentViewInfo: {
+  "direction": "plan",
+  "hiddenElements": [
+    "new-corner-wall-cabinet-60-1760788779197"
+  ],
+  "active2DView": "plan",
+  "totalElements": 18
+}
+[2025-10-18T13:55:02.224Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Element HIDDEN in plan view: {
+  "id": "new-corner-wall-cabinet-60-1760788779197"
+}
+[2025-10-18T13:55:02.225Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Elements to render after filtering: 17
+[2025-10-18T13:55:02.227Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Rendering with currentViewInfo: {
+  "direction": "plan",
+  "hiddenElements": [
+    "new-corner-wall-cabinet-60-1760788779197"
+  ],
+  "active2DView": "plan",
+  "totalElements": 18
+}
+[2025-10-18T13:55:02.228Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Element HIDDEN in plan view: {
+  "id": "new-corner-wall-cabinet-60-1760788779197"
+}
+[2025-10-18T13:55:02.229Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Elements to render after filtering: 17
+[2025-10-18T13:55:02.233Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Rendering with currentViewInfo: {
+  "direction": "plan",
+  "hiddenElements": [
+    "new-corner-wall-cabinet-60-1760788779197"
+  ],
+  "active2DView": "plan",
+  "totalElements": 18
+}
+[2025-10-18T13:55:02.235Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Element HIDDEN in plan view: {
+  "id": "new-corner-wall-cabinet-60-1760788779197"
+}
+[2025-10-18T13:55:02.236Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Elements to render after filtering: 17
+[2025-10-18T13:55:02.238Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Rendering with currentViewInfo: {
+  "direction": "plan",
+  "hiddenElements": [
+    "new-corner-wall-cabinet-60-1760788779197"
+  ],
+  "active2DView": "plan",
+  "totalElements": 18
+}
+[2025-10-18T13:55:02.240Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Element HIDDEN in plan view: {
+  "id": "new-corner-wall-cabinet-60-1760788779197"
+}
+[2025-10-18T13:55:02.241Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Elements to render after filtering: 17
+[2025-10-18T13:55:02.245Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Rendering with currentViewInfo: {
+  "direction": "plan",
+  "hiddenElements": [
+    "new-corner-wall-cabinet-60-1760788779197"
+  ],
+  "active2DView": "plan",
+  "totalElements": 18
+}
+[2025-10-18T13:55:02.247Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Element HIDDEN in plan view: {
+  "id": "new-corner-wall-cabinet-60-1760788779197"
+}
+[2025-10-18T13:55:02.248Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Elements to render after filtering: 17
+[2025-10-18T13:55:02.250Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Rendering with currentViewInfo: {
+  "direction": "plan",
+  "hiddenElements": [
+    "new-corner-wall-cabinet-60-1760788779197"
+  ],
+  "active2DView": "plan",
+  "totalElements": 18
+}
+[2025-10-18T13:55:02.251Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Element HIDDEN in plan view: {
+  "id": "new-corner-wall-cabinet-60-1760788779197"
+}
+[2025-10-18T13:55:02.252Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Elements to render after filtering: 17
+[2025-10-18T13:55:02.260Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Rendering with currentViewInfo: {
+  "direction": "plan",
+  "hiddenElements": [
+    "new-corner-wall-cabinet-60-1760788779197"
+  ],
+  "active2DView": "plan",
+  "totalElements": 18
+}
+[2025-10-18T13:55:02.262Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Element HIDDEN in plan view: {
+  "id": "new-corner-wall-cabinet-60-1760788779197"
+}
+[2025-10-18T13:55:02.263Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Elements to render after filtering: 17
+[2025-10-18T13:55:02.265Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Rendering with currentViewInfo: {
+  "direction": "plan",
+  "hiddenElements": [
+    "new-corner-wall-cabinet-60-1760788779197"
+  ],
+  "active2DView": "plan",
+  "totalElements": 18
+}
+[2025-10-18T13:55:02.266Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Element HIDDEN in plan view: {
+  "id": "new-corner-wall-cabinet-60-1760788779197"
+}
+[2025-10-18T13:55:02.268Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Elements to render after filtering: 17
+[2025-10-18T13:55:02.722Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Rendering with currentViewInfo: {
+  "direction": "plan",
+  "hiddenElements": [
+    "new-corner-wall-cabinet-60-1760788779197"
+  ],
+  "active2DView": "plan",
+  "totalElements": 18
+}
+[2025-10-18T13:55:02.723Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Element HIDDEN in plan view: {
+  "id": "new-corner-wall-cabinet-60-1760788779197"
+}
+[2025-10-18T13:55:02.725Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Elements to render after filtering: 17
+[2025-10-18T13:55:02.727Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Rendering with currentViewInfo: {
+  "direction": "plan",
+  "hiddenElements": [
+    "new-corner-wall-cabinet-60-1760788779197"
+  ],
+  "active2DView": "plan",
+  "totalElements": 18
+}
+[2025-10-18T13:55:02.728Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Element HIDDEN in plan view: {
+  "id": "new-corner-wall-cabinet-60-1760788779197"
+}
+[2025-10-18T13:55:02.729Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Elements to render after filtering: 17
+[2025-10-18T13:55:10.833Z] 📝 [LOG] 💾 [ProjectContext] Auto-saving design...
+[2025-10-18T13:55:10.836Z] 📝 [LOG] 💾 [ProjectContext] Saving current design... {
+  "roomId": "ff110bba-6ec1-4a40-a799-b8d4aa0b6d1f",
+  "showNotification": false
+}
+[2025-10-18T13:55:11.080Z] 📝 [LOG] ✅ [CompactComponentSidebar] Component sidebar rendered successfully
+[2025-10-18T13:55:11.082Z] 📝 [LOG] ✅ [CompactComponentSidebar] Summary: 226 total, 126 for kitchen, 10 categories
+[2025-10-18T13:55:11.100Z] 📝 [LOG] 🎯 [PerformanceMonitor] Performance monitor hidden
+[2025-10-18T13:55:11.104Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Rendering with currentViewInfo: {
+  "direction": "plan",
+  "hiddenElements": [
+    "new-corner-wall-cabinet-60-1760788779197"
+  ],
+  "active2DView": "plan",
+  "totalElements": 18
+}
+[2025-10-18T13:55:11.105Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Element HIDDEN in plan view: {
+  "id": "new-corner-wall-cabinet-60-1760788779197"
+}
+[2025-10-18T13:55:11.107Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Elements to render after filtering: 17
+[2025-10-18T13:55:11.108Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Rendering with currentViewInfo: {
+  "direction": "plan",
+  "hiddenElements": [
+    "new-corner-wall-cabinet-60-1760788779197"
+  ],
+  "active2DView": "plan",
+  "totalElements": 18
+}
+[2025-10-18T13:55:11.111Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Element HIDDEN in plan view: {
+  "id": "new-corner-wall-cabinet-60-1760788779197"
+}
+[2025-10-18T13:55:11.113Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Elements to render after filtering: 17
+[2025-10-18T13:55:11.116Z] 📝 [LOG] 🏗️ [CoordinateEngine] Initialized with inner room dimensions: {
+  "innerWidth": 600,
+  "innerHeight": 400,
+  "ceilingHeight": 240,
+  "wallThickness": 10
+}
+[2025-10-18T13:55:11.117Z] 📝 [LOG] 🏗️ [DesignCanvas2D] Coordinate engine initialized for room: {
+  "width": 600,
+  "height": 400
+}
+[2025-10-18T13:55:11.120Z] 📝 [LOG] 🚀 [DesignCanvas2D] Preloaded component behaviors and room config
+[2025-10-18T13:55:11.130Z] 📝 [LOG] ✅ [CompactComponentSidebar] Component sidebar rendered successfully
+[2025-10-18T13:55:11.132Z] 📝 [LOG] ✅ [CompactComponentSidebar] Summary: 226 total, 126 for kitchen, 10 categories
+[2025-10-18T13:55:11.147Z] 📝 [LOG] 🎯 [PerformanceMonitor] Performance monitor hidden
+[2025-10-18T13:55:11.151Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Rendering with currentViewInfo: {
+  "direction": "plan",
+  "hiddenElements": [
+    "new-corner-wall-cabinet-60-1760788779197"
+  ],
+  "active2DView": "plan",
+  "totalElements": 18
+}
+[2025-10-18T13:55:11.153Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Element HIDDEN in plan view: {
+  "id": "new-corner-wall-cabinet-60-1760788779197"
+}
+[2025-10-18T13:55:11.155Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Elements to render after filtering: 17
+[2025-10-18T13:55:11.157Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Rendering with currentViewInfo: {
+  "direction": "plan",
+  "hiddenElements": [
+    "new-corner-wall-cabinet-60-1760788779197"
+  ],
+  "active2DView": "plan",
+  "totalElements": 18
+}
+[2025-10-18T13:55:11.160Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Element HIDDEN in plan view: {
+  "id": "new-corner-wall-cabinet-60-1760788779197"
+}
+[2025-10-18T13:55:11.163Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Elements to render after filtering: 17
+[2025-10-18T13:55:40.838Z] 📝 [LOG] 💾 [ProjectContext] Auto-saving design...
+[2025-10-18T13:55:40.841Z] 📝 [LOG] 💾 [ProjectContext] Saving current design... {
+  "roomId": "ff110bba-6ec1-4a40-a799-b8d4aa0b6d1f",
+  "showNotification": false
+}
+[2025-10-18T13:55:40.970Z] 📝 [LOG] ✅ [CompactComponentSidebar] Component sidebar rendered successfully
+[2025-10-18T13:55:40.973Z] 📝 [LOG] ✅ [CompactComponentSidebar] Summary: 226 total, 126 for kitchen, 10 categories
+[2025-10-18T13:55:40.984Z] 📝 [LOG] 🎯 [PerformanceMonitor] Performance monitor hidden
+[2025-10-18T13:55:40.988Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Rendering with currentViewInfo: {
+  "direction": "plan",
+  "hiddenElements": [
+    "new-corner-wall-cabinet-60-1760788779197"
+  ],
+  "active2DView": "plan",
+  "totalElements": 18
+}
+[2025-10-18T13:55:40.990Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Element HIDDEN in plan view: {
+  "id": "new-corner-wall-cabinet-60-1760788779197"
+}
+[2025-10-18T13:55:40.991Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Elements to render after filtering: 17
+[2025-10-18T13:55:40.994Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Rendering with currentViewInfo: {
+  "direction": "plan",
+  "hiddenElements": [
+    "new-corner-wall-cabinet-60-1760788779197"
+  ],
+  "active2DView": "plan",
+  "totalElements": 18
+}
+[2025-10-18T13:55:40.995Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Element HIDDEN in plan view: {
+  "id": "new-corner-wall-cabinet-60-1760788779197"
+}
+[2025-10-18T13:55:40.997Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Elements to render after filtering: 17
+[2025-10-18T13:55:41.001Z] 📝 [LOG] 🏗️ [CoordinateEngine] Initialized with inner room dimensions: {
+  "innerWidth": 600,
+  "innerHeight": 400,
+  "ceilingHeight": 240,
+  "wallThickness": 10
+}
+[2025-10-18T13:55:41.002Z] 📝 [LOG] 🏗️ [DesignCanvas2D] Coordinate engine initialized for room: {
+  "width": 600,
+  "height": 400
+}
+[2025-10-18T13:55:41.006Z] 📝 [LOG] 🚀 [DesignCanvas2D] Preloaded component behaviors and room config
+[2025-10-18T13:55:41.015Z] 📝 [LOG] ✅ [CompactComponentSidebar] Component sidebar rendered successfully
+[2025-10-18T13:55:41.018Z] 📝 [LOG] ✅ [CompactComponentSidebar] Summary: 226 total, 126 for kitchen, 10 categories
+[2025-10-18T13:55:41.032Z] 📝 [LOG] 🎯 [PerformanceMonitor] Performance monitor hidden
+[2025-10-18T13:55:41.035Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Rendering with currentViewInfo: {
+  "direction": "plan",
+  "hiddenElements": [
+    "new-corner-wall-cabinet-60-1760788779197"
+  ],
+  "active2DView": "plan",
+  "totalElements": 18
+}
+[2025-10-18T13:55:41.037Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Element HIDDEN in plan view: {
+  "id": "new-corner-wall-cabinet-60-1760788779197"
+}
+[2025-10-18T13:55:41.040Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Elements to render after filtering: 17
+[2025-10-18T13:55:41.043Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Rendering with currentViewInfo: {
+  "direction": "plan",
+  "hiddenElements": [
+    "new-corner-wall-cabinet-60-1760788779197"
+  ],
+  "active2DView": "plan",
+  "totalElements": 18
+}
+[2025-10-18T13:55:41.046Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Element HIDDEN in plan view: {
+  "id": "new-corner-wall-cabinet-60-1760788779197"
+}
+[2025-10-18T13:55:41.048Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Elements to render after filtering: 17
+[2025-10-18T13:56:10.836Z] 📝 [LOG] 💾 [ProjectContext] Auto-saving design...
+[2025-10-18T13:56:10.839Z] 📝 [LOG] 💾 [ProjectContext] Saving current design... {
+  "roomId": "ff110bba-6ec1-4a40-a799-b8d4aa0b6d1f",
+  "showNotification": false
+}
+[2025-10-18T13:56:10.910Z] 📝 [LOG] ✅ [CompactComponentSidebar] Component sidebar rendered successfully
+[2025-10-18T13:56:10.913Z] 📝 [LOG] ✅ [CompactComponentSidebar] Summary: 226 total, 126 for kitchen, 10 categories
+[2025-10-18T13:56:10.924Z] 📝 [LOG] 🎯 [PerformanceMonitor] Performance monitor hidden
+[2025-10-18T13:56:10.929Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Rendering with currentViewInfo: {
+  "direction": "plan",
+  "hiddenElements": [
+    "new-corner-wall-cabinet-60-1760788779197"
+  ],
+  "active2DView": "plan",
+  "totalElements": 18
+}
+[2025-10-18T13:56:10.931Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Element HIDDEN in plan view: {
+  "id": "new-corner-wall-cabinet-60-1760788779197"
+}
+[2025-10-18T13:56:10.932Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Elements to render after filtering: 17
+[2025-10-18T13:56:10.934Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Rendering with currentViewInfo: {
+  "direction": "plan",
+  "hiddenElements": [
+    "new-corner-wall-cabinet-60-1760788779197"
+  ],
+  "active2DView": "plan",
+  "totalElements": 18
+}
+[2025-10-18T13:56:10.937Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Element HIDDEN in plan view: {
+  "id": "new-corner-wall-cabinet-60-1760788779197"
+}
+[2025-10-18T13:56:10.939Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Elements to render after filtering: 17
+[2025-10-18T13:56:10.942Z] 📝 [LOG] 🏗️ [CoordinateEngine] Initialized with inner room dimensions: {
+  "innerWidth": 600,
+  "innerHeight": 400,
+  "ceilingHeight": 240,
+  "wallThickness": 10
+}
+[2025-10-18T13:56:10.945Z] 📝 [LOG] 🏗️ [DesignCanvas2D] Coordinate engine initialized for room: {
+  "width": 600,
+  "height": 400
+}
+[2025-10-18T13:56:10.947Z] 📝 [LOG] 🚀 [DesignCanvas2D] Preloaded component behaviors and room config
+[2025-10-18T13:56:10.956Z] 📝 [LOG] ✅ [CompactComponentSidebar] Component sidebar rendered successfully
+[2025-10-18T13:56:10.958Z] 📝 [LOG] ✅ [CompactComponentSidebar] Summary: 226 total, 126 for kitchen, 10 categories
+[2025-10-18T13:56:10.972Z] 📝 [LOG] 🎯 [PerformanceMonitor] Performance monitor hidden
+[2025-10-18T13:56:10.977Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Rendering with currentViewInfo: {
+  "direction": "plan",
+  "hiddenElements": [
+    "new-corner-wall-cabinet-60-1760788779197"
+  ],
+  "active2DView": "plan",
+  "totalElements": 18
+}
+[2025-10-18T13:56:10.979Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Element HIDDEN in plan view: {
+  "id": "new-corner-wall-cabinet-60-1760788779197"
+}
+[2025-10-18T13:56:10.982Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Elements to render after filtering: 17
+[2025-10-18T13:56:10.984Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Rendering with currentViewInfo: {
+  "direction": "plan",
+  "hiddenElements": [
+    "new-corner-wall-cabinet-60-1760788779197"
+  ],
+  "active2DView": "plan",
+  "totalElements": 18
+}
+[2025-10-18T13:56:10.988Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Element HIDDEN in plan view: {
+  "id": "new-corner-wall-cabinet-60-1760788779197"
+}
+[2025-10-18T13:56:10.990Z] 📝 [LOG] 🎨 [CANVAS DEBUG] Elements to render after filtering: 17
+
+================================================================================
+END OF LOGS (802 entries)
+================================================================================

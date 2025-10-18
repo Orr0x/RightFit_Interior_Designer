@@ -384,7 +384,7 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
   const { toast } = useToast();
 
   // Component metadata for layer-aware selection
-  const { getComponentMetadata } = useComponentMetadata();
+  const { getComponentMetadata, loading: metadataLoading } = useComponentMetadata();
 
   // Use design dimensions (required)
   // If roomDimensions is missing, this indicates a data integrity error
@@ -2896,6 +2896,15 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
       }
     }
   }, [fitToScreenSignal, roomDimensions, getWallHeight, currentViewInfo.direction]);
+
+  // Wait for component metadata to load before rendering (prevents height flash bug)
+  if (metadataLoading) {
+    return (
+      <div className="w-full h-full flex items-center justify-center bg-gray-50">
+        <div className="text-gray-500">Loading component data...</div>
+      </div>
+    );
+  }
 
   return (
     <div
