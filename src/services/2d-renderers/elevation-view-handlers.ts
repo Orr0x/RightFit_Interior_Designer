@@ -37,7 +37,12 @@ export function renderStandardCabinet(
   const doorStyle = data.door_style ?? 'flat';
   const handleStyle = data.handle_style ?? 'bar';
   const handlePosition = data.handle_position ?? 'center';
-  const hasToeKick = data.has_toe_kick ?? false;
+
+  // ✨ FIX: Toe kicks only for base cabinets (floor-mounted)
+  // Wall cabinets have Z > 100cm, so they shouldn't show toe kicks
+  const isWallMounted = (element.z && element.z > 100) || false;
+  const hasToeKick = isWallMounted ? false : (data.has_toe_kick ?? false);
+
   const toeKickHeight = (data.toe_kick_height ?? 10) * zoom;
   const drawerCount = data.drawer_count ?? 0;
   const drawerHeights = data.drawer_heights ?? [];
