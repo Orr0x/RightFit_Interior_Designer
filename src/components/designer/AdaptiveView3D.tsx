@@ -489,6 +489,7 @@ export const AdaptiveView3D: React.FC<AdaptiveView3DProps> = ({
     if (!design?.elements) return [];
 
     // Get the 3D view config to check hidden_elements
+    // FIX: Don't use fallback - we need to detect when elevationViews prop changes
     const views = elevationViews || getElevationViews();
     const view3D = views.find(v => v.id === '3d');
     const hiddenElementIds = view3D?.hidden_elements || [];
@@ -496,7 +497,8 @@ export const AdaptiveView3D: React.FC<AdaptiveView3DProps> = ({
     console.log('🎨 [3D VIEW DEBUG] Filtering elements:', {
       totalElements: design.elements.length,
       hiddenElementIds,
-      view3DConfig: view3D
+      view3DConfig: view3D,
+      elevationViewsProp: elevationViews ? 'provided' : 'using fallback'
     });
 
     // Filter out hidden elements
@@ -518,7 +520,7 @@ export const AdaptiveView3D: React.FC<AdaptiveView3DProps> = ({
     });
 
     return limited;
-  }, [design?.elements, currentQuality?.maxElements, elevationViews]);
+  }, [design?.elements, currentQuality?.maxElements, elevationViews, JSON.stringify(elevationViews)]);
 
   // Initialize performance detection
   useEffect(() => {
