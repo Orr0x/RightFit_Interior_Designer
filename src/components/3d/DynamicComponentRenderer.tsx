@@ -154,9 +154,13 @@ export const DynamicComponentRenderer: React.FC<DynamicComponentRendererProps> =
   // Calculate position and rotation
   const { x, z } = convertTo3D(element.x, element.y, roomDimensions.width, roomDimensions.height);
 
-  // Y position depends on cabinet type
+  // Y position for database-driven models
+  // Database geometry_parts have their own position_y values, so we don't add height/2 offset
+  // The geometry_parts position_y already accounts for proper placement:
+  //   - Base cabinets: plinth at Y=0.075 (bottom at ground), cabinet at Y=height/2+0.15
+  //   - Wall cabinets: mounted at proper height (140cm+ from floor)
   const height = element.height / 100; // meters
-  const yPosition = isWallCabinet ? 2.0 - height / 2 : height / 2;
+  const yPosition = isWallCabinet ? 1.4 + height / 2 : 0; // Wall at 140cm, base at ground
 
   // Calculate dimensions for rotation pivot
   const width = element.width / 100; // meters
