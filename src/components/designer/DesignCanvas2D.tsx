@@ -1945,28 +1945,38 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
       totalElements: design.elements.length
     });
 
-    let elementsToRender = active2DView === 'plan'
-      ? design.elements
-      : design.elements.filter(el => {
-          const wall = getElementWall(el);
-          const isCornerVisible = isCornerVisibleInView(el, currentViewInfo.direction);
+    // Filter elements based on view type
+    let elementsToRender = design.elements.filter(el => {
+      // For plan view: only check per-view hidden_elements (no direction filtering)
+      if (active2DView === 'plan') {
+        const isHiddenInView = currentViewInfo.hiddenElements.includes(el.id);
+        if (isHiddenInView) {
+          console.log('🎨 [CANVAS DEBUG] Element HIDDEN in plan view:', { id: el.id });
+          return false;
+        }
+        return true;
+      }
 
-          // Check direction visibility
-          const isDirectionVisible = wall === currentViewInfo.direction || wall === 'center' || isCornerVisible;
-          if (!isDirectionVisible) {
-            console.log('🎨 [CANVAS DEBUG] Element filtered by direction:', { id: el.id, wall, viewDirection: currentViewInfo.direction });
-            return false;
-          }
+      // For elevation views: check both direction AND hidden_elements
+      const wall = getElementWall(el);
+      const isCornerVisible = isCornerVisibleInView(el, currentViewInfo.direction);
 
-          // Check if element is hidden in this specific view
-          const isHiddenInView = currentViewInfo.hiddenElements.includes(el.id);
-          if (isHiddenInView) {
-            console.log('🎨 [CANVAS DEBUG] Element HIDDEN by per-view filter:', { id: el.id, viewId: active2DView });
-            return false;
-          }
+      // Check direction visibility
+      const isDirectionVisible = wall === currentViewInfo.direction || wall === 'center' || isCornerVisible;
+      if (!isDirectionVisible) {
+        console.log('🎨 [CANVAS DEBUG] Element filtered by direction:', { id: el.id, wall, viewDirection: currentViewInfo.direction });
+        return false;
+      }
 
-          return true;
-        });
+      // Check if element is hidden in this specific view
+      const isHiddenInView = currentViewInfo.hiddenElements.includes(el.id);
+      if (isHiddenInView) {
+        console.log('🎨 [CANVAS DEBUG] Element HIDDEN by per-view filter:', { id: el.id, viewId: active2DView });
+        return false;
+      }
+
+      return true;
+    });
 
     console.log('🎨 [CANVAS DEBUG] Elements to render after filtering:', elementsToRender.length);
 
@@ -2050,18 +2060,22 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
     const roomPos = canvasToRoom(x, y);
     
     // Filter and sort elements the same way as rendering (but in reverse order for selection)
-    let elementsToCheck = active2DView === 'plan'
-      ? design.elements
-      : design.elements.filter(el => {
-          const wall = getElementWall(el);
-          const isCornerVisible = isCornerVisibleInView(el, currentViewInfo.direction);
+    let elementsToCheck = design.elements.filter(el => {
+      // For plan view: only check per-view hidden_elements
+      if (active2DView === 'plan') {
+        return !currentViewInfo.hiddenElements.includes(el.id);
+      }
 
-          // Check direction visibility
-          const isDirectionVisible = wall === currentViewInfo.direction || wall === 'center' || isCornerVisible;
-          if (!isDirectionVisible) return false;
+      // For elevation views: check both direction AND hidden_elements
+      const wall = getElementWall(el);
+      const isCornerVisible = isCornerVisibleInView(el, currentViewInfo.direction);
 
-          // Check if element is hidden in this specific view
-          if (currentViewInfo.hiddenElements.includes(el.id)) return false;
+      // Check direction visibility
+      const isDirectionVisible = wall === currentViewInfo.direction || wall === 'center' || isCornerVisible;
+      if (!isDirectionVisible) return false;
+
+      // Check if element is hidden in this specific view
+      if (currentViewInfo.hiddenElements.includes(el.id)) return false;
 
           return true;
         });
@@ -2159,21 +2173,25 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
       const roomPos = canvasToRoom(x, y);
       
       // Use same filtering and ordering as selection for hover detection
-      let elementsToCheck = active2DView === 'plan'
-        ? design.elements
-        : design.elements.filter(el => {
-            const wall = getElementWall(el);
-            const isCornerVisible = isCornerVisibleInView(el, currentViewInfo.direction);
+      let elementsToCheck = design.elements.filter(el => {
+        // For plan view: only check per-view hidden_elements
+        if (active2DView === 'plan') {
+          return !currentViewInfo.hiddenElements.includes(el.id);
+        }
 
-            // Check direction visibility
-            const isDirectionVisible = wall === currentViewInfo.direction || wall === 'center' || isCornerVisible;
-            if (!isDirectionVisible) return false;
+        // For elevation views: check both direction AND hidden_elements
+        const wall = getElementWall(el);
+        const isCornerVisible = isCornerVisibleInView(el, currentViewInfo.direction);
 
-            // Check if element is hidden in this specific view
-            if (currentViewInfo.hiddenElements.includes(el.id)) return false;
+        // Check direction visibility
+        const isDirectionVisible = wall === currentViewInfo.direction || wall === 'center' || isCornerVisible;
+        if (!isDirectionVisible) return false;
 
-            return true;
-          });
+        // Check if element is hidden in this specific view
+        if (currentViewInfo.hiddenElements.includes(el.id)) return false;
+
+        return true;
+      });
 
       // ⚠️ COMMENTED OUT 2025-10-18: Global isVisible replaced by per-view hidden_elements
       // Already filtered by per-view hidden_elements system above
@@ -2469,21 +2487,25 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
         const roomPos = canvasToRoom(x, y);
         
         // Use same filtering and ordering as selection for hover detection
-        let elementsToCheck = active2DView === 'plan'
-          ? design.elements
-          : design.elements.filter(el => {
-              const wall = getElementWall(el);
-              const isCornerVisible = isCornerVisibleInView(el, currentViewInfo.direction);
+        let elementsToCheck = design.elements.filter(el => {
+          // For plan view: only check per-view hidden_elements
+          if (active2DView === 'plan') {
+            return !currentViewInfo.hiddenElements.includes(el.id);
+          }
 
-              // Check direction visibility
-              const isDirectionVisible = wall === currentViewInfo.direction || wall === 'center' || isCornerVisible;
-              if (!isDirectionVisible) return false;
+          // For elevation views: check both direction AND hidden_elements
+          const wall = getElementWall(el);
+          const isCornerVisible = isCornerVisibleInView(el, currentViewInfo.direction);
 
-              // Check if element is hidden in this specific view
-              if (currentViewInfo.hiddenElements.includes(el.id)) return false;
+          // Check direction visibility
+          const isDirectionVisible = wall === currentViewInfo.direction || wall === 'center' || isCornerVisible;
+          if (!isDirectionVisible) return false;
 
-              return true;
-            });
+          // Check if element is hidden in this specific view
+          if (currentViewInfo.hiddenElements.includes(el.id)) return false;
+
+          return true;
+        });
 
         // ⚠️ COMMENTED OUT 2025-10-18: Global isVisible replaced by per-view hidden_elements
         // Already filtered by per-view hidden_elements system above
