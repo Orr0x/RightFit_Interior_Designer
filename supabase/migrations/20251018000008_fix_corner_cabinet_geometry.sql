@@ -144,6 +144,7 @@ ON CONFLICT DO NOTHING;
 -- Recessed 10cm to create toe-kick space
 
 -- Plinth X-leg (horizontal leg of L)
+-- Bottom at Y=0 (ground), top at Y=0.15
 INSERT INTO geometry_parts (
   model_id,
   part_name,
@@ -166,7 +167,7 @@ VALUES (
   '0.15',  -- 15cm plinth height
   'cornerDepth - 0.1',  -- 10cm shallower (recessed)
   '0',
-  '0.075',  -- Center of 15cm plinth (0.15/2 = 0.075)
+  '0.075',  -- Center of 15cm plinth: bottom at Y=0, top at Y=0.15
   'cornerDepth / 2 - legLength / 2 + 0.05',  -- Match cabinet position but recessed
   'plinth',
   'plinthColor',
@@ -175,6 +176,7 @@ VALUES (
 ON CONFLICT DO NOTHING;
 
 -- Plinth Z-leg (vertical leg of L)
+-- Bottom at Y=0 (ground), top at Y=0.15
 INSERT INTO geometry_parts (
   model_id,
   part_name,
@@ -197,7 +199,7 @@ VALUES (
   '0.15',  -- 15cm plinth height
   'legLength - 0.1',  -- 10cm shallower (recessed)
   'cornerDepth / 2 - legLength / 2 + 0.05',  -- Match cabinet position but recessed
-  '0.075',  -- Center of 15cm plinth (0.15/2 = 0.075)
+  '0.075',  -- Center of 15cm plinth: bottom at Y=0, top at Y=0.15
   '0',
   'plinth',
   'plinthColor',
@@ -205,8 +207,11 @@ VALUES (
 )
 ON CONFLICT DO NOTHING;
 
--- Raise cabinet body to sit on top of plinth (15cm above ground)
--- Cabinet parts use position_y = 0 (centered), so we raise to position_y = height/2 + 0.15
+-- Raise cabinet body to sit on top of plinth
+-- Wall cabinet parts have position_y=0 (centered on Y-axis)
+-- For base cabinet: bottom should be at Y=0.15, so center at Y = 0.15 + height/2
+-- BUT: position_y=0 means bottom at -height/2, top at +height/2
+-- SO: we need position_y = height/2 + 0.15 to get bottom at 0.15
 UPDATE geometry_parts
 SET position_y = 'height / 2 + 0.15'
 WHERE model_id = (SELECT id FROM component_3d_models WHERE component_id = 'corner-cabinet')
