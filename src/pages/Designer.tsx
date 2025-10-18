@@ -366,6 +366,28 @@ const Designer = () => {
     }
   }, [elevationViews, currentRoomDesign, updateCurrentRoomDesign]);
 
+  const handleToggleElementVisibility = useCallback(async (elementId: string, viewId: string) => {
+    const { toggleElementVisibility, isElementVisibleInView } = await import('@/utils/elevationViewHelpers');
+
+    const isCurrentlyVisible = isElementVisibleInView(elementId, viewId, elevationViews);
+    const updated = toggleElementVisibility(viewId, elementId, elevationViews);
+
+    if (updated) {
+      setElevationViews(updated);
+      await updateCurrentRoomDesign({
+        design_settings: {
+          ...currentRoomDesign?.design_settings,
+          elevation_views: updated
+        }
+      });
+
+      const action = isCurrentlyVisible ? 'hidden' : 'shown';
+      toast.success(`Element ${action} in this view`);
+    } else {
+      toast.error('Failed to toggle element visibility');
+    }
+  }, [elevationViews, currentRoomDesign, updateCurrentRoomDesign]);
+
   // Toolbar functions
   const handleToolChange = (tool: 'select' | 'fit-screen' | 'pan' | 'tape-measure' | 'none') => {
     setActiveTool(tool);
@@ -1016,6 +1038,8 @@ const Designer = () => {
                     onUpdateRoomDimensions={handleUpdateRoomDimensions}
                     roomType={design.roomType}
                     active2DView={active2DView}
+                    elevationViews={elevationViews}
+                    onToggleElementVisibility={handleToggleElementVisibility}
                   />
                 </>
               )}

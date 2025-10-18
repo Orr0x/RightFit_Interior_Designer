@@ -8,9 +8,9 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Badge } from '@/components/ui/badge';
-import { DesignElement, RoomType, RoomDimensions } from '@/types/project';
+import { DesignElement, RoomType, RoomDimensions, ElevationViewConfig } from '@/types/project';
 import { View2DMode } from '@/components/designer/ViewSelector';
-import { Ruler, Palette, Settings, Home, Wrench, Layers, Sparkles, RotateCcw, RotateCw } from 'lucide-react';
+import { Ruler, Palette, Settings, Home, Wrench, Layers, Sparkles, RotateCcw, RotateCw, Eye, EyeOff } from 'lucide-react';
 
 interface PropertiesPanelProps {
   selectedElement: DesignElement | null;
@@ -19,6 +19,8 @@ interface PropertiesPanelProps {
   onUpdateRoomDimensions: (dimensions: { width: number; height: number; ceilingHeight?: number }) => void;
   roomType: RoomType;
   active2DView: View2DMode;
+  elevationViews?: ElevationViewConfig[];
+  onToggleElementVisibility?: (elementId: string, viewId: string) => void;
 }
 
 export const PropertiesPanel: React.FC<PropertiesPanelProps> = ({
@@ -27,7 +29,9 @@ export const PropertiesPanel: React.FC<PropertiesPanelProps> = ({
   roomDimensions,
   onUpdateRoomDimensions,
   roomType,
-  active2DView
+  active2DView,
+  elevationViews,
+  onToggleElementVisibility
 }) => {
   // Helper functions for proper 3D dimension mapping
   const getElementDepth = (element: DesignElement): number => {
@@ -119,6 +123,20 @@ export const PropertiesPanel: React.FC<PropertiesPanelProps> = ({
   };
 
   const colors = getRoomColors(roomType);
+
+  // Check if element is hidden in current view
+  const isElementHidden = (): boolean => {
+    if (!selectedElement || !elevationViews) return false;
+    const currentView = elevationViews.find(v => v.id === active2DView);
+    if (!currentView) return false;
+    return currentView.hidden_elements?.includes(selectedElement.id) || false;
+  };
+
+  // Handle toggle visibility
+  const handleToggleVisibility = () => {
+    if (!selectedElement || !onToggleElementVisibility) return;
+    onToggleElementVisibility(selectedElement.id, active2DView);
+  };
 
   // Get component-specific options based on room type and element type
   const getComponentOptions = (roomType: RoomType, elementType: string, elementStyle?: string) => {
@@ -668,24 +686,46 @@ export const PropertiesPanel: React.FC<PropertiesPanelProps> = ({
       )}
 
       {/* Quick Actions */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-sm">Quick Actions</CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-2">
-          <Button variant="outline" size="sm" className="w-full text-xs">
-            Duplicate Element
-          </Button>
-          <Button variant="outline" size="sm" className="w-full text-xs">
-            Reset Position
-          </Button>
-          {selectedElement && (
+      {selectedElement && (
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-sm">Quick Actions</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-2">
+            {/* Hide/Show in current view button */}
+            {onToggleElementVisibility && elevationViews && (
+              <Button
+                variant="outline"
+                size="sm"
+                className="w-full text-xs flex items-center justify-center gap-2"
+                onClick={handleToggleVisibility}
+              >
+                {isElementHidden() ? (
+                  <>
+                    <Eye className="h-3 w-3" />
+                    Show in This View
+                  </>
+                ) : (
+                  <>
+                    <EyeOff className="h-3 w-3" />
+                    Hide in This View
+                  </>
+                )}
+              </Button>
+            )}
+
+            <Button variant="outline" size="sm" className="w-full text-xs">
+              Duplicate Element
+            </Button>
+            <Button variant="outline" size="sm" className="w-full text-xs">
+              Reset Position
+            </Button>
             <Button variant="destructive" size="sm" className="w-full text-xs">
               Delete Element
             </Button>
-          )}
-        </CardContent>
-      </Card>
+          </CardContent>
+        </Card>
+      )}
       </div>
     </div>
   );
