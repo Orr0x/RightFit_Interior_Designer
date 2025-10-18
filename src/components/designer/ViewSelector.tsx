@@ -154,41 +154,43 @@ export const ViewSelector: React.FC<ViewSelectorProps> = ({
         {/* Separator */}
         <div className="w-full h-px bg-gray-300 my-1" />
 
-        {/* Elevation Views */}
-        {views.map((view) => {
-          const Icon = DIRECTION_ICONS[view.direction];
-          const isActive = activeView === view.id || (activeView === view.direction && view.is_default);
+        {/* Elevation Views - Only show cardinal direction views (front, back, left, right) */}
+        {views
+          .filter(view => ['front', 'back', 'left', 'right'].includes(view.direction))
+          .map((view) => {
+            const Icon = DIRECTION_ICONS[view.direction as keyof typeof DIRECTION_ICONS];
+            const isActive = activeView === view.id || (activeView === view.direction && view.is_default);
 
-          return (
-            <Tooltip key={view.id} delayDuration={300}>
-              <TooltipTrigger asChild>
-                <Button
-                  size="sm"
-                  variant="ghost"
-                  onClick={() => onViewChange(view.id)}
-                  onContextMenu={(e) => handleContextMenu(e, view.id)}
-                  className={`w-10 h-10 p-0 transition-all duration-200 hover-scale ${
-                    isActive
-                      ? 'bg-blue-600 text-white hover:bg-blue-700 shadow-lg scale-105'
-                      : 'hover:bg-gray-100 text-gray-600 hover:text-gray-900'
-                  }`}
-                >
-                  <Icon className="h-4 w-4" />
-                </Button>
-              </TooltipTrigger>
-              <TooltipContent side="right" className="bg-gray-900 text-white text-xs max-w-xs">
-                <p className="font-medium">{view.label}</p>
-                <p className="text-gray-300">{view.direction.charAt(0).toUpperCase() + view.direction.slice(1)} wall elevation</p>
-                {view.hidden_elements.length > 0 && (
-                  <p className="text-gray-400 text-xs mt-1">
-                    {view.hidden_elements.length} element(s) hidden
-                  </p>
-                )}
-                <p className="text-gray-400 text-xs mt-1 italic">Right-click for options</p>
-              </TooltipContent>
-            </Tooltip>
-          );
-        })}
+            return (
+              <Tooltip key={view.id} delayDuration={300}>
+                <TooltipTrigger asChild>
+                  <Button
+                    size="sm"
+                    variant="ghost"
+                    onClick={() => onViewChange(view.id)}
+                    onContextMenu={(e) => handleContextMenu(e, view.id)}
+                    className={`w-10 h-10 p-0 transition-all duration-200 hover-scale ${
+                      isActive
+                        ? 'bg-blue-600 text-white hover:bg-blue-700 shadow-lg scale-105'
+                        : 'hover:bg-gray-100 text-gray-600 hover:text-gray-900'
+                    }`}
+                  >
+                    <Icon className="h-4 w-4" />
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent side="right" className="bg-gray-900 text-white text-xs max-w-xs">
+                  <p className="font-medium">{view.label}</p>
+                  <p className="text-gray-300">{view.direction.charAt(0).toUpperCase() + view.direction.slice(1)} wall elevation</p>
+                  {view.hidden_elements.length > 0 && (
+                    <p className="text-gray-400 text-xs mt-1">
+                      {view.hidden_elements.length} element(s) hidden
+                    </p>
+                  )}
+                  <p className="text-gray-400 text-xs mt-1 italic">Right-click for options</p>
+                </TooltipContent>
+              </Tooltip>
+            );
+          })}
 
         {/* Rename dialog - inline */}
         {editingViewId && (
