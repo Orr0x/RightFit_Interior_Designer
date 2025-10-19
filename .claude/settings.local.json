@@ -3,7 +3,8 @@
     "allow": [
       "Read(//i//**)",
       "Bash(tail:*)",
-      "Bash(git merge:*)"
+      "Bash(git merge:*)",
+      "Bash(sort:*)"
     ],
     "deny": [],
     "ask": []

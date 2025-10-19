@@ -84,7 +84,6 @@ export const DynamicComponentRenderer: React.FC<DynamicComponentRendererProps> =
 
   const isCornerCabinet = useMemo(() => {
     return element.id.includes('corner-cabinet') ||
-           element.id.includes('l-shaped-test-cabinet') ||
            element.style?.toLowerCase().includes('corner');
   }, [element.id, element.style]);
 
@@ -155,9 +154,13 @@ export const DynamicComponentRenderer: React.FC<DynamicComponentRendererProps> =
   // Calculate position and rotation
   const { x, z } = convertTo3D(element.x, element.y, roomDimensions.width, roomDimensions.height);
 
-  // Y position depends on cabinet type
+  // Y position for database-driven models
+  // Database geometry_parts have their own position_y values, so we don't add height/2 offset
+  // The geometry_parts position_y already accounts for proper placement:
+  //   - Base cabinets: plinth at Y=0.075 (bottom at ground), cabinet at Y=height/2+0.15
+  //   - Wall cabinets: mounted at proper height (140cm+ from floor)
   const height = element.height / 100; // meters
-  const yPosition = isWallCabinet ? 2.0 - height / 2 : height / 2;
+  const yPosition = isWallCabinet ? 1.4 + height / 2 : 0; // Wall at 140cm, base at ground
 
   // Calculate dimensions for rotation pivot
   const width = element.width / 100; // meters
@@ -193,28 +196,19 @@ export const DynamicComponentRenderer: React.FC<DynamicComponentRendererProps> =
 export const preloadCommonComponents = async () => {
   const commonComponents = [
     // Corner cabinets (P0 - most critical)
-    'l-shaped-test-cabinet-60',
-    'l-shaped-test-cabinet-90',
-    'new-corner-wall-cabinet-60',
-    'new-corner-wall-cabinet-90',
-    // Standard cabinets (P1 - not yet populated)
+    'corner-cabinet', // Base corner cabinet (90cm)
+    'larder-corner-unit-90', // Tall corner larder (90cm, 200cm height)
+    'new-corner-wall-cabinet-60', // Wall corner cabinet (60cm)
+    // Standard cabinets (P1 - not yet populated in database)
+    // Note: base-cabinet-60, base-cabinet-80, wall-cabinet-60, wall-cabinet-80
+    // exist in database but may not have 3D models yet
     'base-cabinet-60',
     'base-cabinet-80',
     'wall-cabinet-60',
     'wall-cabinet-80',
-    // Multi-room furniture (Living/Bedroom)
-    'bed-single',
-    'sofa-3-seater',
-    'dining-chair',
-    'dining-table',
-    'tv-55-inch',
-    // Multi-room appliances (Utility)
-    'washing-machine',
-    'tumble-dryer',
-    // Multi-room fixtures (Bathroom)
-    'toilet-standard',
-    'shower-standard',
-    'bathtub-standard',
+    // Appliances (confirmed in database)
+    'dishwasher',
+    'refrigerator',
   ];
 
   try {

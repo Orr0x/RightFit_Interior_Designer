@@ -1,0 +1,18 @@
+id,material_name,material_type,default_color,roughness,metalness,opacity,description,created_at
+053642f0-3b7e-4bef-beff-b14dcab8fbdb,door,standard,#654321,0.60,0.10,1.00,Cabinet door material,2025-10-08 10:51:01.108456+00
+0b2ed0e0-a4b2-46da-b5e1-bc50c93c483c,screen,standard,#000000,0.20,0.80,1.00,TV screen material,2025-10-08 20:13:16.422946+00
+2d93f10d-1203-492f-b57a-24ad2e43de4c,cushion,standard,#4A6F8C,0.90,0.00,1.00,Cushion material,2025-10-08 20:13:16.422946+00
+2e98c371-e04b-421f-b775-fb21926466b9,cabinet_body,standard,#8B7355,0.70,0.10,1.00,Main cabinet body material,2025-10-08 10:51:01.108456+00
+49e50319-b1ed-45e6-84e1-a2ef0caa701a,wood,standard,#8B4513,0.70,0.10,1.00,Wood finish for furniture,2025-10-08 20:13:16.422946+00
+4d3a0aa9-cf42-4edc-b98e-675440f0b442,worktop,standard,#E8E8E8,0.40,0.30,1.00,Counter-top material,2025-10-08 10:51:01.108456+00
+51dc43e7-4110-4e93-9d4e-868e7c79d4ea,metal_leg,standard,#2F4F4F,0.40,0.60,1.00,Metal legs for chairs and tables,2025-10-08 20:13:16.422946+00
+55238c89-c452-469d-8987-fa0a9c2a19dc,handle,standard,#C0C0C0,0.20,0.80,1.00,Metallic handle material,2025-10-08 10:51:01.108456+00
+87453bd5-a6ee-45ab-9dc9-11df1e9b72e3,appliance_glass,standard,#1a3b57,0.10,0.90,0.70,Tinted glass for appliance doors,2025-10-08 20:13:51.848363+00
+943d0085-6c7e-4f2a-a53e-d6f69486bc0f,drum_metal,standard,#888888,0.60,0.70,1.00,Metal drum interior,2025-10-08 20:13:51.848363+00
+9fe1d5f0-d06b-4e4c-a582-187099aeccef,control_panel,standard,#222222,0.30,0.60,1.00,Dark control panel,2025-10-08 20:13:51.848363+00
+cc97400f-6b8e-4a13-b1d1-fd7a9ad53044,mattress,standard,#FFFFFF,0.90,0.00,1.00,Mattress material,2025-10-08 20:13:16.422946+00
+cf30359a-1eb5-4a35-bb15-70ec308ed84d,fabric,standard,#3A6EA5,0.80,0.00,1.00,Upholstered fabric for sofas and chairs,2025-10-08 20:13:16.422946+00
+dd0014b9-333e-4821-a745-a631956229bd,appliance_panel,standard,#f0f0f0,0.60,0.30,1.00,White/light grey appliance panel,2025-10-08 20:13:51.848363+00
+e8795d2a-2540-4568-a465-1cc2714f9ff2,appliance_steel,standard,#D3D3D3,0.30,0.70,1.00,Stainless steel appliances,2025-10-08 10:51:01.108456+00
+ebb9d03e-97a0-4687-8b6c-9fcd04701fa2,plinth,lambert,#5a4a3a,0.80,0.00,1.00,Plinth/toe kick material,2025-10-08 10:51:01.108456+00
+fa56c764-7bf5-4bf7-b3bc-712c2767cca0,sink,standard,#F5F5F5,0.30,0.50,1.00,Sink basin material,2025-10-08 10:51:01.108456+00

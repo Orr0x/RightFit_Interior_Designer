@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git branch:*)",
+      "Bash(git merge feature/view-specific-visibility --no-ff -m \"$(cat <<''EOF''\nMerge feature/view-specific-visibility into main\n\nThis merge brings in the complete per-view visibility system and elevation \nview click selection functionality.\n\n## Major Features\n- Per-view visibility system (plan, front, back, left, right elevations)\n- Elevation view click-to-select with precise hit detection\n- Database height fix (184/184 components - 100% complete)\n- Properties Panel reorganization (Quick Actions first)\n- Code cleanup (removed all commented code and debug logging)\n\n## Key Changes\n- Element visibility now managed per-view via hidden_elements arrays\n- Coordinate system conversion for elevation views (X/Z mapping)\n- Range-based hit detection matching visual rendering\n- SQL migrations properly organized\n- Comprehensive documentation and handover docs\n\n## Testing\n- All elevation views support click selection\n- Properties Panel Quick Actions working\n- Element visibility toggles per-view\n- No console errors or warnings\n\nSee session docs for detailed information:\n- docs/session-2025-10-18-view-specific-visibility/\n- docs/session-2025-10-18-code-cleanup-and-elevation-selection/\n\n🤖 Generated with [Claude Code](https://claude.com/claude-code)\n\nCo-Authored-By: Claude <noreply@anthropic.com>\nEOF\n)\")"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}

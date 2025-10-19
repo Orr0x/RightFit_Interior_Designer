@@ -781,7 +781,7 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
       // ALL corner components use 90cm square dimensions for detection
       const isCornerCounterTop = element.type === 'counter-top' && element.id.includes('counter-top-corner');
       const isCornerWallCabinet = element.type === 'cabinet' && element.id.includes('corner-wall-cabinet');
-      const isCornerBaseCabinet = element.type === 'cabinet' && (element.id.includes('corner-base-cabinet') || element.id.includes('l-shaped-test-cabinet'));
+      const isCornerBaseCabinet = element.type === 'cabinet' && element.id.includes('corner-cabinet');
       const isCornerTallUnit = element.type === 'cabinet' && (
         element.id.includes('corner-tall') || 
         element.id.includes('corner-larder') ||
