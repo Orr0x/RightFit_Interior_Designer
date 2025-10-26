@@ -4,6 +4,7 @@ import { supabase } from '../integrations/supabase/client';
 import { useToast } from '../hooks/use-toast';
 import { useAuth } from './AuthContext';
 import { Json } from '../integrations/supabase/types';
+import isEqual from 'lodash.isequal';
 
 // Helper function to transform database project to TypeScript interface
 function transformProject(dbProject: Record<string, unknown>): Project {
@@ -252,6 +253,11 @@ export function ProjectProvider({ children }: { children: React.ReactNode }) {
   // Refs to avoid stale closures in intervals
   const stateRef = useRef(state);
   const saveCurrentDesignRef = useRef<((showNotification?: boolean) => Promise<void>) | null>(null);
+
+  // Story 1.6: Refs for deep equality tracking to prevent false positives
+  const prevElementsRef = useRef<DesignElement[] | undefined>(undefined);
+  const prevDimensionsRef = useRef<any>(undefined);
+  const debounceTimerRef = useRef<NodeJS.Timeout | null>(null);
   
   // Update refs when values change
   useEffect(() => {
@@ -816,17 +822,19 @@ export function ProjectProvider({ children }: { children: React.ReactNode }) {
         throw new Error('No room design to save');
       }
 
-      console.log('💾 [ProjectContext] Saving current design...', { 
-        roomId: state.currentRoomDesign.id, 
-        showNotification 
+      console.log('💾 [ProjectContext] Saving current design...', {
+        roomId: state.currentRoomDesign.id,
+        showNotification
       });
+
+      // Story 1.6: Optimistic flag clearing - clear BEFORE save
+      dispatch({ type: 'SET_UNSAVED_CHANGES', payload: false });
 
       await updateCurrentRoomDesign({
         updated_at: new Date().toISOString()
       }, showNotification); // Show loading for explicit save operations
 
-      // Update state
-      dispatch({ type: 'SET_UNSAVED_CHANGES', payload: false });
+      // Update last save time
       dispatch({ type: 'SET_LAST_AUTO_SAVE', payload: new Date() });
 
       if (showNotification) {
@@ -840,7 +848,10 @@ export function ProjectProvider({ children }: { children: React.ReactNode }) {
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'Failed to save design';
       console.error('❌ [ProjectContext] Save failed:', errorMessage);
-      
+
+      // Story 1.6: Restore unsaved changes flag on error
+      dispatch({ type: 'SET_UNSAVED_CHANGES', payload: true });
+
       toast({
         title: "Error",
         description: errorMessage,
@@ -882,11 +893,62 @@ export function ProjectProvider({ children }: { children: React.ReactNode }) {
     }
   }, [autoSaveInterval]);
 
-  // Mark changes as unsaved when room design is updated
+  // Story 1.6: Mark changes as unsaved only when actual data changes (deep equality + debouncing)
   useEffect(() => {
-    if (state.currentRoomDesign) {
-      dispatch({ type: 'SET_UNSAVED_CHANGES', payload: true });
+    if (!state.currentRoomDesign) {
+      prevElementsRef.current = undefined;
+      prevDimensionsRef.current = undefined;
+      // Clear any pending debounce timer
+      if (debounceTimerRef.current) {
+        clearTimeout(debounceTimerRef.current);
+        debounceTimerRef.current = null;
+      }
+      return;
     }
+
+    const currentElements = state.currentRoomDesign.design_elements;
+    const currentDimensions = state.currentRoomDesign.room_dimensions;
+
+    // Check if this is the first load
+    if (prevElementsRef.current === undefined && prevDimensionsRef.current === undefined) {
+      // First load - initialize refs without marking as unsaved
+      prevElementsRef.current = currentElements;
+      prevDimensionsRef.current = currentDimensions;
+      return;
+    }
+
+    // Use deep equality to check if data actually changed
+    const elementsChanged = !isEqual(currentElements, prevElementsRef.current);
+    const dimensionsChanged = !isEqual(currentDimensions, prevDimensionsRef.current);
+
+    if (elementsChanged || dimensionsChanged) {
+      console.log('🔄 [ProjectContext] Actual data change detected', {
+        elementsChanged,
+        dimensionsChanged
+      });
+
+      // Update refs for next comparison
+      prevElementsRef.current = currentElements;
+      prevDimensionsRef.current = currentDimensions;
+
+      // Story 1.6: Debounce flag setting by 1 second to prevent rapid successive updates
+      if (debounceTimerRef.current) {
+        clearTimeout(debounceTimerRef.current);
+      }
+
+      debounceTimerRef.current = setTimeout(() => {
+        console.log('✅ [ProjectContext] Marking as unsaved (after 1s debounce)');
+        dispatch({ type: 'SET_UNSAVED_CHANGES', payload: true });
+        debounceTimerRef.current = null;
+      }, 1000);
+    }
+
+    // Cleanup function to clear timer on unmount
+    return () => {
+      if (debounceTimerRef.current) {
+        clearTimeout(debounceTimerRef.current);
+      }
+    };
   }, [state.currentRoomDesign?.design_elements, state.currentRoomDesign?.room_dimensions]);
 
   // Initialize auto-save when a room is loaded - simplified to prevent infinite loops
