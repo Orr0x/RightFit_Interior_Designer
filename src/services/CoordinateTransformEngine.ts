@@ -1,267 +1,486 @@
 /**
- * CoordinateTransformEngine - Unified coordinate transformation system
- * 
- * FUNDAMENTAL PRINCIPLE: Room dimensions = inner usable space
- * - (0,0) = inner room corner (where components can be placed)
- * - All coordinates represent positions within usable interior space
- * - Wall thickness is handled separately from room dimensions
- * - Consistent reference point across 2D/3D/drag-drop systems
+ * CoordinateTransformEngine - Unified Coordinate Transformation System
+ *
+ * Purpose: Eliminate Winston's Circular Pattern #1 (Positioning Coordinate Circle)
+ * by providing a single source of truth for all coordinate transformations.
+ *
+ * This engine ensures mathematical consistency across all view types:
+ * - Plan View (2D top-down, cm from top-left)
+ * - Elevation Views (2D side views, cm from top-left)
+ * - 3D View (Three.js meters from room center)
+ *
+ * Story: 1.2 - Implement CoordinateTransformEngine
+ * Epic: Epic 1 - Eliminate Circular Dependency Patterns
+ * Date: 2025-10-26
+ *
+ * @see docs/coordinate-system-visual-guide.md for visual diagrams
+ * @see docs/circular-patterns-fix-plan.md#fix-1 for implementation plan
  */
 
-import { RoomDimensions } from '@/types/project';
-
-// Core coordinate system interfaces
-export interface PlanCoordinates {
-  x: number; // X position within inner room space (0 to roomWidth)
-  y: number; // Y position within inner room space (0 to roomHeight)  
-  z?: number; // Height above floor (optional, defaults to 0)
+export interface RoomDimensions {
+  width: number;          // X-axis width in cm (left to right)
+  height: number;         // Y-axis depth in cm (front to back) - Legacy name for "depth"
+  ceilingHeight?: number; // Z-axis height in cm (floor to ceiling)
 }
 
-export interface WorldCoordinates {
-  x: number; // 3D world X coordinate (centered at 0)
-  y: number; // 3D world Y coordinate (height above floor)
-  z: number; // 3D world Z coordinate (centered at 0)
+export interface PlanCoordinates {
+  x: number;  // cm from left wall (0 = left edge)
+  y: number;  // cm from front wall (0 = front edge)
+  z?: number; // cm above floor (0 = floor level)
+}
+
+export interface CanvasCoordinates {
+  x: number;  // pixels from canvas left edge
+  y: number;  // pixels from canvas top edge
+}
+
+export interface ThreeJSPosition {
+  x: number;  // meters from room center (-width/2 to +width/2)
+  y: number;  // meters above floor (vertical)
+  z: number;  // meters from room center (-depth/2 to +depth/2)
 }
 
 export interface ElevationCoordinates {
-  x: number; // Horizontal position along wall
-  y: number; // Vertical height on wall
+  canvasX: number;   // pixels horizontal position
+  canvasY: number;   // pixels vertical position
+  shouldMirror: boolean;  // true for left wall (apply mirroring at render time)
 }
 
-export interface WallConfiguration {
-  thickness: number; // Wall thickness in cm (default: 10cm)
-  innerFaceToInnerFace: boolean; // Always true - room dimensions are inner space
-}
-
-export type WallType = 'front' | 'back' | 'left' | 'right';
-
-export interface RoomConfiguration {
-  innerWidth: number;  // Inner usable width (room dimension)
-  innerHeight: number; // Inner usable height/depth (room dimension)
-  ceilingHeight: number; // Height from floor to ceiling
-  wallConfig: WallConfiguration;
-}
+export type ElevationWall = 'front' | 'back' | 'left' | 'right';
 
 /**
- * Universal coordinate transformation engine
- * Maintains consistent inner room space reference across all systems
+ * Coordinate Transformation Engine
+ *
+ * Provides bidirectional transformations between all coordinate systems used
+ * in the RightFit Interior Designer application.
+ *
+ * **Coordinate Systems**:
+ * 1. **Plan View**: Top-down 2D, cm from top-left corner (0,0)
+ * 2. **Canvas**: Pixel coordinates with zoom factor applied
+ * 3. **Elevation**: 2D side view, cm mapped to canvas pixels
+ * 4. **Three.JS**: 3D world space, meters from room center
+ *
+ * **Key Principles**:
+ * - All transformations are pure functions (no side effects)
+ * - Accuracy target: <0.1cm for round-trip transformations
+ * - Left/right elevation mirroring applied at RENDER time, not in coordinates
+ * - 3D uses meters and centered origin, 2D uses cm and top-left origin
+ *
+ * @example
+ * ```typescript
+ * const engine = new CoordinateTransformEngine({
+ *   width: 400,
+ *   height: 600,
+ *   ceilingHeight: 240
+ * });
+ *
+ * // Plan to canvas
+ * const canvas = engine.planToCanvas({ x: 100, y: 80 }, 1.5);
+ * // → { x: 150, y: 120 }
+ *
+ * // Plan to 3D
+ * const pos3d = engine.planTo3D({ x: 100, y: 80, z: 0 }, 86);
+ * // → { x: -1.0, y: 0.43, z: -2.2 } in meters
+ *
+ * // Validate round-trip
+ * const error = engine.validateConsistency({ x: 100, y: 80, z: 0 }, 86);
+ * // → error < 0.1cm
+ * ```
  */
 export class CoordinateTransformEngine {
-  private roomConfig: RoomConfiguration;
-  
+  private roomDimensions: RoomDimensions;
+
   constructor(roomDimensions: RoomDimensions) {
-    this.roomConfig = {
-      innerWidth: roomDimensions.width,   // Room width = inner usable width
-      innerHeight: roomDimensions.height, // Room height = inner usable height/depth
-      ceilingHeight: roomDimensions.ceilingHeight || 240,
-      wallConfig: {
-        thickness: 10, // Standard interior wall thickness
-        innerFaceToInnerFace: true // Room dimensions always represent inner space
-      }
-    };
-    
-    console.log('🏗️ [CoordinateEngine] Initialized with inner room dimensions:', {
-      innerWidth: this.roomConfig.innerWidth,
-      innerHeight: this.roomConfig.innerHeight,
-      ceilingHeight: this.roomConfig.ceilingHeight,
-      wallThickness: this.roomConfig.wallConfig.thickness
-    });
+    this.roomDimensions = roomDimensions;
   }
 
   /**
-   * Convert 2D plan coordinates to 3D world coordinates
-   * Plan coordinates (0,0) = inner room corner
-   * World coordinates (0,0,0) = center of inner room space
+   * Transform plan view coordinates to canvas pixel coordinates
+   *
+   * **Coordinate System**: Plan View (cm) → Canvas (px)
+   * **Origin**: Top-left (0,0) in both systems
+   * **Formula**:
+   * - canvasX = planX * zoom
+   * - canvasY = planY * zoom
+   *
+   * @param plan - Plan coordinates in cm (x, y from top-left)
+   * @param zoom - Zoom factor (1.0 = 1cm per pixel, 2.0 = 2px per cm)
+   * @returns Canvas coordinates in pixels
+   *
+   * @example
+   * ```typescript
+   * // Component at 100cm from left, 80cm from front, zoom 1.5x
+   * const canvas = engine.planToCanvas({ x: 100, y: 80 }, 1.5);
+   * // → { x: 150, y: 120 } pixels
+   * ```
    */
-  planToWorld(coords: PlanCoordinates): WorldCoordinates {
+  planToCanvas(plan: PlanCoordinates, zoom: number): CanvasCoordinates {
     return {
-      x: coords.x - this.roomConfig.innerWidth / 2,    // Center in world space
-      z: coords.y - this.roomConfig.innerHeight / 2,   // Center in world space (Y becomes Z)
-      y: coords.z || 0                                  // Height unchanged
+      x: plan.x * zoom,
+      y: plan.y * zoom
     };
   }
 
   /**
-   * Convert 3D world coordinates back to 2D plan coordinates
-   * Inverse of planToWorld transformation
+   * Transform canvas pixel coordinates back to plan view coordinates
+   *
+   * **Coordinate System**: Canvas (px) → Plan View (cm)
+   * **Origin**: Top-left (0,0) in both systems
+   * **Formula**:
+   * - planX = canvasX / zoom
+   * - planY = canvasY / zoom
+   *
+   * @param canvas - Canvas coordinates in pixels
+   * @param zoom - Zoom factor (1.0 = 1cm per pixel)
+   * @returns Plan coordinates in cm
+   *
+   * @example
+   * ```typescript
+   * // Click at pixel (150, 120) with zoom 1.5x
+   * const plan = engine.canvasToPlan({ x: 150, y: 120 }, 1.5);
+   * // → { x: 100, y: 80 } cm from top-left
+   * ```
    */
-  worldToPlan(coords: WorldCoordinates): PlanCoordinates {
+  canvasToPlan(canvas: CanvasCoordinates, zoom: number): PlanCoordinates {
     return {
-      x: coords.x + this.roomConfig.innerWidth / 2,    // Back to inner room space
-      y: coords.z + this.roomConfig.innerHeight / 2,   // Back to inner room space (Z becomes Y)
-      z: coords.y                                       // Height unchanged
+      x: canvas.x / zoom,
+      y: canvas.y / zoom
     };
   }
 
   /**
-   * Convert plan coordinates to elevation view coordinates
-   * Each wall view shows different perspective of the room
+   * Transform plan coordinates to elevation view canvas coordinates
+   *
+   * **Coordinate System**: Plan View (cm) → Elevation Canvas (px)
+   * **Origin**: Plan is top-left, Elevation is canvas top-left
+   *
+   * **Wall-Specific Mapping**:
+   * - **Front/Back walls**: Uses plan.x for horizontal position
+   * - **Left/Right walls**: Uses plan.y for horizontal position
+   * - **Vertical position**: Uses plan.z (height above floor)
+   *
+   * **Mirroring Strategy** (NEW UNIFIED SYSTEM):
+   * - Front/Back/Right: No mirroring (shouldMirror = false)
+   * - Left: Mirroring flag set (shouldMirror = true), applied at render time
+   * - This ensures consistent positioning before mirroring
+   *
+   * **Formulas**:
+   * ```
+   * Front/Back walls:
+   *   canvasX = (plan.x / roomWidth) * canvasWidth
+   *   canvasY = (ceilingHeight - plan.z - elementHeight) * zoom
+   *
+   * Left wall (UNIFIED):
+   *   canvasX = (plan.y / roomDepth) * canvasWidth
+   *   shouldMirror = true  // Mirror at render: canvasWidth - canvasX - elementWidth
+   *   canvasY = (ceilingHeight - plan.z - elementHeight) * zoom
+   *
+   * Right wall (UNIFIED):
+   *   canvasX = (plan.y / roomDepth) * canvasWidth
+   *   shouldMirror = false  // No mirroring
+   *   canvasY = (ceilingHeight - plan.z - elementHeight) * zoom
+   * ```
+   *
+   * @param plan - Plan coordinates (x, y from top-left, z above floor)
+   * @param wall - Which elevation wall to project onto
+   * @param canvasWidth - Width of the elevation canvas in pixels
+   * @param canvasHeight - Height of the elevation canvas in pixels
+   * @param elementHeight - Height of the element in cm (for Y positioning)
+   * @param zoom - Zoom factor for elevation view
+   * @returns Elevation canvas coordinates with mirroring flag
+   *
+   * @example
+   * ```typescript
+   * // Wall cabinet at (100, 80, 140) on left wall
+   * const elevation = engine.planToElevation(
+   *   { x: 100, y: 80, z: 140 },
+   *   'left',
+   *   800,  // canvas width
+   *   600,  // canvas height
+   *   70,   // cabinet height
+   *   1.0   // zoom
+   * );
+   * // → {
+   * //     canvasX: 80,  // Before mirroring
+   * //     canvasY: 30,  // From ceiling
+   * //     shouldMirror: true  // Apply at render: 800 - 80 - 60 = 660
+   * //   }
+   * ```
    */
-  planToElevation(coords: PlanCoordinates, wall: WallType): ElevationCoordinates {
+  planToElevation(
+    plan: PlanCoordinates & { z: number },
+    wall: ElevationWall,
+    canvasWidth: number,
+    canvasHeight: number,
+    elementHeight: number,
+    zoom: number
+  ): ElevationCoordinates {
+    const { width: roomWidth, height: roomDepth, ceilingHeight = 240 } = this.roomDimensions;
+
+    let canvasX: number;
+    let shouldMirror: boolean;
+
+    // Horizontal positioning based on wall
     switch (wall) {
       case 'front':
-        return { 
-          x: coords.x,                    // X position along front wall
-          y: coords.z || 0                // Height on wall
-        };
       case 'back':
-        return { 
-          x: this.roomConfig.innerWidth - coords.x,  // Mirrored X for back wall
-          y: coords.z || 0                            // Height on wall
-        };
-      case 'left':
-        return { 
-          x: this.roomConfig.innerHeight - coords.y, // Y becomes X (mirrored)
-          y: coords.z || 0                            // Height on wall
-        };
-      case 'right':
-        return { 
-          x: coords.y,                    // Y becomes X (direct)
-          y: coords.z || 0                // Height on wall
-        };
-      default:
-        throw new Error(`Unknown wall type: ${wall}`);
-    }
-  }
+        // Front/back walls use X coordinate (left-to-right position)
+        canvasX = (plan.x / roomWidth) * canvasWidth;
+        shouldMirror = false;
+        break;
 
-  /**
-   * Convert elevation coordinates back to plan coordinates
-   * Requires knowing which wall the elevation represents
-   */
-  elevationToPlan(coords: ElevationCoordinates, wall: WallType): PlanCoordinates {
-    switch (wall) {
-      case 'front':
-        return {
-          x: coords.x,                    // X position unchanged
-          y: 0,                          // At front wall (Y = 0)
-          z: coords.y                     // Height from elevation
-        };
-      case 'back':
-        return {
-          x: this.roomConfig.innerWidth - coords.x,  // Reverse mirroring
-          y: this.roomConfig.innerHeight,             // At back wall (Y = max)
-          z: coords.y                                 // Height from elevation
-        };
       case 'left':
-        return {
-          x: 0,                                       // At left wall (X = 0)
-          y: this.roomConfig.innerHeight - coords.x, // Reverse Y->X mapping
-          z: coords.y                                 // Height from elevation
-        };
-      case 'right':
-        return {
-          x: this.roomConfig.innerWidth,  // At right wall (X = max)
-          y: coords.x,                    // Reverse Y->X mapping
-          z: coords.y                     // Height from elevation
-        };
-      default:
-        throw new Error(`Unknown wall type: ${wall}`);
-    }
-  }
+        // Left wall uses Y coordinate (front-to-back position)
+        // UNIFIED SYSTEM: Same calculation as right, mirror at render time
+        canvasX = (plan.y / roomDepth) * canvasWidth;
+        shouldMirror = true;  // Mirror at render
+        break;
 
-  /**
-   * Get room boundaries in plan coordinates
-   * Always represents the inner usable space
-   */
-  getInnerRoomBounds() {
+      case 'right':
+        // Right wall uses Y coordinate (front-to-back position)
+        canvasX = (plan.y / roomDepth) * canvasWidth;
+        shouldMirror = false;  // No mirroring
+        break;
+    }
+
+    // Vertical positioning (same for all walls)
+    // Position from ceiling, accounting for element height
+    const canvasY = (ceilingHeight - plan.z - elementHeight) * zoom;
+
     return {
-      minX: 0,
-      minY: 0,
-      maxX: this.roomConfig.innerWidth,
-      maxY: this.roomConfig.innerHeight,
-      width: this.roomConfig.innerWidth,
-      height: this.roomConfig.innerHeight
+      canvasX,
+      canvasY,
+      shouldMirror
     };
   }
 
   /**
-   * Get wall positions for rendering
-   * Walls surround the inner room space
+   * Transform plan coordinates to Three.JS 3D world coordinates
+   *
+   * **Coordinate System**: Plan View (cm, top-left) → Three.JS (meters, centered)
+   *
+   * **Coordinate Mapping**:
+   * - Plan X (cm from left) → Three.js X (meters from center)
+   * - Plan Y (cm from front) → Three.js Z (meters from center)
+   * - Plan Z (cm above floor) → Three.js Y (meters above floor)
+   *
+   * **Origin Transformation**:
+   * - Plan: Top-left corner (0, 0, 0)
+   * - Three.js: Room center at floor level (0, 0, 0)
+   *
+   * **Formula**:
+   * ```
+   * Step 1: Convert to meters
+   *   roomWidthMeters = roomWidth / 100
+   *   roomDepthMeters = roomDepth / 100
+   *
+   * Step 2: Calculate room boundaries (centered at origin)
+   *   innerLeftBoundary = -roomWidthMeters / 2
+   *   innerBackBoundary = -roomDepthMeters / 2
+   *
+   * Step 3: Convert plan position to meters and center
+   *   x3d = innerLeftBoundary + (plan.x / 100)
+   *   y3d = (plan.z / 100) + (elementHeight / 100) / 2
+   *   z3d = innerBackBoundary + (plan.y / 100)
+   * ```
+   *
+   * @param plan - Plan coordinates (x, y from top-left, z above floor) in cm
+   * @param elementHeight - Height of element in cm (for vertical centering)
+   * @returns Three.JS position in meters from room center
+   *
+   * @example
+   * ```typescript
+   * // Component at (100, 80, 0) in 400×600cm room, 86cm tall
+   * const pos3d = engine.planTo3D({ x: 100, y: 80, z: 0 }, 86);
+   * // → {
+   * //     x: -1.0,   // 1m left of center
+   * //     y: 0.43,   // 43cm above floor (center of 86cm cabinet)
+   * //     z: -2.2    // 2.2m back from center
+   * //   }
+   * ```
    */
-  getWallPositions() {
-    const halfThickness = this.roomConfig.wallConfig.thickness / 2;
-    
-    return {
-      // Wall center lines (for rendering wall thickness)
-      front: { x: this.roomConfig.innerWidth / 2, y: -halfThickness },
-      back: { x: this.roomConfig.innerWidth / 2, y: this.roomConfig.innerHeight + halfThickness },
-      left: { x: -halfThickness, y: this.roomConfig.innerHeight / 2 },
-      right: { x: this.roomConfig.innerWidth + halfThickness, y: this.roomConfig.innerHeight / 2 },
-      
-      // Wall inner faces (component placement boundaries)
-      innerFaces: {
-        front: 0,
-        back: this.roomConfig.innerHeight,
-        left: 0,
-        right: this.roomConfig.innerWidth
-      }
-    };
+  planTo3D(plan: PlanCoordinates & { z: number }, elementHeight: number): ThreeJSPosition {
+    const { width: roomWidth, height: roomDepth } = this.roomDimensions;
+
+    // Step 1: Convert room dimensions to meters
+    const roomWidthMeters = roomWidth / 100;
+    const roomDepthMeters = roomDepth / 100;
+
+    // Step 2: Calculate room boundaries (centered at origin)
+    const innerLeftBoundary = -roomWidthMeters / 2;
+    const innerBackBoundary = -roomDepthMeters / 2;
+
+    // Step 3: Convert plan position to meters and center
+    const x = innerLeftBoundary + (plan.x / 100);
+    const y = (plan.z / 100) + (elementHeight / 100) / 2;
+    const z = innerBackBoundary + (plan.y / 100);
+
+    return { x, y, z };
   }
 
   /**
-   * Validate coordinates are within inner room bounds
+   * Transform Three.JS 3D coordinates back to plan view coordinates
+   *
+   * **Coordinate System**: Three.JS (meters, centered) → Plan View (cm, top-left)
+   *
+   * **Inverse Transformation**:
+   * This is the inverse of `planTo3D()`, reversing the centering and unit conversion.
+   *
+   * **Formula**:
+   * ```
+   * Step 1: Calculate room boundaries
+   *   innerLeftBoundary = -roomWidthMeters / 2
+   *   innerBackBoundary = -roomDepthMeters / 2
+   *
+   * Step 2: Convert from centered meters to cm
+   *   planX = (pos.x - innerLeftBoundary) * 100
+   *   planY = (pos.z - innerBackBoundary) * 100
+   *   planZ = (pos.y - elementHeight / 200) * 100
+   * ```
+   *
+   * @param pos - Three.JS position in meters from room center
+   * @param elementHeight - Height of element in cm (for vertical de-centering)
+   * @returns Plan coordinates in cm from top-left
+   *
+   * @example
+   * ```typescript
+   * // 3D position at (-1.0, 0.43, -2.2) with 86cm element
+   * const plan = engine.threeJSToPlan({ x: -1.0, y: 0.43, z: -2.2 }, 86);
+   * // → { x: 100, y: 80, z: 0 }
+   * ```
    */
-  validatePlanCoordinates(coords: PlanCoordinates): boolean {
-    const bounds = this.getInnerRoomBounds();
-    return coords.x >= bounds.minX && 
-           coords.x <= bounds.maxX && 
-           coords.y >= bounds.minY && 
-           coords.y <= bounds.maxY;
+  threeJSToPlan(pos: ThreeJSPosition, elementHeight: number): PlanCoordinates & { z: number } {
+    const { width: roomWidth, height: roomDepth } = this.roomDimensions;
+
+    // Step 1: Room dimensions in meters
+    const roomWidthMeters = roomWidth / 100;
+    const roomDepthMeters = roomDepth / 100;
+
+    // Step 2: Room boundaries (centered at origin)
+    const innerLeftBoundary = -roomWidthMeters / 2;
+    const innerBackBoundary = -roomDepthMeters / 2;
+
+    // Step 3: Convert from centered meters to cm from top-left
+    const x = (pos.x - innerLeftBoundary) * 100;
+    const y = (pos.z - innerBackBoundary) * 100;
+    const z = (pos.y - (elementHeight / 100) / 2) * 100;
+
+    return { x, y, z };
   }
 
   /**
-   * Get room configuration for external systems
+   * Validate transformation consistency through round-trip testing
+   *
+   * **Purpose**: Ensure coordinate transformations are mathematically consistent
+   * by testing round-trip accuracy (plan → 3D → plan).
+   *
+   * **Accuracy Target**: <0.1cm error for round-trip transformations
+   *
+   * **Test Process**:
+   * 1. Start with plan coordinates
+   * 2. Transform to 3D: plan → planTo3D() → 3D position
+   * 3. Transform back to plan: 3D → threeJSToPlan() → plan coordinates
+   * 4. Calculate error: distance between original and final plan coordinates
+   *
+   * @param originalPlan - Original plan coordinates in cm
+   * @param elementHeight - Element height in cm (for vertical centering)
+   * @returns Error distance in cm (should be <0.1cm)
+   *
+   * @example
+   * ```typescript
+   * // Test round-trip accuracy
+   * const error = engine.validateConsistency({ x: 100, y: 80, z: 0 }, 86);
+   * console.log(error);  // → 0.0001 cm (acceptable)
+   *
+   * // Test corner position
+   * const cornerError = engine.validateConsistency({ x: 0, y: 0, z: 0 }, 90);
+   * console.log(cornerError);  // → 0.0 cm (perfect accuracy)
+   * ```
    */
-  getRoomConfiguration(): RoomConfiguration {
-    return { ...this.roomConfig };
+  validateConsistency(
+    originalPlan: PlanCoordinates & { z: number },
+    elementHeight: number
+  ): number {
+    // Round-trip: plan → 3D → plan
+    const pos3d = this.planTo3D(originalPlan, elementHeight);
+    const finalPlan = this.threeJSToPlan(pos3d, elementHeight);
+
+    // Calculate error distance
+    const dx = finalPlan.x - originalPlan.x;
+    const dy = finalPlan.y - originalPlan.y;
+    const dz = finalPlan.z - originalPlan.z;
+
+    const error = Math.sqrt(dx * dx + dy * dy + dz * dz);
+    return error;
   }
 
   /**
-   * Update room dimensions (maintains inner space reference)
+   * Get room dimensions used by this engine
+   *
+   * @returns Current room dimensions
    */
-  updateRoomDimensions(newDimensions: RoomDimensions): void {
-    this.roomConfig.innerWidth = newDimensions.width;
-    this.roomConfig.innerHeight = newDimensions.height;
-    this.roomConfig.ceilingHeight = newDimensions.ceilingHeight || this.roomConfig.ceilingHeight;
-    
-    console.log('🔄 [CoordinateEngine] Updated room dimensions:', {
-      innerWidth: this.roomConfig.innerWidth,
-      innerHeight: this.roomConfig.innerHeight,
-      ceilingHeight: this.roomConfig.ceilingHeight
-    });
+  getRoomDimensions(): RoomDimensions {
+    return { ...this.roomDimensions };
+  }
+
+  /**
+   * Create a new engine with updated room dimensions
+   *
+   * @param newDimensions - New room dimensions
+   * @returns New engine instance
+   */
+  withDimensions(newDimensions: RoomDimensions): CoordinateTransformEngine {
+    return new CoordinateTransformEngine(newDimensions);
   }
 }
 
-// Singleton instance for global access
-let globalCoordinateEngine: CoordinateTransformEngine | null = null;
+/**
+ * Factory function to initialize coordinate engine
+ *
+ * @param roomDimensions - Room dimensions in cm
+ * @returns Configured coordinate transformation engine
+ *
+ * @example
+ * ```typescript
+ * const engine = initializeCoordinateEngine({
+ *   width: 400,
+ *   height: 600,
+ *   ceilingHeight: 240
+ * });
+ * ```
+ */
+export function initializeCoordinateEngine(
+  roomDimensions: RoomDimensions
+): CoordinateTransformEngine {
+  return new CoordinateTransformEngine(roomDimensions);
+}
+
+// Singleton instance management
+let globalEngine: CoordinateTransformEngine | null = null;
 
 /**
- * Get the global coordinate transform engine
- * Creates one if it doesn't exist
+ * Get or create the global coordinate engine
+ *
+ * @param roomDimensions - Room dimensions (required if not yet initialized)
+ * @returns Global coordinate engine instance
  */
-export const getCoordinateEngine = (roomDimensions?: RoomDimensions): CoordinateTransformEngine => {
-  if (!globalCoordinateEngine && roomDimensions) {
-    globalCoordinateEngine = new CoordinateTransformEngine(roomDimensions);
-  } else if (!globalCoordinateEngine) {
+export function getCoordinateEngine(roomDimensions?: RoomDimensions): CoordinateTransformEngine {
+  if (!globalEngine && !roomDimensions) {
     throw new Error('CoordinateTransformEngine not initialized. Provide room dimensions.');
   }
-  
-  return globalCoordinateEngine;
-};
+
+  if (roomDimensions) {
+    globalEngine = new CoordinateTransformEngine(roomDimensions);
+  }
+
+  return globalEngine!;
+}
 
 /**
- * Initialize or update the global coordinate engine
+ * Clear the global engine (useful for testing)
  */
-export const initializeCoordinateEngine = (roomDimensions: RoomDimensions): CoordinateTransformEngine => {
-  globalCoordinateEngine = new CoordinateTransformEngine(roomDimensions);
-  return globalCoordinateEngine;
-};
-
-/**
- * Clear the global coordinate engine (useful for testing)
- */
-export const clearCoordinateEngine = (): void => {
-  globalCoordinateEngine = null;
-};
+export function clearCoordinateEngine(): void {
+  globalEngine = null;
+}
 
 export default CoordinateTransformEngine;
