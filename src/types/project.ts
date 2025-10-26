@@ -100,27 +100,126 @@ export interface Design {
 }
 
 // DesignElement interface with proper 3D dimension mapping
+/**
+ * Design Element - Represents a component placed in a room design
+ *
+ * **IMPORTANT: Position vs Dimension**
+ * - **Position** (x, y, z): Where the component is located in the room (in cm)
+ * - **Dimension** (width, depth, height): How big the component is (in cm)
+ *
+ * **Coordinate System**:
+ * - X-axis: Width (left-to-right, 0 = left wall)
+ * - Y-axis: Depth (front-to-back, 0 = front wall)
+ * - Z-axis: Height (floor-to-ceiling, 0 = floor)
+ *
+ * **Z Position Examples**:
+ * - Base cabinets: z = 0 (sitting on floor)
+ * - Countertops: z = 86 (standard counter height)
+ * - Wall cabinets: z = 200 (mounted high on wall)
+ * - Windows: z = 90 (typical window sill height)
+ *
+ * **Common Mistake**: Setting z = height (copy-paste error)
+ * - ❌ WRONG: `{ z: 90, height: 90 }` (90cm off ground AND 90cm tall?)
+ * - ✅ RIGHT: `{ z: 0, height: 90 }` (on floor, 90cm tall)
+ *
+ * Use ComponentPositionValidator to validate positioning.
+ *
+ * Story 1.7: Added comprehensive JSDoc for position/dimension clarity
+ */
 export interface DesignElement {
+  /** Unique identifier for this element instance */
   id: string;
-  component_id: string; // Component ID for database lookup (2D/3D definitions)
-  name?: string; // Component name for display and debugging
+
+  /** Component ID for database lookup (links to kitchen_components, etc.) */
+  component_id: string;
+
+  /** Component name for display and debugging (optional) */
+  name?: string;
+
+  /** Component type (determines rendering behavior) */
   type: 'wall' | 'cabinet' | 'appliance' | 'counter-top' | 'end-panel' | 'window' | 'door' | 'flooring' | 'toe-kick' | 'cornice' | 'pelmet' | 'wall-unit-end-panel' | 'sink';
-  x: number; // X position in room
-  y: number; // Y position in room
-  z?: number; // Z position in room (height off ground)
-  width: number; // X-axis dimension (left-to-right)
-  depth: number; // Y-axis dimension (front-to-back)
-  height: number; // Z-axis dimension (bottom-to-top)
-  // Legacy properties for backward compatibility
-  verticalHeight?: number; // DEPRECATED: Use height instead
+
+  // ===== POSITION PROPERTIES (where component is located) =====
+
+  /** X position in room (cm from left wall, 0 = left wall) */
+  x: number;
+
+  /** Y position in room (cm from front wall, 0 = front wall) */
+  y: number;
+
+  /**
+   * Z position in room (cm from floor, 0 = floor)
+   *
+   * **Best Practice**: Always set explicitly instead of relying on type defaults
+   * **Common Values**:
+   * - 0cm: Floor-level (base cabinets, appliances, doors)
+   * - 86cm: Counter height
+   * - 90cm: Window sill height
+   * - 140cm: Pelmet height
+   * - 200cm: Wall cabinet height
+   */
+  z?: number;
+
+  // ===== DIMENSION PROPERTIES (how big component is) =====
+
+  /** Width (X-axis dimension in cm, left-to-right) */
+  width: number;
+
+  /** Depth (Y-axis dimension in cm, front-to-back) */
+  depth: number;
+
+  /**
+   * Height (Z-axis dimension in cm, floor-to-ceiling)
+   *
+   * **IMPORTANT**: This is the component's SIZE, not its POSITION.
+   * Do NOT confuse with z (position). A cabinet can be:
+   * - z=0, height=90 → On floor, 90cm tall
+   * - z=200, height=80 → 200cm off floor, 80cm tall
+   */
+  height: number;
+
+  // ===== LEGACY PROPERTIES =====
+
+  /**
+   * @deprecated Use `height` instead. Kept for backward compatibility only.
+   */
+  verticalHeight?: number;
+
+  // ===== TRANSFORMATION PROPERTIES =====
+
+  /** Rotation angle in degrees (0 = facing front, 90 = facing right, etc.) */
   rotation: number;
+
+  // ===== APPEARANCE PROPERTIES =====
+
+  /** Component style/finish (e.g., "shaker", "modern") */
   style?: string;
+
+  /** Component color (hex code or name) */
   color?: string;
+
+  /** Component material (e.g., "wood", "metal") */
   material?: string;
-  // Layering and visibility properties
-  zIndex: number; // Rendering layer order (lower = behind, higher = in front)
-  // Corner unit door positioning
-  cornerDoorSide?: 'left' | 'right' | 'auto'; // Manual override for corner unit door side (auto = use centerline logic)
+
+  // ===== RENDERING PROPERTIES =====
+
+  /**
+   * Rendering layer order (2D plan view only)
+   * - Lower values render behind
+   * - Higher values render in front
+   * - See getDefaultZIndex() for defaults
+   */
+  zIndex: number;
+
+  // ===== SPECIAL PROPERTIES =====
+
+  /**
+   * Corner unit door positioning override
+   * - 'left': Force door on left side
+   * - 'right': Force door on right side
+   * - 'auto': Use automatic centerline logic
+   */
+  cornerDoorSide?: 'left' | 'right' | 'auto';
 }
 
 // Z-Index layering system for 2D plan view rendering
