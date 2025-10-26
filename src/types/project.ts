@@ -113,10 +113,11 @@ export interface Design {
  * - Z-axis: Height (floor-to-ceiling, 0 = floor)
  *
  * **Z Position Examples**:
- * - Base cabinets: z = 0 (sitting on floor)
- * - Countertops: z = 86 (standard counter height)
- * - Wall cabinets: z = 200 (mounted high on wall)
- * - Windows: z = 90 (typical window sill height)
+ * - Base cabinets: z = 0 (sitting on floor, 86cm tall)
+ * - Countertops: z = 86 (sits on 86cm base units, 4cm thick, top at 90cm)
+ * - Wall cabinets: z = 140 (tops match 210cm larders, 70cm tall typical)
+ * - Windows: z = 100 (above 90cm worktop)
+ * - Cornice: z = 210 (above wall cabinets)
  *
  * **Common Mistake**: Setting z = height (copy-paste error)
  * - ❌ WRONG: `{ z: 90, height: 90 }` (90cm off ground AND 90cm tall?)
@@ -152,11 +153,11 @@ export interface DesignElement {
    *
    * **Best Practice**: Always set explicitly instead of relying on type defaults
    * **Common Values**:
-   * - 0cm: Floor-level (base cabinets, appliances, doors)
-   * - 86cm: Counter height
-   * - 90cm: Window sill height
-   * - 140cm: Pelmet height
-   * - 200cm: Wall cabinet height
+   * - 0cm: Floor-level (base cabinets 86cm tall, tall larders 210cm tall)
+   * - 86cm: Countertop (4cm thick, top at 90cm)
+   * - 100cm: Window sill height (above 90cm worktop)
+   * - 140cm: Wall cabinet start (70cm tall typical, tops at 210cm)
+   * - 210cm: Cornice (above wall cabinets)
    */
   z?: number;
 

@@ -64,6 +64,15 @@ export class ComponentPositionValidator {
    *
    * These are fallback values when Z is not specified.
    * Best practice: Always set Z explicitly on elements.
+   *
+   * **Design Specifications** (corrected 2025-10-26):
+   * - Tall larder units: 210cm tall (Z=0, top at 210cm)
+   * - Wall cabinets: Tops match larders at 210cm (Z=140cm, 70cm tall typical)
+   * - Cornice: Above wall cabinets (Z=210cm)
+   * - Pelmet: Below wall cabinets (Z=140cm)
+   * - Counter tops: 4cm tall on 86cm base units (Z=86cm, top at 90cm)
+   * - Windows: Above worktop (Z=100cm)
+   * - Base units: 86cm tall (Z=0cm)
    */
   private static readonly TYPE_DEFAULT_Z: Record<string, number> = {
     // Floor level (Z = 0cm)
@@ -74,16 +83,16 @@ export class ComponentPositionValidator {
     'toe-kick': 0,
     'end-panel': 0,
 
-    // Countertop level (Z = 86cm)
+    // Countertop level (Z = 86cm, sits on 86cm base units)
     'counter-top': 86,
 
-    // Window level (Z = 90cm)
-    'window': 90,
+    // Window level (Z = 100cm, above 90cm worktop)
+    'window': 100,
 
-    // Wall cabinet level (Z = 140-200cm)
-    'wall-unit-end-panel': 200,
-    'cornice': 200,
-    'pelmet': 140,
+    // Wall cabinet level (Z = 140-210cm)
+    'wall-unit-end-panel': 140, // Match wall cabinet start
+    'cornice': 210,              // Above wall cabinets (at top)
+    'pelmet': 140,               // Below wall cabinets (at bottom)
 
     // Sink level (Z = 65-75cm, varies by type)
     'sink': 75, // Kitchen sink default, butler sinks use 65cm
@@ -179,7 +188,7 @@ export class ComponentPositionValidator {
     // SUSPICIOUS: Wall cabinet at floor level (Z = 0)
     if (this.isWallCabinet(element.component_id) && z === 0) {
       suspiciousCases.push(
-        `Wall cabinet at Z=0 (floor level) - should typically be at Z=200cm or higher`
+        `Wall cabinet at Z=0 (floor level) - should typically be at Z=140cm (tops match 210cm larders)`
       );
     }
 
@@ -222,13 +231,14 @@ export class ComponentPositionValidator {
    *
    * // Wall cabinet
    * const z3 = ComponentPositionValidator.getDefaultZ('cabinet', 'wall-cabinet-60x90');
-   * // → 200cm (detected as wall-mounted)
+   * // → 140cm (detected as wall-mounted, tops match 210cm larders)
    * ```
    */
   static getDefaultZ(type: DesignElement['type'], componentId?: string): number {
-    // Special case: Wall cabinets should be at wall height (200cm)
+    // Special case: Wall cabinets should be at wall height (140cm)
+    // Tops match tall larder units at 210cm (140cm + 70cm typical height = 210cm)
     if (type === 'cabinet' && componentId && this.isWallCabinet(componentId)) {
-      return 200;
+      return 140;
     }
 
     // Special case: Butler sinks are lower (65cm) vs kitchen sinks (75cm)

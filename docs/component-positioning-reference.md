@@ -51,15 +51,18 @@ Components in RightFit Interior Designer are positioned using a 3D coordinate sy
 ```
          ┌─────────────────────┐  ← Ceiling (Z = 240cm)
          │                     │
-         │   Wall Cabinet      │  ← Z = 200cm
+         │  ─ Cornice          │  ← Z = 210cm (above wall cabinets)
+         │   Wall Cabinet      │  ← Z = 140cm (tops at 210cm)
          │   ┌───────┐         │
-         │   │       │         │
+         │  ─│Pelmet │         │  ← Z = 140cm (below wall cabinets)
          │   └───────┘         │
          │                     │
-    Y    │     Countertop      │  ← Z = 86cm
-    ↑    │   ═══════════       │
-    │    │                     │
-    │    │   Base Cabinet      │  ← Z = 0cm (floor)
+         │   Window            │  ← Z = 100cm (above worktop)
+         │   ┌─────┐           │
+    Y    │   └─────┘           │
+    ↑    │  ═ Countertop       │  ← Z = 86cm (4cm thick, top at 90cm)
+    │    │   ═══════════       │
+    │    │   Base Cabinet      │  ← Z = 0cm (86cm tall)
     │    │   ┌───────┐         │
     └──→ X   │       │         │
    /     └───┴───────┴─────────┘  ← Floor (Z = 0cm)
@@ -130,22 +133,24 @@ const baseСabinet: DesignElement = {
 | Component Type | Typical Z Position | Rationale |
 |----------------|-------------------|-----------|
 | **Floor Level** | | |
-| Base cabinets | 0cm | Sit directly on floor |
+| Base cabinets | 0cm | Sit directly on floor (86cm tall) |
+| Base corner units | 0cm | Match base cabinet height (86cm tall) |
+| Tall larder units | 0cm | Floor-to-ceiling units (210cm tall, tops match wall cabinets) |
 | Appliances | 0cm | Sit directly on floor |
 | Doors | 0cm | Door frame starts at floor |
 | Flooring | 0cm | IS the floor |
 | Toe kicks | 0cm | Recessed into base of cabinets |
 | End panels | 0cm | Start at floor |
 | **Countertop Level** | | |
-| Counter tops | 86cm | Standard kitchen counter height |
-| **Window/Wall Level** | | |
-| Windows | 90cm | Standard window sill height |
+| Counter tops | 86cm | Sit on 86cm base units, 4cm thick, top at 90cm |
+| **Window Level** | | |
+| Windows | 100cm | Above 90cm worktop |
 | **Wall Cabinet Level** | | |
-| Wall cabinets | 200cm | Standard wall cabinet mounting height |
-| Cornice | 200cm | Top trim of wall cabinets |
-| Wall unit end panels | 200cm | Match wall cabinet height |
-| **Pelmet Level** | | |
-| Pelmet | 140cm | Mounted above wall cabinets |
+| Wall cabinets | 140cm | Tops match larders at 210cm (70cm tall typical) |
+| Wall unit end panels | 140cm | Match wall cabinet start height |
+| Pelmet | 140cm | Below wall cabinets (decorative trim) |
+| **Cornice Level** | | |
+| Cornice | 210cm | Above wall cabinets (at top, decorative trim) |
 | **Sink Level** | | |
 | Kitchen sinks | 75cm | Integrated into countertop |
 | Butler sinks | 65cm | Lower for utility sink |
