@@ -6,7 +6,7 @@ import { RoomService } from '@/services/RoomService';
 import { useTouchEvents, TouchPoint } from '@/hooks/useTouchEvents';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { getEnhancedComponentPlacement } from '@/utils/canvasCoordinateIntegration';
-import { initializeCoordinateEngine } from '@/services/CoordinateTransformEngine';
+import { initializeCoordinateEngine, getCoordinateEngine } from '@/services/CoordinateTransformEngine';
 import { PositionCalculation } from '@/utils/PositionCalculation';
 import { ConfigurationService } from '@/services/ConfigurationService';
 import { render2DService } from '@/services/Render2DService';
@@ -153,7 +153,7 @@ const isPointInRotatedComponent = (
   } else {
     // Elevation view: use X (horizontal) and Z (vertical) coordinates
     const width = element.width;
-    const height = element.height || 90; // Use actual height for vertical dimension
+    const height = element.height || 86; // Use actual height for vertical dimension (updated from 90 to 86)
     const z = element.z || 0;
 
     // In elevation view, Z represents the mount height (bottom of element above floor)
@@ -551,10 +551,13 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
   })();
 
   // Convert room coordinates to canvas coordinates (uses inner room for component placement)
+  // Story 1.5: Using CoordinateTransformEngine for NEW UNIFIED SYSTEM
   const roomToCanvas = useCallback((roomX: number, roomY: number) => {
+    const engine = getCoordinateEngine();
+    const canvasPos = engine.planToCanvas({ x: roomX, y: roomY }, zoom);
     return {
-      x: roomPosition.innerX + (roomX * zoom),
-      y: roomPosition.innerY + (roomY * zoom)
+      x: roomPosition.innerX + canvasPos.x,
+      y: roomPosition.innerY + canvasPos.y
     };
   }, [roomPosition, zoom, active2DView]);
 
@@ -1388,7 +1391,7 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
       } else if (element.type === 'cabinet' && (element.id.includes('tall') || element.id.includes('larder'))) {
         elevationHeightCm = element.height; // Use actual height for tall units
       } else if (element.type === 'cabinet') {
-        elevationHeightCm = 90; // Base cabinet height
+        elevationHeightCm = element.height || 86; // Base cabinet height (use element height, default 86cm)
       } else if (element.type === 'appliance') {
         elevationHeightCm = element.height; // Use actual height for appliances
       } else if (element.type === 'window') {
@@ -1415,11 +1418,11 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
         if (element.type === 'cabinet' && element.id.includes('wall-cabinet')) {
           yPos = floorY - (140 * zoom) - elementHeight;
         } else if (element.type === 'cornice') {
-          yPos = floorY - (200 * zoom) - elementHeight;
+          yPos = floorY - (210 * zoom) - elementHeight; // Updated from 200 to 210 to match tall units
         } else if (element.type === 'pelmet') {
           yPos = floorY - (140 * zoom);
         } else if (element.type === 'window') {
-          yPos = floorY - (90 * zoom) - elementHeight;
+          yPos = floorY - (86 * zoom) - elementHeight; // Updated from 90 to 86
         } else if (element.type === 'sink') {
           const isButlerSink = element.id.includes('butler-sink') || element.id.includes('butler') || element.id.includes('base-unit-sink');
           if (isButlerSink) {
@@ -2143,7 +2146,7 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
       } else {
         // Elevation view: use X (horizontal) and Z (vertical) coordinates
         const width = element.width;
-        const height = element.height || 90; // Use actual height for vertical dimension
+        const height = element.height || 86; // Use actual height for vertical dimension (updated from 90 to 86)
         const z = element.z || 0;
 
         // In elevation view, Z represents the mount height (bottom of element above floor)
@@ -2777,17 +2780,17 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
       // Get Y-offset config for elevation-specific components
       let defaultZ = 0; // Default for floor-mounted components
       if (componentData.type === 'cornice') {
-        defaultZ = ConfigurationService.getSync('cornice_y_offset', 200); // Top of wall units
+        defaultZ = ConfigurationService.getSync('cornice_y_offset', 210); // Top of wall units (updated from 200 to 210 to match tall units)
       } else if (componentData.type === 'pelmet') {
         defaultZ = ConfigurationService.getSync('pelmet_y_offset', 140); // Bottom of wall units
       } else if (componentData.type === 'counter-top') {
-        defaultZ = ConfigurationService.getSync('countertop_y_offset', 90); // Counter top height
+        defaultZ = ConfigurationService.getSync('countertop_y_offset', 86); // Counter top height (updated from 90 to 86)
       } else if (componentData.type === 'wall-cabinet' || componentData.id?.includes('wall-cabinet')) {
         defaultZ = ConfigurationService.getSync('wall_cabinet_y_offset', 140); // Wall cabinet height
       } else if (componentData.type === 'wall-unit-end-panel') {
-        defaultZ = ConfigurationService.getSync('cornice_y_offset', 200); // Top of wall units
+        defaultZ = ConfigurationService.getSync('cornice_y_offset', 210); // Top of wall units (updated from 200 to 210)
       } else if (componentData.type === 'window') {
-        defaultZ = ConfigurationService.getSync('countertop_y_offset', 90); // Window sill height
+        defaultZ = ConfigurationService.getSync('countertop_y_offset', 86); // Window sill height (updated from 90 to 86)
       }
 
       // Apply Enhanced Component Placement using unified coordinate system
