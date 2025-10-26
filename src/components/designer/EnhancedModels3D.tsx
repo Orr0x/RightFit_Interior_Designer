@@ -5,6 +5,7 @@ import { Sofa, RectangleHorizontal } from 'lucide-react';
 import { FeatureFlagService } from '@/services/FeatureFlagService';
 import { DynamicComponentRenderer } from '@/components/3d/DynamicComponentRenderer';
 import { ComponentTypeService } from '@/services/ComponentTypeService';
+import { CoordinateTransformEngine } from '@/services/CoordinateTransformEngine';
 
 // ComponentDefinition interface removed - using DatabaseComponent from useComponents hook
 
@@ -16,37 +17,50 @@ interface Enhanced3DModelProps {
   onClick: () => void;
 }
 
-// Helper function to convert 2D coordinates to 3D world coordinates
-// IMPORTANT: roomWidth/roomHeight parameters are INNER room dimensions (usable space)
-// 2D coordinates (x, y) are also in INNER room space (0 to roomWidth, 0 to roomHeight)
-const convertTo3D = (x: number, y: number, innerRoomWidth: number, innerRoomHeight: number) => {
+/**
+ * Helper function to convert 2D plan coordinates to 3D world coordinates
+ *
+ * Story 1.4: Replaced manual calculation with CoordinateTransformEngine.planTo3D()
+ * Epic: Epic 1 - Eliminate Circular Dependency Patterns
+ *
+ * @param x - Plan X coordinate (cm, inner room space)
+ * @param y - Plan Y coordinate (cm, inner room space)
+ * @param z - Plan Z coordinate (height off ground, cm)
+ * @param elementHeight - Element height (cm)
+ * @param innerRoomWidth - Inner room width (cm)
+ * @param innerRoomHeight - Inner room depth (cm)
+ * @returns Three.JS position {x, y, z} in meters, centered on origin
+ */
+const convertTo3D = (
+  x: number,
+  y: number,
+  z: number,
+  elementHeight: number,
+  innerRoomWidth: number,
+  innerRoomHeight: number
+): { x: number; y: number; z: number } => {
   // Validate input parameters to prevent NaN values
   const safeX = isNaN(x) || x === undefined ? 0 : x;
   const safeY = isNaN(y) || y === undefined ? 0 : y;
+  const safeZ = isNaN(z) || z === undefined ? 0 : z;
+  const safeHeight = isNaN(elementHeight) || elementHeight === undefined ? 90 : elementHeight;
   const safeInnerWidth = isNaN(innerRoomWidth) || innerRoomWidth === undefined ? 600 : innerRoomWidth;
   const safeInnerHeight = isNaN(innerRoomHeight) || innerRoomHeight === undefined ? 400 : innerRoomHeight;
 
-  // Convert dimensions from centimeters to meters for Three.js
-  const innerWidthMeters = safeInnerWidth / 100;
-  const innerHeightMeters = safeInnerHeight / 100;
+  // Create CoordinateTransformEngine instance
+  const engine = new CoordinateTransformEngine({
+    width: safeInnerWidth,
+    height: safeInnerHeight,
+    ceilingHeight: 240  // Default ceiling height (will be configurable in later story)
+  });
 
-  // ✅ FIXED: Input coordinates are ALREADY in inner room space
-  // Just convert cm → meters and center on Three.js origin (0, 0, 0)
-  // NO need to subtract wall thickness again - that's already done in 2D!
+  // Use engine's planTo3D for NEW UNIFIED SYSTEM
+  const pos3d = engine.planTo3D(
+    { x: safeX, y: safeY, z: safeZ },
+    safeHeight
+  );
 
-  // Calculate 3D boundaries (inner room centered on origin)
-  const innerLeftBoundary = -innerWidthMeters / 2;
-  const innerRightBoundary = innerWidthMeters / 2;
-  const innerBackBoundary = -innerHeightMeters / 2;
-  const innerFrontBoundary = innerHeightMeters / 2;
-
-  // Direct mapping: 2D inner coordinates (cm) → 3D inner coordinates (m)
-  // x ranges from 0 to innerRoomWidth (2D) → -innerWidth/2 to +innerWidth/2 (3D)
-  // y ranges from 0 to innerRoomHeight (2D) → -innerHeight/2 to +innerHeight/2 (3D)
-  return {
-    x: innerLeftBoundary + (safeX / safeInnerWidth) * innerWidthMeters,
-    z: innerBackBoundary + (safeY / safeInnerHeight) * innerHeightMeters
-  };
+  return pos3d;
 };
 
 // Helper function to validate element dimensions and prevent NaN values
@@ -157,54 +171,66 @@ export const EnhancedCabinet3D: React.FC<Enhanced3DModelProps> = ({
 
   // Validate element dimensions to prevent NaN values
   const validElement = validateElementDimensions(element);
-  
-  const { x, z } = convertTo3D(validElement.x, validElement.y, roomDimensions.width, roomDimensions.height);
-  const width = validElement.width / 100;  // Convert cm to meters (X-axis)
-  const depth = validElement.depth / 100;  // Convert cm to meters (Y-axis)
-  const height = validElement.height / 100; // Convert cm to meters (Z-axis)
-  
-  // Determine cabinet type
-  const isWallCabinet = element.style?.toLowerCase().includes('wall') || 
+
+  // Determine cabinet type (needed for default Z position)
+  const isWallCabinet = element.style?.toLowerCase().includes('wall') ||
                         element.id.includes('wall-cabinet');
-  
+
   const isCornerCabinet = element.id.includes('corner-cabinet') ||
                         element.id.includes('new-corner-wall-cabinet') ||
                         element.style?.toLowerCase().includes('corner');
-                        
+
   const isLarderCornerUnit = element.id.includes('larder-corner-unit');
-                        
-  const isPanDrawer = element.id.includes('pan-drawers') || 
+
+  const isPanDrawer = element.id.includes('pan-drawers') ||
                      element.style?.toLowerCase().includes('pan drawer');
-                     
-  const isBedroom = element.id.includes('wardrobe') || 
+
+  const isBedroom = element.id.includes('wardrobe') ||
                    element.id.includes('chest') ||
                    element.id.includes('bedside');
-  
+
   const isBathroom = element.id.includes('vanity');
-  
-  const isMediaUnit = element.id.includes('tv-unit') || 
+
+  const isMediaUnit = element.id.includes('tv-unit') ||
                      element.id.includes('media');
-  
+
   // Larder unit types
   const isLarderFridge = element.id.includes('larder-built-in-fridge');
   const isLarderSingleOven = element.id.includes('larder-single-oven');
   const isLarderDoubleOven = element.id.includes('larder-double-oven');
   const isLarderOvenMicrowave = element.id.includes('larder-oven-microwave');
   const isLarderCoffeeMachine = element.id.includes('larder-coffee-machine');
-  
-  // Set position based on cabinet type and Z position
-  // Use validElement.z if set, otherwise use type-based defaults
-  let baseHeight: number;
+
+  // Determine Z position based on cabinet type
+  let elementZ: number;
   if (validElement.z > 0) {
     // User has set a custom Z position - use it
-    baseHeight = validElement.z / 100; // Convert cm to meters
+    elementZ = validElement.z;
     console.log(`✅ [EnhancedCabinet3D] Using custom Z position: ${validElement.z}cm for ${element.id}`);
   } else {
     // Use type-based defaults
-    baseHeight = isWallCabinet ? 2.0 : 0; // Wall cabinets at 200cm, base cabinets on floor
-    console.log(`🔧 [EnhancedCabinet3D] Using default Z position: ${baseHeight * 100}cm for ${element.id} (${isWallCabinet ? 'wall' : 'base'} cabinet)`);
+    elementZ = isWallCabinet ? 200 : 0; // Wall cabinets at 200cm, base cabinets on floor
+    console.log(`🔧 [EnhancedCabinet3D] Using default Z position: ${elementZ}cm for ${element.id} (${isWallCabinet ? 'wall' : 'base'} cabinet)`);
   }
-  const yPosition = baseHeight + height / 2;
+
+  // Use CoordinateTransformEngine for NEW UNIFIED SYSTEM
+  const pos3d = convertTo3D(
+    validElement.x,
+    validElement.y,
+    elementZ,
+    validElement.height || 90,
+    roomDimensions.width,
+    roomDimensions.height
+  );
+
+  // Extract coordinates from engine result (for backward compatibility with existing rendering code)
+  const x = pos3d.x;
+  const z = pos3d.z;
+  const yPosition = pos3d.y;
+
+  const width = validElement.width / 100;  // Convert cm to meters (X-axis)
+  const depth = validElement.depth / 100;  // Convert cm to meters (Y-axis)
+  const height = validElement.height / 100; // Convert cm to meters (Z-axis)
   
   // Material colors - more refined than basic colors
   const selectedColor = '#ff6b6b';
@@ -761,11 +787,6 @@ export const EnhancedAppliance3D: React.FC<Enhanced3DModelProps> = ({
   // Validate element dimensions to prevent NaN values
   const validElement = validateElementDimensions(element);
 
-  const { x, z } = convertTo3D(validElement.x, validElement.y, roomDimensions.width, roomDimensions.height);
-  const width = validElement.width / 100;  // Convert cm to meters (X-axis)
-  const depth = validElement.depth / 100;  // Convert cm to meters (Y-axis)
-  const height = validElement.height / 100; // Convert cm to meters (Z-axis)
-
   const selectedColor = '#ff6b6b';
 
   // Determine appliance type
@@ -805,18 +826,32 @@ export const EnhancedAppliance3D: React.FC<Enhanced3DModelProps> = ({
     loadColor();
   }, [applianceType]);
 
-  // Use Z position if set, otherwise use default (floor level)
-  let baseHeight: number;
+  // Determine Z position (use element.z if set, otherwise floor level)
+  const elementZ = validElement.z > 0 ? validElement.z : 0;
   if (validElement.z > 0) {
-    // User has set a custom Z position - use it
-    baseHeight = validElement.z / 100; // Convert cm to meters
     console.log(`✅ [EnhancedAppliance3D] Using custom Z position: ${validElement.z}cm for ${element.id}`);
   } else {
-    // Default to floor level for appliances
-    baseHeight = 0;
     console.log(`🔧 [EnhancedAppliance3D] Using default Z position: 0cm for ${element.id} (floor level)`);
   }
-  const yPosition = baseHeight + height / 2;
+
+  // Use CoordinateTransformEngine for NEW UNIFIED SYSTEM
+  const pos3d = convertTo3D(
+    validElement.x,
+    validElement.y,
+    elementZ,
+    validElement.height || 90,
+    roomDimensions.width,
+    roomDimensions.height
+  );
+
+  // Extract coordinates from engine result
+  const x = pos3d.x;
+  const z = pos3d.z;
+  const yPosition = pos3d.y;
+
+  const width = validElement.width / 100;  // Convert cm to meters (X-axis)
+  const depth = validElement.depth / 100;  // Convert cm to meters (Y-axis)
+  const height = validElement.height / 100; // Convert cm to meters (Z-axis)
 
   // Base color: priority is element.color > dbColor > hardcoded fallback
   const applianceColor = element.color || dbColor || getApplianceColorFallback(applianceType);
@@ -1617,15 +1652,20 @@ export const EnhancedAppliance3D: React.FC<Enhanced3DModelProps> = ({
 // Missing component exports restored after cleanup
 export const EnhancedCounterTop3D: React.FC<Enhanced3DModelProps> = ({ element, roomDimensions, isSelected, onClick }) => {
   const validElement = validateElementDimensions(element);
-  const { x, z } = convertTo3D(validElement.x, validElement.y, roomDimensions.width, roomDimensions.height);
+  const pos3d = convertTo3D(
+    validElement.x,
+    validElement.y,
+    validElement.z || 86,  // Default countertop height (86cm base cabinet)
+    validElement.height || 4,
+    roomDimensions.width,
+    roomDimensions.height
+  );
   const width = validElement.width / 100;
   const depth = validElement.depth / 100;
   const height = validElement.height / 100;
-  const baseHeight = validElement.z / 100;
-  const y = baseHeight + (height / 2);
-  
+
   return (
-    <group position={[x + width / 2, y, z + depth / 2]} onClick={onClick} rotation={[0, element.rotation * Math.PI / 180, 0]}>
+    <group position={[pos3d.x + width / 2, pos3d.y, pos3d.z + depth / 2]} onClick={onClick} rotation={[0, element.rotation * Math.PI / 180, 0]}>
       <mesh position={[0, 0, 0]} castShadow receiveShadow>
         <boxGeometry args={[width, height, depth]} />
         <meshLambertMaterial color={element.color || '#D2B48C'} />
@@ -1643,14 +1683,20 @@ export const EnhancedCounterTop3D: React.FC<Enhanced3DModelProps> = ({ element, 
 // Missing exports that View3D.tsx needs
 export const EnhancedEndPanel3D: React.FC<Enhanced3DModelProps> = ({ element, roomDimensions, isSelected, onClick }) => {
   const validElement = validateElementDimensions(element);
-  const { x, z } = convertTo3D(validElement.x, validElement.y, roomDimensions.width, roomDimensions.height);
+  const pos3d = convertTo3D(
+    validElement.x,
+    validElement.y,
+    validElement.z || 0,
+    validElement.height || 90,
+    roomDimensions.width,
+    roomDimensions.height
+  );
   const width = validElement.width / 100;
   const depth = validElement.depth / 100;
   const height = validElement.height / 100;
-  const y = height / 2;
-  
+
   return (
-    <group position={[x + width / 2, y, z + depth / 2]} onClick={onClick} rotation={[0, element.rotation * Math.PI / 180, 0]}>
+    <group position={[pos3d.x + width / 2, pos3d.y, pos3d.z + depth / 2]} onClick={onClick} rotation={[0, element.rotation * Math.PI / 180, 0]}>
       <mesh position={[0, 0, 0]} castShadow receiveShadow>
         <boxGeometry args={[width, height, depth]} />
         <meshLambertMaterial color={element.color || '#8B4513'} />
@@ -1667,15 +1713,20 @@ export const EnhancedEndPanel3D: React.FC<Enhanced3DModelProps> = ({ element, ro
 
 export const EnhancedWindow3D: React.FC<Enhanced3DModelProps> = ({ element, roomDimensions, isSelected, onClick }) => {
   const validElement = validateElementDimensions(element);
-  const { x, z } = convertTo3D(validElement.x, validElement.y, roomDimensions.width, roomDimensions.height);
+  const pos3d = convertTo3D(
+    validElement.x,
+    validElement.y,
+    validElement.z > 0 ? validElement.z : 90,  // Default window base height 90cm
+    validElement.height || 100,
+    roomDimensions.width,
+    roomDimensions.height
+  );
   const width = validElement.width / 100;
   const depth = validElement.depth / 100;
   const height = validElement.height / 100;
-  const baseHeight = validElement.z > 0 ? validElement.z / 100 : 0.9;
-  const y = baseHeight + (height / 2);
-  
+
   return (
-    <group position={[x + width / 2, y, z + depth / 2]} onClick={onClick} rotation={[0, element.rotation * Math.PI / 180, 0]}>
+    <group position={[pos3d.x + width / 2, pos3d.y, pos3d.z + depth / 2]} onClick={onClick} rotation={[0, element.rotation * Math.PI / 180, 0]}>
       <mesh position={[0, 0, 0]} castShadow receiveShadow>
         <boxGeometry args={[width, height, depth]} />
         <meshLambertMaterial color="#FFFFFF" />
@@ -1692,14 +1743,20 @@ export const EnhancedWindow3D: React.FC<Enhanced3DModelProps> = ({ element, room
 
 export const EnhancedDoor3D: React.FC<Enhanced3DModelProps> = ({ element, roomDimensions, isSelected, onClick }) => {
   const validElement = validateElementDimensions(element);
-  const { x, z } = convertTo3D(validElement.x, validElement.y, roomDimensions.width, roomDimensions.height);
+  const pos3d = convertTo3D(
+    validElement.x,
+    validElement.y,
+    validElement.z || 0,
+    validElement.height || 200,
+    roomDimensions.width,
+    roomDimensions.height
+  );
   const width = validElement.width / 100;
   const depth = validElement.depth / 100;
   const height = validElement.height / 100;
-  const y = height / 2;
-  
+
   return (
-    <group position={[x + width / 2, y, z + depth / 2]} onClick={onClick} rotation={[0, element.rotation * Math.PI / 180, 0]}>
+    <group position={[pos3d.x + width / 2, pos3d.y, pos3d.z + depth / 2]} onClick={onClick} rotation={[0, element.rotation * Math.PI / 180, 0]}>
       <mesh position={[0, 0, 0]} castShadow receiveShadow>
         <boxGeometry args={[width, height, depth]} />
         <meshLambertMaterial color={element.color || '#8B4513'} />
@@ -1716,14 +1773,20 @@ export const EnhancedDoor3D: React.FC<Enhanced3DModelProps> = ({ element, roomDi
 
 export const EnhancedFlooring3D: React.FC<Enhanced3DModelProps> = ({ element, roomDimensions, isSelected, onClick }) => {
   const validElement = validateElementDimensions(element);
-  const { x, z } = convertTo3D(validElement.x, validElement.y, roomDimensions.width, roomDimensions.height);
+  const pos3d = convertTo3D(
+    validElement.x,
+    validElement.y,
+    validElement.z || 0,
+    validElement.height || 10,
+    roomDimensions.width,
+    roomDimensions.height
+  );
   const width = validElement.width / 100;
   const depth = validElement.depth / 100;
   const height = validElement.height / 100;
-  const y = height / 2;
-  
+
   return (
-    <group position={[x + width / 2, y, z + depth / 2]} onClick={onClick} rotation={[0, element.rotation * Math.PI / 180, 0]}>
+    <group position={[pos3d.x + width / 2, pos3d.y, pos3d.z + depth / 2]} onClick={onClick} rotation={[0, element.rotation * Math.PI / 180, 0]}>
       <mesh position={[0, 0, 0]} castShadow receiveShadow>
         <boxGeometry args={[width, height, depth]} />
         <meshLambertMaterial color={element.color || '#DEB887'} />
@@ -1740,14 +1803,20 @@ export const EnhancedFlooring3D: React.FC<Enhanced3DModelProps> = ({ element, ro
 
 export const EnhancedToeKick3D: React.FC<Enhanced3DModelProps> = ({ element, roomDimensions, isSelected, onClick }) => {
   const validElement = validateElementDimensions(element);
-  const { x, z } = convertTo3D(validElement.x, validElement.y, roomDimensions.width, roomDimensions.height);
+  const pos3d = convertTo3D(
+    validElement.x,
+    validElement.y,
+    validElement.z || 0,
+    validElement.height || 15,
+    roomDimensions.width,
+    roomDimensions.height
+  );
   const width = validElement.width / 100;
   const depth = validElement.depth / 100;
   const height = validElement.height / 100;
-  const y = height / 2;
-  
+
   return (
-    <group position={[x + width / 2, y, z + depth / 2]} onClick={onClick} rotation={[0, element.rotation * Math.PI / 180, 0]}>
+    <group position={[pos3d.x + width / 2, pos3d.y, pos3d.z + depth / 2]} onClick={onClick} rotation={[0, element.rotation * Math.PI / 180, 0]}>
       <mesh position={[0, 0, 0]} castShadow receiveShadow>
         <boxGeometry args={[width, height, depth]} />
         <meshLambertMaterial color={element.color || '#FFFFFF'} />
@@ -1764,16 +1833,20 @@ export const EnhancedToeKick3D: React.FC<Enhanced3DModelProps> = ({ element, roo
 
 export const EnhancedCornice3D: React.FC<Enhanced3DModelProps> = ({ element, roomDimensions, isSelected, onClick }) => {
   const validElement = validateElementDimensions(element);
-  const { x, z } = convertTo3D(validElement.x, validElement.y, roomDimensions.width, roomDimensions.height);
+  const pos3d = convertTo3D(
+    validElement.x,
+    validElement.y,
+    validElement.z > 0 ? validElement.z : 200,  // Default cornice height 200cm (near ceiling)
+    validElement.height || 10,
+    roomDimensions.width,
+    roomDimensions.height
+  );
   const width = validElement.width / 100;
   const depth = validElement.depth / 100;
   const height = validElement.height / 100;
-  const elementZ = validElement.z / 100;
-  const baseHeight = elementZ > 0 ? elementZ : 2.0;
-  const y = baseHeight + (height / 2);
-  
+
   return (
-    <group position={[x + width / 2, y, z + depth / 2]} onClick={onClick} rotation={[0, element.rotation * Math.PI / 180, 0]}>
+    <group position={[pos3d.x + width / 2, pos3d.y, pos3d.z + depth / 2]} onClick={onClick} rotation={[0, element.rotation * Math.PI / 180, 0]}>
       <mesh position={[0, 0, 0]} castShadow receiveShadow>
         <boxGeometry args={[width, height, depth]} />
         <meshLambertMaterial color={element.color || '#FFFFFF'} />
@@ -1790,16 +1863,20 @@ export const EnhancedCornice3D: React.FC<Enhanced3DModelProps> = ({ element, roo
 
 export const EnhancedPelmet3D: React.FC<Enhanced3DModelProps> = ({ element, roomDimensions, isSelected, onClick }) => {
   const validElement = validateElementDimensions(element);
-  const { x, z } = convertTo3D(validElement.x, validElement.y, roomDimensions.width, roomDimensions.height);
+  const pos3d = convertTo3D(
+    validElement.x,
+    validElement.y,
+    validElement.z > 0 ? validElement.z : 140,  // Default pelmet height 140cm
+    validElement.height || 10,
+    roomDimensions.width,
+    roomDimensions.height
+  );
   const width = validElement.width / 100;
   const depth = validElement.depth / 100;
   const height = validElement.height / 100;
-  const elementZ = validElement.z / 100;
-  const baseHeight = elementZ > 0 ? elementZ : 1.4;
-  const y = baseHeight + (height / 2);
-  
+
   return (
-    <group position={[x + width / 2, y, z + depth / 2]} onClick={onClick} rotation={[0, element.rotation * Math.PI / 180, 0]}>
+    <group position={[pos3d.x + width / 2, pos3d.y, pos3d.z + depth / 2]} onClick={onClick} rotation={[0, element.rotation * Math.PI / 180, 0]}>
       <mesh position={[0, 0, 0]} castShadow receiveShadow>
         <boxGeometry args={[width, height, depth]} />
         <meshLambertMaterial color={element.color || '#FFFFFF'} />
@@ -1816,15 +1893,20 @@ export const EnhancedPelmet3D: React.FC<Enhanced3DModelProps> = ({ element, room
 
 export const EnhancedWallUnitEndPanel3D: React.FC<Enhanced3DModelProps> = ({ element, roomDimensions, isSelected, onClick }) => {
   const validElement = validateElementDimensions(element);
-  const { x, z } = convertTo3D(validElement.x, validElement.y, roomDimensions.width, roomDimensions.height);
+  const pos3d = convertTo3D(
+    validElement.x,
+    validElement.y,
+    validElement.z > 0 ? validElement.z : 200,  // Default wall unit end panel height 200cm
+    validElement.height || 70,
+    roomDimensions.width,
+    roomDimensions.height
+  );
   const width = validElement.width / 100;
   const depth = validElement.depth / 100;
   const height = validElement.height / 100;
-  const baseHeight = validElement.z > 0 ? validElement.z / 100 : 2.0;
-  const y = baseHeight + (height / 2);
-  
+
   return (
-    <group position={[x + width / 2, y, z + depth / 2]} onClick={onClick} rotation={[0, element.rotation * Math.PI / 180, 0]}>
+    <group position={[pos3d.x + width / 2, pos3d.y, pos3d.z + depth / 2]} onClick={onClick} rotation={[0, element.rotation * Math.PI / 180, 0]}>
       <mesh position={[0, 0, 0]} castShadow receiveShadow>
         <boxGeometry args={[width, height, depth]} />
         <meshLambertMaterial color={element.color || '#8B4513'} />
@@ -1842,11 +1924,7 @@ export const EnhancedWallUnitEndPanel3D: React.FC<Enhanced3DModelProps> = ({ ele
 // Enhanced Sink 3D Component with realistic professional models
 export const EnhancedSink3D: React.FC<Enhanced3DModelProps> = ({ element, roomDimensions, isSelected, onClick }) => {
   const validElement = validateElementDimensions(element);
-  const { x, z } = convertTo3D(validElement.x, validElement.y, roomDimensions.width, roomDimensions.height);
-  const width = validElement.width / 100;
-  const depth = validElement.depth / 100;
-  const height = validElement.height / 100;
-  
+
   // Determine sink type and mounting based on ID
   const isButlerSink = element.id.includes('butler-sink') || element.id.includes('butler') || element.id.includes('base-unit-sink');
   const isCornerSink = element.id.includes('corner-sink');
@@ -1855,18 +1933,35 @@ export const EnhancedSink3D: React.FC<Enhanced3DModelProps> = ({ element, roomDi
   const isDoubleBowl = element.id.includes('double-bowl') || element.id.includes('double');
   const isIslandSink = element.id.includes('island');
   const hasDrainingBoard = element.id.includes('draining-board') || element.metadata?.has_draining_board;
-  
-  // Calculate base height based on sink type
-  let baseHeight: number;
-  if (isButlerSink) {
-    // Butler sinks at Z position 65cm
-    baseHeight = validElement.z > 0 ? validElement.z / 100 : 0.65; // 65cm for butler sinks
+
+  // Determine Z position based on sink type
+  let elementZ: number;
+  if (validElement.z > 0) {
+    elementZ = validElement.z;
+  } else if (isButlerSink) {
+    elementZ = 65; // Butler sinks at 65cm
   } else {
-    // Kitchen sinks at Z position 75cm
-    baseHeight = validElement.z > 0 ? validElement.z / 100 : 0.75; // 75cm for kitchen sinks
+    elementZ = 75; // Kitchen sinks at 75cm
   }
-  
-  const yPosition = baseHeight + (height / 2);
+
+  // Use CoordinateTransformEngine for NEW UNIFIED SYSTEM
+  const pos3d = convertTo3D(
+    validElement.x,
+    validElement.y,
+    elementZ,
+    validElement.height || 20,
+    roomDimensions.width,
+    roomDimensions.height
+  );
+
+  // Extract coordinates from engine result
+  const x = pos3d.x;
+  const z = pos3d.z;
+  const yPosition = pos3d.y;
+
+  const width = validElement.width / 100;
+  const depth = validElement.depth / 100;
+  const height = validElement.height / 100;
   
   // Material colors based on sink type
   const sinkColor = isButlerSink ? '#FFFFFF' : '#C0C0C0'; // White ceramic for butler, stainless steel for kitchen
