@@ -14,6 +14,129 @@ export type Database = {
   }
   public: {
     Tables: {
+      ab_test_results: {
+        Row: {
+          component_type: string | null
+          created_at: string | null
+          environment: string | null
+          error_message: string | null
+          execution_time_ms: number | null
+          id: string
+          metadata: Json | null
+          operation: string
+          session_id: string | null
+          success: boolean
+          test_name: string
+          user_id: string | null
+          variant: string
+          view_type: string | null
+        }
+        Insert: {
+          component_type?: string | null
+          created_at?: string | null
+          environment?: string | null
+          error_message?: string | null
+          execution_time_ms?: number | null
+          id?: string
+          metadata?: Json | null
+          operation: string
+          session_id?: string | null
+          success: boolean
+          test_name: string
+          user_id?: string | null
+          variant: string
+          view_type?: string | null
+        }
+        Update: {
+          component_type?: string | null
+          created_at?: string | null
+          environment?: string | null
+          error_message?: string | null
+          execution_time_ms?: number | null
+          id?: string
+          metadata?: Json | null
+          operation?: string
+          session_id?: string | null
+          success?: boolean
+          test_name?: string
+          user_id?: string | null
+          variant?: string
+          view_type?: string | null
+        }
+        Relationships: []
+      }
+      app_configuration: {
+        Row: {
+          category: string
+          config_key: string
+          config_name: string
+          created_at: string | null
+          created_by: string | null
+          default_value: string | null
+          description: string | null
+          dev_value: number | null
+          id: string
+          max_value: number | null
+          min_value: number | null
+          production_value: number | null
+          staging_value: number | null
+          unit: string | null
+          updated_at: string | null
+          updated_by: string | null
+          valid_values: Json | null
+          value_boolean: boolean | null
+          value_json: Json | null
+          value_numeric: number | null
+          value_string: string | null
+        }
+        Insert: {
+          category: string
+          config_key: string
+          config_name: string
+          created_at?: string | null
+          created_by?: string | null
+          default_value?: string | null
+          description?: string | null
+          dev_value?: number | null
+          id?: string
+          max_value?: number | null
+          min_value?: number | null
+          production_value?: number | null
+          staging_value?: number | null
+          unit?: string | null
+          updated_at?: string | null
+          updated_by?: string | null
+          valid_values?: Json | null
+          value_boolean?: boolean | null
+          value_json?: Json | null
+          value_numeric?: number | null
+          value_string?: string | null
+        }
+        Update: {
+          category?: string
+          config_key?: string
+          config_name?: string
+          created_at?: string | null
+          created_by?: string | null
+          default_value?: string | null
+          description?: string | null
+          dev_value?: number | null
+          id?: string
+          max_value?: number | null
+          min_value?: number | null
+          production_value?: number | null
+          staging_value?: number | null
+          unit?: string | null
+          updated_at?: string | null
+          updated_by?: string | null
+          valid_values?: Json | null
+          value_boolean?: boolean | null
+          value_json?: Json | null
+          value_numeric?: number | null
+          value_string?: string | null
+        }
+        Relationships: []
+      }
       appliance_3d_types: {
         Row: {
           appliance_category: string
@@ -54,6 +177,51 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      appliance_types: {
+        Row: {
+          appliance_code: string
+          appliance_name: string
+          category: string
+          created_at: string | null
+          default_color: string
+          default_finish: string | null
+          description: string | null
+          id: string
+          typical_depth: number | null
+          typical_height: number | null
+          typical_width: number | null
+          updated_at: string | null
+        }
+        Insert: {
+          appliance_code: string
+          appliance_name: string
+          category: string
+          created_at?: string | null
+          default_color: string
+          default_finish?: string | null
+          description?: string | null
+          id?: string
+          typical_depth?: number | null
+          typical_height?: number | null
+          typical_width?: number | null
+          updated_at?: string | null
+        }
+        Update: {
+          appliance_code?: string
+          appliance_name?: string
+          category?: string
+          created_at?: string | null
+          default_color?: string
+          default_finish?: string | null
+          description?: string | null
+          id?: string
+          typical_depth?: number | null
+          typical_height?: number | null
+          typical_width?: number | null
+          updated_at?: string | null
+        }
+        Relationships: []
       }
       blog_categories: {
         Row: {
@@ -160,6 +328,191 @@ export type Database = {
           tags?: string[] | null
           title?: string
           updated_at?: string | null
+        }
+        Relationships: []
+      }
+      component_2d_renders: {
+        Row: {
+          component_id: string
+          created_at: string | null
+          created_by: string | null
+          elevation_data: Json | null
+          elevation_svg_back: string | null
+          elevation_svg_front: string | null
+          elevation_svg_left: string | null
+          elevation_svg_right: string | null
+          elevation_type: string
+          fill_color: string | null
+          id: string
+          plan_view_data: Json | null
+          plan_view_svg: string | null
+          plan_view_type: string
+          side_elevation_data: Json | null
+          side_elevation_type: string
+          stroke_color: string | null
+          stroke_width: number | null
+          updated_at: string | null
+        }
+        Insert: {
+          component_id: string
+          created_at?: string | null
+          created_by?: string | null
+          elevation_data?: Json | null
+          elevation_svg_back?: string | null
+          elevation_svg_front?: string | null
+          elevation_svg_left?: string | null
+          elevation_svg_right?: string | null
+          elevation_type?: string
+          fill_color?: string | null
+          id?: string
+          plan_view_data?: Json | null
+          plan_view_svg?: string | null
+          plan_view_type?: string
+          side_elevation_data?: Json | null
+          side_elevation_type?: string
+          stroke_color?: string | null
+          stroke_width?: number | null
+          updated_at?: string | null
+        }
+        Update: {
+          component_id?: string
+          created_at?: string | null
+          created_by?: string | null
+          elevation_data?: Json | null
+          elevation_svg_back?: string | null
+          elevation_svg_front?: string | null
+          elevation_svg_left?: string | null
+          elevation_svg_right?: string | null
+          elevation_type?: string
+          fill_color?: string | null
+          id?: string
+          plan_view_data?: Json | null
+          plan_view_svg?: string | null
+          plan_view_type?: string
+          side_elevation_data?: Json | null
+          side_elevation_type?: string
+          stroke_color?: string | null
+          stroke_width?: number | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "component_2d_renders_component_id_fkey"
+            columns: ["component_id"]
+            isOneToOne: true
+            referencedRelation: "components"
+            referencedColumns: ["component_id"]
+          },
+        ]
+      }
+      component_3d_models: {
+        Row: {
+          auto_rotate_enabled: boolean | null
+          can_overlap_layers: string[] | null
+          category: string | null
+          component_id: string
+          component_name: string
+          component_type: string
+          corner_depth_base: number | null
+          corner_depth_wall: number | null
+          corner_rotation_back_left: number | null
+          corner_rotation_back_right: number | null
+          corner_rotation_front_left: number | null
+          corner_rotation_front_right: number | null
+          created_at: string | null
+          created_by: string | null
+          default_depth: number | null
+          default_height: number | null
+          default_width: number | null
+          description: string | null
+          geometry_type: string
+          has_direction: boolean | null
+          id: string
+          is_corner_component: boolean | null
+          layer_type: string | null
+          leg_length: number | null
+          max_height_cm: number | null
+          min_height_cm: number | null
+          rotation_center_x: string | null
+          rotation_center_y: string | null
+          rotation_center_z: string | null
+          updated_at: string | null
+          wall_rotation_bottom: number | null
+          wall_rotation_left: number | null
+          wall_rotation_right: number | null
+          wall_rotation_top: number | null
+        }
+        Insert: {
+          auto_rotate_enabled?: boolean | null
+          can_overlap_layers?: string[] | null
+          category?: string | null
+          component_id: string
+          component_name: string
+          component_type: string
+          corner_depth_base?: number | null
+          corner_depth_wall?: number | null
+          corner_rotation_back_left?: number | null
+          corner_rotation_back_right?: number | null
+          corner_rotation_front_left?: number | null
+          corner_rotation_front_right?: number | null
+          created_at?: string | null
+          created_by?: string | null
+          default_depth?: number | null
+          default_height?: number | null
+          default_width?: number | null
+          description?: string | null
+          geometry_type?: string
+          has_direction?: boolean | null
+          id?: string
+          is_corner_component?: boolean | null
+          layer_type?: string | null
+          leg_length?: number | null
+          max_height_cm?: number | null
+          min_height_cm?: number | null
+          rotation_center_x?: string | null
+          rotation_center_y?: string | null
+          rotation_center_z?: string | null
+          updated_at?: string | null
+          wall_rotation_bottom?: number | null
+          wall_rotation_left?: number | null
+          wall_rotation_right?: number | null
+          wall_rotation_top?: number | null
+        }
+        Update: {
+          auto_rotate_enabled?: boolean | null
+          can_overlap_layers?: string[] | null
+          category?: string | null
+          component_id?: string
+          component_name?: string
+          component_type?: string
+          corner_depth_base?: number | null
+          corner_depth_wall?: number | null
+          corner_rotation_back_left?: number | null
+          corner_rotation_back_right?: number | null
+          corner_rotation_front_left?: number | null
+          corner_rotation_front_right?: number | null
+          created_at?: string | null
+          created_by?: string | null
+          default_depth?: number | null
+          default_height?: number | null
+          default_width?: number | null
+          description?: string | null
+          geometry_type?: string
+          has_direction?: boolean | null
+          id?: string
+          is_corner_component?: boolean | null
+          layer_type?: string | null
+          leg_length?: number | null
+          max_height_cm?: number | null
+          min_height_cm?: number | null
+          rotation_center_x?: string | null
+          rotation_center_y?: string | null
+          rotation_center_z?: string | null
+          updated_at?: string | null
+          wall_rotation_bottom?: number | null
+          wall_rotation_left?: number | null
+          wall_rotation_right?: number | null
+          wall_rotation_top?: number | null
         }
         Relationships: []
       }
@@ -457,6 +810,7 @@ export type Database = {
           metadata: Json | null
           mount_type: string | null
           name: string
+          plinth_height: number | null
           replacement_component_id: string | null
           room_types: string[]
           tags: string[] | null
@@ -486,6 +840,7 @@ export type Database = {
           metadata?: Json | null
           mount_type?: string | null
           name: string
+          plinth_height?: number | null
           replacement_component_id?: string | null
           room_types: string[]
           tags?: string[] | null
@@ -515,6 +870,7 @@ export type Database = {
           metadata?: Json | null
           mount_type?: string | null
           name?: string
+          plinth_height?: number | null
           replacement_component_id?: string | null
           room_types?: string[]
           tags?: string[] | null
@@ -603,6 +959,591 @@ export type Database = {
         }
         Relationships: []
       }
+      egger_availability: {
+        Row: {
+          availability_status: string | null
+          created_at: string | null
+          decor_id: string
+          id: string
+          last_updated: string | null
+          lead_time_days: number | null
+          minimum_order_quantity: number | null
+          product_type: string
+          region: string | null
+        }
+        Insert: {
+          availability_status?: string | null
+          created_at?: string | null
+          decor_id: string
+          id?: string
+          last_updated?: string | null
+          lead_time_days?: number | null
+          minimum_order_quantity?: number | null
+          product_type: string
+          region?: string | null
+        }
+        Update: {
+          availability_status?: string | null
+          created_at?: string | null
+          decor_id?: string
+          id?: string
+          last_updated?: string | null
+          lead_time_days?: number | null
+          minimum_order_quantity?: number | null
+          product_type?: string
+          region?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "egger_availability_decor_id_fkey"
+            columns: ["decor_id"]
+            isOneToOne: false
+            referencedRelation: "egger_decors"
+            referencedColumns: ["decor_id"]
+          },
+        ]
+      }
+      egger_categories: {
+        Row: {
+          color_hex: string | null
+          created_at: string | null
+          description: string | null
+          id: string
+          name: string
+        }
+        Insert: {
+          color_hex?: string | null
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          name: string
+        }
+        Update: {
+          color_hex?: string | null
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          name?: string
+        }
+        Relationships: []
+      }
+      egger_color_families: {
+        Row: {
+          color_hex: string | null
+          created_at: string | null
+          description: string | null
+          id: string
+          name: string
+        }
+        Insert: {
+          color_hex?: string | null
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          name: string
+        }
+        Update: {
+          color_hex?: string | null
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          name?: string
+        }
+        Relationships: []
+      }
+      egger_combinations: {
+        Row: {
+          combination_details: Json | null
+          confidence_score: number | null
+          created_at: string | null
+          decor_id: string
+          id: string
+          match_type: string | null
+          notes: string | null
+          recommended_decor_id: string
+        }
+        Insert: {
+          combination_details?: Json | null
+          confidence_score?: number | null
+          created_at?: string | null
+          decor_id: string
+          id?: string
+          match_type?: string | null
+          notes?: string | null
+          recommended_decor_id: string
+        }
+        Update: {
+          combination_details?: Json | null
+          confidence_score?: number | null
+          created_at?: string | null
+          decor_id?: string
+          id?: string
+          match_type?: string | null
+          notes?: string | null
+          recommended_decor_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "egger_combinations_decor_id_fkey"
+            columns: ["decor_id"]
+            isOneToOne: false
+            referencedRelation: "egger_decors"
+            referencedColumns: ["decor_id"]
+          },
+          {
+            foreignKeyName: "egger_combinations_recommended_decor_id_fkey"
+            columns: ["recommended_decor_id"]
+            isOneToOne: false
+            referencedRelation: "egger_decors"
+            referencedColumns: ["decor_id"]
+          },
+        ]
+      }
+      egger_decors: {
+        Row: {
+          category: string | null
+          color_family: string | null
+          colour_character_text: string | null
+          colour_character_title: string | null
+          cost_per_sqm: number | null
+          created_at: string | null
+          decor: string
+          decor_id: string
+          decor_name: string
+          description: string | null
+          finish_type: string | null
+          id: string
+          product_page_url: string | null
+          supplier_notes: string | null
+          texture: string
+          updated_at: string | null
+        }
+        Insert: {
+          category?: string | null
+          color_family?: string | null
+          colour_character_text?: string | null
+          colour_character_title?: string | null
+          cost_per_sqm?: number | null
+          created_at?: string | null
+          decor: string
+          decor_id: string
+          decor_name: string
+          description?: string | null
+          finish_type?: string | null
+          id?: string
+          product_page_url?: string | null
+          supplier_notes?: string | null
+          texture: string
+          updated_at?: string | null
+        }
+        Update: {
+          category?: string | null
+          color_family?: string | null
+          colour_character_text?: string | null
+          colour_character_title?: string | null
+          cost_per_sqm?: number | null
+          created_at?: string | null
+          decor?: string
+          decor_id?: string
+          decor_name?: string
+          description?: string | null
+          finish_type?: string | null
+          id?: string
+          product_page_url?: string | null
+          supplier_notes?: string | null
+          texture?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      egger_images: {
+        Row: {
+          created_at: string | null
+          decor_id: string
+          height: number | null
+          id: string
+          image_type: string | null
+          image_url: string
+          is_primary: boolean | null
+          sort_order: number | null
+          width: number | null
+        }
+        Insert: {
+          created_at?: string | null
+          decor_id: string
+          height?: number | null
+          id?: string
+          image_type?: string | null
+          image_url: string
+          is_primary?: boolean | null
+          sort_order?: number | null
+          width?: number | null
+        }
+        Update: {
+          created_at?: string | null
+          decor_id?: string
+          height?: number | null
+          id?: string
+          image_type?: string | null
+          image_url?: string
+          is_primary?: boolean | null
+          sort_order?: number | null
+          width?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "egger_images_decor_id_fkey"
+            columns: ["decor_id"]
+            isOneToOne: false
+            referencedRelation: "egger_decors"
+            referencedColumns: ["decor_id"]
+          },
+        ]
+      }
+      egger_interior_matches: {
+        Row: {
+          color_palette: string[]
+          created_at: string | null
+          decor_id: string
+          design_notes: string | null
+          id: string
+          interior_style: string
+          room_types: string[]
+        }
+        Insert: {
+          color_palette?: string[]
+          created_at?: string | null
+          decor_id: string
+          design_notes?: string | null
+          id?: string
+          interior_style: string
+          room_types?: string[]
+        }
+        Update: {
+          color_palette?: string[]
+          created_at?: string | null
+          decor_id?: string
+          design_notes?: string | null
+          id?: string
+          interior_style?: string
+          room_types?: string[]
+        }
+        Relationships: [
+          {
+            foreignKeyName: "egger_interior_matches_decor_id_fkey"
+            columns: ["decor_id"]
+            isOneToOne: true
+            referencedRelation: "egger_decors"
+            referencedColumns: ["decor_id"]
+          },
+        ]
+      }
+      egger_no_combinations: {
+        Row: {
+          created_at: string | null
+          decor_id: string
+          id: string
+          notes: string | null
+          reason: string
+        }
+        Insert: {
+          created_at?: string | null
+          decor_id: string
+          id?: string
+          notes?: string | null
+          reason: string
+        }
+        Update: {
+          created_at?: string | null
+          decor_id?: string
+          id?: string
+          notes?: string | null
+          reason?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "egger_no_combinations_decor_id_fkey"
+            columns: ["decor_id"]
+            isOneToOne: true
+            referencedRelation: "egger_decors"
+            referencedColumns: ["decor_id"]
+          },
+        ]
+      }
+      egger_textures: {
+        Row: {
+          created_at: string | null
+          description: string | null
+          id: string
+          name: string
+        }
+        Insert: {
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          name: string
+        }
+        Update: {
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          name?: string
+        }
+        Relationships: []
+      }
+      farrow_ball_categories: {
+        Row: {
+          category_name: string
+          created_at: string | null
+          description: string | null
+          id: string
+        }
+        Insert: {
+          category_name: string
+          created_at?: string | null
+          description?: string | null
+          id?: string
+        }
+        Update: {
+          category_name?: string
+          created_at?: string | null
+          description?: string | null
+          id?: string
+        }
+        Relationships: []
+      }
+      farrow_ball_color_families: {
+        Row: {
+          created_at: string | null
+          description: string | null
+          family_name: string
+          id: string
+        }
+        Insert: {
+          created_at?: string | null
+          description?: string | null
+          family_name: string
+          id?: string
+        }
+        Update: {
+          created_at?: string | null
+          description?: string | null
+          family_name?: string
+          id?: string
+        }
+        Relationships: []
+      }
+      farrow_ball_color_schemes: {
+        Row: {
+          color_type: string
+          created_at: string | null
+          finish_id: string
+          hex: string
+          id: string
+          rgb: string
+        }
+        Insert: {
+          color_type: string
+          created_at?: string | null
+          finish_id: string
+          hex: string
+          id?: string
+          rgb: string
+        }
+        Update: {
+          color_type?: string
+          created_at?: string | null
+          finish_id?: string
+          hex?: string
+          id?: string
+          rgb?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "farrow_ball_color_schemes_finish_id_fkey"
+            columns: ["finish_id"]
+            isOneToOne: false
+            referencedRelation: "farrow_ball_finishes"
+            referencedColumns: ["finish_id"]
+          },
+        ]
+      }
+      farrow_ball_finishes: {
+        Row: {
+          availability: string | null
+          available_finishes: Json | null
+          color_name: string
+          color_number: string
+          complementary_color: string | null
+          created_at: string | null
+          description: string | null
+          finish_id: string
+          hover_url: string | null
+          id: string
+          key_features: Json | null
+          main_color_hex: string | null
+          main_color_rgb: string | null
+          price_info: string | null
+          product_url: string | null
+          recommended_primer: string | null
+          room_categories: Json | null
+          thumb_url: string | null
+          title: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          availability?: string | null
+          available_finishes?: Json | null
+          color_name: string
+          color_number: string
+          complementary_color?: string | null
+          created_at?: string | null
+          description?: string | null
+          finish_id: string
+          hover_url?: string | null
+          id?: string
+          key_features?: Json | null
+          main_color_hex?: string | null
+          main_color_rgb?: string | null
+          price_info?: string | null
+          product_url?: string | null
+          recommended_primer?: string | null
+          room_categories?: Json | null
+          thumb_url?: string | null
+          title?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          availability?: string | null
+          available_finishes?: Json | null
+          color_name?: string
+          color_number?: string
+          complementary_color?: string | null
+          created_at?: string | null
+          description?: string | null
+          finish_id?: string
+          hover_url?: string | null
+          id?: string
+          key_features?: Json | null
+          main_color_hex?: string | null
+          main_color_rgb?: string | null
+          price_info?: string | null
+          product_url?: string | null
+          recommended_primer?: string | null
+          room_categories?: Json | null
+          thumb_url?: string | null
+          title?: string | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      farrow_ball_images: {
+        Row: {
+          created_at: string | null
+          finish_id: string
+          id: string
+          image_order: number | null
+          image_type: string | null
+          image_url: string
+          is_main_image: boolean | null
+        }
+        Insert: {
+          created_at?: string | null
+          finish_id: string
+          id?: string
+          image_order?: number | null
+          image_type?: string | null
+          image_url: string
+          is_main_image?: boolean | null
+        }
+        Update: {
+          created_at?: string | null
+          finish_id?: string
+          id?: string
+          image_order?: number | null
+          image_type?: string | null
+          image_url?: string
+          is_main_image?: boolean | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "farrow_ball_images_finish_id_fkey"
+            columns: ["finish_id"]
+            isOneToOne: false
+            referencedRelation: "farrow_ball_finishes"
+            referencedColumns: ["finish_id"]
+          },
+        ]
+      }
+      feature_flags: {
+        Row: {
+          approved_at: string | null
+          approved_by: string | null
+          can_disable: boolean | null
+          created_at: string | null
+          created_by: string | null
+          description: string | null
+          enabled: boolean | null
+          enabled_dev: boolean | null
+          enabled_production: boolean | null
+          enabled_staging: boolean | null
+          flag_key: string
+          flag_name: string
+          id: string
+          last_tested_at: string | null
+          requires_approval: boolean | null
+          rollout_percentage: number | null
+          test_results: Json | null
+          test_status: string | null
+          updated_at: string | null
+          user_tier_override: Json | null
+        }
+        Insert: {
+          approved_at?: string | null
+          approved_by?: string | null
+          can_disable?: boolean | null
+          created_at?: string | null
+          created_by?: string | null
+          description?: string | null
+          enabled?: boolean | null
+          enabled_dev?: boolean | null
+          enabled_production?: boolean | null
+          enabled_staging?: boolean | null
+          flag_key: string
+          flag_name: string
+          id?: string
+          last_tested_at?: string | null
+          requires_approval?: boolean | null
+          rollout_percentage?: number | null
+          test_results?: Json | null
+          test_status?: string | null
+          updated_at?: string | null
+          user_tier_override?: Json | null
+        }
+        Update: {
+          approved_at?: string | null
+          approved_by?: string | null
+          can_disable?: boolean | null
+          created_at?: string | null
+          created_by?: string | null
+          description?: string | null
+          enabled?: boolean | null
+          enabled_dev?: boolean | null
+          enabled_production?: boolean | null
+          enabled_staging?: boolean | null
+          flag_key?: string
+          flag_name?: string
+          id?: string
+          last_tested_at?: string | null
+          requires_approval?: boolean | null
+          rollout_percentage?: number | null
+          test_results?: Json | null
+          test_status?: string | null
+          updated_at?: string | null
+          user_tier_override?: Json | null
+        }
+        Relationships: []
+      }
       furniture_3d_models: {
         Row: {
           category: string
@@ -664,6 +1605,128 @@ export type Database = {
             columns: ["model_3d_id"]
             isOneToOne: false
             referencedRelation: "model_3d"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      furniture_types: {
+        Row: {
+          category: string
+          created_at: string | null
+          default_color: string | null
+          default_material: string | null
+          description: string | null
+          furniture_code: string
+          furniture_name: string
+          id: string
+          style_tags: string[] | null
+          typical_depth: number | null
+          typical_height: number | null
+          typical_width: number | null
+          updated_at: string | null
+          weight_capacity_kg: number | null
+        }
+        Insert: {
+          category: string
+          created_at?: string | null
+          default_color?: string | null
+          default_material?: string | null
+          description?: string | null
+          furniture_code: string
+          furniture_name: string
+          id?: string
+          style_tags?: string[] | null
+          typical_depth?: number | null
+          typical_height?: number | null
+          typical_width?: number | null
+          updated_at?: string | null
+          weight_capacity_kg?: number | null
+        }
+        Update: {
+          category?: string
+          created_at?: string | null
+          default_color?: string | null
+          default_material?: string | null
+          description?: string | null
+          furniture_code?: string
+          furniture_name?: string
+          id?: string
+          style_tags?: string[] | null
+          typical_depth?: number | null
+          typical_height?: number | null
+          typical_width?: number | null
+          updated_at?: string | null
+          weight_capacity_kg?: number | null
+        }
+        Relationships: []
+      }
+      geometry_parts: {
+        Row: {
+          color_override: string | null
+          created_at: string | null
+          dimension_depth: string | null
+          dimension_height: string | null
+          dimension_width: string | null
+          id: string
+          material_name: string | null
+          metalness: number | null
+          model_id: string
+          opacity: number | null
+          part_name: string
+          part_type: string
+          position_x: string | null
+          position_y: string | null
+          position_z: string | null
+          render_condition: string | null
+          render_order: number | null
+          roughness: number | null
+        }
+        Insert: {
+          color_override?: string | null
+          created_at?: string | null
+          dimension_depth?: string | null
+          dimension_height?: string | null
+          dimension_width?: string | null
+          id?: string
+          material_name?: string | null
+          metalness?: number | null
+          model_id: string
+          opacity?: number | null
+          part_name: string
+          part_type: string
+          position_x?: string | null
+          position_y?: string | null
+          position_z?: string | null
+          render_condition?: string | null
+          render_order?: number | null
+          roughness?: number | null
+        }
+        Update: {
+          color_override?: string | null
+          created_at?: string | null
+          dimension_depth?: string | null
+          dimension_height?: string | null
+          dimension_width?: string | null
+          id?: string
+          material_name?: string | null
+          metalness?: number | null
+          model_id?: string
+          opacity?: number | null
+          part_name?: string
+          part_type?: string
+          position_x?: string | null
+          position_y?: string | null
+          position_z?: string | null
+          render_condition?: string | null
+          render_order?: number | null
+          roughness?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "geometry_parts_model_id_fkey"
+            columns: ["model_id"]
+            isOneToOne: false
+            referencedRelation: "component_3d_models"
             referencedColumns: ["id"]
           },
         ]
@@ -776,6 +1839,42 @@ export type Database = {
           shortcut_description_key?: string | null
           shortcut_name_key?: string
           updated_at?: string
+        }
+        Relationships: []
+      }
+      material_definitions: {
+        Row: {
+          created_at: string | null
+          default_color: string | null
+          description: string | null
+          id: string
+          material_name: string
+          material_type: string
+          metalness: number | null
+          opacity: number | null
+          roughness: number | null
+        }
+        Insert: {
+          created_at?: string | null
+          default_color?: string | null
+          description?: string | null
+          id?: string
+          material_name: string
+          material_type: string
+          metalness?: number | null
+          opacity?: number | null
+          roughness?: number | null
+        }
+        Update: {
+          created_at?: string | null
+          default_color?: string | null
+          description?: string | null
+          id?: string
+          material_name?: string
+          material_type?: string
+          metalness?: number | null
+          opacity?: number | null
+          roughness?: number | null
         }
         Relationships: []
       }
@@ -1205,6 +2304,42 @@ export type Database = {
           },
         ]
       }
+      paint_finishes: {
+        Row: {
+          created_at: string
+          file_name: string
+          folder_name: string
+          height: number | null
+          id: string
+          original_name: string
+          sha256: string | null
+          storage_path: string
+          width: number | null
+        }
+        Insert: {
+          created_at?: string
+          file_name: string
+          folder_name: string
+          height?: number | null
+          id?: string
+          original_name: string
+          sha256?: string | null
+          storage_path: string
+          width?: number | null
+        }
+        Update: {
+          created_at?: string
+          file_name?: string
+          folder_name?: string
+          height?: number | null
+          id?: string
+          original_name?: string
+          sha256?: string | null
+          storage_path?: string
+          width?: number | null
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           avatar_url: string | null
@@ -1494,11 +2629,13 @@ export type Database = {
           created_at: string
           design_elements: Json
           design_settings: Json
+          dimensions_migrated: boolean | null
           floor_thickness: number | null
           id: string
           name: string | null
           project_id: string
           room_dimensions: Json
+          room_geometry: Json | null
           room_style: Json | null
           room_type: string
           updated_at: string
@@ -1509,11 +2646,13 @@ export type Database = {
           created_at?: string
           design_elements?: Json
           design_settings?: Json
+          dimensions_migrated?: boolean | null
           floor_thickness?: number | null
           id?: string
           name?: string | null
           project_id: string
           room_dimensions?: Json
+          room_geometry?: Json | null
           room_style?: Json | null
           room_type: string
           updated_at?: string
@@ -1524,11 +2663,13 @@ export type Database = {
           created_at?: string
           design_elements?: Json
           design_settings?: Json
+          dimensions_migrated?: boolean | null
           floor_thickness?: number | null
           id?: string
           name?: string | null
           project_id?: string
           room_dimensions?: Json
+          room_geometry?: Json | null
           room_style?: Json | null
           room_type?: string
           updated_at?: string
@@ -1544,10 +2685,56 @@ export type Database = {
           },
         ]
       }
+      room_geometry_templates: {
+        Row: {
+          category: string
+          created_at: string | null
+          description: string | null
+          display_name: string
+          geometry_definition: Json
+          id: string
+          is_active: boolean | null
+          parameter_config: Json | null
+          preview_image_url: string | null
+          sort_order: number | null
+          template_name: string
+          updated_at: string | null
+        }
+        Insert: {
+          category: string
+          created_at?: string | null
+          description?: string | null
+          display_name: string
+          geometry_definition: Json
+          id?: string
+          is_active?: boolean | null
+          parameter_config?: Json | null
+          preview_image_url?: string | null
+          sort_order?: number | null
+          template_name: string
+          updated_at?: string | null
+        }
+        Update: {
+          category?: string
+          created_at?: string | null
+          description?: string | null
+          display_name?: string
+          geometry_definition?: Json
+          id?: string
+          is_active?: boolean | null
+          parameter_config?: Json | null
+          preview_image_url?: string | null
+          sort_order?: number | null
+          template_name?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       room_type_templates: {
         Row: {
           created_at: string | null
           default_ceiling_height: number | null
+          default_colors: Json | null
           default_height: number
           default_settings: Json | null
           default_wall_height: number | null
@@ -1562,6 +2749,7 @@ export type Database = {
         Insert: {
           created_at?: string | null
           default_ceiling_height?: number | null
+          default_colors?: Json | null
           default_height: number
           default_settings?: Json | null
           default_wall_height?: number | null
@@ -1576,6 +2764,7 @@ export type Database = {
         Update: {
           created_at?: string | null
           default_ceiling_height?: number | null
+          default_colors?: Json | null
           default_height?: number
           default_settings?: Json | null
           default_wall_height?: number | null
@@ -2256,6 +3445,22 @@ export type Database = {
       }
     }
     Views: {
+      ab_test_summary: {
+        Row: {
+          avg_execution_time_ms: number | null
+          error_count: number | null
+          first_test_at: string | null
+          last_test_at: string | null
+          max_execution_time_ms: number | null
+          min_execution_time_ms: number | null
+          success_count: number | null
+          success_rate: number | null
+          test_name: string | null
+          total_operations: number | null
+          variant: string | null
+        }
+        Relationships: []
+      }
       active_subscriptions: {
         Row: {
           avg_designs_per_user: number | null
@@ -2264,6 +3469,42 @@ export type Database = {
           region_name: string | null
           subscriber_count: number | null
           tier_name: string | null
+        }
+        Relationships: []
+      }
+      app_config_effective: {
+        Row: {
+          category: string | null
+          config_key: string | null
+          config_name: string | null
+          default_value: number | null
+          description: string | null
+          effective_value: number | null
+          max_value: number | null
+          min_value: number | null
+          unit: string | null
+        }
+        Insert: {
+          category?: string | null
+          config_key?: string | null
+          config_name?: string | null
+          default_value?: number | null
+          description?: string | null
+          effective_value?: never
+          max_value?: number | null
+          min_value?: number | null
+          unit?: string | null
+        }
+        Update: {
+          category?: string | null
+          config_key?: string | null
+          config_name?: string | null
+          default_value?: number | null
+          description?: string | null
+          effective_value?: never
+          max_value?: number | null
+          min_value?: number | null
+          unit?: string | null
         }
         Relationships: []
       }
@@ -2431,6 +3672,88 @@ export type Database = {
         }
         Relationships: []
       }
+      v_paint_finishes_with_url: {
+        Row: {
+          aspect_ratio: number | null
+          created_at: string | null
+          download_url: string | null
+          file_ext: string | null
+          file_name: string | null
+          folder_name: string | null
+          height: number | null
+          id: string | null
+          orientation: string | null
+          original_name: string | null
+          public_url: string | null
+          public_url_cachebusted: string | null
+          sha256: string | null
+          storage_path: string | null
+          total_pixels: number | null
+          width: number | null
+        }
+        Insert: {
+          aspect_ratio?: never
+          created_at?: string | null
+          download_url?: never
+          file_ext?: never
+          file_name?: string | null
+          folder_name?: string | null
+          height?: number | null
+          id?: string | null
+          orientation?: never
+          original_name?: string | null
+          public_url?: never
+          public_url_cachebusted?: never
+          sha256?: string | null
+          storage_path?: string | null
+          total_pixels?: never
+          width?: number | null
+        }
+        Update: {
+          aspect_ratio?: never
+          created_at?: string | null
+          download_url?: never
+          file_ext?: never
+          file_name?: string | null
+          folder_name?: string | null
+          height?: number | null
+          id?: string | null
+          orientation?: never
+          original_name?: string | null
+          public_url?: never
+          public_url_cachebusted?: never
+          sha256?: string | null
+          storage_path?: string | null
+          total_pixels?: never
+          width?: number | null
+        }
+        Relationships: []
+      }
+      v_product_images_with_url: {
+        Row: {
+          aspect_ratio: number | null
+          cache_control: string | null
+          content_type: string | null
+          created_at: string | null
+          download_url: string | null
+          etag: string | null
+          file_ext: string | null
+          file_name: string | null
+          folder_name: string | null
+          height: number | null
+          id: string | null
+          last_accessed_at: string | null
+          orientation: string | null
+          public_url: string | null
+          public_url_cachebusted: string | null
+          size_bytes: number | null
+          storage_path: string | null
+          total_pixels: number | null
+          updated_at: string | null
+          width: number | null
+        }
+        Relationships: []
+      }
     }
     Functions: {
       get_3d_config_for_element: {
@@ -2537,10 +3860,7 @@ export type Database = {
           total_material_cost_pence: number
         }[]
       }
-      get_tier_level: {
-        Args: { tier_name: string }
-        Returns: number
-      }
+      get_tier_level: { Args: { tier_name: string }; Returns: number }
       get_translation: {
         Args: {
           key_param: string
@@ -2574,10 +3894,7 @@ export type Database = {
           discounted_price_local: number
         }[]
       }
-      get_user_ui_config: {
-        Args: { user_id_param: string }
-        Returns: Json
-      }
+      get_user_ui_config: { Args: { user_id_param: string }; Returns: Json }
       user_has_tier_level: {
         Args: { required_tier: string; user_id: string }
         Returns: boolean
@@ -2760,3 +4077,5 @@ export const Constants = {
     },
   },
 } as const
+A new version of Supabase CLI is available: v2.53.6 (currently installed v2.40.7)
+We recommend updating regularly for new features and bug fixes: https://supabase.com/docs/guides/cli/getting-started#updating-the-supabase-cli
