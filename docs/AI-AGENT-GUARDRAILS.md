@@ -1,607 +1,594 @@
-# AI Agent Guardrails - Architectural Guidelines
+# AI Agent Development Guardrails
 
-**Version**: 1.0
-**Date**: 2025-10-27
-**Status**: ✅ Active
-**Epic**: Epic 1 - Eliminate Circular Dependency Patterns
+**Document Status**: ✅ COMPLETE (Story 1.16)
+**Created**: 2025-10-27
+**Last Updated**: 2025-10-27
+**Author**: AI Agent (Epic 1 - Story 1.16)
+**Purpose**: Prevent AI agents from falling into circular dependency traps when working on this codebase
 
 ---
 
-## Purpose
+## Executive Summary
 
-This document provides **critical architectural guardrails** for AI agents (and human developers) working on the RightFit Interior Designer codebase. These guardrails prevent circular dependency patterns that caused AI agents to enter infinite loops during bug fixes.
+This document identifies **five circular dependency patterns** that have historically trapped AI agents in infinite coding loops. These patterns emerge from architectural decisions in a brownfield codebase with organic growth and multiple coordinate systems.
 
-**⚠️ READ THIS BEFORE MAKING CHANGES TO:**
-- Coordinate transformation logic
-- Position calculation code
-- Rendering systems (2D/3D)
-- Component placement logic
-- Z-position/height calculations
+**Critical Insight**: When AI agents encounter bugs in these areas, they often create "fixes" that resolve symptoms in one view but break functionality in another view, leading to an endless cycle of "fix left, break right, fix right, break left."
+
+**This document provides**:
+- ✅ Detailed description of each circular pattern
+- ✅ Step-by-step explanation of how AI agents get stuck
+- ✅ Prevention strategies and solution paths
+- ✅ Code examples from actual fixes (Epic 1 Stories)
+- ✅ AI Agent Development Checklist
+- ✅ Lessons learned from successful refactors
+
+**Target Audience**: AI agents (Claude, GPT, etc.) and human developers working on this codebase.
 
 ---
 
 ## Table of Contents
 
-1. [Quick Reference: Red Flags](#quick-reference-red-flags)
-2. [The NEW UNIFIED SYSTEM](#the-new-unified-system)
-3. [Circular Patterns That Were Fixed](#circular-patterns-that-were-fixed)
-4. [Validation Steps Before Changes](#validation-steps-before-changes)
-5. [Testing Checklist](#testing-checklist)
-6. [Coordinate System Rules](#coordinate-system-rules)
-7. [Feature Flag Rules](#feature-flag-rules)
-8. [Examples: Correct vs Incorrect Approaches](#examples-correct-vs-incorrect-approaches)
-9. [When to Ask for Help](#when-to-ask-for-help)
+1. [The Five Circular Dependency Patterns](#the-five-circular-dependency-patterns)
+   - [Pattern #1: Positioning Coordinate Circle](#pattern-1-positioning-coordinate-circle)
+   - [Pattern #2: State Update Circle](#pattern-2-state-update-circle)
+   - [Pattern #3: Type/Schema Mismatch Circle](#pattern-3-typeschema-mismatch-circle)
+   - [Pattern #4: Corner Cabinet Logic Circle](#pattern-4-corner-cabinet-logic-circle)
+   - [Pattern #5: Height Property Circle](#pattern-5-height-property-circle)
+2. [AI Agent Development Checklist](#ai-agent-development-checklist)
+3. [Lessons Learned from Epic 1](#lessons-learned-from-epic-1)
+4. [Quick Reference: Pattern Detection](#quick-reference-pattern-detection)
+5. [References](#references)
 
 ---
 
-## Quick Reference: Red Flags
+## The Five Circular Dependency Patterns
 
-**🚩 STOP immediately if you find yourself:**
+### Pattern #1: Positioning Coordinate Circle
 
-1. **Adding asymmetric left/right calculations**
-   - ❌ Different formulas for left vs right elevation views
-   - ❌ Mirror logic that only applies to one side
-   - ✅ Use `CoordinateTransformEngine` for ALL views
+**Status**: ⚠️ PARTIALLY RESOLVED (unified system exists but legacy code remains)
 
-2. **Hardcoding Z positions**
-   - ❌ `const zPos = element.type === 'base-cabinet' ? 0 : 80;`
-   - ✅ Use `ComponentService.getZPosition(element)`
+**The Trap**: Three incompatible coordinate systems with no unified transformation layer.
 
-3. **Bypassing the transform engine**
-   - ❌ Direct coordinate calculations in rendering code
-   - ✅ Always use `engine.planToElevation()` or `engine.planTo3D()`
+**Systems**:
+1. **Plan View** (Canvas 2D)
+   - Origin: Top-left (0, 0)
+   - Units: Centimeters
+   - Direct x/y mapping
 
-4. **Creating new position calculation functions**
-   - ❌ Writing new `calculateLeftWallPosition()` helper
-   - ✅ Use existing `PositionCalculation.ts` methods
+2. **Elevation View** (Canvas 2D)
+   - Origin: Canvas top-left (pixels), room origin varies
+   - Units: Centimeters → pixels with zoom
+   - TWO implementations (legacy + new)
+   - Legacy: Asymmetric logic (left uses flipped Y, right uses direct Y)
 
-5. **Ignoring database Z positions**
-   - ❌ Using hardcoded defaults instead of `default_z_position`
-   - ✅ Database is single source of truth
+3. **3D View** (Three.js)
+   - Origin: Room center (0, 0, 0)
+   - Units: Meters (divide by 100)
+   - Y-axis is UP (not depth)
 
-6. **Making changes without tests**
-   - ❌ "I'll add tests later"
-   - ✅ Write tests BEFORE changing position logic
+**How AI Agents Get Stuck**:
 
-7. **Trusting database door_count field**
-   - ❌ Using `component_2d_renders.door_count` directly
-   - ✅ Use width-based logic (see Story 1.9)
+```
+Step 1: User reports "Component positioned wrong on LEFT elevation view"
+Step 2: Agent fixes left view positioning logic
+Step 3: LEFT view now correct ✅
+Step 4: User tests RIGHT elevation view → now broken ❌
+Step 5: Agent fixes right view positioning logic
+Step 6: RIGHT view now correct ✅
+Step 7: LEFT view broken again ❌
+Step 8: Agent realizes views use different logic
+Step 9: Agent creates "unified" logic that averages both
+Step 10: BOTH views now slightly wrong ❌❌
+Step 11: Agent creates view-specific branches
+Step 12: Back to Step 1 (infinite loop)
+```
 
-8. **Creating circular function dependencies**
-   - ❌ Function A calls B, B calls C, C calls A
-   - ✅ One-way dependencies only
+**Root Cause**:
+- Left wall uses `roomDimensions.height - element.y` (flipped)
+- Right wall uses `element.y` directly (not flipped)
+- No clear documentation of which views use which system
+- Feature flag `use_new_positioning_system` exists but behavior uncertain
+
+**Code Location**:
+- **File**: [src/utils/PositionCalculation.ts](../src/utils/PositionCalculation.ts)
+- **Legacy System**: Lines 145-197
+- **New System**: Lines 208-266
+- **Issue**: Both implementations coexist, flag behavior unclear
+
+**Solution Path**:
+
+1. **Identify Active System**:
+   ```typescript
+   // Check feature flag first
+   const useNewSystem = ConfigurationService.getSync('use_new_positioning_system', true);
+   ```
+
+2. **Use Coordinate Transformation Engine**:
+   ```typescript
+   // CORRECT: Use unified transformation
+   import { CoordinateTransformEngine } from '@/utils/CoordinateTransformEngine';
+
+   const engine = new CoordinateTransformEngine(roomDimensions, currentViewInfo);
+   const canvasPos = engine.roomToCanvas(element.x, element.y);
+   ```
+
+3. **Test Across ALL Views**:
+   - Plan view
+   - Front elevation
+   - Back elevation
+   - Left elevation
+   - Right elevation
+   - 3D view
+   - **If ONE view breaks, DON'T create view-specific logic**
+
+**Prevention Strategies**:
+
+✅ **Always use CoordinateTransformEngine for transformations**
+✅ **Never create view-specific coordinate logic**
+✅ **Test all 6 views before committing**
+✅ **Check feature flags before assuming behavior**
+❌ **Never toggle flags to "fix" a single view**
+❌ **Never create asymmetric logic (left ≠ right)**
+
+**Real-World Fix** (Epic 1 - Story 1.2):
+- Created `CoordinateTransformEngine` as single source of truth
+- Unified elevation positioning logic
+- All views now use same transformation functions
+- Result: Consistent positioning across all views
 
 ---
 
-## The NEW UNIFIED SYSTEM
+### Pattern #2: State Update Circle
 
-**Epic 1 established a UNIFIED coordinate transformation system. ALL position-related code must use it.**
+**Status**: ⚠️ KNOWN ISSUE (not yet fixed)
 
-### Core Principle
+**The Trap**: `hasUnsavedChanges` flag stuck true after successful save due to array reference changes without deep equality checking.
 
-**Before (ASYMMETRIC - ❌ DO NOT DO THIS):**
+**How AI Agents Get Stuck**:
+
+```
+Step 1: User reports "Orange 'unsaved changes' indicator won't clear after save"
+Step 2: Agent checks auto-save logic → save IS succeeding
+Step 3: Agent adds debug logs → confirms flag clearing AFTER save
+Step 4: Agent sees flag set to TRUE again immediately
+Step 5: Agent adds more logging → discovers useEffect triggering
+Step 6: Agent checks useEffect dependencies → includes design_elements array
+Step 7: Agent realizes array reference changes on every update
+Step 8: Agent tries to memoize array → breaks rendering
+Step 9: Agent tries to debounce flag updates → flag sometimes wrong
+Step 10: Agent tries to clear flag BEFORE save → race condition
+Step 11: Agent tries to compare array lengths → insufficient (content changed)
+Step 12: Back to Step 1 (infinite loop)
+```
+
+**Root Cause**:
 ```typescript
-// Different logic for each view
-if (view === 'front') {
-  xPos = element.x;
-} else if (view === 'back') {
-  xPos = roomWidth - element.x - element.width;
-} else if (view === 'left') {
-  xPos = roomY + offsetY; // ❌ Different formula
-} else if (view === 'right') {
-  xPos = roomHeight - roomY + offsetY; // ❌ Different formula
-}
-```
-
-**After (SYMMETRIC - ✅ DO THIS):**
-```typescript
-// Same engine for ALL views
-const engine = getCoordinateEngine(roomDimensions);
-const result = engine.planToElevation(element.x, element.y, view);
-const xPos = result.x;
-```
-
-### Key Components
-
-1. **CoordinateTransformEngine** (`src/services/CoordinateTransformEngine.ts`)
-   - Single source of truth for coordinate transformations
-   - Eliminates asymmetric left/right calculations
-   - 98.68% test coverage, 34 tests
-   - **Must initialize before use:** `initializeCoordinateEngine(roomDimensions)`
-
-2. **ComponentService.getZPosition()** (`src/services/ComponentService.ts`)
-   - Single source of truth for Z position (height off ground)
-   - Priority: `element.z` > `default_z_position` > type-based fallback
-   - **Never hardcode Z positions in rendering code**
-
-3. **PositionCalculation.ts** (`src/utils/PositionCalculation.ts`)
-   - Wrapper for elevation view calculations
-   - Uses CoordinateTransformEngine internally
-   - 100% test coverage, 15 tests
-
-4. **CornerCabinetDoorMatrix** (`src/utils/CornerCabinetDoorMatrix.ts`)
-   - Door orientation logic: "Door faces away from walls"
-   - 100% test coverage, 46 tests
-   - **Never override this logic in rendering code**
-
----
-
-## Circular Patterns That Were Fixed
-
-### Circular Pattern #1: Asymmetric Left/Right Calculations
-
-**Problem:**
-- Left and right elevation views had different coordinate formulas
-- Changes to left view broke right view and vice versa
-- AI agents got stuck trying to fix one without breaking the other
-
-**Solution (Story 1.2):**
-- Created CoordinateTransformEngine with symmetric formulas
-- ALL views use same engine with different parameters
-
-**Reference:** `docs/stories/sessions/1.2-coordinate-transform-engine/`
-
-### Circular Pattern #2: Height Property Confusion
-
-**Problem:**
-- Multiple properties for height: `height`, `verticalHeight`, `z`
-- No single source of truth
-- Changes to one property didn't sync with others
-
-**Solution (Story 1.9):**
-- `ComponentService.getZPosition()` is authoritative
-- Database `default_z_position` is ground truth
-- Element `z` property can override
-
-**Reference:** `docs/stories/sessions/1.9-height-property-simplification/`
-
-### Circular Pattern #3: Type/Schema Mismatch
-
-**Problem:**
-- TypeScript types didn't match Supabase schema
-- Fields existed in database but not in types (or vice versa)
-- AI agents added fields that broke type checking
-
-**Solution (Story 1.1):**
-- Regenerated types from Supabase schema
-- Made database schema the single source of truth
-
-**Reference:** `docs/stories/sessions/1.1-typescript-types/`
-
-### Circular Pattern #4: Door Count/Width Logic
-
-**Problem:**
-- Database `door_count` field had incorrect data
-- Rendering code trusted database blindly
-- No consistent door count calculation
-
-**Solution (Story 1.9):**
-- **IGNORE database door_count**
-- Use width-based logic: `width <= 60 ? 1 : 2`
-- Documented in code comments
-
-### Circular Pattern #5: Corner Door Orientation
-
-**Problem:**
-- Corner cabinets showed wrong door in left/right views
-- Multiple inconsistent door orientation rules
-- No clear principle
-
-**Solution (Story 1.10-1.11):**
-- CornerCabinetDoorMatrix established principle: "Door faces away from walls"
-- Matrix lookup for all corner positions × views
-- Replaces ad-hoc orientation logic
-
-**Reference:** `docs/stories/sessions/1.10-corner-door-matrix/`
-
----
-
-## Validation Steps Before Changes
-
-### REQUIRED Steps Before Modifying Position Logic
-
-**1. Read existing code first**
-```bash
-# Understand current implementation
-cat src/services/CoordinateTransformEngine.ts
-cat src/utils/PositionCalculation.ts
-cat src/services/ComponentService.ts
-```
-
-**2. Check test coverage**
-```bash
-# Ensure tests exist and pass
-npm run test:run -- CoordinateTransformEngine.test.ts
-npm run test:run -- PositionCalculation.test.ts
-```
-
-**3. Verify in all views**
-- Plan view (top-down)
-- Front elevation
-- Back elevation
-- Left elevation
-- Right elevation
-- 3D view
-
-**4. Write tests for your change**
-```typescript
-// Test in PositionCalculation.test.ts or ComponentPositionValidator.test.ts
-it('should handle new case correctly', () => {
-  // Arrange
-  const element = { x: 100, y: 200, width: 60 };
-  const roomDimensions = { width: 400, depth: 300, height: 250 };
-
-  // Act
-  const result = calculatePosition(element, roomDimensions, 'left');
-
-  // Assert
-  expect(result.x).toBe(expectedValue);
-});
-```
-
-**5. Run full test suite**
-```bash
-npm run test:run        # All unit tests
-npm run type-check      # TypeScript errors
-```
-
-**6. Manual testing in browser**
-- Create test room
-- Add component to each wall
-- Switch between all views
-- Verify positions match
-
----
-
-## Testing Checklist
-
-**Before committing position-related changes:**
-
-### Unit Tests
-- [ ] CoordinateTransformEngine tests pass (34 tests)
-- [ ] PositionCalculation tests pass (15 tests)
-- [ ] ComponentPositionValidator tests pass (34 tests)
-- [ ] CornerCabinetDoorMatrix tests pass (46 tests)
-- [ ] New tests added for your changes
-- [ ] All existing tests still pass (264+ tests)
-- [ ] `npm run type-check` passes with zero errors
-
-### Integration Tests
-- [ ] Plan view renders correctly
-- [ ] Front elevation renders correctly
-- [ ] Back elevation renders correctly
-- [ ] Left elevation renders correctly
-- [ ] Right elevation renders correctly
-- [ ] 3D view renders correctly
-
-### Specific Element Tests
-- [ ] Base cabinet on front wall: Position correct in all views
-- [ ] Wall cabinet on back wall: Position correct in all views
-- [ ] Corner cabinet front-left: Shows correct door in left/right views
-- [ ] Corner cabinet back-right: Shows correct door in left/right views
-- [ ] Tall unit: Height correct in elevation + 3D
-- [ ] Dragging element: Updates correctly in all views
-
-### Edge Cases
-- [ ] Room with minimum dimensions (100×100×200cm)
-- [ ] Room with maximum dimensions (2000×2000×400cm)
-- [ ] Element at (0, 0) position
-- [ ] Element at far corner
-- [ ] Element rotation (0°, 90°, 180°, 270°)
-
----
-
-## Coordinate System Rules
-
-### Axis Definitions
-
-**CRITICAL: These are FINAL and must not change:**
-
-- **X-axis**: Width (left-to-right) | 0 = left wall, max = right wall
-- **Y-axis**: Depth (front-to-back) | 0 = front wall, max = back wall
-- **Z-axis**: Height (floor-to-ceiling) | 0 = floor, max = ceiling
-
-### Room Dimensions
-
-```typescript
-interface RoomDimensions {
-  width: number;   // X-axis (cm)
-  depth: number;   // Y-axis (cm) - legacy called "height"
-  height: number;  // Z-axis (cm) - actual room height
-}
-```
-
-**⚠️ Legacy Note:** Room depth used to be called `height` in old code. This is deprecated. Use `depth` for Y-axis, `height` for Z-axis.
-
-### Element Position
-
-```typescript
-interface ElementPosition {
-  x: number;        // Position on X-axis (0 to roomWidth)
-  y: number;        // Position on Y-axis (0 to roomDepth)
-  z?: number;       // Height off floor (0 to roomHeight) - optional
-  rotation: number; // Rotation in degrees (0-360)
-}
-```
-
-### Coordinate Transformation Flow
-
-```
-Plan View (X, Y)
-      ↓
-CoordinateTransformEngine
-      ↓
-Elevation View (X, Z) or 3D View (X, Y, Z)
-```
-
-**❌ NEVER transform directly in rendering code**
-**✅ ALWAYS use CoordinateTransformEngine**
-
----
-
-## Feature Flag Rules
-
-**Feature flags in this codebase are for development testing only, not production toggles.**
-
-### DO NOT:
-- ❌ Use feature flags to hide incomplete implementations
-- ❌ Ship code with feature flags in production
-- ❌ Create permanent feature flags
-
-### DO:
-- ✅ Use feature flags during development to test new coordinate logic
-- ✅ Remove feature flag code before merging to main
-- ✅ Document why flag exists in code comments
-
-### Example (Acceptable):
-```typescript
-// TEMPORARY: Testing new corner door logic (remove before merge)
-const useNewCornerLogic = import.meta.env.DEV && false;
-
-if (useNewCornerLogic) {
-  // New experimental logic
-} else {
-  // Current stable logic (use CornerCabinetDoorMatrix)
-}
-```
-
----
-
-## Examples: Correct vs Incorrect Approaches
-
-### Example 1: Adding a New Elevation View Calculation
-
-**❌ INCORRECT (Asymmetric):**
-```typescript
-function calculateNewWallPosition(element: Element, view: string) {
-  // WRONG: Different formula for each view
-  if (view === 'left') {
-    return { x: element.y, y: element.z };
-  } else if (view === 'right') {
-    return { x: roomDepth - element.y, y: element.z }; // Asymmetric!
+// ProjectContext.tsx line 886
+useEffect(() => {
+  // This comparison uses reference equality
+  if (currentDesign?.design_elements !== previousElementsRef.current) {
+    dispatch({ type: 'SET_UNSAVED_CHANGES', payload: true });
+    previousElementsRef.current = currentDesign?.design_elements;
   }
-}
+}, [currentDesign?.design_elements]);
+
+// Every state update creates NEW array reference:
+updateCurrentRoomDesign((prev) => ({
+  ...prev,
+  design_elements: [...prev.design_elements]  // NEW REFERENCE
+}));
+
+// Result: Flag set to true AFTER every successful save
 ```
 
-**✅ CORRECT (Using Engine):**
-```typescript
-function calculateNewWallPosition(element: Element, view: string) {
-  // RIGHT: Use CoordinateTransformEngine
-  const engine = getCoordinateEngine(roomDimensions);
-  return engine.planToElevation(element.x, element.y, view);
-}
+**Code Location**:
+- **File**: [src/contexts/ProjectContext.tsx](../src/contexts/ProjectContext.tsx)
+- **Issue Location**: Lines 886-890
+- **Auto-save Logic**: Lines 892-933
+
+**Solution Path**:
+
+1. **Implement Deep Equality**:
+   ```typescript
+   import { isEqual } from 'lodash';  // or custom implementation
+
+   useEffect(() => {
+     if (!isEqual(currentDesign?.design_elements, previousElementsRef.current)) {
+       dispatch({ type: 'SET_UNSAVED_CHANGES', payload: true });
+       previousElementsRef.current = currentDesign?.design_elements;
+     }
+   }, [currentDesign?.design_elements]);
+   ```
+
+**Prevention Strategies**:
+
+✅ **Use deep equality for array/object comparisons**
+✅ **Test auto-save mechanism after state changes**
+✅ **Consider optimistic updates for UX**
+❌ **Never rely on reference equality for arrays**
+❌ **Never add debouncing without understanding root cause**
+
+**Current Workaround**:
+- Manual save (File → Save) clears flag correctly
+- Page reload resets state
+- Not a functional blocker, but poor UX
+
+---
+
+### Pattern #3: Type/Schema Mismatch Circle
+
+**Status**: ✅ RESOLVED (Epic 1 - Story 1.1)
+
+**The Trap**: TypeScript types not regenerated after database migrations, causing TypeScript errors on fields that exist in database but not in type definitions.
+
+**How AI Agents Get Stuck**:
+
+```
+Step 1: User requests "Add collision detection to component placement"
+Step 2: Agent checks database → finds collision detection migration already exists
+Step 3: Agent writes code using `component_3d_models.layer_type`
+Step 4: TypeScript error: "Property 'layer_type' does not exist"
+Step 5: Agent assumes migration not run → tries to create migration
+Step 6: Migration already exists (20251017000001_add_collision_detection_layer_fields.sql)
+Step 7: Agent creates workaround with `any` type
+Step 8: Agent loses type safety
+Step 9: Runtime errors occur (field exists but typed as `any`)
+Step 10: Agent creates interface with optional field
+Step 11: Optional field allows `undefined`, breaks logic
+Step 12: Agent creates type guard function
+Step 13: Type guard adds complexity, doesn't solve root cause
+Step 14: Back to Step 1 (infinite loop)
 ```
 
-### Example 2: Getting Element Height
+**Root Cause**:
+- Database migrations add columns to tables
+- TypeScript types generated from database schema
+- **Types NOT regenerated after migrations**
+- Code references new columns → TypeScript errors
+- AI agents create workarounds instead of regenerating types
 
-**❌ INCORRECT (Hardcoded):**
-```typescript
-function renderElement(element: Element) {
-  // WRONG: Hardcoded Z positions
-  const z = element.type === 'base-cabinet' ? 0 :
-            element.type === 'wall-cabinet' ? 150 :
-            element.type === 'tall-unit' ? 0 : 0;
-}
-```
+**Solution Path** (CORRECT):
 
-**✅ CORRECT (Single Source):**
-```typescript
-function renderElement(element: Element) {
-  // RIGHT: Use ComponentService
-  const z = ComponentService.getZPosition(element);
-}
-```
+1. **Regenerate Types**:
+   ```bash
+   npx supabase gen types typescript > src/integrations/supabase/types.ts
+   ```
 
-### Example 3: Door Count Logic
+2. **Verify Types Exist**:
+   ```typescript
+   // After regeneration, check interface:
+   export interface component_3d_models extends Tables<'component_3d_models'> {
+     layer_type?: string;           // ✅ Now present
+     min_height_cm?: number;        // ✅ Now present
+     max_height_cm?: number;        // ✅ Now present
+     can_overlap_layers?: boolean;  // ✅ Now present
+   }
+   ```
 
-**❌ INCORRECT (Trusting Database):**
-```typescript
-function renderDoors(component: Component) {
-  // WRONG: Database door_count is incorrect
-  const doorCount = component.door_count;
-}
-```
+**Prevention Strategies**:
 
-**✅ CORRECT (Width-Based):**
-```typescript
-function renderDoors(component: Component) {
-  // RIGHT: Industry standard width-based logic
-  const doorCount = component.width <= 60 ? 1 : 2;
-  // Note: Ignoring component.door_count (database has bad data)
-}
-```
+✅ **ALWAYS regenerate types after database migrations**
+✅ **Check types file BEFORE writing code that uses new fields**
+✅ **Add type regeneration to CI/CD pipeline**
+❌ **Never use `any` type to bypass TypeScript errors**
+❌ **Never create workarounds with optional types**
+❌ **Never assume types are up-to-date**
 
-### Example 4: Corner Door Orientation
+**Real-World Fix** (Epic 1 - Story 1.1):
+- Identified 4 missing collision detection fields
+- Regenerated types with Supabase CLI
+- Verified all 4 fields present in TypeScript definitions
+- Zero TypeScript errors after regeneration
 
-**❌ INCORRECT (Ad-hoc Logic):**
-```typescript
-function getCornerDoorSide(position: string, view: string) {
-  // WRONG: Arbitrary rules
-  if (position === 'front-left' && view === 'left') {
-    return 'right'; // Why? No clear principle
-  }
-  // ... more arbitrary rules
-}
-```
+**Workflow** (MEMORIZE THIS):
+```bash
+# 1. Create/run migration
+npx supabase db push
 
-**✅ CORRECT (Using Matrix):**
-```typescript
-function getCornerDoorSide(position: string, view: string) {
-  // RIGHT: Use established matrix
-  return CornerCabinetDoorMatrix.getDoorSide(position, view);
-  // Principle: "Door faces away from walls"
-}
+# 2. IMMEDIATELY regenerate types
+npx supabase gen types typescript > src/integrations/supabase/types.ts
+
+# 3. Verify types updated
+npm run type-check  # Should pass with 0 errors
+
+# 4. Commit both migration and types
+git add supabase/migrations/*.sql src/integrations/supabase/types.ts
+git commit -m "feat(db): Add new fields + regenerate types"
 ```
 
 ---
 
-## When to Ask for Help
+### Pattern #4: Corner Cabinet Logic Circle
 
-**STOP and ask the user if:**
+**Status**: ⚠️ PARTIALLY RESOLVED (DoorRotationMatrix created in Stories 1.10-1.11)
 
-1. **You need to modify CoordinateTransformEngine**
-   - This is core infrastructure
-   - Changes affect all views
-   - Requires extensive testing
+**The Trap**: Corner cabinet door side determination has 16 different rules (4 views × 4 corners) with no unified system.
 
-2. **Tests are failing after your changes**
-   - Don't disable tests
-   - Don't change tests to pass without understanding why
-   - Failing tests indicate your change breaks existing behavior
-
-3. **You discover new circular patterns**
-   - Document the pattern
-   - Propose solution
-   - Get user approval before implementing
-
-4. **You need to add new coordinate transformation logic**
-   - Should it use the engine?
-   - Is there an existing method?
-   - Do we need a new method?
-
-5. **Database schema changes are needed**
-   - Schema changes affect all environments
-   - Requires migration script
-   - Needs user approval
-
-6. **You're unsure if your approach is correct**
-   - Better to ask than to create new circular patterns
-   - User can reference Winston's architecture docs
-   - Prevents wasted effort
-
----
-
-## Quick Decision Tree
+**How AI Agents Get Stuck**:
 
 ```
-Need to change position/coordinate logic?
-│
-├─ YES → Does CoordinateTransformEngine handle this?
-│        │
-│        ├─ YES → Use the engine ✅
-│        │
-│        └─ NO → Does PositionCalculation have a method?
-│                │
-│                ├─ YES → Use that method ✅
-│                │
-│                └─ NO → STOP. Ask user if new method needed ⚠️
-│
-└─ NO → Need to get element height/Z position?
-         │
-         ├─ YES → Use ComponentService.getZPosition() ✅
-         │
-         └─ NO → Proceed with caution, review guardrails ⚠️
+Step 1: User reports "Corner cabinet door facing wrong way in FRONT view"
+Step 2: Agent checks corner detection logic
+Step 3: Agent finds view-specific if/else chain (16 branches)
+Step 4: Agent updates FRONT + TOP-RIGHT logic
+Step 5: FRONT view now correct ✅
+Step 6: User tests BACK view → same corner, now wrong ❌
+Step 7: Agent updates BACK + TOP-RIGHT logic
+Step 8: BACK view now correct ✅
+Step 9: FRONT view broken again ❌
+Step 10: Agent realizes views use opposite rules
+Step 11: Agent adds more if/else branches for edge cases
+Step 12: Now 24 branches, harder to debug
+Step 13: Agent tries to create "unified" rule → breaks 3 views
+Step 14: Back to Step 1 (infinite loop)
+```
+
+**Root Cause**:
+- Corner detection: 30cm tolerance from walls (top-left, top-right, bottom-left, bottom-right)
+- Door side determination: View-specific rules with no transformation matrix
+- Code has 16 hardcoded conditions (one per corner per view)
+- Fixing one view often breaks another view
+
+**Solution Path**:
+
+1. **Use DoorRotationMatrix** (if implemented):
+   ```typescript
+   import { getDoorSide } from '@/utils/DoorRotationMatrix';
+
+   const corner = detectCornerPosition(element, roomDimensions);
+   const doorSide = getDoorSide(corner, currentViewInfo.direction, element.cornerDoorSide);
+   ```
+
+2. **Test All 16 Scenarios**:
+   - 4 corners (top-left, top-right, bottom-left, bottom-right)
+   - 4 views (front, back, left, right)
+   - Door side should be consistent with principle: "Door faces away from walls"
+
+**Prevention Strategies**:
+
+✅ **Use transformation matrices for view-specific rendering**
+✅ **Single source of truth (matrix) instead of if/else chains**
+✅ **Test all views when changing corner logic**
+✅ **Allow manual overrides via element properties**
+❌ **Never add more if/else branches for corner logic**
+❌ **Never use opposite rules in different views (code smell)**
+
+---
+
+### Pattern #5: Height Property Circle
+
+**Status**: ⚠️ PARTIALLY RESOLVED (component audit complete, enforcement pending)
+
+**The Trap**: Multiple sources of truth for component height/positioning, causing different heights in elevation vs 3D views.
+
+**How AI Agents Get Stuck**:
+
+```
+Step 1: User reports "Wall cabinet at wrong height in elevation view"
+Step 2: Agent checks element.height → 70cm (dimension)
+Step 3: Agent sets element.z = 140cm (position off floor)
+Step 4: Elevation view ignores element.z, uses type default
+Step 5: Agent adds elevation_height to database
+Step 6: 3D view ignores elevation_height, uses element.z
+Step 7: Agent sets component_behavior.use_actual_height_in_elevation = true
+Step 8: Elevation now uses element.height (dimension, not position)
+Step 9: Cabinet appears at 70cm off floor (wrong)
+Step 10: Agent creates hybrid logic (if elevation_height exists, use that)
+Step 11: Now 4 sources of truth (z, height, elevation_height, type default)
+Step 12: Agent confuses dimension (height) with position (z)
+Step 13: Elevation shows 140cm, 3D shows 235cm (95cm difference)
+Step 14: Back to Step 1 (infinite loop)
+```
+
+**Root Cause**:
+- **Property Confusion**:
+  - `element.height` = component DIMENSION (vertical size)
+  - `element.z` = component POSITION (height off floor)
+- **Multiple Sources**: element.height, element.z, elevation_height, type defaults, behavior flags, 3D defaults
+
+**Solution Path**:
+
+1. **Separate Concerns**:
+   ```typescript
+   // element.height = DIMENSION (vertical size)
+   // element.z = POSITION (height off floor)
+
+   const wallUnit = {
+     width: 60,      // 60cm wide (dimension)
+     depth: 35,      // 35cm deep (dimension)
+     height: 70,     // 70cm tall (dimension)
+     z: 140,         // 140cm off floor (position)
+   };
+   ```
+
+2. **Use Unified Positioning**:
+   ```typescript
+   // BOTH views use element.z
+   const positionOffFloor = element.z ?? getDefaultZForType(element.type);
+   ```
+
+**Prevention Strategies**:
+
+✅ **Always separate dimension (height) from position (z)**
+✅ **Set explicit z values, don't rely on defaults**
+✅ **Use same positioning source (element.z) in all views**
+✅ **Test elevation AND 3D views together**
+❌ **Never use element.height for positioning**
+❌ **Never create view-specific height logic**
+
+---
+
+## AI Agent Development Checklist
+
+Use this checklist BEFORE making changes to prevent falling into circular patterns:
+
+### Before Any Change
+
+- [ ] Read [docs/README.md](./README.md) for documentation index
+- [ ] Read [CLAUDE.md](../CLAUDE.md) for project instructions
+- [ ] Check [docs/prd.md](./prd.md) for current work plan
+- [ ] Identify which circular pattern(s) apply to your task
+
+### Before Positioning/Coordinate Changes
+
+- [ ] Identify view context (plan, elevation, 3D)
+- [ ] Check `use_new_positioning_system` feature flag
+- [ ] Use `CoordinateTransformEngine` for transformations
+- [ ] Never create view-specific coordinate logic
+- [ ] Test ALL 6 views (plan + 4 elevations + 3D)
+
+### Before State Management Changes
+
+- [ ] Check if change affects `design_elements` array
+- [ ] Use deep equality for array/object comparisons
+- [ ] All ProjectContext functions wrapped in `useCallback`
+- [ ] Test auto-save behavior (make change, wait 30 sec)
+
+### Before Database Schema Changes
+
+- [ ] Create migration file in `supabase/migrations/`
+- [ ] Run migration: `npx supabase db push`
+- [ ] **CRITICAL**: Regenerate types: `npx supabase gen types typescript > src/integrations/supabase/types.ts`
+- [ ] Verify types contain new fields: `npm run type-check`
+- [ ] Commit both migration and types together
+
+### Before Component Height/Position Changes
+
+- [ ] Identify property: `element.height` (dimension) vs `element.z` (position)
+- [ ] Set explicit `element.z` value (don't rely on defaults)
+- [ ] Test in BOTH elevation AND 3D views
+- [ ] Never use `element.height` for positioning
+
+### Red Flags (STOP if you see these)
+
+- 🚩 Fixing left wall breaks right wall → Pattern #1 (Positioning)
+- 🚩 Fixing elevation breaks 3D → Pattern #5 (Height)
+- 🚩 `hasUnsavedChanges` won't clear → Pattern #2 (State)
+- 🚩 TypeScript error on field in migration → Pattern #3 (Types)
+- 🚩 Corner door logic has view-specific if/else → Pattern #4 (Corner)
+
+### When Stuck
+
+1. **STOP coding** - Don't make more changes
+2. **Read this document** - Identify which circular pattern applies
+3. **Follow the solution path** - Don't invent new approaches
+4. **Test comprehensively** - All views, all scenarios
+5. **Ask for clarification** - Don't assume understanding
+
+---
+
+## Lessons Learned from Epic 1
+
+### Story 1.15.2 - Successful Modular Refactor
+
+**Context**: Extracted 1,073 lines of event handler logic from monolithic DesignCanvas2D.tsx to InteractionHandler.ts module.
+
+**Success Patterns**:
+
+1. **Module Delegation Pattern**:
+   ```typescript
+   // Create clear interfaces
+   interface InteractionState { /* all state */ }
+   interface InteractionCallbacks { /* all callbacks */ }
+   interface InteractionUtilities { /* all utilities */ }
+
+   // Delegate to module
+   InteractionHandler.handleMouseDown(e, state, callbacks, utils);
+   ```
+
+2. **Incremental Approach**:
+   - Phase 1: Design interfaces
+   - Phase 2: Extract mouse handlers
+   - Phase 3: Integration & testing
+   - Phase 4: Extract touch handlers
+   - Phase 5: Extract drag/drop
+   - Phase 6: Cleanup
+
+**Results**:
+- ✅ Reduced DesignCanvas2D from 2,080 → 1,512 lines (27% reduction)
+- ✅ Zero TypeScript errors throughout
+- ✅ All functionality preserved
+
+**Key Takeaway**: Incremental refactoring with clear interfaces prevents breaking changes.
+
+---
+
+### General Lessons
+
+1. **Read Documentation First**: Always check docs/README.md and relevant session docs
+2. **Test Comprehensively**: Manual testing across all views, TypeScript compilation
+3. **Incremental Changes**: Small phases with clear deliverables
+4. **Clear Interfaces**: Define TypeScript interfaces for module boundaries
+5. **Deep Equality for Arrays/Objects**: Never rely on reference equality
+6. **Feature Flags**: Check flags before assuming behavior, never toggle to "fix" issues
+7. **Modular Architecture**: Extract logic to separate modules, single source of truth
+
+---
+
+## Quick Reference: Pattern Detection
+
+**Symptoms → Patterns Mapping**:
+
+| Symptom | Likely Pattern | Action |
+|---------|---------------|---------|
+| Left elevation wrong, right correct | Pattern #1 (Positioning) | Use CoordinateTransformEngine |
+| 3D height ≠ elevation height | Pattern #5 (Height) | Set explicit element.z, test both views |
+| Orange "unsaved" indicator stuck | Pattern #2 (State) | Check array reference, add deep equality |
+| TypeScript error on DB field | Pattern #3 (Types) | Regenerate types with Supabase CLI |
+| Corner door wrong in one view | Pattern #4 (Corner) | Use DoorRotationMatrix, test all views |
+| Fix breaks another view | ANY pattern | STOP, read this doc, identify pattern |
+
+**Critical Commands**:
+
+```bash
+# Regenerate types (Pattern #3)
+npx supabase gen types typescript > src/integrations/supabase/types.ts
+
+# Type checking
+npm run type-check
+
+# Push migrations
+npx supabase db push
+
+# Check current branch (never commit to main)
+git branch
 ```
 
 ---
 
-## Critical Files - DO NOT MODIFY WITHOUT TESTS
+## References
 
-These files are core infrastructure. Changes require:
-1. Understanding the current implementation
-2. Writing tests first
-3. Running full test suite
-4. Manual testing in all views
+**Primary Documentation**:
+- [docs/README.md](./README.md) - Documentation index
+- [docs/prd.md](./prd.md) - Technical Debt Remediation PRD
+- [docs/brownfield-architecture.md](./brownfield-architecture.md) - Detailed architecture analysis
+- [CLAUDE.md](../CLAUDE.md) - Project instructions for AI agents
 
-**Core Infrastructure:**
-- `src/services/CoordinateTransformEngine.ts` (98.68% coverage, 34 tests)
-- `src/utils/PositionCalculation.ts` (100% coverage, 15 tests)
-- `src/services/ComponentService.ts` (key methods tested)
-- `src/utils/CornerCabinetDoorMatrix.ts` (100% coverage, 46 tests)
-- `src/utils/ComponentPositionValidator.ts` (98.75% coverage, 34 tests)
+**Epic 1 Progress**:
+- [docs/EPIC_1_PROGRESS.md](./EPIC_1_PROGRESS.md) - Complete Epic 1 status
 
-**Rendering Systems:**
-- `src/components/designer/DesignCanvas2D.tsx` (117K+ characters - needs refactor)
-- `src/components/designer/EnhancedModels3D.tsx` (3D rendering)
-- `src/services/2d-renderers/elevation-view-handlers.ts` (elevation rendering)
-
-**Database Interaction:**
-- `src/contexts/ProjectContext.tsx` (state management)
-- `src/services/RoomService.ts` (room data)
-- `src/integrations/supabase/types.ts` (generated types - do not edit manually)
+**Code Files** (Read for context):
+- [src/utils/CoordinateTransformEngine.ts](../src/utils/CoordinateTransformEngine.ts) - Unified coordinates (Pattern #1)
+- [src/contexts/ProjectContext.tsx](../src/contexts/ProjectContext.tsx) - State management (Pattern #2)
+- [src/integrations/supabase/types.ts](../src/integrations/supabase/types.ts) - TypeScript types (Pattern #3)
+- [src/services/2d-renderers/elevation-view-handlers.ts](../src/services/2d-renderers/elevation-view-handlers.ts) - Corner logic (Pattern #4)
+- [src/services/ComponentService.ts](../src/services/ComponentService.ts) - Height resolution (Pattern #5)
 
 ---
 
-## Success Metrics
+## Document Metadata
 
-**You're on the right track if:**
+**Version**: 1.0
+**Status**: ✅ Complete
+**Last Updated**: 2025-10-27
+**Author**: AI Agent (Epic 1 - Story 1.16)
+**Maintained By**: Development team + AI agents
 
-- ✅ All 264+ tests passing
-- ✅ Zero TypeScript errors
-- ✅ Element positions correct in all 6 views (plan + 4 elevations + 3D)
-- ✅ Code uses CoordinateTransformEngine for transformations
-- ✅ Code uses ComponentService.getZPosition() for heights
-- ✅ No hardcoded position calculations in rendering code
-- ✅ Changes have unit tests
-- ✅ Manual testing confirms correct behavior
+**Change Log**:
+- 2025-10-27: Initial creation (Story 1.16) - Comprehensive documentation of five circular patterns
 
-**You're going wrong if:**
-
-- ❌ Tests failing after your changes
-- ❌ TypeScript errors appearing
-- ❌ Element positions wrong in some views
-- ❌ Adding new asymmetric left/right logic
-- ❌ Hardcoding Z positions
-- ❌ Bypassing CoordinateTransformEngine
-- ❌ No tests for your changes
-- ❌ Creating circular function dependencies
+**Feedback**: If you encounter a circular pattern not documented here, please add it to this document.
 
 ---
 
-## Additional Resources
-
-**Architecture Documentation:**
-- [brownfield-architecture.md](./brownfield-architecture.md) - System architecture
-- [CODE_REVIEW_COMPREHENSIVE.md](./CODE_REVIEW_COMPREHENSIVE.md) - Critical issues
-- [circular-patterns-fix-plan.md](./circular-patterns-fix-plan.md) - Fix instructions
-- [coordinate-system-visual-guide.md](./coordinate-system-visual-guide.md) - Visual guide
-
-**Story Documentation:**
-- [docs/stories/README.md](./stories/README.md) - Epic 1 progress
-- [docs/stories/sessions/](./stories/sessions/) - Session summaries for each story
-
-**Testing Documentation:**
-- [HANDOVER.md](../HANDOVER.md) - Complete context for Epic 1
-
-**Development Guidelines:**
-- [CLAUDE.md](../CLAUDE.md) - Project instructions
-- [STRUCTURED-LOGGING-GUIDE.md](./STRUCTURED-LOGGING-GUIDE.md) - Logging guidelines
-- [INPUT-VALIDATION-GUIDE.md](./INPUT-VALIDATION-GUIDE.md) - Validation guidelines
-
----
-
-## Revision History
-
-| Version | Date | Changes |
-|---------|------|---------|
-| 1.0 | 2025-10-27 | Initial version - Epic 1 completion |
-
----
-
-**Last Updated:** 2025-10-27
-**Maintained By:** Development Team
-**Review Cycle:** After each architectural change
-
----
-
-**Remember:** When in doubt, ask the user. It's better to clarify than to create new circular patterns that will trap the next AI agent.
+**END OF DOCUMENT**
