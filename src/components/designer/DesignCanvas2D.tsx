@@ -553,13 +553,15 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
   // Convert room coordinates to canvas coordinates (uses inner room for component placement)
   // Story 1.5: Using CoordinateTransformEngine for NEW UNIFIED SYSTEM
   const roomToCanvas = useCallback((roomX: number, roomY: number) => {
-    const engine = getCoordinateEngine();
+    // Pass room dimensions as fallback to prevent "not initialized" errors
+    // This handles race conditions when loading existing projects
+    const engine = getCoordinateEngine(roomDimensions);
     const canvasPos = engine.planToCanvas({ x: roomX, y: roomY }, zoom);
     return {
       x: roomPosition.innerX + canvasPos.x,
       y: roomPosition.innerY + canvasPos.y
     };
-  }, [roomPosition, zoom, active2DView]);
+  }, [roomPosition, zoom, active2DView, roomDimensions]);
 
   // Convert canvas coordinates to room coordinates (uses inner room for component placement)
   const canvasToRoom = useCallback((canvasX: number, canvasY: number) => {
