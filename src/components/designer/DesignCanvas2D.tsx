@@ -22,6 +22,8 @@ import { Logger } from '@/utils/Logger';
 // Story 1.15: Modular canvas rendering
 import * as PlanViewRenderer from './canvas/PlanViewRenderer';
 import * as ElevationViewRenderer from './canvas/ElevationViewRenderer';
+// Story 1.15.2: Interaction handlers
+import * as InteractionHandler from './canvas/InteractionHandler';
 import {
   CANVAS_WIDTH,
   CANVAS_HEIGHT,
@@ -1159,141 +1161,78 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
   }, [showGrid, panOffset, drawRoom, drawElement, drawElevationRuler, design.elements, active2DView, currentViewInfo, getElementWall, isCornerVisibleInView, draggedElement, isDragging, snapGuides, roomPosition, zoom, currentMousePos, canvasToRoom, roomToCanvas, completedMeasurements, currentMeasureStart, tapeMeasurePreview, showRuler, roomDimensions]);
 
 
-  // Mouse event handlers
+  // Mouse event handlers (Story 1.15.2: Delegated to InteractionHandler module)
   const handleMouseDown = useCallback((e: React.MouseEvent<HTMLCanvasElement>) => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
+    // Construct state object
+    const state: InteractionHandler.InteractionState = {
+      canvasRef,
+      active2DView,
+      currentViewInfo,
+      zoom,
+      panOffset,
+      design,
+      selectedElement,
+      hoveredElement,
+      isDragging,
+      draggedElement,
+      draggedElementOriginalPos,
+      dragStart,
+      dragThreshold,
+      currentMousePos,
+      activeTool,
+      currentMeasureStart,
+      tapeMeasurePreview,
+      completedMeasurements,
+      configCache
+    };
 
-    const rect = canvas.getBoundingClientRect();
-    // 🎯 FIX: Account for CSS scaling of canvas element
-    const scaleX = CANVAS_WIDTH / rect.width;
-    const scaleY = CANVAS_HEIGHT / rect.height;
-    
-    const x = (e.clientX - rect.left) * scaleX;
-    const y = (e.clientY - rect.top) * scaleY;
+    // Construct callbacks object
+    const callbacks: InteractionHandler.InteractionCallbacks = {
+      setSelectedElement: onSelectElement,
+      setHoveredElement,
+      setIsDragging,
+      setDraggedElement,
+      setDraggedElementOriginalPos,
+      setDragStart,
+      setDragThreshold,
+      setCurrentMousePos,
+      setPanOffset,
+      setCurrentMeasureStart,
+      setTapeMeasurePreview,
+      setCompletedMeasurements,
+      setSnapGuides,
+      updateCurrentRoomDesign,
+      onUpdateElement,
+      showToast: ({ title, description, variant }) => toast({ title, description, variant }),
+      requestRender: () => requestAnimationFrame(() => render())
+    };
 
-    // Zoom control clicks now handled by React component in Designer.tsx
+    // Construct utilities object
+    const utils: InteractionHandler.InteractionUtilities = {
+      canvasToRoom,
+      roomToCanvas,
+      getElementWall,
+      isCornerVisibleInView,
+      getComponentMetadata,
+      getSnapPosition,
+      snapToGrid,
+      getEnhancedComponentPlacement,
+      validatePlacement,
+      getInnerRoomBounds: () => innerRoomBounds
+    };
 
-    // Right-click for panning (regardless of active tool)
-    if (e.button === 2) { // Right mouse button
-      e.preventDefault(); // Prevent context menu
-      setIsDragging(true);
-      setDragStart({ x, y });
-      return;
-    }
-
-    // Left-click pan tool (legacy support)
-    if (activeTool === 'pan' && e.button === 0) {
-      setIsDragging(true);
-      setDragStart({ x, y });
-      return;
-    }
-
-    // Handle tape measure tool
-    if (activeTool === 'tape-measure') {
-      // Just set up for click handling in mouse up
-      setDragStart({ x, y });
-      return;
-    }
-
-    // Check for element clicks - use same filtering and ordering as rendering
-    const roomPos = canvasToRoom(x, y);
-    
-    // Filter and sort elements the same way as rendering (but in reverse order for selection)
-    let elementsToCheck = design.elements.filter(el => {
-      // For plan view: only check per-view hidden_elements
-      if (active2DView === 'plan') {
-        return !currentViewInfo.hiddenElements.includes(el.id);
-      }
-
-      // For elevation views: check both direction AND hidden_elements
-      const wall = getElementWall(el);
-      const isCornerVisible = isCornerVisibleInView(el, currentViewInfo.direction);
-
-      // Check direction visibility
-      const isDirectionVisible = wall === currentViewInfo.direction || wall === 'center' || isCornerVisible;
-      if (!isDirectionVisible) return false;
-
-      // Check if element is hidden in this specific view
-      if (currentViewInfo.hiddenElements.includes(el.id)) return false;
-
-          return true;
-        });
-
-    // Sort elements by layer height first (wall units over base units), then by zIndex
-    elementsToCheck.sort((a, b) => {
-      // Get layer metadata for height-based sorting
-      const metaA = getComponentMetadata(a.component_id || a.id);
-      const metaB = getComponentMetadata(b.component_id || b.id);
-
-      // Priority 1: Sort by max_height (higher components should be selected first when overlapping)
-      const heightA = metaA?.max_height_cm ?? 0;
-      const heightB = metaB?.max_height_cm ?? 0;
-
-      if (heightB !== heightA) {
-        return heightB - heightA;  // Higher height first (wall units before base units)
-      }
-
-      // Priority 2: If same height, sort by zIndex
-      return (b.zIndex || 0) - (a.zIndex || 0);
-    });
-    
-    const clickedElement = elementsToCheck.find(element => {
-      // Different hit detection for plan vs elevation views
-      if (active2DView === 'plan') {
-        // Plan view: use X/Y coordinates with rotation
-        const width = element.width;
-        const height = element.depth || element.height;
-        const rotation = (element.rotation || 0) * Math.PI / 180;
-
-        // Transform click point into component's local space
-        const centerX = element.x + width / 2;
-        const centerY = element.y + height / 2;
-
-        // Translate click to component center
-        const dx = roomPos.x - centerX;
-        const dy = roomPos.y - centerY;
-
-        // Rotate backwards (inverse rotation)
-        const cos = Math.cos(-rotation);
-        const sin = Math.sin(-rotation);
-        const localX = dx * cos - dy * sin;
-        const localY = dx * sin + dy * cos;
-
-        // Check if in un-rotated bounds
-        return Math.abs(localX) <= width / 2 && Math.abs(localY) <= height / 2;
-      } else {
-        // Elevation view: use X (horizontal) and Z (vertical) coordinates
-        const width = element.width;
-        const height = element.height || 86; // Use actual height for vertical dimension (updated from 90 to 86)
-        const z = element.z || 0;
-
-        // In elevation view, Z represents the mount height (bottom of element above floor)
-        // The element extends from z (bottom) to z + height (top)
-        const centerX = element.x + width / 2;
-        const bottomZ = z; // Bottom of element above floor
-        const topZ = z + height; // Top of element above floor
-        const centerZ = (bottomZ + topZ) / 2; // Same as z + height/2
-
-        // Check if click is within bounds (no rotation in elevation view)
-        const isInHorizontalBounds = Math.abs(roomPos.x - centerX) <= width / 2;
-        const isInVerticalBounds = roomPos.y >= bottomZ && roomPos.y <= topZ;
-
-        return isInHorizontalBounds && isInVerticalBounds;
-      }
-    });
-
-    if (clickedElement) {
-      onSelectElement(clickedElement);
-      if (activeTool === 'select') {
-        // 🎯 FIX: Don't start dragging immediately - just prepare for potential drag
-        setDragStart({ x, y });
-        setDragThreshold({ exceeded: false, startElement: clickedElement });
-      }
-    } else {
-      onSelectElement(null);
-    }
-  }, [activeTool, canvasToRoom, design.elements, onSelectElement, zoom, getComponentMetadata]);
+    // Call module function
+    InteractionHandler.handleMouseDown(e, state, callbacks, utils);
+  }, [
+    canvasRef, active2DView, currentViewInfo, zoom, panOffset, design, selectedElement, hoveredElement,
+    isDragging, draggedElement, draggedElementOriginalPos, dragStart, dragThreshold, currentMousePos,
+    activeTool, currentMeasureStart, tapeMeasurePreview, completedMeasurements, configCache,
+    onSelectElement, setHoveredElement, setIsDragging, setDraggedElement, setDraggedElementOriginalPos,
+    setDragStart, setDragThreshold, setCurrentMousePos, setPanOffset, setCurrentMeasureStart,
+    setTapeMeasurePreview, setCompletedMeasurements, setSnapGuides, updateCurrentRoomDesign,
+    onUpdateElement, toast, render, canvasToRoom, roomToCanvas, getElementWall, isCornerVisibleInView,
+    getComponentMetadata, getSnapPosition, validatePlacement, innerRoomBounds
+  ]);
 
   // Throttled snap guide update to improve performance
   const throttledSnapUpdate = useCallback(
@@ -1309,258 +1248,78 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
   );
 
   const handleMouseMove = useCallback((e: React.MouseEvent<HTMLCanvasElement>) => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
+    // Construct state object (reuse from handleMouseDown pattern)
+    const state: InteractionHandler.InteractionState = {
+      canvasRef, active2DView, currentViewInfo, zoom, panOffset, design, selectedElement, hoveredElement,
+      isDragging, draggedElement, draggedElementOriginalPos, dragStart, dragThreshold, currentMousePos,
+      activeTool, currentMeasureStart, tapeMeasurePreview, completedMeasurements, configCache
+    };
 
-    const rect = canvas.getBoundingClientRect();
-    // 🎯 FIX: Account for CSS scaling of canvas element
-    // The canvas internal size is CANVAS_WIDTH × CANVAS_HEIGHT but CSS may scale it
-    const scaleX = CANVAS_WIDTH / rect.width;
-    const scaleY = CANVAS_HEIGHT / rect.height;
-    
-    const x = (e.clientX - rect.left) * scaleX;
-    const y = (e.clientY - rect.top) * scaleY;
-    
-    // Always track current mouse position for drag operations
-    setCurrentMousePos({ x, y });
+    const callbacks: InteractionHandler.InteractionCallbacks = {
+      setSelectedElement: onSelectElement, setHoveredElement, setIsDragging, setDraggedElement,
+      setDraggedElementOriginalPos, setDragStart, setDragThreshold, setCurrentMousePos, setPanOffset,
+      setCurrentMeasureStart, setTapeMeasurePreview, setCompletedMeasurements, setSnapGuides,
+      updateCurrentRoomDesign, onUpdateElement,
+      showToast: ({ title, description, variant }) => toast({ title, description, variant }),
+      requestRender: () => requestAnimationFrame(() => render())
+    };
 
-    // Handle hover detection
-    if (!isDragging && active2DView === 'plan') {
-      const roomPos = canvasToRoom(x, y);
-      
-      // Use same filtering and ordering as selection for hover detection
-      let elementsToCheck = design.elements.filter(el => {
-        // For plan view: only check per-view hidden_elements
-        if (active2DView === 'plan') {
-          return !currentViewInfo.hiddenElements.includes(el.id);
-        }
+    const utils: InteractionHandler.InteractionUtilities = {
+      canvasToRoom, roomToCanvas, getElementWall, isCornerVisibleInView, getComponentMetadata,
+      getSnapPosition, snapToGrid, getEnhancedComponentPlacement, validatePlacement,
+      getInnerRoomBounds: () => innerRoomBounds
+    };
 
-        // For elevation views: check both direction AND hidden_elements
-        const wall = getElementWall(el);
-        const isCornerVisible = isCornerVisibleInView(el, currentViewInfo.direction);
-
-        // Check direction visibility
-        const isDirectionVisible = wall === currentViewInfo.direction || wall === 'center' || isCornerVisible;
-        if (!isDirectionVisible) return false;
-
-        // Check if element is hidden in this specific view
-        if (currentViewInfo.hiddenElements.includes(el.id)) return false;
-
-        return true;
-      });
-
-      // Sort elements by layer height first (wall units over base units), then by zIndex for hover
-      elementsToCheck.sort((a, b) => {
-        // Get layer metadata for height-based sorting
-        const metaA = getComponentMetadata(a.component_id || a.id);
-        const metaB = getComponentMetadata(b.component_id || b.id);
-
-        // Priority 1: Sort by max_height (higher components should be hovered first when overlapping)
-        const heightA = metaA?.max_height_cm ?? 0;
-        const heightB = metaB?.max_height_cm ?? 0;
-
-        if (heightB !== heightA) {
-          return heightB - heightA;  // Higher height first (wall units before base units)
-        }
-
-        // Priority 2: If same height, sort by zIndex
-        return (b.zIndex || 0) - (a.zIndex || 0);
-      });
-      
-      const hoveredEl = elementsToCheck.find(element => {
-        // Use the new rotation-aware boundary detection
-        const viewMode = active2DView === 'plan' ? 'plan' : 'elevation';
-        return isPointInRotatedComponent(roomPos.x, roomPos.y, element, viewMode);
-      });
-      setHoveredElement(hoveredEl || null);
-      
-      // Clear snap guides when not dragging
-      if (snapGuides.vertical.length > 0 || snapGuides.horizontal.length > 0) {
-        setSnapGuides({ vertical: [], horizontal: [], snapPoint: null });
-      }
-    }
-
-    // Handle tape measure preview
-    if (activeTool === 'tape-measure' && onTapeMeasureMouseMove) {
-      onTapeMeasureMouseMove(x, y);
-    }
-
-    // 🎯 FIX: Check drag threshold before starting drag
-    if (!isDragging && dragThreshold.startElement && activeTool === 'select') {
-      const deltaX = x - dragStart.x;
-      const deltaY = y - dragStart.y;
-      const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
-      const DRAG_THRESHOLD = configCache.drag_threshold_mouse || 5; // Database-driven drag threshold
-
-      if (distance >= DRAG_THRESHOLD && !dragThreshold.exceeded) {
-        // Start dragging now that threshold is exceeded
-        setIsDragging(true);
-        setDraggedElement(dragThreshold.startElement);
-        // Store original position for collision detection fallback
-        setDraggedElementOriginalPos({
-          x: dragThreshold.startElement.x,
-          y: dragThreshold.startElement.y
-        });
-        setDragThreshold({ exceeded: true, startElement: dragThreshold.startElement });
-      }
-    }
-
-    if (!isDragging) return;
-
-    // Handle panning (both right-click and pan tool)
-    if (activeTool === 'pan' || (isDragging && !draggedElement)) {
-      const deltaX = x - dragStart.x;
-      const deltaY = y - dragStart.y;
-      setPanOffset(prev => ({
-        x: prev.x + deltaX,
-        y: prev.y + deltaY
-      }));
-      setDragStart({ x, y });
-    } else if (draggedElement && activeTool === 'select') {
-      // Update snap guides with throttling to improve performance
-      const roomPos = canvasToRoom(x, y);
-      throttledSnapUpdate(roomPos, draggedElement);
-      
-      // Trigger re-render to show drag preview (also throttled by requestAnimationFrame)
-      requestAnimationFrame(() => render());
-    }
-  }, [isDragging, activeTool, dragStart, draggedElement, canvasToRoom, design.elements, active2DView, render, throttledSnapUpdate, snapGuides, onTapeMeasureMouseMove, getComponentMetadata]);
+    InteractionHandler.handleMouseMove(e, state, callbacks, utils);
+  }, [
+    canvasRef, active2DView, currentViewInfo, zoom, panOffset, design, selectedElement, hoveredElement,
+    isDragging, draggedElement, draggedElementOriginalPos, dragStart, dragThreshold, currentMousePos,
+    activeTool, currentMeasureStart, tapeMeasurePreview, completedMeasurements, configCache,
+    onSelectElement, setHoveredElement, setIsDragging, setDraggedElement, setDraggedElementOriginalPos,
+    setDragStart, setDragThreshold, setCurrentMousePos, setPanOffset, setCurrentMeasureStart,
+    setTapeMeasurePreview, setCompletedMeasurements, setSnapGuides, updateCurrentRoomDesign,
+    onUpdateElement, toast, render, canvasToRoom, roomToCanvas, getElementWall, isCornerVisibleInView,
+    getComponentMetadata, getSnapPosition, validatePlacement, innerRoomBounds
+  ]);
 
   // Prevent context menu on right-click
   const handleContextMenu = useCallback((e: React.MouseEvent<HTMLCanvasElement>) => {
-    e.preventDefault();
+    InteractionHandler.handleContextMenu(e);
   }, []);
 
   const handleMouseUp = useCallback(() => {
-    if (isDragging && draggedElement) {
-      // Use current mouse position for final placement
-      const roomPos = canvasToRoom(currentMousePos.x, currentMousePos.y);
-      
-      // Smart snap with walls and components
-      const snapped = getSnapPosition(draggedElement, roomPos.x, roomPos.y);
-      
-      // Apply light grid snapping only if not snapped to walls/components
-      let finalX = snapped.x;
-      let finalY = snapped.y;
-      
-      const isWallSnapped = snapped.guides.vertical.length > 0 || snapped.guides.horizontal.length > 0;
-      if (!isWallSnapped) {
-        finalX = snapToGrid(snapped.x);
-        finalY = snapToGrid(snapped.y);
-      }
-      
-      // Update element with final position - use effective footprint for plan view
-      let clampWidth = draggedElement.width;
-      let clampDepth = draggedElement.depth;
-      // DYNAMIC: Corner components use their actual square footprint
-      const isCornerCounterTop = draggedElement.type === 'counter-top' && draggedElement.id.includes('counter-top-corner');
-      const isCornerWallCabinet = draggedElement.type === 'cabinet' && draggedElement.id.includes('corner-wall-cabinet');
-      const isCornerBaseCabinet = draggedElement.type === 'cabinet' && draggedElement.id.includes('corner-base-cabinet');
-      const isCornerTallUnit = draggedElement.type === 'cabinet' && (
-        draggedElement.id.includes('corner-tall') || 
-        draggedElement.id.includes('corner-larder') ||
-        draggedElement.id.includes('larder-corner')
-      );
-      
-      if (isCornerCounterTop || isCornerWallCabinet || isCornerBaseCabinet || isCornerTallUnit) {
-        // Use actual square dimensions for corner components
-        const squareSize = Math.min(draggedElement.width, draggedElement.depth);
-        clampWidth = squareSize;
-        clampDepth = squareSize;
-      }
+    const state: InteractionHandler.InteractionState = {
+      canvasRef, active2DView, currentViewInfo, zoom, panOffset, design, selectedElement, hoveredElement,
+      isDragging, draggedElement, draggedElementOriginalPos, dragStart, dragThreshold, currentMousePos,
+      activeTool, currentMeasureStart, tapeMeasurePreview, completedMeasurements, configCache
+    };
 
-      // Apply Smart Wall Snapping for dragged elements
-      const isCornerComponent = isCornerCounterTop || isCornerWallCabinet || isCornerBaseCabinet || isCornerTallUnit;
-      
-      const dragWallSnappedPos = getEnhancedComponentPlacement(
-        finalX,
-        finalY,
-        draggedElement.width,
-        draggedElement.depth || draggedElement.height,
-        draggedElement.id,
-        draggedElement.type || 'cabinet',
-        design.roomDimensions
-      );
+    const callbacks: InteractionHandler.InteractionCallbacks = {
+      setSelectedElement: onSelectElement, setHoveredElement, setIsDragging, setDraggedElement,
+      setDraggedElementOriginalPos, setDragStart, setDragThreshold, setCurrentMousePos, setPanOffset,
+      setCurrentMeasureStart, setTapeMeasurePreview, setCompletedMeasurements, setSnapGuides,
+      updateCurrentRoomDesign, onUpdateElement,
+      showToast: ({ title, description, variant }) => toast({ title, description, variant }),
+      requestRender: () => requestAnimationFrame(() => render())
+    };
 
-      // Use wall snapped position if snapped, otherwise clamp to boundaries
-      let finalClampedX, finalClampedY;
-      
-      if (dragWallSnappedPos.snappedToWall) {
-        finalClampedX = dragWallSnappedPos.x;
-        finalClampedY = dragWallSnappedPos.y;
-        
-        // Log drag snapping for debugging
-        Logger.debug(`🎯 [Drag Snap] Element moved to ${dragWallSnappedPos.corner || 'wall'} at (${finalClampedX}, ${finalClampedY})`);
-      } else {
-        // Standard boundary clamping if not snapped to wall
-        finalClampedX = Math.max(0, Math.min(finalX, innerRoomBounds.width - clampWidth));
-        finalClampedY = Math.max(0, Math.min(finalY, innerRoomBounds.height - clampDepth));
-      }
+    const utils: InteractionHandler.InteractionUtilities = {
+      canvasToRoom, roomToCanvas, getElementWall, isCornerVisibleInView, getComponentMetadata,
+      getSnapPosition, snapToGrid, getEnhancedComponentPlacement, validatePlacement,
+      getInnerRoomBounds: () => innerRoomBounds
+    };
 
-      // **COLLISION DETECTION** - Validate placement on drop
-      const proposedElement: DesignElement = {
-        ...draggedElement,
-        x: dragWallSnappedPos.snappedToWall ? finalClampedX : snapToGrid(finalClampedX),
-        y: dragWallSnappedPos.snappedToWall ? finalClampedY : snapToGrid(finalClampedY),
-        rotation: snapped.rotation
-      };
-
-      const validationResult = validatePlacement(
-        proposedElement,
-        design.elements.filter(el => el.id !== draggedElement.id),
-        draggedElementOriginalPos || undefined
-      );
-
-      if (validationResult.isValid) {
-        // ✅ Valid placement - update position
-        onUpdateElement(draggedElement.id, {
-          x: proposedElement.x,
-          y: proposedElement.y,
-          rotation: proposedElement.rotation
-        });
-      } else if (validationResult.suggestedPosition) {
-        // ⚠️ Invalid placement - snap to suggested valid position
-        onUpdateElement(draggedElement.id, {
-          x: validationResult.suggestedPosition.x,
-          y: validationResult.suggestedPosition.y,
-          rotation: proposedElement.rotation
-        });
-        toast({
-          title: "Position Adjusted",
-          description: validationResult.reason || "Position adjusted to avoid collision",
-          variant: "default",
-        });
-        Logger.debug(`🔄 [Collision] Adjusted position: ${validationResult.reason}`);
-      } else {
-        // ❌ No valid position found - return to original position
-        const fallbackPos = draggedElementOriginalPos || { x: draggedElement.x, y: draggedElement.y };
-        onUpdateElement(draggedElement.id, {
-          x: fallbackPos.x,
-          y: fallbackPos.y,
-          rotation: draggedElement.rotation  // Keep original rotation
-        });
-        toast({
-          title: "Invalid Placement",
-          description: validationResult.reason || "Cannot place component here",
-          variant: "destructive",
-        });
-        Logger.warn(`❌ [Collision] Returned to original: ${validationResult.reason}`);
-      }
-    }
-
-    // Handle tape measure clicks
-    if (activeTool === 'tape-measure' && onTapeMeasureClick && !isDragging) {
-      // Only handle clicks, not drags
-      onTapeMeasureClick(currentMousePos.x, currentMousePos.y);
-    }
-
-    // Clear drag state
-    setIsDragging(false);
-    setDraggedElement(null);
-    setDraggedElementOriginalPos(null);  // Clear original position
-    setSnapGuides({ vertical: [], horizontal: [], snapPoint: null });
-    setDragThreshold({ exceeded: false, startElement: null }); // 🎯 Clear drag threshold
-  }, [isDragging, draggedElement, draggedElementOriginalPos, canvasToRoom, currentMousePos, getSnapPosition, snapToGrid, onUpdateElement, roomDimensions, activeTool, onTapeMeasureClick, validatePlacement, toast, design.elements]);
+    InteractionHandler.handleMouseUp(state, callbacks, utils);
+  }, [
+    canvasRef, active2DView, currentViewInfo, zoom, panOffset, design, selectedElement, hoveredElement,
+    isDragging, draggedElement, draggedElementOriginalPos, dragStart, dragThreshold, currentMousePos,
+    activeTool, currentMeasureStart, tapeMeasurePreview, completedMeasurements, configCache,
+    onSelectElement, setHoveredElement, setIsDragging, setDraggedElement, setDraggedElementOriginalPos,
+    setDragStart, setDragThreshold, setCurrentMousePos, setPanOffset, setCurrentMeasureStart,
+    setTapeMeasurePreview, setCompletedMeasurements, setSnapGuides, updateCurrentRoomDesign,
+    onUpdateElement, toast, render, canvasToRoom, roomToCanvas, getElementWall, isCornerVisibleInView,
+    getComponentMetadata, getSnapPosition, validatePlacement, innerRoomBounds
+  ]);
 
 
   // Touch event handlers
