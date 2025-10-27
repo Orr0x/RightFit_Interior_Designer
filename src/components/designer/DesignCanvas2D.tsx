@@ -1,5 +1,5 @@
 import React, { useRef, useEffect, useState, useCallback } from 'react';
-import { DesignElement, Design, ElevationViewConfig } from '../../types/project';
+import { DesignElement, Design, ElevationViewConfig, getDefaultZIndex } from '../../types/project';
 import { ComponentService } from '@/services/ComponentService';
 import { getElevationViews } from '@/utils/elevationViewHelpers';
 import { RoomService } from '@/services/RoomService';
