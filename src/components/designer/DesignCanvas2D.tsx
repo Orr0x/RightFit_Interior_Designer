@@ -1469,139 +1469,121 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
 
   // Handle drag over for drag and drop
   const handleDragOver = useCallback((e: React.DragEvent<HTMLCanvasElement>) => {
-    e.preventDefault();
-    e.dataTransfer.dropEffect = 'copy';
+    InteractionHandler.handleDragOver(e);
   }, []);
 
   // Handle drop
   const handleDrop = useCallback((e: React.DragEvent<HTMLCanvasElement>) => {
-    e.preventDefault();
-    const canvas = canvasRef.current;
-    if (!canvas) return;
+    // Construct state object
+    const state: InteractionHandler.InteractionState = {
+      canvasRef,
+      active2DView,
+      currentViewInfo,
+      zoom,
+      panOffset,
+      design,
+      selectedElement,
+      hoveredElement,
+      isDragging,
+      draggedElement,
+      draggedElementOriginalPos,
+      dragStart,
+      dragThreshold,
+      currentMousePos,
+      activeTool,
+      currentMeasureStart,
+      tapeMeasurePreview,
+      completedMeasurements,
+      configCache
+    };
 
-    try {
-      const rawData = e.dataTransfer.getData('component');
-      if (!rawData || rawData.trim() === '') {
-        Logger.warn('⚠️ Drop cancelled: No component data (quick drag release)');
-        return;
-      }
-      const componentData = JSON.parse(rawData);
-      const rect = canvas.getBoundingClientRect();
-      // 🎯 FIX: Account for CSS scaling of canvas element
-      const scaleX = CANVAS_WIDTH / rect.width;
-      const scaleY = CANVAS_HEIGHT / rect.height;
-      
-      const x = (e.clientX - rect.left) * scaleX;
-      const y = (e.clientY - rect.top) * scaleY;
-      const roomPos = canvasToRoom(x, y);
+    // Construct callbacks object
+    const callbacks: InteractionHandler.InteractionCallbacks = {
+      setSelectedElement: onSelectElement,
+      setHoveredElement,
+      setIsDragging,
+      setDraggedElement,
+      setDraggedElementOriginalPos,
+      setDragStart,
+      setDragThreshold,
+      setCurrentMousePos,
+      setPanOffset,
+      setCurrentMeasureStart,
+      setTapeMeasurePreview,
+      setCompletedMeasurements,
+      setSnapGuides,
+      updateCurrentRoomDesign,
+      onUpdateElement,
+      onAddElement,
+      showToast: ({ title, description, variant }) => toast({ title, description, variant }),
+      requestRender: () => requestAnimationFrame(() => render())
+    };
 
-      // Calculate drop position based on mouse coordinates
-      // The drag image center is already positioned correctly, so use mouse position directly
-      const dropX = roomPos.x;
-      const dropY = roomPos.y;
+    // Construct utilities object
+    const utils: InteractionHandler.InteractionUtilities = {
+      canvasToRoom,
+      roomToCanvas,
+      getElementWall,
+      isCornerVisibleInView,
+      getComponentMetadata,
+      getSnapPosition,
+      snapToGrid,
+      getEnhancedComponentPlacement,
+      validatePlacement,
+      getInnerRoomBounds: () => innerRoomBounds
+    };
 
-
-      // 🎯 BOUNDARY CHECK: Prevent drops outside inner room boundaries (usable space)
-      // Components should only be placed within the inner room, not in the wall thickness
-      const dropBoundaryTolerance = ConfigurationService.getSync('drop_boundary_tolerance', 50); // 50cm tolerance (fallback)
-      if (dropX < -dropBoundaryTolerance || dropY < -dropBoundaryTolerance || dropX > innerRoomBounds.width + dropBoundaryTolerance || dropY > innerRoomBounds.height + dropBoundaryTolerance) {
-        Logger.warn('⚠️ Drop cancelled: Component dropped outside inner room boundaries');
-        return;
-      }
-
-      // Use actual component dimensions for ALL components (no more forced 90x90)
-      const isCornerComponent = componentData.id?.includes('corner-') || 
-                               componentData.id?.includes('-corner') ||
-                               componentData.id?.includes('corner');
-      
-      const effectiveWidth = componentData.width;
-      const effectiveDepth = componentData.depth;
-
-      // Set default Z position based on component type (from database configuration)
-      const zPositionDefaults = ConfigurationService.getJSONSync('z_position_defaults', {
-        floor_unit: 0,
-        base_unit: 10,
-        wall_unit: 150,
-        tall_unit: 0,
-        appliance: 0,
-        sink: 92,
-        worktop: 92
-      });
-
-      // Get Y-offset config for elevation-specific components
-      let defaultZ = 0; // Default for floor-mounted components
-      if (componentData.type === 'cornice') {
-        defaultZ = ConfigurationService.getSync('cornice_y_offset', 210); // Top of wall units (updated from 200 to 210 to match tall units)
-      } else if (componentData.type === 'pelmet') {
-        defaultZ = ConfigurationService.getSync('pelmet_y_offset', 140); // Bottom of wall units
-      } else if (componentData.type === 'counter-top') {
-        defaultZ = ConfigurationService.getSync('countertop_y_offset', 86); // Counter top height (updated from 90 to 86)
-      } else if (componentData.type === 'wall-cabinet' || componentData.id?.includes('wall-cabinet')) {
-        defaultZ = ConfigurationService.getSync('wall_cabinet_y_offset', 140); // Wall cabinet height
-      } else if (componentData.type === 'wall-unit-end-panel') {
-        defaultZ = ConfigurationService.getSync('cornice_y_offset', 210); // Top of wall units (updated from 200 to 210)
-      } else if (componentData.type === 'window') {
-        defaultZ = ConfigurationService.getSync('countertop_y_offset', 86); // Window sill height (updated from 90 to 86)
-      }
-
-      // Apply Enhanced Component Placement using unified coordinate system
-      const placementResult = getEnhancedComponentPlacement(
-        dropX,
-        dropY,
-        effectiveWidth,
-        effectiveDepth,
-        componentData.id,
-        componentData.type,
-        design.roomDimensions
-      );
-
-      // Log placement results for debugging
-      if (placementResult.snappedToWall) {
-        Logger.debug(`🎯 [Enhanced Placement] Component snapped to ${placementResult.corner || 'wall'} at (${placementResult.x}, ${placementResult.y}) with rotation ${placementResult.rotation}°`);
-      }
-      
-      // Validate placement
-      if (!placementResult.withinBounds) {
-        Logger.warn('⚠️ [Enhanced Placement] Component placement outside room bounds, adjusting...');
-      }
-
-      const newElement: DesignElement = {
-        id: `${componentData.id}-${Date.now()}`,
-        component_id: componentData.id, // Database lookup key for 2D/3D rendering
-        type: componentData.type,
-        // Use enhanced placement results with proper wall clearance and rotation
-        x: placementResult.snappedToWall ? placementResult.x : snapToGrid(placementResult.x),
-        y: placementResult.snappedToWall ? placementResult.y : snapToGrid(placementResult.y),
-        z: defaultZ, // Set appropriate Z position
-        width: componentData.width, // X-axis dimension
-        depth: componentData.depth, // Y-axis dimension (front-to-back)
-        height: componentData.height, // Z-axis dimension (bottom-to-top)
-        rotation: placementResult.rotation, // Use calculated rotation from enhanced placement
-        color: componentData.color,
-        style: componentData.name,
-        zIndex: 0, // Required by DesignElement interface
-      };
-
-      // ✅ Enhanced placement already handled snapping - no need for duplicate getSnapPosition() call
-      // This was causing components to snap twice with potentially conflicting results
-
-      onAddElement(newElement);
-    } catch (error) {
-      // Enhanced error handling for different drop failure scenarios
-      if (error instanceof Error) {
-        if (error.message.includes('JSON')) {
-          Logger.warn('⚠️ Drop cancelled: Invalid component data (quick drag/release)');
-        } else if (error.message.includes('boundary')) {
-          Logger.warn('⚠️ Drop cancelled: Component dropped outside room boundaries');
-        } else {
-          Logger.warn('⚠️ Drop failed:', error.message);
-        }
-      } else {
-        Logger.warn('⚠️ Drop cancelled: Unknown reason (likely quick drag/release)');
-      }
-      // Silently handle - this is expected for cancelled drags and off-canvas drops
-    }
-  }, [canvasToRoom, snapToGrid, roomDimensions, getSnapPosition, onAddElement]);
+    // Delegate to module
+    InteractionHandler.handleDrop(e, state, callbacks, utils);
+  }, [
+    canvasRef,
+    active2DView,
+    currentViewInfo,
+    zoom,
+    panOffset,
+    design,
+    selectedElement,
+    hoveredElement,
+    isDragging,
+    draggedElement,
+    draggedElementOriginalPos,
+    dragStart,
+    dragThreshold,
+    currentMousePos,
+    activeTool,
+    currentMeasureStart,
+    tapeMeasurePreview,
+    completedMeasurements,
+    configCache,
+    onSelectElement,
+    setHoveredElement,
+    setIsDragging,
+    setDraggedElement,
+    setDraggedElementOriginalPos,
+    setDragStart,
+    setDragThreshold,
+    setCurrentMousePos,
+    setPanOffset,
+    setCurrentMeasureStart,
+    setTapeMeasurePreview,
+    setCompletedMeasurements,
+    setSnapGuides,
+    updateCurrentRoomDesign,
+    onUpdateElement,
+    onAddElement,
+    toast,
+    render,
+    canvasToRoom,
+    roomToCanvas,
+    getElementWall,
+    isCornerVisibleInView,
+    getComponentMetadata,
+    getSnapPosition,
+    snapToGrid,
+    getEnhancedComponentPlacement,
+    validatePlacement,
+    innerRoomBounds
+  ]);
 
   // Initialize canvas and set up event listeners
   useEffect(() => {

@@ -11,6 +11,7 @@
 import type { DesignElement, Design, ElevationViewConfig } from '@/types/project';
 import { CANVAS_WIDTH, CANVAS_HEIGHT } from './CanvasSharedUtilities';
 import { Logger } from '@/utils/Logger';
+import { ConfigurationService } from '@/services/ConfigurationService';
 
 // =============================================================================
 // TYPE DEFINITIONS
@@ -75,6 +76,7 @@ export interface InteractionCallbacks {
   setSnapGuides: (guides: { vertical: number[]; horizontal: number[]; snapPoint: { x: number; y: number } | null }) => void;
   updateCurrentRoomDesign: (updateFn: (design: Design) => Design) => void;
   onUpdateElement: (elementId: string, updates: Partial<DesignElement>) => void;
+  onAddElement: (element: DesignElement) => void;
   showToast: (options: { title: string; description: string; variant: 'default' | 'destructive' }) => void;
   requestRender: () => void;
 }
@@ -94,7 +96,9 @@ export interface PlacementResult {
 export interface EnhancedPlacement {
   x: number;
   y: number;
+  rotation: number;
   snappedToWall: boolean;
+  withinBounds: boolean;
   corner?: 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right' | null;
 }
 
@@ -933,4 +937,137 @@ export function handleDragOver(
 ): void {
   event.preventDefault();
   event.dataTransfer.dropEffect = 'copy';
+}
+
+/**
+ * Handle drop events (when component is dropped on canvas)
+ */
+export function handleDrop(
+  event: React.DragEvent<HTMLCanvasElement>,
+  state: InteractionState,
+  callbacks: InteractionCallbacks,
+  utils: InteractionUtilities
+): void {
+  event.preventDefault();
+  const canvas = state.canvasRef.current;
+  if (!canvas) return;
+
+  try {
+    const rawData = event.dataTransfer.getData('component');
+    if (!rawData || rawData.trim() === '') {
+      Logger.warn('⚠️ Drop cancelled: No component data (quick drag release)');
+      return;
+    }
+    const componentData = JSON.parse(rawData);
+    const rect = canvas.getBoundingClientRect();
+    // Account for CSS scaling of canvas element
+    const scaleX = CANVAS_WIDTH / rect.width;
+    const scaleY = CANVAS_HEIGHT / rect.height;
+
+    const x = (event.clientX - rect.left) * scaleX;
+    const y = (event.clientY - rect.top) * scaleY;
+    const roomPos = utils.canvasToRoom(x, y);
+
+    // Calculate drop position based on mouse coordinates
+    const dropX = roomPos.x;
+    const dropY = roomPos.y;
+
+    // BOUNDARY CHECK: Prevent drops outside inner room boundaries
+    const dropBoundaryTolerance = ConfigurationService.getSync('drop_boundary_tolerance', 50);
+    const innerRoomBounds = utils.getInnerRoomBounds();
+    if (dropX < -dropBoundaryTolerance || dropY < -dropBoundaryTolerance ||
+        dropX > innerRoomBounds.width + dropBoundaryTolerance ||
+        dropY > innerRoomBounds.height + dropBoundaryTolerance) {
+      Logger.warn('⚠️ Drop cancelled: Component dropped outside inner room boundaries');
+      return;
+    }
+
+    // Use actual component dimensions
+    const isCornerComponent = componentData.id?.includes('corner-') ||
+                             componentData.id?.includes('-corner') ||
+                             componentData.id?.includes('corner');
+
+    const effectiveWidth = componentData.width;
+    const effectiveDepth = componentData.depth;
+
+    // Set default Z position based on component type (from database configuration)
+    const zPositionDefaults = ConfigurationService.getJSONSync('z_position_defaults', {
+      floor_unit: 0,
+      base_unit: 10,
+      wall_unit: 150,
+      tall_unit: 0,
+      appliance: 0,
+      sink: 92,
+      worktop: 92
+    });
+
+    // Get Y-offset config for elevation-specific components
+    let defaultZ = 0; // Default for floor-mounted components
+    if (componentData.type === 'cornice') {
+      defaultZ = ConfigurationService.getSync('cornice_y_offset', 210);
+    } else if (componentData.type === 'pelmet') {
+      defaultZ = ConfigurationService.getSync('pelmet_y_offset', 140);
+    } else if (componentData.type === 'counter-top') {
+      defaultZ = ConfigurationService.getSync('countertop_y_offset', 86);
+    } else if (componentData.type === 'wall-cabinet' || componentData.id?.includes('wall-cabinet')) {
+      defaultZ = ConfigurationService.getSync('wall_cabinet_y_offset', 140);
+    } else if (componentData.type === 'wall-unit-end-panel') {
+      defaultZ = ConfigurationService.getSync('cornice_y_offset', 210);
+    } else if (componentData.type === 'window') {
+      defaultZ = ConfigurationService.getSync('countertop_y_offset', 86);
+    }
+
+    // Apply Enhanced Component Placement
+    const placementResult = utils.getEnhancedComponentPlacement(
+      dropX,
+      dropY,
+      effectiveWidth,
+      effectiveDepth,
+      componentData.id,
+      componentData.type,
+      state.design.roomDimensions
+    );
+
+    // Log placement results
+    if (placementResult.snappedToWall) {
+      Logger.debug(`🎯 [Enhanced Placement] Component snapped to ${placementResult.corner || 'wall'} at (${placementResult.x}, ${placementResult.y}) with rotation ${placementResult.rotation}°`);
+    }
+
+    // Validate placement
+    if (!placementResult.withinBounds) {
+      Logger.warn('⚠️ [Enhanced Placement] Component placement outside room bounds, adjusting...');
+    }
+
+    const newElement: DesignElement = {
+      id: `${componentData.id}-${Date.now()}`,
+      component_id: componentData.id,
+      type: componentData.type,
+      // Use enhanced placement results with proper wall clearance and rotation
+      x: placementResult.snappedToWall ? placementResult.x : utils.snapToGrid(placementResult.x),
+      y: placementResult.snappedToWall ? placementResult.y : utils.snapToGrid(placementResult.y),
+      z: defaultZ,
+      width: componentData.width,
+      depth: componentData.depth,
+      height: componentData.height,
+      rotation: placementResult.rotation,
+      color: componentData.color,
+      style: componentData.name,
+      zIndex: 0,
+    };
+
+    callbacks.onAddElement(newElement);
+  } catch (error) {
+    // Enhanced error handling for different drop failure scenarios
+    if (error instanceof Error) {
+      if (error.message.includes('JSON')) {
+        Logger.warn('⚠️ Drop cancelled: Invalid component data (quick drag/release)');
+      } else if (error.message.includes('boundary')) {
+        Logger.warn('⚠️ Drop cancelled: Component dropped outside room boundaries');
+      } else {
+        Logger.warn('⚠️ Drop failed:', error.message);
+      }
+    } else {
+      Logger.warn('⚠️ Drop cancelled: Unknown reason (likely quick drag/release)');
+    }
+  }
 }
