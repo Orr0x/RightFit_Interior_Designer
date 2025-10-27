@@ -5,8 +5,9 @@
  */
 
 import { supabase } from '@/integrations/supabase/client';
-import { RoomType } from '@/types/project';
+import { RoomType, DesignElement } from '@/types/project';
 import { cacheManager, IntelligentCache } from './CacheService';
+import { ComponentPositionValidator } from '@/utils/ComponentPositionValidator';
 
 export interface ComponentBehavior {
   mount_type: 'floor' | 'wall';
@@ -39,378 +40,6 @@ const elevationCache = cacheManager.getCache<ComponentElevationData>('component-
 });
 
 export class ComponentService {
-  /**
-   * Get comprehensive sink components collection
-   */
-  static getSinkComponents(): any[] {
-    return [
-      // Kitchen Sinks (Worktop Mounted)
-      {
-        id: 'kitchen-sink-single-60cm',
-        component_id: 'kitchen-sink-single-60cm',
-        name: 'Kitchen Sink Single 60cm',
-        description: 'Stainless steel single bowl kitchen sink',
-        type: 'sink',
-        category: 'kitchen-sinks',
-        width: 60,
-        height: 20,
-        depth: 60,
-        room_types: ['kitchen'],
-        icon_name: 'Waves',
-        color: '#C0C0C0',
-        deprecated: false,
-        tags: ['kitchen', 'sink', 'single-bowl', 'stainless-steel'],
-        metadata: { z_position: 75, has_draining_board: false }
-      },
-      {
-        id: 'kitchen-sink-single-80cm',
-        component_id: 'kitchen-sink-single-80cm',
-        name: 'Kitchen Sink Single 80cm',
-        description: 'Large stainless steel single bowl kitchen sink',
-        type: 'sink',
-        category: 'kitchen-sinks',
-        width: 80,
-        height: 20,
-        depth: 60,
-        room_types: ['kitchen'],
-        icon_name: 'Waves',
-        color: '#C0C0C0',
-        deprecated: false,
-        tags: ['kitchen', 'sink', 'single-bowl', 'stainless-steel', 'large'],
-        metadata: { z_position: 75, has_draining_board: false }
-      },
-      {
-        id: 'kitchen-sink-double-80cm',
-        component_id: 'kitchen-sink-double-80cm',
-        name: 'Kitchen Sink Double 80cm',
-        description: 'Stainless steel double bowl kitchen sink',
-        type: 'sink',
-        category: 'kitchen-sinks',
-        width: 80,
-        height: 20,
-        depth: 60,
-        room_types: ['kitchen'],
-        icon_name: 'Waves',
-        color: '#C0C0C0',
-        deprecated: false,
-        tags: ['kitchen', 'sink', 'double-bowl', 'stainless-steel'],
-        metadata: { z_position: 75, has_draining_board: false }
-      },
-      {
-        id: 'kitchen-sink-double-100cm',
-        component_id: 'kitchen-sink-double-100cm',
-        name: 'Kitchen Sink Double 100cm',
-        description: 'Large stainless steel double bowl kitchen sink',
-        type: 'sink',
-        category: 'kitchen-sinks',
-        width: 100,
-        height: 20,
-        depth: 60,
-        room_types: ['kitchen'],
-        icon_name: 'Waves',
-        color: '#C0C0C0',
-        deprecated: false,
-        tags: ['kitchen', 'sink', 'double-bowl', 'stainless-steel', 'large'],
-        metadata: { z_position: 75, has_draining_board: false }
-      },
-      {
-        id: 'kitchen-sink-corner-90cm',
-        component_id: 'kitchen-sink-corner-90cm',
-        name: 'Kitchen Sink Corner 90cm',
-        description: 'L-shaped corner stainless steel kitchen sink',
-        type: 'sink',
-        category: 'kitchen-sinks',
-        width: 90,
-        height: 20,
-        depth: 90,
-        room_types: ['kitchen'],
-        icon_name: 'Waves',
-        color: '#C0C0C0',
-        deprecated: false,
-        tags: ['kitchen', 'sink', 'corner', 'stainless-steel', 'l-shaped'],
-        metadata: { z_position: 75, has_draining_board: false }
-      },
-      {
-        id: 'kitchen-sink-farmhouse-60cm',
-        component_id: 'kitchen-sink-farmhouse-60cm',
-        name: 'Farmhouse Sink 60cm',
-        description: 'Stainless steel farmhouse sink with apron front',
-        type: 'sink',
-        category: 'kitchen-sinks',
-        width: 60,
-        height: 25,
-        depth: 60,
-        room_types: ['kitchen'],
-        icon_name: 'Waves',
-        color: '#C0C0C0',
-        deprecated: false,
-        tags: ['kitchen', 'sink', 'farmhouse', 'stainless-steel', 'apron-front'],
-        metadata: { z_position: 75, has_draining_board: false }
-      },
-      {
-        id: 'kitchen-sink-farmhouse-80cm',
-        component_id: 'kitchen-sink-farmhouse-80cm',
-        name: 'Farmhouse Sink 80cm',
-        description: 'Large stainless steel farmhouse sink with apron front',
-        type: 'sink',
-        category: 'kitchen-sinks',
-        width: 80,
-        height: 25,
-        depth: 60,
-        room_types: ['kitchen'],
-        icon_name: 'Waves',
-        color: '#C0C0C0',
-        deprecated: false,
-        tags: ['kitchen', 'sink', 'farmhouse', 'stainless-steel', 'apron-front', 'large'],
-        metadata: { z_position: 75, has_draining_board: false }
-      },
-      {
-        id: 'kitchen-sink-undermount-60cm',
-        component_id: 'kitchen-sink-undermount-60cm',
-        name: 'Undermount Sink 60cm',
-        description: 'Stainless steel undermount kitchen sink',
-        type: 'sink',
-        category: 'kitchen-sinks',
-        width: 60,
-        height: 20,
-        depth: 60,
-        room_types: ['kitchen'],
-        icon_name: 'Waves',
-        color: '#C0C0C0',
-        deprecated: false,
-        tags: ['kitchen', 'sink', 'undermount', 'stainless-steel'],
-        metadata: { z_position: 75, has_draining_board: false }
-      },
-      {
-        id: 'kitchen-sink-undermount-80cm',
-        component_id: 'kitchen-sink-undermount-80cm',
-        name: 'Undermount Sink 80cm',
-        description: 'Large stainless steel undermount kitchen sink',
-        type: 'sink',
-        category: 'kitchen-sinks',
-        width: 80,
-        height: 20,
-        depth: 60,
-        room_types: ['kitchen'],
-        icon_name: 'Waves',
-        color: '#C0C0C0',
-        deprecated: false,
-        tags: ['kitchen', 'sink', 'undermount', 'stainless-steel', 'large'],
-        metadata: { z_position: 75, has_draining_board: false }
-      },
-      {
-        id: 'kitchen-sink-island-100cm',
-        component_id: 'kitchen-sink-island-100cm',
-        name: 'Island Sink 100cm',
-        description: 'Large stainless steel island kitchen sink',
-        type: 'sink',
-        category: 'kitchen-sinks',
-        width: 100,
-        height: 20,
-        depth: 60,
-        room_types: ['kitchen'],
-        icon_name: 'Waves',
-        color: '#C0C0C0',
-        deprecated: false,
-        tags: ['kitchen', 'sink', 'island', 'stainless-steel', 'large'],
-        metadata: { z_position: 75, has_draining_board: false }
-      },
-      
-      // Butler Sinks (Base Unit Mounted)
-      {
-        id: 'butler-sink-60cm',
-        component_id: 'butler-sink-60cm',
-        name: 'Butler Sink 60cm',
-        description: 'White ceramic butler sink for utility use',
-        type: 'sink',
-        category: 'butler-sinks',
-        width: 60,
-        height: 30,
-        depth: 60,
-        room_types: ['kitchen'],
-        icon_name: 'Waves',
-        color: '#FFFFFF',
-        deprecated: false,
-        tags: ['butler', 'sink', 'ceramic', 'utility'],
-        metadata: { z_position: 65, has_draining_board: false }
-      },
-      {
-        id: 'butler-sink-80cm',
-        component_id: 'butler-sink-80cm',
-        name: 'Butler Sink 80cm',
-        description: 'Large white ceramic butler sink for utility use',
-        type: 'sink',
-        category: 'butler-sinks',
-        width: 80,
-        height: 30,
-        depth: 60,
-        room_types: ['kitchen'],
-        icon_name: 'Waves',
-        color: '#FFFFFF',
-        deprecated: false,
-        tags: ['butler', 'sink', 'ceramic', 'utility', 'large'],
-        metadata: { z_position: 65, has_draining_board: false }
-      },
-      {
-        id: 'butler-sink-corner-90cm',
-        component_id: 'butler-sink-corner-90cm',
-        name: 'Butler Sink Corner 90cm',
-        description: 'L-shaped corner white ceramic butler sink',
-        type: 'sink',
-        category: 'butler-sinks',
-        width: 90,
-        height: 30,
-        depth: 90,
-        room_types: ['kitchen'],
-        icon_name: 'Waves',
-        color: '#FFFFFF',
-        deprecated: false,
-        tags: ['butler', 'sink', 'corner', 'ceramic', 'l-shaped'],
-        metadata: { z_position: 65, has_draining_board: false }
-      },
-      {
-        id: 'butler-sink-deep-60cm',
-        component_id: 'butler-sink-deep-60cm',
-        name: 'Deep Butler Sink 60cm',
-        description: 'Extra deep white ceramic butler sink for heavy duty use',
-        type: 'sink',
-        category: 'butler-sinks',
-        width: 60,
-        height: 40,
-        depth: 60,
-        room_types: ['kitchen'],
-        icon_name: 'Waves',
-        color: '#FFFFFF',
-        deprecated: false,
-        tags: ['butler', 'sink', 'deep', 'ceramic', 'heavy-duty'],
-        metadata: { z_position: 65, has_draining_board: false }
-      },
-      {
-        id: 'butler-sink-shallow-60cm',
-        component_id: 'butler-sink-shallow-60cm',
-        name: 'Shallow Butler Sink 60cm',
-        description: 'Shallow white ceramic butler sink for prep work',
-        type: 'sink',
-        category: 'butler-sinks',
-        width: 60,
-        height: 20,
-        depth: 60,
-        room_types: ['kitchen'],
-        icon_name: 'Waves',
-        color: '#FFFFFF',
-        deprecated: false,
-        tags: ['butler', 'sink', 'shallow', 'ceramic', 'prep'],
-        metadata: { z_position: 65, has_draining_board: false }
-      },
-      
-      // Sinks with Draining Boards
-      {
-        id: 'kitchen-sink-draining-board-80cm',
-        component_id: 'kitchen-sink-draining-board-80cm',
-        name: 'Kitchen Sink with Draining Board 80cm',
-        description: 'Stainless steel kitchen sink with integrated draining board',
-        type: 'sink',
-        category: 'kitchen-sinks',
-        width: 80,
-        height: 20,
-        depth: 80,
-        room_types: ['kitchen'],
-        icon_name: 'Waves',
-        color: '#C0C0C0',
-        deprecated: false,
-        tags: ['kitchen', 'sink', 'draining-board', 'stainless-steel'],
-        metadata: { z_position: 75, has_draining_board: true }
-      },
-      {
-        id: 'kitchen-sink-draining-board-100cm',
-        component_id: 'kitchen-sink-draining-board-100cm',
-        name: 'Kitchen Sink with Draining Board 100cm',
-        description: 'Large stainless steel kitchen sink with integrated draining board',
-        type: 'sink',
-        category: 'kitchen-sinks',
-        width: 100,
-        height: 20,
-        depth: 80,
-        room_types: ['kitchen'],
-        icon_name: 'Waves',
-        color: '#C0C0C0',
-        deprecated: false,
-        tags: ['kitchen', 'sink', 'draining-board', 'stainless-steel', 'large'],
-        metadata: { z_position: 75, has_draining_board: true }
-      },
-      {
-        id: 'butler-sink-draining-board-80cm',
-        component_id: 'butler-sink-draining-board-80cm',
-        name: 'Butler Sink with Draining Board 80cm',
-        description: 'White ceramic butler sink with integrated draining board',
-        type: 'sink',
-        category: 'butler-sinks',
-        width: 80,
-        height: 30,
-        depth: 80,
-        room_types: ['kitchen'],
-        icon_name: 'Waves',
-        color: '#FFFFFF',
-        deprecated: false,
-        tags: ['butler', 'sink', 'draining-board', 'ceramic'],
-        metadata: { z_position: 65, has_draining_board: true }
-      },
-      
-      // Specialty Sinks
-      {
-        id: 'kitchen-sink-granite-80cm',
-        component_id: 'kitchen-sink-granite-80cm',
-        name: 'Granite Sink 80cm',
-        description: 'Black granite composite kitchen sink',
-        type: 'sink',
-        category: 'kitchen-sinks',
-        width: 80,
-        height: 20,
-        depth: 60,
-        room_types: ['kitchen'],
-        icon_name: 'Waves',
-        color: '#2F2F2F',
-        deprecated: false,
-        tags: ['kitchen', 'sink', 'granite', 'composite', 'black'],
-        metadata: { z_position: 75, has_draining_board: false }
-      },
-      {
-        id: 'kitchen-sink-copper-60cm',
-        component_id: 'kitchen-sink-copper-60cm',
-        name: 'Copper Sink 60cm',
-        description: 'Hand-hammered copper kitchen sink',
-        type: 'sink',
-        category: 'kitchen-sinks',
-        width: 60,
-        height: 20,
-        depth: 60,
-        room_types: ['kitchen'],
-        icon_name: 'Waves',
-        color: '#B87333',
-        deprecated: false,
-        tags: ['kitchen', 'sink', 'copper', 'hand-hammered', 'luxury'],
-        metadata: { z_position: 75, has_draining_board: false }
-      },
-      {
-        id: 'kitchen-sink-quartz-80cm',
-        component_id: 'kitchen-sink-quartz-80cm',
-        name: 'Quartz Sink 80cm',
-        description: 'White quartz composite kitchen sink',
-        type: 'sink',
-        category: 'kitchen-sinks',
-        width: 80,
-        height: 20,
-        depth: 60,
-        room_types: ['kitchen'],
-        icon_name: 'Waves',
-        color: '#F5F5F5',
-        deprecated: false,
-        tags: ['kitchen', 'sink', 'quartz', 'composite', 'white'],
-        metadata: { z_position: 75, has_draining_board: false }
-      }
-    ];
-  }
-
   /**
    * Batch load component behaviors for better performance
    */
@@ -476,10 +105,11 @@ export class ComponentService {
             has_direction: true,
             door_side: 'front',
             default_z_position: 0,
-            elevation_height: 85,
+            elevation_height: 86, // Fixed: Was 85cm, now 86cm (base cabinet standard)
             corner_configuration: {},
             component_behavior: {}
           };
+          console.warn(`⚠️ [ComponentService] Using fallback behavior for type "${type}" - elevation_height: 86cm`);
           results.set(type, fallback);
           behaviorCache.set(type, fallback, 30 * 60 * 1000); // Cache fallbacks for 30 minutes
         }
@@ -499,10 +129,11 @@ export class ComponentService {
             has_direction: true,
             door_side: 'front',
             default_z_position: 0,
-            elevation_height: 85,
+            elevation_height: 86, // Fixed: Was 85cm, now 86cm (base cabinet standard)
             corner_configuration: {},
             component_behavior: {}
           };
+          console.error(`💥 [ComponentService] ERROR fallback for type "${type}" - using elevation_height: 86cm`);
           results.set(type, fallback);
         }
       }
@@ -552,10 +183,11 @@ export class ComponentService {
           has_direction: true,
           door_side: 'front',
           default_z_position: 0,
-          elevation_height: 85,
+          elevation_height: 86, // Fixed: Was 85cm, now 86cm (base cabinet standard)
           corner_configuration: {},
           component_behavior: {}
         };
+        console.warn(`⚠️ [ComponentService] FALLBACK USED - Type: ${componentType}, elevation_height: 86cm`);
         behaviorCache.set(componentType, fallback, 30 * 60 * 1000); // Cache fallbacks for 30 minutes
         return fallback;
       }
@@ -582,66 +214,63 @@ export class ComponentService {
         has_direction: true,
         door_side: 'front',
         default_z_position: 0,
-        elevation_height: 85,
+        elevation_height: 86, // Fixed: Was 85cm, now 86cm (base cabinet standard)
         corner_configuration: {},
         component_behavior: {}
       };
+      console.error(`❌ [ComponentService] EXCEPTION FALLBACK - Type: ${componentType}, elevation_height: 86cm`);
       return fallback;
     }
   }
 
   /**
-   * Get elevation height for component (fixes larder cabinet issue)
+   * Get Z position for element (height off floor)
+   *
+   * Priority order:
+   * 1. Explicit Z set on element
+   * 2. Default from component definition (database)
+   * 3. Fallback based on type (ComponentPositionValidator)
+   *
+   * @param element - Design element
+   * @param componentData - Component data from database (optional)
+   * @returns Z position in cm
    */
-  static async getElevationHeight(componentId: string, componentType: string): Promise<number> {
-    // Check intelligent cache first
-    const cached = elevationCache.get(componentId);
-    if (cached) {
-      console.log(`⚡ [ComponentService] Cache hit for elevation: ${componentId}`);
-      return cached.use_actual_height ? cached.height : (cached.elevation_height || cached.height);
+  static getZPosition(
+    element: DesignElement,
+    componentData?: { default_z_position?: number | null }
+  ): number {
+    // Priority 1: Explicit Z set on element
+    if (element.z !== undefined && element.z !== null) {
+      return element.z;
     }
 
-    console.log(`📏 [ComponentService] Loading elevation height for: ${componentId}`);
-
-    try {
-      const { data, error } = await supabase
-        .from('components')
-        .select('height, elevation_height, component_behavior')
-        .eq('component_id', componentId)
-        .single();
-
-      if (error) {
-        console.warn(`⚠️ [ComponentService] No elevation data found for ${componentId}, using type defaults`);
-        // Fall back to component type behavior
-        const typeBehavior = await this.getComponentBehavior(componentType);
-        return typeBehavior.elevation_height || 85;
-      }
-
-      const elevationData: ComponentElevationData = {
-        height: Number(data.height),
-        elevation_height: data.elevation_height ? Number(data.elevation_height) : undefined,
-        use_actual_height: data.component_behavior?.use_actual_height_in_elevation || false,
-        is_tall_unit: data.component_behavior?.is_tall_unit || false
-      };
-
-      elevationCache.set(componentId, elevationData);
-
-      // Determine which height to use
-      if (elevationData.use_actual_height || elevationData.is_tall_unit) {
-        console.log(`📐 [ComponentService] Using actual height ${elevationData.height}cm for ${componentId} (tall/larder unit)`);
-        return elevationData.height;
-      } else if (elevationData.elevation_height) {
-        console.log(`📐 [ComponentService] Using elevation height ${elevationData.elevation_height}cm for ${componentId}`);
-        return elevationData.elevation_height;
-      } else {
-        console.log(`📐 [ComponentService] Using actual height ${elevationData.height}cm for ${componentId} (no specific elevation height)`);
-        return elevationData.height;
-      }
-
-    } catch (err) {
-      console.error(`❌ [ComponentService] Failed to load elevation height for ${componentId}:`, err);
-      return 85; // Safe fallback
+    // Priority 2: Default from component definition
+    if (componentData?.default_z_position !== null && componentData?.default_z_position !== undefined) {
+      return componentData.default_z_position;
     }
+
+    // Priority 3: Fallback based on type
+    return ComponentPositionValidator.getDefaultZ(element.type, element.component_id);
+  }
+
+  /**
+   * Get elevation rendering height (SIZE of component in elevation view)
+   *
+   * Always uses element.height (the SIZE of the component).
+   * The elevation_height field in database is deprecated.
+   *
+   * @param componentId - Component ID (unused, kept for compatibility)
+   * @param element - Design element
+   * @returns Height in cm (element.height)
+   */
+  static getElevationHeight(componentId: string, element?: DesignElement): number {
+    if (!element) {
+      console.warn(`⚠️ [ComponentService] getElevationHeight called without element for ${componentId}, returning default 86cm`);
+      return 86;
+    }
+
+    // Always use element.height (the SIZE of the component)
+    return element.height;
   }
 
   /**

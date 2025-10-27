@@ -1376,65 +1376,19 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
         yPos = floorY - explicitMountHeight - elementHeight;
       }
     } else {
-      // ⚠️ FALLBACK: Component not in database, use legacy hardcoded logic
-      let elevationHeightCm: number;
+      // ⚠️ FALLBACK: Component not in database
+      // Story 1.9: Use ComponentService for single source of truth
 
-      // Determine elevation height based on component type and ID
-      if (element.type === 'cornice') {
-        elevationHeightCm = 30; // Cornice height
-      } else if (element.type === 'pelmet') {
-        elevationHeightCm = 20; // Pelmet height
-      } else if (element.type === 'counter-top') {
-        elevationHeightCm = 4; // Counter top thickness
-      } else if (element.type === 'cabinet' && element.id.includes('wall-cabinet')) {
-        elevationHeightCm = 70; // Wall cabinet height
-      } else if (element.type === 'cabinet' && (element.id.includes('tall') || element.id.includes('larder'))) {
-        elevationHeightCm = element.height; // Use actual height for tall units
-      } else if (element.type === 'cabinet') {
-        elevationHeightCm = element.height || 86; // Base cabinet height (use element height, default 86cm)
-      } else if (element.type === 'appliance') {
-        elevationHeightCm = element.height; // Use actual height for appliances
-      } else if (element.type === 'window') {
-        elevationHeightCm = 100; // Window height
-      } else if (element.type === 'wall-unit-end-panel') {
-        elevationHeightCm = 70; // Wall unit end panel height
-      } else if (element.type === 'sink') {
-        // Different heights for butler vs kitchen sinks
-        const isButlerSink = element.id.includes('butler-sink') || element.id.includes('butler') || element.id.includes('base-unit-sink');
-        elevationHeightCm = isButlerSink ? 30 : 20;
-      } else {
-        elevationHeightCm = element.height; // Default to actual element height
-      }
+      // Get Z position (height off floor) - Priority: element.z → database → type fallback
+      const zPosition = ComponentService.getZPosition(element);
 
+      // Get elevation height (SIZE of component) - Always uses element.height
+      const elevationHeightCm = ComponentService.getElevationHeight(element.component_id, element);
+
+      // Calculate canvas positions
       elementHeight = elevationHeightCm * zoom;
-
-      // Calculate Y position based on component Z position and type
-      if (element.z && element.z > 0) {
-        // Component has explicit Z position - use it
-        const mountHeight = element.z * zoom;
-        yPos = floorY - mountHeight - elementHeight;
-      } else {
-        // Default positioning based on type
-        if (element.type === 'cabinet' && element.id.includes('wall-cabinet')) {
-          yPos = floorY - (140 * zoom) - elementHeight;
-        } else if (element.type === 'cornice') {
-          yPos = floorY - (210 * zoom) - elementHeight; // Updated from 200 to 210 to match tall units
-        } else if (element.type === 'pelmet') {
-          yPos = floorY - (140 * zoom);
-        } else if (element.type === 'window') {
-          yPos = floorY - (86 * zoom) - elementHeight; // Updated from 90 to 86
-        } else if (element.type === 'sink') {
-          const isButlerSink = element.id.includes('butler-sink') || element.id.includes('butler') || element.id.includes('base-unit-sink');
-          if (isButlerSink) {
-            yPos = floorY - (65 * zoom) - elementHeight;
-          } else {
-            yPos = floorY - (75 * zoom) - elementHeight;
-          }
-        } else {
-          // Floor level components
-          yPos = floorY - elementHeight;
-        }
-      }
+      const mountHeight = zPosition * zoom;
+      yPos = floorY - mountHeight - elementHeight;
     }
 
     // Draw detailed elevation view

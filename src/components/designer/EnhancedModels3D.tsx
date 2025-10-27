@@ -6,6 +6,7 @@ import { FeatureFlagService } from '@/services/FeatureFlagService';
 import { DynamicComponentRenderer } from '@/components/3d/DynamicComponentRenderer';
 import { ComponentTypeService } from '@/services/ComponentTypeService';
 import { CoordinateTransformEngine } from '@/services/CoordinateTransformEngine';
+import { ComponentService } from '@/services/ComponentService';
 
 // ComponentDefinition interface removed - using DatabaseComponent from useComponents hook
 
@@ -65,47 +66,11 @@ const convertTo3D = (
 
 // Helper function to validate element dimensions and prevent NaN values
 const validateElementDimensions = (element: DesignElement) => {
-  // CRITICAL FIX: Always preserve user-set Z values, only default if truly missing
-  let safeZ = 0; // Default for floor-mounted components
-  
-  // DEBUG: Log Z value processing
-  console.log(`🔍 [validateElementDimensions] Processing element ${element.id}:`, {
-    elementZ: element.z,
-    isUndefined: element.z === undefined,
-    isNaN: isNaN(element.z as number),
-    elementType: element.type
-  });
-  
-  // If Z is explicitly set (even to 0), ALWAYS use it - don't override user changes!
-  if (element.z !== undefined && !isNaN(element.z)) {
-    safeZ = element.z; // ALWAYS preserve user/system set Z values
-    console.log(`✅ [validateElementDimensions] Using existing Z value: ${safeZ}cm`);
-  } else {
-    // Apply type-based defaults for completely missing Z values (legacy elements)
-    // TODO: Load from component.default_z_position (database) instead of hardcoded
-    // Database: components.default_z_position column (added 2025-10-10)
-    // Migration: 20250131000029_add_default_z_position_to_components.sql
-    if (element.type === 'cornice') {
-      safeZ = 200; // DB default: 200cm (top of wall units)
-    } else if (element.type === 'pelmet') {
-      safeZ = 140; // DB default: 140cm (bottom of wall cabinets)
-    } else if (element.type === 'counter-top') {
-      safeZ = 90; // DB default: 90cm (work surface)
-    } else if (element.type === 'sink') {
-      safeZ = 90; // DB default: 90cm (mounted in countertop)
-    } else if (element.type === 'wall-cabinet' || element.id?.includes('wall-cabinet')) {
-      safeZ = 140; // DB default: 140cm (above countertop)
-    } else if (element.type === 'wall-unit-end-panel') {
-      safeZ = 140; // DB default: 140cm (matches wall cabinets)
-    } else if (element.type === 'window') {
-      safeZ = 90; // DB default: 90cm (standard window height)
-    } else if (element.type === 'toe-kick') {
-      safeZ = 0; // DB default: 0cm (floor level)
-    } else {
-      safeZ = 0; // Default: floor level for base cabinets, appliances, etc.
-    }
-    console.log(`🔧 [validateElementDimensions] Applied default Z value: ${safeZ}cm for type: ${element.type}`);
-  }
+  // Story 1.9: Use ComponentService.getZPosition() for single source of truth
+  // Priority: element.z → database default_z_position → type-based fallback
+  const safeZ = ComponentService.getZPosition(element);
+
+  console.log(`✅ [validateElementDimensions] Element ${element.id} Z position: ${safeZ}cm (type: ${element.type})`)
 
   return {
     x: isNaN(element.x) || element.x === undefined ? 0 : element.x,
