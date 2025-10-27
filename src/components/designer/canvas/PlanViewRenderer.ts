@@ -9,6 +9,7 @@
  */
 
 import type { DesignElement, Design, ElevationViewConfig } from '@/types/project';
+import { getDefaultZIndex } from '@/types/project';
 import type { RoomGeometry } from '@/types/RoomGeometry';
 import { renderPlanView } from '@/services/2d-renderers';
 import { render2DService } from '@/services/Render2DService';
@@ -165,13 +166,15 @@ export function drawRoomPlanView(
  * Get color based on element's Z-index layer
  * Uses brown tones to differentiate between layers
  */
-function getLayerColor(zIndex: number | undefined, elementId?: string): string {
-  const z = zIndex || 0;
+function getLayerColor(element: DesignElement): string {
+  // Use element's zIndex, or calculate default if missing/zero
+  let z = element.zIndex;
+  if (!z || z === 0) {
+    z = getDefaultZIndex(element.type, element.id);
+  }
 
   // Debug logging (temporary - remove after fixing)
-  if (elementId) {
-    console.log(`[LayerColor] Element ${elementId} has zIndex: ${zIndex} (using: ${z})`);
-  }
+  console.log(`[LayerColor] Element ${element.id} (${element.type}) has zIndex: ${element.zIndex} → using: ${z}`);
 
   // Layer-based color scheme (brown tones)
   if (z <= 1.0) {
@@ -234,7 +237,7 @@ export async function drawElementPlanView(
           ctx.fillStyle = '#b0b0b0';
         } else {
           // Use layer-based color scheme (brown tones by Z-index)
-          ctx.fillStyle = getLayerColor(element.zIndex, element.id);
+          ctx.fillStyle = getLayerColor(element);
         }
 
         // Render using database-driven system
@@ -248,7 +251,7 @@ export async function drawElementPlanView(
     // Minimal fallback if database rendering failed
     if (!renderedByDatabase) {
       // Use layer-based color scheme (brown tones by Z-index)
-      ctx.fillStyle = getLayerColor(element.zIndex, element.id);
+      ctx.fillStyle = getLayerColor(element);
       ctx.fillRect(0, 0, width, depth);
     }
   }
