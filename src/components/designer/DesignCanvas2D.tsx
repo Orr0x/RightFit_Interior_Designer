@@ -63,7 +63,6 @@ const throttle_legacy = <T extends (...args: any[]) => void>(func: T, delay: num
   }) as T;
 };
 
-
 interface DesignCanvas2DProps {
   design: Design;
   selectedElement: DesignElement | null;
@@ -788,10 +787,6 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
     return { x: snappedX, y: snappedY, rotation, guides };
   }, [roomDimensions, design.elements]);
 
-  // Draw full canvas grid
-  // REMOVED: drawGrid() - now using PlanViewRenderer.drawGrid() (Story 1.15.1)
-  // See: src/components/designer/canvas/PlanViewRenderer.ts
-
   // Draw room within canvas (Story 1.15.1 - using module renderers)
   const drawRoom = useCallback((ctx: CanvasRenderingContext2D) => {
     if (active2DView === 'plan') {
@@ -816,9 +811,6 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
       );
     }
   }, [roomDimensions, roomPosition, zoom, active2DView, roomGeometry, getWallHeight, currentViewInfo, innerRoomBounds, outerRoomBounds]);
-
-  // REMOVED: 220+ lines of inline room rendering code (Story 1.15.1)
-  // See modules: PlanViewRenderer.drawRoomPlanView() and ElevationViewRenderer.drawRoomElevationView()
 
   // Draw element with smart rendering
   const drawElement = useCallback((ctx: CanvasRenderingContext2D, element: DesignElement) => {
@@ -858,7 +850,6 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
     }
   }, [active2DView, roomToCanvas, selectedElement, hoveredElement, zoom, showWireframe, showColorDetail, roomDimensions, roomPosition]);
 
-
   // Draw selection handles using canvas rotation (matches component rendering)
   const drawSelectionHandles = (ctx: CanvasRenderingContext2D, element: DesignElement) => {
     const handleSize = 8;
@@ -892,46 +883,11 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
 
   // Draw element in elevation view with detailed fronts
 
-  // =============================================================================
-  // LEGACY ELEVATION DETAIL FUNCTIONS REMOVED (875 lines)
-  // =============================================================================
-  // Date: 2025-10-10
-  // Reason: Migrated to database-driven 2D rendering system
-  //
-  // All elevation detail rendering now handled by:
-  // - src/services/2d-renderers/elevation-view-handlers.ts
-  // - Database: component_2d_renders table (elevation_data JSONB)
-  //
-  // Functions removed:
-  // - drawCabinetElevationDetails (233 lines)
-  // - drawApplianceElevationDetails (75 lines)
-  // - drawCounterTopElevationDetails (32 lines)
-  // - drawEndPanelElevationDetails (32 lines)
-  // - drawWindowElevationDetails (32 lines)
-  // - drawDoorElevationDetails (45 lines)
-  // - drawFlooringElevationDetails (69 lines)
-  // - drawToeKickElevationDetails (27 lines)
-  // - drawCorniceElevationDetails (31 lines)
-  // - drawPelmetElevationDetails (34 lines)
-  // - drawWallUnitEndPanelElevationDetails (27 lines)
-  // - drawSinkElevationDetails (71 lines)
-  // - isCornerUnit (19 lines)
-  // - getElementWall (23 lines)
-  // - isCornerVisibleInView (16 lines)
-  // - shouldShowCornerDoorFace (8 lines)
-  //
-  // Full archive available at:
-  // docs/session-2025-10-09-2d-database-migration/LEGACY-CODE-FULL-ARCHIVE.md
-  //
-  // Git commit before removal: 14b478d (feat: Implement view-specific corner cabinet door logic)
-  // Git commit with removal: d31b6e2 (Refactor: Remove 875 lines of legacy elevation rendering code)
-  // =============================================================================
+  // LEGACY CODE: 875 lines of elevation rendering removed (2025-10-10)
+  // Now using database-driven 2D rendering (src/services/2d-renderers)
+  // Archive: docs/session-2025-10-09-2d-database-migration/LEGACY-CODE-FULL-ARCHIVE.md
 
-  // =============================================================================
-  // HELPER FUNCTIONS - Wrappers for ElevationViewRenderer (Story 1.15.2 Phase 6)
-  // =============================================================================
-  // These wrapper functions call ElevationViewRenderer functions with roomDimensions
-  // =============================================================================
+  // Helper functions - Wrappers for ElevationViewRenderer (Story 1.15.2 Phase 6)
 
   const getElementWall = (element: DesignElement): 'front' | 'back' | 'left' | 'right' | 'center' => {
     return ElevationViewRenderer.getElementWall(element, roomDimensions);
@@ -941,15 +897,7 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
     return ElevationViewRenderer.isCornerVisibleInView(element, view, roomDimensions);
   };
 
-  // =============================================================================
-  // END HELPER FUNCTIONS
-  // =============================================================================
-
   // Zoom controls removed - now handled by React component in Designer.tsx
-
-  // Draw ruler/tape measure
-  // REMOVED: drawRuler() plan view logic - now using PlanViewRenderer.drawRuler() (Story 1.15.1)
-  // MOVED: drawElevationRuler() to ElevationViewRenderer.drawElevationRuler() (Story 1.15.2 Phase 6b)
 
   // Main render function
   const render = useCallback(() => {
@@ -1037,7 +985,6 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
     }
 
   }, [showGrid, panOffset, drawRoom, drawElement, design.elements, active2DView, currentViewInfo, getElementWall, isCornerVisibleInView, draggedElement, isDragging, snapGuides, roomPosition, zoom, currentMousePos, canvasToRoom, roomToCanvas, completedMeasurements, currentMeasureStart, tapeMeasurePreview, showRuler, roomDimensions, getWallHeight]);
-
 
   // Mouse event handlers (Story 1.15.2: Delegated to InteractionHandler module)
   const handleMouseDown = useCallback((e: React.MouseEvent<HTMLCanvasElement>) => {
@@ -1198,7 +1145,6 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
     onUpdateElement, toast, render, canvasToRoom, roomToCanvas, getElementWall, isCornerVisibleInView,
     getComponentMetadata, getSnapPosition, validatePlacement, innerRoomBounds
   ]);
-
 
   // Touch event handlers (Story 1.15.2: Delegated to InteractionHandler module)
   const touchEventHandlers = useTouchEvents({
