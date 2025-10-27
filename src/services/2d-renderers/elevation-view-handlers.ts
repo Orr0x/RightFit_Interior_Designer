@@ -34,7 +34,6 @@ export function renderStandardCabinet(
   currentView?: string
 ): void {
   // Configuration with defaults
-  const doorCount = data.door_count ?? 2;
   const doorStyle = data.door_style ?? 'flat';
   const handleStyle = data.handle_style ?? 'bar';
   const handlePosition = data.handle_position ?? 'center';
@@ -47,6 +46,21 @@ export function renderStandardCabinet(
   const toeKickHeight = (data.toe_kick_height ?? 10) * zoom;
   const drawerCount = data.drawer_count ?? 0;
   const drawerHeights = data.drawer_heights ?? [];
+
+  // Door count logic:
+  // 1. If has drawers (drawer_count > 0), no doors (drawer units show drawer fronts only)
+  // 2. If database specifies door_count, use it
+  // 3. Otherwise: ≤60cm wide = 1 door, >60cm wide = 2 doors
+  let doorCount: number;
+  if (drawerCount > 0) {
+    doorCount = 0; // Drawer units don't have doors, only drawer fronts
+  } else if (data.door_count !== undefined && data.door_count !== null) {
+    doorCount = data.door_count;
+  } else {
+    // Width-based door count: ≤60cm = 1 door, >60cm = 2 doors
+    const widthCm = element.width;
+    doorCount = widthCm <= 60 ? 1 : 2;
+  }
 
   // Corner cabinet detection (Option C - Hybrid)
   const isCorner = data.is_corner ?? element.component_id?.includes('corner') ?? false;
@@ -536,9 +550,11 @@ function renderCornerCabinetDoors(
   }
 
   // Calculate door and panel widths
-  // Door: Fixed 30cm | Panel: Remaining width
-  // Issue #4: Component Elevation View Fixes - 2025-10-19
-  const doorWidthCm = 30; // Fixed 30cm door width
+  // Door width depends on cabinet type:
+  // - Base corner cabinets: 30cm door width
+  // - Wall corner cabinets: 20cm door width (narrower doors)
+  const isWallCabinet = (element.z && element.z >= 140) || element.component_id?.includes('wall');
+  const doorWidthCm = isWallCabinet ? 20 : 30;
   let doorWidth = doorWidthCm * zoom;
   let panelWidth = width - doorInset * 2 - doorGap - doorWidth;
 
