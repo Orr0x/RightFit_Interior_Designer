@@ -43,26 +43,6 @@ import {
   getElementZIndex
 } from './canvas/CanvasSharedUtilities';
 
-// LEGACY: Keep local throttle for now (can be removed after full migration)
-const throttle_legacy = <T extends (...args: any[]) => void>(func: T, delay: number): T => {
-  let timeoutId: NodeJS.Timeout | null = null;
-  let lastExecTime = 0;
-  return ((...args: any[]) => {
-    const currentTime = Date.now();
-    
-    if (currentTime - lastExecTime > delay) {
-      func(...args);
-      lastExecTime = currentTime;
-    } else {
-      if (timeoutId) clearTimeout(timeoutId);
-      timeoutId = setTimeout(() => {
-        func(...args);
-        lastExecTime = Date.now();
-      }, delay - (currentTime - lastExecTime));
-    }
-  }) as T;
-};
-
 interface DesignCanvas2DProps {
   design: Design;
   selectedElement: DesignElement | null;
