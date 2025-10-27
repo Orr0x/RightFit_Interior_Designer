@@ -11,6 +11,7 @@ import { Badge } from '@/components/ui/badge';
 import { DesignElement, RoomType, RoomDimensions, ElevationViewConfig } from '@/types/project';
 import { View2DMode } from '@/components/designer/ViewSelector';
 import { Ruler, Palette, Settings, Home, Wrench, Layers, Sparkles, RotateCcw, RotateCw, Eye, EyeOff } from 'lucide-react';
+import { Logger } from '@/utils/Logger';
 
 interface PropertiesPanelProps {
   selectedElement: DesignElement | null;
@@ -247,7 +248,7 @@ export const PropertiesPanel: React.FC<PropertiesPanelProps> = ({
       ceilingHeight: roomCeilingHeight 
     });
     
-    console.log(`🏠 [Room Dimensions] Updated and saved to database:`, {
+    Logger.debug(`🏠 [Room Dimensions] Updated and saved to database:`, {
       width: roomWidth,
       depth: roomDepth,
       ceilingHeight: roomCeilingHeight
@@ -371,7 +372,7 @@ export const PropertiesPanel: React.FC<PropertiesPanelProps> = ({
                         value={Math.round(selectedElement.z || 0)}
                         onChange={(e) => {
                           const newZ = Number(e.target.value);
-                          console.log(`🎛️ [PropertiesPanel] Z Position changed:`, {
+                          Logger.debug(`🎛️ [PropertiesPanel] Z Position changed:`, {
                             elementId: selectedElement.id,
                             oldZ: selectedElement.z,
                             newZ: newZ,

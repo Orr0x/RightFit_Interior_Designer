@@ -8,6 +8,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { RoomType, DesignElement } from '@/types/project';
 import { cacheManager, IntelligentCache } from './CacheService';
 import { ComponentPositionValidator } from '@/utils/ComponentPositionValidator';
+import { Logger } from '@/utils/Logger';
 
 export interface ComponentBehavior {
   mount_type: 'floor' | 'wall';
@@ -44,7 +45,7 @@ export class ComponentService {
    * Batch load component behaviors for better performance
    */
   static async batchLoadComponentBehaviors(componentTypes: string[]): Promise<Map<string, ComponentBehavior>> {
-    console.log(`🔄 [ComponentService] Batch loading behaviors for ${componentTypes.length} component types`);
+    Logger.debug(`🔄 [ComponentService] Batch loading behaviors for ${componentTypes.length} component types`);
     
     // Check cache for existing entries
     const results = new Map<string, ComponentBehavior>();
@@ -60,11 +61,11 @@ export class ComponentService {
     }
 
     if (uncachedTypes.length === 0) {
-      console.log(`⚡ [ComponentService] All ${componentTypes.length} behaviors found in cache`);
+      Logger.debug(`⚡ [ComponentService] All ${componentTypes.length} behaviors found in cache`);
       return results;
     }
 
-    console.log(`🔍 [ComponentService] Loading ${uncachedTypes.length} uncached behaviors from database`);
+    Logger.debug(`🔍 [ComponentService] Loading ${uncachedTypes.length} uncached behaviors from database`);
 
     try {
       // Batch query for all uncached types
@@ -74,7 +75,7 @@ export class ComponentService {
         .in('type', uncachedTypes);
 
       if (error) {
-        console.warn('⚠️ [ComponentService] Batch query error:', error);
+        Logger.warn('⚠️ [ComponentService] Batch query error:', error);
       }
 
       // Process results
@@ -109,17 +110,17 @@ export class ComponentService {
             corner_configuration: {},
             component_behavior: {}
           };
-          console.warn(`⚠️ [ComponentService] Using fallback behavior for type "${type}" - elevation_height: 86cm`);
+          Logger.warn(`⚠️ [ComponentService] Using fallback behavior for type "${type}" - elevation_height: 86cm`);
           results.set(type, fallback);
           behaviorCache.set(type, fallback, 30 * 60 * 1000); // Cache fallbacks for 30 minutes
         }
       }
 
-      console.log(`✅ [ComponentService] Batch loaded ${results.size} component behaviors`);
+      Logger.debug(`✅ [ComponentService] Batch loaded ${results.size} component behaviors`);
       return results;
 
     } catch (err) {
-      console.error('💥 [ComponentService] Batch loading error:', err);
+      Logger.error('💥 [ComponentService] Batch loading error:', err);
       
       // Return fallbacks for all uncached types
       for (const type of uncachedTypes) {
@@ -133,7 +134,7 @@ export class ComponentService {
             corner_configuration: {},
             component_behavior: {}
           };
-          console.error(`💥 [ComponentService] ERROR fallback for type "${type}" - using elevation_height: 86cm`);
+          Logger.error(`💥 [ComponentService] ERROR fallback for type "${type}" - using elevation_height: 86cm`);
           results.set(type, fallback);
         }
       }
@@ -151,7 +152,7 @@ export class ComponentService {
       'window', 'door', 'flooring', 'toe-kick', 'cornice', 'pelmet'
     ];
 
-    console.log('🔥 [ComponentService] Preloading common component behaviors');
+    Logger.debug('🔥 [ComponentService] Preloading common component behaviors');
     await this.batchLoadComponentBehaviors(commonTypes);
   }
   /**
@@ -161,11 +162,11 @@ export class ComponentService {
     // Check intelligent cache first
     const cached = behaviorCache.get(componentType);
     if (cached) {
-      console.log(`⚡ [ComponentService] Cache hit for component type: ${componentType}`);
+      Logger.debug(`⚡ [ComponentService] Cache hit for component type: ${componentType}`);
       return cached;
     }
 
-    console.log(`🔍 [ComponentService] Loading behavior for component type: ${componentType}`);
+    Logger.debug(`🔍 [ComponentService] Loading behavior for component type: ${componentType}`);
 
     try {
       const { data, error } = await supabase
@@ -176,7 +177,7 @@ export class ComponentService {
         .single();
 
       if (error) {
-        console.warn(`⚠️ [ComponentService] No behavior data found for ${componentType}, using defaults:`, error);
+        Logger.warn(`⚠️ [ComponentService] No behavior data found for ${componentType}, using defaults:`, error);
         // Fallback to reasonable defaults
         const fallback: ComponentBehavior = {
           mount_type: 'floor',
@@ -187,7 +188,7 @@ export class ComponentService {
           corner_configuration: {},
           component_behavior: {}
         };
-        console.warn(`⚠️ [ComponentService] FALLBACK USED - Type: ${componentType}, elevation_height: 86cm`);
+        Logger.warn(`⚠️ [ComponentService] FALLBACK USED - Type: ${componentType}, elevation_height: 86cm`);
         behaviorCache.set(componentType, fallback, 30 * 60 * 1000); // Cache fallbacks for 30 minutes
         return fallback;
       }
@@ -203,11 +204,11 @@ export class ComponentService {
       };
 
       behaviorCache.set(componentType, behavior);
-      console.log(`✅ [ComponentService] Loaded and cached behavior for ${componentType}`);
+      Logger.debug(`✅ [ComponentService] Loaded and cached behavior for ${componentType}`);
       return behavior;
 
     } catch (err) {
-      console.error(`❌ [ComponentService] Failed to load behavior for ${componentType}:`, err);
+      Logger.error(`❌ [ComponentService] Failed to load behavior for ${componentType}:`, err);
       // Return safe defaults
       const fallback: ComponentBehavior = {
         mount_type: 'floor',
@@ -218,7 +219,7 @@ export class ComponentService {
         corner_configuration: {},
         component_behavior: {}
       };
-      console.error(`❌ [ComponentService] EXCEPTION FALLBACK - Type: ${componentType}, elevation_height: 86cm`);
+      Logger.error(`❌ [ComponentService] EXCEPTION FALLBACK - Type: ${componentType}, elevation_height: 86cm`);
       return fallback;
     }
   }
@@ -265,7 +266,7 @@ export class ComponentService {
    */
   static getElevationHeight(componentId: string, element?: DesignElement): number {
     if (!element) {
-      console.warn(`⚠️ [ComponentService] getElevationHeight called without element for ${componentId}, returning default 86cm`);
+      Logger.warn(`⚠️ [ComponentService] getElevationHeight called without element for ${componentId}, returning default 86cm`);
       return 86;
     }
 
@@ -322,7 +323,7 @@ export class ComponentService {
 
       return data.corner_configuration || {};
     } catch (err) {
-      console.error(`❌ [ComponentService] Failed to load corner config for ${componentId}:`, err);
+      Logger.error(`❌ [ComponentService] Failed to load corner config for ${componentId}:`, err);
       return {};
     }
   }
@@ -365,7 +366,7 @@ export class ComponentService {
    */
   static clearCache(): void {
     behaviorCache.clear();
-    console.log('🧹 [ComponentService] Cache cleared');
+    Logger.debug('🧹 [ComponentService] Cache cleared');
   }
 }
 

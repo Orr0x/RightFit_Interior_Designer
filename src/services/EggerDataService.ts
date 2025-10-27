@@ -1,6 +1,7 @@
 // Enhanced EGGER data service for Supabase integration
 import { createClient } from '@supabase/supabase-js';
 import { Database } from '../integrations/supabase/types';
+import { Logger } from '@/utils/Logger';
 
 const supabase = createClient<Database>(
   import.meta.env.VITE_SUPABASE_URL,
@@ -204,7 +205,7 @@ export class EggerDataService {
       };
 
     } catch (error) {
-      console.error('Error fetching decors:', error);
+      Logger.error('Error fetching decors:', error);
       throw error;
     }
   }
@@ -223,7 +224,7 @@ export class EggerDataService {
         .limit(2);
 
       if (error || !boardImages) {
-        // console.log('⚠️ No board images found for:', decorId);
+        // Logger.debug('⚠️ No board images found for:', decorId);
         return [];
       }
 
@@ -237,11 +238,11 @@ export class EggerDataService {
         is_closeup: index === 1      // Second image is close-up
       }));
 
-      // console.log(`🖼️ Found ${convertedBoardImages.length} board images for ${decorId}`);
+      // Logger.debug(`🖼️ Found ${convertedBoardImages.length} board images for ${decorId}`);
       return convertedBoardImages;
 
     } catch (error) {
-      console.error('Error fetching board images:', error);
+      Logger.error('Error fetching board images:', error);
       return [];
     }
   }
@@ -249,7 +250,7 @@ export class EggerDataService {
   // Get enhanced product with all relationships
   async getEnhancedProduct(decorId: string): Promise<EnhancedEggerProduct | null> {
     try {
-      // console.log('🔍 Fetching enhanced product for decor_id:', decorId);
+      // Logger.debug('🔍 Fetching enhanced product for decor_id:', decorId);
       
       // Get main decor
       const { data: decor, error: decorError } = await supabase
@@ -259,15 +260,15 @@ export class EggerDataService {
         .single();
 
       if (decorError) {
-        console.error('❌ Decor error:', decorError.message);
+        Logger.error('❌ Decor error:', decorError.message);
         return null;
       }
       if (!decor) {
-        console.warn('⚠️ No decor found for:', decorId);
+        Logger.warn('⚠️ No decor found for:', decorId);
         return null;
       }
       
-      // console.log('✅ Found decor:', decor.decor_name);
+      // Logger.debug('✅ Found decor:', decor.decor_name);
 
       // Get related data in parallel
       const [imagesResult, boardImagesResult, combinationsResult, availabilityResult, interiorMatchResult] = await Promise.all([
@@ -347,10 +348,10 @@ export class EggerDataService {
         // Sort by priority score (highest first)
         filteredImages.sort((a, b) => (b as any).priority_score - (a as any).priority_score);
 
-        // console.log('🎯 Smart image prioritization results:');
+        // Logger.debug('🎯 Smart image prioritization results:');
         // filteredImages.slice(0, 3).forEach((img, index) => {
-        //   console.log(`   ${index + 1}. Priority: ${(img as any).priority_score} - ${(img as any).priority_reasoning}`);
-        //   console.log(`      URL: ${img.image_url.substring(0, 60)}...`);
+        //   Logger.debug(`   ${index + 1}. Priority: ${(img as any).priority_score} - ${(img as any).priority_reasoning}`);
+        //   Logger.debug(`      URL: ${img.image_url.substring(0, 60)}...`);
         // });
       }
 
@@ -390,7 +391,7 @@ export class EggerDataService {
         recommended_products: recommendedProducts
       };
       
-      // console.log('📊 Enhanced product data with dual-image system:', {
+      // Logger.debug('📊 Enhanced product data with dual-image system:', {
       //   decor_name: enhancedProduct.decor_name,
       //   webp_gallery_images: enhancedProduct.images.length,
       //   board_images: enhancedProduct.board_images.length,
@@ -402,7 +403,7 @@ export class EggerDataService {
       return enhancedProduct;
 
     } catch (error) {
-      console.error('Error fetching enhanced product:', error);
+      Logger.error('Error fetching enhanced product:', error);
       return null;
     }
   }
@@ -418,7 +419,7 @@ export class EggerDataService {
       if (error) throw error;
       return data || [];
     } catch (error) {
-      console.error('Error fetching categories:', error);
+      Logger.error('Error fetching categories:', error);
       return [];
     }
   }
@@ -434,7 +435,7 @@ export class EggerDataService {
       if (error) throw error;
       return data || [];
     } catch (error) {
-      console.error('Error fetching textures:', error);
+      Logger.error('Error fetching textures:', error);
       return [];
     }
   }
@@ -450,7 +451,7 @@ export class EggerDataService {
       if (error) throw error;
       return data || [];
     } catch (error) {
-      console.error('Error fetching color families:', error);
+      Logger.error('Error fetching color families:', error);
       return [];
     }
   }
@@ -467,7 +468,7 @@ export class EggerDataService {
       if (error) throw error;
       return data || [];
     } catch (error) {
-      console.error('Error searching products:', error);
+      Logger.error('Error searching products:', error);
       return [];
     }
   }
@@ -483,7 +484,7 @@ export class EggerDataService {
       if (error) throw error;
       return data || [];
     } catch (error) {
-      console.error('Error fetching combinations:', error);
+      Logger.error('Error fetching combinations:', error);
       return [];
     }
   }
@@ -500,7 +501,7 @@ export class EggerDataService {
       if (error) throw error;
       return data || [];
     } catch (error) {
-      console.error('Error fetching availability:', error);
+      Logger.error('Error fetching availability:', error);
       return [];
     }
   }
@@ -517,7 +518,7 @@ export class EggerDataService {
       if (error && error.code !== 'PGRST116') throw error; // PGRST116 = no rows returned
       return data || null;
     } catch (error) {
-      console.error('Error fetching interior match:', error);
+      Logger.error('Error fetching interior match:', error);
       return null;
     }
   }
@@ -534,7 +535,7 @@ export class EggerDataService {
       if (error) throw error;
       return data || [];
     } catch (error) {
-      console.error('Error fetching images:', error);
+      Logger.error('Error fetching images:', error);
       return [];
     }
   }
@@ -564,7 +565,7 @@ export class EggerDataService {
         texturesCount: textureCount.count || 0
       };
     } catch (error) {
-      console.error('Error fetching statistics:', error);
+      Logger.error('Error fetching statistics:', error);
       return {
         totalDecors: 0,
         totalImages: 0,

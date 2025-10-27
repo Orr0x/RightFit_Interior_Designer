@@ -4,6 +4,7 @@
  */
 
 import { supabase } from '@/integrations/supabase/client';
+import { Logger } from '@/utils/Logger';
 
 export interface ApplianceType {
   id: string;
@@ -105,7 +106,7 @@ export class ComponentTypeService {
         .single();
 
       if (error) {
-        console.warn(`[ComponentTypeService] Appliance type not found: ${applianceCode}`, error);
+        Logger.warn(`[ComponentTypeService] Appliance type not found: ${applianceCode}`, error);
         return null;
       }
 
@@ -116,7 +117,7 @@ export class ComponentTypeService {
 
       return null;
     } catch (error) {
-      console.error('[ComponentTypeService] Error fetching appliance type:', error);
+      Logger.error('[ComponentTypeService] Error fetching appliance type:', error);
       return null;
     }
   }
@@ -137,7 +138,7 @@ export class ComponentTypeService {
         .order('appliance_name', { ascending: true });
 
       if (error) {
-        console.error('[ComponentTypeService] Error fetching appliance types:', error);
+        Logger.error('[ComponentTypeService] Error fetching appliance types:', error);
         return [];
       }
 
@@ -148,7 +149,7 @@ export class ComponentTypeService {
 
       return [];
     } catch (error) {
-      console.error('[ComponentTypeService] Error fetching appliance types:', error);
+      Logger.error('[ComponentTypeService] Error fetching appliance types:', error);
       return [];
     }
   }
@@ -178,7 +179,7 @@ export class ComponentTypeService {
         .single();
 
       if (error) {
-        console.warn(`[ComponentTypeService] Furniture type not found: ${furnitureCode}`, error);
+        Logger.warn(`[ComponentTypeService] Furniture type not found: ${furnitureCode}`, error);
         return null;
       }
 
@@ -189,7 +190,7 @@ export class ComponentTypeService {
 
       return null;
     } catch (error) {
-      console.error('[ComponentTypeService] Error fetching furniture type:', error);
+      Logger.error('[ComponentTypeService] Error fetching furniture type:', error);
       return null;
     }
   }
@@ -210,7 +211,7 @@ export class ComponentTypeService {
         .order('furniture_name', { ascending: true });
 
       if (error) {
-        console.error('[ComponentTypeService] Error fetching furniture types:', error);
+        Logger.error('[ComponentTypeService] Error fetching furniture types:', error);
         return [];
       }
 
@@ -221,7 +222,7 @@ export class ComponentTypeService {
 
       return [];
     } catch (error) {
-      console.error('[ComponentTypeService] Error fetching furniture types:', error);
+      Logger.error('[ComponentTypeService] Error fetching furniture types:', error);
       return [];
     }
   }
@@ -245,9 +246,9 @@ export class ComponentTypeService {
         this.getAllApplianceTypes(),
         this.getAllFurnitureTypes()
       ]);
-      console.log('[ComponentTypeService] All component types preloaded');
+      Logger.debug('[ComponentTypeService] All component types preloaded');
     } catch (error) {
-      console.error('[ComponentTypeService] Error preloading component types:', error);
+      Logger.error('[ComponentTypeService] Error preloading component types:', error);
     }
   }
 

@@ -19,6 +19,7 @@
 
 import { supabase } from '@/integrations/supabase/client';
 import { FeatureFlagService } from './FeatureFlagService';
+import { Logger } from '@/utils/Logger';
 
 export interface AppConfig {
   config_key: string;
@@ -97,7 +98,7 @@ export class ConfigurationService {
         .single();
 
       if (error || !data) {
-        console.warn(`[ConfigService] Config "${key}" not found, using fallback:`, fallback);
+        Logger.warn(`[ConfigService] Config "${key}" not found, using fallback:`, fallback);
         return fallback;
       }
 
@@ -117,7 +118,7 @@ export class ConfigurationService {
 
       return validatedValue;
     } catch (error) {
-      console.error(`[ConfigService] Error loading config "${key}":`, error);
+      Logger.error(`[ConfigService] Error loading config "${key}":`, error);
       return fallback;
     }
   }
@@ -142,7 +143,7 @@ export class ConfigurationService {
         .eq('category', category);
 
       if (error || !data) {
-        console.warn(`[ConfigService] Category "${category}" not found`);
+        Logger.warn(`[ConfigService] Category "${category}" not found`);
         return new Map();
       }
 
@@ -162,7 +163,7 @@ export class ConfigurationService {
 
       return result;
     } catch (error) {
-      console.error(`[ConfigService] Error loading category "${category}":`, error);
+      Logger.error(`[ConfigService] Error loading category "${category}":`, error);
       return new Map();
     }
   }
@@ -220,7 +221,7 @@ export class ConfigurationService {
         .single();
 
       if (error || !data || !data.value_json) {
-        console.warn(`[ConfigService] JSON config "${key}" not found, using fallback`);
+        Logger.warn(`[ConfigService] JSON config "${key}" not found, using fallback`);
         return fallback;
       }
 
@@ -233,7 +234,7 @@ export class ConfigurationService {
 
       return data.value_json as T;
     } catch (error) {
-      console.error(`[ConfigService] Error loading JSON config "${key}":`, error);
+      Logger.error(`[ConfigService] Error loading JSON config "${key}":`, error);
       return fallback;
     }
   }
@@ -260,7 +261,7 @@ export class ConfigurationService {
       const useDatabaseConfig = await FeatureFlagService.isEnabled(this.FEATURE_FLAG);
 
       if (!useDatabaseConfig) {
-        console.log('[ConfigService] Feature disabled, skipping preload');
+        Logger.debug('[ConfigService] Feature disabled, skipping preload');
         return;
       }
 
@@ -269,7 +270,7 @@ export class ConfigurationService {
         .select('*');
 
       if (error || !data) {
-        console.warn('[ConfigService] Preload failed:', error);
+        Logger.warn('[ConfigService] Preload failed:', error);
         return;
       }
 
@@ -303,9 +304,9 @@ export class ConfigurationService {
 
       this.cacheTimestamp = Date.now();
 
-      console.log(`[ConfigService] Preloaded ${this.configCache.size} numeric and ${this.jsonCache.size} JSON configuration values`);
+      Logger.debug(`[ConfigService] Preloaded ${this.configCache.size} numeric and ${this.jsonCache.size} JSON configuration values`);
     } catch (error) {
-      console.error('[ConfigService] Preload error:', error);
+      Logger.error('[ConfigService] Preload error:', error);
     }
   }
 
@@ -317,7 +318,7 @@ export class ConfigurationService {
     this.configCache.clear();
     this.jsonCache.clear();
     this.cacheTimestamp = 0;
-    console.log('[ConfigService] Cache cleared');
+    Logger.debug('[ConfigService] Cache cleared');
   }
 
   /**
@@ -352,14 +353,14 @@ export class ConfigurationService {
     let validated = value;
 
     if (config.min_value !== null && validated < config.min_value) {
-      console.warn(
+      Logger.warn(
         `[ConfigService] Value ${validated} below min ${config.min_value} for "${config.config_key}", clamping`
       );
       validated = config.min_value;
     }
 
     if (config.max_value !== null && validated > config.max_value) {
-      console.warn(
+      Logger.warn(
         `[ConfigService] Value ${validated} above max ${config.max_value} for "${config.config_key}", clamping`
       );
       validated = config.max_value;

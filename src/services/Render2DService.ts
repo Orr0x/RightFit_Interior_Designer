@@ -6,6 +6,7 @@
 
 import { supabase } from '@/integrations/supabase/client';
 import type { Render2DDefinition } from '@/types/render2d';
+import { Logger } from '@/utils/Logger';
 
 class Render2DService {
   private cache: Map<string, Render2DDefinition> = new Map();
@@ -33,7 +34,7 @@ class Render2DService {
   }
 
   private async _performPreload(): Promise<void> {
-    console.log('[Render2DService] Preloading 2D render definitions...');
+    Logger.debug('[Render2DService] Preloading 2D render definitions...');
     const startTime = performance.now();
 
     try {
@@ -42,13 +43,13 @@ class Render2DService {
         .select('*');
 
       if (error) {
-        console.error('[Render2DService] Preload failed:', error);
+        Logger.error('[Render2DService] Preload failed:', error);
         this.preloadPromise = null; // Reset so it can be retried
         throw error;
       }
 
       if (!data) {
-        console.warn('[Render2DService] No 2D render definitions found');
+        Logger.warn('[Render2DService] No 2D render definitions found');
         this.isPreloaded = true;
         this.preloadPromise = null;
         return;
@@ -65,9 +66,9 @@ class Render2DService {
       this.isPreloaded = true;
       this.preloadPromise = null;
 
-      console.log(`[Render2DService] ✅ Preloaded ${data.length} definitions in ${duration}ms`);
+      Logger.debug(`[Render2DService] ✅ Preloaded ${data.length} definitions in ${duration}ms`);
     } catch (error) {
-      console.error('[Render2DService] Preload error:', error);
+      Logger.error('[Render2DService] Preload error:', error);
       this.preloadPromise = null;
       throw error;
     }
@@ -86,14 +87,14 @@ class Render2DService {
     // 🔧 FALLBACK: Try base component for directional variants
     const fallbackId = this.getBaseComponentId(componentId);
     if (fallbackId !== componentId && this.cache.has(fallbackId)) {
-      console.log(`✨ [Render2DService] Using cached fallback '${fallbackId}' for '${componentId}'`);
+      Logger.debug(`✨ [Render2DService] Using cached fallback '${fallbackId}' for '${componentId}'`);
       return this.cache.get(fallbackId)!;
     }
 
     // If not preloaded yet, try to fetch individually
     // This handles edge cases where rendering happens before preload
     if (!this.isPreloaded) {
-      console.warn(`[Render2DService] Definition for "${componentId}" requested before preload`);
+      Logger.warn(`[Render2DService] Definition for "${componentId}" requested before preload`);
 
       try {
         let { data, error } = await supabase
@@ -104,7 +105,7 @@ class Render2DService {
 
         // 🔧 FALLBACK: If not found, try base component for directional variants
         if (!data && !error && fallbackId !== componentId) {
-          console.log(`✨ [Render2DService] Trying fallback for '${componentId}' → '${fallbackId}'`);
+          Logger.debug(`✨ [Render2DService] Trying fallback for '${componentId}' → '${fallbackId}'`);
           const fallbackResult = await supabase
             .from('component_2d_renders')
             .select('*')
@@ -115,12 +116,12 @@ class Render2DService {
           error = fallbackResult.error;
 
           if (data) {
-            console.log(`✨ [Render2DService] Fallback successful: Using '${fallbackId}' for '${componentId}'`);
+            Logger.debug(`✨ [Render2DService] Fallback successful: Using '${fallbackId}' for '${componentId}'`);
           }
         }
 
         if (error) {
-          console.error(`[Render2DService] Error fetching definition for "${componentId}":`, error);
+          Logger.error(`[Render2DService] Error fetching definition for "${componentId}":`, error);
           return null;
         }
 
@@ -130,19 +131,19 @@ class Render2DService {
           return data as Render2DDefinition;
         }
       } catch (error) {
-        console.error(`[Render2DService] Fetch error for "${componentId}":`, error);
+        Logger.error(`[Render2DService] Fetch error for "${componentId}":`, error);
         return null;
       }
     }
 
     // Not in cache and preload is complete - try fallback one more time
     if (fallbackId !== componentId && this.cache.has(fallbackId)) {
-      console.log(`✨ [Render2DService] Using fallback '${fallbackId}' for '${componentId}'`);
+      Logger.debug(`✨ [Render2DService] Using fallback '${fallbackId}' for '${componentId}'`);
       return this.cache.get(fallbackId)!;
     }
 
     // Not in cache and preload is complete - definition doesn't exist
-    console.warn(`[Render2DService] No 2D render definition found for "${componentId}"`);
+    Logger.warn(`[Render2DService] No 2D render definition found for "${componentId}"`);
     return null;
   }
 
@@ -184,7 +185,7 @@ class Render2DService {
           .in('component_id', uncached);
 
         if (error) {
-          console.error('[Render2DService] Error fetching multiple definitions:', error);
+          Logger.error('[Render2DService] Error fetching multiple definitions:', error);
         } else if (data) {
           data.forEach(def => {
             const definition = def as Render2DDefinition;
@@ -193,7 +194,7 @@ class Render2DService {
           });
         }
       } catch (error) {
-        console.error('[Render2DService] Batch fetch error:', error);
+        Logger.error('[Render2DService] Batch fetch error:', error);
       }
     }
 
@@ -205,7 +206,7 @@ class Render2DService {
    * Call this after admin modifies render definitions
    */
   clearCache(): void {
-    console.log('[Render2DService] Clearing cache...');
+    Logger.debug('[Render2DService] Clearing cache...');
     this.cache.clear();
     this.isPreloaded = false;
     this.preloadPromise = null;
@@ -243,7 +244,7 @@ class Render2DService {
       if (fallbackId !== componentId) {
         cached = this.cache.get(fallbackId);
         if (cached) {
-          console.log(`✨ [Render2DService] Using cached fallback '${fallbackId}' for '${componentId}'`);
+          Logger.debug(`✨ [Render2DService] Using cached fallback '${fallbackId}' for '${componentId}'`);
         }
       }
     }

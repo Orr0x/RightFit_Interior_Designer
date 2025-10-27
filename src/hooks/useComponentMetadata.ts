@@ -1,5 +1,6 @@
 import { useState, useEffect, useMemo } from 'react';
 import { supabase } from '@/integrations/supabase/client';
+import { Logger } from '@/utils/Logger';
 
 /**
  * Component metadata with collision detection layer information
@@ -30,7 +31,7 @@ export const useComponentMetadata = () => {
   const fetchMetadata = async () => {
     try {
       setLoading(true);
-      console.log('🔄 [useComponentMetadata] Fetching component metadata from component_3d_models...');
+      Logger.debug('🔄 [useComponentMetadata] Fetching component metadata from component_3d_models...');
 
       const { data, error } = await supabase
         .from('component_3d_models')
@@ -46,16 +47,16 @@ export const useComponentMetadata = () => {
         `);
 
       if (error) {
-        console.error('❌ [useComponentMetadata] Database error:', error);
+        Logger.error('❌ [useComponentMetadata] Database error:', error);
         throw error;
       }
 
-      console.log(`✅ [useComponentMetadata] Loaded ${data?.length || 0} component metadata records`);
+      Logger.debug(`✅ [useComponentMetadata] Loaded ${data?.length || 0} component metadata records`);
 
       setMetadata(data || []);
       setError(null);
     } catch (err) {
-      console.error('💥 [useComponentMetadata] Fatal error fetching metadata:', err);
+      Logger.error('💥 [useComponentMetadata] Fatal error fetching metadata:', err);
       setError(err instanceof Error ? err.message : 'Failed to fetch component metadata');
     } finally {
       setLoading(false);
@@ -79,7 +80,7 @@ export const useComponentMetadata = () => {
         found = metadata.find(m => m.component_id === baseComponentId);
 
         if (found) {
-          console.log(`✨ [useComponentMetadata] Fallback: Using metadata from '${baseComponentId}' for variant '${componentId}'`);
+          Logger.debug(`✨ [useComponentMetadata] Fallback: Using metadata from '${baseComponentId}' for variant '${componentId}'`);
         }
       }
 
@@ -102,7 +103,7 @@ export const useComponentMetadata = () => {
 
       if (!meta1 || !meta2) {
         // If metadata missing, default to allowing overlap (permissive fallback)
-        console.warn(`⚠️ [useComponentMetadata] Missing metadata for collision check: ${componentId1} or ${componentId2}`);
+        Logger.warn(`⚠️ [useComponentMetadata] Missing metadata for collision check: ${componentId1} or ${componentId2}`);
         return true;
       }
 

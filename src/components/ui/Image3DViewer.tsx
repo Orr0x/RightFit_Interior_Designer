@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Button } from './button';
+import { Logger } from '@/utils/Logger';
 import {
   ZoomIn,
   ZoomOut,
@@ -134,7 +135,7 @@ export function ImageViewer({ images, className = '' }: Image3DViewerProps) {
                 loading="eager"
                 onLoad={() => setIsLoaded(true)}
                 onError={(e) => {
-                  console.error('Image failed to load:', currentImage.url);
+                  Logger.error('Image failed to load:', currentImage.url);
                   setIsLoaded(true); // Still mark as loaded to prevent infinite loading
                 }}
               />

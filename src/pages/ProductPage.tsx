@@ -19,6 +19,7 @@ import {
   Copy
 } from 'lucide-react';
 import { eggerDataService, EnhancedEggerProduct } from '../services/EggerDataService';
+import { Logger } from '@/utils/Logger';
 
 export default function ProductPage() {
   const { decorId } = useParams<{ decorId: string }>();
@@ -35,14 +36,14 @@ export default function ProductPage() {
         setLoading(true);
         setError(null);
 
-        // console.log('🔄 [ProductPage] Loading EGGER product data...');
-        // console.log('🔍 [ProductPage] Looking for decor_id:', decorId);
+        // Logger.debug('🔄 [ProductPage] Loading EGGER product data...');
+        // Logger.debug('🔍 [ProductPage] Looking for decor_id:', decorId);
         
         const enhancedProduct = await eggerDataService.getEnhancedProduct(decorId);
         
         if (enhancedProduct) {
-          // console.log('✅ [ProductPage] Real EGGER data loaded successfully');
-          // console.log('📊 [ProductPage] Data completeness:', {
+          // Logger.debug('✅ [ProductPage] Real EGGER data loaded successfully');
+          // Logger.debug('📊 [ProductPage] Data completeness:', {
           //   basic_info: '100%',
           //   images: enhancedProduct.images?.length > 0 ? '100%' : '0%',
           //   availability: enhancedProduct.availability?.length > 0 ? '100%' : '0%',
@@ -51,11 +52,11 @@ export default function ProductPage() {
           // });
           setProductData(enhancedProduct);
         } else {
-          console.warn('⚠️ [ProductPage] Product not found:', decorId);
+          Logger.warn('⚠️ [ProductPage] Product not found:', decorId);
           setError('Product not found');
         }
       } catch (err) {
-        console.error('❌ [ProductPage] Error loading product:', err);
+        Logger.error('❌ [ProductPage] Error loading product:', err);
         setError(err instanceof Error ? err.message : 'Failed to load product data');
       } finally {
         setLoading(false);
@@ -204,7 +205,7 @@ export default function ProductPage() {
                     alt={`${productData.decor_name} close-up detail`}
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                     onError={(e) => {
-                      // console.log('❌ [ProductPage] Board detail image failed to load');
+                      // Logger.debug('❌ [ProductPage] Board detail image failed to load');
                       e.currentTarget.src = 'https://via.placeholder.com/400x400?text=Board+Detail';
                     }}
                   />
@@ -225,7 +226,7 @@ export default function ProductPage() {
                     alt={`${productData.decor_name} detail view`}
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                     onError={(e) => {
-                      // console.log('❌ [ProductPage] Gallery image failed to load');
+                      // Logger.debug('❌ [ProductPage] Gallery image failed to load');
                       e.currentTarget.src = 'https://via.placeholder.com/400x400?text=Product+Image';
                     }}
                   />

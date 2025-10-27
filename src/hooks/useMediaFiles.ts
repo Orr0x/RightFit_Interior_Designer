@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
 import { UserTier, getUserTierPermissions } from '@/types/user-tiers';
+import { Logger } from '@/utils/Logger';
 
 export interface MediaFile {
   id: string;
@@ -77,7 +78,7 @@ export const useMediaFiles = () => {
 
       setFiles(filesWithUrls);
     } catch (err) {
-      console.error('Error fetching media files:', err);
+      Logger.error('Error fetching media files:', err);
       setError(err instanceof Error ? err.message : 'Failed to fetch media files');
     } finally {
       setLoading(false);
@@ -211,7 +212,7 @@ export const useMediaFiles = () => {
 
       return uploadedFiles;
     } catch (err) {
-      console.error('Error uploading files:', err);
+      Logger.error('Error uploading files:', err);
       throw err;
     }
   };
@@ -250,7 +251,7 @@ export const useMediaFiles = () => {
       // Update files list
       setFiles(prev => prev.filter(f => f.id !== fileId));
     } catch (err) {
-      console.error('Error deleting file:', err);
+      Logger.error('Error deleting file:', err);
       throw err;
     }
   };
@@ -365,7 +366,7 @@ export const useMediaFiles = () => {
         return movedFile;
       }
     } catch (err) {
-      console.error('Error moving/copying file:', err);
+      Logger.error('Error moving/copying file:', err);
       throw err;
     }
   };
@@ -404,7 +405,7 @@ export const useMediaFiles = () => {
 
       return updatedFile;
     } catch (err) {
-      console.error('Error updating file:', err);
+      Logger.error('Error updating file:', err);
       throw err;
     }
   };
@@ -439,7 +440,7 @@ export const useMediaFiles = () => {
         fileCount: data?.length || 0
       };
     } catch (err) {
-      console.error('Error getting storage stats:', err);
+      Logger.error('Error getting storage stats:', err);
       return {
         totalSize: 0,
         totalSizeFormatted: '0 Bytes',

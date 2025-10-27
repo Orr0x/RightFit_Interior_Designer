@@ -26,6 +26,7 @@
  */
 
 import { supabase } from '@/integrations/supabase/client';
+import { Logger } from '@/utils/Logger';
 
 export interface FeatureFlag {
   id: string;
@@ -57,7 +58,7 @@ export class FeatureFlagService {
   static enableDebugMode(enable: boolean = true): void {
     this.debugMode = enable;
     if (enable) {
-      console.log('[FeatureFlag] Debug mode enabled');
+      Logger.debug('[FeatureFlag] Debug mode enabled');
     }
   }
 
@@ -72,14 +73,14 @@ export class FeatureFlagService {
         const flag = this.flagCache.get(flagKey)!;
         const result = this.evaluateFlag(flag, userId);
         if (this.debugMode) {
-          console.log(`[FeatureFlag] Cache hit for "${flagKey}": ${result}`);
+          Logger.debug(`[FeatureFlag] Cache hit for "${flagKey}": ${result}`);
         }
         return result;
       }
 
       // Fetch from database
       if (this.debugMode) {
-        console.log(`[FeatureFlag] Fetching "${flagKey}" from database...`);
+        Logger.debug(`[FeatureFlag] Fetching "${flagKey}" from database...`);
       }
 
       const { data, error } = await supabase
@@ -89,7 +90,7 @@ export class FeatureFlagService {
         .single();
 
       if (error || !data) {
-        console.warn(`[FeatureFlag] Flag "${flagKey}" not found, defaulting to FALSE (using legacy)`);
+        Logger.warn(`[FeatureFlag] Flag "${flagKey}" not found, defaulting to FALSE (using legacy)`);
         return false;
       }
 
@@ -99,11 +100,11 @@ export class FeatureFlagService {
 
       const result = this.evaluateFlag(data as FeatureFlag, userId);
       if (this.debugMode) {
-        console.log(`[FeatureFlag] Fetched "${flagKey}" from database: ${result}`);
+        Logger.debug(`[FeatureFlag] Fetched "${flagKey}" from database: ${result}`);
       }
       return result;
     } catch (error) {
-      console.error(`[FeatureFlag] Error checking flag "${flagKey}":`, error);
+      Logger.error(`[FeatureFlag] Error checking flag "${flagKey}":`, error);
       return false; // Safe default - use legacy
     }
   }
@@ -116,19 +117,19 @@ export class FeatureFlagService {
     const env = import.meta.env.MODE;
     if (env === 'development' && !flag.enabled_dev) {
       if (this.debugMode) {
-        console.log(`[FeatureFlag] "${flag.flag_key}" disabled in development`);
+        Logger.debug(`[FeatureFlag] "${flag.flag_key}" disabled in development`);
       }
       return false;
     }
     if (env === 'staging' && !flag.enabled_staging) {
       if (this.debugMode) {
-        console.log(`[FeatureFlag] "${flag.flag_key}" disabled in staging`);
+        Logger.debug(`[FeatureFlag] "${flag.flag_key}" disabled in staging`);
       }
       return false;
     }
     if (env === 'production' && !flag.enabled_production) {
       if (this.debugMode) {
-        console.log(`[FeatureFlag] "${flag.flag_key}" disabled in production`);
+        Logger.debug(`[FeatureFlag] "${flag.flag_key}" disabled in production`);
       }
       return false;
     }
@@ -136,7 +137,7 @@ export class FeatureFlagService {
     // Master enabled check
     if (!flag.enabled) {
       if (this.debugMode) {
-        console.log(`[FeatureFlag] "${flag.flag_key}" master flag disabled`);
+        Logger.debug(`[FeatureFlag] "${flag.flag_key}" master flag disabled`);
       }
       return false;
     }
@@ -147,7 +148,7 @@ export class FeatureFlagService {
       if (userTier && flag.user_tier_override[userTier] !== undefined) {
         const result = flag.user_tier_override[userTier];
         if (this.debugMode) {
-          console.log(`[FeatureFlag] "${flag.flag_key}" user tier override for ${userTier}: ${result}`);
+          Logger.debug(`[FeatureFlag] "${flag.flag_key}" user tier override for ${userTier}: ${result}`);
         }
         return result;
       }
@@ -158,7 +159,7 @@ export class FeatureFlagService {
       const userHash = userId ? this.hashUserId(userId) : Math.random() * 100;
       const result = userHash <= flag.rollout_percentage;
       if (this.debugMode) {
-        console.log(`[FeatureFlag] "${flag.flag_key}" rollout ${flag.rollout_percentage}%, user hash ${userHash.toFixed(2)}: ${result}`);
+        Logger.debug(`[FeatureFlag] "${flag.flag_key}" rollout ${flag.rollout_percentage}%, user hash ${userHash.toFixed(2)}: ${result}`);
       }
       return result;
     }
@@ -179,15 +180,15 @@ export class FeatureFlagService {
     const useNew = await this.isEnabled(flagKey, userId);
 
     if (useNew) {
-      console.log(`[FeatureFlag] 🆕 Using NEW implementation for "${flagKey}"`);
+      Logger.debug(`[FeatureFlag] 🆕 Using NEW implementation for "${flagKey}"`);
       try {
         return await newFn();
       } catch (error) {
-        console.error(`[FeatureFlag] ❌ NEW implementation failed for "${flagKey}", falling back to LEGACY:`, error);
+        Logger.error(`[FeatureFlag] ❌ NEW implementation failed for "${flagKey}", falling back to LEGACY:`, error);
         return await legacyFn();
       }
     } else {
-      console.log(`[FeatureFlag] 🔒 Using LEGACY implementation for "${flagKey}"`);
+      Logger.debug(`[FeatureFlag] 🔒 Using LEGACY implementation for "${flagKey}"`);
       return await legacyFn();
     }
   }
@@ -212,10 +213,10 @@ export class FeatureFlagService {
         const newTime = performance.now() - newStart;
 
         if (this.debugMode) {
-          console.log(`[ParallelTest] "${testName}" new implementation completed in ${newTime.toFixed(2)}ms`);
+          Logger.debug(`[ParallelTest] "${testName}" new implementation completed in ${newTime.toFixed(2)}ms`);
         }
       } catch (error) {
-        console.error(`[ParallelTest] New implementation failed for "${testName}":`, error);
+        Logger.error(`[ParallelTest] New implementation failed for "${testName}":`, error);
       }
     });
 
@@ -233,13 +234,13 @@ export class FeatureFlagService {
         .order('flag_name');
 
       if (error) {
-        console.error('[FeatureFlag] Error fetching all flags:', error);
+        Logger.error('[FeatureFlag] Error fetching all flags:', error);
         return [];
       }
 
       return (data || []) as FeatureFlag[];
     } catch (error) {
-      console.error('[FeatureFlag] Error fetching all flags:', error);
+      Logger.error('[FeatureFlag] Error fetching all flags:', error);
       return [];
     }
   }
@@ -258,17 +259,17 @@ export class FeatureFlagService {
         .eq('flag_key', flagKey);
 
       if (error) {
-        console.error(`[FeatureFlag] Error updating flag "${flagKey}":`, error);
+        Logger.error(`[FeatureFlag] Error updating flag "${flagKey}":`, error);
         return { success: false, error: error.message };
       }
 
       // Clear cache after update
       this.flagCache.delete(flagKey);
-      console.log(`[FeatureFlag] ✅ Updated flag "${flagKey}"`);
+      Logger.debug(`[FeatureFlag] ✅ Updated flag "${flagKey}"`);
       return { success: true };
     } catch (error) {
       const message = error instanceof Error ? error.message : 'Unknown error';
-      console.error(`[FeatureFlag] Error updating flag "${flagKey}":`, error);
+      Logger.error(`[FeatureFlag] Error updating flag "${flagKey}":`, error);
       return { success: false, error: message };
     }
   }
@@ -284,14 +285,14 @@ export class FeatureFlagService {
         .eq('can_disable', true);
 
       if (error) {
-        console.error('[FeatureFlag] Error during emergency disable:', error);
+        Logger.error('[FeatureFlag] Error during emergency disable:', error);
         return;
       }
 
       this.clearCache();
-      console.error('🚨 EMERGENCY: All new features disabled, using legacy systems');
+      Logger.error('🚨 EMERGENCY: All new features disabled, using legacy systems');
     } catch (error) {
-      console.error('[FeatureFlag] Error during emergency disable:', error);
+      Logger.error('[FeatureFlag] Error during emergency disable:', error);
     }
   }
 
@@ -302,7 +303,7 @@ export class FeatureFlagService {
     this.flagCache.clear();
     this.lastFetch = 0;
     if (this.debugMode) {
-      console.log('[FeatureFlag] Cache cleared');
+      Logger.debug('[FeatureFlag] Cache cleared');
     }
   }
 

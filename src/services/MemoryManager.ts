@@ -4,6 +4,7 @@
  */
 
 import * as THREE from 'three';
+import { Logger } from '@/utils/Logger';
 
 export class MemoryManager {
   private static instance: MemoryManager;
@@ -29,11 +30,11 @@ export class MemoryManager {
    */
   disposeThreeJSResources(scene?: THREE.Scene): void {
     if (!scene) {
-      console.log('🧹 [MemoryManager] No scene provided for cleanup');
+      Logger.debug('🧹 [MemoryManager] No scene provided for cleanup');
       return;
     }
 
-    console.log('🧹 [MemoryManager] Starting Three.js resource cleanup...');
+    Logger.debug('🧹 [MemoryManager] Starting Three.js resource cleanup...');
     
     const beforeStats = this.getMemoryStats();
     let disposedCount = 0;
@@ -85,15 +86,15 @@ export class MemoryManager {
 
     const afterStats = this.getMemoryStats();
     
-    console.log(`✅ [MemoryManager] Disposed ${disposedCount} Three.js resources`);
-    console.log(`📊 [MemoryManager] Memory before: ${beforeStats.totalMemoryMB}MB, after: ${afterStats.totalMemoryMB}MB`);
+    Logger.debug(`✅ [MemoryManager] Disposed ${disposedCount} Three.js resources`);
+    Logger.debug(`📊 [MemoryManager] Memory before: ${beforeStats.totalMemoryMB}MB, after: ${afterStats.totalMemoryMB}MB`);
   }
 
   /**
    * Clear component-related caches to free memory
    */
   clearComponentCaches(): void {
-    console.log('🧹 [MemoryManager] Clearing component caches...');
+    Logger.debug('🧹 [MemoryManager] Clearing component caches...');
     
     try {
       // Clear performance detection cache
@@ -105,10 +106,10 @@ export class MemoryManager {
         );
         
         cacheKeys.forEach(key => localStorage.removeItem(key));
-        console.log(`🗑️ [MemoryManager] Cleared ${cacheKeys.length} cache entries`);
+        Logger.debug(`🗑️ [MemoryManager] Cleared ${cacheKeys.length} cache entries`);
       }
     } catch (error) {
-      console.warn('⚠️ [MemoryManager] Failed to clear caches:', error);
+      Logger.warn('⚠️ [MemoryManager] Failed to clear caches:', error);
     }
   }
 
@@ -125,13 +126,13 @@ export class MemoryManager {
       
       // Trigger cleanup if memory usage is high
       if (stats.totalMemoryMB > 200) { // 200MB threshold
-        console.warn(`⚠️ [MemoryManager] High memory usage detected: ${stats.totalMemoryMB}MB`);
+        Logger.warn(`⚠️ [MemoryManager] High memory usage detected: ${stats.totalMemoryMB}MB`);
         this.clearComponentCaches();
         
         // Force garbage collection if available (Chrome DevTools)
         if (typeof window !== 'undefined' && (window as any).gc) {
           (window as any).gc();
-          console.log('🗑️ [MemoryManager] Forced garbage collection');
+          Logger.debug('🗑️ [MemoryManager] Forced garbage collection');
         }
       }
     };
@@ -139,7 +140,7 @@ export class MemoryManager {
     // Check memory every 30 seconds
     setInterval(checkMemory, 30000);
     
-    console.log('👁️ [MemoryManager] Memory monitoring started');
+    Logger.debug('👁️ [MemoryManager] Memory monitoring started');
   }
 
   /**
@@ -168,13 +169,13 @@ export class MemoryManager {
    */
   createCleanupFunction(cleanupTasks: (() => void)[]): () => void {
     return () => {
-      console.log(`🧹 [MemoryManager] Running ${cleanupTasks.length} cleanup tasks`);
+      Logger.debug(`🧹 [MemoryManager] Running ${cleanupTasks.length} cleanup tasks`);
       
       cleanupTasks.forEach((task, index) => {
         try {
           task();
         } catch (error) {
-          console.error(`❌ [MemoryManager] Cleanup task ${index} failed:`, error);
+          Logger.error(`❌ [MemoryManager] Cleanup task ${index} failed:`, error);
         }
       });
     };
@@ -212,7 +213,7 @@ export class MemoryManager {
       ctx.drawImage(canvas, 0, 0, newWidth, newHeight);
     }
 
-    console.log(`🖼️ [MemoryManager] Optimized image: ${width}x${height} → ${newWidth}x${newHeight}`);
+    Logger.debug(`🖼️ [MemoryManager] Optimized image: ${width}x${height} → ${newWidth}x${newHeight}`);
     
     return optimizedCanvas;
   }
@@ -224,7 +225,7 @@ export class MemoryManager {
     if (typeof window === 'undefined') return;
 
     const cleanup = () => {
-      console.log('🧹 [MemoryManager] Page unload cleanup...');
+      Logger.debug('🧹 [MemoryManager] Page unload cleanup...');
       this.clearComponentCaches();
     };
 
@@ -234,12 +235,12 @@ export class MemoryManager {
     // Cleanup on visibility change (tab switch)
     document.addEventListener('visibilitychange', () => {
       if (document.hidden) {
-        console.log('🧹 [MemoryManager] Tab hidden, running cleanup...');
+        Logger.debug('🧹 [MemoryManager] Tab hidden, running cleanup...');
         this.clearComponentCaches();
       }
     });
 
-    console.log('🔧 [MemoryManager] Automatic cleanup listeners registered');
+    Logger.debug('🔧 [MemoryManager] Automatic cleanup listeners registered');
   }
 }
 

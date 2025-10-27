@@ -6,6 +6,7 @@
 import { useState, useEffect, useMemo } from 'react';
 import { RoomService, RoomTypeTemplate, RoomConfiguration } from '@/services/RoomService';
 import { RoomType, RoomDimensions } from '@/types/project';
+import { Logger } from '@/utils/Logger';
 
 /**
  * Hook to get room type template from database
@@ -31,7 +32,7 @@ export const useRoomTemplate = (roomType: RoomType) => {
       } catch (err) {
         if (isMounted) {
           setError(err instanceof Error ? err.message : 'Failed to load room template');
-          console.error(`❌ [useRoomTemplate] Error loading template for ${roomType}:`, err);
+          Logger.error(`❌ [useRoomTemplate] Error loading template for ${roomType}:`, err);
         }
       } finally {
         if (isMounted) {
@@ -109,7 +110,7 @@ export const useRoomConfiguration = (
       } catch (err) {
         if (isMounted) {
           setError(err instanceof Error ? err.message : 'Failed to load room configuration');
-          console.error(`❌ [useRoomConfiguration] Error loading config for ${roomType}:`, err);
+          Logger.error(`❌ [useRoomConfiguration] Error loading config for ${roomType}:`, err);
         }
       } finally {
         if (isMounted) {
@@ -162,7 +163,7 @@ export const useAllRoomTemplates = () => {
       } catch (err) {
         if (isMounted) {
           setError(err instanceof Error ? err.message : 'Failed to load room templates');
-          console.error(`❌ [useAllRoomTemplates] Error loading templates:`, err);
+          Logger.error(`❌ [useAllRoomTemplates] Error loading templates:`, err);
         }
       } finally {
         if (isMounted) {

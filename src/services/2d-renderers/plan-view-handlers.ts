@@ -1,3 +1,5 @@
+import { Logger } from '@/utils/Logger';
+
 /**
  * Plan view render handlers for database-driven 2D rendering
  * Date: 2025-10-09
@@ -421,7 +423,7 @@ export function renderCustomSVG(
     const path = new Path2D(svgPath);
     ctx.fill(path);
   } catch (error) {
-    console.error('[PlanViewHandlers] Error rendering custom SVG:', error);
+    Logger.error('[PlanViewHandlers] Error rendering custom SVG:', error);
     // Fallback to rectangle
     renderRectangle(ctx, element, {}, zoom);
   }

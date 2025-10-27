@@ -7,6 +7,7 @@ import { Input } from '../ui/input';
 import { useProject } from '../../contexts/ProjectContext';
 import { RoomType } from '../../types/project';
 import { RoomShapeSelector } from './RoomShapeSelector';
+import { Logger } from '@/utils/Logger';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -143,8 +144,8 @@ export function RoomTabs({ className }: RoomTabsProps) {
   const handleShapeSelected = async (templateId: string | null, dimensions?: { width: number; height: number }) => {
     if (!currentProject || !pendingRoomType) return;
 
-    console.log('[RoomTabs] handleShapeSelected called with templateId:', templateId);
-    console.log('[RoomTabs] Creating room with type:', pendingRoomType);
+    Logger.debug('[RoomTabs] handleShapeSelected called with templateId:', templateId);
+    Logger.debug('[RoomTabs] Creating room with type:', pendingRoomType);
 
     await createRoomDesign(currentProject.id, pendingRoomType, undefined, templateId);
     setPendingRoomType(null);

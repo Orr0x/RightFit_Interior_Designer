@@ -15,7 +15,7 @@
  * // Validate Z position
  * const validation = ComponentPositionValidator.validateZPosition(element, roomDimensions);
  * if (!validation.valid) {
- *   console.error('Invalid Z position:', validation.errors);
+ *   Logger.error('Invalid Z position:', validation.errors);
  * }
  *
  * // Get default Z for element type
@@ -27,6 +27,7 @@
  */
 
 import { DesignElement } from '@/types/project';
+import { Logger } from '@/utils/Logger';
 
 /**
  * Validation result for component positioning
@@ -131,11 +132,11 @@ export class ComponentPositionValidator {
    * });
    *
    * if (!validation.valid) {
-   *   console.error('Validation errors:', validation.errors);
+   *   Logger.error('Validation errors:', validation.errors);
    * }
    *
    * if (validation.suspiciousCases.length > 0) {
-   *   console.warn('Suspicious cases:', validation.suspiciousCases);
+   *   Logger.warn('Suspicious cases:', validation.suspiciousCases);
    * }
    * ```
    */
@@ -323,7 +324,7 @@ export class ComponentPositionValidator {
    *   .map(([id, result]) => ({ id, errors: result.errors }));
    *
    * if (invalid.length > 0) {
-   *   console.error('Invalid elements:', invalid);
+   *   Logger.error('Invalid elements:', invalid);
    * }
    * ```
    */

@@ -1,3 +1,5 @@
+import { Logger } from '@/utils/Logger';
+
 /**
  * Main render dispatcher for database-driven 2D rendering
  * Date: 2025-10-09
@@ -94,7 +96,7 @@ export function renderPlanView(
   const handler = PLAN_VIEW_HANDLERS[renderDef.plan_view_type];
 
   if (!handler) {
-    console.warn(
+    Logger.warn(
       `[2D Renderer] Unknown plan_view_type: "${renderDef.plan_view_type}" for component "${element.component_id}"`
     );
     // Fallback to rectangle
@@ -105,7 +107,7 @@ export function renderPlanView(
   try {
     handler(ctx, element, renderDef.plan_view_data, zoom);
   } catch (error) {
-    console.error(
+    Logger.error(
       `[2D Renderer] Error rendering plan view for "${element.component_id}":`,
       error
     );
@@ -145,7 +147,7 @@ export function renderElevationView(
   const handler = ELEVATION_VIEW_HANDLERS[elevationType];
 
   if (!handler) {
-    console.warn(
+    Logger.warn(
       `[2D Renderer] Unknown elevation_type: "${elevationType}" for component "${element.component_id}"`
     );
     // Fallback to standard cabinet
@@ -156,7 +158,7 @@ export function renderElevationView(
   try {
     handler(ctx, element, elevationData, x, y, width, height, zoom, roomDimensions, view);
   } catch (error) {
-    console.error(
+    Logger.error(
       `[2D Renderer] Error rendering elevation view for "${element.component_id}":`,
       error
     );

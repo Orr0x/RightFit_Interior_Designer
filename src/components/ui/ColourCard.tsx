@@ -5,6 +5,7 @@ import { Card, CardContent } from './card';
 import { Button } from './button';
 import { Badge } from './badge';
 import { ExternalLink, ImageIcon, Palette, Eye } from 'lucide-react';
+import { Logger } from '@/utils/Logger';
 
 interface ColourCardProps {
   finish: ColourFinish;
@@ -19,7 +20,7 @@ export function ColourCard({ finish, className = '' }: ColourCardProps) {
   const cardRef = useRef<HTMLDivElement>(null);
 
   // Debug logging (commented out for production)
-  // console.log('🎨 ColourCard render:', { colour_id: finish.colour_id, imageLoaded, imageError });
+  // Logger.debug('🎨 ColourCard render:', { colour_id: finish.colour_id, imageLoaded, imageError });
 
   // Intersection observer for lazy loading
   useEffect(() => {

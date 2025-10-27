@@ -34,6 +34,7 @@ import { ProjectProvider } from "./contexts/ProjectContext";
 import { preloadCommonComponents } from "./components/3d/DynamicComponentRenderer";
 import { setupConsoleLogger } from "./utils/ConsoleLogger";
 import { ConfigurationService } from "./services/ConfigurationService";
+import { Logger } from '@/utils/Logger';
 
 const queryClient = new QueryClient();
 
@@ -42,9 +43,9 @@ const App = () => {
   useEffect(() => {
     // Preload app configuration from database
     ConfigurationService.preload().then(() => {
-      console.info('✅ [App] Configuration preloaded from database');
+      Logger.info('✅ [App] Configuration preloaded from database');
     }).catch((error) => {
-      console.error('❌ [App] Configuration preload failed:', error);
+      Logger.error('❌ [App] Configuration preload failed:', error);
     });
 
     preloadCommonComponents();
@@ -52,7 +53,7 @@ const App = () => {
     // Start console log capture (development mode only)
     if (import.meta.env.DEV) {
       setupConsoleLogger();
-      console.info('🔧 [App] Console logger enabled (development mode)');
+      Logger.info('🔧 [App] Console logger enabled (development mode)');
     }
   }, []);
 

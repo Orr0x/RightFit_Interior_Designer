@@ -1,3 +1,5 @@
+import { Logger } from '@/utils/Logger';
+
 /**
  * PerformanceDetector - Auto-detect device capabilities for adaptive 3D rendering
  * Provides performance detection and quality recommendations
@@ -48,13 +50,13 @@ export class PerformanceDetector {
       return this.capabilities;
     }
 
-    console.log('🔍 [PerformanceDetector] Analyzing device capabilities...');
+    Logger.debug('🔍 [PerformanceDetector] Analyzing device capabilities...');
 
     const canvas = document.createElement('canvas');
     const gl = canvas.getContext('webgl2') || canvas.getContext('webgl');
     
     if (!gl) {
-      console.warn('⚠️ [PerformanceDetector] WebGL not supported, using low quality');
+      Logger.warn('⚠️ [PerformanceDetector] WebGL not supported, using low quality');
       this.capabilities = this.createLowQualityProfile();
       return this.capabilities;
     }
@@ -89,7 +91,7 @@ export class PerformanceDetector {
       recommendedQuality
     };
 
-    console.log('✅ [PerformanceDetector] Device analysis complete:', this.capabilities);
+    Logger.debug('✅ [PerformanceDetector] Device analysis complete:', this.capabilities);
     return this.capabilities;
   }
 
@@ -102,7 +104,7 @@ export class PerformanceDetector {
 
       // If FPS drops below 30, recommend lower quality
       if (avgFPS < 30 && this.capabilities.recommendedQuality.level !== 'low') {
-        console.log(`⚡ [PerformanceDetector] Low FPS detected (${avgFPS.toFixed(1)}), recommending quality reduction`);
+        Logger.debug(`⚡ [PerformanceDetector] Low FPS detected (${avgFPS.toFixed(1)}), recommending quality reduction`);
         
         const newQuality = this.getNextLowerQuality(this.capabilities.recommendedQuality);
         this.capabilities.recommendedQuality = newQuality;
@@ -110,7 +112,7 @@ export class PerformanceDetector {
       }
       // If FPS is good (>50) and we're on low quality, we could increase
       else if (avgFPS > 50 && this.capabilities.recommendedQuality.level === 'low') {
-        console.log(`🚀 [PerformanceDetector] Good FPS detected (${avgFPS.toFixed(1)}), could increase quality`);
+        Logger.debug(`🚀 [PerformanceDetector] Good FPS detected (${avgFPS.toFixed(1)}), could increase quality`);
         
         const newQuality = this.getNextHigherQuality(this.capabilities.recommendedQuality);
         this.capabilities.recommendedQuality = newQuality;

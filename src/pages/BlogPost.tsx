@@ -4,6 +4,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import { Logger } from '@/utils/Logger';
 import { 
   Calendar, 
   Tag, 
@@ -46,14 +47,14 @@ const BlogPost: React.FC = () => {
         .single();
 
       if (error) {
-        console.error('Error fetching blog post:', error);
+        Logger.error('Error fetching blog post:', error);
         setNotFound(true);
         return;
       }
 
       setPost(data);
     } catch (error) {
-      console.error('Error:', error);
+      Logger.error('Error:', error);
       setNotFound(true);
     } finally {
       setLoading(false);

@@ -12,6 +12,7 @@ import { Label } from '@/components/ui/label';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Progress } from '@/components/ui/progress';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Logger } from '@/utils/Logger';
 import { 
   Dialog,
   DialogContent,
@@ -201,7 +202,7 @@ const MediaManager: React.FC = () => {
         const stats = await getStorageStats();
         setStorageStats(stats);
       } catch (error) {
-        console.error('Error loading storage stats:', error);
+        Logger.error('Error loading storage stats:', error);
         // Set default stats to prevent crashes
         setStorageStats({
           totalSize: 0,

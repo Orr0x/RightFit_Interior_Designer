@@ -28,6 +28,7 @@ import * as THREE from 'three';
 import { Model3DLoaderService } from '@/services/Model3DLoaderService';
 import { GeometryBuilder } from '@/utils/GeometryBuilder';
 import { mapComponentIdToModelId } from '@/utils/ComponentIDMapper';
+import { Logger } from '@/utils/Logger';
 
 interface DynamicComponentRendererProps {
   element: DesignElement;
@@ -99,13 +100,13 @@ export const DynamicComponentRenderer: React.FC<DynamicComponentRendererProps> =
         if (!isMounted) return;
 
         if (!model) {
-          console.warn(`[DynamicRenderer] Model not found: ${componentId}`);
+          Logger.warn(`[DynamicRenderer] Model not found: ${componentId}`);
           setLoadError(`Model not found: ${componentId}`);
           return;
         }
 
         if (geometry.length === 0) {
-          console.warn(`[DynamicRenderer] No geometry parts for model: ${componentId}`);
+          Logger.warn(`[DynamicRenderer] No geometry parts for model: ${componentId}`);
           setLoadError(`No geometry parts found`);
           return;
         }
@@ -134,11 +135,11 @@ export const DynamicComponentRenderer: React.FC<DynamicComponentRendererProps> =
         if (isMounted) {
           setMeshGroup(group);
           setLoadError(null);
-          console.log(`[DynamicRenderer] Built component: ${componentId} (${group.children.length} parts)`);
+          Logger.debug(`[DynamicRenderer] Built component: ${componentId} (${group.children.length} parts)`);
         }
       } catch (error) {
         if (isMounted) {
-          console.error(`[DynamicRenderer] Error loading component ${componentId}:`, error);
+          Logger.error(`[DynamicRenderer] Error loading component ${componentId}:`, error);
           setLoadError(error instanceof Error ? error.message : 'Unknown error');
         }
       }
@@ -213,8 +214,8 @@ export const preloadCommonComponents = async () => {
 
   try {
     await Model3DLoaderService.preload(commonComponents);
-    console.log('[DynamicRenderer] Preloaded common components');
+    Logger.debug('[DynamicRenderer] Preloaded common components');
   } catch (error) {
-    console.warn('[DynamicRenderer] Preload failed:', error);
+    Logger.warn('[DynamicRenderer] Preload failed:', error);
   }
 };

@@ -1,3 +1,5 @@
+import { Logger } from '@/utils/Logger';
+
 /**
  * CoordinateTransformEngine - Unified Coordinate Transformation System
  *
@@ -390,11 +392,11 @@ export class CoordinateTransformEngine {
    * ```typescript
    * // Test round-trip accuracy
    * const error = engine.validateConsistency({ x: 100, y: 80, z: 0 }, 86);
-   * console.log(error);  // → 0.0001 cm (acceptable)
+   * Logger.debug(error);  // → 0.0001 cm (acceptable)
    *
    * // Test corner position
    * const cornerError = engine.validateConsistency({ x: 0, y: 0, z: 0 }, 90);
-   * console.log(cornerError);  // → 0.0 cm (perfect accuracy)
+   * Logger.debug(cornerError);  // → 0.0 cm (perfect accuracy)
    * ```
    */
   validateConsistency(

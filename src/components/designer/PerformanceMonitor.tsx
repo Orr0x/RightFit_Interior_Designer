@@ -9,6 +9,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 import { cacheManager } from '@/services/CacheService';
+import { Logger } from '@/utils/Logger';
 import { 
   BarChart3, 
   ChevronDown, 
@@ -114,7 +115,7 @@ export const PerformanceMonitor: React.FC<PerformanceMonitorProps> = ({
   };
 
   if (!isVisible) {
-    console.log('🎯 [PerformanceMonitor] Performance monitor hidden');
+    Logger.debug('🎯 [PerformanceMonitor] Performance monitor hidden');
     return null;
   }
 

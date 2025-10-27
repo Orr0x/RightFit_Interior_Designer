@@ -33,7 +33,8 @@
       "Bash(npm run test:unit:*)",
       "Bash(npx vitest:*)",
       "Bash(npx playwright test:*)",
-      "Bash(ls:*)"
+      "Bash(ls:*)",
+      "Bash(npm run build:*)"
     ],
     "deny": [],
     "ask": []

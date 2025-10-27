@@ -1,3 +1,5 @@
+import { Logger } from '@/utils/Logger';
+
 export interface ColourFinish {
   name: string;
   number: string;
@@ -167,7 +169,7 @@ export async function loadColoursFromDatabase(): Promise<ColoursData> {
       import.meta.env.VITE_SUPABASE_ANON_KEY
     );
 
-    console.log('🔄 Loading Farrow & Ball finishes from database...');
+    Logger.debug('🔄 Loading Farrow & Ball finishes from database...');
     
     const { data, error } = await supabase
       .from('farrow_ball_finishes')
@@ -175,16 +177,16 @@ export async function loadColoursFromDatabase(): Promise<ColoursData> {
       .order('color_name');
 
     if (error) {
-      console.error('❌ Database error:', error);
+      Logger.error('❌ Database error:', error);
       throw new Error(`Database error: ${error.message}`);
     }
 
     if (!data || data.length === 0) {
-      console.warn('⚠️ No finishes found in database');
+      Logger.warn('⚠️ No finishes found in database');
       return { finishes: [], categories: [], totalFinishes: 0 };
     }
 
-    console.log(`✅ Loaded ${data.length} finishes from database`);
+    Logger.debug(`✅ Loaded ${data.length} finishes from database`);
 
     // Transform database records to ColourFinish format
     const finishes: ColourFinish[] = data.map(record => ({
@@ -205,8 +207,8 @@ export async function loadColoursFromDatabase(): Promise<ColoursData> {
     const finishesWithImages = finishes.filter(f => f.thumb_url && f.hover_url);
     const finishesWithoutImages = finishes.filter(f => !f.thumb_url || !f.hover_url);
 
-    console.log(`🖼️ Finishes with images: ${finishesWithImages.length}`);
-    console.log(`⚠️ Finishes without images: ${finishesWithoutImages.length}`);
+    Logger.debug(`🖼️ Finishes with images: ${finishesWithImages.length}`);
+    Logger.debug(`⚠️ Finishes without images: ${finishesWithoutImages.length}`);
 
     // Extract unique categories
     const categories = [...new Set(finishes.map(f => f.category))].sort();
@@ -217,7 +219,7 @@ export async function loadColoursFromDatabase(): Promise<ColoursData> {
       totalFinishes: finishes.length
     };
   } catch (error) {
-    console.error('❌ Error loading colours from database:', error);
+    Logger.error('❌ Error loading colours from database:', error);
     throw error;
   }
 }

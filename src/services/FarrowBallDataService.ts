@@ -1,5 +1,6 @@
 import { createClient } from '@supabase/supabase-js';
 import { Database } from '../integrations/supabase/types';
+import { Logger } from '@/utils/Logger';
 
 const supabase = createClient<Database>(
   import.meta.env.VITE_SUPABASE_URL,
@@ -65,7 +66,7 @@ class FarrowBallDataService {
       if (error) throw error;
       return data || [];
     } catch (error) {
-      console.error("Error fetching Farrow & Ball finishes:", error);
+      Logger.error("Error fetching Farrow & Ball finishes:", error);
       throw error;
     }
   }
@@ -103,7 +104,7 @@ class FarrowBallDataService {
         farrow_ball_images: imagesData || []
       };
     } catch (error) {
-      console.error(`Error fetching Farrow & Ball finish ${finishId}:`, error);
+      Logger.error(`Error fetching Farrow & Ball finish ${finishId}:`, error);
       throw error;
     }
   }

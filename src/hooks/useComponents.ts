@@ -1,6 +1,7 @@
 import { useState, useEffect, useMemo } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { RoomType } from '@/types/project';
+import { Logger } from '@/utils/Logger';
 
 export interface DatabaseComponent {
   id: string;
@@ -83,7 +84,7 @@ export const useComponents = () => {
   const fetchComponents = async () => {
     try {
       setLoading(true);
-      console.log('🔄 [useComponents] Starting component fetch from database...');
+      Logger.debug('🔄 [useComponents] Starting component fetch from database...');
       
       const startTime = Date.now();
       const { data, error } = await supabase
@@ -94,40 +95,40 @@ export const useComponents = () => {
         .order('name');
 
       const fetchTime = Date.now() - startTime;
-      console.log(`⏱️ [useComponents] Database query completed in ${fetchTime}ms`);
+      Logger.debug(`⏱️ [useComponents] Database query completed in ${fetchTime}ms`);
 
       if (error) {
-        console.error('❌ [useComponents] Database error:', error);
+        Logger.error('❌ [useComponents] Database error:', error);
         throw error;
       }
       
       const componentCount = data?.length || 0;
-      console.log(`✅ [useComponents] Loaded ${componentCount} components from database`);
+      Logger.debug(`✅ [useComponents] Loaded ${componentCount} components from database`);
       
       // Debug wall units specifically (check both possible category formats)
       const wallUnitsLowercase = data?.filter(comp => comp.category === 'wall-units') || [];
       const wallUnitsTitle = data?.filter(comp => comp.category === 'Wall Units') || [];
       const totalWallUnits = wallUnitsLowercase.length + wallUnitsTitle.length;
       
-      console.log(`🏠 [useComponents] Wall units found: ${totalWallUnits} (lowercase: ${wallUnitsLowercase.length}, title: ${wallUnitsTitle.length})`);
+      Logger.debug(`🏠 [useComponents] Wall units found: ${totalWallUnits} (lowercase: ${wallUnitsLowercase.length}, title: ${wallUnitsTitle.length})`);
       if (totalWallUnits === 0) {
-        console.warn('⚠️ [useComponents] NO WALL UNITS FOUND IN DATABASE!');
-        console.log('🔍 [useComponents] Available categories:', [...new Set(data?.map(comp => comp.category) || [])].sort());
+        Logger.warn('⚠️ [useComponents] NO WALL UNITS FOUND IN DATABASE!');
+        Logger.debug('🔍 [useComponents] Available categories:', [...new Set(data?.map(comp => comp.category) || [])].sort());
       }
       
       // Debug categories
       const categories = [...new Set(data?.map(comp => comp.category) || [])];
-      console.log('📂 [useComponents] Available categories:', categories.sort());
+      Logger.debug('📂 [useComponents] Available categories:', categories.sort());
       
       // Debug kitchen components
       const kitchenComponents = data?.filter(comp => comp.room_types?.includes('kitchen')) || [];
-      console.log(`🍳 [useComponents] Kitchen components: ${kitchenComponents.length}`);
+      Logger.debug(`🍳 [useComponents] Kitchen components: ${kitchenComponents.length}`);
       
       setComponents(data || []);
       setError(null);
     } catch (err) {
-      console.error('💥 [useComponents] Fatal error fetching components:', err);
-      console.error('💥 [useComponents] Error details:', {
+      Logger.error('💥 [useComponents] Fatal error fetching components:', err);
+      Logger.error('💥 [useComponents] Error details:', {
         message: err instanceof Error ? err.message : 'Unknown error',
         stack: err instanceof Error ? err.stack : undefined,
         timestamp: new Date().toISOString()
@@ -135,7 +136,7 @@ export const useComponents = () => {
       setError(err instanceof Error ? err.message : 'Failed to fetch components');
     } finally {
       setLoading(false);
-      console.log('🏁 [useComponents] Component fetch completed');
+      Logger.debug('🏁 [useComponents] Component fetch completed');
     }
   };
 
@@ -216,7 +217,7 @@ export const useComponents = () => {
       await fetchComponents();
       return data;
     } catch (err) {
-      console.error('Error creating component:', err);
+      Logger.error('Error creating component:', err);
       throw err;
     }
   };
@@ -237,7 +238,7 @@ export const useComponents = () => {
       await fetchComponents();
       return data;
     } catch (err) {
-      console.error('Error updating component:', err);
+      Logger.error('Error updating component:', err);
       throw err;
     }
   };
@@ -262,7 +263,7 @@ export const useComponents = () => {
       await fetchComponents();
       return data;
     } catch (err) {
-      console.error('Error deprecating component:', err);
+      Logger.error('Error deprecating component:', err);
       throw err;
     }
   };

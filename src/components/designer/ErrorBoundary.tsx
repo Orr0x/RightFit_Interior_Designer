@@ -3,6 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { AlertTriangle, RefreshCw, Home } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { Logger } from '@/utils/Logger';
 
 interface ErrorBoundaryState {
   hasError: boolean;
@@ -25,7 +26,7 @@ export class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoun
   }
 
   componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
-    console.error('Design Designer Error:', error, errorInfo);
+    Logger.error('Design Designer Error:', error, errorInfo);
   }
 
   resetError = () => {

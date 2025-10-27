@@ -24,6 +24,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Loader2, Square, Shapes, Grid3x3 } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { Logger } from '@/utils/Logger';
 
 // Icon mapping for room shapes
 const shapeIcons = {
@@ -58,8 +59,8 @@ export function RoomShapeSelector({
   }, [open]);
 
   const handleConfirm = () => {
-    console.log('[RoomShapeSelector] Confirming selection with templateId:', selectedTemplateId);
-    console.log('[RoomShapeSelector] Selected template:', templates.find(t => t.id === selectedTemplateId)?.display_name);
+    Logger.debug('[RoomShapeSelector] Confirming selection with templateId:', selectedTemplateId);
+    Logger.debug('[RoomShapeSelector] Selected template:', templates.find(t => t.id === selectedTemplateId)?.display_name);
     onSelectShape(selectedTemplateId, selectedTemplateId ? undefined : customDimensions);
     onOpenChange(false);
   };

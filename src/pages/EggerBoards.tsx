@@ -26,6 +26,7 @@ import {
 } from '../utils/eggerBoardsData';
 import { eggerDataService, EnhancedEggerProduct } from '../services/EggerDataService';
 import { farrowBallDataService, FarrowBallFinish } from '../services/FarrowBallDataService';
+import { Logger } from '@/utils/Logger';
 
 export default function EggerBoards() {
   const [searchParams] = useSearchParams();
@@ -61,7 +62,7 @@ export default function EggerBoards() {
   useEffect(() => {
     if (dataSource === 'csv' && retryCount < 3) {
       const retryTimer = setTimeout(() => {
-        console.log(`🔄 Retrying database connection (attempt ${retryCount + 1}/3)...`);
+        Logger.debug(`🔄 Retrying database connection (attempt ${retryCount + 1}/3)...`);
         setRetryCount(prev => prev + 1);
         setLoading(true);
       }, 30000); // Retry every 30 seconds
@@ -90,7 +91,7 @@ export default function EggerBoards() {
         // Try database first with timeout and reduced data
         let databaseLoaded = false;
         try {
-          console.log('🔄 Attempting to load data from database (optimized)...');
+          Logger.debug('🔄 Attempting to load data from database (optimized)...');
           
           // Load all materials from database
           const databasePromise = eggerDataService.getDecors(1, 0); // Load all records
@@ -101,46 +102,46 @@ export default function EggerBoards() {
           const result = await Promise.race([databasePromise, timeoutPromise]) as any;
           
           if (result.data.length > 0) {
-            console.log('✅ Database data loaded successfully:', result.data.length, 'products');
+            Logger.debug('✅ Database data loaded successfully:', result.data.length, 'products');
             setDatabaseProducts(result.data);
             setDataSource('database');
             databaseLoaded = true;
           } else {
-            console.warn('⚠️ Database returned empty result, falling back to CSV');
+            Logger.warn('⚠️ Database returned empty result, falling back to CSV');
           }
         } catch (dbError) {
-          console.warn('⚠️ Database temporarily unavailable, using CSV data');
-          console.warn('Reason:', dbError.message);
+          Logger.warn('⚠️ Database temporarily unavailable, using CSV data');
+          Logger.warn('Reason:', dbError.message);
           
           // If it's a resource error, we'll use CSV for now
           if (dbError.message.includes('INSUFFICIENT_RESOURCES') || 
               dbError.message.includes('timeout')) {
-            console.log('📄 Using CSV data due to Supabase limits (will retry database later)');
+            Logger.debug('📄 Using CSV data due to Supabase limits (will retry database later)');
           }
         }
 
         // Load finishes data from database
         try {
-          console.log('🔄 Loading Farrow & Ball finishes from database...');
+          Logger.debug('🔄 Loading Farrow & Ball finishes from database...');
           const finishesData = await farrowBallDataService.getAllFinishes();
           
-          console.log('🔍 Raw finishes data from database:', {
+          Logger.debug('🔍 Raw finishes data from database:', {
             length: finishesData.length,
             firstItem: finishesData[0],
             sampleIds: finishesData.slice(0, 3).map(f => f.finish_id)
           });
           
           if (finishesData.length > 0) {
-            console.log('✅ Finishes database data loaded successfully:', finishesData.length, 'finishes');
+            Logger.debug('✅ Finishes database data loaded successfully:', finishesData.length, 'finishes');
             setDatabaseFinishes(finishesData);
             setFinishesDataSource('database');
           } else {
-            console.warn('⚠️ Finishes database returned empty result, falling back to CSV');
+            Logger.warn('⚠️ Finishes database returned empty result, falling back to CSV');
             setFinishesDataSource('csv');
           }
         } catch (finishesDbError) {
-          console.warn('⚠️ Finishes database temporarily unavailable, using CSV data');
-          console.warn('Reason:', finishesDbError);
+          Logger.warn('⚠️ Finishes database temporarily unavailable, using CSV data');
+          Logger.warn('Reason:', finishesDbError);
           setFinishesDataSource('csv');
         }
 
@@ -149,11 +150,11 @@ export default function EggerBoards() {
         const fetchPromises = [fetch('/colours.csv')];
         
         if (!databaseLoaded) {
-          // console.log('🔄 Loading materials data from CSV files...');
+          // Logger.debug('🔄 Loading materials data from CSV files...');
           setDataSource('csv');
           fetchPromises.push(fetch('/webp-images.csv'), fetch('/Boards.csv'));
         } else {
-          // console.log('🔄 Loading only colours data (materials from database)...');
+          // Logger.debug('🔄 Loading only colours data (materials from database)...');
         }
 
         const responses = await Promise.all(fetchPromises);
@@ -161,7 +162,7 @@ export default function EggerBoards() {
         const webpResponse = databaseLoaded ? null : responses[1];
         const boardsResponse = databaseLoaded ? null : responses[2];
 
-        console.log('📡 Fetch responses:', {
+        Logger.debug('📡 Fetch responses:', {
           webp: webpResponse ? { ok: webpResponse.ok, status: webpResponse.status } : 'skipped (database)',
           boards: boardsResponse ? { ok: boardsResponse.ok, status: boardsResponse.status } : 'skipped (database)',
           colours: { ok: coloursResponse.ok, status: coloursResponse.status }
@@ -182,9 +183,9 @@ export default function EggerBoards() {
 
         if (coloursResponse.ok) {
           coloursCsvText = await coloursResponse.text();
-          console.log('📄 Colours CSV loaded, length:', coloursCsvText.length);
+          Logger.debug('📄 Colours CSV loaded, length:', coloursCsvText.length);
         } else {
-          console.error('❌ Colours CSV fetch failed:', coloursResponse.status, coloursResponse.statusText);
+          Logger.error('❌ Colours CSV fetch failed:', coloursResponse.status, coloursResponse.statusText);
         }
 
         // Load WebP data (combined with boards data)
@@ -201,37 +202,37 @@ export default function EggerBoards() {
 
         // Load colours data from database
         try {
-          console.log('🔄 Loading colours from database...');
+          Logger.debug('🔄 Loading colours from database...');
           const databaseColoursData = await loadColoursFromDatabase();
-          console.log('✅ Database colours data loaded:', {
+          Logger.debug('✅ Database colours data loaded:', {
             totalFinishes: databaseColoursData.totalFinishes,
             categories: databaseColoursData.categories,
             firstFinish: databaseColoursData.finishes[0]
           });
           setColoursData(databaseColoursData);
-          console.log('🔧 Database colours data state set, should be available now');
+          Logger.debug('🔧 Database colours data state set, should be available now');
         } catch (dbError) {
-          console.warn('⚠️ Database colours loading failed, falling back to CSV:', dbError);
+          Logger.warn('⚠️ Database colours loading failed, falling back to CSV:', dbError);
           // Fallback to CSV if database fails
           if (coloursCsvText) {
-            console.log('📄 Colours CSV text length:', coloursCsvText.length);
+            Logger.debug('📄 Colours CSV text length:', coloursCsvText.length);
             const parsedColoursData = parseColoursCSV(coloursCsvText);
-            console.log('✅ CSV Colours data loaded:', {
+            Logger.debug('✅ CSV Colours data loaded:', {
               totalFinishes: parsedColoursData.totalFinishes,
               categories: parsedColoursData.categories,
               firstFinish: parsedColoursData.finishes[0]
             });
             setColoursData(parsedColoursData);
-            console.log('🔧 CSV Colours data state set, should be available now');
+            Logger.debug('🔧 CSV Colours data state set, should be available now');
           } else {
-            console.warn('❌ Could not load colours data from database or CSV - finishes tab may not work');
+            Logger.warn('❌ Could not load colours data from database or CSV - finishes tab may not work');
           }
         }
 
-        // console.log('✅ CSV data loaded successfully');
+        // Logger.debug('✅ CSV data loaded successfully');
       } catch (err) {
         setError(err instanceof Error ? err.message : 'Failed to load data');
-        console.error('Error loading data:', err);
+        Logger.error('Error loading data:', err);
       } finally {
         setLoading(false);
       }
@@ -299,14 +300,14 @@ export default function EggerBoards() {
     } else if (dataSource === 'csv' && activeTab === 'materials' && webpData) {
       products = [...webpData.decors];
     } else if (activeTab === 'finishes') {
-      console.log('🔍 Finishes tab - checking data sources:', {
+      Logger.debug('🔍 Finishes tab - checking data sources:', {
         finishesDataSource,
         databaseFinishesLength: databaseFinishes.length,
         coloursDataLength: coloursData?.finishes?.length || 0
       });
       
       if (finishesDataSource === 'database' && databaseFinishes.length > 0) {
-        console.log('🔍 Loading finishes data from database only:', { 
+        Logger.debug('🔍 Loading finishes data from database only:', { 
           databaseCount: databaseFinishes.length
         });
         
@@ -333,7 +334,7 @@ export default function EggerBoards() {
           
           // Debug logging for first few items
           if (products.length < 3) {
-            console.log('🔧 Database to ColourFinish conversion:', {
+            Logger.debug('🔧 Database to ColourFinish conversion:', {
               original: dbFinish.finish_id,
               generated: colour_id,
               url: `/finishes/${colour_id}`,
@@ -347,10 +348,10 @@ export default function EggerBoards() {
         // Set data source to database
         setFinishesDataSource('database');
       } else if (coloursData) {
-        console.log('🔍 Loading finishes data from CSV only:', { coloursData, finishesCount: coloursData.finishes.length });
+        Logger.debug('🔍 Loading finishes data from CSV only:', { coloursData, finishesCount: coloursData.finishes.length });
         products = [...coloursData.finishes];
       } else {
-        console.log('❌ No finishes data available:', { coloursData, databaseFinishes, finishesDataSource, activeTab });
+        Logger.debug('❌ No finishes data available:', { coloursData, databaseFinishes, finishesDataSource, activeTab });
       }
     }
 

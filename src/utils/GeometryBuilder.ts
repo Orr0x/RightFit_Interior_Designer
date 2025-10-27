@@ -24,6 +24,7 @@
 import * as THREE from 'three';
 import { FormulaEvaluator, createStandardVariables, evaluateCondition } from './FormulaEvaluator';
 import type { GeometryPart, MaterialDefinition } from '@/services/Model3DLoaderService';
+import { Logger } from '@/utils/Logger';
 
 export interface BuildContext {
   // Element data
@@ -79,7 +80,7 @@ export class GeometryBuilder {
         if (part.render_condition) {
           const shouldRender = evaluateCondition(part.render_condition, variables);
           if (!shouldRender) {
-            console.log(`[GeometryBuilder] Skipping part ${part.part_name} due to condition: ${part.render_condition}`);
+            Logger.debug(`[GeometryBuilder] Skipping part ${part.part_name} due to condition: ${part.render_condition}`);
             continue;
           }
         }
@@ -90,12 +91,12 @@ export class GeometryBuilder {
           group.add(mesh);
         }
       } catch (error) {
-        console.error(`[GeometryBuilder] Error building part ${part.part_name}:`, error);
+        Logger.error(`[GeometryBuilder] Error building part ${part.part_name}:`, error);
         // Continue with other parts even if one fails
       }
     }
 
-    console.log(`[GeometryBuilder] Built ${group.children.length} geometry parts`);
+    Logger.debug(`[GeometryBuilder] Built ${group.children.length} geometry parts`);
     return group;
   }
 
@@ -116,7 +117,7 @@ export class GeometryBuilder {
     // Create geometry based on part type
     const geometry = this.createGeometry(part.part_type, dimensions);
     if (!geometry) {
-      console.warn(`[GeometryBuilder] Unknown geometry type: ${part.part_type}`);
+      Logger.warn(`[GeometryBuilder] Unknown geometry type: ${part.part_type}`);
       return null;
     }
 
@@ -194,7 +195,7 @@ export class GeometryBuilder {
         );
 
       default:
-        console.warn(`[GeometryBuilder] Unsupported geometry type: ${type}`);
+        Logger.warn(`[GeometryBuilder] Unsupported geometry type: ${type}`);
         return null;
     }
   }

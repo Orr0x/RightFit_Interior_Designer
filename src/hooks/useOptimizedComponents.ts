@@ -7,6 +7,7 @@ import { useState, useEffect, useMemo, useCallback } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { RoomType } from '@/types/project';
 import { cacheManager } from '@/services/CacheService';
+import { Logger } from '@/utils/Logger';
 // Define DatabaseComponent type locally since it may not be in generated types yet
 interface DatabaseComponent {
   id: string;
@@ -66,14 +67,14 @@ export const useOptimizedComponents = () => {
       if (!forceRefresh) {
         const cached = componentCache.get('all-components');
         if (cached) {
-          console.log('⚡ [useOptimizedComponents] Loaded components from cache');
+          Logger.debug('⚡ [useOptimizedComponents] Loaded components from cache');
           setComponents(cached);
           setLoading(false);
           return;
         }
       }
 
-      console.log('🔄 [useOptimizedComponents] Fetching components from database...');
+      Logger.debug('🔄 [useOptimizedComponents] Fetching components from database...');
       const startTime = Date.now();
 
       const { data, error: fetchError } = await supabase
@@ -84,16 +85,16 @@ export const useOptimizedComponents = () => {
         .order('name');
 
       const fetchTime = Date.now() - startTime;
-      console.log(`⏱️ [useOptimizedComponents] Database query completed in ${fetchTime}ms`);
+      Logger.debug(`⏱️ [useOptimizedComponents] Database query completed in ${fetchTime}ms`);
 
       if (fetchError) {
-        console.error('❌ [useOptimizedComponents] Database error:', fetchError);
+        Logger.error('❌ [useOptimizedComponents] Database error:', fetchError);
         throw fetchError;
       }
 
       const componentData = data || [];
 
-      console.log(`✅ [useOptimizedComponents] Loaded ${componentData.length} database components`);
+      Logger.debug(`✅ [useOptimizedComponents] Loaded ${componentData.length} database components`);
 
       // Cache the results
       componentCache.set('all-components', componentData);
@@ -107,7 +108,7 @@ export const useOptimizedComponents = () => {
       logDebugInfo(componentData);
 
     } catch (err) {
-      console.error('💥 [useOptimizedComponents] Fatal error:', err);
+      Logger.error('💥 [useOptimizedComponents] Fatal error:', err);
       setError(err instanceof Error ? err.message : 'Failed to fetch components');
     } finally {
       setLoading(false);
@@ -116,7 +117,7 @@ export const useOptimizedComponents = () => {
 
   // Pre-warm related caches for better performance
   const warmCaches = useCallback((componentData: DatabaseComponent[]) => {
-    console.log('🔥 [useOptimizedComponents] Pre-warming category and room type caches');
+    Logger.debug('🔥 [useOptimizedComponents] Pre-warming category and room type caches');
 
     // Group by category
     const categoryGroups = new Map<string, DatabaseComponent[]>();
@@ -157,7 +158,7 @@ export const useOptimizedComponents = () => {
       roomTypeCache.set(roomType, items);
     }
 
-    console.log(`🔥 [useOptimizedComponents] Pre-warmed ${categoryGroups.size} categories and ${roomTypeGroups.size} room types`);
+    Logger.debug(`🔥 [useOptimizedComponents] Pre-warmed ${categoryGroups.size} categories and ${roomTypeGroups.size} room types`);
   }, []);
 
   // Debug logging function
@@ -167,17 +168,17 @@ export const useOptimizedComponents = () => {
     const wallUnitsTitle = componentData.filter(comp => comp.category === 'Wall Units');
     const totalWallUnits = wallUnitsLowercase.length + wallUnitsTitle.length;
     
-    console.log(`🏠 [useOptimizedComponents] Wall units: ${totalWallUnits} (lowercase: ${wallUnitsLowercase.length}, title: ${wallUnitsTitle.length})`);
+    Logger.debug(`🏠 [useOptimizedComponents] Wall units: ${totalWallUnits} (lowercase: ${wallUnitsLowercase.length}, title: ${wallUnitsTitle.length})`);
     
     if (totalWallUnits === 0) {
-      console.warn('⚠️ [useOptimizedComponents] NO WALL UNITS FOUND!');
+      Logger.warn('⚠️ [useOptimizedComponents] NO WALL UNITS FOUND!');
       const categories = [...new Set(componentData.map(comp => comp.category))].sort();
-      console.log('📂 [useOptimizedComponents] Available categories:', categories);
+      Logger.debug('📂 [useOptimizedComponents] Available categories:', categories);
     }
 
     // Kitchen components
     const kitchenComponents = componentData.filter(comp => comp.room_types?.includes('kitchen'));
-    console.log(`🍳 [useOptimizedComponents] Kitchen components: ${kitchenComponents.length}`);
+    Logger.debug(`🍳 [useOptimizedComponents] Kitchen components: ${kitchenComponents.length}`);
   }, []);
 
   // Initial load
@@ -191,7 +192,7 @@ export const useOptimizedComponents = () => {
       // Check cache first
       const cached = roomTypeCache.get(roomType);
       if (cached) {
-        console.log(`⚡ [useOptimizedComponents] Cache hit for room type: ${roomType}`);
+        Logger.debug(`⚡ [useOptimizedComponents] Cache hit for room type: ${roomType}`);
         return cached;
       }
 
@@ -212,7 +213,7 @@ export const useOptimizedComponents = () => {
       // Check cache first
       const cached = categoryCache.get(cacheKey);
       if (cached) {
-        console.log(`⚡ [useOptimizedComponents] Cache hit for category: ${cacheKey}`);
+        Logger.debug(`⚡ [useOptimizedComponents] Cache hit for category: ${cacheKey}`);
         return cached;
       }
 

@@ -1,3 +1,5 @@
+import { Logger } from '@/utils/Logger';
+
 /**
  * Component ID Mapper
  *
@@ -837,17 +839,17 @@ export function mapComponentIdToModelId(
     if (isMatch) {
       try {
         const modelId = mapping.mapper(elementId, width, height, depth);
-        console.log(`[ComponentIDMapper] Mapped '${elementId}' (${width}cm) -> '${modelId}' using: ${mapping.description}`);
+        Logger.debug(`[ComponentIDMapper] Mapped '${elementId}' (${width}cm) -> '${modelId}' using: ${mapping.description}`);
         return modelId;
       } catch (error) {
-        console.error(`[ComponentIDMapper] Error in mapper for '${elementId}':`, error);
+        Logger.error(`[ComponentIDMapper] Error in mapper for '${elementId}':`, error);
         continue; // Try next mapping
       }
     }
   }
 
   // No mapping found
-  console.warn(`[ComponentIDMapper] No mapping found for '${elementId}' (${width}cm). Returning null for hardcoded fallback.`);
+  Logger.warn(`[ComponentIDMapper] No mapping found for '${elementId}' (${width}cm). Returning null for hardcoded fallback.`);
   return null;
 }
 

@@ -11,6 +11,7 @@ import {
   ElevationCoordinates
 } from '@/services/CoordinateTransformEngine';
 import { RoomDimensions } from '@/types/project';
+import { Logger } from '@/utils/Logger';
 
 export interface CoordinateTestResult {
   testName: string;
@@ -27,8 +28,8 @@ export interface CoordinateTestResult {
 export const runCoordinateSystemTests = (roomDimensions: RoomDimensions): CoordinateTestResult[] => {
   const results: CoordinateTestResult[] = [];
   
-  console.log('🧪 [CoordinateDemo] Starting coordinate system validation...');
-  console.log('📐 [CoordinateDemo] Room dimensions (inner usable space):', roomDimensions);
+  Logger.debug('🧪 [CoordinateDemo] Starting coordinate system validation...');
+  Logger.debug('📐 [CoordinateDemo] Room dimensions (inner usable space):', roomDimensions);
   
   // Initialize the coordinate engine
   const engine = initializeCoordinateEngine(roomDimensions);
@@ -168,15 +169,15 @@ export const runCoordinateSystemTests = (roomDimensions: RoomDimensions): Coordi
   const passedCount = results.filter(r => r.passed).length;
   const totalCount = results.length;
   
-  console.log(`✅ [CoordinateDemo] Tests completed: ${passedCount}/${totalCount} passed`);
+  Logger.debug(`✅ [CoordinateDemo] Tests completed: ${passedCount}/${totalCount} passed`);
   
   if (passedCount === totalCount) {
-    console.log('🎉 [CoordinateDemo] All coordinate system tests PASSED!');
-    console.log('✨ [CoordinateDemo] The unified coordinate system is working correctly');
+    Logger.debug('🎉 [CoordinateDemo] All coordinate system tests PASSED!');
+    Logger.debug('✨ [CoordinateDemo] The unified coordinate system is working correctly');
   } else {
-    console.warn('⚠️ [CoordinateDemo] Some tests FAILED - coordinate system needs attention');
+    Logger.warn('⚠️ [CoordinateDemo] Some tests FAILED - coordinate system needs attention');
     results.filter(r => !r.passed).forEach(result => {
-      console.error(`❌ [CoordinateDemo] FAILED: ${result.testName} - ${result.details}`);
+      Logger.error(`❌ [CoordinateDemo] FAILED: ${result.testName} - ${result.details}`);
     });
   }
   
@@ -187,48 +188,48 @@ export const runCoordinateSystemTests = (roomDimensions: RoomDimensions): Coordi
  * Demonstrate coordinate system usage with real-world examples
  */
 export const demonstrateCoordinateSystem = (roomDimensions: RoomDimensions): void => {
-  console.log('\n🎯 [CoordinateDemo] Real-world coordinate system demonstration');
+  Logger.debug('\n🎯 [CoordinateDemo] Real-world coordinate system demonstration');
   
   const engine = initializeCoordinateEngine(roomDimensions);
   
   // Example 1: Kitchen cabinet placement
-  console.log('\n📦 Example 1: Kitchen Cabinet Placement');
+  Logger.debug('\n📦 Example 1: Kitchen Cabinet Placement');
   const cabinetPosition: PlanCoordinates = { x: 60, y: 50, z: 0 }; // 60cm wide cabinet, 5cm from front wall
   
-  console.log('  Plan coordinates (inner room space):', cabinetPosition);
-  console.log('  World coordinates (3D scene):', engine.planToWorld(cabinetPosition));
-  console.log('  Front elevation view:', engine.planToElevation(cabinetPosition, 'front'));
-  console.log('  Left elevation view:', engine.planToElevation(cabinetPosition, 'left'));
-  console.log('  Valid placement?', engine.validatePlanCoordinates(cabinetPosition));
+  Logger.debug('  Plan coordinates (inner room space):', cabinetPosition);
+  Logger.debug('  World coordinates (3D scene):', engine.planToWorld(cabinetPosition));
+  Logger.debug('  Front elevation view:', engine.planToElevation(cabinetPosition, 'front'));
+  Logger.debug('  Left elevation view:', engine.planToElevation(cabinetPosition, 'left'));
+  Logger.debug('  Valid placement?', engine.validatePlanCoordinates(cabinetPosition));
   
   // Example 2: Corner unit placement
-  console.log('\n🔲 Example 2: Corner Unit Placement');
+  Logger.debug('\n🔲 Example 2: Corner Unit Placement');
   const cornerPosition: PlanCoordinates = { x: 0, y: 0, z: 0 }; // Top-left corner
   
-  console.log('  Plan coordinates (corner):', cornerPosition);
-  console.log('  World coordinates (3D scene):', engine.planToWorld(cornerPosition));
-  console.log('  All elevation views:');
-  console.log('    Front:', engine.planToElevation(cornerPosition, 'front'));
-  console.log('    Back:', engine.planToElevation(cornerPosition, 'back'));
-  console.log('    Left:', engine.planToElevation(cornerPosition, 'left'));
-  console.log('    Right:', engine.planToElevation(cornerPosition, 'right'));
+  Logger.debug('  Plan coordinates (corner):', cornerPosition);
+  Logger.debug('  World coordinates (3D scene):', engine.planToWorld(cornerPosition));
+  Logger.debug('  All elevation views:');
+  Logger.debug('    Front:', engine.planToElevation(cornerPosition, 'front'));
+  Logger.debug('    Back:', engine.planToElevation(cornerPosition, 'back'));
+  Logger.debug('    Left:', engine.planToElevation(cornerPosition, 'left'));
+  Logger.debug('    Right:', engine.planToElevation(cornerPosition, 'right'));
   
   // Example 3: Wall-mounted component
-  console.log('\n🏠 Example 3: Wall-Mounted Component');
+  Logger.debug('\n🏠 Example 3: Wall-Mounted Component');
   const wallCabinetPosition: PlanCoordinates = { x: 200, y: 30, z: 140 }; // Wall cabinet at 140cm height
   
-  console.log('  Plan coordinates (with height):', wallCabinetPosition);
-  console.log('  World coordinates (3D scene):', engine.planToWorld(wallCabinetPosition));
-  console.log('  Front elevation (shows height):', engine.planToElevation(wallCabinetPosition, 'front'));
+  Logger.debug('  Plan coordinates (with height):', wallCabinetPosition);
+  Logger.debug('  World coordinates (3D scene):', engine.planToWorld(wallCabinetPosition));
+  Logger.debug('  Front elevation (shows height):', engine.planToElevation(wallCabinetPosition, 'front'));
   
   // Example 4: Room boundaries
-  console.log('\n🏠 Example 4: Room Boundary Information');
+  Logger.debug('\n🏠 Example 4: Room Boundary Information');
   const bounds = engine.getInnerRoomBounds();
   const wallPositions = engine.getWallPositions();
   
-  console.log('  Inner room bounds (usable space):', bounds);
-  console.log('  Wall inner faces (component boundaries):', wallPositions.innerFaces);
-  console.log('  Wall center lines (for rendering):', {
+  Logger.debug('  Inner room bounds (usable space):', bounds);
+  Logger.debug('  Wall inner faces (component boundaries):', wallPositions.innerFaces);
+  Logger.debug('  Wall center lines (for rendering):', {
     front: wallPositions.front,
     back: wallPositions.back,
     left: wallPositions.left,
@@ -241,11 +242,11 @@ export const demonstrateCoordinateSystem = (roomDimensions: RoomDimensions): voi
  */
 export const testCurrentCoordinateSystem = (design: any): CoordinateTestResult[] => {
   if (!design?.roomDimensions) {
-    console.error('❌ [CoordinateDemo] No room dimensions available for testing');
+    Logger.error('❌ [CoordinateDemo] No room dimensions available for testing');
     return [];
   }
   
-  console.log('🧪 [CoordinateDemo] Testing coordinate system with current room...');
+  Logger.debug('🧪 [CoordinateDemo] Testing coordinate system with current room...');
   const results = runCoordinateSystemTests(design.roomDimensions);
   
   // Also run the demonstration

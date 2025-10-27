@@ -1,3 +1,5 @@
+import { Logger } from '@/utils/Logger';
+
 // Supabase image URL utilities for handling WebP images and other assets
 
 export interface SupabaseImageUrlOptions {
@@ -137,10 +139,10 @@ export const getImageMetadata = async (imagePath: string): Promise<{
   try {
     // This would typically use the Supabase client to get file metadata
     // For now, return null as a placeholder
-    console.log('Getting metadata for:', imagePath);
+    Logger.debug('Getting metadata for:', imagePath);
     return null;
   } catch (error) {
-    console.error('Error getting image metadata:', error);
+    Logger.error('Error getting image metadata:', error);
     return null;
   }
 };
@@ -155,7 +157,7 @@ export const uploadImageToSupabase = async (
 ): Promise<string | null> => {
   try {
     // This would typically use the Supabase client to upload the file
-    console.log('Uploading image:', file.name, 'to path:', path);
+    Logger.debug('Uploading image:', file.name, 'to path:', path);
 
     // Simulate upload delay
     await new Promise(resolve => setTimeout(resolve, 1000));
@@ -163,7 +165,7 @@ export const uploadImageToSupabase = async (
     // Return the path as if upload was successful
     return path;
   } catch (error) {
-    console.error('Error uploading image:', error);
+    Logger.error('Error uploading image:', error);
     return null;
   }
 };
@@ -174,14 +176,14 @@ export const uploadImageToSupabase = async (
 export const deleteImageFromSupabase = async (imagePath: string): Promise<boolean> => {
   try {
     // This would typically use the Supabase client to delete the file
-    console.log('Deleting image:', imagePath);
+    Logger.debug('Deleting image:', imagePath);
 
     // Simulate delete operation
     await new Promise(resolve => setTimeout(resolve, 500));
 
     return true;
   } catch (error) {
-    console.error('Error deleting image:', error);
+    Logger.error('Error deleting image:', error);
     return false;
   }
 };
@@ -192,12 +194,12 @@ export const deleteImageFromSupabase = async (imagePath: string): Promise<boolea
 export const imageExistsInSupabase = async (imagePath: string): Promise<boolean> => {
   try {
     // This would typically check if the file exists
-    console.log('Checking if image exists:', imagePath);
+    Logger.debug('Checking if image exists:', imagePath);
 
     // For now, assume it exists if path is provided
     return !!imagePath;
   } catch (error) {
-    console.error('Error checking image existence:', error);
+    Logger.error('Error checking image existence:', error);
     return false;
   }
 };

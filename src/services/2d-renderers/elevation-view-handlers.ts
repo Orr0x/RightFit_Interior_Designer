@@ -16,6 +16,7 @@ import type {
   RoomDimensions
 } from '@/types/render2d';
 import { CornerCabinetDoorMatrix } from '@/utils/CornerCabinetDoorMatrix';
+import { Logger } from '@/utils/Logger';
 
 // =====================================================
 // Standard Cabinet Handler (with doors, handles, toe kick)
@@ -76,7 +77,7 @@ export function renderStandardCabinet(
         }
       }
       if (process.env.NODE_ENV === 'development') {
-        console.log(`📦 [Drawer Inference] ${element.component_id}: Inferred ${drawerCount} drawers`);
+        Logger.debug(`📦 [Drawer Inference] ${element.component_id}: Inferred ${drawerCount} drawers`);
       }
     }
   }
@@ -95,20 +96,20 @@ export function renderStandardCabinet(
     // Finishing components: No doors, just solid panels
     doorCount = 0;
     if (process.env.NODE_ENV === 'development') {
-      console.log(`🎨 [Finishing Component] ${element.component_id}: No doors, solid panel`);
+      Logger.debug(`🎨 [Finishing Component] ${element.component_id}: No doors, solid panel`);
     }
   } else if (drawerCount > 0) {
     // Drawer units: No doors, only drawer fronts
     doorCount = 0;
     if (process.env.NODE_ENV === 'development') {
-      console.log(`📦 [Drawer Unit] ${element.component_id}: ${drawerCount} drawers, doorCount=0`);
+      Logger.debug(`📦 [Drawer Unit] ${element.component_id}: ${drawerCount} drawers, doorCount=0`);
     }
   } else {
     // Standard cabinets: ALWAYS use width-based door count (industry standard)
     const widthCm = element.width;
     doorCount = widthCm <= 60 ? 1 : 2;
     if (process.env.NODE_ENV === 'development' && data.door_count !== doorCount) {
-      console.log(`🚪 [Width-Based Doors] ${element.component_id}: ${widthCm}cm wide = ${doorCount} door(s) (database had ${data.door_count})`);
+      Logger.debug(`🚪 [Width-Based Doors] ${element.component_id}: ${widthCm}cm wide = ${doorCount} door(s) (database had ${data.door_count})`);
     }
   }
 
@@ -605,7 +606,7 @@ function renderCornerCabinetDoors(
   // Debug logging (development mode only)
   if (process.env.NODE_ENV === 'development') {
     const transformed = physicalDoorSide !== doorSide ? ` → ${doorSide} (transformed)` : '';
-    console.log(`🚪 [Door Matrix] ${element.id} | Corner: ${cornerPosition || 'none'} | Physical: ${physicalDoorSide}${transformed} | View: ${currentView}`);
+    Logger.debug(`🚪 [Door Matrix] ${element.id} | Corner: ${cornerPosition || 'none'} | Physical: ${physicalDoorSide}${transformed} | View: ${currentView}`);
   }
 
   // Calculate door and panel widths
@@ -733,7 +734,7 @@ export function renderCustomSVGElevation(
 
     ctx.restore();
   } catch (error) {
-    console.error('[ElevationViewHandlers] Error rendering custom SVG:', error);
+    Logger.error('[ElevationViewHandlers] Error rendering custom SVG:', error);
     // Fallback to standard cabinet
     renderStandardCabinet(ctx, element, {}, x, y, width, height, zoom);
   }

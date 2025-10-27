@@ -17,6 +17,7 @@ import * as GeometryUtils from '@/utils/GeometryUtils';
 import { useCollisionDetection } from '@/hooks/useCollisionDetection';
 import { useComponentMetadata } from '@/hooks/useComponentMetadata';
 import { useToast } from '@/hooks/use-toast';
+import { Logger } from '@/utils/Logger';
 
 // Throttle function for performance optimization
 const throttle = <T extends (...args: any[]) => void>(func: T, delay: number): T => {
@@ -94,7 +95,7 @@ const getRoomConfig = async (roomType: string, roomDimensions: any) => {
     roomConfigCache = config;
     return config;
   } catch (err) {
-    console.warn('Failed to load room config, using fallback:', err);
+    Logger.warn('Failed to load room config, using fallback:', err);
     const fallback = {
       dimensions: roomDimensions || { width: 600, height: 400 },
       wall_height: 240,
@@ -286,7 +287,7 @@ const getComponentBehavior = async (componentType: string) => {
     componentBehaviorCache.set(componentType, compatibleBehavior);
     return compatibleBehavior;
   } catch (err) {
-    console.warn(`Failed to load behavior for ${componentType}, using fallback:`, err);
+    Logger.warn(`Failed to load behavior for ${componentType}, using fallback:`, err);
     // Fallback that matches old COMPONENT_DATA structure
     const fallback = {
       hasDirection: true,
@@ -414,7 +415,7 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
   // Use design dimensions (required)
   // If roomDimensions is missing, this indicates a data integrity error
   if (!design.roomDimensions) {
-    console.error('[DesignCanvas2D] Missing room dimensions in design object:', design);
+    Logger.error('[DesignCanvas2D] Missing room dimensions in design object:', design);
     throw new Error('Room dimensions are required. This is a data integrity error.');
   }
   const roomDimensions = design.roomDimensions;
@@ -452,13 +453,13 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
           drag_threshold_touch: ConfigurationService.getSync('drag_threshold_touch', 10),
         };
 
-        console.log('[DesignCanvas2D] Configuration loaded from database:', configCache);
+        Logger.debug('[DesignCanvas2D] Configuration loaded from database:', configCache);
 
         // Preload 2D render definitions (Phase 3: Database-Driven 2D Rendering)
         await render2DService.preloadAll();
-        console.log('[DesignCanvas2D] 2D render definitions preloaded');
+        Logger.debug('[DesignCanvas2D] 2D render definitions preloaded');
       } catch (error) {
-        console.warn('[DesignCanvas2D] Failed to load configuration, using hardcoded fallbacks:', error);
+        Logger.warn('[DesignCanvas2D] Failed to load configuration, using hardcoded fallbacks:', error);
       }
     };
 
@@ -475,14 +476,14 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
           const geometry = await RoomService.getRoomGeometry(design.id);
           if (geometry) {
             setRoomGeometry(geometry as RoomGeometry);
-            console.log(`✅ [DesignCanvas2D] Loaded complex room geometry for room ${design.id}:`, geometry.shape_type);
+            Logger.debug(`✅ [DesignCanvas2D] Loaded complex room geometry for room ${design.id}:`, geometry.shape_type);
           } else {
             // No complex geometry - will use simple rectangular fallback
             setRoomGeometry(null);
-            console.log(`ℹ️ [DesignCanvas2D] No complex geometry found for room ${design.id}, using simple rectangular room`);
+            Logger.debug(`ℹ️ [DesignCanvas2D] No complex geometry found for room ${design.id}, using simple rectangular room`);
           }
         } catch (error) {
-          console.warn(`⚠️ [DesignCanvas2D] Failed to load room geometry for ${design.id}:`, error);
+          Logger.warn(`⚠️ [DesignCanvas2D] Failed to load room geometry for ${design.id}:`, error);
           setRoomGeometry(null);
         } finally {
           setLoadingGeometry(false);
@@ -591,9 +592,9 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
         // Initialize the coordinate engine with current room dimensions
         try {
           initializeCoordinateEngine(design.roomDimensions);
-          console.log('🏗️ [DesignCanvas2D] Coordinate engine initialized for room:', design.roomDimensions);
+          Logger.debug('🏗️ [DesignCanvas2D] Coordinate engine initialized for room:', design.roomDimensions);
         } catch (error) {
-          console.warn('⚠️ [DesignCanvas2D] Failed to initialize coordinate engine:', error);
+          Logger.warn('⚠️ [DesignCanvas2D] Failed to initialize coordinate engine:', error);
         }
         
         // Preload common component behaviors (use actual database types)
@@ -605,9 +606,9 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
           commonTypes.map(type => getComponentBehavior(type).catch(console.warn))
         );
         
-        console.log('🚀 [DesignCanvas2D] Preloaded component behaviors and room config');
+        Logger.debug('🚀 [DesignCanvas2D] Preloaded component behaviors and room config');
       } catch (err) {
-        console.warn('Failed to preload component data:', err);
+        Logger.warn('Failed to preload component data:', err);
       }
     };
     
@@ -1213,7 +1214,7 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
               renderedByDatabase = true;
             }
           } catch (error) {
-            console.warn('[DesignCanvas2D] Database rendering failed, falling back to legacy:', error);
+            Logger.warn('[DesignCanvas2D] Database rendering failed, falling back to legacy:', error);
           }
         }
 
@@ -1383,7 +1384,7 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
       try {
         const renderDef = render2DService.getCached(element.component_id);
         if (renderDef) {
-          console.log('[DesignCanvas2D] Rendering elevation for:', element.component_id, 'with data:', renderDef.elevation_data);
+          Logger.debug('[DesignCanvas2D] Rendering elevation for:', element.component_id, 'with data:', renderDef.elevation_data);
 
           // Apply selection/hover colors
           if (isSelected) {
@@ -1409,13 +1410,13 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
           );
           renderedByDatabase = true;
         } else {
-          console.warn('[DesignCanvas2D] No render definition found for:', element.component_id);
+          Logger.warn('[DesignCanvas2D] No render definition found for:', element.component_id);
         }
       } catch (error) {
-        console.warn('[DesignCanvas2D] Elevation database rendering failed, falling back to legacy:', error);
+        Logger.warn('[DesignCanvas2D] Elevation database rendering failed, falling back to legacy:', error);
       }
     } else {
-      console.warn('[DesignCanvas2D] Database rendering disabled by feature flag');
+      Logger.warn('[DesignCanvas2D] Database rendering disabled by feature flag');
     }
 
     // Fallback to legacy rendering if database rendering not enabled or failed
@@ -1945,7 +1946,7 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
     elementsToRender.sort((a, b) => (a.zIndex || 0) - (b.zIndex || 0));
 
     // Debug logging for layering order (disabled - causes console spam)
-    // Uncomment for debugging: console.log(`🎯 [Rendering] Elements in order:`, elementsToRender.map(el => `${el.id} (${el.type}) -> zIndex: ${el.zIndex}`));
+    // Uncomment for debugging: Logger.debug(`🎯 [Rendering] Elements in order:`, elementsToRender.map(el => `${el.id} (${el.type}) -> zIndex: ${el.zIndex}`));
 
     // Use for...of loop to handle async drawElement calls
     elementsToRender.forEach(element => {
@@ -2306,7 +2307,7 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
         finalClampedY = dragWallSnappedPos.y;
         
         // Log drag snapping for debugging
-        console.log(`🎯 [Drag Snap] Element moved to ${dragWallSnappedPos.corner || 'wall'} at (${finalClampedX}, ${finalClampedY})`);
+        Logger.debug(`🎯 [Drag Snap] Element moved to ${dragWallSnappedPos.corner || 'wall'} at (${finalClampedX}, ${finalClampedY})`);
       } else {
         // Standard boundary clamping if not snapped to wall
         finalClampedX = Math.max(0, Math.min(finalX, innerRoomBounds.width - clampWidth));
@@ -2346,7 +2347,7 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
           description: validationResult.reason || "Position adjusted to avoid collision",
           variant: "default",
         });
-        console.log(`🔄 [Collision] Adjusted position: ${validationResult.reason}`);
+        Logger.debug(`🔄 [Collision] Adjusted position: ${validationResult.reason}`);
       } else {
         // ❌ No valid position found - return to original position
         const fallbackPos = draggedElementOriginalPos || { x: draggedElement.x, y: draggedElement.y };
@@ -2360,7 +2361,7 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
           description: validationResult.reason || "Cannot place component here",
           variant: "destructive",
         });
-        console.warn(`❌ [Collision] Returned to original: ${validationResult.reason}`);
+        Logger.warn(`❌ [Collision] Returned to original: ${validationResult.reason}`);
       }
     }
 
@@ -2584,7 +2585,7 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
           finalClampedX = dragWallSnappedPos.x;
           finalClampedY = dragWallSnappedPos.y;
           
-          console.log(`🎯 [Touch Drag Snap] Element moved to ${dragWallSnappedPos.corner || 'wall'} at (${finalClampedX}, ${finalClampedY})`);
+          Logger.debug(`🎯 [Touch Drag Snap] Element moved to ${dragWallSnappedPos.corner || 'wall'} at (${finalClampedX}, ${finalClampedY})`);
         } else {
           // Standard boundary clamping if not snapped to wall
           finalClampedX = Math.max(0, Math.min(finalX, innerRoomBounds.width - clampWidth));
@@ -2646,7 +2647,7 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
       if (longPressedElement) {
         onSelectElement(longPressedElement);
         // Could trigger a context menu here in the future
-        console.log(`🔗 [Long Press] Selected element: ${longPressedElement.type} at (${longPressedElement.x}, ${longPressedElement.y})`);
+        Logger.debug(`🔗 [Long Press] Selected element: ${longPressedElement.type} at (${longPressedElement.x}, ${longPressedElement.y})`);
       }
     }, [canvasToRoom, design.elements, onSelectElement])
   });
@@ -2666,7 +2667,7 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
     try {
       const rawData = e.dataTransfer.getData('component');
       if (!rawData || rawData.trim() === '') {
-        console.warn('⚠️ Drop cancelled: No component data (quick drag release)');
+        Logger.warn('⚠️ Drop cancelled: No component data (quick drag release)');
         return;
       }
       const componentData = JSON.parse(rawData);
@@ -2689,7 +2690,7 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
       // Components should only be placed within the inner room, not in the wall thickness
       const dropBoundaryTolerance = ConfigurationService.getSync('drop_boundary_tolerance', 50); // 50cm tolerance (fallback)
       if (dropX < -dropBoundaryTolerance || dropY < -dropBoundaryTolerance || dropX > innerRoomBounds.width + dropBoundaryTolerance || dropY > innerRoomBounds.height + dropBoundaryTolerance) {
-        console.warn('⚠️ Drop cancelled: Component dropped outside inner room boundaries');
+        Logger.warn('⚠️ Drop cancelled: Component dropped outside inner room boundaries');
         return;
       }
 
@@ -2741,12 +2742,12 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
 
       // Log placement results for debugging
       if (placementResult.snappedToWall) {
-        console.log(`🎯 [Enhanced Placement] Component snapped to ${placementResult.corner || 'wall'} at (${placementResult.x}, ${placementResult.y}) with rotation ${placementResult.rotation}°`);
+        Logger.debug(`🎯 [Enhanced Placement] Component snapped to ${placementResult.corner || 'wall'} at (${placementResult.x}, ${placementResult.y}) with rotation ${placementResult.rotation}°`);
       }
       
       // Validate placement
       if (!placementResult.withinBounds) {
-        console.warn('⚠️ [Enhanced Placement] Component placement outside room bounds, adjusting...');
+        Logger.warn('⚠️ [Enhanced Placement] Component placement outside room bounds, adjusting...');
       }
 
       const newElement: DesignElement = {
@@ -2774,14 +2775,14 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
       // Enhanced error handling for different drop failure scenarios
       if (error instanceof Error) {
         if (error.message.includes('JSON')) {
-          console.warn('⚠️ Drop cancelled: Invalid component data (quick drag/release)');
+          Logger.warn('⚠️ Drop cancelled: Invalid component data (quick drag/release)');
         } else if (error.message.includes('boundary')) {
-          console.warn('⚠️ Drop cancelled: Component dropped outside room boundaries');
+          Logger.warn('⚠️ Drop cancelled: Component dropped outside room boundaries');
         } else {
-          console.warn('⚠️ Drop failed:', error.message);
+          Logger.warn('⚠️ Drop failed:', error.message);
         }
       } else {
-        console.warn('⚠️ Drop cancelled: Unknown reason (likely quick drag/release)');
+        Logger.warn('⚠️ Drop cancelled: Unknown reason (likely quick drag/release)');
       }
       // Silently handle - this is expected for cancelled drags and off-canvas drops
     }

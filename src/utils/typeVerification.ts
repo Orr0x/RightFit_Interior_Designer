@@ -8,6 +8,7 @@
  */
 
 import { supabase } from '@/integrations/supabase/client';
+import { Logger } from '@/utils/Logger';
 
 /**
  * Test query to verify collision detection fields are accessible
@@ -21,7 +22,7 @@ export async function testComponent3DModelsTypes() {
     .single();
 
   if (error) {
-    console.log('⚠️ [Type Verification] No data returned (table may be empty):', error.message);
+    Logger.debug('⚠️ [Type Verification] No data returned (table may be empty):', error.message);
     return null;
   }
 
@@ -34,7 +35,7 @@ export async function testComponent3DModelsTypes() {
     can_overlap_layers: data.can_overlap_layers // ✅ Should compile without errors
   };
 
-  console.log('✅ [Type Verification] All collision detection fields accessible:', verification);
+  Logger.debug('✅ [Type Verification] All collision detection fields accessible:', verification);
   return verification;
 }
 
@@ -59,6 +60,6 @@ export function verifyFieldTypes() {
     can_overlap_layers: ['wall', 'ceiling']
   };
 
-  console.log('✅ [Type Verification] Field types match expected interface');
+  Logger.debug('✅ [Type Verification] Field types match expected interface');
   return mockComponent;
 }

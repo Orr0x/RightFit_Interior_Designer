@@ -1,3 +1,5 @@
+import { Logger } from '@/utils/Logger';
+
 /**
  * CacheService - Intelligent caching layer for database queries
  * Provides TTL-based caching, batch loading, and cache warming
@@ -207,7 +209,7 @@ export class IntelligentCache<T> {
    * Warm cache with commonly used data
    */
   async warmCache(warmupData: Map<string, T>): Promise<void> {
-    console.log(`🔥 [IntelligentCache] Warming cache with ${warmupData.size} entries`);
+    Logger.debug(`🔥 [IntelligentCache] Warming cache with ${warmupData.size} entries`);
     this.setMultiple(warmupData);
   }
 }
@@ -277,6 +279,6 @@ export const cacheManager = CacheManager.getInstance();
 setInterval(() => {
   const cleaned = cacheManager.cleanupAll();
   if (cleaned > 0) {
-    console.log(`🧹 [CacheManager] Cleaned ${cleaned} expired cache entries`);
+    Logger.debug(`🧹 [CacheManager] Cleaned ${cleaned} expired cache entries`);
   }
 }, 2 * 60 * 1000); // Cleanup every 2 minutes

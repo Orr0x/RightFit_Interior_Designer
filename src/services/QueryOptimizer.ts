@@ -5,6 +5,7 @@
 
 import { supabase } from '@/integrations/supabase/client';
 import { cacheManager } from './CacheService';
+import { Logger } from '@/utils/Logger';
 
 export interface QueryOptions {
   enableCaching?: boolean;
@@ -84,7 +85,7 @@ class QueryOptimizer {
       const cached = cache.get(cacheKey);
       if (cached) {
         this.updateMetrics(Date.now() - startTime, true, false);
-        console.log(`⚡ [QueryOptimizer] Cache hit for ${table}:${cacheKey}`);
+        Logger.debug(`⚡ [QueryOptimizer] Cache hit for ${table}:${cacheKey}`);
         return cached;
       }
     }
@@ -114,7 +115,7 @@ class QueryOptimizer {
 
       } catch (error) {
         lastError = error as Error;
-        console.warn(`⚠️ [QueryOptimizer] Query attempt ${attempt + 1} failed:`, error);
+        Logger.warn(`⚠️ [QueryOptimizer] Query attempt ${attempt + 1} failed:`, error);
         
         if (attempt < maxRetries) {
           // Exponential backoff
@@ -169,7 +170,7 @@ class QueryOptimizer {
     this.batchQueue.delete(batchKey);
     clearTimeout(batch.timeout);
 
-    console.log(`🔄 [QueryOptimizer] Processing batch of ${batch.queries.length} queries`);
+    Logger.debug(`🔄 [QueryOptimizer] Processing batch of ${batch.queries.length} queries`);
 
     try {
       // Group queries by table and select

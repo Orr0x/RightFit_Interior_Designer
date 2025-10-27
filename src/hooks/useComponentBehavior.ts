@@ -5,6 +5,7 @@
 
 import { useState, useEffect, useMemo } from 'react';
 import { ComponentService, ComponentBehavior } from '@/services/ComponentService';
+import { Logger } from '@/utils/Logger';
 
 /**
  * Hook to get component behavior data from database
@@ -30,7 +31,7 @@ export const useComponentBehavior = (componentType: string) => {
       } catch (err) {
         if (isMounted) {
           setError(err instanceof Error ? err.message : 'Failed to load component behavior');
-          console.error(`❌ [useComponentBehavior] Error loading behavior for ${componentType}:`, err);
+          Logger.error(`❌ [useComponentBehavior] Error loading behavior for ${componentType}:`, err);
         }
       } finally {
         if (isMounted) {
@@ -100,7 +101,7 @@ export const useElevationHeight = (componentId: string, componentType: string) =
       } catch (err) {
         if (isMounted) {
           setError(err instanceof Error ? err.message : 'Failed to load elevation height');
-          console.error(`❌ [useElevationHeight] Error loading height for ${componentId}:`, err);
+          Logger.error(`❌ [useElevationHeight] Error loading height for ${componentId}:`, err);
         }
       } finally {
         if (isMounted) {
@@ -155,7 +156,7 @@ export const useComponentBehaviors = (componentTypes: string[]) => {
       } catch (err) {
         if (isMounted) {
           setError(err instanceof Error ? err.message : 'Failed to load component behaviors');
-          console.error(`❌ [useComponentBehaviors] Error loading behaviors:`, err);
+          Logger.error(`❌ [useComponentBehaviors] Error loading behaviors:`, err);
         }
       } finally {
         if (isMounted) {

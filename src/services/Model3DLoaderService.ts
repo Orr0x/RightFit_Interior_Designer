@@ -21,6 +21,7 @@
 
 import { supabase } from '@/integrations/supabase/client';
 import { FeatureFlagService } from './FeatureFlagService';
+import { Logger } from '@/utils/Logger';
 
 export interface Component3DModel {
   id: string;
@@ -104,7 +105,7 @@ export class Model3DLoaderService {
     try {
       return await FeatureFlagService.isEnabled(this.FEATURE_FLAG);
     } catch (error) {
-      console.warn('[Model3DLoader] Feature flag check failed:', error);
+      Logger.warn('[Model3DLoader] Feature flag check failed:', error);
       return false;
     }
   }
@@ -119,13 +120,13 @@ export class Model3DLoaderService {
       // Check feature flag
       const enabled = await this.isEnabled();
       if (!enabled) {
-        console.log(`[Model3DLoader] Feature disabled, skipping model load for: ${componentId}`);
+        Logger.debug(`[Model3DLoader] Feature disabled, skipping model load for: ${componentId}`);
         return null;
       }
 
       // Check cache
       if (this.isCacheValid() && this.modelCache.has(componentId)) {
-        console.log(`[Model3DLoader] Cache hit for model: ${componentId}`);
+        Logger.debug(`[Model3DLoader] Cache hit for model: ${componentId}`);
         return this.modelCache.get(componentId)!;
       }
 
@@ -140,7 +141,7 @@ export class Model3DLoaderService {
       // These variants are just rotational orientations of the same base component
       if (!data && !error && (componentId.endsWith('-ns') || componentId.endsWith('-ew'))) {
         const baseComponentId = componentId.slice(0, -3); // Remove last 3 chars
-        console.log(`✨ [Model3DLoader] Trying fallback for '${componentId}' → '${baseComponentId}'`);
+        Logger.debug(`✨ [Model3DLoader] Trying fallback for '${componentId}' → '${baseComponentId}'`);
 
         const fallbackResult = await supabase
           .from('component_3d_models')
@@ -152,17 +153,17 @@ export class Model3DLoaderService {
         error = fallbackResult.error;
 
         if (data) {
-          console.log(`✨ [Model3DLoader] Fallback successful: Using metadata from '${baseComponentId}' for variant '${componentId}'`);
+          Logger.debug(`✨ [Model3DLoader] Fallback successful: Using metadata from '${baseComponentId}' for variant '${componentId}'`);
         }
       }
 
       if (error) {
-        console.error(`[Model3DLoader] Error loading model ${componentId}:`, error);
+        Logger.error(`[Model3DLoader] Error loading model ${componentId}:`, error);
         return null;
       }
 
       if (!data) {
-        console.warn(`[Model3DLoader] Model not found: ${componentId}`);
+        Logger.warn(`[Model3DLoader] Model not found: ${componentId}`);
         return null;
       }
 
@@ -170,10 +171,10 @@ export class Model3DLoaderService {
       this.modelCache.set(componentId, data);
       this.cacheTimestamp = Date.now();
 
-      console.log(`[Model3DLoader] Loaded model from database: ${componentId}`);
+      Logger.debug(`[Model3DLoader] Loaded model from database: ${componentId}`);
       return data;
     } catch (error) {
-      console.error(`[Model3DLoader] Exception loading model ${componentId}:`, error);
+      Logger.error(`[Model3DLoader] Exception loading model ${componentId}:`, error);
       return null;
     }
   }
@@ -187,7 +188,7 @@ export class Model3DLoaderService {
     try {
       // Check cache
       if (this.isCacheValid() && this.geometryCache.has(modelId)) {
-        console.log(`[Model3DLoader] Cache hit for geometry: ${modelId}`);
+        Logger.debug(`[Model3DLoader] Cache hit for geometry: ${modelId}`);
         return this.geometryCache.get(modelId)!;
       }
 
@@ -199,12 +200,12 @@ export class Model3DLoaderService {
         .order('render_order', { ascending: true });
 
       if (error) {
-        console.error(`[Model3DLoader] Error loading geometry parts for ${modelId}:`, error);
+        Logger.error(`[Model3DLoader] Error loading geometry parts for ${modelId}:`, error);
         return [];
       }
 
       if (!data || data.length === 0) {
-        console.warn(`[Model3DLoader] No geometry parts found for model: ${modelId}`);
+        Logger.warn(`[Model3DLoader] No geometry parts found for model: ${modelId}`);
         return [];
       }
 
@@ -212,10 +213,10 @@ export class Model3DLoaderService {
       this.geometryCache.set(modelId, data);
       this.cacheTimestamp = Date.now();
 
-      console.log(`[Model3DLoader] Loaded ${data.length} geometry parts for model: ${modelId}`);
+      Logger.debug(`[Model3DLoader] Loaded ${data.length} geometry parts for model: ${modelId}`);
       return data;
     } catch (error) {
-      console.error(`[Model3DLoader] Exception loading geometry parts for ${modelId}:`, error);
+      Logger.error(`[Model3DLoader] Exception loading geometry parts for ${modelId}:`, error);
       return [];
     }
   }
@@ -228,7 +229,7 @@ export class Model3DLoaderService {
     try {
       // Check cache
       if (this.isCacheValid() && this.materialCache.size > 0) {
-        console.log(`[Model3DLoader] Cache hit for materials`);
+        Logger.debug(`[Model3DLoader] Cache hit for materials`);
         return new Map(this.materialCache);
       }
 
@@ -238,12 +239,12 @@ export class Model3DLoaderService {
         .select('*');
 
       if (error) {
-        console.error('[Model3DLoader] Error loading materials:', error);
+        Logger.error('[Model3DLoader] Error loading materials:', error);
         return new Map();
       }
 
       if (!data || data.length === 0) {
-        console.warn('[Model3DLoader] No materials found');
+        Logger.warn('[Model3DLoader] No materials found');
         return new Map();
       }
 
@@ -254,10 +255,10 @@ export class Model3DLoaderService {
       }
       this.cacheTimestamp = Date.now();
 
-      console.log(`[Model3DLoader] Loaded ${data.length} materials`);
+      Logger.debug(`[Model3DLoader] Loaded ${data.length} materials`);
       return new Map(this.materialCache);
     } catch (error) {
-      console.error('[Model3DLoader] Exception loading materials:', error);
+      Logger.error('[Model3DLoader] Exception loading materials:', error);
       return new Map();
     }
   }
@@ -270,11 +271,11 @@ export class Model3DLoaderService {
     try {
       const enabled = await this.isEnabled();
       if (!enabled) {
-        console.log('[Model3DLoader] Feature disabled, skipping preload');
+        Logger.debug('[Model3DLoader] Feature disabled, skipping preload');
         return;
       }
 
-      console.log(`[Model3DLoader] Preloading ${componentIds.length} models...`);
+      Logger.debug(`[Model3DLoader] Preloading ${componentIds.length} models...`);
 
       // Load all models in parallel
       const modelPromises = componentIds.map((id) => this.loadModel(id));
@@ -288,9 +289,9 @@ export class Model3DLoaderService {
       // Load materials
       await this.loadMaterials();
 
-      console.log(`[Model3DLoader] Preloaded ${validModels.length} models with geometry and materials`);
+      Logger.debug(`[Model3DLoader] Preloaded ${validModels.length} models with geometry and materials`);
     } catch (error) {
-      console.error('[Model3DLoader] Preload failed:', error);
+      Logger.error('[Model3DLoader] Preload failed:', error);
     }
   }
 
@@ -330,7 +331,7 @@ export class Model3DLoaderService {
     this.geometryCache.clear();
     this.materialCache.clear();
     this.cacheTimestamp = 0;
-    console.log('[Model3DLoader] Cache cleared');
+    Logger.debug('[Model3DLoader] Cache cleared');
   }
 
   /**

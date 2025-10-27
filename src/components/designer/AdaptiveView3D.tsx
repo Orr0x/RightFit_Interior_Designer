@@ -27,6 +27,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 
 import * as THREE from 'three';
+import { Logger } from '@/utils/Logger';
 import { 
   EnhancedCabinet3D, 
   EnhancedAppliance3D, 
@@ -428,7 +429,7 @@ export const AdaptiveView3D: React.FC<AdaptiveView3DProps> = ({
   // Consolidated async data loader - prevents render flashes by loading all data before rendering
   useEffect(() => {
     const loadAllAsyncData = async () => {
-      console.log('🔄 [AdaptiveView3D] Starting consolidated data load...');
+      Logger.debug('🔄 [AdaptiveView3D] Starting consolidated data load...');
       setIsFullyLoaded(false);
 
       try {
@@ -441,11 +442,11 @@ export const AdaptiveView3D: React.FC<AdaptiveView3DProps> = ({
             .then(template => {
               if (template.default_colors) {
                 setRoomColors(template.default_colors);
-                console.log(`✅ [AdaptiveView3D] Loaded room colors for ${design.roomType}`);
+                Logger.debug(`✅ [AdaptiveView3D] Loaded room colors for ${design.roomType}`);
               }
             })
             .catch(error => {
-              console.warn(`⚠️ [AdaptiveView3D] Failed to load room colors:`, error);
+              Logger.warn(`⚠️ [AdaptiveView3D] Failed to load room colors:`, error);
               setRoomColors(null);
             });
           loadPromises.push(colorsPromise);
@@ -457,14 +458,14 @@ export const AdaptiveView3D: React.FC<AdaptiveView3DProps> = ({
             .then(geometry => {
               if (geometry) {
                 setRoomGeometry(geometry as RoomGeometry);
-                console.log(`✅ [AdaptiveView3D] Loaded room geometry for room ${design.id}`);
+                Logger.debug(`✅ [AdaptiveView3D] Loaded room geometry for room ${design.id}`);
               } else {
                 setRoomGeometry(null);
-                console.log(`ℹ️ [AdaptiveView3D] No complex geometry found, using simple room`);
+                Logger.debug(`ℹ️ [AdaptiveView3D] No complex geometry found, using simple room`);
               }
             })
             .catch(error => {
-              console.warn(`⚠️ [AdaptiveView3D] Failed to load room geometry:`, error);
+              Logger.warn(`⚠️ [AdaptiveView3D] Failed to load room geometry:`, error);
               setRoomGeometry(null);
             });
           loadPromises.push(geometryPromise);
@@ -473,9 +474,9 @@ export const AdaptiveView3D: React.FC<AdaptiveView3DProps> = ({
         // Wait for all data to load in parallel
         await Promise.all(loadPromises);
 
-        console.log('✅ [AdaptiveView3D] All async data loaded successfully');
+        Logger.debug('✅ [AdaptiveView3D] All async data loaded successfully');
       } catch (error) {
-        console.error('❌ [AdaptiveView3D] Error loading async data:', error);
+        Logger.error('❌ [AdaptiveView3D] Error loading async data:', error);
       } finally {
         setIsFullyLoaded(true);
       }
@@ -494,7 +495,7 @@ export const AdaptiveView3D: React.FC<AdaptiveView3DProps> = ({
     const view3D = views.find(v => v.id === '3d');
     const hiddenElementIds = view3D?.hidden_elements || [];
 
-    console.log('🎨 [3D VIEW DEBUG] Filtering elements:', {
+    Logger.debug('🎨 [3D VIEW DEBUG] Filtering elements:', {
       totalElements: design.elements.length,
       hiddenElementIds,
       view3DConfig: view3D,
@@ -505,7 +506,7 @@ export const AdaptiveView3D: React.FC<AdaptiveView3DProps> = ({
     const filteredByVisibility = design.elements.filter(el => {
       const isHidden = hiddenElementIds.includes(el.id);
       if (isHidden) {
-        console.log('🎨 [3D VIEW DEBUG] Element HIDDEN in 3D view:', { id: el.id });
+        Logger.debug('🎨 [3D VIEW DEBUG] Element HIDDEN in 3D view:', { id: el.id });
       }
       return !isHidden;
     });
@@ -514,7 +515,7 @@ export const AdaptiveView3D: React.FC<AdaptiveView3DProps> = ({
     const maxElements = currentQuality?.maxElements || 100;
     const limited = filteredByVisibility.slice(0, maxElements);
 
-    console.log('🎨 [3D VIEW DEBUG] Visible elements after filtering:', {
+    Logger.debug('🎨 [3D VIEW DEBUG] Visible elements after filtering:', {
       afterVisibilityFilter: filteredByVisibility.length,
       afterPerformanceLimit: limited.length
     });
@@ -533,14 +534,14 @@ export const AdaptiveView3D: React.FC<AdaptiveView3DProps> = ({
         setCurrentQuality(mediumQuality);
         setIsInitializing(false);
 
-        console.log('🎮 [AdaptiveView3D] Performance detection complete:', {
+        Logger.debug('🎮 [AdaptiveView3D] Performance detection complete:', {
           gpu: caps.gpuTier,
           recommended: caps.recommendedQuality.level,
           defaultUsing: 'medium',
           autoMode: false
         });
       } catch (error) {
-        console.error('❌ [AdaptiveView3D] Performance detection failed:', error);
+        Logger.error('❌ [AdaptiveView3D] Performance detection failed:', error);
         // Fallback to medium quality
         const fallback = performanceDetector.getQualityPresets().medium;
         setCurrentQuality(fallback);
@@ -556,7 +557,7 @@ export const AdaptiveView3D: React.FC<AdaptiveView3DProps> = ({
     if (!isAutoMode || !capabilities) return;
 
     performanceDetector.startFrameRateMonitoring((newQuality) => {
-      console.log('⚡ [AdaptiveView3D] Auto-adjusting quality:', newQuality.level);
+      Logger.debug('⚡ [AdaptiveView3D] Auto-adjusting quality:', newQuality.level);
       setCurrentQuality(newQuality);
     });
 
@@ -575,7 +576,7 @@ export const AdaptiveView3D: React.FC<AdaptiveView3DProps> = ({
     return memoryManager.createCleanupFunction([
       () => performanceDetector.stopFrameRateMonitoring(),
       () => memoryManager.clearComponentCaches(),
-      () => console.log('🧹 [AdaptiveView3D] Component cleanup complete')
+      () => Logger.debug('🧹 [AdaptiveView3D] Component cleanup complete')
     ]);
   }, []);
 
@@ -597,12 +598,12 @@ export const AdaptiveView3D: React.FC<AdaptiveView3DProps> = ({
   };
 
   const handleQualityChange = (newQuality: RenderQuality) => {
-    console.log('🎨 [AdaptiveView3D] Manual quality change:', newQuality.level);
+    Logger.debug('🎨 [AdaptiveView3D] Manual quality change:', newQuality.level);
     setCurrentQuality(newQuality);
   };
 
   const handleAutoModeToggle = (auto: boolean) => {
-    console.log('🔄 [AdaptiveView3D] Auto mode:', auto ? 'enabled' : 'disabled');
+    Logger.debug('🔄 [AdaptiveView3D] Auto mode:', auto ? 'enabled' : 'disabled');
     setIsAutoMode(auto);
     
     if (auto && capabilities) {
@@ -913,7 +914,7 @@ export const AdaptiveView3D: React.FC<AdaptiveView3DProps> = ({
               default:
                 // For any unhandled types, try to render with EnhancedCabinet3D
                 // which will use DynamicComponentRenderer if feature flag is enabled
-                console.log(`[AdaptiveView3D] Rendering unhandled type "${element.type}" with EnhancedCabinet3D`);
+                Logger.debug(`[AdaptiveView3D] Rendering unhandled type "${element.type}" with EnhancedCabinet3D`);
                 return (
                   <EnhancedCabinet3D
                     key={element.id}

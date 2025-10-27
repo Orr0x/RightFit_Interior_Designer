@@ -1,3 +1,5 @@
+import { Logger } from '@/utils/Logger';
+
 /**
  * Formula Evaluator
  *
@@ -63,7 +65,7 @@ export class FormulaEvaluator {
       // Evaluate RPN
       return this.evaluateRPN(rpn);
     } catch (error) {
-      console.error('[FormulaEvaluator] Failed to evaluate formula:', formula, error);
+      Logger.error('[FormulaEvaluator] Failed to evaluate formula:', formula, error);
       throw new Error(`Invalid formula: ${formula}`);
     }
   }

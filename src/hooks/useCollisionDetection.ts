@@ -1,5 +1,6 @@
 import { useComponentMetadata, ComponentMetadata } from './useComponentMetadata';
 import { DesignElement } from '@/types/project';
+import { Logger } from '@/utils/Logger';
 
 // Snapping configuration
 const SNAP_THRESHOLD_CM = 10;  // Only snap if within 10cm (prevents annoying drag-away behavior, small enough for 30cm cabinets)
@@ -42,7 +43,7 @@ export const useCollisionDetection = () => {
 
     if (!elementMeta) {
       // No metadata available - allow placement (permissive fallback)
-      console.warn(`⚠️ [Collision] No metadata for component: ${element.component_id || element.id}`);
+      Logger.warn(`⚠️ [Collision] No metadata for component: ${element.component_id || element.id}`);
       return { isValid: true, collidingElements: [] };
     }
 

@@ -9,6 +9,7 @@ import { DesignElement, RoomType } from '@/types/project';
 import useOptimizedComponents from '@/hooks/useOptimizedComponents';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { LoadingSpinner } from '@/components/designer/LoadingSpinner';
+import { Logger } from '@/utils/Logger';
 // Define DatabaseComponent type locally since it may not be in generated types yet
 interface DatabaseComponent {
   id: string;
@@ -98,26 +99,26 @@ const CompactComponentSidebar: React.FC<CompactComponentSidebarProps> = ({
       return [];
     }
     
-    console.log(`🔍 [CompactComponentSidebar] Filtering components for room type: ${roomType}`);
-    console.log(`🔍 [CompactComponentSidebar] Total components loaded: ${allComponents.length}`);
+    Logger.debug(`🔍 [CompactComponentSidebar] Filtering components for room type: ${roomType}`);
+    Logger.debug(`🔍 [CompactComponentSidebar] Total components loaded: ${allComponents.length}`);
     
     const filtered = allComponents.filter(component => 
       component.room_types.includes(roomType)
     );
     
-    console.log(`🔍 [CompactComponentSidebar] Components available for ${roomType}: ${filtered.length}`);
+    Logger.debug(`🔍 [CompactComponentSidebar] Components available for ${roomType}: ${filtered.length}`);
     
     // Debug wall units specifically - check both possible category formats
     const wallUnitsLowercase = filtered.filter(comp => comp.category === 'wall-units');
     const wallUnitsTitle = filtered.filter(comp => comp.category === 'Wall Units');
     const totalWallUnits = wallUnitsLowercase.length + wallUnitsTitle.length;
     
-    console.log(`🏠 [CompactComponentSidebar] Wall units available for ${roomType}: ${totalWallUnits} (lowercase: ${wallUnitsLowercase.length}, title: ${wallUnitsTitle.length})`);
+    Logger.debug(`🏠 [CompactComponentSidebar] Wall units available for ${roomType}: ${totalWallUnits} (lowercase: ${wallUnitsLowercase.length}, title: ${wallUnitsTitle.length})`);
     if (totalWallUnits > 0) {
       const allWallUnits = [...wallUnitsLowercase, ...wallUnitsTitle];
-      console.log('🏠 [CompactComponentSidebar] Available wall units:', allWallUnits.map(w => w.name));
+      Logger.debug('🏠 [CompactComponentSidebar] Available wall units:', allWallUnits.map(w => w.name));
     } else {
-      console.warn(`⚠️ [CompactComponentSidebar] NO WALL UNITS AVAILABLE for room type: ${roomType}`);
+      Logger.warn(`⚠️ [CompactComponentSidebar] NO WALL UNITS AVAILABLE for room type: ${roomType}`);
     }
     
     return filtered;
@@ -155,7 +156,7 @@ const CompactComponentSidebar: React.FC<CompactComponentSidebarProps> = ({
 
   // Group components by category with debugging
   const componentsByCategory = useMemo(() => {
-    console.log(`📂 [CompactComponentSidebar] Grouping ${filteredComponents.length} filtered components by category`);
+    Logger.debug(`📂 [CompactComponentSidebar] Grouping ${filteredComponents.length} filtered components by category`);
     
     const groups: Record<string, DatabaseComponent[]> = {};
     filteredComponents.forEach(component => {
@@ -166,16 +167,16 @@ const CompactComponentSidebar: React.FC<CompactComponentSidebarProps> = ({
     });
     
     const categoryList = Object.keys(groups).sort();
-    console.log('📂 [CompactComponentSidebar] Final categories with components:', categoryList);
+    Logger.debug('📂 [CompactComponentSidebar] Final categories with components:', categoryList);
     
     // Debug each category count
     categoryList.forEach(category => {
       const count = groups[category].length;
-      console.log(`📂 [CompactComponentSidebar] ${category}: ${count} components`);
+      Logger.debug(`📂 [CompactComponentSidebar] ${category}: ${count} components`);
       
       // Check for wall units in both possible formats
       if (category === 'wall-units' || category === 'Wall Units') {
-        console.log('🏠 [CompactComponentSidebar] Wall units in final group:', groups[category].map(w => w.name));
+        Logger.debug('🏠 [CompactComponentSidebar] Wall units in final group:', groups[category].map(w => w.name));
       }
     });
     
@@ -184,11 +185,11 @@ const CompactComponentSidebar: React.FC<CompactComponentSidebarProps> = ({
     const hasWallUnitsTitle = !!groups['Wall Units'];
     
     if (!hasWallUnitsLowercase && !hasWallUnitsTitle) {
-      console.error('❌ [CompactComponentSidebar] WALL UNITS CATEGORY MISSING FROM FINAL GROUPS!');
-      console.log('📂 [CompactComponentSidebar] Available categories:', categoryList);
+      Logger.error('❌ [CompactComponentSidebar] WALL UNITS CATEGORY MISSING FROM FINAL GROUPS!');
+      Logger.debug('📂 [CompactComponentSidebar] Available categories:', categoryList);
     } else {
       const wallUnitsCount = (groups['wall-units']?.length || 0) + (groups['Wall Units']?.length || 0);
-      console.log(`✅ [CompactComponentSidebar] Wall units category found with ${wallUnitsCount} components`);
+      Logger.debug(`✅ [CompactComponentSidebar] Wall units category found with ${wallUnitsCount} components`);
     }
     
     return groups;
@@ -220,7 +221,7 @@ const CompactComponentSidebar: React.FC<CompactComponentSidebarProps> = ({
 
   // Handle mobile click-to-add - directly add component to canvas center
   const handleMobileClickToAdd = (component: DatabaseComponent) => {
-    console.log('📱 [Mobile Click-to-Add] Adding component:', component.name);
+    Logger.debug('📱 [Mobile Click-to-Add] Adding component:', component.name);
     
     // Create a new design element positioned at canvas center
     const newElement: DesignElement = {
@@ -248,7 +249,7 @@ const CompactComponentSidebar: React.FC<CompactComponentSidebarProps> = ({
       return updated.slice(0, 5); // Keep only 5 most recent
     });
     
-    console.log('✅ [Mobile Click-to-Add] Component added to canvas at (200, 150)');
+    Logger.debug('✅ [Mobile Click-to-Add] Component added to canvas at (200, 150)');
   };
 
   // Handle drag start - only serialize essential data (no React components)
@@ -285,7 +286,7 @@ const CompactComponentSidebar: React.FC<CompactComponentSidebarProps> = ({
                              componentIdentifier.toLowerCase().includes('larder corner');
     
     // Debug logging to see what's happening
-    console.log('🔍 [Drag Preview Debug]:', {
+    Logger.debug('🔍 [Drag Preview Debug]:', {
       id: component.component_id,
       name: component.name,
       isCornerComponent,
@@ -418,7 +419,7 @@ const CompactComponentSidebar: React.FC<CompactComponentSidebarProps> = ({
 
   // 🚀 Loading and error states for database components with debugging
   if (loading) {
-    console.log('⏳ [CompactComponentSidebar] Component sidebar in loading state');
+    Logger.debug('⏳ [CompactComponentSidebar] Component sidebar in loading state');
     return (
       <div className="p-3 h-full flex flex-col items-center justify-center">
         <LoadingSpinner />
@@ -429,8 +430,8 @@ const CompactComponentSidebar: React.FC<CompactComponentSidebarProps> = ({
   }
 
   if (error) {
-    console.error('💥 [CompactComponentSidebar] Component sidebar in error state:', error);
-    console.log('🌐 [CompactComponentSidebar] Network status:', {
+    Logger.error('💥 [CompactComponentSidebar] Component sidebar in error state:', error);
+    Logger.debug('🌐 [CompactComponentSidebar] Network status:', {
       online: navigator.onLine,
       userAgent: navigator.userAgent,
       timestamp: new Date().toISOString()
@@ -449,7 +450,7 @@ const CompactComponentSidebar: React.FC<CompactComponentSidebarProps> = ({
             size="sm" 
             className="mt-3"
             onClick={() => {
-              console.log('🔄 [CompactComponentSidebar] Manual retry requested');
+              Logger.debug('🔄 [CompactComponentSidebar] Manual retry requested');
               refetch();
             }}
           >
@@ -461,8 +462,8 @@ const CompactComponentSidebar: React.FC<CompactComponentSidebarProps> = ({
   }
 
   // Debug summary when components are successfully loaded
-  console.log(`✅ [CompactComponentSidebar] Component sidebar rendered successfully`);
-  console.log(`✅ [CompactComponentSidebar] Summary: ${allComponents.length} total, ${availableComponents.length} for ${roomType}, ${Object.keys(componentsByCategory).length} categories`);
+  Logger.debug(`✅ [CompactComponentSidebar] Component sidebar rendered successfully`);
+  Logger.debug(`✅ [CompactComponentSidebar] Summary: ${allComponents.length} total, ${availableComponents.length} for ${roomType}, ${Object.keys(componentsByCategory).length} categories`);
 
   return (
     <div className="h-full flex flex-col">

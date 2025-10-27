@@ -5,6 +5,7 @@ import { useToast } from '../hooks/use-toast';
 import { useAuth } from './AuthContext';
 import { Json } from '../integrations/supabase/types';
 import isEqual from 'lodash.isequal';
+import { Logger } from '@/utils/Logger';
 
 // Helper function to transform database project to TypeScript interface
 function transformProject(dbProject: Record<string, unknown>): Project {
@@ -536,10 +537,10 @@ export function ProjectProvider({ children }: { children: React.ReactNode }) {
       let roomGeometry = null;
       let roomDimensions = { width: 600, height: 400 }; // Default
 
-      console.log('[ProjectContext] createRoomDesign called with templateId:', templateId);
+      Logger.debug('[ProjectContext] createRoomDesign called with templateId:', templateId);
 
       if (templateId) {
-        console.log('[ProjectContext] Fetching template geometry for templateId:', templateId);
+        Logger.debug('[ProjectContext] Fetching template geometry for templateId:', templateId);
         try {
           const { data: templateData, error: templateError } = await supabase
             .from('room_geometry_templates')
@@ -548,7 +549,7 @@ export function ProjectProvider({ children }: { children: React.ReactNode }) {
             .single();
 
           if (templateError) {
-            console.warn('[ProjectContext] Failed to fetch template:', templateError);
+            Logger.warn('[ProjectContext] Failed to fetch template:', templateError);
           } else if (templateData) {
             roomGeometry = templateData.geometry_definition;
 
@@ -559,17 +560,17 @@ export function ProjectProvider({ children }: { children: React.ReactNode }) {
               height: bbox.max_y - bbox.min_y
             };
 
-            console.log(`✅ [ProjectContext] Using template "${templateData.display_name}" with geometry:`, templateData.category);
-            console.log('[ProjectContext] Room dimensions from template:', roomDimensions);
-            console.log('[ProjectContext] Room geometry:', roomGeometry);
+            Logger.debug(`✅ [ProjectContext] Using template "${templateData.display_name}" with geometry:`, templateData.category);
+            Logger.debug('[ProjectContext] Room dimensions from template:', roomDimensions);
+            Logger.debug('[ProjectContext] Room geometry:', roomGeometry);
           } else {
-            console.warn('[ProjectContext] Template data is null');
+            Logger.warn('[ProjectContext] Template data is null');
           }
         } catch (err) {
-          console.error('[ProjectContext] Error fetching template:', err);
+          Logger.error('[ProjectContext] Error fetching template:', err);
         }
       } else {
-        console.log('[ProjectContext] No templateId provided, using default rectangle');
+        Logger.debug('[ProjectContext] No templateId provided, using default rectangle');
       }
 
       const { data, error } = await supabase
@@ -822,7 +823,7 @@ export function ProjectProvider({ children }: { children: React.ReactNode }) {
         throw new Error('No room design to save');
       }
 
-      console.log('💾 [ProjectContext] Saving current design...', {
+      Logger.debug('💾 [ProjectContext] Saving current design...', {
         roomId: state.currentRoomDesign.id,
         showNotification
       });
@@ -847,7 +848,7 @@ export function ProjectProvider({ children }: { children: React.ReactNode }) {
 
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'Failed to save design';
-      console.error('❌ [ProjectContext] Save failed:', errorMessage);
+      Logger.error('❌ [ProjectContext] Save failed:', errorMessage);
 
       // Story 1.6: Restore unsaved changes flag on error
       dispatch({ type: 'SET_UNSAVED_CHANGES', payload: true });
@@ -867,7 +868,7 @@ export function ProjectProvider({ children }: { children: React.ReactNode }) {
 
   // Auto-save functionality - memoized to prevent infinite loops
   const enableAutoSave = useCallback(() => {
-    console.log('🔄 [ProjectContext] Enabling auto-save...');
+    Logger.debug('🔄 [ProjectContext] Enabling auto-save...');
     setAutoSaveEnabled(true);
     
     if (autoSaveInterval) {
@@ -876,7 +877,7 @@ export function ProjectProvider({ children }: { children: React.ReactNode }) {
 
     const interval = setInterval(async () => {
       if (state.hasUnsavedChanges && state.currentRoomDesign) {
-        console.log('💾 [ProjectContext] Auto-saving design...');
+        Logger.debug('💾 [ProjectContext] Auto-saving design...');
         await saveCurrentDesign(false); // Auto-save without showing main notification
       }
     }, 30000); // Auto-save every 30 seconds
@@ -885,7 +886,7 @@ export function ProjectProvider({ children }: { children: React.ReactNode }) {
   }, [state.hasUnsavedChanges, state.currentRoomDesign, autoSaveInterval, saveCurrentDesign]);
 
   const disableAutoSave = useCallback(() => {
-    console.log('⏹️ [ProjectContext] Disabling auto-save...');
+    Logger.debug('⏹️ [ProjectContext] Disabling auto-save...');
     setAutoSaveEnabled(false);
     if (autoSaveInterval) {
       clearInterval(autoSaveInterval);
@@ -922,7 +923,7 @@ export function ProjectProvider({ children }: { children: React.ReactNode }) {
     const dimensionsChanged = !isEqual(currentDimensions, prevDimensionsRef.current);
 
     if (elementsChanged || dimensionsChanged) {
-      console.log('🔄 [ProjectContext] Actual data change detected', {
+      Logger.debug('🔄 [ProjectContext] Actual data change detected', {
         elementsChanged,
         dimensionsChanged
       });
@@ -937,7 +938,7 @@ export function ProjectProvider({ children }: { children: React.ReactNode }) {
       }
 
       debounceTimerRef.current = setTimeout(() => {
-        console.log('✅ [ProjectContext] Marking as unsaved (after 1s debounce)');
+        Logger.debug('✅ [ProjectContext] Marking as unsaved (after 1s debounce)');
         dispatch({ type: 'SET_UNSAVED_CHANGES', payload: true });
         debounceTimerRef.current = null;
       }, 1000);
@@ -953,7 +954,7 @@ export function ProjectProvider({ children }: { children: React.ReactNode }) {
 
   // Initialize auto-save when a room is loaded - simplified to prevent infinite loops
   useEffect(() => {
-    console.log('🔧 [ProjectContext] Auto-save initialization check', { 
+    Logger.debug('🔧 [ProjectContext] Auto-save initialization check', { 
       autoSaveEnabled, 
       hasInterval: !!autoSaveInterval,
       hasCurrentRoom: !!state.currentRoomDesign,
@@ -962,7 +963,7 @@ export function ProjectProvider({ children }: { children: React.ReactNode }) {
     
     // Only start auto-save when we first get a room (and don't have an interval)
     if (autoSaveEnabled && !autoSaveInterval && state.currentRoomDesign?.id) {
-      console.log('🚀 [ProjectContext] Initializing auto-save for room:', state.currentRoomDesign.id);
+      Logger.debug('🚀 [ProjectContext] Initializing auto-save for room:', state.currentRoomDesign.id);
       
       // Create interval directly to avoid dependency issues
       const interval = setInterval(async () => {
@@ -971,11 +972,11 @@ export function ProjectProvider({ children }: { children: React.ReactNode }) {
         const currentSaveFunction = saveCurrentDesignRef.current;
         
         if (currentState.hasUnsavedChanges && currentState.currentRoomDesign && currentSaveFunction) {
-          console.log('💾 [ProjectContext] Auto-saving design...');
+          Logger.debug('💾 [ProjectContext] Auto-saving design...');
           try {
             await currentSaveFunction(false);
           } catch (error) {
-            console.error('❌ [ProjectContext] Auto-save failed:', error);
+            Logger.error('❌ [ProjectContext] Auto-save failed:', error);
           }
         }
       }, 30000); // Auto-save every 30 seconds
@@ -987,7 +988,7 @@ export function ProjectProvider({ children }: { children: React.ReactNode }) {
     // Clean up interval when room changes or component unmounts
     return () => {
       if (autoSaveInterval) {
-        console.log('🧹 [ProjectContext] Cleaning up auto-save interval on room change');
+        Logger.debug('🧹 [ProjectContext] Cleaning up auto-save interval on room change');
         clearInterval(autoSaveInterval);
         setAutoSaveInterval(null);
       }
@@ -1000,11 +1001,11 @@ export function ProjectProvider({ children }: { children: React.ReactNode }) {
     // 1. Auth context has finished loading
     // 2. User is authenticated
     if (!isLoading && user) {
-      console.log('🔐 [ProjectContext] Auth ready, loading user projects...');
+      Logger.debug('🔐 [ProjectContext] Auth ready, loading user projects...');
       loadUserProjects();
     } else if (!isLoading && !user) {
       // Auth finished loading but no user - clear any existing projects
-      console.log('🔐 [ProjectContext] No authenticated user, clearing projects');
+      Logger.debug('🔐 [ProjectContext] No authenticated user, clearing projects');
       dispatch({ type: 'SET_PROJECTS', payload: [] });
       dispatch({ type: 'SET_LOADING', payload: false });
     }

@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
 import { UserTier, getUserTierPermissions } from '@/types/user-tiers';
+import { Logger } from '@/utils/Logger';
 
 export interface BlogPost {
   id: string;
@@ -98,7 +99,7 @@ export const useBlogPosts = () => {
 
       setPosts(postsWithAuthor);
     } catch (err) {
-      console.error('Error fetching blog posts:', err);
+      Logger.error('Error fetching blog posts:', err);
       setError(err instanceof Error ? err.message : 'Failed to fetch blog posts');
     } finally {
       setLoading(false);
@@ -119,7 +120,7 @@ export const useBlogPosts = () => {
 
       setCategories(data || []);
     } catch (err) {
-      console.error('Error fetching categories:', err);
+      Logger.error('Error fetching categories:', err);
     }
   };
 
@@ -158,7 +159,7 @@ export const useBlogPosts = () => {
       setPosts(prev => [newPost, ...prev]);
       return newPost;
     } catch (err) {
-      console.error('Error creating blog post:', err);
+      Logger.error('Error creating blog post:', err);
       throw err;
     }
   };
@@ -205,7 +206,7 @@ export const useBlogPosts = () => {
 
       return updatedPost;
     } catch (err) {
-      console.error('Error updating blog post:', err);
+      Logger.error('Error updating blog post:', err);
       throw err;
     }
   };
@@ -228,7 +229,7 @@ export const useBlogPosts = () => {
 
       setPosts(prev => prev.filter(post => post.id !== postId));
     } catch (err) {
-      console.error('Error deleting blog post:', err);
+      Logger.error('Error deleting blog post:', err);
       throw err;
     }
   };
@@ -252,7 +253,7 @@ export const useBlogPosts = () => {
         tags: data.tags || []
       };
     } catch (err) {
-      console.error('Error fetching blog post:', err);
+      Logger.error('Error fetching blog post:', err);
       return null;
     }
   };
@@ -282,7 +283,7 @@ export const useBlogPosts = () => {
         tags: data.tags || []
       };
     } catch (err) {
-      console.error('Error fetching blog post by slug:', err);
+      Logger.error('Error fetching blog post by slug:', err);
       return null;
     }
   };

@@ -16,6 +16,13 @@ export default defineConfig({
     minify: 'esbuild',
     sourcemap: false,
     chunkSizeWarningLimit: 1000,
+    // Remove debugger statements in production
+    esbuildOptions: {
+      drop: ['debugger'], // Drop debugger statements
+      // Note: Logger has built-in environment checks
+      // debug/info/warn are no-ops in production
+      // error still works for production error tracking
+    },
     rollupOptions: {
       output: {
         manualChunks: (id) => {

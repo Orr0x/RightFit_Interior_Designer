@@ -7,6 +7,7 @@ import { DynamicComponentRenderer } from '@/components/3d/DynamicComponentRender
 import { ComponentTypeService } from '@/services/ComponentTypeService';
 import { CoordinateTransformEngine } from '@/services/CoordinateTransformEngine';
 import { ComponentService } from '@/services/ComponentService';
+import { Logger } from '@/utils/Logger';
 
 // ComponentDefinition interface removed - using DatabaseComponent from useComponents hook
 
@@ -70,7 +71,7 @@ const validateElementDimensions = (element: DesignElement) => {
   // Priority: element.z → database default_z_position → type-based fallback
   const safeZ = ComponentService.getZPosition(element);
 
-  console.log(`✅ [validateElementDimensions] Element ${element.id} Z position: ${safeZ}cm (type: ${element.type})`)
+  Logger.debug(`✅ [validateElementDimensions] Element ${element.id} Z position: ${safeZ}cm (type: ${element.type})`)
 
   return {
     x: isNaN(element.x) || element.x === undefined ? 0 : element.x,
@@ -108,9 +109,9 @@ export const EnhancedCabinet3D: React.FC<Enhanced3DModelProps> = ({
       try {
         const enabled = await FeatureFlagService.isEnabled('use_dynamic_3d_models');
         setUseDynamicModels(enabled);
-        console.log(`[EnhancedCabinet3D] Dynamic 3D models ${enabled ? 'ENABLED' : 'disabled'}`);
+        Logger.debug(`[EnhancedCabinet3D] Dynamic 3D models ${enabled ? 'ENABLED' : 'disabled'}`);
       } catch (error) {
-        console.warn('[EnhancedCabinet3D] Feature flag check failed, using hardcoded models:', error);
+        Logger.warn('[EnhancedCabinet3D] Feature flag check failed, using hardcoded models:', error);
         setUseDynamicModels(false);
       }
     };
@@ -120,7 +121,7 @@ export const EnhancedCabinet3D: React.FC<Enhanced3DModelProps> = ({
 
   // If feature flag is enabled, use dynamic renderer
   if (useDynamicModels) {
-    console.log(`[EnhancedCabinet3D] Rendering ${element.id} with DynamicComponentRenderer`);
+    Logger.debug(`[EnhancedCabinet3D] Rendering ${element.id} with DynamicComponentRenderer`);
     return (
       <DynamicComponentRenderer
         element={element}
@@ -171,11 +172,11 @@ export const EnhancedCabinet3D: React.FC<Enhanced3DModelProps> = ({
   if (validElement.z > 0) {
     // User has set a custom Z position - use it
     elementZ = validElement.z;
-    console.log(`✅ [EnhancedCabinet3D] Using custom Z position: ${validElement.z}cm for ${element.id}`);
+    Logger.debug(`✅ [EnhancedCabinet3D] Using custom Z position: ${validElement.z}cm for ${element.id}`);
   } else {
     // Use type-based defaults
     elementZ = isWallCabinet ? 200 : 0; // Wall cabinets at 200cm, base cabinets on floor
-    console.log(`🔧 [EnhancedCabinet3D] Using default Z position: ${elementZ}cm for ${element.id} (${isWallCabinet ? 'wall' : 'base'} cabinet)`);
+    Logger.debug(`🔧 [EnhancedCabinet3D] Using default Z position: ${elementZ}cm for ${element.id} (${isWallCabinet ? 'wall' : 'base'} cabinet)`);
   }
 
   // Use CoordinateTransformEngine for NEW UNIFIED SYSTEM
@@ -784,7 +785,7 @@ export const EnhancedAppliance3D: React.FC<Enhanced3DModelProps> = ({
 
       if (color) {
         setDbColor(color);
-        console.log(`✅ [EnhancedAppliance3D] Loaded color from database: ${color} for ${applianceType}`);
+        Logger.debug(`✅ [EnhancedAppliance3D] Loaded color from database: ${color} for ${applianceType}`);
       }
     };
 
@@ -794,9 +795,9 @@ export const EnhancedAppliance3D: React.FC<Enhanced3DModelProps> = ({
   // Determine Z position (use element.z if set, otherwise floor level)
   const elementZ = validElement.z > 0 ? validElement.z : 0;
   if (validElement.z > 0) {
-    console.log(`✅ [EnhancedAppliance3D] Using custom Z position: ${validElement.z}cm for ${element.id}`);
+    Logger.debug(`✅ [EnhancedAppliance3D] Using custom Z position: ${validElement.z}cm for ${element.id}`);
   } else {
-    console.log(`🔧 [EnhancedAppliance3D] Using default Z position: 0cm for ${element.id} (floor level)`);
+    Logger.debug(`🔧 [EnhancedAppliance3D] Using default Z position: 0cm for ${element.id} (floor level)`);
   }
 
   // Use CoordinateTransformEngine for NEW UNIFIED SYSTEM

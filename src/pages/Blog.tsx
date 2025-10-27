@@ -5,6 +5,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
+import { Logger } from '@/utils/Logger';
 import { 
   Calendar, 
   Tag, 
@@ -44,13 +45,13 @@ const Blog: React.FC = () => {
         .order('created_at', { ascending: false });
 
       if (error) {
-        console.error('Error fetching blog posts:', error);
+        Logger.error('Error fetching blog posts:', error);
         return;
       }
 
       setPosts(data || []);
     } catch (error) {
-      console.error('Error:', error);
+      Logger.error('Error:', error);
     } finally {
       setLoading(false);
     }

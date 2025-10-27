@@ -11,6 +11,7 @@
  */
 
 import type { ElevationViewConfig, RoomDesignSettings } from '@/types/project';
+import { Logger } from '@/utils/Logger';
 
 // Constants
 export const MAX_VIEWS_PER_DIRECTION = 3;
@@ -125,13 +126,13 @@ export function duplicateElevationView(
   // Find the view to duplicate
   const sourceView = elevationViews.find(v => v.id === viewId);
   if (!sourceView) {
-    console.error(`View ${viewId} not found`);
+    Logger.error(`View ${viewId} not found`);
     return null;
   }
 
   // Check if we can duplicate this direction
   if (!canDuplicateView(sourceView.direction, elevationViews)) {
-    console.error(`Cannot duplicate ${sourceView.direction}: max ${MAX_VIEWS_PER_DIRECTION} views per direction`);
+    Logger.error(`Cannot duplicate ${sourceView.direction}: max ${MAX_VIEWS_PER_DIRECTION} views per direction`);
     return null;
   }
 
@@ -161,12 +162,12 @@ export function deleteElevationView(
   const viewToDelete = elevationViews.find(v => v.id === viewId);
 
   if (!viewToDelete) {
-    console.error(`View ${viewId} not found`);
+    Logger.error(`View ${viewId} not found`);
     return null;
   }
 
   if (viewToDelete.is_default) {
-    console.error(`Cannot delete default view ${viewId}`);
+    Logger.error(`Cannot delete default view ${viewId}`);
     return null;
   }
 
@@ -184,13 +185,13 @@ export function renameElevationView(
   const viewIndex = elevationViews.findIndex(v => v.id === viewId);
 
   if (viewIndex === -1) {
-    console.error(`View ${viewId} not found`);
+    Logger.error(`View ${viewId} not found`);
     return null;
   }
 
   // Validate label
   if (!newLabel.trim()) {
-    console.error('Label cannot be empty');
+    Logger.error('Label cannot be empty');
     return null;
   }
 
@@ -215,7 +216,7 @@ export function toggleElementVisibility(
   const viewIndex = elevationViews.findIndex(v => v.id === viewId);
 
   if (viewIndex === -1) {
-    console.error(`View ${viewId} not found`);
+    Logger.error(`View ${viewId} not found`);
     return null;
   }
 

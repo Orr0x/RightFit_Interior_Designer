@@ -11,6 +11,7 @@ import {
 } from '@/services/CoordinateTransformEngine';
 import { DesignElement } from '@/types/project';
 import { ConfigurationService } from '@/services/ConfigurationService';
+import { Logger } from '@/utils/Logger';
 
 export interface ComponentPlacementResult {
   x: number;
@@ -60,7 +61,7 @@ export class CanvasCoordinateIntegrator {
     const effectiveWidth = componentWidth;
     const effectiveDepth = componentDepth;
     
-    console.log('🎯 [CanvasIntegrator] Calculating placement:', {
+    Logger.debug('🎯 [CanvasIntegrator] Calculating placement:', {
       dropPosition: { x: dropX, y: dropY },
       componentSize: { width: effectiveWidth, depth: effectiveDepth },
       roomBounds,
@@ -78,7 +79,7 @@ export class CanvasCoordinateIntegrator {
       maxY: roomBounds.height - effectiveDepth - wallClearance
     };
     
-    console.log('📐 [CanvasIntegrator] Placement bounds:', placementBounds);
+    Logger.debug('📐 [CanvasIntegrator] Placement bounds:', placementBounds);
     
     // Check for corner placement first
     if (isCornerComponent) {
@@ -102,7 +103,7 @@ export class CanvasCoordinateIntegrator {
     // Validate final position
     const withinBounds = this.coordinateEngine.validatePlanCoordinates({ x: finalX, y: finalY });
     
-    console.log('✅ [CanvasIntegrator] Final placement:', {
+    Logger.debug('✅ [CanvasIntegrator] Final placement:', {
       position: { x: finalX, y: finalY },
       snapped: wallSnappedPosition.snappedToWall,
       withinBounds
@@ -132,7 +133,7 @@ export class CanvasCoordinateIntegrator {
     const cornerThreshold = ConfigurationService.getSync('corner_snap_threshold', 60); // Threshold for corner detection (fallback)
     const roomBounds = this.coordinateEngine.getInnerRoomBounds();
     
-    console.log('🔲 [CanvasIntegrator] Corner detection:', {
+    Logger.debug('🔲 [CanvasIntegrator] Corner detection:', {
       dropPosition: { x: dropX, y: dropY },
       roomBounds,
       threshold: cornerThreshold
@@ -176,8 +177,8 @@ export class CanvasCoordinateIntegrator {
         // Log corner detection
         const cornerInfo = `${corner.name} corner (rotation: ${corner.rotation}°)`;
         
-        console.log(`🔲 [CanvasIntegrator] Corner placement MATCHED: ${corner.name} at (${corner.position.x}, ${corner.position.y}) with rotation ${corner.rotation}°`);
-        console.log(`🔄 [CanvasIntegrator] Using ${cornerInfo} - L opens toward room center`);
+        Logger.debug(`🔲 [CanvasIntegrator] Corner placement MATCHED: ${corner.name} at (${corner.position.x}, ${corner.position.y}) with rotation ${corner.rotation}°`);
+        Logger.debug(`🔄 [CanvasIntegrator] Using ${cornerInfo} - L opens toward room center`);
         
         return {
           x: corner.position.x,
@@ -190,7 +191,7 @@ export class CanvasCoordinateIntegrator {
       }
     }
     
-    console.log('🔲 [CanvasIntegrator] No corner match found');
+    Logger.debug('🔲 [CanvasIntegrator] No corner match found');
     return null;
   }
   
@@ -212,7 +213,7 @@ export class CanvasCoordinateIntegrator {
     const snapThreshold = ConfigurationService.getSync('wall_snap_threshold', 40); // Wall snap distance (fallback)
     const roomBounds = this.coordinateEngine.getInnerRoomBounds();
     
-    console.log('🎯 [CanvasIntegrator] Wall snapping check:', {
+    Logger.debug('🎯 [CanvasIntegrator] Wall snapping check:', {
       dropPosition: { x: dropX, y: dropY },
       componentSize: { width, depth },
       bounds,
@@ -232,7 +233,7 @@ export class CanvasCoordinateIntegrator {
     // Bottom wall proximity (back)
     const bottomWallDistance = roomBounds.height - (dropY + depth);
     
-    console.log('📏 [CanvasIntegrator] Wall distances:', {
+    Logger.debug('📏 [CanvasIntegrator] Wall distances:', {
       left: leftWallDistance,
       right: rightWallDistance, 
       top: topWallDistance,
@@ -244,13 +245,13 @@ export class CanvasCoordinateIntegrator {
       snappedX = bounds.minX;
       snappedToWall = true;
       rotation = 0; // Face into room (right)
-      console.log('🎯 [CanvasIntegrator] Snapped to LEFT wall');
+      Logger.debug('🎯 [CanvasIntegrator] Snapped to LEFT wall');
     }
     else if (rightWallDistance <= snapThreshold && rightWallDistance >= 0) {
       snappedX = bounds.maxX;
       snappedToWall = true;
       rotation = 180; // Face into room (left)
-      console.log('🎯 [CanvasIntegrator] Snapped to RIGHT wall');
+      Logger.debug('🎯 [CanvasIntegrator] Snapped to RIGHT wall');
     }
     
     if (topWallDistance <= snapThreshold && topWallDistance >= 0) {
@@ -258,14 +259,14 @@ export class CanvasCoordinateIntegrator {
       snappedToWall = true;
       // Only override rotation if not already set by left/right wall
       if (rotation === 0 && snappedX === dropX) rotation = 0; // Face into room (down)
-      console.log('🎯 [CanvasIntegrator] Snapped to TOP wall (front)');
+      Logger.debug('🎯 [CanvasIntegrator] Snapped to TOP wall (front)');
     }
     else if (bottomWallDistance <= snapThreshold && bottomWallDistance >= 0) {
       snappedY = bounds.maxY;
       snappedToWall = true;
       // Only override rotation if not already set by left/right wall
       if (rotation === 0 && snappedX === dropX) rotation = 180; // Face into room (up)
-      console.log('🎯 [CanvasIntegrator] Snapped to BOTTOM wall (back)');
+      Logger.debug('🎯 [CanvasIntegrator] Snapped to BOTTOM wall (back)');
     }
     
     return {
@@ -339,7 +340,7 @@ export const getEnhancedComponentPlacement = (
       componentType
     });
   } catch (error) {
-    console.error('❌ [CanvasIntegrator] Placement calculation failed:', error);
+    Logger.error('❌ [CanvasIntegrator] Placement calculation failed:', error);
     
     // Fallback to basic placement
     return {

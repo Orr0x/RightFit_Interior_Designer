@@ -5,6 +5,7 @@
 
 import { supabase } from '@/integrations/supabase/client';
 import { RoomType, RoomDimensions } from '@/types/project';
+import { Logger } from '@/utils/Logger';
 
 export interface RoomColors {
   floor: string;
@@ -66,7 +67,7 @@ export class RoomService {
       return cached;
     }
 
-    console.log(`🏠 [RoomService] Loading template for room type: ${roomType}`);
+    Logger.debug(`🏠 [RoomService] Loading template for room type: ${roomType}`);
 
     try {
       const { data, error } = await supabase
@@ -76,7 +77,7 @@ export class RoomService {
         .single();
 
       if (error) {
-        console.warn(`⚠️ [RoomService] No template found for ${roomType}, using defaults:`, error);
+        Logger.warn(`⚠️ [RoomService] No template found for ${roomType}, using defaults:`, error);
         // Fallback to reasonable defaults
         const safeName = roomType ? roomType.charAt(0).toUpperCase() + roomType.slice(1) : 'Kitchen';
         const fallback: RoomTypeTemplate = {
@@ -109,11 +110,11 @@ export class RoomService {
       };
 
       templateCache.set(roomType, template);
-      console.log(`✅ [RoomService] Loaded template for ${roomType}:`, template);
+      Logger.debug(`✅ [RoomService] Loaded template for ${roomType}:`, template);
       return template;
 
     } catch (err) {
-      console.error(`❌ [RoomService] Failed to load template for ${roomType}:`, err);
+      Logger.error(`❌ [RoomService] Failed to load template for ${roomType}:`, err);
       // Return safe defaults
       const fallback: RoomTypeTemplate = {
         id: 'fallback',
@@ -170,7 +171,7 @@ export class RoomService {
    * Get all available room type templates
    */
   static async getAllRoomTypeTemplates(): Promise<RoomTypeTemplate[]> {
-    console.log(`📋 [RoomService] Loading all room type templates`);
+    Logger.debug(`📋 [RoomService] Loading all room type templates`);
 
     try {
       const { data, error } = await supabase
@@ -179,7 +180,7 @@ export class RoomService {
         .order('room_type');
 
       if (error) {
-        console.error(`❌ [RoomService] Failed to load room templates:`, error);
+        Logger.error(`❌ [RoomService] Failed to load room templates:`, error);
         return [];
       }
 
@@ -201,11 +202,11 @@ export class RoomService {
         templateCache.set(template.room_type, template);
       });
 
-      console.log(`✅ [RoomService] Loaded ${templates.length} room type templates`);
+      Logger.debug(`✅ [RoomService] Loaded ${templates.length} room type templates`);
       return templates;
 
     } catch (err) {
-      console.error(`❌ [RoomService] Failed to load room templates:`, err);
+      Logger.error(`❌ [RoomService] Failed to load room templates:`, err);
       return [];
     }
   }
@@ -256,7 +257,7 @@ export class RoomService {
       design_settings: template.default_settings
     };
 
-    console.log(`🏗️ [RoomService] Creating new ${roomType} room design:`, roomDesign);
+    Logger.debug(`🏗️ [RoomService] Creating new ${roomType} room design:`, roomDesign);
 
     try {
       const { data, error } = await supabase
@@ -266,15 +267,15 @@ export class RoomService {
         .single();
 
       if (error) {
-        console.error(`❌ [RoomService] Failed to create room design:`, error);
+        Logger.error(`❌ [RoomService] Failed to create room design:`, error);
         throw error;
       }
 
-      console.log(`✅ [RoomService] Created new room design:`, data);
+      Logger.debug(`✅ [RoomService] Created new room design:`, data);
       return data;
 
     } catch (err) {
-      console.error(`❌ [RoomService] Failed to create room design:`, err);
+      Logger.error(`❌ [RoomService] Failed to create room design:`, err);
       throw err;
     }
   }
@@ -284,7 +285,7 @@ export class RoomService {
    */
   static clearCache(): void {
     templateCache.clear();
-    console.log('🧹 [RoomService] Cache cleared');
+    Logger.debug('🧹 [RoomService] Cache cleared');
   }
 
   // =========================================================================
@@ -309,14 +310,14 @@ export class RoomService {
       const { data, error } = await query;
 
       if (error) {
-        console.error('❌ [RoomService] Error loading room geometry templates:', error);
+        Logger.error('❌ [RoomService] Error loading room geometry templates:', error);
         throw error;
       }
 
-      console.log(`✅ [RoomService] Loaded ${data?.length || 0} geometry templates`);
+      Logger.debug(`✅ [RoomService] Loaded ${data?.length || 0} geometry templates`);
       return data || [];
     } catch (error) {
-      console.error('❌ [RoomService] Failed to load room geometry templates:', error);
+      Logger.error('❌ [RoomService] Failed to load room geometry templates:', error);
       return [];
     }
   }
@@ -334,14 +335,14 @@ export class RoomService {
         .single();
 
       if (error) {
-        console.error(`❌ [RoomService] Error loading template "${templateName}":`, error);
+        Logger.error(`❌ [RoomService] Error loading template "${templateName}":`, error);
         throw error;
       }
 
-      console.log(`✅ [RoomService] Loaded geometry template: ${templateName}`);
+      Logger.debug(`✅ [RoomService] Loaded geometry template: ${templateName}`);
       return data;
     } catch (error) {
-      console.error(`❌ [RoomService] Failed to load template "${templateName}":`, error);
+      Logger.error(`❌ [RoomService] Failed to load template "${templateName}":`, error);
       return null;
     }
   }
@@ -361,10 +362,10 @@ export class RoomService {
 
       if (error) throw error;
 
-      console.log(`✅ [RoomService] Loaded ${data?.length || 0} templates for category: ${category}`);
+      Logger.debug(`✅ [RoomService] Loaded ${data?.length || 0} templates for category: ${category}`);
       return data || [];
     } catch (error) {
-      console.error(`❌ [RoomService] Failed to load templates for category "${category}":`, error);
+      Logger.error(`❌ [RoomService] Failed to load templates for category "${category}":`, error);
       return [];
     }
   }
@@ -394,7 +395,7 @@ export class RoomService {
       if (parameters && template.parameter_config) {
         // TODO: Implement parameter application (Phase 2 advanced task)
         // For now, just use default geometry
-        console.warn('⚠️ [RoomService] Parameter application not yet implemented');
+        Logger.warn('⚠️ [RoomService] Parameter application not yet implemented');
       }
 
       // 4. Update room
@@ -405,10 +406,10 @@ export class RoomService {
 
       if (error) throw error;
 
-      console.log(`✅ [RoomService] Applied geometry template "${templateName}" to room ${roomId}`);
+      Logger.debug(`✅ [RoomService] Applied geometry template "${templateName}" to room ${roomId}`);
       return { success: true };
     } catch (error: any) {
-      console.error('❌ [RoomService] Failed to apply geometry template:', error);
+      Logger.error('❌ [RoomService] Failed to apply geometry template:', error);
       return { success: false, error: error.message };
     }
   }
@@ -429,20 +430,20 @@ export class RoomService {
 
       // Return complex geometry if available
       if (data.room_geometry) {
-        console.log(`✅ [RoomService] Loaded complex geometry for room ${roomId}`);
+        Logger.debug(`✅ [RoomService] Loaded complex geometry for room ${roomId}`);
         return data.room_geometry;
       }
 
       // Fallback: Generate simple rectangle from room_dimensions
       if (data.room_dimensions) {
-        console.log(`📐 [RoomService] Generating simple rectangle for room ${roomId}`);
+        Logger.debug(`📐 [RoomService] Generating simple rectangle for room ${roomId}`);
         return this.generateSimpleRectangleGeometry(data.room_dimensions);
       }
 
-      console.warn(`⚠️ [RoomService] No geometry or dimensions found for room ${roomId}`);
+      Logger.warn(`⚠️ [RoomService] No geometry or dimensions found for room ${roomId}`);
       return null;
     } catch (error) {
-      console.error(`❌ [RoomService] Failed to load room geometry for ${roomId}:`, error);
+      Logger.error(`❌ [RoomService] Failed to load room geometry for ${roomId}:`, error);
       return null;
     }
   }
@@ -538,10 +539,10 @@ export class RoomService {
 
       if (error) throw error;
 
-      console.log(`✅ [RoomService] Cleared geometry for room ${roomId}`);
+      Logger.debug(`✅ [RoomService] Cleared geometry for room ${roomId}`);
       return true;
     } catch (error) {
-      console.error(`❌ [RoomService] Failed to clear room geometry for ${roomId}:`, error);
+      Logger.error(`❌ [RoomService] Failed to clear room geometry for ${roomId}:`, error);
       return false;
     }
   }

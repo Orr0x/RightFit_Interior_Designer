@@ -11,6 +11,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Badge } from '@/components/ui/badge';
 import { Loader2, Plus, Edit, Trash2, Save, X } from 'lucide-react';
+import { Logger } from '@/utils/Logger';
 
 export const TypeManager: React.FC = () => {
   const [appliances, setAppliances] = useState<ApplianceType[]>([]);
@@ -32,7 +33,7 @@ export const TypeManager: React.FC = () => {
       setAppliances(applianceData);
       setFurniture(furnitureData);
     } catch (error) {
-      console.error('[TypeManager] Failed to load data:', error);
+      Logger.error('[TypeManager] Failed to load data:', error);
     } finally {
       setLoading(false);
     }

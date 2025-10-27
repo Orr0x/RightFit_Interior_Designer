@@ -31,6 +31,7 @@ import { getElevationViews, duplicateElevationView, deleteElevationView, renameE
 import rightfitLogo from '@/assets/logo.png';
 import '@/utils/godMode'; // Load God mode utilities in development
 import { testCurrentCoordinateSystem } from '@/utils/coordinateSystemDemo';
+import { Logger } from '@/utils/Logger';
 
 
 const Designer = () => {
@@ -102,11 +103,11 @@ const Designer = () => {
   useEffect(() => {
     const preloadData = async () => {
       try {
-        console.log('🚀 [Designer] Preloading common component behaviors for performance');
+        Logger.debug('🚀 [Designer] Preloading common component behaviors for performance');
         await ComponentService.preloadCommonBehaviors();
-        console.log('✅ [Designer] Preloading complete');
+        Logger.debug('✅ [Designer] Preloading complete');
       } catch (err) {
-        console.warn('⚠️ [Designer] Preloading failed (non-critical):', err);
+        Logger.warn('⚠️ [Designer] Preloading failed (non-critical):', err);
       }
     };
 
@@ -248,7 +249,7 @@ const Designer = () => {
     };
     
     // Debug logging for layering
-    console.log(`🎯 [Layering] Element: ${element.id} (${element.type}) -> zIndex: ${defaultZIndex}`);
+    Logger.debug(`🎯 [Layering] Element: ${element.id} (${element.type}) -> zIndex: ${defaultZIndex}`);
 
     // Add the new element to the design
     const updatedElements = [...(currentRoomDesign.design_elements || []), elementWithDefaults];
@@ -266,7 +267,7 @@ const Designer = () => {
   const handleUpdateElement = async (elementId: string, updates: Partial<DesignElement>) => {
     if (!currentRoomDesign) return;
 
-    console.log(`🔄 [Designer] handleUpdateElement called:`, {
+    Logger.debug(`🔄 [Designer] handleUpdateElement called:`, {
       elementId,
       updates,
       hasZUpdate: 'z' in updates,
@@ -281,7 +282,7 @@ const Designer = () => {
       el.id === elementId ? { ...el, ...updates } : el
     );
 
-    console.log(`📋 [Designer] Updated element:`, updatedElements.find(el => el.id === elementId));
+    Logger.debug(`📋 [Designer] Updated element:`, updatedElements.find(el => el.id === elementId));
 
     await updateCurrentRoomDesign({
       design_elements: updatedElements,
@@ -566,7 +567,7 @@ const Designer = () => {
       return;
     }
     
-    console.log('🧪 [Designer] Testing coordinate system...');
+    Logger.debug('🧪 [Designer] Testing coordinate system...');
     toast.info('Testing coordinate system... Check console for results');
     
     try {
@@ -580,7 +581,7 @@ const Designer = () => {
         toast.error(`❌ Coordinate system test FAILED! (${passedCount}/${totalCount})`);
       }
     } catch (error) {
-      console.error('❌ [Designer] Coordinate system test failed:', error);
+      Logger.error('❌ [Designer] Coordinate system test failed:', error);
       toast.error('Coordinate system test failed - check console for details');
     }
   };
@@ -789,7 +790,7 @@ const Designer = () => {
                         size="sm"
                         variant="outline"
                         onClick={() => {
-                          console.log('🎯 [Designer] Performance Monitor toggle clicked, current state:', showPerformanceMonitor);
+                          Logger.debug('🎯 [Designer] Performance Monitor toggle clicked, current state:', showPerformanceMonitor);
                           setShowPerformanceMonitor(!showPerformanceMonitor);
                         }}
                         className="text-xs"
@@ -803,7 +804,7 @@ const Designer = () => {
                         variant="outline"
                         onClick={() => {
                           // Navigate to dev tools page
-                          console.log('🛠️ [Designer] Navigating to Dev Tools page');
+                          Logger.debug('🛠️ [Designer] Navigating to Dev Tools page');
                           navigate('/dev');
                         }}
                         className="text-xs"

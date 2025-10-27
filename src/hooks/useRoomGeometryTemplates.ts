@@ -9,6 +9,7 @@
 import { useState, useEffect } from 'react';
 import { RoomGeometryTemplate } from '@/types/RoomGeometry';
 import { RoomService } from '@/services/RoomService';
+import { Logger } from '@/utils/Logger';
 
 // ============================================================================
 // Hook: Load All Geometry Templates
@@ -57,7 +58,7 @@ export function useRoomGeometryTemplates(
       setTemplates(data as RoomGeometryTemplate[]);
     } catch (err: any) {
       setError(err.message || 'Failed to load geometry templates');
-      console.error('Error loading geometry templates:', err);
+      Logger.error('Error loading geometry templates:', err);
     } finally {
       setLoading(false);
     }
@@ -123,7 +124,7 @@ export function useRoomGeometryTemplate(
         setTemplate(data as RoomGeometryTemplate);
       } catch (err: any) {
         setError(err.message || 'Failed to load template');
-        console.error('Error loading template:', err);
+        Logger.error('Error loading template:', err);
       } finally {
         setLoading(false);
       }
@@ -185,7 +186,7 @@ export function useTemplatesByCategory(
       setTemplates(data as RoomGeometryTemplate[]);
     } catch (err: any) {
       setError(err.message || 'Failed to load templates');
-      console.error('Error loading templates by category:', err);
+      Logger.error('Error loading templates by category:', err);
     } finally {
       setLoading(false);
     }
@@ -260,7 +261,7 @@ export function useApplyTemplate(): UseApplyTemplateResult {
       return result;
     } catch (err: any) {
       setError(err.message || 'Failed to apply template');
-      console.error('Error applying template:', err);
+      Logger.error('Error applying template:', err);
       return { success: false, error: err.message };
     } finally {
       setApplying(false);
@@ -326,7 +327,7 @@ export function useRoomGeometry(roomId: string | null): UseRoomGeometryResult {
       setGeometry(data);
     } catch (err: any) {
       setError(err.message || 'Failed to load room geometry');
-      console.error('Error loading room geometry:', err);
+      Logger.error('Error loading room geometry:', err);
     } finally {
       setLoading(false);
     }
@@ -343,7 +344,7 @@ export function useRoomGeometry(roomId: string | null): UseRoomGeometryResult {
       return success;
     } catch (err: any) {
       setError(err.message || 'Failed to clear geometry');
-      console.error('Error clearing geometry:', err);
+      Logger.error('Error clearing geometry:', err);
       return false;
     }
   };

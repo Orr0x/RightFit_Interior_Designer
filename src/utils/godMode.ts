@@ -4,6 +4,7 @@
  */
 
 import { supabase } from '@/integrations/supabase/client';
+import { Logger } from '@/utils/Logger';
 
 /**
  * Enable God mode for current user (development only)
@@ -14,7 +15,7 @@ export const enableGodMode = async (): Promise<boolean> => {
     const { data: { user } } = await supabase.auth.getUser();
     
     if (!user) {
-      console.error('❌ [GodMode] No authenticated user found');
+      Logger.error('❌ [GodMode] No authenticated user found');
       return false;
     }
 
@@ -29,15 +30,15 @@ export const enableGodMode = async (): Promise<boolean> => {
       });
 
     if (error) {
-      console.error('❌ [GodMode] Failed to enable God mode:', error);
+      Logger.error('❌ [GodMode] Failed to enable God mode:', error);
       return false;
     }
 
-    console.log('🔥 [GodMode] God mode enabled! Refresh the page to see dev tools.');
+    Logger.debug('🔥 [GodMode] God mode enabled! Refresh the page to see dev tools.');
     return true;
 
   } catch (error) {
-    console.error('❌ [GodMode] Error enabling God mode:', error);
+    Logger.error('❌ [GodMode] Error enabling God mode:', error);
     return false;
   }
 };
@@ -50,7 +51,7 @@ export const disableGodMode = async (): Promise<boolean> => {
     const { data: { user } } = await supabase.auth.getUser();
     
     if (!user) {
-      console.error('❌ [GodMode] No authenticated user found');
+      Logger.error('❌ [GodMode] No authenticated user found');
       return false;
     }
 
@@ -64,15 +65,15 @@ export const disableGodMode = async (): Promise<boolean> => {
       .eq('user_id', user.id);
 
     if (error) {
-      console.error('❌ [GodMode] Failed to disable God mode:', error);
+      Logger.error('❌ [GodMode] Failed to disable God mode:', error);
       return false;
     }
 
-    console.log('👤 [GodMode] God mode disabled. Refresh the page.');
+    Logger.debug('👤 [GodMode] God mode disabled. Refresh the page.');
     return true;
 
   } catch (error) {
-    console.error('❌ [GodMode] Error disabling God mode:', error);
+    Logger.error('❌ [GodMode] Error disabling God mode:', error);
     return false;
   }
 };
@@ -85,7 +86,7 @@ export const checkUserTier = async (): Promise<string | null> => {
     const { data: { user } } = await supabase.auth.getUser();
     
     if (!user) {
-      console.log('❌ [GodMode] No authenticated user found');
+      Logger.debug('❌ [GodMode] No authenticated user found');
       return null;
     }
 
@@ -96,11 +97,11 @@ export const checkUserTier = async (): Promise<string | null> => {
       .maybeSingle();
 
     const tier = profile?.user_tier || 'free';
-    console.log(`👤 [GodMode] Current user tier: ${tier}`);
+    Logger.debug(`👤 [GodMode] Current user tier: ${tier}`);
     return tier;
 
   } catch (error) {
-    console.error('❌ [GodMode] Error checking user tier:', error);
+    Logger.error('❌ [GodMode] Error checking user tier:', error);
     return null;
   }
 };
@@ -111,8 +112,8 @@ if (typeof window !== 'undefined' && process.env.NODE_ENV === 'development') {
   (window as any).disableGodMode = disableGodMode;
   (window as any).checkUserTier = checkUserTier;
   
-  console.log('🔥 [GodMode] Development utilities loaded:');
-  console.log('  - enableGodMode() - Enable God mode access');
-  console.log('  - disableGodMode() - Disable God mode access'); 
-  console.log('  - checkUserTier() - Check current user tier');
+  Logger.debug('🔥 [GodMode] Development utilities loaded:');
+  Logger.debug('  - enableGodMode() - Enable God mode access');
+  Logger.debug('  - disableGodMode() - Disable God mode access'); 
+  Logger.debug('  - checkUserTier() - Check current user tier');
 }
