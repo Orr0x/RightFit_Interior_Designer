@@ -5,6 +5,7 @@ import { initializeCoordinateEngine } from '@/services/CoordinateTransformEngine
 import { Logger } from '@/utils/Logger';
 
 interface UseCanvasStateProps {
+  roomId: string;
   roomType: string;
   roomDimensions: { width: number; height: number };
   fitToScreenSignal?: number;
@@ -38,6 +39,7 @@ interface UseCanvasStateReturn {
  * Extracted from DesignCanvas2D.tsx as part of Story 1.15.3
  */
 export function useCanvasState({
+  roomId,
   roomType,
   roomDimensions,
   fitToScreenSignal,
@@ -70,7 +72,7 @@ export function useCanvasState({
           depth: roomDimensions.height, // Legacy: room "height" is actually depth
           height: 240, // Default room height in cm
         });
-        Logger.log('✅ Coordinate engine initialized', roomDimensions);
+        Logger.debug('✅ Coordinate engine initialized', roomDimensions);
       } catch (error) {
         Logger.error('❌ Failed to initialize coordinate engine', error);
       }
@@ -79,15 +81,15 @@ export function useCanvasState({
 
   // Load room geometry for complex rooms
   useEffect(() => {
-    if (!roomType) return;
+    if (!roomId) return;
 
     const loadGeometry = async () => {
       setLoadingGeometry(true);
       try {
-        const template = await RoomService.getRoomGeometryTemplate(roomType as any);
-        if (template) {
-          Logger.log('✅ Loaded room geometry template', template);
-          setRoomGeometry(template);
+        const geometry = await RoomService.getRoomGeometry(roomId);
+        if (geometry) {
+          Logger.debug('✅ Loaded room geometry', { roomId, shape: geometry.shape_type });
+          setRoomGeometry(geometry as RoomGeometry);
         } else {
           setRoomGeometry(null);
         }
@@ -100,13 +102,13 @@ export function useCanvasState({
     };
 
     loadGeometry();
-  }, [roomType]);
+  }, [roomId]);
 
   // Reset view to default state
   const resetView = useCallback(() => {
     setZoom(1.0);
     setPanOffset({ x: 0, y: 0 });
-    Logger.log('🔄 Canvas view reset');
+    Logger.debug('🔄 Canvas view reset');
   }, []);
 
   // Fit canvas to screen
@@ -125,7 +127,7 @@ export function useCanvasState({
     setZoom(newZoom);
     setPanOffset({ x: 0, y: 0 });
 
-    Logger.log('📐 Fit to screen', { zoom: newZoom, container: { containerWidth, containerHeight } });
+    Logger.debug('📐 Fit to screen', { zoom: newZoom, container: { containerWidth, containerHeight } });
   }, [roomDimensions]);
 
   // Handle fit-to-screen signal from parent

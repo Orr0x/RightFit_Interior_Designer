@@ -208,6 +208,7 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
     touchZoomStart,
     setTouchZoomStart,
   } = useCanvasState({
+    roomId: design.id,
     roomType: design.roomType,
     roomDimensions: design.roomDimensions,
     fitToScreenSignal,
