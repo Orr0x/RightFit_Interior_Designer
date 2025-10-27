@@ -1127,14 +1127,6 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
       return aZ - bZ;
     });
 
-    // Debug logging for layering order (temporary - remove after fixing)
-    console.log(`[DrawOrder] Rendering ${elementsToRender.length} elements in Z-index order:`,
-      elementsToRender.map(el => {
-        const calculatedZ = el.zIndex && el.zIndex !== 0 ? el.zIndex : getDefaultZIndex(el.type, el.id);
-        return `${el.id.split('-')[0]} (${el.type}): stored=${el.zIndex} → using=${calculatedZ}`;
-      })
-    );
-
     // Use for...of loop to handle async drawElement calls
     elementsToRender.forEach(element => {
       // Always draw all elements, but make dragged element semi-transparent

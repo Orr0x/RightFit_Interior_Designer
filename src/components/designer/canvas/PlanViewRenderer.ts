@@ -173,9 +173,6 @@ function getLayerColor(element: DesignElement): string {
     z = getDefaultZIndex(element.type, element.id);
   }
 
-  // Debug logging (temporary - remove after fixing)
-  console.log(`[LayerColor] Element ${element.id} (${element.type}) has zIndex: ${element.zIndex} → using: ${z}`);
-
   // Special case: Tall units (larders) should match wall cabinets visually
   // even though they're floor-standing (Z: 2.0)
   const isTallUnit = element.id && (
