@@ -953,6 +953,7 @@ const Designer = () => {
                         onDeleteElement={handleDeleteElement}
                         onUpdateRoomDimensions={handleUpdateRoomDimensions}
                         onAddElement={handleAddElement}
+                        updateCurrentRoomDesign={updateCurrentRoomDesign}
                         showGrid={showGrid}
                         showRuler={showRuler}
                         showWireframe={showWireframe}

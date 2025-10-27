@@ -51,6 +51,7 @@ interface DesignCanvas2DProps {
   onDeleteElement: (elementId: string) => void;
   onUpdateRoomDimensions: (dimensions: { width: number; height: number }) => void;
   onAddElement: (element: DesignElement) => void;
+  updateCurrentRoomDesign?: (updateFn: (design: Design) => Design) => void;
   showGrid?: boolean;
   showRuler?: boolean;
   showWireframe?: boolean;
@@ -166,6 +167,7 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
   onSelectElement,
   onUpdateElement,
   onAddElement,
+  updateCurrentRoomDesign,
   showGrid = true,
   showRuler = false,
   showWireframe = false,
@@ -270,6 +272,11 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
   const effectiveCurrentMeasureStart = currentMeasureStart !== undefined ? currentMeasureStart : localCurrentMeasureStart;
   const effectiveTapeMeasurePreview = tapeMeasurePreview !== undefined ? tapeMeasurePreview : localTapeMeasurePreview;
   const effectiveCompletedMeasurements = completedMeasurements !== undefined ? completedMeasurements : localCompletedMeasurements;
+
+  // Provide fallback for updateCurrentRoomDesign if not passed (noop for standalone usage)
+  const effectiveUpdateCurrentRoomDesign = updateCurrentRoomDesign || ((updateFn: (design: Design) => Design) => {
+    Logger.warn('⚠️ updateCurrentRoomDesign not provided - changes will not persist');
+  });
 
   // Collision detection with type-aware magnetic snapping
   const { validatePlacement } = useCollisionDetection();
@@ -1016,7 +1023,7 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
       setTapeMeasurePreview,
       setCompletedMeasurements,
       setSnapGuides,
-      updateCurrentRoomDesign,
+      updateCurrentRoomDesign: effectiveUpdateCurrentRoomDesign,
       onUpdateElement,
       showToast: ({ title, description, variant }) => toast({ title, description, variant }),
       requestRender: () => requestAnimationFrame(() => render())
@@ -1044,7 +1051,7 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
     activeTool, effectiveCurrentMeasureStart, effectiveTapeMeasurePreview, effectiveCompletedMeasurements, configCache,
     onSelectElement, setHoveredElement, setIsDragging, setDraggedElement, setDraggedElementOriginalPos,
     setDragStart, setDragThreshold, setCurrentMousePos, setPanOffset, setCurrentMeasureStart,
-    setTapeMeasurePreview, setCompletedMeasurements, setSnapGuides, updateCurrentRoomDesign,
+    setTapeMeasurePreview, setCompletedMeasurements, setSnapGuides, effectiveUpdateCurrentRoomDesign,
     onUpdateElement, toast, render, canvasToRoom, roomToCanvas, getElementWall, isCornerVisibleInView,
     getComponentMetadata, getSnapPosition, validatePlacement, innerRoomBounds
   ]);
@@ -1074,7 +1081,7 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
       setSelectedElement: onSelectElement, setHoveredElement, setIsDragging, setDraggedElement,
       setDraggedElementOriginalPos, setDragStart, setDragThreshold, setCurrentMousePos, setPanOffset,
       setCurrentMeasureStart, setTapeMeasurePreview, setCompletedMeasurements, setSnapGuides,
-      updateCurrentRoomDesign, onUpdateElement,
+      updateCurrentRoomDesign: effectiveUpdateCurrentRoomDesign, onUpdateElement,
       showToast: ({ title, description, variant }) => toast({ title, description, variant }),
       requestRender: () => requestAnimationFrame(() => render())
     };
@@ -1092,7 +1099,7 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
     activeTool, effectiveCurrentMeasureStart, effectiveTapeMeasurePreview, effectiveCompletedMeasurements, configCache,
     onSelectElement, setHoveredElement, setIsDragging, setDraggedElement, setDraggedElementOriginalPos,
     setDragStart, setDragThreshold, setCurrentMousePos, setPanOffset, setCurrentMeasureStart,
-    setTapeMeasurePreview, setCompletedMeasurements, setSnapGuides, updateCurrentRoomDesign,
+    setTapeMeasurePreview, setCompletedMeasurements, setSnapGuides, effectiveUpdateCurrentRoomDesign,
     onUpdateElement, toast, render, canvasToRoom, roomToCanvas, getElementWall, isCornerVisibleInView,
     getComponentMetadata, getSnapPosition, validatePlacement, innerRoomBounds
   ]);
@@ -1113,7 +1120,7 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
       setSelectedElement: onSelectElement, setHoveredElement, setIsDragging, setDraggedElement,
       setDraggedElementOriginalPos, setDragStart, setDragThreshold, setCurrentMousePos, setPanOffset,
       setCurrentMeasureStart, setTapeMeasurePreview, setCompletedMeasurements, setSnapGuides,
-      updateCurrentRoomDesign, onUpdateElement,
+      updateCurrentRoomDesign: effectiveUpdateCurrentRoomDesign, onUpdateElement,
       showToast: ({ title, description, variant }) => toast({ title, description, variant }),
       requestRender: () => requestAnimationFrame(() => render())
     };
@@ -1131,7 +1138,7 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
     activeTool, effectiveCurrentMeasureStart, effectiveTapeMeasurePreview, effectiveCompletedMeasurements, configCache,
     onSelectElement, setHoveredElement, setIsDragging, setDraggedElement, setDraggedElementOriginalPos,
     setDragStart, setDragThreshold, setCurrentMousePos, setPanOffset, setCurrentMeasureStart,
-    setTapeMeasurePreview, setCompletedMeasurements, setSnapGuides, updateCurrentRoomDesign,
+    setTapeMeasurePreview, setCompletedMeasurements, setSnapGuides, effectiveUpdateCurrentRoomDesign,
     onUpdateElement, toast, render, canvasToRoom, roomToCanvas, getElementWall, isCornerVisibleInView,
     getComponentMetadata, getSnapPosition, validatePlacement, innerRoomBounds
   ]);
@@ -1149,7 +1156,7 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
         setSelectedElement: onSelectElement, setHoveredElement, setIsDragging, setDraggedElement,
         setDraggedElementOriginalPos, setDragStart, setDragThreshold, setCurrentMousePos, setPanOffset,
         setCurrentMeasureStart, setTapeMeasurePreview, setCompletedMeasurements, setSnapGuides,
-        updateCurrentRoomDesign, onUpdateElement,
+        updateCurrentRoomDesign: effectiveUpdateCurrentRoomDesign, onUpdateElement,
         showToast: ({ title, description, variant }) => toast({ title, description, variant }),
         requestRender: () => requestAnimationFrame(() => render())
       };
@@ -1167,7 +1174,7 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
       activeTool, effectiveCurrentMeasureStart, effectiveTapeMeasurePreview, effectiveCompletedMeasurements, configCache,
       onSelectElement, setHoveredElement, setIsDragging, setDraggedElement, setDraggedElementOriginalPos,
       setDragStart, setDragThreshold, setCurrentMousePos, setPanOffset, setCurrentMeasureStart,
-      setTapeMeasurePreview, setCompletedMeasurements, setSnapGuides, updateCurrentRoomDesign,
+      setTapeMeasurePreview, setCompletedMeasurements, setSnapGuides, effectiveUpdateCurrentRoomDesign,
       onUpdateElement, toast, render, canvasToRoom, roomToCanvas, getElementWall, isCornerVisibleInView,
       getComponentMetadata, getSnapPosition, validatePlacement, innerRoomBounds
     ]),
@@ -1183,7 +1190,7 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
         setSelectedElement: onSelectElement, setHoveredElement, setIsDragging, setDraggedElement,
         setDraggedElementOriginalPos, setDragStart, setDragThreshold, setCurrentMousePos, setPanOffset,
         setCurrentMeasureStart, setTapeMeasurePreview, setCompletedMeasurements, setSnapGuides,
-        updateCurrentRoomDesign, onUpdateElement,
+        updateCurrentRoomDesign: effectiveUpdateCurrentRoomDesign, onUpdateElement,
         showToast: ({ title, description, variant }) => toast({ title, description, variant }),
         requestRender: () => requestAnimationFrame(() => render())
       };
@@ -1201,7 +1208,7 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
       activeTool, effectiveCurrentMeasureStart, effectiveTapeMeasurePreview, effectiveCompletedMeasurements, configCache,
       onSelectElement, setHoveredElement, setIsDragging, setDraggedElement, setDraggedElementOriginalPos,
       setDragStart, setDragThreshold, setCurrentMousePos, setPanOffset, setCurrentMeasureStart,
-      setTapeMeasurePreview, setCompletedMeasurements, setSnapGuides, updateCurrentRoomDesign,
+      setTapeMeasurePreview, setCompletedMeasurements, setSnapGuides, effectiveUpdateCurrentRoomDesign,
       onUpdateElement, toast, render, canvasToRoom, roomToCanvas, getElementWall, isCornerVisibleInView,
       getComponentMetadata, getSnapPosition, validatePlacement, innerRoomBounds
     ]),
@@ -1217,7 +1224,7 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
         setSelectedElement: onSelectElement, setHoveredElement, setIsDragging, setDraggedElement,
         setDraggedElementOriginalPos, setDragStart, setDragThreshold, setCurrentMousePos, setPanOffset,
         setCurrentMeasureStart, setTapeMeasurePreview, setCompletedMeasurements, setSnapGuides,
-        updateCurrentRoomDesign, onUpdateElement,
+        updateCurrentRoomDesign: effectiveUpdateCurrentRoomDesign, onUpdateElement,
         showToast: ({ title, description, variant }) => toast({ title, description, variant }),
         requestRender: () => requestAnimationFrame(() => render())
       };
@@ -1235,7 +1242,7 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
       activeTool, effectiveCurrentMeasureStart, effectiveTapeMeasurePreview, effectiveCompletedMeasurements, configCache,
       onSelectElement, setHoveredElement, setIsDragging, setDraggedElement, setDraggedElementOriginalPos,
       setDragStart, setDragThreshold, setCurrentMousePos, setPanOffset, setCurrentMeasureStart,
-      setTapeMeasurePreview, setCompletedMeasurements, setSnapGuides, updateCurrentRoomDesign,
+      setTapeMeasurePreview, setCompletedMeasurements, setSnapGuides, effectiveUpdateCurrentRoomDesign,
       onUpdateElement, toast, render, canvasToRoom, roomToCanvas, getElementWall, isCornerVisibleInView,
       getComponentMetadata, getSnapPosition, validatePlacement, innerRoomBounds
     ]),
@@ -1326,7 +1333,7 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
       setTapeMeasurePreview,
       setCompletedMeasurements,
       setSnapGuides,
-      updateCurrentRoomDesign,
+      updateCurrentRoomDesign: effectiveUpdateCurrentRoomDesign,
       onUpdateElement,
       onAddElement,
       showToast: ({ title, description, variant }) => toast({ title, description, variant }),
