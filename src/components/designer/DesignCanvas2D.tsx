@@ -1120,10 +1120,20 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
     });
 
     // Sort elements by zIndex for proper layering (lower zIndex = drawn first/behind)
-    elementsToRender.sort((a, b) => (a.zIndex || 0) - (b.zIndex || 0));
+    // Use getDefaultZIndex fallback for elements with zIndex: 0 (legacy elements)
+    elementsToRender.sort((a, b) => {
+      const aZ = a.zIndex && a.zIndex !== 0 ? a.zIndex : getDefaultZIndex(a.type, a.id);
+      const bZ = b.zIndex && b.zIndex !== 0 ? b.zIndex : getDefaultZIndex(b.type, b.id);
+      return aZ - bZ;
+    });
 
-    // Debug logging for layering order (disabled - causes console spam)
-    // Uncomment for debugging: Logger.debug(`🎯 [Rendering] Elements in order:`, elementsToRender.map(el => `${el.id} (${el.type}) -> zIndex: ${el.zIndex}`));
+    // Debug logging for layering order (temporary - remove after fixing)
+    console.log(`[DrawOrder] Rendering ${elementsToRender.length} elements in Z-index order:`,
+      elementsToRender.map(el => {
+        const calculatedZ = el.zIndex && el.zIndex !== 0 ? el.zIndex : getDefaultZIndex(el.type, el.id);
+        return `${el.id.split('-')[0]} (${el.type}): stored=${el.zIndex} → using=${calculatedZ}`;
+      })
+    );
 
     // Use for...of loop to handle async drawElement calls
     elementsToRender.forEach(element => {

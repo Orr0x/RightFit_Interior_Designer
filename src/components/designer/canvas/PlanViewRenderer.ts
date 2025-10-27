@@ -176,12 +176,26 @@ function getLayerColor(element: DesignElement): string {
   // Debug logging (temporary - remove after fixing)
   console.log(`[LayerColor] Element ${element.id} (${element.type}) has zIndex: ${element.zIndex} → using: ${z}`);
 
+  // Special case: Tall units (larders) should match wall cabinets visually
+  // even though they're floor-standing (Z: 2.0)
+  const isTallUnit = element.id && (
+    element.id.includes('tall') ||
+    element.id.includes('larder') ||
+    element.id.includes('corner-tall') ||
+    element.id.includes('corner-larder') ||
+    element.id.includes('larder-corner')
+  );
+
   // Layer-based color scheme (brown tones)
   if (z <= 1.0) {
     // Flooring layer
     return '#d4a574'; // Light tan/beige
   } else if (z <= 2.5) {
-    // Base cabinets, appliances, tall units
+    // Base cabinets, appliances
+    // BUT: Tall units get wall cabinet color despite being floor-standing
+    if (isTallUnit) {
+      return '#6b4423'; // Dark brown (same as wall cabinets)
+    }
     return '#a67c52'; // Medium brown
   } else if (z <= 3.5) {
     // Counter tops, sinks
