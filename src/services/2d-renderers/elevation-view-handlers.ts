@@ -581,7 +581,7 @@ function renderCornerCabinetDoors(
 
   const manualOverride = element.cornerDoorSide ?? data.corner_door_side;
 
-  const { doorSide, cornerPosition } = CornerCabinetDoorMatrix.determineCornerDoorSide(
+  const { doorSide: physicalDoorSide, cornerPosition } = CornerCabinetDoorMatrix.determineCornerDoorSide(
     {
       x: element.x,
       y: element.y,
@@ -595,9 +595,17 @@ function renderCornerCabinetDoors(
     }
   );
 
+  // Transform door side for current view (LEFT/RIGHT views need flipping)
+  const doorSide = CornerCabinetDoorMatrix.transformDoorSideForView(
+    physicalDoorSide,
+    cornerPosition,
+    currentView
+  );
+
   // Debug logging (development mode only)
   if (process.env.NODE_ENV === 'development') {
-    console.log(`🚪 [Door Matrix] ${element.id} | Corner: ${cornerPosition || 'none'} | Door: ${doorSide} | View: ${currentView}`);
+    const transformed = physicalDoorSide !== doorSide ? ` → ${doorSide} (transformed)` : '';
+    console.log(`🚪 [Door Matrix] ${element.id} | Corner: ${cornerPosition || 'none'} | Physical: ${physicalDoorSide}${transformed} | View: ${currentView}`);
   }
 
   // Calculate door and panel widths

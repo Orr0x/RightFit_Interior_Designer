@@ -116,4 +116,67 @@ export class CornerCabinetDoorMatrix {
 
     return { doorSide, cornerPosition };
   }
+
+  /**
+   * Transform door side for specific elevation view
+   *
+   * The matrix returns physical door orientation (which wall the door faces away from).
+   * But when rendering from different elevation views, we need to transform this
+   * to the correct visual position.
+   *
+   * Example: A front-left corner has door='right' (away from left wall).
+   * - FRONT view: Door renders on right side ✓
+   * - LEFT view: Door physically faces right, but viewed from left wall it appears on left side
+   *
+   * @param doorSide - Physical door side from matrix
+   * @param cornerPosition - Corner position (front-left, etc.)
+   * @param currentView - Current elevation view (front, back, left, right)
+   * @returns Transformed door side for rendering in this view
+   */
+  static transformDoorSideForView(
+    doorSide: DoorSide,
+    cornerPosition: CornerPosition | null,
+    currentView: string | undefined
+  ): DoorSide {
+    if (!cornerPosition || !currentView) {
+      return doorSide; // No transformation needed
+    }
+
+    // Extract base view direction (remove '-default', '-dup1', etc.)
+    const viewDirection = currentView.split('-')[0] as 'front' | 'back' | 'left' | 'right';
+
+    // LEFT and RIGHT views are MIRRORS - they need OPPOSITE transformations
+    //
+    // RIGHT elevation (looking at right wall from inside room):
+    // - Front-right corner: On LEFT side of view → FLIP door side
+    // - Back-right corner: On RIGHT side of view → NO FLIP
+    //
+    // LEFT elevation (looking at left wall from inside room) - MIRROR of right:
+    // - Front-left corner: On LEFT side of view → NO FLIP (opposite of right)
+    // - Back-left corner: On RIGHT side of view → FLIP (opposite of right)
+
+    if (viewDirection === 'left') {
+      // LEFT elevation: Looking at left wall (MIRROR of right elevation)
+      if (cornerPosition === 'back-left') {
+        // Back-left corner: On the RIGHT side of view (near back wall)
+        // Matrix says 'right' (away from left wall), flip it to 'left'
+        return doorSide === 'right' ? 'left' : 'right';
+      }
+      // front-left: NO transformation needed
+    }
+
+    if (viewDirection === 'right') {
+      // RIGHT elevation: Looking at right wall
+      if (cornerPosition === 'front-right') {
+        // Front-right corner: On the LEFT side of view (near front wall)
+        // Matrix says 'left' (away from right wall), flip it to 'right'
+        return doorSide === 'left' ? 'right' : 'left';
+      }
+      // back-right: NO transformation needed
+    }
+
+    // FRONT and BACK views: No transformation needed
+    // The matrix orientation matches the rendering orientation
+    return doorSide;
+  }
 }
