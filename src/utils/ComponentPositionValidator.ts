@@ -89,10 +89,10 @@ export class ComponentPositionValidator {
     // Window level (Z = 100cm, above 90cm worktop)
     'window': 100,
 
-    // Wall cabinet level (Z = 140-210cm)
+    // Wall cabinet level (Z = 130-210cm)
     'wall-unit-end-panel': 140, // Match wall cabinet start
     'cornice': 210,              // Above wall cabinets (at top)
-    'pelmet': 140,               // Below wall cabinets (at bottom)
+    'pelmet': 130,               // Below wall cabinets (at bottom, corrected from 140)
 
     // Sink level (Z = 65-75cm, varies by type)
     'sink': 75, // Kitchen sink default, butler sinks use 65cm

@@ -35,7 +35,15 @@ export function renderStandardCabinet(
 ): void {
   // Configuration with defaults
   const doorStyle = data.door_style ?? 'flat';
-  const handleStyle = data.handle_style ?? 'bar';
+
+  // ✨ FIX: Finishing components (cornice, pelmet, end panels) shouldn't have handles
+  const isFinishingComponent = element.component_id?.includes('cornice') ||
+                                element.component_id?.includes('pelmet') ||
+                                element.component_id?.includes('end-panel') ||
+                                element.type === 'cornice' ||
+                                element.type === 'pelmet';
+
+  const handleStyle = isFinishingComponent ? 'none' : (data.handle_style ?? 'bar');
   const handlePosition = data.handle_position ?? 'center';
 
   // ✨ FIX: Toe kicks only for base cabinets (floor-mounted)
@@ -77,12 +85,19 @@ export function renderStandardCabinet(
 
   // ✨ FIX: Door count logic - ALWAYS use width-based, IGNORE database
   // Database has incorrect door_count values. Use industry standard exclusively:
+  // - Finishing components (cornice, pelmet): No doors (solid panels)
   // - Drawer units (drawer_count > 0): No doors, only drawer fronts
   // - Standard cabinets: Width-based (≤60cm=1 door, >60cm=2 doors)
   // - Corner cabinets: 1 door (handled separately in renderCornerCabinetDoors)
   let doorCount: number;
 
-  if (drawerCount > 0) {
+  if (isFinishingComponent) {
+    // Finishing components: No doors, just solid panels
+    doorCount = 0;
+    if (process.env.NODE_ENV === 'development') {
+      console.log(`🎨 [Finishing Component] ${element.component_id}: No doors, solid panel`);
+    }
+  } else if (drawerCount > 0) {
     // Drawer units: No doors, only drawer fronts
     doorCount = 0;
     if (process.env.NODE_ENV === 'development') {
@@ -166,12 +181,13 @@ export function renderStandardCabinet(
         drawerHeight
       );
 
-      // Drawer handle (centered horizontally, vertically on drawer)
+      // Drawer handle (centered, rotated 90° - vertical for drawers)
       if (handleStyle !== 'none') {
         ctx.fillStyle = handleColor;
-        const handleX = x + width / 2 - handleWidth / 2;
-        const handleY = currentY + drawerHeight / 2 - handleHeight / 2;
-        ctx.fillRect(handleX, handleY, handleWidth, handleHeight);
+        // Swap dimensions for vertical orientation (10px wide, 2px tall becomes 2px wide, 10px tall)
+        const handleX = x + width / 2 - handleHeight / 2;
+        const handleY = currentY + drawerHeight / 2 - handleWidth / 2;
+        ctx.fillRect(handleX, handleY, handleHeight, handleWidth);
       }
 
       currentY += drawerHeight + doorGap;
