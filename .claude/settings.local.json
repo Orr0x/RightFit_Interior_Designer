@@ -28,7 +28,10 @@
       "Bash(else echo \"File not found\")",
       "Read(//c/Users/james/Downloads/**)",
       "Bash(npm run test:run:*)",
-      "Bash(npx tsc:*)"
+      "Bash(npx tsc:*)",
+      "Bash(npm run test:coverage:*)",
+      "Bash(npm run test:unit:*)",
+      "Bash(npx vitest:*)"
     ],
     "deny": [],
     "ask": []

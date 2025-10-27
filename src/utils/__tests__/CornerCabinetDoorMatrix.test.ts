@@ -179,4 +179,78 @@ describe('CornerCabinetDoorMatrix', () => {
       });
     });
   });
+
+  describe('transformDoorSideForView', () => {
+    describe('Front View - No Transformation', () => {
+      it('should not transform door side in front view', () => {
+        expect(CornerCabinetDoorMatrix.transformDoorSideForView('left', 'front-left', 'front')).toBe('left');
+        expect(CornerCabinetDoorMatrix.transformDoorSideForView('right', 'front-right', 'front')).toBe('right');
+        expect(CornerCabinetDoorMatrix.transformDoorSideForView('left', 'front-left', 'front-default')).toBe('left');
+      });
+    });
+
+    describe('Back View - No Transformation', () => {
+      it('should not transform door side in back view', () => {
+        expect(CornerCabinetDoorMatrix.transformDoorSideForView('left', 'back-left', 'back')).toBe('left');
+        expect(CornerCabinetDoorMatrix.transformDoorSideForView('right', 'back-right', 'back')).toBe('right');
+        expect(CornerCabinetDoorMatrix.transformDoorSideForView('left', 'back-left', 'back-default')).toBe('left');
+      });
+    });
+
+    describe('Left View - Mirror Transformation', () => {
+      it('should transform back-left corner door sides', () => {
+        // Back-left corner: On RIGHT side of left elevation view
+        // Matrix says 'right' (away from left wall), flip it to 'left'
+        expect(CornerCabinetDoorMatrix.transformDoorSideForView('right', 'back-left', 'left')).toBe('left');
+        expect(CornerCabinetDoorMatrix.transformDoorSideForView('left', 'back-left', 'left')).toBe('right');
+      });
+
+      it('should not transform front-left corner door sides', () => {
+        // Front-left corner: No transformation needed
+        expect(CornerCabinetDoorMatrix.transformDoorSideForView('left', 'front-left', 'left')).toBe('left');
+        expect(CornerCabinetDoorMatrix.transformDoorSideForView('right', 'front-left', 'left')).toBe('right');
+      });
+
+      it('should handle view suffixes in left view', () => {
+        expect(CornerCabinetDoorMatrix.transformDoorSideForView('right', 'back-left', 'left-default')).toBe('left');
+        expect(CornerCabinetDoorMatrix.transformDoorSideForView('right', 'back-left', 'left-dup1')).toBe('left');
+      });
+    });
+
+    describe('Right View - Transformation', () => {
+      it('should transform front-right corner door sides', () => {
+        // Front-right corner: On LEFT side of right elevation view
+        // Matrix says 'left' (away from right wall), flip it to 'right'
+        expect(CornerCabinetDoorMatrix.transformDoorSideForView('left', 'front-right', 'right')).toBe('right');
+        expect(CornerCabinetDoorMatrix.transformDoorSideForView('right', 'front-right', 'right')).toBe('left');
+      });
+
+      it('should not transform back-right corner door sides', () => {
+        // Back-right corner: No transformation needed
+        expect(CornerCabinetDoorMatrix.transformDoorSideForView('left', 'back-right', 'right')).toBe('left');
+        expect(CornerCabinetDoorMatrix.transformDoorSideForView('right', 'back-right', 'right')).toBe('right');
+      });
+
+      it('should handle view suffixes in right view', () => {
+        expect(CornerCabinetDoorMatrix.transformDoorSideForView('left', 'front-right', 'right-default')).toBe('right');
+        expect(CornerCabinetDoorMatrix.transformDoorSideForView('left', 'front-right', 'right-dup1')).toBe('right');
+      });
+    });
+
+    describe('Edge Cases', () => {
+      it('should return original door side when corner position is null', () => {
+        expect(CornerCabinetDoorMatrix.transformDoorSideForView('left', null, 'front')).toBe('left');
+        expect(CornerCabinetDoorMatrix.transformDoorSideForView('right', null, 'back')).toBe('right');
+      });
+
+      it('should return original door side when view is undefined', () => {
+        expect(CornerCabinetDoorMatrix.transformDoorSideForView('left', 'front-left', undefined)).toBe('left');
+        expect(CornerCabinetDoorMatrix.transformDoorSideForView('right', 'back-right', undefined)).toBe('right');
+      });
+
+      it('should return original door side when both are null/undefined', () => {
+        expect(CornerCabinetDoorMatrix.transformDoorSideForView('left', null, undefined)).toBe('left');
+      });
+    });
+  });
 });
