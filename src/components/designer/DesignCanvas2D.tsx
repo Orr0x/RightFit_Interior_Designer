@@ -19,8 +19,30 @@ import { useComponentMetadata } from '@/hooks/useComponentMetadata';
 import { useToast } from '@/hooks/use-toast';
 import { Logger } from '@/utils/Logger';
 
-// Throttle function for performance optimization
-const throttle = <T extends (...args: any[]) => void>(func: T, delay: number): T => {
+// Story 1.15: Modular canvas rendering
+import * as PlanViewRenderer from './canvas/PlanViewRenderer';
+import * as ElevationViewRenderer from './canvas/ElevationViewRenderer';
+import {
+  CANVAS_WIDTH,
+  CANVAS_HEIGHT,
+  GRID_SIZE,
+  MIN_ZOOM,
+  MAX_ZOOM,
+  WALL_THICKNESS,
+  WALL_CLEARANCE,
+  WALL_SNAP_THRESHOLD,
+  throttle,
+  isPointInRotatedComponent,
+  getWallSnappedPosition,
+  snapToGrid,
+  calculateRoomPosition,
+  isCornerComponent,
+  getEffectiveDimensions,
+  getElementZIndex
+} from './canvas/CanvasSharedUtilities';
+
+// LEGACY: Keep local throttle for now (can be removed after full migration)
+const throttle_legacy = <T extends (...args: any[]) => void>(func: T, delay: number): T => {
   let timeoutId: NodeJS.Timeout | null = null;
   let lastExecTime = 0;
   return ((...args: any[]) => {
@@ -106,164 +128,17 @@ const getRoomConfig = async (roomType: string, roomDimensions: any) => {
   }
 };
 
-// Canvas constants - Default fallbacks (database-driven via ConfigurationService)
-const CANVAS_WIDTH = 1600; // Larger workspace for better zoom
-const CANVAS_HEIGHT = 1200; // Larger workspace for better zoom
-const GRID_SIZE = 20; // Grid spacing in pixels
-const MIN_ZOOM = 0.5;
-const MAX_ZOOM = 4.0; // Increased to take advantage of larger canvas
+// Canvas constants - Now imported from CanvasSharedUtilities (Story 1.15)
+// REMOVED: Duplicate constants moved to shared module
+// See: src/components/designer/canvas/CanvasSharedUtilities.ts
 
-// Wall thickness constants to match 3D implementation - Default fallbacks
-const WALL_THICKNESS = 10; // 10cm wall thickness (matches 3D: 0.1 meters)
-const WALL_CLEARANCE = 5; // 5cm clearance from walls for component placement
-const WALL_SNAP_THRESHOLD = 40; // Snap to wall if within 40cm
-
-// Configuration cache - loaded from database on component mount
+// Configuration cache - loaded from database on component mont
 let configCache: Record<string, number> = {};
 
-// Helper function to check if a point is inside a rotated component
-// Uses inverse rotation transform to check point in component's local space
-const isPointInRotatedComponent = (
-  pointX: number,
-  pointY: number,
-  element: DesignElement,
-  viewMode: 'plan' | 'elevation' = 'plan'
-) => {
-  if (viewMode === 'plan') {
-    // Plan view: use X/Y coordinates with rotation
-    const width = element.width;
-    const height = element.depth || element.height;
-    const rotation = (element.rotation || 0) * Math.PI / 180;
-
-    // Transform click point into component's local space
-    const centerX = element.x + width / 2;
-    const centerY = element.y + height / 2;
-
-    // Translate point to component center
-    const dx = pointX - centerX;
-    const dy = pointY - centerY;
-
-    // Rotate backwards (inverse rotation)
-    const cos = Math.cos(-rotation);
-    const sin = Math.sin(-rotation);
-    const localX = dx * cos - dy * sin;
-    const localY = dx * sin + dy * cos;
-
-    // Check if in un-rotated bounds
-    return Math.abs(localX) <= width / 2 && Math.abs(localY) <= height / 2;
-  } else {
-    // Elevation view: use X (horizontal) and Z (vertical) coordinates
-    const width = element.width;
-    const height = element.height || 86; // Use actual height for vertical dimension (updated from 90 to 86)
-    const z = element.z || 0;
-
-    // In elevation view, Z represents the mount height (bottom of element above floor)
-    // The element extends from z (bottom) to z + height (top)
-    const centerX = element.x + width / 2;
-    const bottomZ = z; // Bottom of element above floor
-    const topZ = z + height; // Top of element above floor
-
-    // Check if point is within bounds (no rotation in elevation view)
-    const isInHorizontalBounds = Math.abs(pointX - centerX) <= width / 2;
-    const isInVerticalBounds = pointY >= bottomZ && pointY <= topZ;
-
-    return isInHorizontalBounds && isInVerticalBounds;
-  }
-};
-
-// Smart Wall Snapping System with 5cm clearance
-const getWallSnappedPosition = (
-  dropX: number, 
-  dropY: number, 
-  componentWidth: number, 
-  componentDepth: number, 
-  roomWidth: number, 
-  roomHeight: number,
-  isCornerComponent: boolean = false
-) => {
-  let snappedX = dropX;
-  let snappedY = dropY;
-  let snappedToWall = false;
-
-  // For corner components, use 90x90 footprint
-  const effectiveWidth = isCornerComponent ? 90 : componentWidth;
-  const effectiveDepth = isCornerComponent ? 90 : componentDepth;
-
-  // Calculate wall snap positions with 5cm clearance
-  const leftWallX = WALL_CLEARANCE;
-  const rightWallX = roomWidth - effectiveWidth - WALL_CLEARANCE;
-  const topWallY = WALL_CLEARANCE;
-  const bottomWallY = roomHeight - effectiveDepth - WALL_CLEARANCE;
-
-  // Check for corner snapping first (higher priority)
-  if (isCornerComponent) {
-    const cornerThreshold = WALL_SNAP_THRESHOLD;
-    
-    // Top-left corner: (5, 5)
-    if (dropX <= cornerThreshold && dropY <= cornerThreshold) {
-      return { x: leftWallX, y: topWallY, snappedToWall: true, corner: 'top-left' };
-    }
-    
-    // Top-right corner: (505, 5) for 90cm component in 600cm room
-    if (dropX >= roomWidth - cornerThreshold && dropY <= cornerThreshold) {
-      return { x: rightWallX, y: topWallY, snappedToWall: true, corner: 'top-right' };
-    }
-    
-    // Bottom-left corner: (5, 310) for 90cm component in 400cm room
-    if (dropX <= cornerThreshold && dropY >= roomHeight - cornerThreshold) {
-      return { x: leftWallX, y: bottomWallY, snappedToWall: true, corner: 'bottom-left' };
-    }
-    
-    // Bottom-right corner: (505, 310)
-    if (dropX >= roomWidth - cornerThreshold && dropY >= roomHeight - cornerThreshold) {
-      return { x: rightWallX, y: bottomWallY, snappedToWall: true, corner: 'bottom-right' };
-    }
-  }
-
-  // Wall snapping for all components (including corners if not in corner zones)
-  // CRITICAL FIX: dropX/dropY represent component's TOP-LEFT corner position
-  // Check both the component's start edge AND end edge for wall proximity
-  
-  // Snap to left wall - check if component's left edge is near left wall
-  if (dropX <= WALL_SNAP_THRESHOLD) {
-    snappedX = leftWallX;
-    snappedToWall = true;
-  }
-  // Snap to right wall - check if component's right edge would be near right wall boundary
-  else if (dropX + effectiveWidth >= roomWidth - WALL_SNAP_THRESHOLD) {
-    snappedX = rightWallX;
-    snappedToWall = true;
-  }
-  // ADDITIONAL: Also check if the drop position itself is near the right boundary
-  // This handles cases where wide components are dropped near the right edge
-  else if (dropX >= roomWidth - WALL_SNAP_THRESHOLD - effectiveWidth) {
-    snappedX = rightWallX;
-    snappedToWall = true;
-  }
-
-  // Snap to top wall - check if component's top edge is near top wall  
-  if (dropY <= WALL_SNAP_THRESHOLD) {
-    snappedY = topWallY;
-    snappedToWall = true;
-  }
-  // Snap to bottom wall - check if component's bottom edge would be near bottom wall boundary
-  else if (dropY + effectiveDepth >= roomHeight - WALL_SNAP_THRESHOLD) {
-    snappedY = bottomWallY;
-    snappedToWall = true;
-  }
-  // ADDITIONAL: Also check if the drop position itself is near the bottom boundary  
-  else if (dropY >= roomHeight - WALL_SNAP_THRESHOLD - effectiveDepth) {
-    snappedY = bottomWallY;
-    snappedToWall = true;
-  }
-
-  return { 
-    x: snappedX, 
-    y: snappedY, 
-    snappedToWall, 
-    corner: null 
-  };
-};
+// Helper functions - Now imported from CanvasSharedUtilities (Story 1.15)
+// REMOVED: isPointInRotatedComponent() - now imported
+// REMOVED: getWallSnappedPosition() - now imported
+// See: src/components/designer/canvas/CanvasSharedUtilities.ts
 
 // Component behavior cache for performance
 const componentBehaviorCache = new Map<string, any>();
