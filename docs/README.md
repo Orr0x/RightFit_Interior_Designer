@@ -16,27 +16,37 @@
    - Success metrics and next steps
    - **Start here for understanding what work needs to be done**
 
+### AI Agent Guardrails
+
+2. **[AI-AGENT-GUARDRAILS.md](./AI-AGENT-GUARDRAILS.md)** - ⚠️ **CRITICAL: READ BEFORE MODIFYING POSITION/COORDINATE CODE** ⚠️
+   - Red flags that indicate circular pattern entry
+   - Required validation steps before position-related changes
+   - Testing checklist (plan + 4 elevations + 3D)
+   - Coordinate system transformation rules
+   - Examples of correct vs incorrect approaches
+   - **Must-read for any changes to coordinate transformation, position calculation, or rendering systems**
+
 ### Technical Analysis Documents
 
-2. **[brownfield-architecture.md](./brownfield-architecture.md)** - **System Architecture & Circular Patterns**
+3. **[brownfield-architecture.md](./brownfield-architecture.md)** - **System Architecture & Circular Patterns**
    - Complete architectural analysis by Winston (AI Architect)
    - Detailed breakdown of 5 circular dependency patterns
    - Dependency graphs and impact analysis
    - 1,430 lines of comprehensive technical analysis
 
-3. **[CODE_REVIEW_COMPREHENSIVE.md](./CODE_REVIEW_COMPREHENSIVE.md)** - **Critical Issues Analysis**
+4. **[CODE_REVIEW_COMPREHENSIVE.md](./CODE_REVIEW_COMPREHENSIVE.md)** - **Critical Issues Analysis**
    - Code review by James (Senior Developer)
    - 28 critical issues beyond the circular patterns
    - Security vulnerabilities, data integrity risks, performance problems
    - 1,248 lines of findings with severity ratings
 
-4. **[circular-patterns-fix-plan.md](./circular-patterns-fix-plan.md)** - **Step-by-Step Fix Instructions**
+5. **[circular-patterns-fix-plan.md](./circular-patterns-fix-plan.md)** - **Step-by-Step Fix Instructions**
    - Detailed implementation steps for all 5 circular pattern fixes
    - 30.5 hours of mapped work with dependencies
    - Code examples and validation steps
    - 2,100 lines of actionable fix plans
 
-5. **[coordinate-system-visual-guide.md](./coordinate-system-visual-guide.md)** - **Visual Transformation Guides**
+6. **[coordinate-system-visual-guide.md](./coordinate-system-visual-guide.md)** - **Visual Transformation Guides**
    - Visual diagrams of coordinate system transformations
    - Plan view, elevation views, and 3D view coordinate mappings
    - Testing procedures and debugging guides
@@ -44,7 +54,7 @@
 
 ### General Project Instructions
 
-6. **[../CLAUDE.md](../CLAUDE.md)** - **General Project Instructions**
+7. **[../CLAUDE.md](../CLAUDE.md)** - **General Project Instructions**
    - Project overview and architecture
    - Development commands and workflows
    - Key files and responsibilities

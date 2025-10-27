@@ -17,6 +17,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 **Authoritative Documentation:**
 - **[HANDOVER.md](./HANDOVER.md)** - 🔥 **START HERE IF CONTINUING SESSION** 🔥 (Complete context for next agent)
+- **[docs/AI-AGENT-GUARDRAILS.md](./docs/AI-AGENT-GUARDRAILS.md)** - ⚠️ **READ BEFORE MODIFYING POSITION/COORDINATE CODE** ⚠️ (Prevents circular patterns)
 - [docs/README.md](./docs/README.md) - Documentation index
 - [docs/prd.md](./docs/prd.md) - Technical Debt Remediation PRD (THE PLAN)
 - [docs/brownfield-architecture.md](./docs/brownfield-architecture.md) - System architecture
