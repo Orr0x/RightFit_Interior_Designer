@@ -32,7 +32,8 @@
       "Bash(npm run test:coverage:*)",
       "Bash(npm run test:unit:*)",
       "Bash(npx vitest:*)",
-      "Bash(npx playwright test:*)"
+      "Bash(npx playwright test:*)",
+      "Bash(ls:*)"
     ],
     "deny": [],
     "ask": []

@@ -2,7 +2,7 @@
 
 **Total Stories**: 17
 **Total Estimated Effort**: ~120 hours
-**Status**: 8/17 Complete (47%)
+**Status**: 12/17 Complete (71%)
 
 ---
 
@@ -13,14 +13,14 @@
 | [1.1](./1.1-typescript-types.md) | Regenerate TypeScript Types | P1 | 30 min | ✅ Complete |
 | [1.2](./1.2-coordinate-engine.md) | Implement CoordinateTransformEngine | P1 | 8h | ✅ Complete |
 | [1.3](./1.3-refactor-position-calculation.md) | Refactor PositionCalculation.ts | P1 | 4h | ✅ Complete |
-| [1.4](./1.4-update-enhanced-models-3d.md) | Update EnhancedModels3D | P1 | 4h | 🟡 Not Started |
+| [1.4](./1.4-update-enhanced-models-3d.md) | Update EnhancedModels3D | P1 | 4h | ✅ Complete |
 | [1.5](./1.5-update-design-canvas-2d.md) | Update DesignCanvas2D Plan View | P1 | 2h | ✅ Complete |
 | [1.6](./1.6-deep-equality-state.md) | Deep Equality State Check | P1 | 2h | ✅ Complete |
 | [1.7](./1.7-component-position-validator.md) | Component Position Validator | P2 | 3h | ✅ Complete |
 | [1.8](./1.8-z-audit.md) | Audit Component Library Z Positions | P2 | 5h | ✅ Complete |
-| [1.9](./1.9-simplify-height.md) | Simplify Height Property Usage | P2 | 3h | 🟡 Not Started |
-| [1.10](./1.10-door-matrix.md) | Implement CornerCabinetDoorMatrix | P2 | 3h | 🟡 Not Started |
-| [1.11](./1.11-refactor-door-handlers.md) | Refactor Elevation View Handlers | P2 | 2h | 🟡 Not Started |
+| [1.9](./1.9-simplify-height.md) | Simplify Height Property Usage | P2 | 3h | ✅ Complete |
+| [1.10](./1.10-door-matrix.md) | Implement CornerCabinetDoorMatrix | P2 | 3h | ✅ Complete |
+| [1.11](./1.11-refactor-door-handlers.md) | Refactor Elevation View Handlers | P2 | 2h | ✅ Complete |
 | [1.12](./1.12-test-infrastructure.md) | Establish Test Infrastructure | P1 | 40h | ✅ Complete |
 | [1.13](./1.13-structured-logging.md) | Remove Console Logs & Logging | P2 | 4h | 🟡 Not Started |
 | [1.14](./1.14-input-validation.md) | Implement Input Validation | P2 | 8h | 🟡 Not Started |
@@ -117,6 +117,10 @@ Story 1.1 (30min) - PREREQUISITE FOR ALL
 - Refactored elevation position calculations
 - Integrated with CoordinateTransformEngine
 
+### ✅ Story 1.4: Update EnhancedModels3D (Oct 26, 2025)
+- Integrated CoordinateTransformEngine into 3D rendering
+- Replaced manual `convertTo3D()` calculations
+
 ### ✅ Story 1.5: Update DesignCanvas2D (Oct 26, 2025)
 - Integrated CoordinateTransformEngine into plan view rendering
 
@@ -131,6 +135,21 @@ Story 1.1 (30min) - PREREQUISITE FOR ALL
 ### ✅ Story 1.8: Audit Component Library Z Positions (Oct 26, 2025)
 - Audited all component Z positions
 - Created corrective database migration
+
+### ✅ Story 1.9: Simplify Height Property Usage (Oct 27, 2025)
+- Created `ComponentService.getZPosition()` - single source of truth
+- Simplified elevation height calculations
+- Fixed 7 critical rendering bugs
+
+### ✅ Story 1.10: CornerCabinetDoorMatrix (Oct 27, 2025)
+- Implemented door orientation matrix utility
+- 46 tests with 100% coverage
+- "Door faces away from walls" principle
+
+### ✅ Story 1.11: Refactor Elevation View Handlers (Oct 27, 2025)
+- Replaced 58 lines of view-specific logic with matrix calls
+- Integrated CornerCabinetDoorMatrix
+- User confirmed: "all corner base, wall and tall larder units are now correct"
 
 ### ✅ Story 1.12: Test Infrastructure (Oct 27, 2025)
 - Configured Vitest and Playwright
