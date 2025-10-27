@@ -165,8 +165,13 @@ export function drawRoomPlanView(
  * Get color based on element's Z-index layer
  * Uses brown tones to differentiate between layers
  */
-function getLayerColor(zIndex: number | undefined): string {
+function getLayerColor(zIndex: number | undefined, elementId?: string): string {
   const z = zIndex || 0;
+
+  // Debug logging (temporary - remove after fixing)
+  if (elementId) {
+    console.log(`[LayerColor] Element ${elementId} has zIndex: ${zIndex} (using: ${z})`);
+  }
 
   // Layer-based color scheme (brown tones)
   if (z <= 1.0) {
@@ -229,7 +234,7 @@ export async function drawElementPlanView(
           ctx.fillStyle = '#b0b0b0';
         } else {
           // Use layer-based color scheme (brown tones by Z-index)
-          ctx.fillStyle = getLayerColor(element.zIndex);
+          ctx.fillStyle = getLayerColor(element.zIndex, element.id);
         }
 
         // Render using database-driven system
@@ -243,7 +248,7 @@ export async function drawElementPlanView(
     // Minimal fallback if database rendering failed
     if (!renderedByDatabase) {
       // Use layer-based color scheme (brown tones by Z-index)
-      ctx.fillStyle = getLayerColor(element.zIndex);
+      ctx.fillStyle = getLayerColor(element.zIndex, element.id);
       ctx.fillRect(0, 0, width, depth);
     }
   }
