@@ -182,67 +182,72 @@ export async function drawElementPlanView(
   // Save context state
   ctx.save();
 
-  // Translate and rotate for element
-  ctx.translate(pos.x, pos.y);
+  // Translate and rotate around element center (not corner!)
+  ctx.translate(pos.x + width / 2, pos.y + depth / 2);
   ctx.rotate((rotation * Math.PI) / 180);
+  ctx.translate(-width / 2, -depth / 2);
 
-  // Try database-driven rendering first
-  let renderedByDatabase = false;
-  try {
-    const renderDef = await render2DService.get2DRender(element.component_id);
-    if (renderDef) {
-      // Apply colors based on render mode
-      if (showWireframe) {
-        ctx.fillStyle = 'rgba(255, 255, 255, 0.1)';
-        ctx.strokeStyle = '#666';
-      } else if (!showColorDetail) {
-        ctx.fillStyle = '#d4d4d4';
-      } else {
-        ctx.fillStyle = renderDef.fill_color || element.color || '#8b4513';
+  // Check if this is a corner component (for rendering)
+  const isCornerComponent = element.id.includes('corner-');
+
+  // COLOR DETAIL RENDERING (if enabled)
+  if (showColorDetail) {
+    let renderedByDatabase = false;
+    try {
+      const renderDef = await render2DService.get2DRender(element.component_id);
+      if (renderDef) {
+        // Apply selection/hover colors
+        if (isSelected) {
+          ctx.fillStyle = '#ff6b6b';
+        } else if (isHovered) {
+          ctx.fillStyle = '#b0b0b0';
+        } else {
+          ctx.fillStyle = renderDef.fill_color || element.color || '#8b4513';
+        }
+
+        // Render using database-driven system
+        renderPlanView(ctx, element, renderDef, zoom);
+        renderedByDatabase = true;
       }
-
-      // Render using database-driven system
-      renderPlanView(ctx, element, renderDef, zoom);
-      renderedByDatabase = true;
+    } catch (error) {
+      Logger.warn('[PlanViewRenderer] Database rendering failed, falling back to legacy:', error);
     }
-  } catch (error) {
-    Logger.warn('[PlanViewRenderer] Database rendering failed, falling back to legacy:', error);
-  }
 
-  // Fallback to simple rectangle if database rendering failed
-  if (!renderedByDatabase) {
-    if (showWireframe) {
-      ctx.fillStyle = 'rgba(255, 255, 255, 0.1)';
-      ctx.strokeStyle = '#666';
-    } else if (!showColorDetail) {
-      ctx.fillStyle = '#d4d4d4';
-    } else {
+    // Minimal fallback if database rendering failed
+    if (!renderedByDatabase) {
       ctx.fillStyle = element.color || '#8b4513';
+      ctx.fillRect(0, 0, width, depth);
     }
-
-    ctx.fillRect(0, 0, width, depth);
-    ctx.strokeStyle = '#333';
-    ctx.lineWidth = 1;
-    ctx.strokeRect(0, 0, width, depth);
   }
 
-  // Draw selection highlight
-  if (isSelected) {
-    ctx.strokeStyle = '#3b82f6';
-    ctx.lineWidth = 3;
+  // WIREFRAME OVERLAY (if enabled)
+  if (showWireframe) {
+    ctx.strokeStyle = '#000000'; // Black wireframe outlines
+    ctx.lineWidth = 0.5; // Ultra-thin lines
     ctx.setLineDash([]);
-    ctx.strokeRect(0, 0, width, depth);
 
-    // Draw rotation handle
-    const handleRadius = 8;
-    const handleY = -20;
-    ctx.fillStyle = '#3b82f6';
-    ctx.beginPath();
-    ctx.arc(width / 2, handleY, handleRadius, 0, 2 * Math.PI);
-    ctx.fill();
-    ctx.strokeStyle = '#fff';
+    if (isCornerComponent) {
+      // Corner components: Draw as square wireframe
+      const squareSize = Math.min(element.width, element.depth) * zoom;
+      ctx.strokeRect(0, 0, squareSize, squareSize);
+    } else {
+      // Standard components: Draw as rectangular wireframe
+      ctx.strokeRect(0, 0, width, depth);
+    }
+  }
+
+  // Selection overlay - Red outline when selected (drawn on top of everything)
+  if (isSelected) {
+    ctx.strokeStyle = '#ff0000';
     ctx.lineWidth = 2;
-    ctx.stroke();
+    ctx.setLineDash([]);
+
+    if (isCornerComponent) {
+      const squareSize = Math.min(element.width, element.depth) * zoom;
+      ctx.strokeRect(0, 0, squareSize, squareSize);
+    } else {
+      ctx.strokeRect(0, 0, width, depth);
+    }
   }
 
   // Draw hover highlight
