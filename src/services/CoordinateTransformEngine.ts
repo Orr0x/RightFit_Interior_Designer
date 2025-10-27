@@ -449,14 +449,15 @@ export class CoordinateTransformEngine {
  * });
  * ```
  */
+// Singleton instance management
+let globalEngine: CoordinateTransformEngine | null = null;
+
 export function initializeCoordinateEngine(
   roomDimensions: RoomDimensions
 ): CoordinateTransformEngine {
-  return new CoordinateTransformEngine(roomDimensions);
+  globalEngine = new CoordinateTransformEngine(roomDimensions);
+  return globalEngine;
 }
-
-// Singleton instance management
-let globalEngine: CoordinateTransformEngine | null = null;
 
 /**
  * Get or create the global coordinate engine

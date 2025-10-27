@@ -27,7 +27,8 @@
       "Bash(then echo \"File exists\")",
       "Bash(else echo \"File not found\")",
       "Read(//c/Users/james/Downloads/**)",
-      "Bash(npm run test:run:*)"
+      "Bash(npm run test:run:*)",
+      "Bash(npx tsc:*)"
     ],
     "deny": [],
     "ask": []

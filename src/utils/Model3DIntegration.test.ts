@@ -11,6 +11,7 @@
  * 5. Verify corner cabinet geometry
  */
 
+import { describe, it, expect, beforeAll } from 'vitest';
 import * as THREE from 'three';
 import { Model3DLoaderService } from '@/services/Model3DLoaderService';
 import { GeometryBuilder } from './GeometryBuilder';

@@ -1,11 +1,7 @@
-import '@testing-library/jest-dom';
-import { expect, afterEach, vi } from 'vitest';
-import { cleanup } from '@testing-library/react';
+import { vi } from 'vitest';
 
-// Cleanup after each test case
-afterEach(() => {
-  cleanup();
-});
+// Note: '@testing-library/jest-dom' requires globals to be enabled in vitest.config.ts
+// For now, we're testing utility functions only, so we don't need jest-dom matchers
 
 // Mock matchMedia (for responsive components)
 Object.defineProperty(window, 'matchMedia', {

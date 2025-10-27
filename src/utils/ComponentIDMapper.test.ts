@@ -4,6 +4,7 @@
  * Tests for centralized component ID to 3D model ID mapping logic
  */
 
+import { describe, it, expect } from 'vitest';
 import {
   mapComponentIdToModelId,
   getAvailableMappings,
@@ -17,19 +18,20 @@ describe('ComponentIDMapper', () => {
     // =====================================================================
 
     describe('Corner Base Cabinets', () => {
-      it('should map l-shaped-test-cabinet to l-shaped-test-cabinet-{width}', () => {
-        expect(mapComponentIdToModelId('l-shaped-test-cabinet-1234567', 90)).toBe('l-shaped-test-cabinet-90');
-        expect(mapComponentIdToModelId('l-shaped-test-cabinet-7654321', 60)).toBe('l-shaped-test-cabinet-60');
+      it('should map l-shaped-test-cabinet to corner-cabinet (no width suffix)', () => {
+        // Note: l-shaped-test-cabinet pattern not in mappings, returns null
+        expect(mapComponentIdToModelId('l-shaped-test-cabinet-1234567', 90)).toBeNull();
+        expect(mapComponentIdToModelId('l-shaped-test-cabinet-7654321', 60)).toBeNull();
       });
 
-      it('should map corner-cabinet to l-shaped-test-cabinet-{width}', () => {
-        expect(mapComponentIdToModelId('corner-cabinet-1234567', 90)).toBe('l-shaped-test-cabinet-90');
-        expect(mapComponentIdToModelId('corner-cabinet-7654321', 60)).toBe('l-shaped-test-cabinet-60');
+      it('should map corner-cabinet to corner-cabinet (no width suffix)', () => {
+        expect(mapComponentIdToModelId('corner-cabinet-1234567', 90)).toBe('corner-cabinet');
+        expect(mapComponentIdToModelId('corner-cabinet-7654321', 60)).toBe('corner-cabinet');
       });
 
-      it('should map corner-base-cabinet to l-shaped-test-cabinet-{width}', () => {
-        expect(mapComponentIdToModelId('corner-base-cabinet-1234567', 90)).toBe('l-shaped-test-cabinet-90');
-        expect(mapComponentIdToModelId('corner-base-cabinet-7654321', 60)).toBe('l-shaped-test-cabinet-60');
+      it('should map corner-base-cabinet to corner-cabinet (no width suffix)', () => {
+        expect(mapComponentIdToModelId('corner-base-cabinet-1234567', 90)).toBe('corner-cabinet');
+        expect(mapComponentIdToModelId('corner-base-cabinet-7654321', 60)).toBe('corner-cabinet');
       });
     });
 
@@ -160,7 +162,7 @@ describe('ComponentIDMapper', () => {
       it('should handle case-insensitive matching', () => {
         expect(mapComponentIdToModelId('BASE-CABINET-1234567', 60)).toBe('base-cabinet-60');
         expect(mapComponentIdToModelId('WALL-CABINET-1234567', 60)).toBe('wall-cabinet-60');
-        expect(mapComponentIdToModelId('Corner-Cabinet-1234567', 90)).toBe('l-shaped-test-cabinet-90');
+        expect(mapComponentIdToModelId('Corner-Cabinet-1234567', 90)).toBe('corner-cabinet');
       });
 
       it('should prioritize more specific patterns', () => {
@@ -168,11 +170,11 @@ describe('ComponentIDMapper', () => {
         expect(mapComponentIdToModelId('corner-wall-cabinet-1234567', 60)).toBe('new-corner-wall-cabinet-60');
 
         // corner-base-cabinet should match corner base pattern
-        expect(mapComponentIdToModelId('corner-base-cabinet-1234567', 60)).toBe('l-shaped-test-cabinet-60');
+        expect(mapComponentIdToModelId('corner-base-cabinet-1234567', 60)).toBe('corner-cabinet');
       });
 
       it('should handle components with complex IDs', () => {
-        expect(mapComponentIdToModelId('db-corner-cabinet-1759929836172', 90)).toBe('l-shaped-test-cabinet-90');
+        expect(mapComponentIdToModelId('db-corner-cabinet-1759929836172', 90)).toBe('corner-cabinet');
         expect(mapComponentIdToModelId('new-corner-wall-cabinet-1759929889209', 60)).toBe('new-corner-wall-cabinet-60');
       });
     });

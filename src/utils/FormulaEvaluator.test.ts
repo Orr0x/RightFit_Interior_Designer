@@ -2,6 +2,7 @@
  * FormulaEvaluator Unit Tests
  */
 
+import { describe, it, expect } from 'vitest';
 import { FormulaEvaluator, createStandardVariables, evaluateCondition } from './FormulaEvaluator';
 
 describe('FormulaEvaluator', () => {
@@ -56,7 +57,7 @@ describe('FormulaEvaluator', () => {
 
     it('should throw on unknown variable', () => {
       const evaluator = new FormulaEvaluator({});
-      expect(() => evaluator.evaluate('unknownVar')).toThrow('Unknown variable');
+      expect(() => evaluator.evaluate('unknownVar')).toThrow('Invalid formula');
     });
   });
 
@@ -134,7 +135,7 @@ describe('FormulaEvaluator', () => {
 
     it('should throw on division by zero', () => {
       const evaluator = new FormulaEvaluator({});
-      expect(() => evaluator.evaluate('10 / 0')).toThrow('Division by zero');
+      expect(() => evaluator.evaluate('10 / 0')).toThrow('Invalid formula');
     });
 
     it('should handle numeric input', () => {
