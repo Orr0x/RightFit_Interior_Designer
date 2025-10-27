@@ -1,5 +1,5 @@
 import React, { useRef, useEffect, useState, useCallback } from 'react';
-import { DesignElement, Design, ElevationViewConfig } from '../../types/project';
+import { DesignElement, Design, ElevationViewConfig, getDefaultZIndex } from '../../types/project';
 import { ComponentService } from '@/services/ComponentService';
 import { getElevationViews } from '@/utils/elevationViewHelpers';
 import { RoomService } from '@/services/RoomService';
@@ -787,362 +787,74 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
   }, [roomDimensions, design.elements]);
 
   // Draw full canvas grid
-  const drawGrid = useCallback((ctx: CanvasRenderingContext2D) => {
-    if (!showGrid) return;
+  // REMOVED: drawGrid() - now using PlanViewRenderer.drawGrid() (Story 1.15.1)
+  // See: src/components/designer/canvas/PlanViewRenderer.ts
 
-    ctx.strokeStyle = '#e0e0e0';
-    ctx.lineWidth = 1;
-    ctx.setLineDash([]);
-
-    const gridSize = GRID_SIZE * zoom;
-
-    // Draw vertical lines
-    for (let x = (panOffset.x % gridSize); x <= CANVAS_WIDTH; x += gridSize) {
-      ctx.beginPath();
-      ctx.moveTo(x, 0);
-      ctx.lineTo(x, CANVAS_HEIGHT);
-      ctx.stroke();
-    }
-
-    // Draw horizontal lines
-    for (let y = (panOffset.y % gridSize); y <= CANVAS_HEIGHT; y += gridSize) {
-      ctx.beginPath();
-      ctx.moveTo(0, y);
-      ctx.lineTo(CANVAS_WIDTH, y);
-      ctx.stroke();
-    }
-  }, [showGrid, zoom, panOffset]);
-
-  // Draw room within canvas
+  // Draw room within canvas (Story 1.15.1 - using module renderers)
   const drawRoom = useCallback((ctx: CanvasRenderingContext2D) => {
-    const innerWidth = innerRoomBounds.width * zoom;
-    const innerHeight = innerRoomBounds.height * zoom;
-    const outerWidth = outerRoomBounds.width * zoom;
-    const outerHeight = outerRoomBounds.height * zoom;
-    const wallThickness = WALL_THICKNESS * zoom;
-
     if (active2DView === 'plan') {
-      // Plan view - draw walls with proper thickness
-
-      if (roomGeometry) {
-        // Complex room geometry (L-shape, U-shape, custom polygons)
-        const vertices = roomGeometry.floor.vertices;
-
-        // Convert vertices to canvas coordinates
-        const canvasVertices = vertices.map(v => [
-          roomPosition.innerX + v[0] * zoom,
-          roomPosition.innerY + v[1] * zoom
-        ]);
-
-        // Draw floor (usable space)
-        ctx.fillStyle = '#f9f9f9';
-        ctx.beginPath();
-        ctx.moveTo(canvasVertices[0][0], canvasVertices[0][1]);
-        for (let i = 1; i < canvasVertices.length; i++) {
-          ctx.lineTo(canvasVertices[i][0], canvasVertices[i][1]);
-        }
-        ctx.closePath();
-        ctx.fill();
-
-        // Draw floor outline (inner boundary)
-        ctx.strokeStyle = '#666';
-        ctx.lineWidth = 1;
-        ctx.setLineDash([]);
-        ctx.stroke();
-
-        // Draw wall segments
-        roomGeometry.walls.forEach(wall => {
-          const startX = roomPosition.innerX + wall.start[0] * zoom;
-          const startY = roomPosition.innerY + wall.start[1] * zoom;
-          const endX = roomPosition.innerX + wall.end[0] * zoom;
-          const endY = roomPosition.innerY + wall.end[1] * zoom;
-          const thickness = (wall.thickness || WALL_THICKNESS) * zoom;
-
-          // Calculate wall perpendicular vector (for thickness)
-          const dx = endX - startX;
-          const dy = endY - startY;
-          const len = Math.sqrt(dx * dx + dy * dy);
-          const perpX = (-dy / len) * thickness / 2;
-          const perpY = (dx / len) * thickness / 2;
-
-          // Draw wall as thick line
-          ctx.fillStyle = '#e5e5e5';
-          ctx.beginPath();
-          ctx.moveTo(startX + perpX, startY + perpY);
-          ctx.lineTo(endX + perpX, endY + perpY);
-          ctx.lineTo(endX - perpX, endY - perpY);
-          ctx.lineTo(startX - perpX, startY - perpY);
-          ctx.closePath();
-          ctx.fill();
-
-          // Draw wall outline
-          ctx.strokeStyle = '#333';
-          ctx.lineWidth = 1;
-          ctx.stroke();
-        });
-      } else {
-        // Simple rectangular room (boundary-only rendering)
-        // ✅ FIXED: Use boundary lines instead of filled rectangles to prevent visual overlap
-
-        // Optional: Very subtle inner room background (doesn't block components)
-        ctx.fillStyle = 'rgba(249, 249, 249, 0.3)'; // 70% transparent
-        ctx.fillRect(roomPosition.innerX, roomPosition.innerY, innerWidth, innerHeight);
-
-        // Draw wall boundaries (stroke only - no fills)
-        ctx.strokeStyle = '#333';
-        ctx.lineWidth = 2;
-        ctx.setLineDash([]);
-
-        // Outer wall boundary
-        ctx.strokeRect(roomPosition.outerX, roomPosition.outerY, outerWidth, outerHeight);
-
-        // Inner room boundary (where components can be placed)
-        ctx.strokeStyle = '#666';
-        ctx.lineWidth = 1;
-        ctx.strokeRect(roomPosition.innerX, roomPosition.innerY, innerWidth, innerHeight);
-      }
-
-      // Room dimensions labels
-      ctx.fillStyle = '#666';
-      ctx.font = '12px Arial';
-      ctx.textAlign = 'center';
-      
-      // Width label (top) - show inner room dimensions
-      ctx.fillText(
-        `${roomDimensions.width}cm (inner)`,
-        roomPosition.innerX + innerWidth / 2,
-        roomPosition.outerY - 10
+      // Plan view - use PlanViewRenderer
+      PlanViewRenderer.drawRoomPlanView(
+        ctx,
+        innerRoomBounds,
+        outerRoomBounds,
+        roomPosition,
+        zoom,
+        roomGeometry
       );
-
-      // Height label (left) - show inner room dimensions
-      ctx.save();
-      ctx.translate(roomPosition.outerX - 25, roomPosition.innerY + innerHeight / 2);
-      ctx.rotate(-Math.PI / 2);
-      ctx.fillText(`${roomDimensions.height}cm (inner)`, 0, 0);
-      ctx.restore();
-      
-      // Wall thickness labels
-      ctx.fillStyle = '#999';
-      ctx.font = '10px Arial';
-      ctx.textAlign = 'center';
-      
-      // Top wall thickness
-      ctx.fillText(
-        `${WALL_THICKNESS}cm`,
-        roomPosition.innerX + innerWidth / 2,
-        roomPosition.outerY + wallThickness / 2 + 3
-      );
-      
-      // Left wall thickness
-      ctx.save();
-      ctx.translate(roomPosition.outerX + wallThickness / 2, roomPosition.innerY + innerHeight / 2);
-      ctx.rotate(-Math.PI / 2);
-      ctx.fillText(`${WALL_THICKNESS}cm`, 0, 3);
-      ctx.restore();
-
     } else {
-      // Elevation view - draw room as elevation (floor fixed, ceiling moves)
-      const wallHeight = getWallHeight() * zoom;
-      const floorY = roomPosition.innerY + (CANVAS_HEIGHT * 0.4); // Fixed floor position (adjusted for top-center alignment)
-      const topY = floorY - wallHeight; // Ceiling moves up/down based on wall height
-
-      // CRITICAL FIX: Use appropriate dimension for each elevation view based on direction
-      let elevationRoomWidth: number;
-      if (currentViewInfo.direction === 'front' || currentViewInfo.direction === 'back') {
-        elevationRoomWidth = roomDimensions.width * zoom; // Use room width for front/back views
-      } else {
-        elevationRoomWidth = roomDimensions.height * zoom; // Use room depth for left/right views
-      }
-
-      // Draw wall boundaries
-      ctx.fillStyle = '#f9f9f9';
-      ctx.fillRect(roomPosition.innerX, topY, elevationRoomWidth, wallHeight);
-
-      ctx.strokeStyle = '#333';
-      ctx.lineWidth = 2;
-      ctx.strokeRect(roomPosition.innerX, topY, elevationRoomWidth, wallHeight);
-
-      // Floor line
-      ctx.strokeStyle = '#8B4513';
-      ctx.lineWidth = 3;
-      ctx.beginPath();
-      ctx.moveTo(roomPosition.innerX, floorY);
-      ctx.lineTo(roomPosition.innerX + elevationRoomWidth, floorY);
-      ctx.stroke();
-
-      // Wall label
-      ctx.fillStyle = '#333';
-      ctx.font = '14px Arial';
-      ctx.textAlign = 'center';
-      const wallLabels = {
-        front: 'Front Wall',
-        back: 'Back Wall',
-        left: 'Left Wall',
-        right: 'Right Wall'
-      };
-      ctx.fillText(
-        wallLabels[currentViewInfo.direction] || '',
-        roomPosition.innerX + elevationRoomWidth / 2,
-        roomPosition.innerY - 20
+      // Elevation view - use ElevationViewRenderer
+      ElevationViewRenderer.drawRoomElevationView(
+        ctx,
+        roomDimensions,
+        roomPosition,
+        zoom,
+        getWallHeight(),
+        currentViewInfo
       );
-
-      // Dimension labels
-      ctx.fillStyle = '#666';
-      ctx.font = '12px Arial';
-
-      // Width dimension (bottom) - use inner room dimensions
-      let widthText = '';
-      if (currentViewInfo.direction === 'front' || currentViewInfo.direction === 'back') {
-        widthText = `${roomDimensions.width}cm (inner)`;
-      } else {
-        widthText = `${roomDimensions.height}cm (inner)`;
-      }
-      ctx.textAlign = 'center';
-      ctx.fillText(widthText, roomPosition.innerX + elevationRoomWidth / 2, floorY + 20);
-      
-      // Wall height dimension (left side)
-      const heightText = `${getWallHeight()}cm`;
-      ctx.save();
-      ctx.translate(roomPosition.innerX - 35, topY + wallHeight / 2);
-      ctx.rotate(-Math.PI / 2);
-      ctx.textAlign = 'center';
-      ctx.fillText(heightText, 0, 0);
-      ctx.restore();
-      
-      // Height indicator line with arrows
-      ctx.strokeStyle = '#999';
-      ctx.lineWidth = 1;
-      const indicatorX = roomPosition.innerX - 25;
-      
-      // Vertical line
-      ctx.beginPath();
-      ctx.moveTo(indicatorX, topY);
-      ctx.lineTo(indicatorX, floorY);
-      ctx.stroke();
-      
-      // Top arrow
-      ctx.beginPath();
-      ctx.moveTo(indicatorX, topY);
-      ctx.lineTo(indicatorX - 3, topY + 8);
-      ctx.moveTo(indicatorX, topY);
-      ctx.lineTo(indicatorX + 3, topY + 8);
-      ctx.stroke();
-      
-      // Bottom arrow
-      ctx.beginPath();
-      ctx.moveTo(indicatorX, floorY);
-      ctx.lineTo(indicatorX - 3, floorY - 8);
-      ctx.moveTo(indicatorX, floorY);
-      ctx.lineTo(indicatorX + 3, floorY - 8);
-      ctx.stroke();
     }
-  }, [roomDimensions, roomPosition, zoom, active2DView, roomGeometry, getWallHeight]);
+  }, [roomDimensions, roomPosition, zoom, active2DView, roomGeometry, getWallHeight, currentViewInfo, innerRoomBounds, outerRoomBounds]);
 
-  // LEGACY CODE REMOVED: drawSinkPlanView function (173 lines)
-  // Replaced by database-driven handlers in src/services/2d-renderers/plan-view-handlers.ts
-  // See archive: docs/session-2025-10-09-2d-database-migration/LEGACY-CODE-FULL-ARCHIVE.md
+  // REMOVED: 220+ lines of inline room rendering code (Story 1.15.1)
+  // See modules: PlanViewRenderer.drawRoomPlanView() and ElevationViewRenderer.drawRoomElevationView()
 
   // Draw element with smart rendering
   const drawElement = useCallback((ctx: CanvasRenderingContext2D, element: DesignElement) => {
     const isSelected = selectedElement?.id === element.id;
     const isHovered = hoveredElement?.id === element.id;
-    
+
     if (active2DView === 'plan') {
-      // Plan view rendering - Support both color detail and wireframe overlays
-      const pos = roomToCanvas(element.x, element.y);
-      const width = element.width * zoom;
-      const depth = (element.depth || element.height) * zoom; // Use depth for Y-axis in plan view
-      const rotation = element.rotation || 0;
+      // Plan view rendering - using PlanViewRenderer module (Story 1.15.1)
+      PlanViewRenderer.drawElementPlanView(
+        ctx,
+        element,
+        zoom,
+        roomToCanvas,
+        isSelected,
+        isHovered,
+        showWireframe,
+        showColorDetail
+      );
 
-      ctx.save();
-      
-      // Check if this is a corner component (needed for wireframe/selection overlays)
-      // Note: Main rendering now uses database field plan_view_type: 'corner-square'
-      const isCornerComponent = element.id.includes('corner-');
-
-      // Apply rotation - convert degrees to radians if needed
-      ctx.translate(pos.x + width / 2, pos.y + depth / 2);
-      ctx.rotate(rotation * Math.PI / 180);
-      ctx.translate(-width / 2, -depth / 2);
-
-      // COLOR DETAIL RENDERING (if enabled)
-      if (showColorDetail) {
-        // Try database-driven rendering first (Phase 3: Database-Driven 2D Rendering)
-        const useDatabaseRendering = FeatureFlagService.isEnabled('use_database_2d_rendering');
-        let renderedByDatabase = false;
-
-        if (useDatabaseRendering) {
-          try {
-            const renderDef = render2DService.getCached(element.component_id);
-            if (renderDef) {
-              // Apply selection/hover colors
-              if (isSelected) {
-                ctx.fillStyle = '#ff6b6b';
-              } else if (isHovered) {
-                ctx.fillStyle = '#b0b0b0';
-              } else {
-                ctx.fillStyle = renderDef.fill_color || element.color || '#8b4513';
-              }
-
-              // Render using database-driven system
-              renderPlanView(ctx, element, renderDef, zoom);
-              renderedByDatabase = true;
-            }
-          } catch (error) {
-            Logger.warn('[DesignCanvas2D] Database rendering failed, falling back to legacy:', error);
-          }
-        }
-
-        // Minimal fallback if database rendering not enabled or failed
-        if (!renderedByDatabase) {
-          // Simple rectangle fallback
-          ctx.fillStyle = element.color || '#8b4513';
-          ctx.fillRect(0, 0, width, depth);
-        }
-      }
-
-      // WIREFRAME OVERLAY (if enabled)
-      if (showWireframe) {
-        ctx.strokeStyle = '#000000'; // Black wireframe outlines
-        ctx.lineWidth = 0.5; // Ultra-thin lines as requested
-        ctx.setLineDash([]);
-        
-        if (isCornerComponent) {
-          // Corner components: Draw as square wireframe
-          const squareSize = Math.min(element.width, element.depth) * zoom;
-          ctx.strokeRect(0, 0, squareSize, squareSize);
-        } else {
-          // Standard components: Draw as rectangular wireframe
-          ctx.strokeRect(0, 0, width, depth);
-        }
-      }
-
-      // Selection overlay - Red outline when selected (drawn on top of everything)
-      if (isSelected) {
-        ctx.strokeStyle = '#ff0000';
-        ctx.lineWidth = 2;
-        ctx.setLineDash([]);
-        
-        if (isCornerComponent) {
-          const squareSize = Math.min(element.width, element.depth) * zoom;
-          ctx.strokeRect(0, 0, squareSize, squareSize);
-        } else {
-          ctx.strokeRect(0, 0, width, depth);
-        }
-      }
-
-      ctx.restore();
-
-      // Selection handles (drawn after restore)
+      // Selection handles (drawn after element)
       if (isSelected) {
         drawSelectionHandles(ctx, element);
       }
-
     } else {
-      // Elevation view rendering
-      drawElementElevation(ctx, element, isSelected, isHovered, showWireframe);
+      // Elevation view rendering - using ElevationViewRenderer module (Story 1.15.1)
+      ElevationViewRenderer.drawElementElevationView(
+        ctx,
+        element,
+        roomDimensions,
+        roomPosition,
+        active2DView,
+        zoom,
+        isSelected,
+        isHovered,
+        showWireframe
+      );
     }
-  }, [active2DView, roomToCanvas, selectedElement, hoveredElement, zoom, showWireframe, showColorDetail]);
+  }, [active2DView, roomToCanvas, selectedElement, hoveredElement, zoom, showWireframe, showColorDetail, roomDimensions, roomPosition]);
 
 
   // Draw selection handles using canvas rotation (matches component rendering)
@@ -1177,158 +889,6 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
   };
 
   // Draw element in elevation view with detailed fronts
-  const drawElementElevation = (ctx: CanvasRenderingContext2D, element: DesignElement, isSelected: boolean, isHovered: boolean, showWireframe: boolean) => {
-    // Check if element should be visible in current elevation view
-    const wall = getElementWall(element);
-    const isCornerVisible = isCornerVisibleInView(element, currentViewInfo.direction);
-
-    // Check direction visibility
-    if (!isCornerVisible && wall !== currentViewInfo.direction && wall !== 'center') return;
-
-    // Check if element is hidden in this specific view
-    if (currentViewInfo.hiddenElements.includes(element.id)) return;
-
-    // Async preload behavior if not cached
-    if (!componentBehaviorCache.has(element.type)) {
-      getComponentBehavior(element.type).catch(console.warn);
-    }
-    // CRITICAL FIX: Elevation views should use inner room dimensions for proper alignment
-    // Components are positioned within the inner room space, not including wall thickness
-    const elevationWidth = roomDimensions.width * zoom; // Inner room width for front/back views
-    const elevationDepth = roomDimensions.height * zoom; // Inner room depth for left/right views
-    const floorY = roomPosition.innerY + (CANVAS_HEIGHT * 0.4); // Fixed floor position (adjusted for top-center alignment)
-    
-    // Calculate rotation-aware dimensions
-    const rotation = (element.rotation || 0) * Math.PI / 180;
-    const isRotated = Math.abs(Math.sin(rotation)) > 0.1; // 90° or 270° rotation
-    
-    // Get effective dimensions based on rotation
-    let effectiveWidth: number;
-    let effectiveDepth: number;
-    
-    if (isRotated) {
-      // When rotated 90° or 270°, width and depth are swapped
-      effectiveWidth = element.depth;
-      effectiveDepth = element.width;
-    } else {
-      // Normal orientation
-      effectiveWidth = element.width;
-      effectiveDepth = element.depth;
-    }
-
-    // 🎯 Calculate horizontal position using PositionCalculation utility
-    // Feature flag controls switching between legacy (asymmetric) and new (unified) coordinate systems
-    // Legacy code preserved inside PositionCalculation for instant rollback capability
-    // Now synchronous to avoid render race conditions
-    const { xPos, elementWidth } = PositionCalculation.calculateElevationPosition(
-      element,
-      roomDimensions,
-      roomPosition,
-      active2DView,
-      zoom,
-      elevationWidth,
-      elevationDepth
-    );
-    
-    // Tall corner unit dimensions are now correct (90x90cm) after database migration
-    
-    // Story 1.9: Calculate vertical position using ComponentService (single source of truth)
-    // ComponentService uses: element.z → database default_z_position → type fallback
-    let elementHeight: number;
-    let yPos: number;
-
-    // Get Z position (height off floor) - Story 1.9 single source of truth
-    const zPosition = ComponentService.getZPosition(element);
-
-    // Get elevation height (SIZE of component) - Always uses element.height
-    const elevationHeightCm = ComponentService.getElevationHeight(element.component_id, element);
-
-    // Calculate canvas positions
-    elementHeight = elevationHeightCm * zoom;
-    const mountHeight = zPosition * zoom;
-    yPos = floorY - mountHeight - elementHeight;
-
-    // Draw detailed elevation view
-    ctx.save();
-
-    // Try database-driven rendering first (Phase 3: Database-Driven 2D Rendering)
-    const useDatabaseRendering = FeatureFlagService.isEnabled('use_database_2d_rendering');
-    let renderedByDatabase = false;
-
-    if (useDatabaseRendering) {
-      try {
-        const renderDef = render2DService.getCached(element.component_id);
-        if (renderDef) {
-          Logger.debug('[DesignCanvas2D] Rendering elevation for:', element.component_id, 'with data:', renderDef.elevation_data);
-
-          // Apply selection/hover colors
-          if (isSelected) {
-            ctx.fillStyle = '#ff6b6b';
-          } else if (isHovered) {
-            ctx.fillStyle = '#b0b0b0';
-          } else {
-            ctx.fillStyle = renderDef.fill_color || element.color || '#8b4513';
-          }
-
-          // Render using database-driven system (with roomDimensions for corner logic)
-          renderElevationView(
-            ctx,
-            element,
-            renderDef,
-            active2DView,
-            xPos,
-            yPos,
-            elementWidth,
-            elementHeight,
-            zoom,
-            roomDimensions // Pass room dimensions for corner cabinet positioning
-          );
-          renderedByDatabase = true;
-        } else {
-          Logger.warn('[DesignCanvas2D] No render definition found for:', element.component_id);
-        }
-      } catch (error) {
-        Logger.warn('[DesignCanvas2D] Elevation database rendering failed, falling back to legacy:', error);
-      }
-    } else {
-      Logger.warn('[DesignCanvas2D] Database rendering disabled by feature flag');
-    }
-
-    // Fallback to legacy rendering if database rendering not enabled or failed
-    if (!renderedByDatabase) {
-      // Main cabinet body
-      if (isSelected) {
-        ctx.fillStyle = '#ff6b6b';
-      } else if (isHovered) {
-        ctx.fillStyle = '#b0b0b0';
-      } else {
-        ctx.fillStyle = element.color || '#8b4513';
-      }
-
-      ctx.fillRect(xPos, yPos, elementWidth, elementHeight);
-    }
-
-    // Element border (only when selected)
-    if (isSelected) {
-      ctx.strokeStyle = '#ff0000';
-      ctx.lineWidth = 2;
-      ctx.strokeRect(xPos, yPos, elementWidth, elementHeight);
-    }
-
-    // WIREFRAME OVERLAY (if enabled) - for elevation views
-    if (showWireframe) {
-      ctx.strokeStyle = '#000000'; // Black wireframe outlines
-      ctx.lineWidth = 0.5; // Ultra-thin lines as requested
-      ctx.setLineDash([]);
-      ctx.strokeRect(xPos, yPos, elementWidth, elementHeight);
-    }
-
-    // LEGACY CODE REMOVED: Elevation detail function calls (28 lines)
-    // All elevation detail rendering now handled by database-driven handlers
-    // See archive: docs/session-2025-10-09-2d-database-migration/LEGACY-CODE-FULL-ARCHIVE.md
-
-    ctx.restore();
-  };
 
   // =============================================================================
   // LEGACY ELEVATION DETAIL FUNCTIONS REMOVED (875 lines)
@@ -1446,328 +1006,70 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
   // Zoom controls removed - now handled by React component in Designer.tsx
 
   // Draw ruler/tape measure
-  const drawRuler = useCallback((ctx: CanvasRenderingContext2D) => {
-    if (!showRuler) return;
+  // REMOVED: drawRuler() plan view logic - now using PlanViewRenderer.drawRuler() (Story 1.15.1)
+  // Elevation view ruler kept inline until ElevationViewRenderer module adds ruler support
+  const drawElevationRuler = useCallback((ctx: CanvasRenderingContext2D) => {
+    if (!showRuler || active2DView === 'plan') return;
 
     ctx.strokeStyle = '#666';
     ctx.lineWidth = 1;
     ctx.font = '10px Arial';
     ctx.fillStyle = '#666';
 
-    if (active2DView === 'plan') {
-      // Horizontal ruler (top)
-      const rulerY = roomPosition.innerY - 30;
-      
+    // Elevation view rulers
+    const roomWidth = currentViewInfo.direction === 'front' || currentViewInfo.direction === 'back'
+      ? roomDimensions.width
+      : roomDimensions.height;
+
+    // Horizontal ruler (bottom)
+    const wallHeight = getWallHeight() * zoom;
+    const floorY = roomPosition.innerY + (CANVAS_HEIGHT * 0.4); // Fixed floor position (adjusted for top-center alignment)
+    const topY = floorY - wallHeight; // Ceiling moves up/down based on wall height
+    const rulerY = floorY + 25;
+
+    ctx.beginPath();
+    ctx.moveTo(roomPosition.innerX, rulerY);
+    ctx.lineTo(roomPosition.innerX + roomWidth * zoom, rulerY);
+    ctx.stroke();
+
+    for (let x = 0; x <= roomWidth; x += 50) {
+      const xPos = roomPosition.innerX + x * zoom;
       ctx.beginPath();
-      ctx.moveTo(roomPosition.innerX, rulerY);
-      ctx.lineTo(roomPosition.innerX + roomDimensions.width * zoom, rulerY);
+      ctx.moveTo(xPos, rulerY - 3);
+      ctx.lineTo(xPos, rulerY + 3);
       ctx.stroke();
 
-      for (let x = 0; x <= roomDimensions.width; x += 50) {
-        const xPos = roomPosition.innerX + x * zoom;
-        ctx.beginPath();
-        ctx.moveTo(xPos, rulerY - 5);
-        ctx.lineTo(xPos, rulerY + 5);
-        ctx.stroke();
-        
-        if (x > 0) {
-          ctx.textAlign = 'center';
-          ctx.fillText(`${x}cm`, xPos, rulerY - 8);
-        }
-      }
-
-      // Vertical ruler (left)
-      const rulerX = roomPosition.innerX - 30;
-      
-      ctx.beginPath();
-      ctx.moveTo(rulerX, roomPosition.innerY);
-      ctx.lineTo(rulerX, roomPosition.innerY + roomDimensions.height * zoom);
-      ctx.stroke();
-
-      for (let y = 0; y <= roomDimensions.height; y += 50) {
-        const yPos = roomPosition.innerY + y * zoom;
-        ctx.beginPath();
-        ctx.moveTo(rulerX - 5, yPos);
-        ctx.lineTo(rulerX + 5, yPos);
-        ctx.stroke();
-        
-        if (y > 0) {
-          ctx.save();
-          ctx.translate(rulerX - 8, yPos);
-          ctx.rotate(-Math.PI / 2);
-          ctx.textAlign = 'center';
-          ctx.fillText(`${y}cm`, 0, 0);
-          ctx.restore();
-        }
-      }
-    } else {
-      // Elevation view rulers
-      const roomWidth = currentViewInfo.direction === 'front' || currentViewInfo.direction === 'back'
-        ? roomDimensions.width
-        : roomDimensions.height;
-      
-      // Horizontal ruler (bottom)
-      const wallHeight = getWallHeight() * zoom;
-      const floorY = roomPosition.innerY + (CANVAS_HEIGHT * 0.4); // Fixed floor position (adjusted for top-center alignment)
-      const topY = floorY - wallHeight; // Ceiling moves up/down based on wall height
-      const rulerY = floorY + 25;
-      
-      ctx.beginPath();
-      ctx.moveTo(roomPosition.innerX, rulerY);
-      ctx.lineTo(roomPosition.innerX + roomWidth * zoom, rulerY);
-      ctx.stroke();
-
-      for (let x = 0; x <= roomWidth; x += 50) {
-        const xPos = roomPosition.innerX + x * zoom;
-        ctx.beginPath();
-        ctx.moveTo(xPos, rulerY - 3);
-        ctx.lineTo(xPos, rulerY + 3);
-        ctx.stroke();
-        
-        if (x > 0) {
-          ctx.textAlign = 'center';
-          ctx.fillText(`${x}cm`, xPos, rulerY + 15);
-        }
-      }
-
-      // Vertical ruler (right side)
-      const rulerX = roomPosition.innerX + roomWidth * zoom + 25;
-      
-      ctx.beginPath();
-      ctx.moveTo(rulerX, topY);
-      ctx.lineTo(rulerX, floorY);
-      ctx.stroke();
-
-      for (let h = 0; h <= getWallHeight(); h += 50) {
-        const yPos = floorY - h * zoom;
-        ctx.beginPath();
-        ctx.moveTo(rulerX - 3, yPos);
-        ctx.lineTo(rulerX + 3, yPos);
-        ctx.stroke();
-        
-        if (h > 0) {
-          ctx.save();
-          ctx.translate(rulerX + 8, yPos);
-          ctx.rotate(-Math.PI / 2);
-          ctx.textAlign = 'center';
-          ctx.fillText(`${h}cm`, 0, 0);
-          ctx.restore();
-        }
-      }
-    }
-  }, [showRuler, active2DView, roomPosition, zoom, roomDimensions]);
-
-  // Draw snap guides
-  const drawSnapGuides = useCallback((ctx: CanvasRenderingContext2D) => {
-    if (!isDragging || !draggedElement) return;
-    
-    ctx.save();
-    ctx.strokeStyle = '#00ff00';
-    ctx.lineWidth = 1;
-    ctx.setLineDash([4, 4]);
-    ctx.globalAlpha = 0.8;
-    
-    // Draw vertical snap guides
-    snapGuides.vertical.forEach(x => {
-      const canvasX = roomToCanvas(x, 0).x;
-      ctx.beginPath();
-      ctx.moveTo(canvasX, 0);
-      ctx.lineTo(canvasX, CANVAS_HEIGHT);
-      ctx.stroke();
-    });
-    
-    // Draw horizontal snap guides
-    snapGuides.horizontal.forEach(y => {
-      const canvasY = roomToCanvas(0, y).y;
-      ctx.beginPath();
-      ctx.moveTo(0, canvasY);
-      ctx.lineTo(CANVAS_WIDTH, canvasY);
-      ctx.stroke();
-    });
-    
-    ctx.restore();
-  }, [isDragging, draggedElement, snapGuides, roomToCanvas]);
-
-  // Draw drag preview
-  const drawDragPreview = useCallback((ctx: CanvasRenderingContext2D) => {
-    if (!isDragging || !draggedElement) return;
-    
-    const roomPos = canvasToRoom(currentMousePos.x, currentMousePos.y);
-    
-    // Calculate snap position (but don't update guides in real-time to avoid performance issues)
-    const snapResult = getSnapPosition(draggedElement, roomPos.x, roomPos.y);
-    const pos = roomToCanvas(snapResult.x, snapResult.y);
-    
-    // Check if this is a corner component for L-shape preview
-    const isCornerCounterTop = draggedElement.type === 'counter-top' && draggedElement.id.includes('counter-top-corner');
-    const isCornerWallCabinet = draggedElement.type === 'cabinet' && (draggedElement.id.includes('corner-wall-cabinet') || draggedElement.id.includes('new-corner-wall-cabinet'));
-    const isCornerBaseCabinet = draggedElement.type === 'cabinet' && draggedElement.id.includes('corner-base-cabinet');
-    const isCornerTallUnit = draggedElement.type === 'cabinet' && (
-      draggedElement.id.includes('corner-tall') || 
-      draggedElement.id.includes('corner-larder') ||
-      draggedElement.id.includes('larder-corner')
-    );
-    
-    const isCornerComponent = isCornerCounterTop || isCornerWallCabinet || isCornerBaseCabinet || isCornerTallUnit;
-    
-    // Draw preview at snap position (plan view only)
-    ctx.save();
-    ctx.globalAlpha = 0.8;
-    
-    // Preview border - green if snapping, red if not
-    const isSnapped = Math.abs(snapResult.x - roomPos.x) > 0.1 || Math.abs(snapResult.y - roomPos.y) > 0.1;
-    const previewColor = isSnapped ? '#00ff00' : '#ff6b6b';
-    
-    // COLOR DETAIL PREVIEW (if enabled)
-    if (showColorDetail) {
-      ctx.fillStyle = draggedElement.color || '#8b4513';
-      
-      if (isCornerComponent) {
-        const squareSize = Math.min(draggedElement.width, draggedElement.depth) * zoom;
-        ctx.fillRect(pos.x, pos.y, squareSize, squareSize);
-      } else {
-        const width = draggedElement.width * zoom;
-        const height = (draggedElement.depth || draggedElement.height) * zoom;
-        ctx.fillRect(pos.x, pos.y, width, height);
-      }
-    }
-    
-    // WIREFRAME PREVIEW (if enabled)
-    if (showWireframe) {
-      ctx.strokeStyle = '#000000';
-      ctx.lineWidth = 0.5;
-      ctx.setLineDash([]);
-      
-      if (isCornerComponent) {
-        const squareSize = Math.min(draggedElement.width, draggedElement.depth) * zoom;
-        ctx.strokeRect(pos.x, pos.y, squareSize, squareSize);
-      } else {
-        const width = draggedElement.width * zoom;
-        const height = (draggedElement.depth || draggedElement.height) * zoom;
-        ctx.strokeRect(pos.x, pos.y, width, height);
-      }
-    }
-    
-    // Preview border outline
-    ctx.strokeStyle = previewColor;
-    ctx.lineWidth = 2;
-    ctx.setLineDash([5, 5]);
-    
-    if (isCornerComponent) {
-      const squareSize = Math.min(draggedElement.width, draggedElement.depth) * zoom;
-      ctx.strokeRect(pos.x, pos.y, squareSize, squareSize);
-    } else {
-      const width = draggedElement.width * zoom;
-      const height = (draggedElement.depth || draggedElement.height) * zoom;
-      ctx.strokeRect(pos.x, pos.y, width, height);
-    }
-    
-    ctx.restore();
-  }, [isDragging, draggedElement, currentMousePos, canvasToRoom, roomToCanvas, zoom, getSnapPosition, showWireframe, showColorDetail]);
-
-  // Draw tape measure - multi-measurement support
-  const drawTapeMeasure = useCallback((ctx: CanvasRenderingContext2D) => {
-    ctx.save();
-
-    // Helper function to draw a single measurement
-    const drawSingleMeasurement = (start: { x: number; y: number }, end: { x: number; y: number }, isCompleted: boolean, measurementIndex?: number) => {
-      // Calculate distance in cm
-      const pixelDistance = Math.sqrt(
-        Math.pow(end.x - start.x, 2) + 
-        Math.pow(end.y - start.y, 2)
-      );
-      const distanceInCm = Math.round(pixelDistance / zoom);
-
-      // Draw measurement line
-      ctx.strokeStyle = isCompleted ? '#3b82f6' : '#94a3b8'; // Blue if completed, gray if preview
-      ctx.lineWidth = 2;
-      ctx.setLineDash(isCompleted ? [] : [8, 4]); // Solid if completed, dashed if preview
-      
-      ctx.beginPath();
-      ctx.moveTo(start.x, start.y);
-      ctx.lineTo(end.x, end.y);
-      ctx.stroke();
-
-      // Draw start point
-      ctx.fillStyle = '#3b82f6';
-      ctx.beginPath();
-      ctx.arc(start.x, start.y, 5, 0, 2 * Math.PI);
-      ctx.fill();
-
-      // Draw end point
-      ctx.fillStyle = isCompleted ? '#3b82f6' : '#94a3b8';
-      ctx.beginPath();
-      ctx.arc(end.x, end.y, 5, 0, 2 * Math.PI);
-      ctx.fill();
-
-      // Draw distance label
-      const midX = (start.x + end.x) / 2;
-      const midY = (start.y + end.y) / 2;
-      
-      // Background for text
-      ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
-      ctx.strokeStyle = isCompleted ? '#3b82f6' : '#94a3b8';
-      ctx.lineWidth = 1;
-      
-      const text = `${distanceInCm}cm`;
-      const textWidth = ctx.measureText(text).width;
-      const padding = 6;
-      const bgWidth = textWidth + padding * 2;
-      const bgHeight = 20;
-      
-      ctx.fillRect(midX - bgWidth/2, midY - bgHeight/2, bgWidth, bgHeight);
-      ctx.strokeRect(midX - bgWidth/2, midY - bgHeight/2, bgWidth, bgHeight);
-      
-      // Distance text
-      ctx.fillStyle = isCompleted ? '#1e40af' : '#64748b';
-      ctx.font = 'bold 12px Arial';
-      ctx.textAlign = 'center';
-      ctx.textBaseline = 'middle';
-      ctx.fillText(text, midX, midY);
-
-      // Add measurement number for completed measurements
-      if (isCompleted && measurementIndex !== undefined) {
-        ctx.fillStyle = '#ffffff';
-        ctx.beginPath();
-        ctx.arc(start.x - 8, start.y - 8, 8, 0, 2 * Math.PI);
-        ctx.fill();
-        
-        ctx.fillStyle = '#3b82f6';
-        ctx.font = 'bold 10px Arial';
+      if (x > 0) {
         ctx.textAlign = 'center';
-        ctx.textBaseline = 'middle';
-        ctx.fillText((measurementIndex + 1).toString(), start.x - 8, start.y - 8);
-      }
-    };
-
-    // Draw all completed measurements
-    completedMeasurements.forEach((measurement, index) => {
-      drawSingleMeasurement(measurement.start, measurement.end, true, index);
-    });
-
-    // Draw current measurement in progress
-    if (currentMeasureStart) {
-      if (tapeMeasurePreview) {
-        // Show preview line
-        drawSingleMeasurement(currentMeasureStart, tapeMeasurePreview, false);
-      } else {
-        // Just show start point
-        ctx.fillStyle = '#3b82f6';
-        ctx.beginPath();
-        ctx.arc(currentMeasureStart.x, currentMeasureStart.y, 5, 0, 2 * Math.PI);
-        ctx.fill();
-        
-        // Draw start point label
-        ctx.fillStyle = '#1e40af';
-        ctx.font = 'bold 12px Arial';
-        ctx.textAlign = 'center';
-        ctx.textBaseline = 'middle';
-        ctx.fillText('START', currentMeasureStart.x, currentMeasureStart.y - 15);
+        ctx.fillText(`${x}cm`, xPos, rulerY + 15);
       }
     }
 
-    ctx.restore();
-  }, [completedMeasurements, currentMeasureStart, tapeMeasurePreview, zoom]);
+    // Vertical ruler (right side)
+    const rulerX = roomPosition.innerX + roomWidth * zoom + 25;
+
+    ctx.beginPath();
+    ctx.moveTo(rulerX, topY);
+    ctx.lineTo(rulerX, floorY);
+    ctx.stroke();
+
+    for (let h = 0; h <= getWallHeight(); h += 50) {
+      const yPos = floorY - h * zoom;
+      ctx.beginPath();
+      ctx.moveTo(rulerX - 3, yPos);
+      ctx.lineTo(rulerX + 3, yPos);
+      ctx.stroke();
+
+      if (h > 0) {
+        ctx.save();
+        ctx.translate(rulerX + 8, yPos);
+        ctx.rotate(-Math.PI / 2);
+        ctx.textAlign = 'center';
+        ctx.fillText(`${h}cm`, 0, 0);
+        ctx.restore();
+      }
+    }
+  }, [showRuler, active2DView, roomPosition, zoom, roomDimensions, currentViewInfo, getWallHeight]);
 
   // Main render function
   const render = useCallback(() => {
@@ -1780,8 +1082,8 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
     // Clear canvas
     ctx.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
 
-    // Draw grid
-    drawGrid(ctx);
+    // Draw grid (Story 1.15.1 - using PlanViewRenderer module)
+    PlanViewRenderer.drawGrid(ctx, showGrid, zoom, panOffset);
 
     // Draw room
     drawRoom(ctx);
@@ -1818,10 +1120,12 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
     });
 
     // Sort elements by zIndex for proper layering (lower zIndex = drawn first/behind)
-    elementsToRender.sort((a, b) => (a.zIndex || 0) - (b.zIndex || 0));
-
-    // Debug logging for layering order (disabled - causes console spam)
-    // Uncomment for debugging: Logger.debug(`🎯 [Rendering] Elements in order:`, elementsToRender.map(el => `${el.id} (${el.type}) -> zIndex: ${el.zIndex}`));
+    // Use getDefaultZIndex fallback for elements with zIndex: 0 (legacy elements)
+    elementsToRender.sort((a, b) => {
+      const aZ = a.zIndex && a.zIndex !== 0 ? a.zIndex : getDefaultZIndex(a.type, a.id);
+      const bZ = b.zIndex && b.zIndex !== 0 ? b.zIndex : getDefaultZIndex(b.type, b.id);
+      return aZ - bZ;
+    });
 
     // Use for...of loop to handle async drawElement calls
     elementsToRender.forEach(element => {
@@ -1836,19 +1140,23 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
       }
     });
 
-    // Draw snap guides and drag preview on top
+    // Draw snap guides and drag preview on top (Story 1.15.1 - using PlanViewRenderer)
     if (active2DView === 'plan') {
-      drawSnapGuides(ctx);
-      drawDragPreview(ctx);
+      PlanViewRenderer.drawSnapGuides(ctx, snapGuides, roomPosition, zoom);
+      PlanViewRenderer.drawDragPreview(ctx, draggedElement, currentMousePos, canvasToRoom, roomToCanvas, zoom);
     }
 
-    // Draw tape measure
-    drawTapeMeasure(ctx);
+    // Draw tape measure (Story 1.15.1 - using PlanViewRenderer)
+    PlanViewRenderer.drawTapeMeasure(ctx, completedMeasurements, currentMeasureStart, tapeMeasurePreview, zoom);
 
-    // Draw ruler
-    drawRuler(ctx);
+    // Draw ruler (Story 1.15.1 - using PlanViewRenderer for plan view, inline for elevation)
+    if (active2DView === 'plan') {
+      PlanViewRenderer.drawRuler(ctx, showRuler, roomDimensions, roomPosition, zoom);
+    } else {
+      drawElevationRuler(ctx);
+    }
 
-  }, [drawGrid, drawRoom, drawElement, drawSnapGuides, drawDragPreview, drawTapeMeasure, drawRuler, design.elements, active2DView, draggedElement, isDragging]);
+  }, [showGrid, panOffset, drawRoom, drawElement, drawElevationRuler, design.elements, active2DView, currentViewInfo, getElementWall, isCornerVisibleInView, draggedElement, isDragging, snapGuides, roomPosition, zoom, currentMousePos, canvasToRoom, roomToCanvas, completedMeasurements, currentMeasureStart, tapeMeasurePreview, showRuler, roomDimensions]);
 
 
   // Mouse event handlers
