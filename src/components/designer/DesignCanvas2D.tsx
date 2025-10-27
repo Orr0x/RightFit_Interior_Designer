@@ -787,260 +787,36 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
   }, [roomDimensions, design.elements]);
 
   // Draw full canvas grid
-  const drawGrid = useCallback((ctx: CanvasRenderingContext2D) => {
-    if (!showGrid) return;
+  // REMOVED: drawGrid() - now using PlanViewRenderer.drawGrid() (Story 1.15.1)
+  // See: src/components/designer/canvas/PlanViewRenderer.ts
 
-    ctx.strokeStyle = '#e0e0e0';
-    ctx.lineWidth = 1;
-    ctx.setLineDash([]);
-
-    const gridSize = GRID_SIZE * zoom;
-
-    // Draw vertical lines
-    for (let x = (panOffset.x % gridSize); x <= CANVAS_WIDTH; x += gridSize) {
-      ctx.beginPath();
-      ctx.moveTo(x, 0);
-      ctx.lineTo(x, CANVAS_HEIGHT);
-      ctx.stroke();
-    }
-
-    // Draw horizontal lines
-    for (let y = (panOffset.y % gridSize); y <= CANVAS_HEIGHT; y += gridSize) {
-      ctx.beginPath();
-      ctx.moveTo(0, y);
-      ctx.lineTo(CANVAS_WIDTH, y);
-      ctx.stroke();
-    }
-  }, [showGrid, zoom, panOffset]);
-
-  // Draw room within canvas
+  // Draw room within canvas (Story 1.15.1 - using module renderers)
   const drawRoom = useCallback((ctx: CanvasRenderingContext2D) => {
-    const innerWidth = innerRoomBounds.width * zoom;
-    const innerHeight = innerRoomBounds.height * zoom;
-    const outerWidth = outerRoomBounds.width * zoom;
-    const outerHeight = outerRoomBounds.height * zoom;
-    const wallThickness = WALL_THICKNESS * zoom;
-
     if (active2DView === 'plan') {
-      // Plan view - draw walls with proper thickness
-
-      if (roomGeometry) {
-        // Complex room geometry (L-shape, U-shape, custom polygons)
-        const vertices = roomGeometry.floor.vertices;
-
-        // Convert vertices to canvas coordinates
-        const canvasVertices = vertices.map(v => [
-          roomPosition.innerX + v[0] * zoom,
-          roomPosition.innerY + v[1] * zoom
-        ]);
-
-        // Draw floor (usable space)
-        ctx.fillStyle = '#f9f9f9';
-        ctx.beginPath();
-        ctx.moveTo(canvasVertices[0][0], canvasVertices[0][1]);
-        for (let i = 1; i < canvasVertices.length; i++) {
-          ctx.lineTo(canvasVertices[i][0], canvasVertices[i][1]);
-        }
-        ctx.closePath();
-        ctx.fill();
-
-        // Draw floor outline (inner boundary)
-        ctx.strokeStyle = '#666';
-        ctx.lineWidth = 1;
-        ctx.setLineDash([]);
-        ctx.stroke();
-
-        // Draw wall segments
-        roomGeometry.walls.forEach(wall => {
-          const startX = roomPosition.innerX + wall.start[0] * zoom;
-          const startY = roomPosition.innerY + wall.start[1] * zoom;
-          const endX = roomPosition.innerX + wall.end[0] * zoom;
-          const endY = roomPosition.innerY + wall.end[1] * zoom;
-          const thickness = (wall.thickness || WALL_THICKNESS) * zoom;
-
-          // Calculate wall perpendicular vector (for thickness)
-          const dx = endX - startX;
-          const dy = endY - startY;
-          const len = Math.sqrt(dx * dx + dy * dy);
-          const perpX = (-dy / len) * thickness / 2;
-          const perpY = (dx / len) * thickness / 2;
-
-          // Draw wall as thick line
-          ctx.fillStyle = '#e5e5e5';
-          ctx.beginPath();
-          ctx.moveTo(startX + perpX, startY + perpY);
-          ctx.lineTo(endX + perpX, endY + perpY);
-          ctx.lineTo(endX - perpX, endY - perpY);
-          ctx.lineTo(startX - perpX, startY - perpY);
-          ctx.closePath();
-          ctx.fill();
-
-          // Draw wall outline
-          ctx.strokeStyle = '#333';
-          ctx.lineWidth = 1;
-          ctx.stroke();
-        });
-      } else {
-        // Simple rectangular room (boundary-only rendering)
-        // ✅ FIXED: Use boundary lines instead of filled rectangles to prevent visual overlap
-
-        // Optional: Very subtle inner room background (doesn't block components)
-        ctx.fillStyle = 'rgba(249, 249, 249, 0.3)'; // 70% transparent
-        ctx.fillRect(roomPosition.innerX, roomPosition.innerY, innerWidth, innerHeight);
-
-        // Draw wall boundaries (stroke only - no fills)
-        ctx.strokeStyle = '#333';
-        ctx.lineWidth = 2;
-        ctx.setLineDash([]);
-
-        // Outer wall boundary
-        ctx.strokeRect(roomPosition.outerX, roomPosition.outerY, outerWidth, outerHeight);
-
-        // Inner room boundary (where components can be placed)
-        ctx.strokeStyle = '#666';
-        ctx.lineWidth = 1;
-        ctx.strokeRect(roomPosition.innerX, roomPosition.innerY, innerWidth, innerHeight);
-      }
-
-      // Room dimensions labels
-      ctx.fillStyle = '#666';
-      ctx.font = '12px Arial';
-      ctx.textAlign = 'center';
-      
-      // Width label (top) - show inner room dimensions
-      ctx.fillText(
-        `${roomDimensions.width}cm (inner)`,
-        roomPosition.innerX + innerWidth / 2,
-        roomPosition.outerY - 10
+      // Plan view - use PlanViewRenderer
+      PlanViewRenderer.drawRoomPlanView(
+        ctx,
+        innerRoomBounds,
+        outerRoomBounds,
+        roomPosition,
+        zoom,
+        roomGeometry
       );
-
-      // Height label (left) - show inner room dimensions
-      ctx.save();
-      ctx.translate(roomPosition.outerX - 25, roomPosition.innerY + innerHeight / 2);
-      ctx.rotate(-Math.PI / 2);
-      ctx.fillText(`${roomDimensions.height}cm (inner)`, 0, 0);
-      ctx.restore();
-      
-      // Wall thickness labels
-      ctx.fillStyle = '#999';
-      ctx.font = '10px Arial';
-      ctx.textAlign = 'center';
-      
-      // Top wall thickness
-      ctx.fillText(
-        `${WALL_THICKNESS}cm`,
-        roomPosition.innerX + innerWidth / 2,
-        roomPosition.outerY + wallThickness / 2 + 3
-      );
-      
-      // Left wall thickness
-      ctx.save();
-      ctx.translate(roomPosition.outerX + wallThickness / 2, roomPosition.innerY + innerHeight / 2);
-      ctx.rotate(-Math.PI / 2);
-      ctx.fillText(`${WALL_THICKNESS}cm`, 0, 3);
-      ctx.restore();
-
     } else {
-      // Elevation view - draw room as elevation (floor fixed, ceiling moves)
-      const wallHeight = getWallHeight() * zoom;
-      const floorY = roomPosition.innerY + (CANVAS_HEIGHT * 0.4); // Fixed floor position (adjusted for top-center alignment)
-      const topY = floorY - wallHeight; // Ceiling moves up/down based on wall height
-
-      // CRITICAL FIX: Use appropriate dimension for each elevation view based on direction
-      let elevationRoomWidth: number;
-      if (currentViewInfo.direction === 'front' || currentViewInfo.direction === 'back') {
-        elevationRoomWidth = roomDimensions.width * zoom; // Use room width for front/back views
-      } else {
-        elevationRoomWidth = roomDimensions.height * zoom; // Use room depth for left/right views
-      }
-
-      // Draw wall boundaries
-      ctx.fillStyle = '#f9f9f9';
-      ctx.fillRect(roomPosition.innerX, topY, elevationRoomWidth, wallHeight);
-
-      ctx.strokeStyle = '#333';
-      ctx.lineWidth = 2;
-      ctx.strokeRect(roomPosition.innerX, topY, elevationRoomWidth, wallHeight);
-
-      // Floor line
-      ctx.strokeStyle = '#8B4513';
-      ctx.lineWidth = 3;
-      ctx.beginPath();
-      ctx.moveTo(roomPosition.innerX, floorY);
-      ctx.lineTo(roomPosition.innerX + elevationRoomWidth, floorY);
-      ctx.stroke();
-
-      // Wall label
-      ctx.fillStyle = '#333';
-      ctx.font = '14px Arial';
-      ctx.textAlign = 'center';
-      const wallLabels = {
-        front: 'Front Wall',
-        back: 'Back Wall',
-        left: 'Left Wall',
-        right: 'Right Wall'
-      };
-      ctx.fillText(
-        wallLabels[currentViewInfo.direction] || '',
-        roomPosition.innerX + elevationRoomWidth / 2,
-        roomPosition.innerY - 20
+      // Elevation view - use ElevationViewRenderer
+      ElevationViewRenderer.drawRoomElevationView(
+        ctx,
+        roomDimensions,
+        roomPosition,
+        zoom,
+        getWallHeight(),
+        currentViewInfo
       );
-
-      // Dimension labels
-      ctx.fillStyle = '#666';
-      ctx.font = '12px Arial';
-
-      // Width dimension (bottom) - use inner room dimensions
-      let widthText = '';
-      if (currentViewInfo.direction === 'front' || currentViewInfo.direction === 'back') {
-        widthText = `${roomDimensions.width}cm (inner)`;
-      } else {
-        widthText = `${roomDimensions.height}cm (inner)`;
-      }
-      ctx.textAlign = 'center';
-      ctx.fillText(widthText, roomPosition.innerX + elevationRoomWidth / 2, floorY + 20);
-      
-      // Wall height dimension (left side)
-      const heightText = `${getWallHeight()}cm`;
-      ctx.save();
-      ctx.translate(roomPosition.innerX - 35, topY + wallHeight / 2);
-      ctx.rotate(-Math.PI / 2);
-      ctx.textAlign = 'center';
-      ctx.fillText(heightText, 0, 0);
-      ctx.restore();
-      
-      // Height indicator line with arrows
-      ctx.strokeStyle = '#999';
-      ctx.lineWidth = 1;
-      const indicatorX = roomPosition.innerX - 25;
-      
-      // Vertical line
-      ctx.beginPath();
-      ctx.moveTo(indicatorX, topY);
-      ctx.lineTo(indicatorX, floorY);
-      ctx.stroke();
-      
-      // Top arrow
-      ctx.beginPath();
-      ctx.moveTo(indicatorX, topY);
-      ctx.lineTo(indicatorX - 3, topY + 8);
-      ctx.moveTo(indicatorX, topY);
-      ctx.lineTo(indicatorX + 3, topY + 8);
-      ctx.stroke();
-      
-      // Bottom arrow
-      ctx.beginPath();
-      ctx.moveTo(indicatorX, floorY);
-      ctx.lineTo(indicatorX - 3, floorY - 8);
-      ctx.moveTo(indicatorX, floorY);
-      ctx.lineTo(indicatorX + 3, floorY - 8);
-      ctx.stroke();
     }
-  }, [roomDimensions, roomPosition, zoom, active2DView, roomGeometry, getWallHeight]);
+  }, [roomDimensions, roomPosition, zoom, active2DView, roomGeometry, getWallHeight, currentViewInfo, innerRoomBounds, outerRoomBounds]);
 
-  // LEGACY CODE REMOVED: drawSinkPlanView function (173 lines)
-  // Replaced by database-driven handlers in src/services/2d-renderers/plan-view-handlers.ts
-  // See archive: docs/session-2025-10-09-2d-database-migration/LEGACY-CODE-FULL-ARCHIVE.md
+  // REMOVED: 220+ lines of inline room rendering code (Story 1.15.1)
+  // See modules: PlanViewRenderer.drawRoomPlanView() and ElevationViewRenderer.drawRoomElevationView()
 
   // Draw element with smart rendering
   const drawElement = useCallback((ctx: CanvasRenderingContext2D, element: DesignElement) => {
@@ -1780,8 +1556,8 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
     // Clear canvas
     ctx.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
 
-    // Draw grid
-    drawGrid(ctx);
+    // Draw grid (Story 1.15.1 - using PlanViewRenderer module)
+    PlanViewRenderer.drawGrid(ctx, showGrid, zoom, panOffset);
 
     // Draw room
     drawRoom(ctx);
