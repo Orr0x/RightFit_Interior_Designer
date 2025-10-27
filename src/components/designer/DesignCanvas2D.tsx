@@ -261,6 +261,16 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
     snapPoint: { x: number; y: number } | null;
   }>({ vertical: [], horizontal: [], snapPoint: null });
 
+  // Tape measure state (local state with prop defaults)
+  const [localCurrentMeasureStart, setCurrentMeasureStart] = useState<{ x: number; y: number } | null>(currentMeasureStart || null);
+  const [localTapeMeasurePreview, setTapeMeasurePreview] = useState<{ x: number; y: number } | null>(tapeMeasurePreview || null);
+  const [localCompletedMeasurements, setCompletedMeasurements] = useState<Array<{ start: { x: number; y: number }, end: { x: number; y: number } }>>(completedMeasurements || []);
+
+  // Use prop values if provided, otherwise use local state
+  const effectiveCurrentMeasureStart = currentMeasureStart !== undefined ? currentMeasureStart : localCurrentMeasureStart;
+  const effectiveTapeMeasurePreview = tapeMeasurePreview !== undefined ? tapeMeasurePreview : localTapeMeasurePreview;
+  const effectiveCompletedMeasurements = completedMeasurements !== undefined ? completedMeasurements : localCompletedMeasurements;
+
   // Collision detection with type-aware magnetic snapping
   const { validatePlacement } = useCollisionDetection();
   const { toast } = useToast();
@@ -955,7 +965,7 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
     }
 
     // Draw tape measure (Story 1.15.1 - using PlanViewRenderer)
-    PlanViewRenderer.drawTapeMeasure(ctx, completedMeasurements, currentMeasureStart, tapeMeasurePreview, zoom);
+    PlanViewRenderer.drawTapeMeasure(ctx, effectiveCompletedMeasurements, effectiveCurrentMeasureStart, effectiveTapeMeasurePreview, zoom);
 
     // Draw ruler (Story 1.15.1/1.15.2 - using PlanViewRenderer and ElevationViewRenderer)
     if (active2DView === 'plan') {
@@ -964,7 +974,7 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
       ElevationViewRenderer.drawElevationRuler(ctx, showRuler, roomDimensions, roomPosition, zoom, getWallHeight(), currentViewInfo);
     }
 
-  }, [showGrid, panOffset, drawRoom, drawElement, design.elements, active2DView, currentViewInfo, getElementWall, isCornerVisibleInView, draggedElement, isDragging, snapGuides, roomPosition, zoom, currentMousePos, canvasToRoom, roomToCanvas, completedMeasurements, currentMeasureStart, tapeMeasurePreview, showRuler, roomDimensions, getWallHeight]);
+  }, [showGrid, panOffset, drawRoom, drawElement, design.elements, active2DView, currentViewInfo, getElementWall, isCornerVisibleInView, draggedElement, isDragging, snapGuides, roomPosition, zoom, currentMousePos, canvasToRoom, roomToCanvas, effectiveCompletedMeasurements, effectiveCurrentMeasureStart, effectiveTapeMeasurePreview, showRuler, roomDimensions, getWallHeight]);
 
   // Mouse event handlers (Story 1.15.2: Delegated to InteractionHandler module)
   const handleMouseDown = useCallback((e: React.MouseEvent<HTMLCanvasElement>) => {
@@ -985,9 +995,9 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
       dragThreshold,
       currentMousePos,
       activeTool,
-      currentMeasureStart,
-      tapeMeasurePreview,
-      completedMeasurements,
+      currentMeasureStart: effectiveCurrentMeasureStart,
+      tapeMeasurePreview: effectiveTapeMeasurePreview,
+      completedMeasurements: effectiveCompletedMeasurements,
       configCache
     };
 
@@ -1031,7 +1041,7 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
   }, [
     canvasRef, active2DView, currentViewInfo, zoom, panOffset, design, selectedElement, hoveredElement,
     isDragging, draggedElement, draggedElementOriginalPos, dragStart, dragThreshold, currentMousePos,
-    activeTool, currentMeasureStart, tapeMeasurePreview, completedMeasurements, configCache,
+    activeTool, effectiveCurrentMeasureStart, effectiveTapeMeasurePreview, effectiveCompletedMeasurements, configCache,
     onSelectElement, setHoveredElement, setIsDragging, setDraggedElement, setDraggedElementOriginalPos,
     setDragStart, setDragThreshold, setCurrentMousePos, setPanOffset, setCurrentMeasureStart,
     setTapeMeasurePreview, setCompletedMeasurements, setSnapGuides, updateCurrentRoomDesign,
@@ -1079,7 +1089,7 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
   }, [
     canvasRef, active2DView, currentViewInfo, zoom, panOffset, design, selectedElement, hoveredElement,
     isDragging, draggedElement, draggedElementOriginalPos, dragStart, dragThreshold, currentMousePos,
-    activeTool, currentMeasureStart, tapeMeasurePreview, completedMeasurements, configCache,
+    activeTool, effectiveCurrentMeasureStart, effectiveTapeMeasurePreview, effectiveCompletedMeasurements, configCache,
     onSelectElement, setHoveredElement, setIsDragging, setDraggedElement, setDraggedElementOriginalPos,
     setDragStart, setDragThreshold, setCurrentMousePos, setPanOffset, setCurrentMeasureStart,
     setTapeMeasurePreview, setCompletedMeasurements, setSnapGuides, updateCurrentRoomDesign,
@@ -1118,7 +1128,7 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
   }, [
     canvasRef, active2DView, currentViewInfo, zoom, panOffset, design, selectedElement, hoveredElement,
     isDragging, draggedElement, draggedElementOriginalPos, dragStart, dragThreshold, currentMousePos,
-    activeTool, currentMeasureStart, tapeMeasurePreview, completedMeasurements, configCache,
+    activeTool, effectiveCurrentMeasureStart, effectiveTapeMeasurePreview, effectiveCompletedMeasurements, configCache,
     onSelectElement, setHoveredElement, setIsDragging, setDraggedElement, setDraggedElementOriginalPos,
     setDragStart, setDragThreshold, setCurrentMousePos, setPanOffset, setCurrentMeasureStart,
     setTapeMeasurePreview, setCompletedMeasurements, setSnapGuides, updateCurrentRoomDesign,
@@ -1154,7 +1164,7 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
     }, [
       canvasRef, active2DView, currentViewInfo, zoom, panOffset, design, selectedElement, hoveredElement,
       isDragging, draggedElement, draggedElementOriginalPos, dragStart, dragThreshold, currentMousePos,
-      activeTool, currentMeasureStart, tapeMeasurePreview, completedMeasurements, configCache,
+      activeTool, effectiveCurrentMeasureStart, effectiveTapeMeasurePreview, effectiveCompletedMeasurements, configCache,
       onSelectElement, setHoveredElement, setIsDragging, setDraggedElement, setDraggedElementOriginalPos,
       setDragStart, setDragThreshold, setCurrentMousePos, setPanOffset, setCurrentMeasureStart,
       setTapeMeasurePreview, setCompletedMeasurements, setSnapGuides, updateCurrentRoomDesign,
@@ -1188,7 +1198,7 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
     }, [
       canvasRef, active2DView, currentViewInfo, zoom, panOffset, design, selectedElement, hoveredElement,
       isDragging, draggedElement, draggedElementOriginalPos, dragStart, dragThreshold, currentMousePos,
-      activeTool, currentMeasureStart, tapeMeasurePreview, completedMeasurements, configCache,
+      activeTool, effectiveCurrentMeasureStart, effectiveTapeMeasurePreview, effectiveCompletedMeasurements, configCache,
       onSelectElement, setHoveredElement, setIsDragging, setDraggedElement, setDraggedElementOriginalPos,
       setDragStart, setDragThreshold, setCurrentMousePos, setPanOffset, setCurrentMeasureStart,
       setTapeMeasurePreview, setCompletedMeasurements, setSnapGuides, updateCurrentRoomDesign,
@@ -1222,7 +1232,7 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
     }, [
       canvasRef, active2DView, currentViewInfo, zoom, panOffset, design, selectedElement, hoveredElement,
       isDragging, draggedElement, draggedElementOriginalPos, dragStart, dragThreshold, currentMousePos,
-      activeTool, currentMeasureStart, tapeMeasurePreview, completedMeasurements, configCache,
+      activeTool, effectiveCurrentMeasureStart, effectiveTapeMeasurePreview, effectiveCompletedMeasurements, configCache,
       onSelectElement, setHoveredElement, setIsDragging, setDraggedElement, setDraggedElementOriginalPos,
       setDragStart, setDragThreshold, setCurrentMousePos, setPanOffset, setCurrentMeasureStart,
       setTapeMeasurePreview, setCompletedMeasurements, setSnapGuides, updateCurrentRoomDesign,
@@ -1295,9 +1305,9 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
       dragThreshold,
       currentMousePos,
       activeTool,
-      currentMeasureStart,
-      tapeMeasurePreview,
-      completedMeasurements,
+      currentMeasureStart: effectiveCurrentMeasureStart,
+      tapeMeasurePreview: effectiveTapeMeasurePreview,
+      completedMeasurements: effectiveCompletedMeasurements,
       configCache
     };
 
