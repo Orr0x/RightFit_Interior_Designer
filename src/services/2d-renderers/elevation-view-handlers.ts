@@ -47,19 +47,33 @@ export function renderStandardCabinet(
   const drawerCount = data.drawer_count ?? 0;
   const drawerHeights = data.drawer_heights ?? [];
 
-  // Door count logic:
-  // 1. If has drawers (drawer_count > 0), no doors (drawer units show drawer fronts only)
-  // 2. If database specifies door_count, use it
-  // 3. Otherwise: ≤60cm wide = 1 door, >60cm wide = 2 doors
+  // Door count logic (FIXED: Width-based takes precedence over database):
+  // 1. Drawer units (drawer_count > 0): No doors, only drawer fronts
+  // 2. Standard cabinets: Width-based (≤60cm=1 door, >60cm=2 doors)
+  // 3. Database door_count only used if it differs from width-based (special overrides)
   let doorCount: number;
+
   if (drawerCount > 0) {
-    doorCount = 0; // Drawer units don't have doors, only drawer fronts
-  } else if (data.door_count !== undefined && data.door_count !== null) {
-    doorCount = data.door_count;
+    // Drawer units: No doors, only drawer fronts
+    doorCount = 0;
   } else {
-    // Width-based door count: ≤60cm = 1 door, >60cm = 2 doors
+    // Standard cabinets: Width-based door count (industry standard)
     const widthCm = element.width;
-    doorCount = widthCm <= 60 ? 1 : 2;
+    const widthBasedDoors = widthCm <= 60 ? 1 : 2;
+
+    // Database can override ONLY if explicitly different (for special cases)
+    if (data.door_count !== undefined &&
+        data.door_count !== null &&
+        data.door_count !== widthBasedDoors) {
+      // Explicit override for special cases (e.g., corner cabinets)
+      doorCount = data.door_count;
+      if (process.env.NODE_ENV === 'development') {
+        console.log(`🚪 [Door Override] ${element.component_id}: ${widthCm}cm wide, width-based=${widthBasedDoors}, using database=${data.door_count}`);
+      }
+    } else {
+      // Use width-based standard (most common case)
+      doorCount = widthBasedDoors;
+    }
   }
 
   // Corner cabinet detection (Option C - Hybrid)
