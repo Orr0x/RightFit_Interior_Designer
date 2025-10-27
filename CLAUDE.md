@@ -16,7 +16,8 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - If you accidentally access archive files, **STOP** and ask the user for guidance
 
 **Authoritative Documentation:**
-- [docs/README.md](./docs/README.md) - Documentation index (START HERE)
+- **[HANDOVER.md](./HANDOVER.md)** - 🔥 **START HERE IF CONTINUING SESSION** 🔥 (Complete context for next agent)
+- [docs/README.md](./docs/README.md) - Documentation index
 - [docs/prd.md](./docs/prd.md) - Technical Debt Remediation PRD (THE PLAN)
 - [docs/brownfield-architecture.md](./docs/brownfield-architecture.md) - System architecture
 - [docs/CODE_REVIEW_COMPREHENSIVE.md](./docs/CODE_REVIEW_COMPREHENSIVE.md) - Critical issues
