@@ -15,6 +15,7 @@ import type {
   OpenShelfData,
   RoomDimensions
 } from '@/types/render2d';
+import { CornerCabinetDoorMatrix } from '@/utils/CornerCabinetDoorMatrix';
 
 // =====================================================
 // Standard Cabinet Handler (with doors, handles, toe kick)
@@ -509,68 +510,45 @@ function renderCornerCabinetDoors(
   const handleWidth = 2 * zoom;
   const handleHeight = 10 * zoom;
 
-  // Determine door side (3-tier priority system)
-  let doorSide: 'left' | 'right' = 'left';
+  // Story 1.11: Determine door side using CornerCabinetDoorMatrix
+  // Single source of truth - same logic for ALL elevation views
+  // Replaces 16 view-specific rules (4 views × 4 corners) with 4 corner-position rules
 
-  // Priority 1: Manual override from element or database
   const manualOverride = element.cornerDoorSide ?? data.corner_door_side;
-  if (manualOverride && manualOverride !== 'auto') {
-    doorSide = manualOverride;
-  } else {
-    // Priority 2: Auto-detect based on corner position using centerline algorithm
-    const roomCenterX = roomDimensions.width / 2;
-    const roomCenterY = roomDimensions.height / 2;
 
-    // Detect which corner this cabinet is in
-    const tolerance = 30; // cm tolerance for corner detection
-    let cornerPosition: 'front-left' | 'front-right' | 'back-left' | 'back-right' | null = null;
-
-    if (element.x <= tolerance && element.y <= tolerance) {
-      cornerPosition = 'front-left';
-    } else if (element.x >= roomDimensions.width - width / zoom - tolerance && element.y <= tolerance) {
-      cornerPosition = 'front-right';
-    } else if (element.x <= tolerance && element.y >= roomDimensions.height - height / zoom - tolerance) {
-      cornerPosition = 'back-left';
-    } else if (element.x >= roomDimensions.width - width / zoom - tolerance &&
-               element.y >= roomDimensions.height - height / zoom - tolerance) {
-      cornerPosition = 'back-right';
+  const { doorSide, cornerPosition } = CornerCabinetDoorMatrix.determineCornerDoorSide(
+    {
+      x: element.x,
+      y: element.y,
+      width: element.width,
+      depth: element.depth,
+      cornerDoorSide: manualOverride
+    },
+    {
+      width: roomDimensions.width,
+      depth: roomDimensions.height  // Legacy mapping: height → depth
     }
+  );
 
-    // Door placement rules based on corner position AND current elevation view
-    // Different logic for each view because we're looking at different walls
-    // NOTE: Back view is correct, others were inverted - now fixed
-
-    if (cornerPosition) {
-      if (currentView === 'front') {
-        // Front view: looking at front wall (Y=0) - INVERTED (same as back)
-        // Front-left: door on RIGHT | Front-right: door on LEFT
-        doorSide = (cornerPosition === 'front-left') ? 'right' : 'left';
-
-      } else if (currentView === 'back') {
-        // Back view: looking at back wall (Y=max) - CORRECT ✅
-        // Back-left: door on RIGHT | Back-right: door on LEFT
-        doorSide = (cornerPosition === 'back-left') ? 'right' : 'left';
-
-      } else if (currentView === 'left') {
-        // Left view: looking at left wall (X=0) - INVERTED
-        // Front-left: door on LEFT | Back-left: door on RIGHT
-        doorSide = (cornerPosition === 'front-left') ? 'left' : 'right';
-
-      } else if (currentView === 'right') {
-        // Right view: looking at right wall (X=max) - INVERTED
-        // Front-right: door on RIGHT | Back-right: door on LEFT
-        doorSide = (cornerPosition === 'front-right') ? 'right' : 'left';
-
-      } else {
-        // Fallback for undefined view
-        doorSide = 'left';
-      }
-    }
+  // Debug logging (development mode only)
+  if (process.env.NODE_ENV === 'development') {
+    console.log(`🚪 [Door Matrix] ${element.id} | Corner: ${cornerPosition || 'none'} | Door: ${doorSide} | View: ${currentView}`);
   }
 
-  // Calculate door and panel widths (50% each)
-  const doorWidth = (width - doorInset * 2 - doorGap) / 2;
-  const panelWidth = (width - doorInset * 2 - doorGap) / 2;
+  // Calculate door and panel widths
+  // Door: Fixed 30cm | Panel: Remaining width
+  // Issue #4: Component Elevation View Fixes - 2025-10-19
+  const doorWidthCm = 30; // Fixed 30cm door width
+  let doorWidth = doorWidthCm * zoom;
+  let panelWidth = width - doorInset * 2 - doorGap - doorWidth;
+
+  // Fallback: if panel width is too small (cabinet < 60cm), use 50/50 split
+  if (panelWidth < doorWidth * 0.5) {
+    // Cabinet is too narrow for 30cm door - use proportional split
+    const totalAvailableWidth = width - doorInset * 2 - doorGap;
+    doorWidth = totalAvailableWidth / 2;
+    panelWidth = totalAvailableWidth / 2;
+  }
 
   // Render based on door side
   if (doorSide === 'left') {
