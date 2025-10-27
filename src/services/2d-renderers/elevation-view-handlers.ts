@@ -44,35 +44,56 @@ export function renderStandardCabinet(
   const hasToeKick = isWallMounted ? false : (data.has_toe_kick ?? false);
 
   const toeKickHeight = (data.toe_kick_height ?? 10) * zoom;
-  const drawerCount = data.drawer_count ?? 0;
+
+  // ✨ FIX: Infer drawer_count from component_id (database has incorrect 0 values)
+  // Examples: "pan-drawers-3", "pan-drawers-4", "pan-drawers-100" (100cm width, typically 3 drawers)
+  let drawerCount = data.drawer_count ?? 0;
+  if (element.component_id?.includes('drawer') || element.component_id?.includes('pan-drawer')) {
+    // Check for explicit drawer count in component ID (e.g., "pan-drawers-3")
+    const drawerMatch = element.component_id.match(/drawer[s]?-(\d+)(?:-|$)/);
+    if (drawerMatch) {
+      const numFromId = parseInt(drawerMatch[1], 10);
+      // If number is small (1-6), it's drawer count; if large (>20), it's width in cm
+      if (numFromId <= 6) {
+        drawerCount = numFromId;
+      } else {
+        // Infer drawer count from width (industry standard for pan drawers)
+        const widthCm = element.width || numFromId;
+        if (widthCm >= 80) {
+          drawerCount = 4; // Wide units: 4 drawers
+        } else if (widthCm >= 50) {
+          drawerCount = 3; // Standard units: 3 drawers
+        } else {
+          drawerCount = 2; // Narrow units: 2 drawers
+        }
+      }
+      if (process.env.NODE_ENV === 'development') {
+        console.log(`📦 [Drawer Inference] ${element.component_id}: Inferred ${drawerCount} drawers`);
+      }
+    }
+  }
+
   const drawerHeights = data.drawer_heights ?? [];
 
-  // Door count logic (FIXED: Width-based takes precedence over database):
-  // 1. Drawer units (drawer_count > 0): No doors, only drawer fronts
-  // 2. Standard cabinets: Width-based (≤60cm=1 door, >60cm=2 doors)
-  // 3. Database door_count only used if it differs from width-based (special overrides)
+  // ✨ FIX: Door count logic - ALWAYS use width-based, IGNORE database
+  // Database has incorrect door_count values. Use industry standard exclusively:
+  // - Drawer units (drawer_count > 0): No doors, only drawer fronts
+  // - Standard cabinets: Width-based (≤60cm=1 door, >60cm=2 doors)
+  // - Corner cabinets: 1 door (handled separately in renderCornerCabinetDoors)
   let doorCount: number;
 
   if (drawerCount > 0) {
     // Drawer units: No doors, only drawer fronts
     doorCount = 0;
+    if (process.env.NODE_ENV === 'development') {
+      console.log(`📦 [Drawer Unit] ${element.component_id}: ${drawerCount} drawers, doorCount=0`);
+    }
   } else {
-    // Standard cabinets: Width-based door count (industry standard)
+    // Standard cabinets: ALWAYS use width-based door count (industry standard)
     const widthCm = element.width;
-    const widthBasedDoors = widthCm <= 60 ? 1 : 2;
-
-    // Database can override ONLY if explicitly different (for special cases)
-    if (data.door_count !== undefined &&
-        data.door_count !== null &&
-        data.door_count !== widthBasedDoors) {
-      // Explicit override for special cases (e.g., corner cabinets)
-      doorCount = data.door_count;
-      if (process.env.NODE_ENV === 'development') {
-        console.log(`🚪 [Door Override] ${element.component_id}: ${widthCm}cm wide, width-based=${widthBasedDoors}, using database=${data.door_count}`);
-      }
-    } else {
-      // Use width-based standard (most common case)
-      doorCount = widthBasedDoors;
+    doorCount = widthCm <= 60 ? 1 : 2;
+    if (process.env.NODE_ENV === 'development' && data.door_count !== doorCount) {
+      console.log(`🚪 [Width-Based Doors] ${element.component_id}: ${widthCm}cm wide = ${doorCount} door(s) (database had ${data.door_count})`);
     }
   }
 
