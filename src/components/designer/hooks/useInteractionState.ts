@@ -1,10 +1,10 @@
 import { useState } from 'react';
 import type { DesignElement } from '@/types/project';
 
-interface SnapGuide {
-  type: 'vertical' | 'horizontal';
-  position: number;
-  label: string;
+interface SnapGuidesState {
+  vertical: number[];
+  horizontal: number[];
+  snapPoint: { x: number; y: number } | null;
 }
 
 interface UseInteractionStateReturn {
@@ -27,8 +27,8 @@ interface UseInteractionStateReturn {
   setHoveredElement: React.Dispatch<React.SetStateAction<DesignElement | null>>;
 
   // Snap guides
-  snapGuides: SnapGuide[];
-  setSnapGuides: React.Dispatch<React.SetStateAction<SnapGuide[]>>;
+  snapGuides: SnapGuidesState;
+  setSnapGuides: React.Dispatch<React.SetStateAction<SnapGuidesState>>;
 }
 
 /**
@@ -51,7 +51,11 @@ export function useInteractionState(): UseInteractionStateReturn {
   const [hoveredElement, setHoveredElement] = useState<DesignElement | null>(null);
 
   // Snap guides
-  const [snapGuides, setSnapGuides] = useState<SnapGuide[]>([]);
+  const [snapGuides, setSnapGuides] = useState<SnapGuidesState>({
+    vertical: [],
+    horizontal: [],
+    snapPoint: null,
+  });
 
   return {
     isDragging,

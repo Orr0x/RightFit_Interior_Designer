@@ -24,6 +24,10 @@ import * as PlanViewRenderer from './canvas/PlanViewRenderer';
 import * as ElevationViewRenderer from './canvas/ElevationViewRenderer';
 // Story 1.15.2: Interaction handlers
 import * as InteractionHandler from './canvas/InteractionHandler';
+// Story 1.15.3: State management hooks
+import { useCanvasState } from './hooks/useCanvasState';
+import { useInteractionState } from './hooks/useInteractionState';
+import { useToolState } from './hooks/useToolState';
 import {
   CANVAS_WIDTH,
   CANVAS_HEIGHT,
@@ -189,14 +193,26 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
   onZoomIn,
   onZoomOut
 }) => {
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-  const containerRef = useRef<HTMLDivElement>(null);
-
-  // State management
-  const [zoom, setZoom] = useState(1.0);
-  const [panOffset, setPanOffset] = useState({ x: 0, y: 0 });
-  const [roomGeometry, setRoomGeometry] = useState<RoomGeometry | null>(null);
-  const [loadingGeometry, setLoadingGeometry] = useState(false);
+  // Story 1.15.3: Canvas state management hook
+  const {
+    canvasRef,
+    containerRef,
+    zoom,
+    setZoom,
+    panOffset,
+    setPanOffset,
+    roomGeometry,
+    setRoomGeometry,
+    loadingGeometry,
+    setLoadingGeometry,
+    touchZoomStart,
+    setTouchZoomStart,
+  } = useCanvasState({
+    roomType: design.roomType,
+    roomDimensions: design.roomDimensions,
+    fitToScreenSignal,
+    onZoomChange,
+  });
 
   // Extract current view direction and hidden elements from ALL view configs (plan, elevation, 3D)
   const currentViewInfo = React.useMemo(() => {
@@ -250,28 +266,43 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
       setZoom(prev => Math.max(MIN_ZOOM, prev / 1.2));
     }
   }, [onZoomOut]);
-  const [isDragging, setIsDragging] = useState(false);
-  const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
-  const [currentMousePos, setCurrentMousePos] = useState({ x: 0, y: 0 });
-  const [draggedElement, setDraggedElement] = useState<DesignElement | null>(null);
-  const [draggedElementOriginalPos, setDraggedElementOriginalPos] = useState<{ x: number; y: number } | null>(null);
-  const [hoveredElement, setHoveredElement] = useState<DesignElement | null>(null);
-  const [dragThreshold, setDragThreshold] = useState<{ exceeded: boolean; startElement: DesignElement | null }>({ exceeded: false, startElement: null });
-  const [snapGuides, setSnapGuides] = useState<{
-    vertical: number[];
-    horizontal: number[];
-    snapPoint: { x: number; y: number } | null;
-  }>({ vertical: [], horizontal: [], snapPoint: null });
 
-  // Tape measure state (local state with prop defaults)
-  const [localCurrentMeasureStart, setCurrentMeasureStart] = useState<{ x: number; y: number } | null>(currentMeasureStart || null);
-  const [localTapeMeasurePreview, setTapeMeasurePreview] = useState<{ x: number; y: number } | null>(tapeMeasurePreview || null);
-  const [localCompletedMeasurements, setCompletedMeasurements] = useState<Array<{ start: { x: number; y: number }, end: { x: number; y: number } }>>(completedMeasurements || []);
+  // Story 1.15.3: Interaction state management hook
+  const {
+    isDragging,
+    setIsDragging,
+    dragStart,
+    setDragStart,
+    currentMousePos,
+    setCurrentMousePos,
+    draggedElement,
+    setDraggedElement,
+    draggedElementOriginalPos,
+    setDraggedElementOriginalPos,
+    hoveredElement,
+    setHoveredElement,
+    dragThreshold,
+    setDragThreshold,
+    snapGuides,
+    setSnapGuides,
+  } = useInteractionState();
 
-  // Use prop values if provided, otherwise use local state
-  const effectiveCurrentMeasureStart = currentMeasureStart !== undefined ? currentMeasureStart : localCurrentMeasureStart;
-  const effectiveTapeMeasurePreview = tapeMeasurePreview !== undefined ? tapeMeasurePreview : localTapeMeasurePreview;
-  const effectiveCompletedMeasurements = completedMeasurements !== undefined ? completedMeasurements : localCompletedMeasurements;
+  // Story 1.15.3: Tool state management hook (tape measure)
+  const {
+    currentMeasureStart: localCurrentMeasureStart,
+    setCurrentMeasureStart,
+    tapeMeasurePreview: localTapeMeasurePreview,
+    setTapeMeasurePreview,
+    completedMeasurements: localCompletedMeasurements,
+    setCompletedMeasurements,
+    effectiveCurrentMeasureStart,
+    effectiveTapeMeasurePreview,
+    effectiveCompletedMeasurements,
+  } = useToolState({
+    completedMeasurements,
+    currentMeasureStart,
+    tapeMeasurePreview,
+  });
 
   // Provide fallback for updateCurrentRoomDesign if not passed (noop for standalone usage)
   const effectiveUpdateCurrentRoomDesign = updateCurrentRoomDesign || ((updateFn: (design: Design) => Design) => {
@@ -295,9 +326,6 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
   
   // Mobile detection
   const isMobile = useIsMobile();
-
-  // Touch events state
-  const [touchZoomStart, setTouchZoomStart] = useState<number | null>(null);
 
   // Preload configuration values from database on component mount
   useEffect(() => {
