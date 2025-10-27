@@ -1356,42 +1356,21 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
     
     // Tall corner unit dimensions are now correct (90x90cm) after database migration
     
-    // ✨ PHASE 3: Calculate vertical position and height using database layer metadata
-    // This aligns elevation views with collision detection system (single source of truth)
+    // Story 1.9: Calculate vertical position using ComponentService (single source of truth)
+    // ComponentService uses: element.z → database default_z_position → type fallback
     let elementHeight: number;
     let yPos: number;
 
-    // Try to get metadata from database (Phase 1 collision detection)
-    const metadata = getComponentMetadata(element.component_id || element.id);
+    // Get Z position (height off floor) - Story 1.9 single source of truth
+    const zPosition = ComponentService.getZPosition(element);
 
-    if (metadata) {
-      // ✅ DATABASE-DRIVEN: Use authoritative layer heights from database
-      const componentHeight = metadata.max_height_cm - metadata.min_height_cm;
-      const mountHeight = metadata.min_height_cm;
+    // Get elevation height (SIZE of component) - Always uses element.height
+    const elevationHeightCm = ComponentService.getElevationHeight(element.component_id, element);
 
-      elementHeight = componentHeight * zoom;
-      yPos = floorY - (mountHeight * zoom) - elementHeight;
-
-      // Override with explicit Z position if present
-      if (element.z && element.z > 0) {
-        const explicitMountHeight = element.z * zoom;
-        yPos = floorY - explicitMountHeight - elementHeight;
-      }
-    } else {
-      // ⚠️ FALLBACK: Component not in database
-      // Story 1.9: Use ComponentService for single source of truth
-
-      // Get Z position (height off floor) - Priority: element.z → database → type fallback
-      const zPosition = ComponentService.getZPosition(element);
-
-      // Get elevation height (SIZE of component) - Always uses element.height
-      const elevationHeightCm = ComponentService.getElevationHeight(element.component_id, element);
-
-      // Calculate canvas positions
-      elementHeight = elevationHeightCm * zoom;
-      const mountHeight = zPosition * zoom;
-      yPos = floorY - mountHeight - elementHeight;
-    }
+    // Calculate canvas positions
+    elementHeight = elevationHeightCm * zoom;
+    const mountHeight = zPosition * zoom;
+    yPos = floorY - mountHeight - elementHeight;
 
     // Draw detailed elevation view
     ctx.save();
