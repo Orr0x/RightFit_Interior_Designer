@@ -625,8 +625,56 @@ export function handleTouchStart(
   callbacks: InteractionCallbacks,
   utils: InteractionUtilities
 ): void {
-  // Implementation will be extracted from DesignCanvas2D.tsx
-  // Placeholder for now
+  const canvas = state.canvasRef.current;
+  if (!canvas) return;
+
+  // Convert touch coordinates to canvas coordinates
+  const rect = canvas.getBoundingClientRect();
+  const scaleX = CANVAS_WIDTH / rect.width;
+  const scaleY = CANVAS_HEIGHT / rect.height;
+
+  const x = point.x * scaleX;
+  const y = point.y * scaleY;
+
+  if (state.activeTool === 'pan') {
+    callbacks.setIsDragging(true);
+    callbacks.setDragStart({ x, y });
+    return;
+  }
+
+  // Handle tape measure tool
+  if (state.activeTool === 'tape-measure') {
+    callbacks.setDragStart({ x, y });
+    return;
+  }
+
+  // Check for element touches
+  const roomPos = utils.canvasToRoom(x, y);
+  const touchedElement = state.design.elements.find(element => {
+    // Special handling for corner counter tops - use square bounding box
+    const isCornerCounterTop = element.type === 'counter-top' && element.id.includes('counter-top-corner');
+
+    if (isCornerCounterTop) {
+      // Use actual square dimensions for corner counter tops
+      const squareSize = Math.min(element.width, element.depth);
+      return roomPos.x >= element.x && roomPos.x <= element.x + squareSize &&
+             roomPos.y >= element.y && roomPos.y <= element.y + squareSize;
+    } else {
+      // Standard rectangular hit detection
+      return roomPos.x >= element.x && roomPos.x <= element.x + element.width &&
+             roomPos.y >= element.y && roomPos.y <= element.y + (element.depth || element.height);
+    }
+  });
+
+  if (touchedElement) {
+    callbacks.setSelectedElement(touchedElement);
+    if (state.activeTool === 'select') {
+      callbacks.setDragStart({ x, y });
+      callbacks.setDragThreshold({ exceeded: false, startElement: touchedElement });
+    }
+  } else {
+    callbacks.setSelectedElement(null);
+  }
 }
 
 /**
@@ -639,12 +687,139 @@ export function handleTouchMove(
   callbacks: InteractionCallbacks,
   utils: InteractionUtilities
 ): void {
-  // Implementation will be extracted from DesignCanvas2D.tsx
-  // Placeholder for now
+  const canvas = state.canvasRef.current;
+  if (!canvas) return;
+
+  const rect = canvas.getBoundingClientRect();
+  const scaleX = CANVAS_WIDTH / rect.width;
+  const scaleY = CANVAS_HEIGHT / rect.height;
+
+  const x = point.x * scaleX;
+  const y = point.y * scaleY;
+
+  // Always track current touch position for drag operations
+  callbacks.setCurrentMousePos({ x, y });
+
+  // Handle hover detection (for touch devices, only when not dragging)
+  if (!state.isDragging && state.active2DView === 'plan') {
+    const roomPos = utils.canvasToRoom(x, y);
+
+    // Use same filtering and ordering as selection for hover detection
+    let elementsToCheck = state.design.elements.filter(el => {
+      // For plan view: only check per-view hidden_elements
+      if (state.active2DView === 'plan') {
+        return !state.currentViewInfo.hiddenElements.includes(el.id);
+      }
+
+      // For elevation views: check both direction AND hidden_elements
+      const wall = utils.getElementWall(el);
+      const isCornerVisible = utils.isCornerVisibleInView(el, state.currentViewInfo.direction);
+
+      // Check direction visibility
+      const isDirectionVisible = wall === state.currentViewInfo.direction || wall === 'center' || isCornerVisible;
+      if (!isDirectionVisible) return false;
+
+      // Check if element is hidden in this specific view
+      if (state.currentViewInfo.hiddenElements.includes(el.id)) return false;
+
+      return true;
+    });
+
+    // Sort elements by zIndex in DESCENDING order (highest zIndex first) for hover
+    elementsToCheck.sort((a, b) => (b.zIndex || 0) - (a.zIndex || 0));
+
+    const hoveredEl = elementsToCheck.find(element => {
+      // Different hit detection for plan vs elevation views
+      if (state.active2DView === 'plan') {
+        // Plan view: rotation-aware hit detection
+        const width = element.width;
+        const height = element.depth || element.height;
+        const rotation = (element.rotation || 0) * Math.PI / 180;
+
+        const centerX = element.x + width / 2;
+        const centerY = element.y + height / 2;
+
+        const dx = roomPos.x - centerX;
+        const dy = roomPos.y - centerY;
+
+        const cos = Math.cos(-rotation);
+        const sin = Math.sin(-rotation);
+        const localX = dx * cos - dy * sin;
+        const localY = dx * sin + dy * cos;
+
+        return Math.abs(localX) <= width / 2 && Math.abs(localY) <= height / 2;
+      } else {
+        // Elevation view: X/Z coordinates
+        const width = element.width;
+        const height = element.height || 86;
+        const z = element.z || 0;
+
+        const centerX = element.x + width / 2;
+        const bottomZ = z;
+        const topZ = z + height;
+
+        const isInHorizontalBounds = Math.abs(roomPos.x - centerX) <= width / 2;
+        const isInVerticalBounds = roomPos.y >= bottomZ && roomPos.y <= topZ;
+
+        return isInHorizontalBounds && isInVerticalBounds;
+      }
+    });
+    callbacks.setHoveredElement(hoveredEl || null);
+  }
+
+  // Handle tape measure preview
+  if (state.activeTool === 'tape-measure' && state.tapeMeasurePreview !== null) {
+    callbacks.setTapeMeasurePreview({ x, y });
+  }
+
+  // Check drag threshold before starting drag (touch uses larger threshold)
+  if (!state.isDragging && state.dragThreshold.startElement && state.activeTool === 'select' && state.dragStart) {
+    const deltaX = x - state.dragStart.x;
+    const deltaY = y - state.dragStart.y;
+    const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+    const DRAG_THRESHOLD = state.configCache.drag_threshold_mouse || 10; // Touch threshold is larger
+
+    if (distance >= DRAG_THRESHOLD && !state.dragThreshold.exceeded) {
+      // Start dragging now that threshold is exceeded
+      callbacks.setIsDragging(true);
+      callbacks.setDraggedElement(state.dragThreshold.startElement);
+      callbacks.setDraggedElementOriginalPos({
+        x: state.dragThreshold.startElement.x,
+        y: state.dragThreshold.startElement.y
+      });
+      callbacks.setDragThreshold({ exceeded: true, startElement: state.dragThreshold.startElement });
+    }
+  }
+
+  if (!state.isDragging) return;
+
+  if (state.activeTool === 'pan') {
+    if (!state.dragStart) return;
+    const deltaX = x - state.dragStart.x;
+    const deltaY = y - state.dragStart.y;
+    callbacks.setPanOffset({
+      x: state.panOffset.x + deltaX,
+      y: state.panOffset.y + deltaY
+    });
+    callbacks.setDragStart({ x, y });
+  } else if (state.draggedElement && state.activeTool === 'select') {
+    // Update snap guides with current position
+    const roomPos = utils.canvasToRoom(x, y);
+    const snapResult = utils.getSnapPosition(state.draggedElement, roomPos.x, roomPos.y);
+    callbacks.setSnapGuides({
+      vertical: snapResult.guides.vertical,
+      horizontal: snapResult.guides.horizontal,
+      snapPoint: { x: snapResult.x, y: snapResult.y }
+    });
+
+    // Trigger re-render to show drag preview
+    callbacks.requestRender();
+  }
 }
 
 /**
  * Handle touch end events
+ * Note: Simplified version without collision detection for faster touch interactions
  */
 export function handleTouchEnd(
   point: TouchPoint,
@@ -653,8 +828,97 @@ export function handleTouchEnd(
   callbacks: InteractionCallbacks,
   utils: InteractionUtilities
 ): void {
-  // Implementation will be extracted from DesignCanvas2D.tsx
-  // Placeholder for now
+  if (state.isDragging && state.draggedElement) {
+    const roomPos = utils.canvasToRoom(state.currentMousePos.x, state.currentMousePos.y);
+
+    // Smart snap with walls and components
+    const snapped = utils.getSnapPosition(state.draggedElement, roomPos.x, roomPos.y);
+
+    // Apply light grid snapping only if not snapped to walls/components
+    let finalX = snapped.x;
+    let finalY = snapped.y;
+
+    const isWallSnapped = snapped.guides.vertical.length > 0 || snapped.guides.horizontal.length > 0;
+    if (!isWallSnapped) {
+      finalX = utils.snapToGrid(snapped.x);
+      finalY = utils.snapToGrid(snapped.y);
+    }
+
+    // Update element with final position
+    let clampWidth = state.draggedElement.width;
+    let clampDepth = state.draggedElement.depth;
+
+    // Handle corner components
+    const isCornerCounterTop = state.draggedElement.type === 'counter-top' && state.draggedElement.id.includes('counter-top-corner');
+    const isCornerWallCabinet = state.draggedElement.type === 'cabinet' && state.draggedElement.id.includes('corner-wall-cabinet');
+    const isCornerBaseCabinet = state.draggedElement.type === 'cabinet' && state.draggedElement.id.includes('corner-base-cabinet');
+    const isCornerTallUnit = state.draggedElement.type === 'cabinet' && (
+      state.draggedElement.id.includes('corner-tall') ||
+      state.draggedElement.id.includes('corner-larder') ||
+      state.draggedElement.id.includes('larder-corner')
+    );
+
+    if (isCornerCounterTop || isCornerWallCabinet || isCornerBaseCabinet || isCornerTallUnit) {
+      // Use actual square dimensions for corner components
+      const squareSize = Math.min(state.draggedElement.width, state.draggedElement.depth);
+      clampWidth = squareSize;
+      clampDepth = squareSize;
+    }
+
+    // Apply Smart Wall Snapping for dragged elements
+    const dragWallSnappedPos = utils.getEnhancedComponentPlacement(
+      finalX,
+      finalY,
+      state.draggedElement.width,
+      state.draggedElement.depth || state.draggedElement.height,
+      state.draggedElement.id,
+      state.draggedElement.type || 'cabinet',
+      state.design.roomDimensions
+    );
+
+    // Use wall snapped position if snapped, otherwise clamp to boundaries
+    let finalClampedX, finalClampedY;
+    const innerRoomBounds = utils.getInnerRoomBounds();
+
+    if (dragWallSnappedPos.snappedToWall) {
+      finalClampedX = dragWallSnappedPos.x;
+      finalClampedY = dragWallSnappedPos.y;
+
+      Logger.debug(`🎯 [Touch Drag Snap] Element moved to ${dragWallSnappedPos.corner || 'wall'} at (${finalClampedX}, ${finalClampedY})`);
+    } else {
+      // Standard boundary clamping if not snapped to wall
+      finalClampedX = Math.max(0, Math.min(finalX, innerRoomBounds.width - clampWidth));
+      finalClampedY = Math.max(0, Math.min(finalY, innerRoomBounds.height - clampDepth));
+    }
+
+    // Update element (simplified - no collision detection for faster touch interactions)
+    callbacks.onUpdateElement(state.draggedElement.id, {
+      x: dragWallSnappedPos.snappedToWall ? finalClampedX : utils.snapToGrid(finalClampedX),
+      y: dragWallSnappedPos.snappedToWall ? finalClampedY : utils.snapToGrid(finalClampedY),
+      rotation: snapped.rotation
+    });
+  }
+
+  // Handle tape measure clicks
+  if (state.activeTool === 'tape-measure' && !state.isDragging && state.currentMeasureStart !== null) {
+    // Add measurement to completed list
+    callbacks.setCompletedMeasurements([
+      ...state.completedMeasurements,
+      { start: state.currentMeasureStart, end: state.currentMousePos }
+    ]);
+    callbacks.setCurrentMeasureStart(null);
+    callbacks.setTapeMeasurePreview(null);
+  } else if (state.activeTool === 'tape-measure' && !state.isDragging) {
+    // Start new measurement
+    callbacks.setCurrentMeasureStart(state.currentMousePos);
+  }
+
+  // Clear drag state
+  callbacks.setIsDragging(false);
+  callbacks.setDraggedElement(null);
+  callbacks.setDraggedElementOriginalPos(null);
+  callbacks.setSnapGuides({ vertical: [], horizontal: [], snapPoint: null });
+  callbacks.setDragThreshold({ exceeded: false, startElement: null });
 }
 
 // =============================================================================
