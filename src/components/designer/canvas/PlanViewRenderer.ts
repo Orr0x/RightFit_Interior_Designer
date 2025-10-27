@@ -162,6 +162,32 @@ export function drawRoomPlanView(
 // =============================================================================
 
 /**
+ * Get color based on element's Z-index layer
+ * Uses brown tones to differentiate between layers
+ */
+function getLayerColor(zIndex: number | undefined): string {
+  const z = zIndex || 0;
+
+  // Layer-based color scheme (brown tones)
+  if (z <= 1.0) {
+    // Flooring layer
+    return '#d4a574'; // Light tan/beige
+  } else if (z <= 2.5) {
+    // Base cabinets, appliances, tall units
+    return '#a67c52'; // Medium brown
+  } else if (z <= 3.5) {
+    // Counter tops, sinks
+    return '#8b6239'; // Medium-dark brown
+  } else if (z <= 4.5) {
+    // Wall cabinets, wall end panels
+    return '#6b4423'; // Dark brown
+  } else {
+    // Pelmet, cornice, windows, doors
+    return '#4a2f1a'; // Very dark brown
+  }
+}
+
+/**
  * Draw a single element in plan view
  */
 export async function drawElementPlanView(
@@ -196,13 +222,14 @@ export async function drawElementPlanView(
     try {
       const renderDef = await render2DService.get2DRender(element.component_id);
       if (renderDef) {
-        // Apply selection/hover colors
+        // Apply selection/hover colors, or layer-based color
         if (isSelected) {
           ctx.fillStyle = '#ff6b6b';
         } else if (isHovered) {
           ctx.fillStyle = '#b0b0b0';
         } else {
-          ctx.fillStyle = renderDef.fill_color || element.color || '#8b4513';
+          // Use layer-based color scheme (brown tones by Z-index)
+          ctx.fillStyle = getLayerColor(element.zIndex);
         }
 
         // Render using database-driven system
@@ -215,7 +242,8 @@ export async function drawElementPlanView(
 
     // Minimal fallback if database rendering failed
     if (!renderedByDatabase) {
-      ctx.fillStyle = element.color || '#8b4513';
+      // Use layer-based color scheme (brown tones by Z-index)
+      ctx.fillStyle = getLayerColor(element.zIndex);
       ctx.fillRect(0, 0, width, depth);
     }
   }
