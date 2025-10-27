@@ -344,3 +344,82 @@ export function isCornerVisibleInView(
       return false;
   }
 }
+
+// =============================================================================
+// RULER RENDERING
+// =============================================================================
+
+/**
+ * Draw ruler for elevation view
+ * Extracted from DesignCanvas2D.tsx (Story 1.15.2 Phase 6b)
+ */
+export function drawElevationRuler(
+  ctx: CanvasRenderingContext2D,
+  showRuler: boolean,
+  roomDimensions: { width: number; height: number },
+  roomPosition: RoomPosition,
+  zoom: number,
+  wallHeight: number,
+  currentViewInfo: ElevationViewConfig
+): void {
+  if (!showRuler) return;
+
+  ctx.strokeStyle = '#666';
+  ctx.lineWidth = 1;
+  ctx.font = '10px Arial';
+  ctx.fillStyle = '#666';
+
+  // Elevation view rulers
+  const roomWidth = currentViewInfo.direction === 'front' || currentViewInfo.direction === 'back'
+    ? roomDimensions.width
+    : roomDimensions.height;
+
+  // Horizontal ruler (bottom)
+  const wallHeightZoomed = wallHeight * zoom;
+  const floorY = roomPosition.innerY + (CANVAS_HEIGHT * 0.4); // Fixed floor position
+  const topY = floorY - wallHeightZoomed; // Ceiling moves up/down based on wall height
+  const rulerY = floorY + 25;
+
+  ctx.beginPath();
+  ctx.moveTo(roomPosition.innerX, rulerY);
+  ctx.lineTo(roomPosition.innerX + roomWidth * zoom, rulerY);
+  ctx.stroke();
+
+  for (let x = 0; x <= roomWidth; x += 50) {
+    const xPos = roomPosition.innerX + x * zoom;
+    ctx.beginPath();
+    ctx.moveTo(xPos, rulerY - 3);
+    ctx.lineTo(xPos, rulerY + 3);
+    ctx.stroke();
+
+    if (x > 0) {
+      ctx.textAlign = 'center';
+      ctx.fillText(`${x}cm`, xPos, rulerY + 15);
+    }
+  }
+
+  // Vertical ruler (right side)
+  const rulerX = roomPosition.innerX + roomWidth * zoom + 25;
+
+  ctx.beginPath();
+  ctx.moveTo(rulerX, topY);
+  ctx.lineTo(rulerX, floorY);
+  ctx.stroke();
+
+  for (let h = 0; h <= wallHeight; h += 50) {
+    const yPos = floorY - h * zoom;
+    ctx.beginPath();
+    ctx.moveTo(rulerX - 3, yPos);
+    ctx.lineTo(rulerX + 3, yPos);
+    ctx.stroke();
+
+    if (h > 0) {
+      ctx.save();
+      ctx.translate(rulerX + 8, yPos);
+      ctx.rotate(-Math.PI / 2);
+      ctx.textAlign = 'center';
+      ctx.fillText(`${h}cm`, 0, 0);
+      ctx.restore();
+    }
+  }
+}

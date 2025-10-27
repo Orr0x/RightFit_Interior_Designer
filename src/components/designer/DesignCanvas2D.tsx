@@ -949,69 +949,7 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
 
   // Draw ruler/tape measure
   // REMOVED: drawRuler() plan view logic - now using PlanViewRenderer.drawRuler() (Story 1.15.1)
-  // Elevation view ruler kept inline until ElevationViewRenderer module adds ruler support
-  const drawElevationRuler = useCallback((ctx: CanvasRenderingContext2D) => {
-    if (!showRuler || active2DView === 'plan') return;
-
-    ctx.strokeStyle = '#666';
-    ctx.lineWidth = 1;
-    ctx.font = '10px Arial';
-    ctx.fillStyle = '#666';
-
-    // Elevation view rulers
-    const roomWidth = currentViewInfo.direction === 'front' || currentViewInfo.direction === 'back'
-      ? roomDimensions.width
-      : roomDimensions.height;
-
-    // Horizontal ruler (bottom)
-    const wallHeight = getWallHeight() * zoom;
-    const floorY = roomPosition.innerY + (CANVAS_HEIGHT * 0.4); // Fixed floor position (adjusted for top-center alignment)
-    const topY = floorY - wallHeight; // Ceiling moves up/down based on wall height
-    const rulerY = floorY + 25;
-
-    ctx.beginPath();
-    ctx.moveTo(roomPosition.innerX, rulerY);
-    ctx.lineTo(roomPosition.innerX + roomWidth * zoom, rulerY);
-    ctx.stroke();
-
-    for (let x = 0; x <= roomWidth; x += 50) {
-      const xPos = roomPosition.innerX + x * zoom;
-      ctx.beginPath();
-      ctx.moveTo(xPos, rulerY - 3);
-      ctx.lineTo(xPos, rulerY + 3);
-      ctx.stroke();
-
-      if (x > 0) {
-        ctx.textAlign = 'center';
-        ctx.fillText(`${x}cm`, xPos, rulerY + 15);
-      }
-    }
-
-    // Vertical ruler (right side)
-    const rulerX = roomPosition.innerX + roomWidth * zoom + 25;
-
-    ctx.beginPath();
-    ctx.moveTo(rulerX, topY);
-    ctx.lineTo(rulerX, floorY);
-    ctx.stroke();
-
-    for (let h = 0; h <= getWallHeight(); h += 50) {
-      const yPos = floorY - h * zoom;
-      ctx.beginPath();
-      ctx.moveTo(rulerX - 3, yPos);
-      ctx.lineTo(rulerX + 3, yPos);
-      ctx.stroke();
-
-      if (h > 0) {
-        ctx.save();
-        ctx.translate(rulerX + 8, yPos);
-        ctx.rotate(-Math.PI / 2);
-        ctx.textAlign = 'center';
-        ctx.fillText(`${h}cm`, 0, 0);
-        ctx.restore();
-      }
-    }
-  }, [showRuler, active2DView, roomPosition, zoom, roomDimensions, currentViewInfo, getWallHeight]);
+  // MOVED: drawElevationRuler() to ElevationViewRenderer.drawElevationRuler() (Story 1.15.2 Phase 6b)
 
   // Main render function
   const render = useCallback(() => {
@@ -1091,14 +1029,14 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
     // Draw tape measure (Story 1.15.1 - using PlanViewRenderer)
     PlanViewRenderer.drawTapeMeasure(ctx, completedMeasurements, currentMeasureStart, tapeMeasurePreview, zoom);
 
-    // Draw ruler (Story 1.15.1 - using PlanViewRenderer for plan view, inline for elevation)
+    // Draw ruler (Story 1.15.1/1.15.2 - using PlanViewRenderer and ElevationViewRenderer)
     if (active2DView === 'plan') {
       PlanViewRenderer.drawRuler(ctx, showRuler, roomDimensions, roomPosition, zoom);
     } else {
-      drawElevationRuler(ctx);
+      ElevationViewRenderer.drawElevationRuler(ctx, showRuler, roomDimensions, roomPosition, zoom, getWallHeight(), currentViewInfo);
     }
 
-  }, [showGrid, panOffset, drawRoom, drawElement, drawElevationRuler, design.elements, active2DView, currentViewInfo, getElementWall, isCornerVisibleInView, draggedElement, isDragging, snapGuides, roomPosition, zoom, currentMousePos, canvasToRoom, roomToCanvas, completedMeasurements, currentMeasureStart, tapeMeasurePreview, showRuler, roomDimensions]);
+  }, [showGrid, panOffset, drawRoom, drawElement, design.elements, active2DView, currentViewInfo, getElementWall, isCornerVisibleInView, draggedElement, isDragging, snapGuides, roomPosition, zoom, currentMousePos, canvasToRoom, roomToCanvas, completedMeasurements, currentMeasureStart, tapeMeasurePreview, showRuler, roomDimensions, getWallHeight]);
 
 
   // Mouse event handlers (Story 1.15.2: Delegated to InteractionHandler module)
