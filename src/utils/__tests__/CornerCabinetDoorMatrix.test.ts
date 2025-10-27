@@ -4,10 +4,10 @@
  * Story 1.10: Corner Cabinet Door Orientation Matrix
  * Epic: Epic 1 - Eliminate Circular Dependency Patterns
  *
- * Note: Requires test infrastructure from Story 1.12
- * Test framework: Vitest (to be installed)
+ * Test framework: Vitest
  */
 
+import { describe, it, expect } from 'vitest';
 import { CornerCabinetDoorMatrix } from '../CornerCabinetDoorMatrix';
 
 describe('CornerCabinetDoorMatrix', () => {

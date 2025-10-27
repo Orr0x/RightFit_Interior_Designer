@@ -1,0 +1,9 @@
+# AI Agent Ignore File
+# This file tells AI coding assistants to avoid reading these directories/files
+# Similar to .gitignore but for AI context
+
+# Historical archive - contains outdated approaches
+archive/
+
+# Archive should only be referenced when explicitly requested by user
+# See docs/README.md and CLAUDE.md for current authoritative documentation

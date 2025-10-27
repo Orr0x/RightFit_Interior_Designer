@@ -8,7 +8,7 @@
  * Epic: Epic 1 - Eliminate Circular Dependency Patterns
  */
 
-import { describe, it, expect, beforeEach } from '@playwright/test';
+import { describe, it, expect, beforeEach } from 'vitest';
 import {
   CoordinateTransformEngine,
   initializeCoordinateEngine,

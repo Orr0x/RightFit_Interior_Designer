@@ -2,6 +2,61 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+## ⚠️ CRITICAL: Documentation Rules for AI Agents
+
+**MANDATORY READING ORDER:**
+1. **ALWAYS read [docs/README.md](./docs/README.md) FIRST** - This is your authoritative entry point
+2. **NEVER read files from `docs/archive/` without explicit user permission** - Archive contains outdated approaches that led to circular dependency patterns
+3. **Follow the PRD**: [docs/prd.md](./docs/prd.md) is THE PLAN for all current work
+
+**Archive Policy:**
+- `docs/archive/` contains **historical exploratory work** (pre-2025-10-26)
+- These sessions contain **approaches that were identified as problematic**
+- **DO NOT reference archive files** unless the user specifically asks
+- If you accidentally access archive files, **STOP** and ask the user for guidance
+
+**Authoritative Documentation:**
+- [docs/README.md](./docs/README.md) - Documentation index (START HERE)
+- [docs/prd.md](./docs/prd.md) - Technical Debt Remediation PRD (THE PLAN)
+- [docs/brownfield-architecture.md](./docs/brownfield-architecture.md) - System architecture
+- [docs/CODE_REVIEW_COMPREHENSIVE.md](./docs/CODE_REVIEW_COMPREHENSIVE.md) - Critical issues
+- [docs/circular-patterns-fix-plan.md](./docs/circular-patterns-fix-plan.md) - Fix instructions
+
+---
+
+## 🚨 CRITICAL: Git & Deployment Rules - AUTO-DEPLOY TO PRODUCTION 🚨
+
+**⚠️ THIS PROJECT HAS AUTO-DEPLOYMENT TO PRODUCTION ENABLED ⚠️**
+
+**ABSOLUTE RULES - VIOLATION WILL BREAK PRODUCTION:**
+
+1. **NEVER PUSH TO `main` BRANCH** without explicit user permission
+2. **NEVER COMMIT TO `main` BRANCH** - Always work on feature branches
+3. **NEVER CREATE PULL REQUESTS TO `main`** without asking user first
+4. **NEVER MERGE TO `main`** - Only user can approve production deployments
+
+**Why This Is Critical:**
+- GitHub Action auto-deploys `main` → Hostinger VPS production server
+- Pushing to `main` = **INSTANT LIVE DEPLOYMENT**
+- Breaking production = **CUSTOMER-FACING DOWNTIME**
+
+**Safe Workflow:**
+- ✅ Work on feature branches (e.g., `feature/component-elevation-fixes`)
+- ✅ Commit to feature branches freely
+- ✅ Create pull requests to feature branches
+- ✅ **ASK USER** before any action involving `main` branch
+- ✅ Let user control all production deployments
+
+**Current Working Branch:** Check with `git branch` - should be a feature branch, NOT `main`
+
+**If you accidentally start working on `main`:**
+1. STOP immediately
+2. Alert the user
+3. Create a feature branch: `git checkout -b feature/story-X.Y-description`
+4. Continue work on feature branch
+
+---
+
 ## Project Overview
 
 RightFit Interior Designer is a professional-grade interior design application built with React, TypeScript, and Supabase. It provides multi-room project management with advanced 2D multi-view planning (plan view + 4 elevation views) and immersive 3D visualization using Three.js.

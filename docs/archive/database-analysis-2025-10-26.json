@@ -1,0 +1,1415 @@
+{
+  "timestamp": "2025-10-26T13:20:36.442Z",
+  "tables": [
+    {
+      "tableName": "components",
+      "rowCount": 186,
+      "error": null,
+      "sampleData": [
+        {
+          "id": "30adeb37-655c-4f44-ab44-5a0fb0e7e277",
+          "created_at": "2025-10-08T17:26:07.475697+00:00",
+          "updated_at": "2025-10-19T18:16:48.937374+00:00",
+          "component_id": "corner-cabinet",
+          "name": "Corner Base Cabinet",
+          "type": "cabinet",
+          "width": 90,
+          "depth": 90,
+          "height": 86,
+          "color": "#F5DEB3",
+          "category": "base-cabinets",
+          "room_types": [
+            "kitchen"
+          ],
+          "icon_name": "Archive",
+          "description": "Corner base cabinet with lazy susan",
+          "version": "1.0.0",
+          "deprecated": false,
+          "deprecation_reason": null,
+          "replacement_component_id": null,
+          "metadata": {},
+          "tags": [],
+          "mount_type": "floor",
+          "has_direction": true,
+          "door_side": "front",
+          "default_z_position": 0,
+          "elevation_height": 85,
+          "corner_configuration": {
+            "is_corner": true,
+            "door_width": 30,
+            "side_width": 60,
+            "corner_type": "L-shaped"
+          },
+          "component_behavior": {},
+          "plinth_height": 10
+        },
+        {
+          "id": "45d41ccf-e2c3-4ff4-a9e3-ea32c2fc4580",
+          "created_at": "2025-10-08T18:02:52.04969+00:00",
+          "updated_at": "2025-10-12T23:06:09.054594+00:00",
+          "component_id": "tallboy-50",
+          "name": "Tallboy 50cm",
+          "type": "cabinet",
+          "width": 50,
+          "depth": 50,
+          "height": 120,
+          "color": "#8B4513",
+          "category": "bedroom-storage",
+          "room_types": [
+            "bedroom"
+          ],
+          "icon_name": "Square",
+          "description": "Narrow 6-drawer tallboy",
+          "version": "1.0.0",
+          "deprecated": false,
+          "deprecation_reason": null,
+          "replacement_component_id": null,
+          "metadata": {},
+          "tags": [],
+          "mount_type": "floor",
+          "has_direction": true,
+          "door_side": "front",
+          "default_z_position": 0,
+          "elevation_height": null,
+          "corner_configuration": {},
+          "component_behavior": {},
+          "plinth_height": 10
+        },
+        {
+          "id": "941ed892-41e4-47c0-926e-136d3f30fba7",
+          "created_at": "2025-10-08T18:02:52.04969+00:00",
+          "updated_at": "2025-10-12T23:06:09.054594+00:00",
+          "component_id": "bedside-table-40",
+          "name": "Bedside Table 40cm",
+          "type": "cabinet",
+          "width": 40,
+          "depth": 40,
+          "height": 50,
+          "color": "#8B4513",
+          "category": "bedroom-storage",
+          "room_types": [
+            "bedroom"
+          ],
+          "icon_name": "Square",
+          "description": "Compact bedside table",
+          "version": "1.0.0",
+          "deprecated": false,
+          "deprecation_reason": null,
+          "replacement_component_id": null,
+          "metadata": {},
+          "tags": [],
+          "mount_type": "floor",
+          "has_direction": true,
+          "door_side": "front",
+          "default_z_position": 0,
+          "elevation_height": null,
+          "corner_configuration": {},
+          "component_behavior": {},
+          "plinth_height": 10
+        }
+      ]
+    },
+    {
+      "tableName": "component_3d_models",
+      "rowCount": 184,
+      "error": null,
+      "sampleData": [
+        {
+          "id": "011f5272-69b3-4e8a-8990-aea9ddc922c7",
+          "component_id": "pan-drawers-30",
+          "component_name": "Pan Drawers 30cm",
+          "component_type": "drawer-unit",
+          "category": "cabinets",
+          "geometry_type": "standard",
+          "is_corner_component": false,
+          "leg_length": null,
+          "corner_depth_wall": null,
+          "corner_depth_base": null,
+          "rotation_center_x": null,
+          "rotation_center_y": null,
+          "rotation_center_z": null,
+          "has_direction": true,
+          "auto_rotate_enabled": true,
+          "wall_rotation_left": 90,
+          "wall_rotation_right": 270,
+          "wall_rotation_top": 0,
+          "wall_rotation_bottom": 180,
+          "corner_rotation_front_left": null,
+          "corner_rotation_front_right": null,
+          "corner_rotation_back_left": null,
+          "corner_rotation_back_right": null,
+          "default_width": 0.3,
+          "default_height": 0.9,
+          "default_depth": 0.6,
+          "description": "Narrow 30cm pan drawer unit",
+          "created_at": "2025-10-08T16:21:41.621901+00:00",
+          "updated_at": "2025-10-17T22:39:25.2717+00:00",
+          "created_by": null,
+          "layer_type": "base",
+          "min_height_cm": 0,
+          "max_height_cm": 90,
+          "can_overlap_layers": [
+            "flooring"
+          ]
+        },
+        {
+          "id": "5c56e7f0-6fdc-461b-bf2d-cb4df3c1cca4",
+          "component_id": "pan-drawers-40",
+          "component_name": "Pan Drawers 40cm",
+          "component_type": "drawer-unit",
+          "category": "cabinets",
+          "geometry_type": "standard",
+          "is_corner_component": false,
+          "leg_length": null,
+          "corner_depth_wall": null,
+          "corner_depth_base": null,
+          "rotation_center_x": null,
+          "rotation_center_y": null,
+          "rotation_center_z": null,
+          "has_direction": true,
+          "auto_rotate_enabled": true,
+          "wall_rotation_left": 90,
+          "wall_rotation_right": 270,
+          "wall_rotation_top": 0,
+          "wall_rotation_bottom": 180,
+          "corner_rotation_front_left": null,
+          "corner_rotation_front_right": null,
+          "corner_rotation_back_left": null,
+          "corner_rotation_back_right": null,
+          "default_width": 0.4,
+          "default_height": 0.9,
+          "default_depth": 0.6,
+          "description": "Compact 40cm pan drawer unit",
+          "created_at": "2025-10-08T16:21:41.621901+00:00",
+          "updated_at": "2025-10-17T22:39:25.2717+00:00",
+          "created_by": null,
+          "layer_type": "base",
+          "min_height_cm": 0,
+          "max_height_cm": 90,
+          "can_overlap_layers": [
+            "flooring"
+          ]
+        },
+        {
+          "id": "4ae82ee6-9f21-4b0d-a266-ffbf712213a7",
+          "component_id": "larder-oven-microwave",
+          "component_name": "Larder Oven + Microwave",
+          "component_type": "appliance",
+          "category": "appliances",
+          "geometry_type": "standard",
+          "is_corner_component": false,
+          "leg_length": null,
+          "corner_depth_wall": null,
+          "corner_depth_base": null,
+          "rotation_center_x": null,
+          "rotation_center_y": null,
+          "rotation_center_z": null,
+          "has_direction": true,
+          "auto_rotate_enabled": true,
+          "wall_rotation_left": 90,
+          "wall_rotation_right": 270,
+          "wall_rotation_top": 0,
+          "wall_rotation_bottom": 180,
+          "corner_rotation_front_left": null,
+          "corner_rotation_front_right": null,
+          "corner_rotation_back_left": null,
+          "corner_rotation_back_right": null,
+          "default_width": 0.6,
+          "default_height": 2,
+          "default_depth": 0.6,
+          "description": "Tall larder unit with oven and microwave",
+          "created_at": "2025-10-08T17:10:22.990597+00:00",
+          "updated_at": "2025-10-18T14:24:00.178896+00:00",
+          "created_by": null,
+          "layer_type": "appliance",
+          "min_height_cm": 0,
+          "max_height_cm": 200,
+          "can_overlap_layers": [
+            "flooring"
+          ]
+        }
+      ]
+    },
+    {
+      "tableName": "component_2d_renders",
+      "rowCount": 186,
+      "error": null,
+      "sampleData": [
+        {
+          "id": "9c71a3ed-7705-4775-88ee-05109863de73",
+          "component_id": "armchair-80",
+          "plan_view_type": "rectangle",
+          "plan_view_data": {},
+          "plan_view_svg": null,
+          "elevation_type": "standard-cabinet",
+          "elevation_data": {
+            "door_count": 2,
+            "door_style": "flat",
+            "drawer_count": 0,
+            "handle_style": "bar",
+            "has_toe_kick": false,
+            "drawer_heights": [],
+            "handle_position": "center",
+            "toe_kick_height": 0
+          },
+          "elevation_svg_front": null,
+          "elevation_svg_back": null,
+          "side_elevation_type": "standard-cabinet",
+          "side_elevation_data": {
+            "door_count": 2,
+            "door_style": "flat",
+            "drawer_count": 0,
+            "handle_style": "bar",
+            "has_toe_kick": false,
+            "drawer_heights": [],
+            "handle_position": "center",
+            "toe_kick_height": 0
+          },
+          "elevation_svg_left": null,
+          "elevation_svg_right": null,
+          "fill_color": "#8b4513",
+          "stroke_color": "#000000",
+          "stroke_width": 1,
+          "created_at": "2025-10-09T20:58:26.075367+00:00",
+          "updated_at": "2025-10-09T20:58:26.075367+00:00",
+          "created_by": null
+        },
+        {
+          "id": "db55bc8b-4e81-489a-8e24-35e1a5559787",
+          "component_id": "base-cabinet-100",
+          "plan_view_type": "rectangle",
+          "plan_view_data": {},
+          "plan_view_svg": null,
+          "elevation_type": "standard-cabinet",
+          "elevation_data": {
+            "door_count": 2,
+            "door_style": "flat",
+            "drawer_count": 0,
+            "handle_style": "bar",
+            "has_toe_kick": true,
+            "drawer_heights": [],
+            "handle_position": "center",
+            "toe_kick_height": 10
+          },
+          "elevation_svg_front": null,
+          "elevation_svg_back": null,
+          "side_elevation_type": "standard-cabinet",
+          "side_elevation_data": {
+            "door_count": 2,
+            "door_style": "flat",
+            "drawer_count": 0,
+            "handle_style": "bar",
+            "has_toe_kick": true,
+            "drawer_heights": [],
+            "handle_position": "center",
+            "toe_kick_height": 10
+          },
+          "elevation_svg_left": null,
+          "elevation_svg_right": null,
+          "fill_color": "#8b4513",
+          "stroke_color": "#000000",
+          "stroke_width": 1,
+          "created_at": "2025-10-09T20:58:26.075367+00:00",
+          "updated_at": "2025-10-09T20:58:26.075367+00:00",
+          "created_by": null
+        },
+        {
+          "id": "6a5f1a9c-f06e-4412-b108-678374100b77",
+          "component_id": "base-cabinet-30",
+          "plan_view_type": "rectangle",
+          "plan_view_data": {},
+          "plan_view_svg": null,
+          "elevation_type": "standard-cabinet",
+          "elevation_data": {
+            "door_count": 1,
+            "door_style": "flat",
+            "drawer_count": 0,
+            "handle_style": "bar",
+            "has_toe_kick": true,
+            "drawer_heights": [],
+            "handle_position": "center",
+            "toe_kick_height": 10
+          },
+          "elevation_svg_front": null,
+          "elevation_svg_back": null,
+          "side_elevation_type": "standard-cabinet",
+          "side_elevation_data": {
+            "door_count": 1,
+            "door_style": "flat",
+            "drawer_count": 0,
+            "handle_style": "bar",
+            "has_toe_kick": true,
+            "drawer_heights": [],
+            "handle_position": "center",
+            "toe_kick_height": 10
+          },
+          "elevation_svg_left": null,
+          "elevation_svg_right": null,
+          "fill_color": "#8b4513",
+          "stroke_color": "#000000",
+          "stroke_width": 1,
+          "created_at": "2025-10-09T20:58:26.075367+00:00",
+          "updated_at": "2025-10-09T20:58:26.075367+00:00",
+          "created_by": null
+        }
+      ]
+    },
+    {
+      "tableName": "3d_models",
+      "rowCount": null,
+      "error": null
+    },
+    {
+      "tableName": "model_3d",
+      "rowCount": 0,
+      "error": null
+    },
+    {
+      "tableName": "geometry_parts",
+      "rowCount": 516,
+      "error": null,
+      "sampleData": [
+        {
+          "id": "ad776e9b-3b18-43f4-bba3-e0b3714d03e1",
+          "model_id": "011f5272-69b3-4e8a-8990-aea9ddc922c7",
+          "part_name": "Plinth",
+          "part_type": "box",
+          "render_order": 1,
+          "position_x": "0",
+          "position_y": "0.075",
+          "position_z": "0",
+          "dimension_width": "width",
+          "dimension_height": "0.15",
+          "dimension_depth": "depth - 0.05",
+          "material_name": "plinth",
+          "color_override": "plinthColor",
+          "metalness": null,
+          "roughness": null,
+          "opacity": 1,
+          "render_condition": null,
+          "created_at": "2025-10-08T16:21:41.621901+00:00"
+        },
+        {
+          "id": "fad5cb8c-15cc-403c-a7e7-851f34d6a5ec",
+          "model_id": "011f5272-69b3-4e8a-8990-aea9ddc922c7",
+          "part_name": "Drawer 1",
+          "part_type": "box",
+          "render_order": 3,
+          "position_x": "0",
+          "position_y": "0.25",
+          "position_z": "depth / 2 + 0.01",
+          "dimension_width": "width - 0.02",
+          "dimension_height": "0.20",
+          "dimension_depth": "0.02",
+          "material_name": "door",
+          "color_override": "doorColor",
+          "metalness": null,
+          "roughness": null,
+          "opacity": 1,
+          "render_condition": null,
+          "created_at": "2025-10-08T16:21:41.621901+00:00"
+        },
+        {
+          "id": "93836ba4-f4d4-4767-b898-e5848c7a4a6e",
+          "model_id": "011f5272-69b3-4e8a-8990-aea9ddc922c7",
+          "part_name": "Drawer 2",
+          "part_type": "box",
+          "render_order": 4,
+          "position_x": "0",
+          "position_y": "0.50",
+          "position_z": "depth / 2 + 0.01",
+          "dimension_width": "width - 0.02",
+          "dimension_height": "0.20",
+          "dimension_depth": "0.02",
+          "material_name": "door",
+          "color_override": "doorColor",
+          "metalness": null,
+          "roughness": null,
+          "opacity": 1,
+          "render_condition": null,
+          "created_at": "2025-10-08T16:21:41.621901+00:00"
+        }
+      ]
+    },
+    {
+      "tableName": "room_designs",
+      "rowCount": 0,
+      "error": null
+    },
+    {
+      "tableName": "projects",
+      "rowCount": 0,
+      "error": null
+    },
+    {
+      "tableName": "room_geometry_templates",
+      "rowCount": 6,
+      "error": null,
+      "sampleData": [
+        {
+          "id": "6cb9bcc9-a142-4fe4-b70e-864eaeb6ea72",
+          "template_name": "rectangle-600x400",
+          "display_name": "Simple Rectangle",
+          "description": "Standard rectangular room. Easy to work with and suitable for most layouts.",
+          "category": "standard",
+          "preview_image_url": null,
+          "geometry_definition": {
+            "floor": {
+              "type": "polygon",
+              "vertices": [
+                [
+                  0,
+                  0
+                ],
+                [
+                  600,
+                  0
+                ],
+                [
+                  600,
+                  400
+                ],
+                [
+                  0,
+                  400
+                ]
+              ],
+              "elevation": 0
+            },
+            "walls": [
+              {
+                "id": "wall-1",
+                "end": [
+                  600,
+                  0
+                ],
+                "start": [
+                  0,
+                  0
+                ],
+                "height": 240,
+                "has_door": false,
+                "material": "default",
+                "thickness": 15,
+                "has_window": false,
+                "elevation_view": "front"
+              },
+              {
+                "id": "wall-2",
+                "end": [
+                  600,
+                  400
+                ],
+                "start": [
+                  600,
+                  0
+                ],
+                "height": 240,
+                "has_door": false,
+                "material": "default",
+                "thickness": 15,
+                "has_window": false,
+                "elevation_view": "right"
+              },
+              {
+                "id": "wall-3",
+                "end": [
+                  0,
+                  400
+                ],
+                "start": [
+                  600,
+                  400
+                ],
+                "height": 240,
+                "has_door": false,
+                "material": "default",
+                "thickness": 15,
+                "has_window": false,
+                "elevation_view": "back"
+              },
+              {
+                "id": "wall-4",
+                "end": [
+                  0,
+                  0
+                ],
+                "start": [
+                  0,
+                  400
+                ],
+                "height": 240,
+                "has_door": false,
+                "material": "default",
+                "thickness": 15,
+                "has_window": false,
+                "elevation_view": "left"
+              }
+            ],
+            "ceiling": {
+              "type": "polygon",
+              "height": 240,
+              "vertices": [
+                [
+                  0,
+                  0
+                ],
+                [
+                  600,
+                  0
+                ],
+                [
+                  600,
+                  400
+                ],
+                [
+                  0,
+                  400
+                ]
+              ],
+              "elevation": 240
+            },
+            "metadata": {
+              "complexity": "simple",
+              "suggested_uses": [
+                "kitchen",
+                "bedroom",
+                "office"
+              ],
+              "total_floor_area": 240000,
+              "total_wall_length": 2000
+            },
+            "shape_type": "rectangle",
+            "bounding_box": {
+              "max_x": 600,
+              "max_y": 400,
+              "min_x": 0,
+              "min_y": 0
+            }
+          },
+          "parameter_config": null,
+          "is_active": true,
+          "sort_order": 0,
+          "created_at": "2025-10-10T17:05:11.425774+00:00",
+          "updated_at": "2025-10-10T17:05:11.425774+00:00"
+        },
+        {
+          "id": "2af972d9-9014-4601-b41d-7c26d629dcf3",
+          "template_name": "l-shape-kitchen",
+          "display_name": "L-Shaped Kitchen",
+          "description": "L-shaped layout with two perpendicular sections. Ideal for kitchens with multiple work zones.",
+          "category": "l-shape",
+          "preview_image_url": null,
+          "geometry_definition": {
+            "floor": {
+              "type": "polygon",
+              "vertices": [
+                [
+                  0,
+                  0
+                ],
+                [
+                  600,
+                  0
+                ],
+                [
+                  600,
+                  300
+                ],
+                [
+                  300,
+                  300
+                ],
+                [
+                  300,
+                  400
+                ],
+                [
+                  0,
+                  400
+                ]
+              ],
+              "elevation": 0
+            },
+            "walls": [
+              {
+                "id": "wall-1",
+                "end": [
+                  600,
+                  0
+                ],
+                "start": [
+                  0,
+                  0
+                ],
+                "height": 240,
+                "has_door": false,
+                "material": "default",
+                "thickness": 15,
+                "has_window": false,
+                "elevation_view": "front"
+              },
+              {
+                "id": "wall-2",
+                "end": [
+                  600,
+                  300
+                ],
+                "start": [
+                  600,
+                  0
+                ],
+                "height": 240,
+                "has_door": false,
+                "material": "default",
+                "thickness": 15,
+                "has_window": false,
+                "elevation_view": "right"
+              },
+              {
+                "id": "wall-3",
+                "end": [
+                  300,
+                  300
+                ],
+                "start": [
+                  600,
+                  300
+                ],
+                "height": 240,
+                "has_door": false,
+                "material": "default",
+                "thickness": 15,
+                "has_window": false,
+                "elevation_view": "back"
+              },
+              {
+                "id": "wall-4",
+                "end": [
+                  300,
+                  400
+                ],
+                "start": [
+                  300,
+                  300
+                ],
+                "height": 240,
+                "has_door": false,
+                "material": "default",
+                "thickness": 15,
+                "has_window": false,
+                "elevation_view": "left"
+              },
+              {
+                "id": "wall-5",
+                "end": [
+                  0,
+                  400
+                ],
+                "start": [
+                  300,
+                  400
+                ],
+                "height": 240,
+                "has_door": false,
+                "material": "default",
+                "thickness": 15,
+                "has_window": false,
+                "elevation_view": "left"
+              },
+              {
+                "id": "wall-6",
+                "end": [
+                  0,
+                  0
+                ],
+                "start": [
+                  0,
+                  400
+                ],
+                "height": 240,
+                "has_door": false,
+                "material": "default",
+                "thickness": 15,
+                "has_window": false,
+                "elevation_view": "front"
+              }
+            ],
+            "ceiling": {
+              "type": "polygon",
+              "height": 240,
+              "vertices": [
+                [
+                  0,
+                  0
+                ],
+                [
+                  600,
+                  0
+                ],
+                [
+                  600,
+                  300
+                ],
+                [
+                  300,
+                  300
+                ],
+                [
+                  300,
+                  400
+                ],
+                [
+                  0,
+                  400
+                ]
+              ],
+              "elevation": 240
+            },
+            "metadata": {
+              "complexity": "moderate",
+              "suggested_uses": [
+                "kitchen",
+                "living-room"
+              ],
+              "total_floor_area": 210000,
+              "total_wall_length": 2200
+            },
+            "shape_type": "l-shape",
+            "bounding_box": {
+              "max_x": 600,
+              "max_y": 400,
+              "min_x": 0,
+              "min_y": 0
+            }
+          },
+          "parameter_config": null,
+          "is_active": true,
+          "sort_order": 1,
+          "created_at": "2025-10-10T17:05:11.425774+00:00",
+          "updated_at": "2025-10-10T17:05:11.425774+00:00"
+        },
+        {
+          "id": "d7ede77b-54c6-4d2b-bd9e-03b73b9b28ab",
+          "template_name": "u-shape-standard",
+          "display_name": "Standard U-Shape",
+          "description": "U-shaped room with central courtyard or opening. Ideal for wrap-around kitchens or horseshoe layouts.",
+          "category": "u-shape",
+          "preview_image_url": null,
+          "geometry_definition": {
+            "floor": {
+              "type": "polygon",
+              "material": "hardwood",
+              "vertices": [
+                [
+                  0,
+                  0
+                ],
+                [
+                  800,
+                  0
+                ],
+                [
+                  800,
+                  600
+                ],
+                [
+                  600,
+                  600
+                ],
+                [
+                  600,
+                  200
+                ],
+                [
+                  200,
+                  200
+                ],
+                [
+                  200,
+                  600
+                ],
+                [
+                  0,
+                  600
+                ]
+              ],
+              "elevation": 0
+            },
+            "walls": [
+              {
+                "id": "wall_outer_north",
+                "end": [
+                  800,
+                  0
+                ],
+                "type": "solid",
+                "start": [
+                  0,
+                  0
+                ],
+                "height": 240,
+                "material": "plaster",
+                "thickness": 10,
+                "elevation_view": "front"
+              },
+              {
+                "id": "wall_outer_east",
+                "end": [
+                  800,
+                  600
+                ],
+                "type": "solid",
+                "start": [
+                  800,
+                  0
+                ],
+                "height": 240,
+                "material": "plaster",
+                "thickness": 10,
+                "elevation_view": "right"
+              },
+              {
+                "id": "wall_outer_south_right",
+                "end": [
+                  600,
+                  600
+                ],
+                "type": "solid",
+                "start": [
+                  800,
+                  600
+                ],
+                "height": 240,
+                "material": "plaster",
+                "thickness": 10,
+                "elevation_view": "right"
+              },
+              {
+                "id": "wall_inner_right",
+                "end": [
+                  600,
+                  200
+                ],
+                "type": "solid",
+                "start": [
+                  600,
+                  600
+                ],
+                "height": 240,
+                "material": "plaster",
+                "thickness": 10,
+                "elevation_view": "interior-right"
+              },
+              {
+                "id": "wall_inner_top",
+                "end": [
+                  200,
+                  200
+                ],
+                "type": "solid",
+                "start": [
+                  600,
+                  200
+                ],
+                "height": 240,
+                "material": "plaster",
+                "thickness": 10,
+                "elevation_view": "interior-top"
+              },
+              {
+                "id": "wall_inner_left",
+                "end": [
+                  200,
+                  600
+                ],
+                "type": "solid",
+                "start": [
+                  200,
+                  200
+                ],
+                "height": 240,
+                "material": "plaster",
+                "thickness": 10,
+                "elevation_view": "interior-left"
+              },
+              {
+                "id": "wall_outer_south_left",
+                "end": [
+                  0,
+                  600
+                ],
+                "type": "solid",
+                "start": [
+                  200,
+                  600
+                ],
+                "height": 240,
+                "material": "plaster",
+                "thickness": 10,
+                "elevation_view": "back"
+              },
+              {
+                "id": "wall_outer_west",
+                "end": [
+                  0,
+                  0
+                ],
+                "type": "solid",
+                "start": [
+                  0,
+                  600
+                ],
+                "height": 240,
+                "material": "plaster",
+                "thickness": 10,
+                "elevation_view": "left"
+              }
+            ],
+            "ceiling": {
+              "type": "flat",
+              "zones": [
+                {
+                  "style": "flat",
+                  "height": 250,
+                  "vertices": [
+                    [
+                      0,
+                      0
+                    ],
+                    [
+                      800,
+                      0
+                    ],
+                    [
+                      800,
+                      600
+                    ],
+                    [
+                      600,
+                      600
+                    ],
+                    [
+                      600,
+                      200
+                    ],
+                    [
+                      200,
+                      200
+                    ],
+                    [
+                      200,
+                      600
+                    ],
+                    [
+                      0,
+                      600
+                    ]
+                  ]
+                }
+              ]
+            },
+            "metadata": {
+              "total_wall_area": 192000,
+              "total_floor_area": 400000,
+              "usable_floor_area": 380000
+            },
+            "sections": [
+              {
+                "id": "left_arm",
+                "name": "Left Arm",
+                "type": "arm",
+                "vertices": [
+                  [
+                    0,
+                    0
+                  ],
+                  [
+                    200,
+                    0
+                  ],
+                  [
+                    200,
+                    600
+                  ],
+                  [
+                    0,
+                    600
+                  ]
+                ]
+              },
+              {
+                "id": "top_section",
+                "name": "Top Section",
+                "type": "primary",
+                "vertices": [
+                  [
+                    200,
+                    0
+                  ],
+                  [
+                    600,
+                    0
+                  ],
+                  [
+                    600,
+                    200
+                  ],
+                  [
+                    200,
+                    200
+                  ]
+                ]
+              },
+              {
+                "id": "right_arm",
+                "name": "Right Arm",
+                "type": "arm",
+                "vertices": [
+                  [
+                    600,
+                    0
+                  ],
+                  [
+                    800,
+                    0
+                  ],
+                  [
+                    800,
+                    600
+                  ],
+                  [
+                    600,
+                    600
+                  ]
+                ]
+              }
+            ],
+            "shape_type": "u-shape",
+            "bounding_box": {
+              "max_x": 800,
+              "max_y": 600,
+              "min_x": 0,
+              "min_y": 0
+            }
+          },
+          "parameter_config": {
+            "configurable_params": [
+              {
+                "max": 1200,
+                "min": 400,
+                "name": "total_width",
+                "step": 10,
+                "type": "number",
+                "unit": "cm",
+                "label": "Total Width",
+                "default": 800
+              },
+              {
+                "max": 1000,
+                "min": 400,
+                "name": "total_depth",
+                "step": 10,
+                "type": "number",
+                "unit": "cm",
+                "label": "Total Depth",
+                "default": 600
+              },
+              {
+                "max": 400,
+                "min": 150,
+                "name": "arm_width",
+                "step": 10,
+                "type": "number",
+                "unit": "cm",
+                "label": "Arm Width",
+                "default": 200
+              },
+              {
+                "max": 400,
+                "min": 150,
+                "name": "top_depth",
+                "step": 10,
+                "type": "number",
+                "unit": "cm",
+                "label": "Top Section Depth",
+                "default": 200
+              },
+              {
+                "max": 400,
+                "min": 220,
+                "name": "ceiling_height",
+                "step": 10,
+                "type": "number",
+                "unit": "cm",
+                "label": "Ceiling Height",
+                "default": 250
+              }
+            ]
+          },
+          "is_active": true,
+          "sort_order": 30,
+          "created_at": "2025-10-10T14:00:16.238673+00:00",
+          "updated_at": "2025-10-10T14:00:16.238673+00:00"
+        }
+      ]
+    },
+    {
+      "tableName": "room_type_templates",
+      "rowCount": 0,
+      "error": null
+    },
+    {
+      "tableName": "app_configuration",
+      "rowCount": 37,
+      "error": null,
+      "sampleData": [
+        {
+          "id": "d21d5d2c-844c-4756-8954-00ebeac11b2f",
+          "config_key": "canvas_width",
+          "config_name": "Canvas Width",
+          "category": "canvas",
+          "value_numeric": 1600,
+          "value_string": null,
+          "value_boolean": null,
+          "value_json": null,
+          "unit": "px",
+          "description": "Canvas workspace width",
+          "default_value": null,
+          "min_value": 800,
+          "max_value": 3200,
+          "valid_values": null,
+          "dev_value": null,
+          "staging_value": null,
+          "production_value": null,
+          "created_at": "2025-10-08T09:56:06.970807+00:00",
+          "updated_at": "2025-10-08T09:56:06.970807+00:00",
+          "created_by": null,
+          "updated_by": null
+        },
+        {
+          "id": "9cbbe664-9d29-4a8c-99a4-214153da6659",
+          "config_key": "canvas_height",
+          "config_name": "Canvas Height",
+          "category": "canvas",
+          "value_numeric": 1200,
+          "value_string": null,
+          "value_boolean": null,
+          "value_json": null,
+          "unit": "px",
+          "description": "Canvas workspace height",
+          "default_value": null,
+          "min_value": 600,
+          "max_value": 2400,
+          "valid_values": null,
+          "dev_value": null,
+          "staging_value": null,
+          "production_value": null,
+          "created_at": "2025-10-08T09:56:06.970807+00:00",
+          "updated_at": "2025-10-08T09:56:06.970807+00:00",
+          "created_by": null,
+          "updated_by": null
+        },
+        {
+          "id": "48ded9a6-0461-4070-b117-ac2a0e0ba553",
+          "config_key": "grid_size",
+          "config_name": "Grid Size",
+          "category": "canvas",
+          "value_numeric": 20,
+          "value_string": null,
+          "value_boolean": null,
+          "value_json": null,
+          "unit": "px",
+          "description": "Grid spacing in pixels",
+          "default_value": null,
+          "min_value": 5,
+          "max_value": 50,
+          "valid_values": null,
+          "dev_value": null,
+          "staging_value": null,
+          "production_value": null,
+          "created_at": "2025-10-08T09:56:06.970807+00:00",
+          "updated_at": "2025-10-08T09:56:06.970807+00:00",
+          "created_by": null,
+          "updated_by": null
+        }
+      ]
+    },
+    {
+      "tableName": "feature_flags",
+      "rowCount": 5,
+      "error": null,
+      "sampleData": [
+        {
+          "id": "ebe8a19a-ddfa-4d67-a348-e50b2e8480d6",
+          "flag_key": "use_database_configuration",
+          "flag_name": "Database Configuration System",
+          "description": "Loads configuration from database",
+          "enabled": false,
+          "rollout_percentage": 0,
+          "user_tier_override": null,
+          "enabled_dev": true,
+          "enabled_staging": false,
+          "enabled_production": false,
+          "test_status": "untested",
+          "test_results": null,
+          "last_tested_at": null,
+          "can_disable": true,
+          "requires_approval": false,
+          "approved_by": null,
+          "approved_at": null,
+          "created_at": "2025-10-08T00:45:33.146404+00:00",
+          "updated_at": "2025-10-08T00:45:33.146404+00:00",
+          "created_by": null
+        },
+        {
+          "id": "9b228592-445b-4864-8038-470c8c35e16d",
+          "flag_key": "use_cost_calculation_system",
+          "flag_name": "Cost Calculation System",
+          "description": "Real-time cost calculation",
+          "enabled": false,
+          "rollout_percentage": 0,
+          "user_tier_override": null,
+          "enabled_dev": true,
+          "enabled_staging": false,
+          "enabled_production": false,
+          "test_status": "untested",
+          "test_results": null,
+          "last_tested_at": null,
+          "can_disable": true,
+          "requires_approval": false,
+          "approved_by": null,
+          "approved_at": null,
+          "created_at": "2025-10-08T00:45:33.146404+00:00",
+          "updated_at": "2025-10-08T00:45:33.146404+00:00",
+          "created_by": null
+        },
+        {
+          "id": "ba1e67f9-1139-47b9-9fb1-6784815be5c2",
+          "flag_key": "use_database_2d_rendering",
+          "flag_name": "Database-Driven 2D Rendering",
+          "description": "Enable database-driven 2D rendering system with component_2d_renders table.",
+          "enabled": true,
+          "rollout_percentage": 100,
+          "user_tier_override": null,
+          "enabled_dev": true,
+          "enabled_staging": true,
+          "enabled_production": false,
+          "test_status": "testing",
+          "test_results": null,
+          "last_tested_at": null,
+          "can_disable": true,
+          "requires_approval": false,
+          "approved_by": null,
+          "approved_at": null,
+          "created_at": "2025-10-09T21:24:57.282635+00:00",
+          "updated_at": "2025-10-09T21:24:57.282635+00:00",
+          "created_by": null
+        }
+      ]
+    },
+    {
+      "tableName": "ab_test_results",
+      "rowCount": 0,
+      "error": null
+    },
+    {
+      "tableName": "ab_test_sessions",
+      "rowCount": null,
+      "error": null
+    },
+    {
+      "tableName": "profiles",
+      "rowCount": 0,
+      "error": null
+    },
+    {
+      "tableName": "user_preferences",
+      "rowCount": null,
+      "error": null
+    },
+    {
+      "tableName": "farrow_ball_colors",
+      "rowCount": null,
+      "error": null
+    },
+    {
+      "tableName": "material_definitions",
+      "rowCount": 17,
+      "error": null,
+      "sampleData": [
+        {
+          "id": "2e98c371-e04b-421f-b775-fb21926466b9",
+          "material_name": "cabinet_body",
+          "material_type": "standard",
+          "default_color": "#8B7355",
+          "roughness": 0.7,
+          "metalness": 0.1,
+          "opacity": 1,
+          "description": "Main cabinet body material",
+          "created_at": "2025-10-08T10:51:01.108456+00:00"
+        },
+        {
+          "id": "053642f0-3b7e-4bef-beff-b14dcab8fbdb",
+          "material_name": "door",
+          "material_type": "standard",
+          "default_color": "#654321",
+          "roughness": 0.6,
+          "metalness": 0.1,
+          "opacity": 1,
+          "description": "Cabinet door material",
+          "created_at": "2025-10-08T10:51:01.108456+00:00"
+        },
+        {
+          "id": "55238c89-c452-469d-8987-fa0a9c2a19dc",
+          "material_name": "handle",
+          "material_type": "standard",
+          "default_color": "#C0C0C0",
+          "roughness": 0.2,
+          "metalness": 0.8,
+          "opacity": 1,
+          "description": "Metallic handle material",
+          "created_at": "2025-10-08T10:51:01.108456+00:00"
+        }
+      ]
+    },
+    {
+      "tableName": "design_styles",
+      "rowCount": null,
+      "error": null
+    },
+    {
+      "tableName": "cabinet_styles",
+      "rowCount": null,
+      "error": null
+    }
+  ],
+  "summary": {
+    "totalTables": 20,
+    "emptyTables": [
+      "model_3d",
+      "room_designs",
+      "projects",
+      "room_type_templates",
+      "ab_test_results",
+      "profiles"
+    ],
+    "populatedTables": [
+      "components",
+      "component_3d_models",
+      "component_2d_renders",
+      "3d_models",
+      "geometry_parts",
+      "room_geometry_templates",
+      "app_configuration",
+      "feature_flags",
+      "ab_test_sessions",
+      "user_preferences",
+      "farrow_ball_colors",
+      "material_definitions",
+      "design_styles",
+      "cabinet_styles"
+    ],
+    "errorTables": []
+  }
+}
