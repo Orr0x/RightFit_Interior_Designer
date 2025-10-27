@@ -505,7 +505,9 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
           
         // Load all component behaviors in parallel
         await Promise.all(
-          commonTypes.map(type => getComponentBehavior(type).catch(console.warn))
+          commonTypes.map(type => getComponentBehavior(type).catch(err =>
+            Logger.warn(`Failed to load behavior for ${type}`, err)
+          ))
         );
         
         Logger.debug('🚀 [DesignCanvas2D] Preloaded component behaviors and room config');
@@ -675,7 +677,9 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
     
     // Async preload behavior if not cached
     if (!componentBehaviorCache.has(element.type)) {
-      getComponentBehavior(element.type).catch(console.warn);
+      getComponentBehavior(element.type).catch(err =>
+        Logger.warn(`Failed to preload behavior for ${element.type}`, err)
+      );
     }
     
     if (componentData?.hasDirection) {
