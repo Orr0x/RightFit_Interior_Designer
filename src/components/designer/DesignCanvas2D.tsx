@@ -928,77 +928,17 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
   // =============================================================================
 
   // =============================================================================
-  // HELPER FUNCTIONS - Element Visibility Logic (Required for Elevation Views)
+  // HELPER FUNCTIONS - Wrappers for ElevationViewRenderer (Story 1.15.2 Phase 6)
   // =============================================================================
-  // These functions were preserved because they're used throughout the component
-  // for determining element visibility in elevation views, not just for rendering.
+  // These wrapper functions call ElevationViewRenderer functions with roomDimensions
   // =============================================================================
 
-  // Check if element is a corner unit
-  const isCornerUnit = (element: DesignElement): { isCorner: boolean; corner?: 'front-left' | 'front-right' | 'back-left' | 'back-right' } => {
-    const tolerance = 30; // cm tolerance for corner detection
-
-    // Check each corner position
-    if (element.x <= tolerance && element.y <= tolerance) {
-      return { isCorner: true, corner: 'front-left' };
-    }
-    if (element.x >= roomDimensions.width - element.width - tolerance && element.y <= tolerance) {
-      return { isCorner: true, corner: 'front-right' };
-    }
-    if (element.x <= tolerance && element.y >= roomDimensions.height - element.height - tolerance) {
-      return { isCorner: true, corner: 'back-left' };
-    }
-    if (element.x >= roomDimensions.width - element.width - tolerance &&
-        element.y >= roomDimensions.height - element.height - tolerance) {
-      return { isCorner: true, corner: 'back-right' };
-    }
-
-    return { isCorner: false };
-  };
-
-  // Get element wall association (updated to handle corner units)
   const getElementWall = (element: DesignElement): 'front' | 'back' | 'left' | 'right' | 'center' => {
-    const centerX = element.x + element.width / 2;
-    const centerY = element.y + element.height / 2;
-    const tolerance = 50;
-
-    // Check for corner units first
-    const cornerInfo = isCornerUnit(element);
-    if (cornerInfo.isCorner) {
-      // Corner units are visible in both adjacent walls
-      // Return the primary wall for filtering purposes
-      switch (cornerInfo.corner) {
-        case 'front-left': return 'front'; // Also visible in 'left'
-        case 'front-right': return 'front'; // Also visible in 'right'
-        case 'back-left': return 'back'; // Also visible in 'left'
-        case 'back-right': return 'back'; // Also visible in 'right'
-      }
-    }
-
-    if (centerY <= tolerance) return 'front';
-    if (centerY >= roomDimensions.height - tolerance) return 'back';
-    if (centerX <= tolerance) return 'left';
-    if (centerX >= roomDimensions.width - tolerance) return 'right';
-    return 'center';
+    return ElevationViewRenderer.getElementWall(element, roomDimensions);
   };
 
-  // Check if corner unit is visible in current elevation view
   const isCornerVisibleInView = (element: DesignElement, view: string): boolean => {
-    const cornerInfo = isCornerUnit(element);
-    if (!cornerInfo.isCorner) return false;
-
-    switch (cornerInfo.corner) {
-      case 'front-left':
-        return view === 'front' || view === 'left';
-      case 'front-right':
-        return view === 'front' || view === 'right';
-      case 'back-left':
-        return view === 'back' || view === 'left';
-      case 'back-right':
-        return view === 'back' || view === 'right';
-      default:
-        return false;
-    }
+    return ElevationViewRenderer.isCornerVisibleInView(element, view, roomDimensions);
   };
 
   // =============================================================================
