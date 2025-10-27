@@ -1154,7 +1154,7 @@ export const DesignCanvas2D: React.FC<DesignCanvas2DProps> = ({
       drawElevationRuler(ctx);
     }
 
-  }, [drawGrid, drawRoom, drawElement, drawElevationRuler, design.elements, active2DView, draggedElement, isDragging, snapGuides, roomPosition, zoom, currentMousePos, canvasToRoom, roomToCanvas, completedMeasurements, currentMeasureStart, tapeMeasurePreview, showRuler, roomDimensions]);
+  }, [showGrid, panOffset, drawRoom, drawElement, drawElevationRuler, design.elements, active2DView, currentViewInfo, getElementWall, isCornerVisibleInView, draggedElement, isDragging, snapGuides, roomPosition, zoom, currentMousePos, canvasToRoom, roomToCanvas, completedMeasurements, currentMeasureStart, tapeMeasurePreview, showRuler, roomDimensions]);
 
 
   // Mouse event handlers
