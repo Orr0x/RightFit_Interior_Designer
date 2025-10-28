@@ -189,7 +189,7 @@ export async function drawElementPlanView(
   // Try database-driven rendering first
   let renderedByDatabase = false;
   try {
-    const renderDef = await render2DService.get2DRender(element.component_id);
+    const renderDef = await render2DService.get(element.component_id);
     if (renderDef) {
       // Apply colors based on render mode
       if (showWireframe) {
